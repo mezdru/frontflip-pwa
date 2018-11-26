@@ -1,5 +1,4 @@
 import { observable, action, reaction, decorate } from 'mobx';
-import agent from '../agent';
 
 class CommonStore {
 

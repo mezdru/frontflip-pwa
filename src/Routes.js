@@ -3,9 +3,6 @@ import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import { Home } from './pages/Home';
 
 export default class Routes extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         return (

@@ -5,7 +5,6 @@ import commonStore from './stores/common.store';
 
 const superagent = superagentPromise(_superagent, global.Promise);
 const API_ROOT = 'https://auth-wingzy-staging.herokuapp.com';
-const encode = encodeURIComponent;
 
 const handleErrors = err => {
     if (err && err.response && err.response.status === 401) {
