@@ -1,13 +1,14 @@
 import React from "react";
-import { Route, Switch, BrowserRouter } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { Home } from './pages/Home';
-import { Profile } from "./pages/Profile";
+import Profile from './components/profile/ProfileBox';
 
 export default class Routes extends React.Component {
 
     render() {
         return (
-                <BrowserRouter>
+                
+                <div>
                     <Switch>
                         {/* HOME PART */}
                         <Route exact path="/" component={Home} />
@@ -44,7 +45,8 @@ export default class Routes extends React.Component {
                         <Route path="/admin/user/list" component={null} />
                         
                     </Switch>
-                </BrowserRouter>
+                </div>
+
         );
     }
 }
