@@ -43,6 +43,70 @@ class RecordStore {
             .finally(action(()=> { this.inProgress = false; }));
     }
 
+    /**
+     * @description Post new record
+     */
+    postRecord() {
+        this.inProgress = true;
+        this.errors = null;
+
+        return agent.Record.post(this.values.orgTag, this.values.record)
+            .then(data => { this.values.record = data.record;})
+            .catch(action((err) => {
+                this.errors = err.response && err.response.body && err.response.body.errors;
+                throw err;
+            }))
+            .finally(action(()=> { this.inProgress = false; }));
+    }
+
+    /**
+     * @description Update record
+     */
+    updateRecord() {
+        this.inProgress = true;
+        this.errors = null;
+
+        return agent.Record.put(this.values.orgTag, this.values.recordTag, this.values.record)
+            .then(data => { this.values.record = data.record;})
+            .catch(action((err) => {
+                this.errors = err.response && err.response.body && err.response.body.errors;
+                throw err;
+            }))
+            .finally(action(()=> { this.inProgress = false; }));
+    }
+
+    /**
+     * @description Get my record
+     */
+    getMyRecord() {
+        this.inProgress = true;
+        this.errors = null;
+
+        return agent.Record.getMe(this.values.orgTag)
+            .then(data => { this.values.record = data.record;})
+            .catch(action((err) => {
+                this.errors = err.response && err.response.body && err.response.body.errors;
+                throw err;
+            }))
+            .finally(action(()=> { this.inProgress = false; }));
+    }
+
+    /**
+     * @description Delete my record
+     */
+    postRecord() {
+        this.inProgress = true;
+        this.errors = null;
+
+        return agent.Record.deleteMe(this.values.orgTag)
+            .then(data => { this.values.record = data.record;})
+            .catch(action((err) => {
+                this.errors = err.response && err.response.body && err.response.body.errors;
+                throw err;
+            }))
+            .finally(action(()=> { this.inProgress = false; }));
+    }
+
 }
 
 decorate(RecordStore, {
