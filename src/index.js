@@ -7,11 +7,13 @@ import { Provider } from 'mobx-react';
 import authStore from './stores/auth.store';
 import userStore from './stores/user.store';
 import recordStore from './stores/record.store';
+import commonStore from './stores/common.store';
 
 const stores = {
     authStore,
     userStore,
-    recordStore
+    recordStore,
+    commonStore
 }
  
 
