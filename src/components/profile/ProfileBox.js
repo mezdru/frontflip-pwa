@@ -12,8 +12,7 @@ let ProfileBox = inject("recordStore")(  observer(class ProfileBox extends React
 
     componentDidMount() {
         window.self.props.recordStore.setOrgTag('isen');
-        window.self.props.recordStore.setRecordTag('@QuentinMezdru');
-        window.self.props.recordStore.getRecordByTag();
+        window.self.props.recordStore.getMyRecord();
     };
 
     render(){
