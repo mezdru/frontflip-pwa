@@ -1,7 +1,7 @@
 import React from "react";
-import { Route, Switch, BrowserRouter } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { Home } from './pages/Home';
-import NavBar from './components/header/NavBar';
+import Profile from './components/profile/ProfileBox';
 
 export default class Routes extends React.Component {
 
@@ -9,7 +9,6 @@ export default class Routes extends React.Component {
         return (
                 
                 <div>
-                    
                     <Switch>
                         {/* HOME PART */}
                         <Route exact path="/" component={Home} />
@@ -35,7 +34,7 @@ export default class Routes extends React.Component {
                         <Route path="/invite" component={null} />
 
                         {/* Profile */}
-                        <Route path="/profile" component={null} />
+                        <Route path="/profile" component={Profile} />
                         <Route path="/profile/edit" component={null} />
 
                         {/* Search */}

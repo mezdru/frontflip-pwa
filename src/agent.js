@@ -4,7 +4,9 @@ import authStore from './stores/auth.store';
 import commonStore from './stores/common.store';
 
 const superagent = superagentPromise(_superagent, global.Promise);
-const API_ROOT = 'https://auth-wingzy-staging.herokuapp.com';
+//const API_ROOT_AUTH = 'https://auth-wingzy-staging.herokuapp.com';
+const API_ROOT_AUTH = 'http://localhost:3001'
+const API_ROOT = 'http://localhost:3000';
 
 const handleErrors = err => {
     if (err && err.response && err.response.status === 401) {
@@ -30,25 +32,25 @@ const tokenPlugin = req => {
 const requests = {
     del: url =>
         superagent
-            .del(`${API_ROOT}${url}`)
+            .del(`${url}`)
             .use(tokenPlugin)
             .end(handleErrors)
             .then(responseBody),
     get: url =>
         superagent
-            .get(`${API_ROOT}${url}`)
+            .get(`${url}`)
             .use(tokenPlugin)
             .end(handleErrors)
             .then(responseBody),
     put: (url, body) =>
         superagent
-            .put(`${API_ROOT}${url}`, body)
+            .put(`${url}`, body)
             .use(tokenPlugin)
             .end(handleErrors)
             .then(responseBody),
     post: (url, body) =>
         superagent
-            .post(`${API_ROOT}${url}`, body)
+            .post(`${url}`, body)
             .use(tokenPlugin)
             .end(handleErrors)
             .then(responseBody),
@@ -60,7 +62,7 @@ const requests = {
 const Auth = {
     login: (email, password) => 
         requests.post(
-            '/auth/locale',
+            `${API_ROOT_AUTH}/auth/locale`,
             {
                 username: email,
                 password: password,
@@ -71,7 +73,7 @@ const Auth = {
         ),
     register: (email, password) =>
         requests.post(
-            '/register',
+            `${API_ROOT_AUTH}/register`,
             {
                 email: email,
                 password: password
@@ -79,7 +81,7 @@ const Auth = {
         ),
     authorization: (email, password, orgTag, invitationCode) =>
         requests.post(
-            '/authorization/organisation/'+orgTag+'/'+(invitationCode ? invitationCode : ''),
+            `${API_ROOT_AUTH}/authorization/organisation/`+orgTag+`/`+(invitationCode ? invitationCode : ``),
             {
                 username: email,
                 password: password,
@@ -87,6 +89,35 @@ const Auth = {
                 client_secret: 'abcd1234',
                 grant_type: 'password'
             }
+        )
+};
+
+const Record = {
+    get: (orgTag, recordTag) => 
+        requests.get(
+            API_ROOT+'/api/record/'+recordTag+'/organisation/'+orgTag
+        ),
+    post: (orgTag, record) => 
+        requests.post(
+            API_ROOT+'/api/record/organisation/'+orgTag,
+            {
+                record: record
+            }
+        ),
+    put: (orgTag, recordTag, record) => 
+        requests.put(
+            API_ROOT+'/api/record/'+recordTag+'/organisation/'+orgTag,
+            {
+                record: record
+            }
+        ),
+    getMe: (orgTag) => 
+        requests.get(
+            API_ROOT+'/api/record/organisation/'+orgTag+'/me'
+        ),
+    deleteMe: (orgTag) => 
+        requests.del(
+            API_ROOT+'/api/record/organisation/'+orgTag+'/me'
         )
 };
 
@@ -100,5 +131,6 @@ const Test = {
 
 export default {
     Auth,
-    Test
+    Test,
+    Record
 }
