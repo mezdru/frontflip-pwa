@@ -6,11 +6,12 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from 'mobx-react';
 import authStore from './stores/auth.store';
 import userStore from './stores/user.store';
-
+import recordStore from './stores/record.store';
 
 const stores = {
     authStore,
-    userStore
+    userStore,
+    recordStore
 }
  
 
