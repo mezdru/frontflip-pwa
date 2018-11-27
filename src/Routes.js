@@ -1,15 +1,18 @@
 import React from "react";
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import { Home } from './pages/Home';
+import NavBar from './components/header/NavBar';
 
 export default class Routes extends React.Component {
 
     render() {
         return (
-                <BrowserRouter>
+                
+                <div>
+                    
                     <Switch>
                         {/* HOME PART */}
-                        <Route path="/" component={Home} />
+                        <Route exact path="/" component={Home} />
                         <Route path="/pricing" component={null} />
                         <Route path="/terms" component={null} />
                         <Route path="/protectingYourData" component={null} />
@@ -43,7 +46,8 @@ export default class Routes extends React.Component {
                         <Route path="/admin/user/list" component={null} />
                         
                     </Switch>
-                </BrowserRouter>
+                </div>
+
         );
     }
 }
