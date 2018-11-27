@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Routes from './Routes';
-import NavBar from './components/header/NavBar';
+import NavBar2 from './components/header/NavBar2';
 import { BrowserRouter } from 'react-router-dom';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
@@ -13,8 +13,8 @@ class App extends Component {
       <BrowserRouter>
         <div className="App">
           <MuiThemeProvider theme={theme}>
-            <NavBar/>
-            <Routes/>
+            <NavBar2/>
+            {/* <Routes/> */}
           </MuiThemeProvider>
         </div>
       </BrowserRouter>
