@@ -8,9 +8,6 @@ export class Home extends React.Component {
         return(
             <div>
                 This is Home
-                <Button variant="contained" color="primary">
-                    MaterialUI Button
-                </Button>
                 <Login/>
             </div>
         );
