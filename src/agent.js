@@ -68,6 +68,25 @@ const Auth = {
                 client_secret: 'abcd1234',
                 grant_type: 'password'
             }
+        ),
+    register: (email, password) =>
+        requests.post(
+            '/register',
+            {
+                email: email,
+                password: password
+            }
+        ),
+    authorization: (email, password, orgTag, invitationCode) =>
+        requests.post(
+            '/authorization/organisation/'+orgTag+'/'+(invitationCode ? invitationCode : ''),
+            {
+                username: email,
+                password: password,
+                client_id: 'frontflip',
+                client_secret: 'abcd1234',
+                grant_type: 'password'
+            }
         )
 };
 
