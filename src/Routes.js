@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import { Home } from './pages/Home';
+import { Profile } from "./pages/Profile";
 
 export default class Routes extends React.Component {
 
@@ -9,7 +10,7 @@ export default class Routes extends React.Component {
                 <BrowserRouter>
                     <Switch>
                         {/* HOME PART */}
-                        <Route path="/" component={Home} />
+                        <Route exact path="/" component={Home} />
                         <Route path="/pricing" component={null} />
                         <Route path="/terms" component={null} />
                         <Route path="/protectingYourData" component={null} />
@@ -32,7 +33,7 @@ export default class Routes extends React.Component {
                         <Route path="/invite" component={null} />
 
                         {/* Profile */}
-                        <Route path="/profile" component={null} />
+                        <Route path="/profile" component={Profile} />
                         <Route path="/profile/edit" component={null} />
 
                         {/* Search */}

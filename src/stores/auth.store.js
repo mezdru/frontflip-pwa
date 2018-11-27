@@ -1,4 +1,4 @@
-import { observable, computed, action, decorate } from "mobx";
+import { observable, action, decorate } from "mobx";
 import agent from '../agent';
 import commonStore from "./common.store";
 import userStore from "./user.store";
@@ -115,9 +115,12 @@ decorate(AuthStore, {
     values: observable,
     setEmail: action,
     setPassword: action,
+    setOrgTag: action,
     reset: action,
     login: action,
-    logout: action
+    logout: action,
+    register: action,
+    registerToOrg: action
 });
 
 export default new AuthStore();
