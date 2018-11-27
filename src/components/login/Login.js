@@ -10,7 +10,7 @@ let Login = inject("authStore")(  observer(class Login extends React.Component {
     }
 
     componentWillUnmount() {
-        window.self.props.authStore.reset();
+        // window.self.props.authStore.reset();
     };
 
     handleEmailChange(e) {
@@ -22,7 +22,7 @@ let Login = inject("authStore")(  observer(class Login extends React.Component {
     handleSubmitForm(e) {
         e.preventDefault();
         window.self.props.authStore.login()
-            .then(() => null);
+            .then(() => console.log('logged in'));
     };
     
     render() {
