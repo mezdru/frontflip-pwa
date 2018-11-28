@@ -1,0 +1,7 @@
+.inputWithRadius {
+    border-radius: 30px;
+}
+.inputWithRadius fieldset {
+    border-radius: 30px;
+    border-color: rgba(0, 0, 0, 0.23);
+}
