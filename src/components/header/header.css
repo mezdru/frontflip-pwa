@@ -1,0 +1,21 @@
+.leftSubmenu {
+    position: relative;
+    border-radius: 30px;
+    width: 90%;
+    height: calc(100% - 70px);
+    left: 5%;
+    background: #FFFFFF;
+    overflow: hidden;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.leftMenu {
+    position: relative;
+    background: #F2F2F2;
+    height: calc(100vh - 143px);
+    overflow:hidden;
+}
+header>div {
+    top:50%;
+    transform: translateY(-50%);
+}
