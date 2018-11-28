@@ -26,8 +26,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
-
-
+import logoWingzy from '../../resources/images/wingzy_line_256.png';
+import './header.css';
 
 const drawerWidth = 240;
 
@@ -48,6 +48,7 @@ const styles = theme => ({
     [theme.breakpoints.up('sm')]: {
       display: 'block',
     },
+    lineHeight: '50%',
   },
   sectionDesktop: {
     display: 'none',
@@ -66,6 +67,12 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    background: 'white',
+    height:'120px',
+    [theme.breakpoints.down('md')]: {
+      height: '100px',
+    },
+    borderTop: '10px solid #dd362e',
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -95,6 +102,11 @@ const styles = theme => ({
     padding: '0 8px',
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
+    height:'129px',
+    [theme.breakpoints.down('md')]: {
+      height: '105px',
+    },
+    borderTop: '10px solid #dd362e',
   },
   content: {
     flexGrow: 1,
@@ -197,6 +209,7 @@ let NavBar2 = inject("commonStore") (observer(class NavBar2 extends React.Compon
         <CssBaseline />
         <AppBar
           position="fixed"
+          color="default"
           className={classNames(classes.appBar, {
             [classes.appBarShift]: open,
           })}
@@ -211,7 +224,9 @@ let NavBar2 = inject("commonStore") (observer(class NavBar2 extends React.Compon
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-              <Link to='/'>Wingzy</Link>
+              <Link to='/'>
+              <img src={logoWingzy} height="70px" />
+              </Link>
             </Typography>
 
             <div className={classes.grow} />
@@ -257,7 +272,23 @@ let NavBar2 = inject("commonStore") (observer(class NavBar2 extends React.Compon
             </IconButton>
           </div>
           <Divider />
-          <List>
+          <Button>List of the orgs</Button>
+          <Divider/>
+
+          <div className={'leftMenu'}>
+          <Typography variant="h6" color="inherit" noWrap>
+          <IconButton
+                    aria-owns={isMenuOpen ? 'material-appbar' : undefined}
+                    aria-haspopup="true"
+                    onClick={this.handleProfileMenuOpen}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
+            Info current Org
+          </Typography>
+
+          <List className={'leftSubmenu'}>
             {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
@@ -265,15 +296,7 @@ let NavBar2 = inject("commonStore") (observer(class NavBar2 extends React.Compon
               </ListItem>
             ))}
           </List>
-          <Divider />
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
+          </div>
         </Drawer>
         <main
           className={classNames(classes.content, {
