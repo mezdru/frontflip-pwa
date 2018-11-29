@@ -94,7 +94,7 @@ class RecordStore {
     /**
      * @description Delete my record
      */
-    postRecord() {
+    deleteMyRecord() {
         this.inProgress = true;
         this.errors = null;
 
@@ -114,9 +114,14 @@ decorate(RecordStore, {
     errors: observable,
     values: observable,
     setOrgTag: action,
+    reset: action,
     setRecordTag: action,
     setRecord: action,
-    getRecordByTag: action
+    getRecordByTag: action,
+    postRecord: action,
+    updateRecord: action,
+    getMyRecord: action,
+    deleteMyRecord: action
 });
 
 export default new RecordStore();

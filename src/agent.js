@@ -121,6 +121,17 @@ const Record = {
         )
 };
 
+const Organisation = {
+    getForPublic: (orgTag) =>
+        requests.get(
+            API_ROOT+'/api/organisation/'+orgTag
+        ),
+    getAlgoliaKey: (orgTag, isPublic) =>
+        requests.get(
+            API_ROOT+'/api/organisation/algolia/'+(isPublic?'public':'private')+'/'+orgTag
+        )
+}
+
 /**
  * @description Test get user with secure call to API
  */
@@ -132,5 +143,6 @@ const Test = {
 export default {
     Auth,
     Test,
-    Record
+    Record,
+    Organisation
 }
