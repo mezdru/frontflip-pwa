@@ -8,7 +8,6 @@ class OrganisationStore {
     values = {
         orgTag: '',
         organisation: {},
-        public_key: {}
     };
 
     setOrgTag(orgTag) {
@@ -19,13 +18,9 @@ class OrganisationStore {
         this.values.organisation = organisation;
     }
     
-    setPublicKey(public_key) {
-        this.values.public_key = public_key;
-    }
 
     reset() {
         this.values.organisation = {};
-        this.values.public_key = {};
         this.values.orgTag = '';
     }
 
@@ -33,12 +28,12 @@ class OrganisationStore {
         this.inProgress = true;
         this.errors = null;
 
-        if(this.isKeyStillValid()) return this.values.public_key.value;
+        if(this.isKeyStillValid()) return Promise.resolve(commonStore.algoliaKey);
 
         return agent.Organisation.getAlgoliaKey(this.values.organisation.tag, this.values.organisation.public)
             .then(data => { 
-                this.setPublicKey(data.public_key);
-                return this.values.public_key.value;
+                commonStore.setAlgoliaKey(data.public_key);
+                return data.public_key.value;
             })
             .catch(action((err) => {
                 this.errors = err.response && err.response.body && err.response.body.errors;
@@ -64,8 +59,8 @@ class OrganisationStore {
     }
 
     isKeyStillValid() {
-        if(this.values.public_key && this.values.public_key.valid_until) {
-            let valid_until_date = new Date(this.values.public_key.valid_until);
+        if(commonStore.algoliaKey && commonStore.algoliaKeyValidity) {
+            let valid_until_date = new Date(parseInt(commonStore.algoliaKeyValidity));
             return ( ((new Date()).getTime()+3600000) < valid_until_date.getTime());
         }
         return false;
@@ -73,16 +68,15 @@ class OrganisationStore {
 
 }
 
-decorate(RecordStore, {
+decorate(OrganisationStore, {
     inProgress: observable,
     errors: observable,
     values: observable,
     reset: action,
     setOrganisation: action,
     setOrgTag: action,
-    setPublicKey: action,
     getAlgoliaKey: action,
     getOrganisationForPublic: action
 });
 
-export default new RecordStore();
+export default new OrganisationStore();
