@@ -33,10 +33,12 @@ class OrganisationStore {
         this.inProgress = true;
         this.errors = null;
 
+        if(this.isKeyStillValid()) return this.values.public_key.value;
+
         return agent.Organisation.getAlgoliaKey(this.values.organisation.tag, this.values.organisation.public)
             .then(data => { 
                 this.setPublicKey(data.public_key);
-                return this.values.public_key;
+                return this.values.public_key.value;
             })
             .catch(action((err) => {
                 this.errors = err.response && err.response.body && err.response.body.errors;
@@ -59,6 +61,14 @@ class OrganisationStore {
                 throw err;
             }))
             .finally(action(()=> { this.inProgress = false; }));
+    }
+
+    isKeyStillValid() {
+        if(this.values.public_key && this.values.public_key.valid_until) {
+            let valid_until_date = new Date(this.values.public_key.valid_until);
+            return ( ((new Date()).getTime()+3600000) < valid_until_date.getTime());
+        }
+        return false;
     }
 
 }
