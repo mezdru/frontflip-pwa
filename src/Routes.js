@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch } from 'react-router-dom';
 import { Home } from './pages/Home';
+import { Search } from './pages/Search';
 import Profile from './components/profile/ProfileBox';
 
 export default class Routes extends React.Component {
@@ -38,7 +39,7 @@ export default class Routes extends React.Component {
                         <Route path="/profile/edit" component={null} />
 
                         {/* Search */}
-                        <Route path="/search" component={null} />
+                        <Route path="/search" component={Search} />
 
                         {/* Wingzy admin */}
                         <Route path="/admin/organisation" component={null} />

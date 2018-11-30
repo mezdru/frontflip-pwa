@@ -30,13 +30,13 @@ const tokenPlugin = req => {
  * @description Create requests, will be used by all other actions in this file
  */
 const requests = {
-    del: url =>
+    del: (url) =>
         superagent
             .del(`${url}`)
             .use(tokenPlugin)
             .end(handleErrors)
             .then(responseBody),
-    get: url =>
+    get: (url) =>
         superagent
             .get(`${url}`)
             .use(tokenPlugin)
@@ -93,33 +93,46 @@ const Auth = {
 };
 
 const Record = {
-    get: (orgTag, recordTag) => 
+    get: (recordId) => 
         requests.get(
-            API_ROOT+'/api/record/'+recordTag+'/organisation/'+orgTag
+            API_ROOT+'/api/profiles/'+recordId
         ),
-    post: (orgTag, record) => 
+    post: (orgId, record) => 
         requests.post(
-            API_ROOT+'/api/record/organisation/'+orgTag,
+            API_ROOT+'/api/profiles/',
             {
+                orgId: orgId,
                 record: record
             }
         ),
-    put: (orgTag, recordTag, record) => 
+    put: (orgId, recordId, record) => 
         requests.put(
-            API_ROOT+'/api/record/'+recordTag+'/organisation/'+orgTag,
+            API_ROOT+'/api/profiles/'+recordId,
             {
+                orgId: orgId,
                 record: record
             }
         ),
-    getMe: (orgTag) => 
-        requests.get(
-            API_ROOT+'/api/record/organisation/'+orgTag+'/me'
-        ),
-    deleteMe: (orgTag) => 
+    delete: (recordId) => 
         requests.del(
-            API_ROOT+'/api/record/organisation/'+orgTag+'/me'
+            API_ROOT+'/api/profiles/'+recordId
         )
+
 };
+
+const Organisation = {
+    getForPublic: (orgTag) =>
+        requests.get(
+            API_ROOT+'/api/organisations/'+orgTag+'/forpublic'
+        ),
+    getAlgoliaKey: (orgId, isPublic) =>
+        requests.get(
+            API_ROOT+'/api/organisations/algolia/'+(isPublic?'public':'private')+'/',
+            {
+                orgId: orgId
+            }
+        )
+}
 
 /**
  * @description Test get user with secure call to API
@@ -132,5 +145,6 @@ const Test = {
 export default {
     Auth,
     Test,
-    Record
+    Record,
+    Organisation
 }

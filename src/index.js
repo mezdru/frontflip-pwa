@@ -8,12 +8,14 @@ import authStore from './stores/auth.store';
 import userStore from './stores/user.store';
 import recordStore from './stores/record.store';
 import commonStore from './stores/common.store';
+import organisationStore from './stores/organisation.store';
 
 const stores = {
     authStore,
     userStore,
     recordStore,
-    commonStore
+    commonStore,
+    organisationStore
 }
  
 
