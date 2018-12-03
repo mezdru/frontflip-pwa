@@ -32,8 +32,11 @@ class OrganisationStore {
 
         return agent.Organisation.getAlgoliaKey(this.values.organisation.tag, this.values.organisation.public)
             .then(data => { 
-                commonStore.setAlgoliaKey(data.public_key);
-                return data.public_key.value;
+                if(data){
+                    commonStore.setAlgoliaKey(data.public_key);
+                    return data.public_key.value;
+                }
+                return null;
             })
             .catch(action((err) => {
                 this.errors = err.response && err.response.body && err.response.body.errors;
@@ -48,7 +51,7 @@ class OrganisationStore {
 
         return agent.Organisation.getForPublic(this.values.orgTag)
             .then(data => { 
-                this.setOrganisation(data.organisation);
+                if(data) this.setOrganisation(data.organisation);
                 return this.values.organisation;
             })
             .catch(action((err) => {
