@@ -3,7 +3,8 @@ import {inject, observer} from 'mobx-react';
 import Grid from '@material-ui/core/Grid';
 
 import Input from '../utils/inputs/InputWithRadius'
-import Btn from '../utils/buttons/Button';
+import ButtonRadius from '../utils/buttons/ButtonRadius';
+
 
 import './LoginSignup.css';
 
@@ -63,7 +64,7 @@ let SignUp = inject("authStore")(observer(class SignUp extends React.Component {
                         onChange={window.self.handlePasswordChange}                    />
                 </Grid>
                 <Grid item>
-                    <Btn color="primary"> Sign Up </Btn>
+                    <ButtonRadius color="primary"> Sign Up </ButtonRadius>
                 </Grid>
             </Grid>
         )
