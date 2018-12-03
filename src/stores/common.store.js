@@ -1,30 +1,31 @@
 import { observable, action, reaction, decorate } from 'mobx';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+
 
 class CommonStore {
 
     appName = 'Frontflip';
-    token;
+    accessToken;
+    refreshToken;
     algoliaKey;
     algoliaKeyValidity;
     appLoaded = false;
 
 
     constructor() {
-        // Init token value
-        this.token = this.getStorage('jwt');
+        this.accessToken = this.getCookie('accessToken');
+        this.refreshToken = this.getCookie('refreshToken');
         this.algoliaKey = this.getStorage('algoliaKey');
         this.algoliaKeyValidity = this.getStorage('algoliaKeyValidity');
+    }
+    
+    setCookie(name, value, expires) {
+        cookies.set(name, value, (expires ? {expires: expires} : null));
+    }
 
-        // Sync storage with token value
-        reaction(() => this.token,
-            token => {
-                if (token) {
-                    this.setStorage(token, 'jwt');
-                } else {
-                    this.removeStorage('jwt');
-                }
-            }
-        );
+    getCookie(name) {
+        return cookies.get(name);
     }
 
     setStorage(token, name) {
@@ -39,9 +40,18 @@ class CommonStore {
         window.localStorage.removeItem(name);
     }
 
-    setToken(token) {
-        this.token = token;
+    setAuthTokens(tokens) {
+        console.log(tokens);
+        let expDate = new Date();
+        expDate.setMinutes(expDate.getMinutes()+55);
+
+        this.accessToken = tokens.access_token;
+        this.setCookie('accessToken',this.accessToken, expDate);
+
+        this.refreshToken = tokens.refresh_token;
+        this.setCookie('refreshToken',this.refreshToken, null);
     }
+
     setAlgoliaKey(algoliaKey) {
         this.algoliaKey = algoliaKey.value;
         this.algoliaKeyValidity = algoliaKey.valid_until;

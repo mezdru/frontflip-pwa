@@ -40,8 +40,10 @@ class AuthStore {
         this.errors = null;
 
         return agent.Auth.login(this.values.email, this.values.password)
-            .then((tokens) => {
-                commonStore.setToken(tokens.access_token);
+            .then((response) => {
+                commonStore.setAuthTokens(response);
+                if(response.access_token) return 200;
+                else return 403;
             })
             .catch(action((err) => {
                 this.errors = err.response && err.response.body && err.response.body.errors;

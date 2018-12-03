@@ -21,8 +21,8 @@ const responseBody = res => res.body;
  * @description Set token to header
  */
 const tokenPlugin = req => {
-    if(commonStore.token){
-        req.set('Authorization', `Bearer ${commonStore.token}`);
+    if(commonStore.accessToken){
+        req.set('Authorization', `Bearer ${commonStore.accessToken}`);
     }
 };
 
