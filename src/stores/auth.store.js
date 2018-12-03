@@ -97,7 +97,7 @@ class AuthStore {
     }
 
     logout() {
-        commonStore.setToken(null);
+        commonStore.removeAuthTokens();
         userStore.forgetUser();
         return Promise.resolve();
     }

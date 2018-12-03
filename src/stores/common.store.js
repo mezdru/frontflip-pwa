@@ -19,13 +19,26 @@ class CommonStore {
         this.algoliaKey = this.getStorage('algoliaKey');
         this.algoliaKeyValidity = this.getStorage('algoliaKeyValidity');
     }
+
+    getAccessToken() {
+        return this.getCookie('accessToken');
+    }
+    getRefreshToken() {
+        return this.getCookie('refreshToken');
+    }
     
     setCookie(name, value, expires) {
         cookies.set(name, value, (expires ? {expires: expires} : null));
     }
 
     getCookie(name) {
+        console.log(cookies.get(name));
         return cookies.get(name);
+    }
+
+    removeAuthTokens() {
+        cookies.remove('accessToken');
+        cookies.remove('refreshToken');
     }
 
     setStorage(token, name) {
@@ -43,7 +56,7 @@ class CommonStore {
     setAuthTokens(tokens) {
         console.log(tokens);
         let expDate = new Date();
-        expDate.setMinutes(expDate.getMinutes()+55);
+        expDate.setMinutes(expDate.getMinutes()+1);
 
         this.accessToken = tokens.access_token;
         this.setCookie('accessToken',this.accessToken, expDate);

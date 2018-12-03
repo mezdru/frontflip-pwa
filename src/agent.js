@@ -10,6 +10,7 @@ const API_ROOT = 'http://localhost:3000';
 
 const handleErrors = err => {
     if (err && err.response && err.response.status === 401) {
+        console.log(err.response);
         authStore.logout();
     }
     return err;
@@ -21,8 +22,13 @@ const responseBody = res => res.body;
  * @description Set token to header
  */
 const tokenPlugin = req => {
-    if(commonStore.accessToken){
-        req.set('Authorization', `Bearer ${commonStore.accessToken}`);
+    if(commonStore.getAccessToken()) {
+        console.log('ok')
+        req.set('Authorization', `Bearer ${commonStore.getAccessToken()}`);
+    }else {
+        getWithRefreshToken().then(() => {
+            req.set('Authorization', `Bearer ${commonStore.getAccessToken()}`);
+        })
     }
 };
 
@@ -30,13 +36,13 @@ const tokenPlugin = req => {
  * @description Create requests, will be used by all other actions in this file
  */
 const requests = {
-    del: (url) =>
+    del: async (url) =>
         superagent
-            .del(`${url}`)
-            .use(tokenPlugin)
-            .end(handleErrors)
-            .then(responseBody),
-    get: (url) =>
+        .del(`${url}`)
+        .use(tokenPlugin)
+        .end(handleErrors)
+        .then(responseBody),   
+    get: (url) => 
         superagent
             .get(`${url}`)
             .use(tokenPlugin)
@@ -56,6 +62,31 @@ const requests = {
             .then(responseBody),
 };
 
+let getWithRefreshTokenAsync = () => {
+    // check token
+    if (commonStore.getRefreshToken() && !commonStore.getAccessToken()) {
+        console.log('refresh')
+        requests.post(
+            `${API_ROOT_AUTH}/auth/locale`,
+            {
+                client_id: 'frontflip',
+                client_secret: 'abcd1234',
+                grant_type: 'refresh_token',
+                refresh_token: commonStore.getRefreshToken()
+            }
+        )
+        .then((response)=>{
+            console.log('resp : ' + response)
+            commonStore.setAuthTokens(response);
+        })
+        
+        console.log('after refresh')
+    }
+}
+let getWithRefreshToken = async () => {
+    await getWithRefreshTokenAsync();
+}
+
 /**
  * @description Authentification actions
  */
@@ -69,6 +100,16 @@ const Auth = {
                 client_id: 'frontflip',
                 client_secret: 'abcd1234',
                 grant_type: 'password'
+            }
+        ),
+    refreshToken: (refreshToken) =>
+        requests.post(
+            `${API_ROOT_AUTH}/auth/locale`,
+            {
+                client_id: 'frontflip',
+                client_secret: 'abcd1234',
+                grant_type: 'refresh_token',
+                refresh_token: refreshToken
             }
         ),
     register: (email, password) =>
