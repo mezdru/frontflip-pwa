@@ -9,10 +9,10 @@ export class Home extends React.Component {
     render(){
         return(
             <div>
-                This is Home
-                <Login/>
-                <InputWithRadius label='Your password' />
-                <Link to="/search">Go to seaarch page</Link>
+                {/* This is Home
+                <Login/> */}
+                <InputWithRadius label='Your password' /><br/>
+                {/* <Link to="/search">Search</Link> */}
             </div>
         );
     }
