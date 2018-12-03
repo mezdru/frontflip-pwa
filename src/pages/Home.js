@@ -9,8 +9,6 @@ export class Home extends React.Component {
     render(){
         return(
             <div>
-                <InputWithRadius label='Your password'/>
-                <Link to="/search">Go to search page</Link>
                 <Auth/>
             </div>
         );

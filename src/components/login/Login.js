@@ -3,9 +3,9 @@ import {inject, observer} from 'mobx-react';
 import {Grid} from '@material-ui/core';
 
 import Input from '../utils/inputs/InputWithRadius'
-import Btn from '../utils/buttons/Button';
 
 import './LoginSignup.css';
+import ButtonRadius from '../utils/buttons/ButtonRadius';
 
 let Login = inject("authStore")(observer(class Login extends React.Component {
     
@@ -41,7 +41,7 @@ let Login = inject("authStore")(observer(class Login extends React.Component {
         return (
             <Grid className={'form'} container item direction='column' justify='space-around' alignItems="stretch" >
                 <Grid item>
-                    <Btn color={'secondary'}> Connect with google </Btn>
+                    <ButtonRadius color='secondary'> Connect with google </ButtonRadius>
                 </Grid>
                 <Grid item >
                     <Input
@@ -66,7 +66,7 @@ let Login = inject("authStore")(observer(class Login extends React.Component {
                     />
                 </Grid>
                 <Grid item >
-                    <Btn onClick={window.self.handleSubmitForm} color="primary"> Log In </Btn>
+                    <ButtonRadius onClick={window.self.handleSubmitForm} color="primary">Log In</ButtonRadius>
                 </Grid>
             </Grid>
         )
