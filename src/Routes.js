@@ -5,7 +5,7 @@ import { Search } from './pages/Search';
 import Profile from './components/profile/ProfileBox';
 
 export default class Routes extends React.Component {
-
+    
     render() {
         return (
                 

@@ -1,6 +1,6 @@
 import React from 'react';
 import './InputWithRadius.css';
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
 /**
@@ -11,28 +11,29 @@ import TextField from '@material-ui/core/TextField';
 
 const styles = theme => ({
     textField: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit,  
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: '100%',
     },
-  });
-  
+});
+
 
 class InputWithRadius extends React.Component {
-
-    render(){
-        const { classes } = this.props;
-
-        return(
+    
+    render() {
+        const {classes} = this.props;
+        
+        return (
             <TextField
-            label={this.props.label}
-            className={`inputWithRadius ${classes.textField}`}
-            value={this.props.value}
-            onChange={this.props.onChange}
-            margin="normal"
-            variant="outlined"
+                label={this.props.label}
+                className={`inputWithRadius ${classes.textField}`}
+                value={this.props.value}
+                onChange={this.props.onChange}
+                margin="normal"
+                variant="outlined"
             />
         );
     }
 }
 
-export default withStyles(styles, { withTheme: true })(InputWithRadius);
+export default withStyles(styles, {withTheme: true})(InputWithRadius);

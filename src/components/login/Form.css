@@ -1,0 +1,23 @@
+.form-root {
+    flex-grow: 1;
+    width: 100%;
+}
+
+.form-tab-bar {
+    box-shadow: none !important;
+    background-color: transparent !important;
+    border-radius: 20px !important;
+    font-size: 0.9rem;
+}
+
+#form-tab-left:hover, #form-tab-right:hover {
+    background-color: #d7d9d3 !important;
+}
+
+#form-tab-left {
+    text-align: left;
+}
+
+#form-tab-right  {
+    text-align: right;
+}

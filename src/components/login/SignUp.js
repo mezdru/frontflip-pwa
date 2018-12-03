@@ -1,13 +1,13 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {Grid} from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 
 import Input from '../utils/inputs/InputWithRadius'
 import Btn from '../utils/buttons/Button';
 
 import './LoginSignup.css';
 
-let Login = inject("authStore")(observer(class Login extends React.Component {
+let SignUp = inject("authStore")(observer(class SignUp extends React.Component {
     
     constructor(props) {
         super(props);
@@ -19,31 +19,30 @@ let Login = inject("authStore")(observer(class Login extends React.Component {
     }
     
     componentWillUnmount() {
-        // window.self.props.authStore.reset();
+        window.self.props.authStore.reset();
     };
     
     handleEmailChange(e) {
         window.self.props.authStore.setEmail(e.target.value);
+        console.log(e.target.value)
     };
     
     handlePasswordChange(e) {
-        window.self.props.authStore.setPassword(e.target.value)
+        window.self.props.authStore.setPassword(e.target.value);
+        console.log(e.target.value)
     };
     
     handleSubmitForm(e) {
         e.preventDefault();
         window.self.props.authStore.login()
-            .then(() => console.log('logged in'));
+            .then(() => null);
     };
     
     render() {
         const {values, errors, inProgress} = window.self.props.authStore;
         return (
-            <Grid className={'form'} container item direction='column' justify='space-around' alignItems="stretch" >
+            <Grid className={'form'} container item direction='column' justify='space-around' alignItems="stretch">
                 <Grid item>
-                    <Btn color={'secondary'}> Connect with google </Btn>
-                </Grid>
-                <Grid item >
                     <Input
                         label="Email"
                         type="email"
@@ -51,10 +50,9 @@ let Login = inject("authStore")(observer(class Login extends React.Component {
                         margin="normal"
                         fullWidth
                         value={values.email}
-                        onChange={window.self.handleEmailChange}
-                    />
+                        onChange={window.self.handleEmailChange}                    />
                 </Grid>
-                <Grid item >
+                <Grid item>
                     <Input
                         label="Password"
                         type="password"
@@ -62,15 +60,14 @@ let Login = inject("authStore")(observer(class Login extends React.Component {
                         margin="normal"
                         fullWidth
                         value={values.password}
-                        onChange={window.self.handlePasswordChange}
-                    />
+                        onChange={window.self.handlePasswordChange}                    />
                 </Grid>
-                <Grid item >
-                    <Btn onClick={window.self.handleSubmitForm} color="primary"> Log In </Btn>
+                <Grid item>
+                    <Btn color="primary"> Sign Up </Btn>
                 </Grid>
             </Grid>
         )
     };
 }));
 
-export default Login;
+export default SignUp
