@@ -67,6 +67,7 @@ let SignUp = inject("authStore")(observer(class SignUp extends React.Component {
                     <ButtonRadius color="primary"> Sign Up </ButtonRadius>
                 </Grid>
             </Grid>
+        
         )
     };
 }));
