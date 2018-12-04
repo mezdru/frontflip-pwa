@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    padding: 1rem 5px;
-    height: 51vh;
+    padding: 1rem 15px;
+    height: 49vh;
     overflow: hidden;
 }

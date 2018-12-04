@@ -67,7 +67,7 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    background: 'white',
+    background: 'transparent',
     height:'120px',
     [theme.breakpoints.down('md')]: {
       height: '100px',

@@ -10,10 +10,10 @@ import './Auth.css'
 const Auth = () => {
     
     return (
-        <Grid container direction={"colomn"} justify={"center"} className="root">
-            <Grid item container direction={"colomn"} justify={"center"} alignItems={'stretch'} xs={12} style={{height:'45vh'}}>
+        <Grid container justify={"center"} className="root">
+            <Grid item container justify={"center"} alignItems={'stretch'} xs={12} style={{height:'45vh'}}>
                 <div className="banner"/>
-                <Logo src="https://ytimg.googleusercontent.com/vi/lcno0yGvP7o/mqdefault.jpg" alt="org-logo" id="logo"/>
+                <Logo src="https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg" alt="org-logo" id="logo"/>
             </Grid>
             <Grid item xs={12} sm={4} id="auth-form">
                 <Form />

@@ -33,12 +33,12 @@ class Form extends React.Component {
         const {theme} = this.props;
         
         return (
-            <Grid container direction="column"
+            <Grid container
                   justify="center"
                   alignItems="center"
                   className="form-root">
                 <Grid item xs={12} style={{width: '100%'}}>
-                    <AppBar position="static" className="form-tab-bar">
+                    <AppBar position="static" id="form-tab-bar">
                         <Tabs
                             value={this.state.value}
                             onChange={this.handleChange}
@@ -51,7 +51,7 @@ class Form extends React.Component {
                         </Tabs>
                     </AppBar>
                 </Grid>
-                <Grid item xs={12} style={{width: '100%'}}>
+                <Grid item style={{width: '100%'}}>
                     <SwipeableViews
                         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                         index={this.state.value}

@@ -11,8 +11,8 @@
     height: 43vh;
     background-image: url("../images/fly_away.jpg");
     background-position: center;
+    box-shadow: 0 5px 15px -1px darkgrey, 0 0 0 5px transparent;
     background-size: cover;
-    border-bottom: 5px solid red;
 }
 
 #logo {
@@ -20,11 +20,11 @@
     height: 7rem;
     bottom: 4rem;
     box-shadow: 0 5px 15px -1px darkgrey, 0 0 0 5px transparent;
-    border: 5px solid red;
+    border: 5px solid white;
     z-index: 999;
 }
 
 #auth-form {
-    padding-top: 10px;
+    padding-top: 4px;
     height: 55vh;
 }
