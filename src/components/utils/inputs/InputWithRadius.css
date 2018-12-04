@@ -1,5 +1,7 @@
 .inputWithRadius {
     border-radius: 30px;
+    width: 100%;
+    height: 6vh;
 }
 .inputWithRadius fieldset {
     border-radius: 30px;

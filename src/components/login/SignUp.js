@@ -7,6 +7,7 @@ import ButtonRadius from '../utils/buttons/ButtonRadius';
 
 
 import './LoginSignup.css';
+import {Typography} from "@material-ui/core";
 
 let SignUp = inject("authStore")(observer(class SignUp extends React.Component {
     
@@ -23,6 +24,10 @@ let SignUp = inject("authStore")(observer(class SignUp extends React.Component {
         const {values, errors, inProgress} = window.self.props.authStore;
         return (
             <Grid className={'form'} container item direction='column' justify='space-around' alignItems="stretch">
+                <Grid item>
+                    <ButtonRadius color='secondary'> Connect with google </ButtonRadius>
+                </Grid>
+                <Typography style={{fontSize:'1rem', fontWeight: '500'}}> or </Typography>
                 <Grid item>
                     <Input
                         label="Email"
@@ -47,6 +52,7 @@ let SignUp = inject("authStore")(observer(class SignUp extends React.Component {
                     <ButtonRadius color="primary"> Sign Up </ButtonRadius>
                 </Grid>
             </Grid>
+        
         )
     };
 }));

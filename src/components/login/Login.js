@@ -1,12 +1,8 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {Grid} from '@material-ui/core';
-import {
-    Redirect
-  } from "react-router-dom";
-
+import {Redirect} from "react-router-dom";
+import {Grid, Typography} from '@material-ui/core';
 import Input from '../utils/inputs/InputWithRadius'
-
 import './LoginSignup.css';
 import ButtonRadius from '../utils/buttons/ButtonRadius';
 
@@ -48,10 +44,11 @@ let Login = inject("authStore")(observer(class Login extends React.Component {
         if (successLogin) return <Redirect to='/profile'/>;
 
         return (
-            <Grid className={'form'} container item direction='column' justify='space-around' alignItems="stretch" >
+            <Grid className={'form'} container item direction='column' alignItems={'stretch'} justify='space-around'>
                 <Grid item>
                     <ButtonRadius color='secondary'> Connect with google </ButtonRadius>
                 </Grid>
+                <Typography style={{fontSize:'1rem', fontWeight: '500'}}> or </Typography>
                 <Grid item >
                     <Input
                         label="Email"
