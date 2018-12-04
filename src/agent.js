@@ -21,14 +21,9 @@ const responseBody = res => res.body;
 /**
  * @description Set token to header
  */
-const tokenPlugin = req => {
+const tokenPlugin = async  req => {
     if(commonStore.getAccessToken()) {
-        console.log('ok')
         req.set('Authorization', `Bearer ${commonStore.getAccessToken()}`);
-    }else {
-        getWithRefreshToken().then(() => {
-            req.set('Authorization', `Bearer ${commonStore.getAccessToken()}`);
-        })
     }
 };
 
@@ -36,56 +31,76 @@ const tokenPlugin = req => {
  * @description Create requests, will be used by all other actions in this file
  */
 const requests = {
-    del: async (url) =>
-        superagent
-        .del(`${url}`)
-        .use(tokenPlugin)
-        .end(handleErrors)
-        .then(responseBody),   
-    get: (url) => 
-        superagent
+    del: (url) => {
+        return validateToken()
+        .then(()=>{
+            superagent
             .get(`${url}`)
             .use(tokenPlugin)
             .end(handleErrors)
-            .then(responseBody),
-    put: (url, body) =>
-        superagent
+            .then(responseBody);
+        });
+    },
+        
+    get: (url) => {
+        return validateToken()
+        .then(()=>{
+            superagent
+            .get(`${url}`)
+            .use(tokenPlugin)
+            .end(handleErrors)
+            .then(responseBody);
+        });
+    },
+        
+    put: (url, body) => {
+        return validateToken()
+        .then( () => {
+            superagent
             .put(`${url}`, body)
             .use(tokenPlugin)
             .end(handleErrors)
-            .then(responseBody),
-    post: (url, body) =>
-        superagent
-            .post(`${url}`, body)
+            .then(responseBody)
+        });
+    },
+
+    post: (url, body) => {
+        return validateToken()
+        .then( () => {
+            superagent
+            .put(`${url}`, body)
             .use(tokenPlugin)
             .end(handleErrors)
-            .then(responseBody),
+            .then(responseBody)
+        });
+    },
 };
 
-let getWithRefreshTokenAsync = () => {
-    // check token
+/**
+ * @description Get new access token if the older one is expired
+ */
+let validateToken = () => {
     if (commonStore.getRefreshToken() && !commonStore.getAccessToken()) {
-        console.log('refresh')
-        requests.post(
-            `${API_ROOT_AUTH}/auth/locale`,
-            {
-                client_id: 'frontflip',
-                client_secret: 'abcd1234',
-                grant_type: 'refresh_token',
-                refresh_token: commonStore.getRefreshToken()
-            }
-        )
-        .then((response)=>{
-            console.log('resp : ' + response)
-            commonStore.setAuthTokens(response);
-        })
-        
-        console.log('after refresh')
+        return new Promise( (resolve, reject) => {
+            superagent.post(
+                `${API_ROOT_AUTH}/auth/locale`,
+                {
+                    client_id: 'frontflip',
+                    client_secret: 'abcd1234',
+                    grant_type: 'refresh_token',
+                    refresh_token: commonStore.getRefreshToken()
+                }
+            )
+            .end(handleErrors)
+            .then((response)=>{
+                commonStore.setAuthTokens(JSON.parse(response.text));
+                resolve(); 
+            }) 
+        });
+    }else{
+        return Promise.resolve();
     }
-}
-let getWithRefreshToken = async () => {
-    await getWithRefreshTokenAsync();
-}
+};
 
 /**
  * @description Authentification actions

@@ -32,7 +32,6 @@ class CommonStore {
     }
 
     getCookie(name) {
-        console.log(cookies.get(name));
         return cookies.get(name);
     }
 
@@ -54,9 +53,8 @@ class CommonStore {
     }
 
     setAuthTokens(tokens) {
-        console.log(tokens);
         let expDate = new Date();
-        expDate.setMinutes(expDate.getMinutes()+1);
+        expDate.setMinutes(expDate.getMinutes()+55);
 
         this.accessToken = tokens.access_token;
         this.setCookie('accessToken',this.accessToken, expDate);
