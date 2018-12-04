@@ -116,16 +116,6 @@ const Auth = {
                 grant_type: 'password'
             }
         ),
-    refreshToken: (refreshToken) =>
-        requests.post(
-            `${API_ROOT_AUTH}/auth/locale`,
-            {
-                client_id: 'frontflip',
-                client_secret: 'abcd1234',
-                grant_type: 'refresh_token',
-                refresh_token: refreshToken
-            }
-        ),
     register: (email, password) =>
         requests.post(
             `${API_ROOT_AUTH}/register`,
