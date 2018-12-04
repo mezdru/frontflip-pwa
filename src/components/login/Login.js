@@ -14,7 +14,6 @@ let Login = inject("authStore")(observer(class Login extends React.Component {
             value: 0,
             successLogin: false,
         };
-        // Because we can't access to this in the class
     }
     
     componentWillUnmount = () => {

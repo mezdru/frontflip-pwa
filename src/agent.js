@@ -10,7 +10,6 @@ const API_ROOT = 'http://localhost:3000';
 
 const handleErrors = err => {
     if (err && err.response && err.response.status === 401) {
-        console.log(err.response);
         authStore.logout();
     }
     return err;
@@ -21,7 +20,7 @@ const responseBody = res => res.body;
 /**
  * @description Set token to header
  */
-const tokenPlugin = async  req => {
+const tokenPlugin = req => {
     if(commonStore.getAccessToken()) {
         req.set('Authorization', `Bearer ${commonStore.getAccessToken()}`);
     }
