@@ -53,14 +53,16 @@ class CommonStore {
     }
 
     setAuthTokens(tokens) {
-        let expDate = new Date();
-        expDate.setMinutes(expDate.getMinutes()+55);
-
-        this.accessToken = tokens.access_token;
-        this.setCookie('accessToken',this.accessToken, expDate);
-
-        this.refreshToken = tokens.refresh_token;
-        this.setCookie('refreshToken',this.refreshToken, null);
+        if(tokens) {
+            let expDate = new Date();
+            expDate.setMinutes(expDate.getMinutes()+55);
+    
+            this.accessToken = tokens.access_token;
+            this.setCookie('accessToken',this.accessToken, expDate);
+    
+            this.refreshToken = tokens.refresh_token;
+            this.setCookie('refreshToken',this.refreshToken, null);
+        }
     }
 
     setAlgoliaKey(algoliaKey) {

@@ -40,9 +40,11 @@ class AuthStore {
         this.errors = null;
 
         return agent.Auth.login(this.values.email, this.values.password)
-            .then((response) => {
-                commonStore.setAuthTokens(response);
-                if(response.access_token) return 200;
+            .then((response) => {   
+                if(response && response.access_token){
+                    commonStore.setAuthTokens(response);
+                    return 200;
+                } 
                 else return 403;
             })
             .catch(action((err) => {
@@ -97,6 +99,8 @@ class AuthStore {
     }
 
     logout() {
+        console.log('will logout');
+
         commonStore.removeAuthTokens();
         userStore.forgetUser();
         return Promise.resolve();

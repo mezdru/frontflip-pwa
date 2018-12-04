@@ -21,8 +21,8 @@ const responseBody = res => res.body;
  * @description Set token to header
  */
 const tokenPlugin = req => {
-    if(commonStore.getAccessToken()) {
-        req.set('Authorization', `Bearer ${commonStore.getAccessToken()}`);
+    if(commonStore.getAccessToken() ||commonStore.accessToken) {
+        req.set('Authorization', `Bearer `+ (commonStore.getAccessToken() ||commonStore.accessToken));
     }
 };
 
@@ -32,46 +32,46 @@ const tokenPlugin = req => {
 const requests = {
     del: (url) => {
         return validateToken()
-        .then(()=>{
+        .then(()=>
             superagent
-            .get(`${url}`)
+            .del(`${url}`)
             .use(tokenPlugin)
             .end(handleErrors)
-            .then(responseBody);
-        });
+            .then(responseBody)
+        );
     },
         
     get: (url) => {
         return validateToken()
-        .then(()=>{
+        .then(()=>
             superagent
             .get(`${url}`)
             .use(tokenPlugin)
             .end(handleErrors)
-            .then(responseBody);
-        });
+            .then(responseBody)
+        );
     },
         
     put: (url, body) => {
         return validateToken()
-        .then( () => {
+        .then( () => 
             superagent
             .put(`${url}`, body)
             .use(tokenPlugin)
             .end(handleErrors)
             .then(responseBody)
-        });
+        );
     },
 
     post: (url, body) => {
         return validateToken()
-        .then( () => {
+        .then( () => 
             superagent
-            .put(`${url}`, body)
+            .post(`${url}`, body)
             .use(tokenPlugin)
             .end(handleErrors)
             .then(responseBody)
-        });
+        );
     },
 };
 

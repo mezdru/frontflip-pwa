@@ -32,7 +32,6 @@ let Login = inject("authStore")(observer(class Login extends React.Component {
         e.preventDefault();
         this.props.authStore.login()
             .then((response) => {
-                console.log('response : ' + response);
                 if(response == 200) this.setState({successLogin: true});
             });
     };
