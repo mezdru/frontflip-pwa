@@ -21,8 +21,8 @@ const responseBody = res => res.body;
  * @description Set token to header
  */
 const tokenPlugin = req => {
-    if(commonStore.token){
-        req.set('Authorization', `Bearer ${commonStore.token}`);
+    if(commonStore.getAccessToken() ||commonStore.accessToken) {
+        req.set('Authorization', `Bearer `+ (commonStore.getAccessToken() ||commonStore.accessToken));
     }
 };
 
@@ -30,30 +30,75 @@ const tokenPlugin = req => {
  * @description Create requests, will be used by all other actions in this file
  */
 const requests = {
-    del: (url) =>
-        superagent
+    del: (url) => {
+        return validateToken()
+        .then(()=>
+            superagent
             .del(`${url}`)
             .use(tokenPlugin)
             .end(handleErrors)
-            .then(responseBody),
-    get: (url) =>
-        superagent
+            .then(responseBody)
+        );
+    },
+        
+    get: (url) => {
+        return validateToken()
+        .then(()=>
+            superagent
             .get(`${url}`)
             .use(tokenPlugin)
             .end(handleErrors)
-            .then(responseBody),
-    put: (url, body) =>
-        superagent
+            .then(responseBody)
+        );
+    },
+        
+    put: (url, body) => {
+        return validateToken()
+        .then( () => 
+            superagent
             .put(`${url}`, body)
             .use(tokenPlugin)
             .end(handleErrors)
-            .then(responseBody),
-    post: (url, body) =>
-        superagent
+            .then(responseBody)
+        );
+    },
+
+    post: (url, body) => {
+        return validateToken()
+        .then( () => 
+            superagent
             .post(`${url}`, body)
             .use(tokenPlugin)
             .end(handleErrors)
-            .then(responseBody),
+            .then(responseBody)
+        );
+    },
+};
+
+/**
+ * @description Get new access token if the older one is expired
+ */
+let validateToken = () => {
+    if (commonStore.getRefreshToken() && !commonStore.getAccessToken()) {
+        return new Promise( (resolve, reject) => {
+            superagent.post(
+                `${API_ROOT_AUTH}/auth/locale`,
+                {
+                    client_id: 'frontflip',
+                    client_secret: 'abcd1234',
+                    grant_type: 'refresh_token',
+                    refresh_token: commonStore.getRefreshToken()
+                }
+            )
+            .end(handleErrors)
+            .then((response)=>{
+                commonStore.setAuthTokens(JSON.parse(response.text));
+                resolve(); 
+            }) 
+        });
+    }else{
+        return Promise.resolve();
+    }
 };
 
 /**

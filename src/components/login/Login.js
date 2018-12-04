@@ -1,9 +1,8 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
+import {Redirect} from "react-router-dom";
 import {Grid, Typography} from '@material-ui/core';
-
 import Input from '../utils/inputs/InputWithRadius'
-
 import './LoginSignup.css';
 import ButtonRadius from '../utils/buttons/ButtonRadius';
 
@@ -13,31 +12,35 @@ let Login = inject("authStore")(observer(class Login extends React.Component {
         super(props);
         this.state = {
             value: 0,
+            successLogin: false,
         };
-        // Because we can't access to this in the class
-        window.self = this;
     }
     
-    componentWillUnmount() {
-        // window.self.props.authStore.reset();
+    componentWillUnmount = () => {
+        this.props.authStore.reset();
     };
     
-    handleEmailChange(e) {
-        window.self.props.authStore.setEmail(e.target.value);
+    handleEmailChange = (e) => {
+        this.props.authStore.setEmail(e.target.value);
     };
     
-    handlePasswordChange(e) {
-        window.self.props.authStore.setPassword(e.target.value)
+    handlePasswordChange = (e) => {
+        this.props.authStore.setPassword(e.target.value)
     };
     
-    handleSubmitForm(e) {
+    handleSubmitForm = (e) => {
         e.preventDefault();
-        window.self.props.authStore.login()
-            .then(() => console.log('logged in'));
+        this.props.authStore.login()
+            .then((response) => {
+                if(response == 200) this.setState({successLogin: true});
+            });
     };
     
     render() {
-        const {values, errors, inProgress} = window.self.props.authStore;
+        const {values, errors, inProgress} = this.props.authStore;
+        let {successLogin} = this.state;
+        if (successLogin) return <Redirect to='/profile'/>;
+
         return (
             <Grid className={'form'} container item direction='column' alignItems={'stretch'} justify='space-around'>
                 <Grid item>
@@ -52,7 +55,7 @@ let Login = inject("authStore")(observer(class Login extends React.Component {
                         margin="normal"
                         fullWidth
                         value={values.email}
-                        onChange={window.self.handleEmailChange}
+                        onChange={this.handleEmailChange}
                     />
                 </Grid>
                 <Grid item >
@@ -63,11 +66,11 @@ let Login = inject("authStore")(observer(class Login extends React.Component {
                         margin="normal"
                         fullWidth
                         value={values.password}
-                        onChange={window.self.handlePasswordChange}
+                        onChange={this.handlePasswordChange}
                     />
                 </Grid>
                 <Grid item >
-                    <ButtonRadius onClick={window.self.handleSubmitForm} color="primary">Log In</ButtonRadius>
+                    <ButtonRadius onClick={this.handleSubmitForm} color="primary">Log In</ButtonRadius>
                 </Grid>
             </Grid>
         )

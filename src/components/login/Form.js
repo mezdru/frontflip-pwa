@@ -59,7 +59,7 @@ class Form extends React.Component {
                         style={{ width:'100%'}}
                     >
                         <TabContainer dir={theme.direction}><Login/></TabContainer>
-                        <TabContainer dir={theme.direction}><SignUp/></TabContainer>
+                        {/* <TabContainer dir={theme.direction}><SignUp/></TabContainer> */}
                     </SwipeableViews>
                 </Grid>
             </Grid>

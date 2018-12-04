@@ -19,27 +19,7 @@ let SignUp = inject("authStore")(observer(class SignUp extends React.Component {
         // Because we can't access to this in the class
         window.self = this;
     }
-    
-    componentWillUnmount() {
-        window.self.props.authStore.reset();
-    };
-    
-    handleEmailChange(e) {
-        window.self.props.authStore.setEmail(e.target.value);
-        console.log(e.target.value)
-    };
-    
-    handlePasswordChange(e) {
-        window.self.props.authStore.setPassword(e.target.value);
-        console.log(e.target.value)
-    };
-    
-    handleSubmitForm(e) {
-        e.preventDefault();
-        window.self.props.authStore.login()
-            .then(() => null);
-    };
-    
+
     render() {
         const {values, errors, inProgress} = window.self.props.authStore;
         return (
@@ -56,7 +36,7 @@ let SignUp = inject("authStore")(observer(class SignUp extends React.Component {
                         margin="normal"
                         fullWidth
                         value={values.email}
-                        onChange={window.self.handleEmailChange}                    />
+                                            />
                 </Grid>
                 <Grid item>
                     <Input
@@ -66,7 +46,7 @@ let SignUp = inject("authStore")(observer(class SignUp extends React.Component {
                         margin="normal"
                         fullWidth
                         value={values.password}
-                        onChange={window.self.handlePasswordChange}                    />
+                                           />
                 </Grid>
                 <Grid item>
                     <ButtonRadius color="primary"> Sign Up </ButtonRadius>
