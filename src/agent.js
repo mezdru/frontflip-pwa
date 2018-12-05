@@ -137,6 +137,27 @@ const Auth = {
         )
 };
 
+const User = {
+    getCurrent: () =>
+        requests.get(
+            API_ROOT+'/api/users/current'
+        ),
+    updateCurrent: (user) => 
+        requests.put(
+            API_ROOT+'/api/users/',
+            {
+                user: user
+            }
+        ),
+    update: (userId, user) =>
+        requests.put(
+            API_ROOT+'/api/users/'+userId,
+            {
+                user: user
+            }
+        )
+}
+
 const Record = {
     get: (recordId) => 
         requests.get(
@@ -191,5 +212,6 @@ export default {
     Auth,
     Test,
     Record,
-    Organisation
+    Organisation,
+    User
 }
