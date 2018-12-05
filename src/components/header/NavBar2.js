@@ -28,8 +28,13 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import logoWingzy from '../../resources/images/wingzy_line_256.png';
 import './header.css';
+import Toggle from '../../components/utils/toggle/Toggle';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import WifiIcon from '@material-ui/icons/Wifi';
+import Switch from '@material-ui/core/Switch';
 
-const drawerWidth = 240;
+
+const drawerWidth = 300;
 
 const styles = theme => ({
   root: {
@@ -290,6 +295,22 @@ let NavBar2 = inject("commonStore") (observer(class NavBar2 extends React.Compon
           </Typography>
 
           <List className={'leftSubmenu'}>
+          <ListItem key={'Ma dispo'}>
+            <Toggle state={{current: 'unspecified', left: 'unavailable', middle: 'unspecified', right: 'available'}}
+                          action={{left: ()=>{}, middle: ()=>{}, right: ()=>{}}}/>
+          </ListItem>
+          <ListItem>
+          <ListItemIcon>
+            <WifiIcon />
+          </ListItemIcon>
+          <ListItemText primary="Disponibilité" />
+          <ListItemSecondaryAction>
+            <Switch
+              onChange={() => {}}
+              checked={true}
+            />
+          </ListItemSecondaryAction>
+        </ListItem>
             {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
