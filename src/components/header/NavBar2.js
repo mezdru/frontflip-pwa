@@ -29,7 +29,6 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import logoWingzy from '../../resources/images/wingzy_line_256.png';
 import './header.css';
 import {Redirect} from "react-router-dom";
-// import {observe} from 'mobx';
 
 const drawerWidth = 240;
 
@@ -143,11 +142,6 @@ let NavBar2 = inject("commonStore", "userStore", "authStore") (observer(class Na
     componentDidMount() {
       if(this.props.commonStore.accessToken){
         this.setState({auth: true});}
-      // }else{
-      //     observe(this.props.commonStore.accessToken, (change) => {
-      //         this.setState({auth: true});
-      //     });
-      // } 
 
         if(this.props.commonStore.accessToken) this.setState({auth: true});
         else this.setState({auth: false});

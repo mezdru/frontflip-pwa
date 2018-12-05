@@ -9,17 +9,6 @@ let ProfileBox = inject("recordStore", "userStore")(  observer(class ProfileBox 
         super(props);
     }
 
-    // async loadRecordAfterUser() {
-    //     await when(() => this.props.userStore.values.currentUser._id);
-    //     try{
-    //         console.log(JSON.stringify(this.props.userStore.currentUser.orgsAndRecords[0]));
-    //         this.props.recordStore.setOrgId(this.props.userStore.values.currentUser.orgsAndRecords[0].organisation);
-    //         this.props.recordStore.setRecordId(this.props.userStore.values.currentUser.orgsAndRecords[0].record);
-    //         this.props.recordStore.getRecord();
-    //     }catch(error){
-    //         console.log('user has no orgsAndRecords');
-    //     }
-    // }
     getRecord() {
         this.props.recordStore.setOrgId(this.props.userStore.values.currentUser.orgsAndRecords[0].organisation);
         this.props.recordStore.setRecordId(this.props.userStore.values.currentUser.orgsAndRecords[0].record);
@@ -54,7 +43,6 @@ let ProfileBox = inject("recordStore", "userStore")(  observer(class ProfileBox 
                 </div>
             )
         }
-        
     }
 }));
 
