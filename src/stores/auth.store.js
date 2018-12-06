@@ -43,6 +43,7 @@ class AuthStore {
             .then((response) => {   
                 if(response && response.access_token){
                     commonStore.setAuthTokens(response);
+                    userStore.getCurrentUser();
                     return 200;
                 } 
                 else return 403;
@@ -99,8 +100,6 @@ class AuthStore {
     }
 
     logout() {
-        console.log('will logout');
-
         commonStore.removeAuthTokens();
         userStore.forgetUser();
         return Promise.resolve();

@@ -85,7 +85,8 @@ class CommonStore {
 
 decorate(CommonStore, {
     appName: observable,
-    token: observable,
+    accessToken: observable,
+    refreshToken: observable,
     algoliaKey: observable,
     algoliaKeyValidity: observable,
     appLoaded: observable,
