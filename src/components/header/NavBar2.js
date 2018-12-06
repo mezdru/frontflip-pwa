@@ -29,6 +29,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import logoWingzy from '../../resources/images/wingzy_line_256.png';
 import './header.css';
 import {Redirect} from "react-router-dom";
+import {withRouter} from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -333,4 +334,4 @@ NavBar2.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(NavBar2);
+export default withRouter(withStyles(styles, { withTheme: true })(NavBar2));
