@@ -28,6 +28,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import logoWingzy from '../../resources/images/wingzy_line_256.png';
 import './header.css';
+import {Redirect} from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -127,18 +128,26 @@ const styles = theme => ({
   },
 });
 
-let NavBar2 = inject("commonStore") (observer(class NavBar2 extends React.Component {
+let NavBar2 = inject("commonStore", "userStore", "authStore") (observer(class NavBar2 extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             anchorEl: null,
             mobileMoreAnchorEl: null,
+            successLogout: false,
+            auth: false,
           };
     }
 
     componentDidMount() {
-        if(this.props.commonStore.token) this.setState({auth: true});
+      if(this.props.commonStore.accessToken){
+        this.setState({auth: true});}
+
+        if(this.props.commonStore.accessToken) this.setState({auth: true});
         else this.setState({auth: false});
+        if(!this.props.userStore.values.currentUser._id && this.state.auth){
+          this.props.userStore.getCurrentUser();
+        }
     }
   
 
@@ -167,13 +176,20 @@ let NavBar2 = inject("commonStore") (observer(class NavBar2 extends React.Compon
     this.setState({ open: false });
   };
 
+  handleLogout = () => {
+    this.props.authStore.logout()
+    .then(this.setState({successLogout: true}));
+  }
+
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
     const {auth} = this.state;
     const { classes, theme } = this.props;
-    const { open } = this.state;
+    const { open, successLogout } = this.state;
+
+    if (successLogout) return <Redirect to='/'/>;
 
     const renderMenu = (
       <Menu
@@ -184,7 +200,7 @@ let NavBar2 = inject("commonStore") (observer(class NavBar2 extends React.Compon
         onClose={this.handleMenuClose}
       >
         <MenuItem onClick={this.handleMenuClose}><Link to='/profile'>Profile</Link></MenuItem>
-        <MenuItem onClick={this.handleMenuClose}>Logout</MenuItem>
+        <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
       </Menu>
     );
 
