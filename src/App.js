@@ -6,7 +6,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
 
-
 class App extends Component {
   render() {
     return (

@@ -33,6 +33,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import WifiIcon from '@material-ui/icons/Wifi';
 import Switch from '@material-ui/core/Switch';
 import {Redirect} from "react-router-dom";
+import {withRouter} from 'react-router-dom';
 
 
 const drawerWidth = 300;
@@ -354,4 +355,4 @@ NavBar2.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(NavBar2);
+export default withRouter(withStyles(styles, { withTheme: true })(NavBar2));
