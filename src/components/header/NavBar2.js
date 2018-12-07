@@ -281,53 +281,57 @@ let NavBar2 = inject("commonStore", "userStore", "authStore") (observer(class Na
         </AppBar>
         {renderMenu}
         {renderMobileMenu}
-        <Drawer
-          className={classes.drawer}
-          variant="persistent"
-          anchor="left"
-          open={open}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <div className={classes.drawerHeader}>
-            <IconButton onClick={this.handleDrawerClose}>
-              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-            </IconButton>
-          </div>
-          <Divider />
-          <Button>List of the orgs</Button>
-          <Divider/>
+        
+          <Drawer
+            className={classes.drawer}
+            variant="persistent"
+            anchor="left"
+            open={open}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+          >
+            <div className={classes.drawerHeader}>
+              <IconButton onClick={this.handleDrawerClose}>
+                {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+              </IconButton>
+            </div>
+            <Divider />
+            <Button>List of the orgs</Button>
+            <Divider/>
 
-          <div className={'leftMenu'}>
-          <Typography variant="h6" color="inherit" noWrap>
-          <IconButton
-                    aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                    aria-haspopup="true"
-                    onClick={this.handleProfileMenuOpen}
-                    color="inherit"
-                  >
-                    <AccountCircle />
-                  </IconButton>
-            Info current Org
-          </Typography>
+            <div className={'leftMenu'}>
+            <Typography variant="h6" color="inherit" noWrap>
+            <IconButton
+                      aria-owns={isMenuOpen ? 'material-appbar' : undefined}
+                      aria-haspopup="true"
+                      onClick={this.handleProfileMenuOpen}
+                      color="inherit"
+                    >
+                      <AccountCircle />
+                    </IconButton>
+              Info current Org
+            </Typography>
 
-          <List className={'leftSubmenu'}>
-          <ListItem>
-            <ListItemText primary="Disponibilité" />
-            <ListItemSecondaryAction>
-              <AvailabilityToggle/>
-            </ListItemSecondaryAction>
-          </ListItem>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-          </div>
-        </Drawer>
+            <List className={'leftSubmenu'}>
+            {auth && (
+            <ListItem>
+              <ListItemText primary="Disponibilité" />
+              <ListItemSecondaryAction>
+                <AvailabilityToggle/>
+              </ListItemSecondaryAction>
+            </ListItem>
+            )}
+              {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                <ListItem button key={text}>
+                  <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              ))}
+            </List>
+            </div>
+          </Drawer>
+        
         <main
           className={classNames(classes.content, {
             [classes.contentShift]: open,
