@@ -28,11 +28,13 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import logoWingzy from '../../resources/images/wingzy_line_256.png';
 import './header.css';
-import Toggle from '../../components/utils/toggle/Toggle';
+import AvailabilityToggle from '../../components/availabilityToggle/AvailabilityToggle';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import WifiIcon from '@material-ui/icons/Wifi';
 import Switch from '@material-ui/core/Switch';
 import {Redirect} from "react-router-dom";
+import {withRouter} from 'react-router-dom';
+import {observe} from 'mobx';
 
 
 const drawerWidth = 300;
@@ -145,11 +147,11 @@ let NavBar2 = inject("commonStore", "userStore", "authStore") (observer(class Na
     }
 
     componentDidMount() {
-      if(this.props.commonStore.accessToken){
-        this.setState({auth: true});}
-
-        if(this.props.commonStore.accessToken) this.setState({auth: true});
-        else this.setState({auth: false});
+        if(this.props.commonStore.accessToken) {
+          this.state.auth = true;
+        }else{
+          this.state.auth = false;
+        }
         if(!this.props.userStore.values.currentUser._id && this.state.auth){
           this.props.userStore.getCurrentUser();
         }
@@ -311,22 +313,12 @@ let NavBar2 = inject("commonStore", "userStore", "authStore") (observer(class Na
           </Typography>
 
           <List className={'leftSubmenu'}>
-          <ListItem key={'Ma dispo'}>
-            <Toggle state={{current: 'unspecified', left: 'unavailable', middle: 'unspecified', right: 'available'}}
-                          action={{left: ()=>{}, middle: ()=>{}, right: ()=>{}}}/>
-          </ListItem>
           <ListItem>
-          <ListItemIcon>
-            <WifiIcon />
-          </ListItemIcon>
-          <ListItemText primary="Disponibilité" />
-          <ListItemSecondaryAction>
-            <Switch
-              onChange={() => {}}
-              checked={true}
-            />
-          </ListItemSecondaryAction>
-        </ListItem>
+            <ListItemText primary="Disponibilité" />
+            <ListItemSecondaryAction>
+              <AvailabilityToggle/>
+            </ListItemSecondaryAction>
+          </ListItem>
             {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
@@ -354,4 +346,4 @@ NavBar2.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(NavBar2);
+export default withRouter(withStyles(styles, { withTheme: true })(NavBar2));
