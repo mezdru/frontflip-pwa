@@ -9,6 +9,9 @@
 
 // To learn more about the benefits of this model and instructions on how to
 // opt-in, read http://bit.ly/CRA-PWA
+require('dotenv').config();
+console.log(process.env.NODE_ENV);
+console.log(process.env.PUBLIC_URL);
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
