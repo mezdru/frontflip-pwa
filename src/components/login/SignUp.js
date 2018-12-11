@@ -17,6 +17,7 @@ let SignUp = inject("authStore")(observer(class SignUp extends React.Component {
             value: 0,
         };
     }
+    
 
     render() {
         const {values, errors, inProgress} = this.props.authStore;
