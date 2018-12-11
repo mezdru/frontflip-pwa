@@ -5,8 +5,8 @@ import commonStore from './stores/common.store';
 
 const superagent = superagentPromise(_superagent, global.Promise);
 //const API_ROOT_AUTH = 'https://auth-wingzy-staging.herokuapp.com';
-const API_ROOT_AUTH = 'http://localhost:3001'
-const API_ROOT = 'http://localhost:3000';
+const API_ROOT_AUTH = process.env.REACT_APP_API_ROOT_AUTH;
+const API_ROOT = process.env.REACT_APP_API_ROOT;
 
 const handleErrors = err => {
     if (err && err.response && err.response.status === 401) {
