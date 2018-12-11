@@ -7,13 +7,14 @@ import './LoginSignup.css';
 import ButtonRadius from '../utils/buttons/ButtonRadius';
 import SnackbarCustom from '../utils/snackbars/SnackbarCustom';
 
-let Login = inject("authStore")(observer(class Login extends React.Component {
+let Login = inject("authStore", "userStore")(observer(class Login extends React.Component {
     
     constructor(props) {
         super(props);
         this.state = {
             value: 0,
             successLogin: false,
+            redirectTo: '/',
             loginErrors: null
         };
     }
@@ -35,9 +36,20 @@ let Login = inject("authStore")(observer(class Login extends React.Component {
         e.preventDefault();
         this.props.authStore.login()
             .then((response) => {
-                if(response == 200) this.setState({successLogin: true});
-                else {
+                if(response == 200){
+                    this.setState({successLogin: true});
+                    if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0 && 
+                        this.props.userStore.values.currentUser.orgsAndRecords[0].record){
+                        
+                        this.setState({redirectTo: '/profile'});
+                    }else if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0){
+                        this.setState({redirectTo: '/onboard/profile'});
+                    }else{
+                        this.setState({redirectTo: '/onboard/wingzy'});
+                    }
+                } else {
                     this.setState({loginErrors : response.message});
+
                 }
             }).catch((err)=>{
                 this.setState({loginErrors : err.message});
@@ -46,8 +58,8 @@ let Login = inject("authStore")(observer(class Login extends React.Component {
     
     render() {
         const {values, errors, inProgress} = this.props.authStore;
-        let {successLogin, loginErrors} = this.state;
-        if (successLogin) return <Redirect to='/profile'/>;
+        let {successLogin, loginErrors, redirectTo} = this.state;
+        if (successLogin) return <Redirect to={redirectTo}/>;
 
         return (
             <Grid className={'form'} container item direction='column' alignItems={'stretch'} justify='space-around'>

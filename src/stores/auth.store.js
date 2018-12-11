@@ -43,8 +43,8 @@ class AuthStore {
             .then((response) => {   
                 if(response && response.access_token){
                     commonStore.setAuthTokens(response);
-                    userStore.getCurrentUser();
-                    return 200;
+                    return userStore.getCurrentUser()
+                    .then(()=> {return 200;});
                 } 
                 else return 403;
             })

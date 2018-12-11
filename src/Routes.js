@@ -3,6 +3,8 @@ import { Route, Switch } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { Search } from './pages/Search';
 import Profile from './components/profile/ProfileBox';
+import OnboardWingzy from './pages/OnboardWingzy';
+import OnboardProfile from './pages/OnboardProfile';
 
 export default class Routes extends React.Component {
     
@@ -21,15 +23,10 @@ export default class Routes extends React.Component {
                         <Route path="/login/:action" component={null} />
 
                         {/* Onboard : new wingzy*/}
-                        <Route path="/wingzy/intro" component={null} />
-                        <Route path="/wingzy/create" component={null} />
-                        <Route path="/wingzy/congratulations" component={null} />
+                        <Route path="/onboard/wingzy" component={OnboardWingzy} />
 
                         {/* Onboard : new profile */}
-                        <Route path="/onboard/welcome" component={null} />
-                        <Route path="/onboard/intro" component={null} />
-                        <Route path="/onboard/hashtags" component={null} />
-                        <Route path="/onboard/links" component={null} />
+                        <Route path="/onboard/profile" component={OnboardProfile} />
 
                         {/* Invitation */}
                         <Route path="/invite" component={null} />
