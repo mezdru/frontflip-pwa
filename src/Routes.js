@@ -41,7 +41,8 @@ export default class Routes extends React.Component {
                         {/* Wingzy admin */}
                         <Route path="/admin/organisation" component={null} />
                         <Route path="/admin/user/list" component={null} />
-                        
+                        {/* 404 Handle */}
+                        <Route path="*" status={404} component={Home}/>
                     </Switch>
                 </div>
 
