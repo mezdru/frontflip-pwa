@@ -5,6 +5,7 @@ import {Grid, Typography} from '@material-ui/core';
 import Input from '../utils/inputs/InputWithRadius'
 import './LoginSignup.css';
 import ButtonRadius from '../utils/buttons/ButtonRadius';
+import SnackbarCustom from '../utils/snackbars/SnackbarCustom';
 
 let Login = inject("authStore")(observer(class Login extends React.Component {
     
@@ -13,6 +14,7 @@ let Login = inject("authStore")(observer(class Login extends React.Component {
         this.state = {
             value: 0,
             successLogin: false,
+            loginErrors: null
         };
     }
     
@@ -34,17 +36,28 @@ let Login = inject("authStore")(observer(class Login extends React.Component {
         this.props.authStore.login()
             .then((response) => {
                 if(response == 200) this.setState({successLogin: true});
-                else console.log('Login failed.');
-            });
+                else {
+                    this.setState({loginErrors : response.message});
+                }
+            }).catch((err)=>{
+                this.setState({loginErrors : err.message});
+            })
     };
     
     render() {
         const {values, errors, inProgress} = this.props.authStore;
-        let {successLogin} = this.state;
+        let {successLogin, loginErrors} = this.state;
         if (successLogin) return <Redirect to='/profile'/>;
 
         return (
             <Grid className={'form'} container item direction='column' alignItems={'stretch'} justify='space-around'>
+                {loginErrors && (
+                    <Grid item >
+                        <SnackbarCustom variant="error"
+                                        message={loginErrors} />
+                    </Grid>
+                )}
+                
                 <Grid item >
                     <ButtonRadius style={{backgroundColor:'white', position:'relative'}}>
                         <img src="https://developers.google.com/identity/images/g-logo.png" style={{width:'25px', height: '25px', position:'absolute', left: '7px'}} alt="google"/>
