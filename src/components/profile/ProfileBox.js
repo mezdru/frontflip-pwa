@@ -30,6 +30,7 @@ let ProfileBox = inject("recordStore", "userStore")(  observer(class ProfileBox 
         if(values.record.name){
             return(
                 <div>
+                    You are redirected here because you already have a profile in an Organisation.
                     This is the profile of
                     <div>
                         {values.record.name}

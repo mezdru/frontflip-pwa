@@ -16,12 +16,11 @@ let SignUp = inject("authStore")(observer(class SignUp extends React.Component {
         this.state = {
             value: 0,
         };
-        // Because we can't access to this in the class
-        window.self = this;
+        this = this;
     }
 
     render() {
-        const {values, errors, inProgress} = window.self.props.authStore;
+        const {values, errors, inProgress} = this.props.authStore;
         return (
             <Grid className={'form'} container item direction='column' justify='space-around' alignItems="stretch">
                 <ButtonRadius style={{backgroundColor:'white', position:'relative'}}>
