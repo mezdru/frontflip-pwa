@@ -16,7 +16,6 @@ let SignUp = inject("authStore")(observer(class SignUp extends React.Component {
         this.state = {
             value: 0,
         };
-        this = this;
     }
 
     render() {
