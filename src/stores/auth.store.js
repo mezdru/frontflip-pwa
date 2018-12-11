@@ -32,6 +32,7 @@ class AuthStore {
         this.values.invitationCode = '';
     }
 
+    
     /**
      * @description Call authentification service to fetch tokens
      */
