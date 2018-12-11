@@ -24,6 +24,7 @@ let Login = inject("authStore")(observer(class Login extends React.Component {
         this.props.authStore.setEmail(e.target.value);
     };
     
+    
     handlePasswordChange = (e) => {
         this.props.authStore.setPassword(e.target.value)
     };
