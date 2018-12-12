@@ -5,6 +5,7 @@ import { Search } from './pages/Search';
 import Profile from './components/profile/ProfileBox';
 import OnboardWingzy from './pages/OnboardWingzy';
 import OnboardProfile from './pages/OnboardProfile';
+import RedirectUser from "./pages/RedirectUser";
 
 export default class Routes extends React.Component {
     
@@ -15,6 +16,9 @@ export default class Routes extends React.Component {
                     <Switch>
                         {/* HOME PART */}
                         <Route exact path="/" component={Home} />
+
+                        <Route path="/redirect" component={RedirectUser} />
+
                         <Route path="/pricing" component={null} />
                         <Route path="/terms" component={null} />
                         <Route path="/protectingYourData" component={null} />

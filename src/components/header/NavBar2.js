@@ -30,8 +30,6 @@ import logoWingzy from '../../resources/images/wingzy_line_256.png';
 import './header.css';
 import AvailabilityToggle from '../../components/availabilityToggle/AvailabilityToggle';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import WifiIcon from '@material-ui/icons/Wifi';
-import Switch from '@material-ui/core/Switch';
 import {Redirect} from "react-router-dom";
 import {withRouter} from 'react-router-dom';
 import {observe} from 'mobx';

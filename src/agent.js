@@ -124,16 +124,9 @@ const Auth = {
                 password: password
             }
         ),
-    authorization: (email, password, orgTag, invitationCode) =>
+    registerToOrg: (orgId, invitationCode) =>
         requests.post(
-            `${API_ROOT_AUTH}/authorization/organisation/`+orgTag+`/`+(invitationCode ? invitationCode : ``),
-            {
-                username: email,
-                password: password,
-                client_id: 'frontflip',
-                client_secret: 'abcd1234',
-                grant_type: 'password'
-            }
+            `${API_ROOT_AUTH}/register/organisation/`+orgId+`/`+(invitationCode ? invitationCode : ``)
         )
 };
 
@@ -197,6 +190,13 @@ const Organisation = {
             {
                 orgId: orgId
             }
+        )
+}
+
+const Email = {
+    confirmLoginEmail: () => 
+        requests.post(
+            API_ROOT+'/api/emails/confirmation'
         )
 }
 

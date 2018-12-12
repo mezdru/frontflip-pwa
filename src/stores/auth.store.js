@@ -32,6 +32,19 @@ class AuthStore {
         this.values.invitationCode = '';
     }
 
+    isAuth() {
+        if(commonStore.getAccessToken() || commonStore.getRefreshToken()){
+            return userStore.getCurrentUser()
+            .then(() => {
+                return true;
+            }).catch(() => {
+                return false;
+            })
+        }else{
+            return Promise.resolve(false);
+        }
+    }
+
     
     /**
      * @description Call authentification service to fetch tokens
@@ -86,7 +99,7 @@ class AuthStore {
         this.inProgress = true;
         this.errors = null;
 
-        return agent.Auth.authorization(this.values.email, this.values.password, this.values.orgTag, this.values.invitationCode)
+        return agent.Auth.registerToOrg(this.values.orgId, this.values.invitationCode)
             .then((data) => {
                 console.log(data.message);
                 console.log(data.user);
