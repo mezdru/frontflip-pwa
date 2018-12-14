@@ -27,7 +27,6 @@ let Login = inject("authStore", "userStore")(observer(class Login extends React.
         this.props.authStore.setEmail(e.target.value);
     };
     
-    
     handlePasswordChange = (e) => {
         this.props.authStore.setPassword(e.target.value)
     };
@@ -53,7 +52,7 @@ let Login = inject("authStore", "userStore")(observer(class Login extends React.
                 }
             }).catch((err)=>{
                 this.setState({loginErrors : err.message});
-            })
+            });
     };
     
     render() {

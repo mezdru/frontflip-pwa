@@ -9,6 +9,7 @@ import userStore from './stores/user.store';
 import recordStore from './stores/record.store';
 import commonStore from './stores/common.store';
 import organisationStore from './stores/organisation.store';
+import HttpsRedirect from 'react-https-redirect';
 
 const stores = {
     authStore,
@@ -20,9 +21,11 @@ const stores = {
  
 
 ReactDOM.render(
-    <Provider {...stores}>
-        <App />
-    </Provider>
+    <HttpsRedirect>
+        <Provider {...stores}>
+            <App />
+        </Provider>
+    </HttpsRedirect>
 , document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

@@ -92,7 +92,9 @@ decorate(CommonStore, {
     appLoaded: observable,
     setToken: action,
     setAlgoliaKey: action,
-    setAppLoaded: action
+    setAppLoaded: action,
+    getCookie: action,
+    setCookie: action
 });
 
 export default new CommonStore();

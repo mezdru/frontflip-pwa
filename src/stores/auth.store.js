@@ -2,6 +2,7 @@ import { observable, action, decorate } from "mobx";
 import agent from '../agent';
 import commonStore from "./common.store";
 import userStore from "./user.store";
+import emailService from "../services/email.service";
 
 class AuthStore {
     inProgress = false;
@@ -30,6 +31,19 @@ class AuthStore {
         this.values.password = '';
         this.values.orgTag = '';
         this.values.invitationCode = '';
+    }
+
+    isAuth() {
+        if(commonStore.getAccessToken() || commonStore.getRefreshToken()){
+            return userStore.getCurrentUser()
+            .then(() => {
+                return true;
+            }).catch(() => {
+                return false;
+            })
+        }else{
+            return Promise.resolve(false);
+        }
     }
 
     
@@ -65,14 +79,18 @@ class AuthStore {
 
         return agent.Auth.register(this.values.email, this.values.password)
             .then((data) => {
-                console.log(data.message);
-                console.log(data.user);
-                // if an orgTag is provided, register user to the org ?
+                return this.login(this.values.email, this.values.password)
+                .then((respLogin) => {
+                    return emailService.confirmLoginEmail()
+                    .then((respEmail) => {
+                        console.log('email sended');
+                        return true;
+                    });
+                });
             })
             .catch(action((err) => {
                 // any other response status than 20X is an error
-                console.log(err.response.body);
-                console.log(err.status);
+                console.log(err);
                 this.errors = err;
             }))
             .finally(action(() => {this.inProgress = false; }));
@@ -86,7 +104,7 @@ class AuthStore {
         this.inProgress = true;
         this.errors = null;
 
-        return agent.Auth.authorization(this.values.email, this.values.password, this.values.orgTag, this.values.invitationCode)
+        return agent.Auth.registerToOrg(this.values.orgId, this.values.invitationCode)
             .then((data) => {
                 console.log(data.message);
                 console.log(data.user);

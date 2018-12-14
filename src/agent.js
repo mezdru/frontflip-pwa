@@ -103,6 +103,10 @@ let validateToken = () => {
 
 /**
  * @description Authentification actions
+ *              We have 2 levels of register / login :
+ *              - register to Wingzy (classic)
+ *              - register to an Organisation of Wingzy
+ *              1 User can have many Organisation
  */
 const Auth = {
     login: (email, password) => 
@@ -124,16 +128,9 @@ const Auth = {
                 password: password
             }
         ),
-    authorization: (email, password, orgTag, invitationCode) =>
+    registerToOrg: (orgId, invitationCode) =>
         requests.post(
-            `${API_ROOT_AUTH}/authorization/organisation/`+orgTag+`/`+(invitationCode ? invitationCode : ``),
-            {
-                username: email,
-                password: password,
-                client_id: 'frontflip',
-                client_secret: 'abcd1234',
-                grant_type: 'password'
-            }
+            `${API_ROOT_AUTH}/register/organisation/`+orgId+`/`+(invitationCode ? invitationCode : ``)
         )
 };
 
@@ -201,6 +198,16 @@ const Organisation = {
 }
 
 /**
+ * @description Email API
+ */
+const Email = {
+    confirmLoginEmail: () => 
+        requests.post(
+            API_ROOT+'/api/emails/confirmation'
+        )
+}
+
+/**
  * @description Test get user with secure call to API
  */
 const Test = {
@@ -213,5 +220,6 @@ export default {
     Test,
     Record,
     Organisation,
-    User
+    User,
+    Email
 }

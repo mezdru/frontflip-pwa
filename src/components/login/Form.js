@@ -18,7 +18,7 @@ function TabContainer({children, dir}) {
 
 class Form extends React.Component {
     state = {
-        value: 0,
+        value: 0
     };
     
     handleChange = (event, value) => {
@@ -59,7 +59,7 @@ class Form extends React.Component {
                         style={{ width:'100%'}}
                     >
                         <TabContainer dir={theme.direction}><Login/></TabContainer>
-                        {/* <TabContainer dir={theme.direction}><SignUp/></TabContainer> */}
+                        <TabContainer dir={theme.direction}><SignUp/></TabContainer>
                     </SwipeableViews>
                 </Grid>
             </Grid>
