@@ -118,6 +118,35 @@ class AuthStore {
             .finally(action(() => {this.inProgress = false; }));
     }
 
+    passwordForgot() {
+        this.inProgress = true;
+        this.errors = null;
+
+        return agent.Email.passwordForgot(this.values.email)
+            .then((data) => {
+                return data;
+            })
+            .catch(action((err) => {
+                console.log(err);
+                this.errors = err;
+            }))
+            .finally(action(() => {this.inProgress = false; }));   
+    }
+    updatePassword(token, hash) {
+        this.inProgress = true;
+        this.errors = null;
+
+        return agent.Email.updatePassword(token, hash, this.values.password)
+            .then((data) => {
+                return data;
+            })
+            .catch((err) => {
+                this.errors = err;
+                return err.response;
+            })
+            .finally(action(() => {this.inProgress = false; }));      
+    }
+
     logout() {
         commonStore.removeAuthTokens();
         userStore.forgetUser();
