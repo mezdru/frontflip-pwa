@@ -103,6 +103,10 @@ let validateToken = () => {
 
 /**
  * @description Authentification actions
+ *              We have 2 levels of register / login :
+ *              - register to Wingzy (classic)
+ *              - register to an Organisation of Wingzy
+ *              1 User can have many Organisation
  */
 const Auth = {
     login: (email, password) => 
@@ -193,6 +197,9 @@ const Organisation = {
         )
 }
 
+/**
+ * @description Email API
+ */
 const Email = {
     confirmLoginEmail: () => 
         requests.post(
@@ -213,5 +220,6 @@ export default {
     Test,
     Record,
     Organisation,
-    User
+    User,
+    Email
 }
