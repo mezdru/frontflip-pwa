@@ -6,6 +6,7 @@ import Input from '../utils/inputs/InputWithRadius'
 import './LoginSignup.css';
 import ButtonRadius from '../utils/buttons/ButtonRadius';
 import SnackbarCustom from '../utils/snackbars/SnackbarCustom';
+import { Link } from 'react-router-dom'
 
 let Login = inject("authStore", "userStore")(observer(class Login extends React.Component {
     
@@ -97,6 +98,9 @@ let Login = inject("authStore", "userStore")(observer(class Login extends React.
                         value={values.password}
                         onChange={this.handlePasswordChange}
                     />
+                </Grid>
+                <Grid item>
+                <Link to="/password/forgot">I forgot my password</Link>
                 </Grid>
                 <Grid item >
                     <ButtonRadius onClick={this.handleSubmitForm} color="primary">Log In</ButtonRadius>

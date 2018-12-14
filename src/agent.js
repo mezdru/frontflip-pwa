@@ -204,8 +204,22 @@ const Email = {
     confirmLoginEmail: () => 
         requests.post(
             API_ROOT+'/api/emails/confirmation'
+        ),
+    passwordForgot: (userEmail) => 
+        requests.post(
+            API_ROOT+'/api/emails/password',
+            {
+                userEmail: userEmail
+            }
+        ),
+    updatePassword: (token, hash, password) =>
+        requests.post(
+            API_ROOT_AUTH+'/password/reset/'+token+'/'+hash,
+            {
+                password: password
+            }
         )
-}
+}   
 
 /**
  * @description Test get user with secure call to API

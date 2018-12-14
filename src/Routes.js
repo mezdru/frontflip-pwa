@@ -6,6 +6,8 @@ import Profile from './components/profile/ProfileBox';
 import OnboardWingzy from './pages/OnboardWingzy';
 import OnboardProfile from './pages/OnboardProfile';
 import RedirectUser from "./pages/RedirectUser";
+import PasswordForgot from "./pages/auth/PasswordForgot";
+import PasswordReset from "./pages/auth/PasswordReset";
 
 export default class Routes extends React.Component {
     
@@ -16,6 +18,8 @@ export default class Routes extends React.Component {
                     <Switch>
                         {/* HOME PART */}
                         <Route exact path="/" component={Home} />
+                        <Route exact path="/password/forgot" component={PasswordForgot}/>
+                        <Route exact path="/password/reset/:token/:hash" component={PasswordReset}/> 
 
                         <Route path="/redirect" component={RedirectUser} />
 
