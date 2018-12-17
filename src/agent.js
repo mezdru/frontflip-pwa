@@ -111,7 +111,7 @@ let validateToken = () => {
 const Auth = {
     login: (email, password) => 
         requests.post(
-            `${API_ROOT_AUTH}/auth/locale`,
+            `${API_ROOT_AUTH}/locale`,
             {
                 username: email,
                 password: password,
