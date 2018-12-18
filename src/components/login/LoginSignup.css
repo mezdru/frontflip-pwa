@@ -4,6 +4,6 @@
     justify-content: space-between;
     width: 100%;
     padding: 1rem 15px;
-    height: 49vh;
-    overflow: hidden;
+    height: 51vh;
+    flex-wrap: nowrap !important;
 }

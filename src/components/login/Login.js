@@ -36,7 +36,7 @@ let Login = inject("authStore", "userStore")(observer(class Login extends React.
         e.preventDefault();
         this.props.authStore.login()
             .then((response) => {
-                if(response == 200){
+                if(response === 200){
                     this.setState({successLogin: true});
                     if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0 && 
                         this.props.userStore.values.currentUser.orgsAndRecords[0].record){
@@ -62,7 +62,7 @@ let Login = inject("authStore", "userStore")(observer(class Login extends React.
         if (successLogin) return <Redirect to={redirectTo}/>;
 
         return (
-            <Grid className={'form'} container item direction='column' alignItems={'stretch'} justify='space-around'>
+            <Grid className={'form'} container item direction='column' alignItems={'stretch'} justify='space-between'>
                 {loginErrors && (
                     <Grid item >
                         <SnackbarCustom variant="error"
@@ -98,9 +98,7 @@ let Login = inject("authStore", "userStore")(observer(class Login extends React.
                         value={values.password}
                         onChange={this.handlePasswordChange}
                     />
-                </Grid>
-                <Grid item>
-                <Link to="/password/forgot">I forgot my password</Link>
+                    <Link to="/password/forgot">I forgot my password</Link>
                 </Grid>
                 <Grid item >
                     <ButtonRadius onClick={this.handleSubmitForm} color="primary">Log In</ButtonRadius>
