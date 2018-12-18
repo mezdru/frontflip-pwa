@@ -28,7 +28,7 @@ class CommonStore {
     }
     
     setCookie(name, value, expires) {
-        cookies.set(name, value, (expires ? {expires: expires} : null));
+        cookies.set(name, value, (expires ? {expires: expires, path: '/'} : {path: '/'}));
     }
 
     getCookie(name) {
