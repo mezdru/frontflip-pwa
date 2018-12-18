@@ -82,7 +82,7 @@ let validateToken = () => {
     if (commonStore.getRefreshToken() && !commonStore.getAccessToken()) {
         return new Promise( (resolve, reject) => {
             superagent.post(
-                `${API_ROOT_AUTH}/auth/locale`,
+                `${API_ROOT_AUTH}/locale`,
                 {
                     client_id: 'frontflip',
                     client_secret: 'abcd1234',
