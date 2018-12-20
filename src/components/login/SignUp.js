@@ -9,14 +9,15 @@ import ButtonRadius from '../utils/buttons/ButtonRadius';
 import './LoginSignup.css';
 import {Typography} from "@material-ui/core";
 
-let SignUp = inject("authStore")(observer(class SignUp extends React.Component {
+let SignUp = inject("authStore", "organisationStore")(observer(class SignUp extends React.Component {
     
     constructor() {
         super();
         this.state = {
             value: 0,
             registerErrors: null,
-            registerSuccess: false
+            registerSuccess: false,
+            registerSuccessMessage: ''
         };
     }
     
@@ -36,23 +37,38 @@ let SignUp = inject("authStore")(observer(class SignUp extends React.Component {
     
     handleSubmitForm = (e) => {
         this.props.authStore.register()
-            .then(() => {
-                // display success screen
-                //window.location = (process.env.NODE_ENV == 'development' ? 'http://' : 'https://') + process.env.REACT_APP_HOST_BACKFLIP;
+        .then(() => {
+            if(this.props.organisationStore.values.orgTag){
+                console.log('register to org');
+                this.props.authStore.registerToOrg()
+                .then(() => {  
+                    this.setState({registerSuccess: true});
+                    this.setState({registerSuccessMessage: 'To complete your register, we have send you an email. You should confirm your address by clicking this email.'});
+                }).catch((err) => {
+                    this.setState({registerSuccess: true});
+                    this.setState({registerSuccessMessage: 'You are register to Wingzy but can\'t access the Wingzy of ' + this.props.organisationStore.values.orgTag + '. Please confirm your email address to continue.'});
+                })
+            }else{
+                this.setState({registerSuccessMessage: 'To complete your register, we have send you an email. You should confirm your address by clicking this email.'});
                 this.setState({registerSuccess: true});
-            }).catch((err) => {
+            }
+        }).catch((err) => {
             this.setState({registerErrors: err.message})
         })
-        // if we want to access an org, we have to create a cookie with the id of the org
     };
     
     render() {
         const {values, errors, inProgress} = this.props.authStore;
-        let {registerErrors, registerSuccess} = this.state;
+        let {registerErrors, registerSuccess, registerSuccessMessage} = this.state;
 
         if(registerSuccess){
             return (
-                <div>Success ! Check your mails</div>
+                <Grid className={'form'} container item direction='column' justify='space-between' alignItems="stretch">
+                    <Grid item>
+                            <SnackbarCustom variant="info"
+                                            message={registerSuccessMessage}/>
+                    </Grid>
+                </Grid>
             )
         }else{
             return (
