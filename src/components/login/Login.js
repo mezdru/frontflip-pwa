@@ -8,7 +8,7 @@ import ButtonRadius from '../utils/buttons/ButtonRadius';
 import SnackbarCustom from '../utils/snackbars/SnackbarCustom';
 import { Link } from 'react-router-dom'
 
-let Login = inject("authStore", "userStore")(observer(class Login extends React.Component {
+let Login = inject("authStore", "userStore", "organisationStore")(observer(class Login extends React.Component {
     
     constructor(props) {
         super(props);
@@ -38,15 +38,20 @@ let Login = inject("authStore", "userStore")(observer(class Login extends React.
             .then((response) => {
                 if(response === 200){
                     this.setState({successLogin: true});
-                    if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0 && 
-                        this.props.userStore.values.currentUser.orgsAndRecords[0].record){
-                        
-                        this.setState({redirectTo: '/profile'});
-                    }else if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0){
-                        this.setState({redirectTo: '/onboard/profile'});
+                    if(process.env.NODE_ENV === 'production'){
+                        window.location = 'https://' + (this.props.organisationStore.values.orgTag ? this.props.organisationStore.values.orgTag + '.' : '') + process.env.REACT_APP_HOST_BACKFLIP + '/search';
                     }else{
-                        this.setState({redirectTo: '/onboard/wingzy'});
+                        window.location = 'http://' + process.env.REACT_APP_HOST_BACKFLIP +'/search' +(this.props.organisationStore.values.orgTag ? '?subdomains=' +this.props.organisationStore.values.orgTag : '');
                     }
+                    // if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0 && 
+                    //     this.props.userStore.values.currentUser.orgsAndRecords[0].record){
+                        
+                    //     this.setState({redirectTo: '/profile'});
+                    // }else if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0){
+                    //     this.setState({redirectTo: '/onboard/profile'});
+                    // }else{
+                    //     this.setState({redirectTo: '/onboard/wingzy'});
+                    // }
                 } else {
                     this.setState({loginErrors : response.message});
 
@@ -59,7 +64,7 @@ let Login = inject("authStore", "userStore")(observer(class Login extends React.
     render() {
         const {values, errors, inProgress} = this.props.authStore;
         let {successLogin, loginErrors, redirectTo} = this.state;
-        if (successLogin) return <Redirect to={redirectTo}/>;
+        // if (successLogin) return <Redirect to={redirectTo}/>;
 
         return (
             <Grid className={'form'} container item direction='column' alignItems={'stretch'} justify='space-between'>

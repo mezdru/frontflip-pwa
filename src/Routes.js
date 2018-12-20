@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch } from 'react-router-dom';
-import { Home } from './pages/Home';
+import Home from './pages/Home';
 import { Search } from './pages/Search';
 import Profile from './components/profile/ProfileBox';
 import OnboardWingzy from './pages/OnboardWingzy';
@@ -17,7 +17,7 @@ export default class Routes extends React.Component {
                 <div>
                     <Switch>
                         {/* HOME PART */}
-                        <Route exact path="/" component={Home} />
+                        <Route exact path="/:organisationTag" component={Home} />
                         <Route exact path="/password/forgot" component={PasswordForgot}/>
                         <Route exact path="/password/reset/:token/:hash" component={PasswordReset}/> 
 
