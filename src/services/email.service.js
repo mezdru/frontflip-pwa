@@ -4,12 +4,12 @@ class EmailService {
     inProgress = false;
     errors = null;
 
-    confirmLoginEmail() {
+    confirmLoginEmail(orgTag) {
         this.inProgress = true;
         this.errors = null;
         console.log('eh');
 
-        return agent.Email.confirmLoginEmail()
+        return agent.Email.confirmLoginEmail(orgTag)
             .then((response) => {   
                 console.log(JSON.stringify(response));
                 return true;

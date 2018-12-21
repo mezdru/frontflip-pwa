@@ -2,6 +2,7 @@ import { observable, action, decorate } from "mobx";
 import agent from '../agent';
 import commonStore from "./common.store";
 import userStore from "./user.store";
+import organisationStore from "./organisation.store";
 import emailService from "../services/email.service";
 
 class AuthStore {
@@ -81,7 +82,8 @@ class AuthStore {
             .then((data) => {
                 return this.login(this.values.email, this.values.password)
                 .then((respLogin) => {
-                    return emailService.confirmLoginEmail()
+                    console.log('org tag : ' + organisationStore.values.orgTag);
+                    return emailService.confirmLoginEmail(organisationStore.values.orgTag)
                     .then((respEmail) => {
                         console.log('email sended');
                         return true;
@@ -92,6 +94,7 @@ class AuthStore {
                 // any other response status than 20X is an error
                 console.log(err);
                 this.errors = err;
+                throw err;
             }))
             .finally(action(() => {this.inProgress = false; }));
     }
@@ -104,16 +107,15 @@ class AuthStore {
         this.inProgress = true;
         this.errors = null;
 
-        return agent.Auth.registerToOrg(this.values.orgId, this.values.invitationCode)
+        return agent.Auth.registerToOrg(organisationStore.values.organisation._id, this.values.invitationCode || null)
             .then((data) => {
-                console.log(data.message);
-                console.log(data.user);
-                console.log(data.organisation);
+                return true;
             })
             .catch(action((err) => {
                 console.log(err.response.body);
                 console.log(err.status);
                 this.errors = err;
+                throw err;
             }))
             .finally(action(() => {this.inProgress = false; }));
     }

@@ -34,7 +34,7 @@ const requests = {
         return validateToken()
         .then(()=>
             superagent
-            .del(`${url}`)
+            .del((process.env.NODE_ENV == 'development' ? 'http://' : 'https://') + `${url}`)
             .use(tokenPlugin)
             .end(handleErrors)
             .then(responseBody)
@@ -45,7 +45,7 @@ const requests = {
         return validateToken()
         .then(()=>
             superagent
-            .get(`${url}`)
+            .get((process.env.NODE_ENV == 'development' ? 'http://' : 'https://') + `${url}`)
             .use(tokenPlugin)
             .end(handleErrors)
             .then(responseBody)
@@ -56,7 +56,7 @@ const requests = {
         return validateToken()
         .then( () => 
             superagent
-            .put(`${url}`, body)
+            .put((process.env.NODE_ENV == 'development' ? 'http://' : 'https://') + `${url}`, body)
             .use(tokenPlugin)
             .end(handleErrors)
             .then(responseBody)
@@ -67,7 +67,7 @@ const requests = {
         return validateToken()
         .then( () => 
             superagent
-            .post(`${url}`, body)
+            .post((process.env.NODE_ENV == 'development' ? 'http://' : 'https://') + `${url}`, body)
             .use(tokenPlugin)
             .end(handleErrors)
             .then(responseBody)
@@ -130,7 +130,7 @@ const Auth = {
         ),
     registerToOrg: (orgId, invitationCode) =>
         requests.post(
-            `${API_ROOT_AUTH}/register/organisation/`+orgId+`/`+(invitationCode ? invitationCode : ``)
+            `${API_ROOT_AUTH}/register/organisation/`+orgId+`/`+(invitationCode ? invitationCode : '')
         )
 };
 
@@ -201,9 +201,9 @@ const Organisation = {
  * @description Email API
  */
 const Email = {
-    confirmLoginEmail: () => 
+    confirmLoginEmail: (orgTag) => 
         requests.post(
-            API_ROOT+'/api/emails/confirmation'
+            API_ROOT+'/api/emails/confirmation/' + (orgTag ? orgTag : '')
         ),
     passwordForgot: (userEmail) => 
         requests.post(
