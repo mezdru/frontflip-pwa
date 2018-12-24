@@ -28,7 +28,11 @@ class CommonStore {
     }
     
     setCookie(name, value, expires) {
-        cookies.set(name, value, (expires ? {expires: expires, path: '/'} : {path: '/'}));
+        if(process.env.NODE_ENV === 'production'){
+            cookies.set(name, value, (expires ? {expires: expires, path: '/', domain: 'wingzy.com'} : {path: '/', domain: 'wingzy.com'}));
+        }else{
+            cookies.set(name, value, (expires ? {expires: expires, path: '/'} : {path: '/'}));
+        }
     }
 
     getCookie(name) {
