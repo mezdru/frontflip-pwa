@@ -215,7 +215,7 @@ class App extends Component {
                             [classes.contentShift]: open,
                         })}
                     >
-                        {/*<div className={classes.drawerHeader}/>*/}
+                        <div className={classes.drawerHeader}/>
                         <Routes/>
                     </main>
                 </div>
