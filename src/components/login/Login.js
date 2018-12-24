@@ -83,7 +83,7 @@ class Login extends React.Component {
                 {loginErrors && (
                     <Grid item>
                         <Paper elevation="1">
-                            <ErrorOutline/>  {loginErrors}
+                            <ErrorOutline/>  <br/>{loginErrors}
                         </Paper>
                     </Grid>
                 )}

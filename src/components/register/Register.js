@@ -61,7 +61,7 @@ class Register extends React.Component {
                 <Grid className={'form'} container item direction='column' spacing={16}>
                     <Grid item>
                         <Paper elevation="1">
-                            <InfoOutlined/>  {registerSuccessMessage}
+                            <InfoOutlined/>  <br/>{registerSuccessMessage}
                         </Paper>
                     </Grid>
                 </Grid>
@@ -72,7 +72,7 @@ class Register extends React.Component {
                 {registerErrors && (
                     <Grid item>
                         <Paper elevation="1">
-                        <ErrorOutline/>  {registerErrors}
+                        <ErrorOutline/>  <br/>{registerErrors}
                         </Paper>
                     </Grid>
                 )}

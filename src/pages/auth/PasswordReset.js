@@ -51,7 +51,7 @@ class PasswordReset extends React.Component {
             return (
                 <div>
                     <Paper elevation="1">
-                        <InfoOutlined/>  Your password have been updated.
+                        <InfoOutlined/>  <br/>Your password have been updated.
                         Go to : <Link to="/">Login page</Link>
                     </Paper>
                 </div>
@@ -63,7 +63,7 @@ class PasswordReset extends React.Component {
                         You can now choose a new password
                         {passwordErrors && (
                             <Paper>
-                                <ErrorOutline/>  {passwordErrors}
+                                <ErrorOutline/>  <br/>{passwordErrors}
                             </Paper>
                         )}
                     </Grid>

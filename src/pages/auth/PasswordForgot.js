@@ -41,7 +41,7 @@ class PasswordForgot extends React.Component {
         let {successPasswordReset} = this.state;
         
         if (successPasswordReset) {
-            return <Paper><InfoOutlined/>  If you have an account on Wingzy, we have send you an email to reset your password.</Paper>;
+            return <Paper><InfoOutlined/>  <br/>If you have an account on Wingzy, we have send you an email to reset your password.</Paper>;
         } else {
             return (
                 <Grid container direction={"column"} justify={"center"} alignItems={"center"} className={"margin-form"} xs={12} sm={4} spacing={16}>
