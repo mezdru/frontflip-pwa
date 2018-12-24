@@ -1,13 +1,12 @@
-import React from 'react'
+import React from 'react';
 import {inject, observer} from 'mobx-react';
 import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
-import Input from '../../components/utils/inputs/InputWithRadius'
-import ButtonRadius from '../../components/utils/buttons/ButtonRadius';
-import Grid from '@material-ui/core/Grid';
+import {Button, TextField, Grid} from "@material-ui/core";
 
 import './Auth.css';
+import mdpImg from '../../images/mdp.png';
 
-let PasswordForgot = inject("authStore")(observer(class PasswordForgot extends React.Component {
+class PasswordForgot extends React.Component {
     
     constructor(props) {
         super(props);
@@ -45,21 +44,33 @@ let PasswordForgot = inject("authStore")(observer(class PasswordForgot extends R
                                    message="If you have an account on Wingzy, we have send you an email to reset your password."/>;
         } else {
             return (
-                <Grid container justify={"center"} className={"margin-form"}>
+                <Grid container direction={"column"} justify={"center"} alignItems={"center"} className={"margin-form"} spacing={16}>
                     <Grid item container justify={"center"} alignItems={"center"} xs={12} sm={4}>
-                        You forgot your password ? Don't worry ! You can ask for a reset :
-                        <Input label="Email"
-                               type="email"
-                               autoComplete="email"
-                               margin="normal"
-                               value={values.email}
-                               onChange={this.handleEmailChange}/>
-                        <ButtonRadius onClick={this.handleSubmitForm} color="primary">Reset your password</ButtonRadius>
+                        <img src={mdpImg} alt="mdp" style={{width: '12rem', padding: '1rem'}}/>
+                    </Grid>
+                    <Grid item container justify={"center"} alignItems={"center"} xs={12} sm={4}>
+                        <p> You forgot your password ? Don't worry ! You can ask for a reset</p>
+                    </Grid>
+                    <Grid item container justify={"center"} alignItems={"center"} xs={12} sm={4}>
+                        <TextField label="Email"
+                                   type="email"
+                                   autoComplete="email"
+                                   margin="normal"
+                                   variant={"outlined"}
+                                   fullWidth={true}
+                                   value={values.email}
+                                   onChange={this.handleEmailChange}
+                        />
+                    </Grid>
+                    <Grid item container justify={"center"} alignItems={"center"} xs={12} sm={4}>
+                        <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary">Reset your password</Button>
                     </Grid>
                 </Grid>
             );
         }
     }
-}));
+}
 
-export default PasswordForgot;
+export default inject('authStore')(
+    observer(PasswordForgot)
+);

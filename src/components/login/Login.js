@@ -1,14 +1,24 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {Redirect} from "react-router-dom";
-import {Grid, Typography} from '@material-ui/core';
-import Input from '../utils/inputs/InputWithRadius'
-import './LoginSignup.css';
-import ButtonRadius from '../utils/buttons/ButtonRadius';
+import {Button, Grid, Typography, TextField, withStyles} from '@material-ui/core';
 import SnackbarCustom from '../utils/snackbars/SnackbarCustom';
-import { Link } from 'react-router-dom'
 
-let Login = inject("authStore", "userStore", "organisationStore")(observer(class Login extends React.Component {
+import './Login.css';
+import GoogleButton from "../utils/buttons/GoogleButton";
+
+// const styles = theme => ({
+//     root: {
+//         "&:hover:not($disabled):not($focused):not($error) $notchedOutline": {
+//             borderColor: 'darkgrey'
+//         }
+//     },
+//     disabled: {},
+//     focused: {},
+//     error: {},
+//     notchedOutline: {}
+// });
+
+class Login extends React.Component {
     
     constructor(props) {
         super(props);
@@ -36,16 +46,16 @@ let Login = inject("authStore", "userStore", "organisationStore")(observer(class
         e.preventDefault();
         this.props.authStore.login()
             .then((response) => {
-                if(response === 200){
+                if (response === 200) {
                     this.setState({successLogin: true});
-                    if(process.env.NODE_ENV === 'production'){
+                    if (process.env.NODE_ENV === 'production') {
                         window.location = 'https://' + (this.props.organisationStore.values.orgTag ? this.props.organisationStore.values.orgTag + '.' : '') + process.env.REACT_APP_HOST_BACKFLIP + '/login/callback';
-                    }else{
-                        window.location = 'http://' + process.env.REACT_APP_HOST_BACKFLIP +'/login/callback' +(this.props.organisationStore.values.orgTag ? '?subdomains=' +this.props.organisationStore.values.orgTag : '');
+                    } else {
+                        window.location = 'http://' + process.env.REACT_APP_HOST_BACKFLIP + '/login/callback' + (this.props.organisationStore.values.orgTag ? '?subdomains=' + this.props.organisationStore.values.orgTag : '');
                     }
-                    // if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0 && 
+                    // if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0 &&
                     //     this.props.userStore.values.currentUser.orgsAndRecords[0].record){
-                        
+                    
                     //     this.setState({redirectTo: '/profile'});
                     // }else if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0){
                     //     this.setState({redirectTo: '/onboard/profile'});
@@ -53,64 +63,70 @@ let Login = inject("authStore", "userStore", "organisationStore")(observer(class
                     //     this.setState({redirectTo: '/onboard/wingzy'});
                     // }
                 } else {
-                    this.setState({loginErrors : response.message});
-
+                    this.setState({loginErrors: response.message});
+                    
                 }
-            }).catch((err)=>{
-                this.setState({loginErrors : err.message});
-            });
+            }).catch((err) => {
+            this.setState({loginErrors: err.message});
+        });
     };
     
     render() {
         const {values, errors, inProgress} = this.props.authStore;
         let {successLogin, loginErrors, redirectTo} = this.state;
         // if (successLogin) return <Redirect to={redirectTo}/>;
-
+        
         return (
-            <Grid className={'form'} container item direction='column' alignItems={'stretch'} justify='space-between'>
+            <Grid className={'form'} container item direction='column' spacing={16}>
                 {loginErrors && (
-                    <Grid item >
+                    <Grid item>
                         <SnackbarCustom variant="error"
-                                        message={loginErrors} />
+                                        message={loginErrors}/>
                     </Grid>
                 )}
-                
-                <Grid item >
-                    <ButtonRadius style={{backgroundColor:'white', position:'relative'}}>
-                        <img src="https://developers.google.com/identity/images/g-logo.png" style={{width:'25px', height: '25px', position:'absolute', left: '7px'}} alt="google"/>
-                        <Typography> connect with google</Typography>
-                    </ButtonRadius>
+                <Grid item>
+                    <GoogleButton fullWidth={true}/>
                 </Grid>
-                <Typography style={{fontSize:'1rem', fontWeight: '500'}}> or </Typography>
-                <Grid item >
-                    <Input
+                <Grid item>
+                    <Typography className="or-seperator"> or </Typography>
+                </Grid>
+                <Grid item>
+                    <TextField
                         label="Email"
                         type="email"
                         autoComplete="email"
-                        margin="normal"
                         fullWidth
+                        variant={"outlined"}
                         value={values.email}
                         onChange={this.handleEmailChange}
                     />
                 </Grid>
-                <Grid item >
-                    <Input
+                <Grid item>
+                    <TextField
                         label="Password"
                         type="password"
                         autoComplete="current-password"
-                        margin="normal"
                         fullWidth
+                        variant={"outlined"}
                         value={values.password}
                         onChange={this.handlePasswordChange}
                     />
-                    <Link to="/password/forgot">I forgot my password</Link>
                 </Grid>
-                <Grid item >
-                    <ButtonRadius onClick={this.handleSubmitForm} color="primary">Log In</ButtonRadius>
+                <Grid item>
+                    <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary">Sign in</Button>
+                </Grid>
+                <Grid item>
+                    <Button variant={"text"} href="/password/forgot">
+                        I don't have my password
+                    </Button>
                 </Grid>
             </Grid>
         )
     };
-}));
+}
 
-export default Login;
+export default inject('authStore', 'userStore', 'organisationStore')(
+    observer(
+        Login
+    )
+);
