@@ -12,7 +12,9 @@ class Register extends React.Component {
         super();
         this.state = {
             value: 0,
-            registerErrors: null
+            registerErrors: null,
+            registerSuccess: false,
+            registerSuccessMessage: ''
         };
     }
     
@@ -21,30 +23,48 @@ class Register extends React.Component {
     };
     
     handleEmailChange = (e) => {
-        console.log('signup func');
         this.props.authStore.setEmail(e.target.value);
     };
     
     handlePasswordChange = (e) => {
-        console.log('signup func');
         this.props.authStore.setPassword(e.target.value)
     };
     
     handleSubmitForm = (e) => {
         this.props.authStore.register()
             .then(() => {
-                // send email of confirmation
-                // display success screen
+                if(this.props.organisationStore.values.orgTag){
+                    this.props.authStore.registerToOrg()
+                    .then(() => {  
+                        this.setState({registerSuccess: true});
+                        this.setState({registerSuccessMessage: 'To complete your register, we have send you an email. You should confirm your address by clicking this email.'});
+                    }).catch((err) => {
+                        this.setState({registerSuccess: true});
+                        this.setState({registerSuccessMessage: 'You are register to Wingzy but can\'t access the Wingzy of ' + this.props.organisationStore.values.orgTag + '. Please confirm your email address to continue.'});
+                    })
+                }else{
+                    this.setState({registerSuccessMessage: 'To complete your register, we have send you an email. You should confirm your address by clicking this email.'});
+                    this.setState({registerSuccess: true});
+                }
             }).catch((err) => {
-            this.setState({registerErrors: err.message})
+            this.setState({registerErrors: 'There was an error. You probably already have an account on Wingzy.'});
         })
-        // if we want to access an org, we have to create a cookie with the id of the org
     };
     
     render() {
         const {values, errors, inProgress} = this.props.authStore;
-        let {registerErrors} = this.state;
-        
+        let {registerErrors, registerSuccess, registerSuccessMessage} = this.state;
+
+        if(registerSuccess){
+            return (
+                <Grid className={'form'} container item direction='column' spacing={16}>
+                    <Grid item>
+                        <SnackbarCustom variant="info"
+                                                message={registerSuccessMessage}/>
+                    </Grid>
+                </Grid>
+            )
+        }else{
         return (
             <Grid className={'form'} container item direction='column' spacing={16}>
                 {registerErrors && (
@@ -86,6 +106,7 @@ class Register extends React.Component {
                 </Grid>
             </Grid>
         )
+    }
     };
 }
 

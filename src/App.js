@@ -122,6 +122,7 @@ class App extends Component {
                                         aria-label="Open drawer"
                                         onClick={this.handleDrawerOpen}
                                         className={classNames(classes.menuButton, open && classes.hide)}
+                                        disabled
                             >
                                 <MenuIcon/>
                             </IconButton>

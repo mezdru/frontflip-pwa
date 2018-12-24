@@ -63,12 +63,12 @@ class Login extends React.Component {
                     //     this.setState({redirectTo: '/onboard/wingzy'});
                     // }
                 } else {
-                    this.setState({loginErrors: response.message});
+                    this.setState({loginErrors: "We don't know anyone with these credentials. Please check them or ask for a password."});
                     
                 }
             }).catch((err) => {
-            this.setState({loginErrors: err.message});
-        });
+                this.setState({loginErrors: "We don't know anyone with these credentials. Please check them or ask for a password."});
+            });
     };
     
     render() {

@@ -28,6 +28,11 @@ let PasswordReset = inject("authStore")(observer(class PasswordReset extends Rea
             .then(response => {
                 if (!(response.body) || !(response.body.errors)) {
                     this.setState({successUpdatePassword: true});
+                    if (process.env.NODE_ENV === 'production') {
+                        window.location = 'https://' + (this.props.organisationStore.values.orgTag ? this.props.organisationStore.values.orgTag + '.' : '') + process.env.REACT_APP_HOST_BACKFLIP + '/login/callback';
+                    } else {
+                        window.location = 'http://' + process.env.REACT_APP_HOST_BACKFLIP + '/login/callback' + (this.props.organisationStore.values.orgTag ? '?subdomains=' + this.props.organisationStore.values.orgTag : '');
+                    }
                 } else {
                     this.setState({passwordErrors: response.body.errors[0].msg});
                 }

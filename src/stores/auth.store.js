@@ -92,8 +92,7 @@ class AuthStore {
             })
             .catch(action((err) => {
                 // any other response status than 20X is an error
-                console.log(err);
-                this.errors = err;
+                this.errors = err.response && err.response.body && err.response.body.errors;
                 throw err;
             }))
             .finally(action(() => {this.inProgress = false; }));
@@ -114,7 +113,7 @@ class AuthStore {
             .catch(action((err) => {
                 console.log(err.response.body);
                 console.log(err.status);
-                this.errors = err;
+                this.errors = err.response && err.response.body && err.response.body.errors;
                 throw err;
             }))
             .finally(action(() => {this.inProgress = false; }));
