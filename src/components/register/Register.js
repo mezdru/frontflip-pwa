@@ -1,10 +1,11 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
 import SnackbarCustom from '../utils/snackbars/SnackbarCustom';
-import {Typography, TextField, Grid, Button} from "@material-ui/core";
+import {Typography, TextField, Grid, Button, Paper} from "@material-ui/core";
 
 import '../login/Login.css';
 import GoogleButton from "../utils/buttons/GoogleButton";
+import { ErrorOutline, InfoOutlined } from '@material-ui/icons';
 
 class Register extends React.Component {
     
@@ -59,8 +60,9 @@ class Register extends React.Component {
             return (
                 <Grid className={'form'} container item direction='column' spacing={16}>
                     <Grid item>
-                        <SnackbarCustom variant="info"
-                                                message={registerSuccessMessage}/>
+                        <Paper elevation="1">
+                            <InfoOutlined/>  {registerSuccessMessage}
+                        </Paper>
                     </Grid>
                 </Grid>
             )
@@ -69,8 +71,9 @@ class Register extends React.Component {
             <Grid className={'form'} container item direction='column' spacing={16}>
                 {registerErrors && (
                     <Grid item>
-                        <SnackbarCustom variant="error"
-                                        message={registerErrors}/>
+                        <Paper elevation="1">
+                        <ErrorOutline/>  {registerErrors}
+                        </Paper>
                     </Grid>
                 )}
                 <Grid item>

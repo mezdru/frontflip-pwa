@@ -1,10 +1,11 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {Button, Grid, Typography, TextField, withStyles} from '@material-ui/core';
+import {Button, Grid, Typography, TextField, withStyles, Paper} from '@material-ui/core';
 import SnackbarCustom from '../utils/snackbars/SnackbarCustom';
 
 import './Login.css';
 import GoogleButton from "../utils/buttons/GoogleButton";
+import { ErrorOutline } from '@material-ui/icons';
 
 // const styles = theme => ({
 //     root: {
@@ -75,14 +76,15 @@ class Login extends React.Component {
         const {values, errors, inProgress} = this.props.authStore;
         let {successLogin, loginErrors, redirectTo} = this.state;
         // if (successLogin) return <Redirect to={redirectTo}/>;
-        
+
         
         return (
             <Grid className={'form'} container item direction='column' spacing={16}>
                 {loginErrors && (
                     <Grid item>
-                        <SnackbarCustom variant="error"
-                                        message={loginErrors}/>
+                        <Paper elevation="1">
+                            <ErrorOutline/>  {loginErrors}
+                        </Paper>
                     </Grid>
                 )}
                 <Grid item>

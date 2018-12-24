@@ -2,7 +2,8 @@ import React from 'react'
 import {inject, observer} from 'mobx-react';
 import {Link} from 'react-router-dom'
 import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
-import {TextField, Button, Grid} from "@material-ui/core";
+import {TextField, Button, Grid, Paper} from "@material-ui/core";
+import { ErrorOutline, InfoOutlined } from '@material-ui/icons';
 
 class PasswordReset extends React.Component {
     
@@ -49,8 +50,10 @@ class PasswordReset extends React.Component {
         if (successUpdatePassword) {
             return (
                 <div>
-                    Your password have been updated.
-                    Go to : <Link to="/">Login page</Link>
+                    <Paper elevation="1">
+                        <InfoOutlined/>  Your password have been updated.
+                        Go to : <Link to="/">Login page</Link>
+                    </Paper>
                 </div>
             );
         } else {
@@ -59,8 +62,9 @@ class PasswordReset extends React.Component {
                     <Grid container item justify={"center"}>
                         You can now choose a new password
                         {passwordErrors && (
-                            <SnackbarCustom variant="error"
-                                            message={passwordErrors}/>
+                            <Paper>
+                                <ErrorOutline/>  {passwordErrors}
+                            </Paper>
                         )}
                     </Grid>
                     <Grid container item>
