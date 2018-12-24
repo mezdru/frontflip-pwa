@@ -76,6 +76,7 @@ class Login extends React.Component {
         let {successLogin, loginErrors, redirectTo} = this.state;
         // if (successLogin) return <Redirect to={redirectTo}/>;
         
+        
         return (
             <Grid className={'form'} container item direction='column' spacing={16}>
                 {loginErrors && (
