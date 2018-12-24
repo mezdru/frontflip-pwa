@@ -2,9 +2,9 @@ import React from 'react'
 import {inject, observer} from 'mobx-react';
 import {Link} from 'react-router-dom'
 import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
-import {TextField, Button} from "@material-ui/core";
+import {TextField, Button, Grid} from "@material-ui/core";
 
-let PasswordReset = inject("authStore")(observer(class PasswordReset extends React.Component {
+class PasswordReset extends React.Component {
     
     constructor(props) {
         super(props);
@@ -17,6 +17,7 @@ let PasswordReset = inject("authStore")(observer(class PasswordReset extends Rea
     componentWillUnmount = () => {
         this.props.authStore.reset();
     };
+    
     handlePasswordChange = (e) => {
         this.props.authStore.setPassword(e.target.value)
     };
@@ -54,28 +55,36 @@ let PasswordReset = inject("authStore")(observer(class PasswordReset extends Rea
             );
         } else {
             return (
-                <div>
-                    You can now choose a new password :
-                    {passwordErrors && (
-                        <SnackbarCustom variant="error"
-                                        message={passwordErrors}/>
-                    )}
-                    <TextField
-                        label="Password"
-                        type="password"
-                        margin="normal"
-                        fullWidth
-                        variant={"outlined"}
-                        value={values.password}
-                        onChange={this.handlePasswordChange}
-                    />
-                    <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary">Change password</Button>
-                </div>
+                <Grid container direction={"column"} justify={"center"} alignItems={"center"} className={"margin-form"} xs={12} sm={4} spacing={16}>
+                    <Grid container item justify={"center"}>
+                        You can now choose a new password
+                        {passwordErrors && (
+                            <SnackbarCustom variant="error"
+                                            message={passwordErrors}/>
+                        )}
+                    </Grid>
+                    <Grid container item>
+                        <TextField
+                            label="Password"
+                            type="password"
+                            margin="normal"
+                            fullWidth
+                            variant={"outlined"}
+                            value={values.password}
+                            onChange={this.handlePasswordChange}
+                        />
+                    </Grid>
+                    <Grid container item>
+                        <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary">Change password</Button>
+                    </Grid>
+                </Grid>
             );
         }
         
         
     }
-}));
+}
 
-export default PasswordReset;
+export default inject("authStore")(
+    observer(PasswordReset)
+);
