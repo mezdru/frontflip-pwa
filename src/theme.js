@@ -47,6 +47,11 @@ export default createMuiTheme({
                     borderColor: 'red'
                 }
             }
+        },
+        MuiPaper: {
+            root: {
+                padding: '16px'
+            }
         }
     },
     props: {

@@ -1,10 +1,11 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {Button, Grid, Typography, TextField, withStyles} from '@material-ui/core';
+import {Button, Grid, Typography, TextField, withStyles, Paper} from '@material-ui/core';
 import SnackbarCustom from '../utils/snackbars/SnackbarCustom';
 
 import './Login.css';
 import GoogleButton from "../utils/buttons/GoogleButton";
+import { ErrorOutline } from '@material-ui/icons';
 
 // const styles = theme => ({
 //     root: {
@@ -63,25 +64,27 @@ class Login extends React.Component {
                     //     this.setState({redirectTo: '/onboard/wingzy'});
                     // }
                 } else {
-                    this.setState({loginErrors: response.message});
+                    this.setState({loginErrors: "We don't know anyone with these credentials. Please check them or ask for a password."});
                     
                 }
             }).catch((err) => {
-            this.setState({loginErrors: err.message});
-        });
+                this.setState({loginErrors: "We don't know anyone with these credentials. Please check them or ask for a password."});
+            });
     };
     
     render() {
         const {values, errors, inProgress} = this.props.authStore;
         let {successLogin, loginErrors, redirectTo} = this.state;
         // if (successLogin) return <Redirect to={redirectTo}/>;
+
         
         return (
             <Grid className={'form'} container item direction='column' spacing={16}>
                 {loginErrors && (
                     <Grid item>
-                        <SnackbarCustom variant="error"
-                                        message={loginErrors}/>
+                        <Paper elevation="1">
+                            <ErrorOutline/>  <br/>{loginErrors}
+                        </Paper>
                     </Grid>
                 )}
                 <Grid item>

@@ -2,7 +2,8 @@ import React from 'react'
 import {inject, observer} from 'mobx-react';
 import {Link} from 'react-router-dom'
 import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
-import {TextField, Button, Grid} from "@material-ui/core";
+import {TextField, Button, Grid, Paper} from "@material-ui/core";
+import { ErrorOutline, InfoOutlined } from '@material-ui/icons';
 
 class PasswordReset extends React.Component {
     
@@ -29,6 +30,11 @@ class PasswordReset extends React.Component {
             .then(response => {
                 if (!(response.body) || !(response.body.errors)) {
                     this.setState({successUpdatePassword: true});
+                    if (process.env.NODE_ENV === 'production') {
+                        window.location = 'https://' + (this.props.organisationStore.values.orgTag ? this.props.organisationStore.values.orgTag + '.' : '') + process.env.REACT_APP_HOST_BACKFLIP + '/login/callback';
+                    } else {
+                        window.location = 'http://' + process.env.REACT_APP_HOST_BACKFLIP + '/login/callback' + (this.props.organisationStore.values.orgTag ? '?subdomains=' + this.props.organisationStore.values.orgTag : '');
+                    }
                 } else {
                     this.setState({passwordErrors: response.body.errors[0].msg});
                 }
@@ -44,8 +50,10 @@ class PasswordReset extends React.Component {
         if (successUpdatePassword) {
             return (
                 <div>
-                    Your password have been updated.
-                    Go to : <Link to="/">Login page</Link>
+                    <Paper elevation="1">
+                        <InfoOutlined/>  <br/>Your password have been updated.
+                        Go to : <Link to="/">Login page</Link>
+                    </Paper>
                 </div>
             );
         } else {
@@ -54,8 +62,9 @@ class PasswordReset extends React.Component {
                     <Grid container item justify={"center"}>
                         You can now choose a new password
                         {passwordErrors && (
-                            <SnackbarCustom variant="error"
-                                            message={passwordErrors}/>
+                            <Paper>
+                                <ErrorOutline/>  <br/>{passwordErrors}
+                            </Paper>
                         )}
                     </Grid>
                     <Grid container item>
