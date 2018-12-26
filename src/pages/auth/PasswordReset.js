@@ -91,5 +91,5 @@ class PasswordReset extends React.Component {
 }
 
 export default inject("authStore")(
-    observer(injectIntl(PasswordReset))
+    injectIntl(observer(PasswordReset))
 );
