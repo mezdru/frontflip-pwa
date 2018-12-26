@@ -128,9 +128,9 @@ class App extends Component {
                                 <MenuIcon/>
                             </IconButton>
                             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                                <Link to='/'>
+                                <a href={(process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP}>
                                     <img src={logoWingzy} height="70px" alt="Logo of Wingzy"/>
-                                </Link>
+                                </a>
                             </Typography>
                             
                             <div className={classes.grow}/>
