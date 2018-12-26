@@ -115,7 +115,7 @@ class Register extends React.Component {
 }
 
 export default inject('authStore', 'userStore', 'organisationStore')(
-    observer(
-        injectIntl(Register)
-    )
+    injectIntl(observer(
+        Register
+    ))
 );

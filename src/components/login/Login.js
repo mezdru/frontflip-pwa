@@ -130,7 +130,7 @@ class Login extends React.Component {
 }
 
 export default inject('authStore', 'userStore', 'organisationStore')(
-    observer(
-        injectIntl(Login)
-    )
+    injectIntl(observer(
+        (Login)
+    ))
 );
