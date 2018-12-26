@@ -1,11 +1,11 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
 import {Button, TextField, Grid, Paper} from "@material-ui/core";
 
 import './Auth.css';
 import mdpImg from '../../resources/images/mdp.png';
 import { InfoOutlined } from '@material-ui/icons';
+import { FormattedMessage } from 'react-intl';
 
 class PasswordForgot extends React.Component {
     
@@ -41,7 +41,7 @@ class PasswordForgot extends React.Component {
         let {successPasswordReset} = this.state;
         
         if (successPasswordReset) {
-            return <Paper><InfoOutlined/>  <br/>If you have an account on Wingzy, we have send you an email to reset your password.</Paper>;
+            return <Paper><InfoOutlined/>  <br/><FormattedMessage id="If you have an account on Wingzy, we have send you an email to reset your password."/></Paper>;
         } else {
             return (
                 <Grid container direction={"column"} justify={"center"} alignItems={"center"} className={"margin-form"} xs={12} sm={4} spacing={16}>
@@ -49,7 +49,7 @@ class PasswordForgot extends React.Component {
                         <img src={mdpImg} alt="mdp" style={{width: '12rem', padding: '1rem'}}/>
                     </Grid>
                     <Grid item container justify={"center"}>
-                        <p> You forgot your password ? Don't worry ! You can ask for a reset</p>
+                        <p> <FormattedMessage id="You forgot your password or didn't have one yet ? Don't worry ! You can ask for a reset" /></p>
                     </Grid>
                     <Grid item container >
                         <TextField label="Email"
@@ -63,7 +63,7 @@ class PasswordForgot extends React.Component {
                         />
                     </Grid>
                     <Grid item container>
-                        <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary">Reset your password</Button>
+                        <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary"><FormattedMessage id="Reset your password"/></Button>
                     </Grid>
                 </Grid>
             );

@@ -12,6 +12,18 @@ import organisationStore from './stores/organisation.store';
 import HttpsRedirect from 'react-https-redirect';
 import {MuiThemeProvider} from "@material-ui/core";
 import theme from "./theme";
+import { addLocaleData, IntlProvider } from "react-intl";
+import locale_en from 'react-intl/locale-data/en';
+import locale_fr from 'react-intl/locale-data/fr';
+import messages_fr from "./translations/fr.json";
+import messages_en from "./translations/en.json";
+
+addLocaleData([...locale_en, ...locale_fr]);
+
+const messages = {
+    'fr': messages_fr,
+    'en': messages_en
+};
 
 const stores = {
     authStore,
@@ -21,11 +33,15 @@ const stores = {
     organisationStore
 };
 
+const language = navigator.language.split(/[-_]/)[0];  // language without region code
+
 ReactDOM.render(
     <HttpsRedirect>
         <Provider {...stores}>
             <MuiThemeProvider theme={theme}>
-                <App/>
+                <IntlProvider locale={language} messages={messages[language]}>
+                    <App/>
+                </IntlProvider>
             </MuiThemeProvider>
         </Provider>
     </HttpsRedirect>

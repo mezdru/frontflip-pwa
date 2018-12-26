@@ -34,7 +34,7 @@ const requests = {
         return validateToken()
         .then(()=>
             superagent
-            .del((process.env.NODE_ENV == 'development' ? 'http://' : 'https://') + `${url}`)
+            .del((process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${url}`)
             .use(tokenPlugin)
             .end(handleErrors)
             .then(responseBody)
@@ -45,7 +45,7 @@ const requests = {
         return validateToken()
         .then(()=>
             superagent
-            .get((process.env.NODE_ENV == 'development' ? 'http://' : 'https://') + `${url}`)
+            .get((process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${url}`)
             .use(tokenPlugin)
             .end(handleErrors)
             .then(responseBody)
@@ -56,7 +56,7 @@ const requests = {
         return validateToken()
         .then( () => 
             superagent
-            .put((process.env.NODE_ENV == 'development' ? 'http://' : 'https://') + `${url}`, body)
+            .put((process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${url}`, body)
             .use(tokenPlugin)
             .end(handleErrors)
             .then(responseBody)
@@ -67,7 +67,7 @@ const requests = {
         return validateToken()
         .then( () => 
             superagent
-            .post((process.env.NODE_ENV == 'development' ? 'http://' : 'https://') + `${url}`, body)
+            .post((process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${url}`, body)
             .use(tokenPlugin)
             .end(handleErrors)
             .then(responseBody)

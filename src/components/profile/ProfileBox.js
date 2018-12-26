@@ -26,7 +26,7 @@ let ProfileBox = inject("recordStore", "userStore")(  observer(class ProfileBox 
     };
 
     render(){
-        const { values, errors, inProgress} = this.props.recordStore;
+        const { values} = this.props.recordStore;
         if(values.record.name){
             return(
                 <div>

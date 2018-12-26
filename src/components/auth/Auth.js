@@ -5,6 +5,7 @@ import {Grid, Tab, Tabs} from '@material-ui/core';
 
 import Login from '../login/Login';
 import Register from '../register/Register';
+import { injectIntl } from 'react-intl';
 
 import './Auth.css';
 
@@ -23,6 +24,7 @@ class Auth extends React.Component {
     
     render() {
         const {theme} = this.props;
+        let intl = this.props.intl;
         
         return (
             <Grid container
@@ -38,8 +40,8 @@ class Auth extends React.Component {
                         textColor="primary"
                         fullWidth={true}
                     >
-                        <Tab id="form-tab-left" label="Sign In"/>
-                        <Tab id="form-tab-right" label="Sign Up"/>
+                        <Tab id="form-tab-left" label={intl.formatMessage({id: 'Sign In'})}/>
+                        <Tab id="form-tab-right" label={intl.formatMessage({id: 'Sign Up'})}/>
                     </Tabs>
                 </Grid>
                 <Grid item style={{width: '100%'}}>
@@ -58,4 +60,4 @@ class Auth extends React.Component {
 }
 
 
-export default withTheme()(Auth);
+export default withTheme()(injectIntl(Auth));

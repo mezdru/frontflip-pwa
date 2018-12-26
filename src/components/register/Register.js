@@ -1,11 +1,11 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import SnackbarCustom from '../utils/snackbars/SnackbarCustom';
 import {Typography, TextField, Grid, Button, Paper} from "@material-ui/core";
 
 import '../login/Login.css';
 import GoogleButton from "../utils/buttons/GoogleButton";
 import { ErrorOutline, InfoOutlined } from '@material-ui/icons';
+import {injectIntl, FormattedMessage} from 'react-intl';
 
 class Register extends React.Component {
     
@@ -53,8 +53,9 @@ class Register extends React.Component {
     };
     
     render() {
-        const {values, errors, inProgress} = this.props.authStore;
+        const {values} = this.props.authStore;
         let {registerErrors, registerSuccess, registerSuccessMessage} = this.state;
+        let intl = this.props.intl;
 
         if(registerSuccess){
             return (
@@ -80,7 +81,7 @@ class Register extends React.Component {
                     <GoogleButton fullWidth={true}/>
                 </Grid>
                 <Grid item>
-                    <Typography className="or-seperator"> or </Typography>
+                    <Typography className="or-seperator"><FormattedMessage id="or" /></Typography>
                 </Grid>
                 <Grid item>
                     <TextField
@@ -95,7 +96,7 @@ class Register extends React.Component {
                 </Grid>
                 <Grid item>
                     <TextField
-                        label="Password"
+                        label={intl.formatMessage({id: 'Password'})}
                         type="password"
                         autoComplete="current-password"
                         variant={"outlined"}
@@ -105,7 +106,7 @@ class Register extends React.Component {
                     />
                 </Grid>
                 <Grid item>
-                    <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary">Sign Up</Button>
+                    <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary"><FormattedMessage id="Sign Up"/></Button>
                 </Grid>
             </Grid>
         )
@@ -115,6 +116,6 @@ class Register extends React.Component {
 
 export default inject('authStore', 'userStore', 'organisationStore')(
     observer(
-        Register
+        injectIntl(Register)
     )
 );

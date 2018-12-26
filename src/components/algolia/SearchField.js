@@ -19,7 +19,7 @@ let SearchField = inject("organisationStore", "commonStore")(  observer(class Se
     };
 
     render(){
-        const { values, errors, inProgress} = window.self.props.organisationStore;
+        const { values } = window.self.props.organisationStore;
         const { algoliaKey }  = window.self.props.commonStore;
         return(     
             <div>
