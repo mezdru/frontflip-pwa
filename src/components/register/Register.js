@@ -51,6 +51,10 @@ class Register extends React.Component {
             this.setState({registerErrors: 'There was an error. You probably already have an account on Wingzy.'});
         })
     };
+
+    handleGoogleConnect = (e) => {
+        window.location = (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_API_ROOT_AUTH + '/google';
+    };
     
     render() {
         const {values} = this.props.authStore;
@@ -78,7 +82,7 @@ class Register extends React.Component {
                     </Grid>
                 )}
                 <Grid item>
-                    <GoogleButton fullWidth={true}/>
+                    <GoogleButton fullWidth={true} onClick={this.handleGoogleConnect}/>
                 </Grid>
                 <Grid item>
                     <Typography className="or-seperator"><FormattedMessage id="or" /></Typography>

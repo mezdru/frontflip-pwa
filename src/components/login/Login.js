@@ -71,6 +71,10 @@ class Login extends React.Component {
                 this.setState({loginErrors: "We don't know anyone with these credentials. Please check them or ask for a password."});
             });
     };
+
+    handleGoogleConnect = (e) => {
+        window.location = (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_API_ROOT_AUTH + '/google';
+    };
     
     render() {
         const {values} = this.props.authStore;
@@ -89,7 +93,7 @@ class Login extends React.Component {
                     </Grid>
                 )}
                 <Grid item>
-                    <GoogleButton fullWidth={true}/>
+                    <GoogleButton fullWidth={true} onClick={this.handleGoogleConnect}/>
                 </Grid>
                 <Grid item>
                     <Typography className="or-seperator"><FormattedMessage id="or"/></Typography>
