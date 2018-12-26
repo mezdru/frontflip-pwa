@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button, Typography, withStyles} from '@material-ui/core';
 import googleLogo from '../../../resources/images/g.svg';
+import { FormattedMessage } from 'react-intl';
 
 const styles = {
     root: {
@@ -13,7 +14,7 @@ const styles = {
 const GoogleButton = ({...props}) =>
     <Button {...props} className={styles.root}>
         <img src={googleLogo} style={{width: '25px', height: '25px', position: 'absolute', left: '13px'}} alt="google"/>
-        <Typography> connect with google</Typography>
+        <Typography> <FormattedMessage id="connect with Google" /></Typography>
     </Button>;
     
 export default withStyles(styles)(GoogleButton);

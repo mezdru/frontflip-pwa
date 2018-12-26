@@ -6,11 +6,12 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {AppBar, Button, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, Menu, MenuItem, Toolbar, Typography} from '@material-ui/core';
 import {AccountCircle, ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon, Mail as MailIcon, Menu as MenuIcon, MoreVert as MoreIcon, MoveToInbox as InboxIcon} from '@material-ui/icons';
-import {BrowserRouter, Link, Redirect, withRouter} from "react-router-dom";
+import {BrowserRouter, Link, Redirect} from "react-router-dom";
 import logoWingzy from './resources/images/wingzy_line_256.png';
 import './components/header/header.css';
 import AvailabilityToggle from './components/availabilityToggle/AvailabilityToggle';
 import {styles} from './App.css.js'
+// import { FormattedMessage } from 'react-intl';
 
 class App extends Component {
     constructor(props) {
@@ -25,9 +26,9 @@ class App extends Component {
     
     componentDidMount() {
         if (this.props.commonStore.accessToken) {
-            this.state.auth = true;
+            this.setState({auth: true});
         } else {
-            this.state.auth = false;
+            this.setState({auth: false})
         }
         if (!this.props.userStore.values.currentUser._id && this.state.auth) {
             this.props.userStore.getCurrentUser();
@@ -128,13 +129,13 @@ class App extends Component {
                             </IconButton>
                             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
                                 <Link to='/'>
-                                    <img src={logoWingzy} height="70px"/>
+                                    <img src={logoWingzy} height="70px" alt="Logo of Wingzy"/>
                                 </Link>
                             </Typography>
                             
                             <div className={classes.grow}/>
                             <div className={classes.sectionDesktop}>
-                                <Button variant={"text"} color="inherit">Why Wingzy ?</Button>
+                                {/* <Button variant={"text"} color="inherit">Why Wingzy ?</Button>
                                 <Button variant={"text"} color="inherit">Pricing</Button>
                                 {auth && (
                                     <IconButton
@@ -148,13 +149,13 @@ class App extends Component {
                                 )}
                                 {!auth && (
                                     <Button variant={"text"} color="inherit">Login</Button>
-                                )}
+                                )} */}
                             
                             </div>
                             <div className={classes.sectionMobile}>
-                                <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit" style={{padding: 0}}>
+                                {/* <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit" style={{padding: 0}}>
                                     <MoreIcon/>
-                                </IconButton>
+                                </IconButton> */}
                             </div>
                         </Toolbar>
                     </AppBar>

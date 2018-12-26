@@ -1,9 +1,9 @@
 import React from 'react'
 import {inject, observer} from 'mobx-react';
 import {Link} from 'react-router-dom'
-import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
 import {TextField, Button, Grid, Paper} from "@material-ui/core";
 import { ErrorOutline, InfoOutlined } from '@material-ui/icons';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 class PasswordReset extends React.Component {
     
@@ -46,6 +46,7 @@ class PasswordReset extends React.Component {
     render() {
         const {values} = this.props.authStore;
         let {passwordErrors, successUpdatePassword} = this.state;
+        let intl = this.props.intl;
         
         if (successUpdatePassword) {
             return (
@@ -60,7 +61,7 @@ class PasswordReset extends React.Component {
             return (
                 <Grid container direction={"column"} justify={"center"} alignItems={"center"} className={"margin-form"} xs={12} sm={4} spacing={16}>
                     <Grid container item justify={"center"}>
-                        You can now choose a new password
+                        <FormattedMessage id="You can now choose a new password"/>
                         {passwordErrors && (
                             <Paper>
                                 <ErrorOutline/>  <br/>{passwordErrors}
@@ -69,7 +70,7 @@ class PasswordReset extends React.Component {
                     </Grid>
                     <Grid container item>
                         <TextField
-                            label="Password"
+                            label={intl.formatMessage({id: 'Password'})}
                             type="password"
                             margin="normal"
                             fullWidth
@@ -79,7 +80,7 @@ class PasswordReset extends React.Component {
                         />
                     </Grid>
                     <Grid container item>
-                        <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary">Change password</Button>
+                        <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary"><FormattedMessage id="Change password"/></Button>
                     </Grid>
                 </Grid>
             );
@@ -90,5 +91,5 @@ class PasswordReset extends React.Component {
 }
 
 export default inject("authStore")(
-    observer(PasswordReset)
+    observer(injectIntl(PasswordReset))
 );

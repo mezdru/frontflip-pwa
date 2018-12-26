@@ -1,11 +1,11 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {Button, Grid, Typography, TextField, withStyles, Paper} from '@material-ui/core';
-import SnackbarCustom from '../utils/snackbars/SnackbarCustom';
-
+import {Button, Grid, Typography, TextField, Paper} from '@material-ui/core';
 import './Login.css';
 import GoogleButton from "../utils/buttons/GoogleButton";
 import { ErrorOutline } from '@material-ui/icons';
+
+import {injectIntl, FormattedMessage} from 'react-intl';
 
 // const styles = theme => ({
 //     root: {
@@ -73,8 +73,9 @@ class Login extends React.Component {
     };
     
     render() {
-        const {values, errors, inProgress} = this.props.authStore;
-        let {successLogin, loginErrors, redirectTo} = this.state;
+        const {values} = this.props.authStore;
+        let {loginErrors} = this.state;
+        let intl = this.props.intl;
         // if (successLogin) return <Redirect to={redirectTo}/>;
 
         
@@ -91,7 +92,7 @@ class Login extends React.Component {
                     <GoogleButton fullWidth={true}/>
                 </Grid>
                 <Grid item>
-                    <Typography className="or-seperator"> or </Typography>
+                    <Typography className="or-seperator"><FormattedMessage id="or"/></Typography>
                 </Grid>
                 <Grid item>
                     <TextField
@@ -106,7 +107,7 @@ class Login extends React.Component {
                 </Grid>
                 <Grid item>
                     <TextField
-                        label="Password"
+                        label={intl.formatMessage({id: 'Password'})}
                         type="password"
                         autoComplete="current-password"
                         fullWidth
@@ -116,11 +117,11 @@ class Login extends React.Component {
                     />
                 </Grid>
                 <Grid item>
-                    <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary">Sign in</Button>
+                    <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary"><FormattedMessage id="Sign In" /></Button>
                 </Grid>
                 <Grid item>
                     <Button variant={"text"} href="/password/forgot">
-                        I don't have my password
+                        <FormattedMessage id="I don't have my password"/>
                     </Button>
                 </Grid>
             </Grid>
@@ -130,6 +131,6 @@ class Login extends React.Component {
 
 export default inject('authStore', 'userStore', 'organisationStore')(
     observer(
-        Login
+        injectIntl(Login)
     )
 );
