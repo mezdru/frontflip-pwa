@@ -90,6 +90,6 @@ class PasswordReset extends React.Component {
     }
 }
 
-export default inject("authStore")(
+export default inject("authStore", "organisationStore")(
     injectIntl(observer(PasswordReset))
 );

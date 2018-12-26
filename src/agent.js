@@ -120,6 +120,10 @@ const Auth = {
                 grant_type: 'password'
             }
         ),
+    // loginWithGoogle: () =>
+    //         requests.get(
+    //             API_ROOT_AUTH + '/google'
+    //         ),
     register: (email, password) =>
         requests.post(
             `${API_ROOT_AUTH}/register`,

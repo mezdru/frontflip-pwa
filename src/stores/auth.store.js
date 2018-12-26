@@ -82,10 +82,8 @@ class AuthStore {
             .then((data) => {
                 return this.login(this.values.email, this.values.password)
                 .then((respLogin) => {
-                    console.log('org tag : ' + organisationStore.values.orgTag);
                     return emailService.confirmLoginEmail(organisationStore.values.orgTag)
                     .then((respEmail) => {
-                        console.log('email sended');
                         return true;
                     });
                 });
@@ -111,8 +109,6 @@ class AuthStore {
                 return true;
             })
             .catch(action((err) => {
-                console.log(err.response.body);
-                console.log(err.status);
                 this.errors = err.response && err.response.body && err.response.body.errors;
                 throw err;
             }))
@@ -128,7 +124,6 @@ class AuthStore {
                 return data;
             })
             .catch(action((err) => {
-                console.log(err);
                 this.errors = err;
             }))
             .finally(action(() => {this.inProgress = false; }));   
