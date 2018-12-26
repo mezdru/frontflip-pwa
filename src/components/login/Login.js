@@ -63,6 +63,7 @@ class Login extends React.Component {
                     // }else{
                     //     this.setState({redirectTo: '/onboard/wingzy'});
                     // }
+                    
                 } else {
                     this.setState({loginErrors: "We don't know anyone with these credentials. Please check them or ask for a password."});
                     
@@ -73,7 +74,7 @@ class Login extends React.Component {
     };
 
     handleGoogleConnect = (e) => {
-        window.location = (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_API_ROOT_AUTH + '/google';
+        window.location = (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP + '/google/login';
     };
     
     render() {

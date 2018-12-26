@@ -53,7 +53,7 @@ class Register extends React.Component {
     };
 
     handleGoogleConnect = (e) => {
-        window.location = (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_API_ROOT_AUTH + '/google';
+        window.location = (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP + '/google/login';
     };
     
     render() {
