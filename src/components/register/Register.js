@@ -16,12 +16,22 @@ class Register extends React.Component {
             value: 0,
             registerErrors: null,
             registerSuccess: false,
-            registerSuccessMessage: ''
+            registerSuccessMessage: '',
+            inProgress: false
         };
     }
     
     componentWillMount = () => {
         this.props.authStore.reset();
+    };
+
+    componentDidMount = () => {
+        observe(this.props.authStore, 'inProgress', (change) => {
+            if(this.props.authStore.values.inProgress)
+                this.setState({inProgress: true});
+            else
+                this.setState({inProgress: false});
+        });
     };
     
     handleEmailChange = (e) => {
