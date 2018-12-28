@@ -25,11 +25,17 @@ class App extends Component {
     }
     
     componentDidMount() {
-        if (this.props.commonStore.accessToken) {
-            this.setState({auth: true});
-        } else {
-            this.setState({auth: false})
-        }
+        this.props.authStore.isAuth()
+        .then(isAuth => {
+            isAuth ? this.setState({auth: true}) : this.setState({auth: false});
+            if(isAuth){
+                if (process.env.NODE_ENV === 'production') {
+                    window.location = 'https://' + (this.props.organisationStore.values.orgTag ? this.props.organisationStore.values.orgTag + '.' : '') + process.env.REACT_APP_HOST_BACKFLIP + '/search';
+                } else {
+                    window.location = 'http://' + process.env.REACT_APP_HOST_BACKFLIP + '/search' + (this.props.organisationStore.values.orgTag ? '?subdomains=' + this.props.organisationStore.values.orgTag : '');
+                }
+            }
+        });
         if (!this.props.userStore.values.currentUser._id && this.state.auth) {
             this.props.userStore.getCurrentUser();
         }
@@ -231,7 +237,7 @@ App.propTypes = {
     theme: PropTypes.object.isRequired,
 };
 
-export default inject('commonStore', 'userStore', 'authStore')(
+export default inject('commonStore', 'userStore', 'authStore', 'organisationStore')(
     observer(
         withStyles(styles, {withTheme: true})(
             App
