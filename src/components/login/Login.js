@@ -88,7 +88,7 @@ class Login extends React.Component {
             <Grid className={'form'} container item direction='column' spacing={16}>
                 {loginErrors && (
                     <Grid item>
-                        <Paper elevation="1">
+                        <Paper>
                             <ErrorOutline/>  <br/>{loginErrors}
                         </Paper>
                     </Grid>
