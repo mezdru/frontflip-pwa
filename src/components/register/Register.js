@@ -6,7 +6,6 @@ import '../login/Login.css';
 import GoogleButton from "../utils/buttons/GoogleButton";
 import { ErrorOutline, InfoOutlined } from '@material-ui/icons';
 import {injectIntl, FormattedMessage} from 'react-intl';
-import { observe } from 'mobx';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 class Register extends React.Component {
@@ -17,8 +16,7 @@ class Register extends React.Component {
             value: 0,
             registerErrors: null,
             registerSuccess: false,
-            registerSuccessMessage: '',
-            inProgress: false
+            registerSuccessMessage: ''
         };
     }
     
@@ -26,15 +24,6 @@ class Register extends React.Component {
         this.props.authStore.reset();
     };
 
-    componentDidMount = () => {
-        observe(this.props.authStore, 'inProgress', (change) => {
-            if(this.props.authStore.values.inProgress)
-                this.setState({inProgress: true});
-            else
-                this.setState({inProgress: false});
-        });
-    };
-    
     handleEmailChange = (e) => {
         this.props.authStore.setEmail(e.target.value);
     };
@@ -69,8 +58,8 @@ class Register extends React.Component {
     };
     
     render() {
-        const {values} = this.props.authStore;
-        let {registerErrors, registerSuccess, registerSuccessMessage, inProgress} = this.state;
+        const {values, inProgress} = this.props.authStore;
+        let {registerErrors, registerSuccess, registerSuccessMessage} = this.state;
         let intl = this.props.intl;
 
         if(registerSuccess){
