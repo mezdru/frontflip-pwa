@@ -6,6 +6,8 @@ import '../login/Login.css';
 import GoogleButton from "../utils/buttons/GoogleButton";
 import { ErrorOutline, InfoOutlined } from '@material-ui/icons';
 import {injectIntl, FormattedMessage} from 'react-intl';
+import { observe } from 'mobx';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 class Register extends React.Component {
     
@@ -15,12 +17,22 @@ class Register extends React.Component {
             value: 0,
             registerErrors: null,
             registerSuccess: false,
-            registerSuccessMessage: ''
+            registerSuccessMessage: '',
+            inProgress: false
         };
     }
     
     componentWillMount = () => {
         this.props.authStore.reset();
+    };
+
+    componentDidMount = () => {
+        observe(this.props.authStore, 'inProgress', (change) => {
+            if(this.props.authStore.values.inProgress)
+                this.setState({inProgress: true});
+            else
+                this.setState({inProgress: false});
+        });
     };
     
     handleEmailChange = (e) => {
@@ -58,7 +70,7 @@ class Register extends React.Component {
     
     render() {
         const {values} = this.props.authStore;
-        let {registerErrors, registerSuccess, registerSuccessMessage} = this.state;
+        let {registerErrors, registerSuccess, registerSuccessMessage, inProgress} = this.state;
         let intl = this.props.intl;
 
         if(registerSuccess){
@@ -110,7 +122,17 @@ class Register extends React.Component {
                     />
                 </Grid>
                 <Grid item>
-                    <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary"><FormattedMessage id="Sign Up"/></Button>
+                    {
+                        inProgress && (
+                            <CircularProgress color="primary"/>
+                        )
+                    }
+                    {
+                        !inProgress && (
+                            <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary"><FormattedMessage id="Sign Up"/></Button>
+                        )
+                    }
+                    
                 </Grid>
             </Grid>
         )

@@ -4,7 +4,8 @@ import {Button, Grid, Typography, TextField, Paper} from '@material-ui/core';
 import './Login.css';
 import GoogleButton from "../utils/buttons/GoogleButton";
 import { ErrorOutline } from '@material-ui/icons';
-
+import { observe } from 'mobx';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import {injectIntl, FormattedMessage} from 'react-intl';
 
 // const styles = theme => ({
@@ -27,9 +28,19 @@ class Login extends React.Component {
             value: 0,
             successLogin: false,
             redirectTo: '/',
-            loginErrors: null
+            loginErrors: null,
+            inProgress: false
         };
     }
+
+    componentDidMount = () => {
+        observe(this.props.authStore, 'inProgress', (change) => {
+            if(this.props.authStore.values.inProgress)
+                this.setState({inProgress: true});
+            else
+                this.setState({inProgress: false});
+        });
+    };
     
     componentWillUnmount = () => {
         this.props.authStore.reset();
@@ -79,7 +90,7 @@ class Login extends React.Component {
     
     render() {
         const {values} = this.props.authStore;
-        let {loginErrors} = this.state;
+        let {loginErrors, inProgress} = this.state;
         let intl = this.props.intl;
         // if (successLogin) return <Redirect to={redirectTo}/>;
 
@@ -122,7 +133,16 @@ class Login extends React.Component {
                     />
                 </Grid>
                 <Grid item>
-                    <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary"><FormattedMessage id="Sign In" /></Button>
+                    {
+                        inProgress && (
+                            <CircularProgress color="primary"/>
+                        )
+                    }
+                    {
+                        !inProgress && (
+                            <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary"><FormattedMessage id="Sign In" /></Button>
+                        )
+                    }
                 </Grid>
                 <Grid item>
                     <Button variant={"text"} href="/password/forgot">
