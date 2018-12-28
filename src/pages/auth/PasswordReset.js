@@ -24,7 +24,6 @@ class PasswordReset extends React.Component {
     };
     
     handleSubmitForm = (e) => {
-        console.log('ask new pass');
         e.preventDefault();
         this.props.authStore.updatePassword(this.props.match.params.token,
             this.props.match.params.hash)
@@ -52,7 +51,7 @@ class PasswordReset extends React.Component {
         if (successUpdatePassword) {
             return (
                 <div>
-                    <Paper elevation="1">
+                    <Paper>
                         <InfoOutlined/>  <br/>Your password have been updated.
                         Go to : <Link to="/">Login page</Link>
                     </Paper>

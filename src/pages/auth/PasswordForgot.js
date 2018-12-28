@@ -25,7 +25,6 @@ class PasswordForgot extends React.Component {
     };
     
     handleSubmitForm = (e) => {
-        console.log('Test ? ');
         e.preventDefault();
         this.props.authStore.passwordForgot()
             .then(response => {

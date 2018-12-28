@@ -52,6 +52,7 @@ class AuthStore {
      * @description Call authentification service to fetch tokens
      */
     login() {
+        console.log('wiill login');
         this.inProgress = true;
         this.errors = null;
 
@@ -135,8 +136,8 @@ class AuthStore {
 
         return agent.Email.updatePassword(token, hash, this.values.password)
             .then((data) => {
-                console.log(data);
-                return data;
+                this.setEmail(data.email);
+                return this.login();
             })
             .catch((err) => {
                 this.errors = err;
