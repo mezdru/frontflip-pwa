@@ -4,7 +4,6 @@ import {Button, Grid, Typography, TextField, Paper} from '@material-ui/core';
 import './Login.css';
 import GoogleButton from "../utils/buttons/GoogleButton";
 import { ErrorOutline } from '@material-ui/icons';
-import { observe } from 'mobx';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {injectIntl, FormattedMessage} from 'react-intl';
 
@@ -28,19 +27,9 @@ class Login extends React.Component {
             value: 0,
             successLogin: false,
             redirectTo: '/',
-            loginErrors: null,
-            inProgress: false
+            loginErrors: null
         };
     }
-
-    componentDidMount = () => {
-        observe(this.props.authStore, 'inProgress', (change) => {
-            if(this.props.authStore.values.inProgress)
-                this.setState({inProgress: true});
-            else
-                this.setState({inProgress: false});
-        });
-    };
     
     componentWillUnmount = () => {
         this.props.authStore.reset();
@@ -89,8 +78,8 @@ class Login extends React.Component {
     };
     
     render() {
-        const {values} = this.props.authStore;
-        let {loginErrors, inProgress} = this.state;
+        const {values, inProgress} = this.props.authStore;
+        let {loginErrors} = this.state;
         let intl = this.props.intl;
         // if (successLogin) return <Redirect to={redirectTo}/>;
 
