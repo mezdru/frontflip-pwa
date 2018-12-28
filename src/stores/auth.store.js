@@ -52,7 +52,6 @@ class AuthStore {
      * @description Call authentification service to fetch tokens
      */
     login() {
-        console.log('wiill login');
         this.inProgress = true;
         this.errors = null;
 
