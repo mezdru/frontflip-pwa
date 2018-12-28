@@ -27,8 +27,7 @@ class Login extends React.Component {
             value: 0,
             successLogin: false,
             redirectTo: '/',
-            loginErrors: null,
-            inProgress: false
+            loginErrors: null
         };
     }
     
