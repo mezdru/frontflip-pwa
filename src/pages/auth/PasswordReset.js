@@ -24,6 +24,7 @@ class PasswordReset extends React.Component {
     };
     
     handleSubmitForm = (e) => {
+        console.log('ask new pass');
         e.preventDefault();
         this.props.authStore.updatePassword(this.props.match.params.token,
             this.props.match.params.hash)

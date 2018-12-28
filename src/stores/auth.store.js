@@ -125,6 +125,7 @@ class AuthStore {
             })
             .catch(action((err) => {
                 this.errors = err;
+                return err;
             }))
             .finally(action(() => {this.inProgress = false; }));   
     }
@@ -134,6 +135,7 @@ class AuthStore {
 
         return agent.Email.updatePassword(token, hash, this.values.password)
             .then((data) => {
+                console.log(data);
                 return data;
             })
             .catch((err) => {
