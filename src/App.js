@@ -4,13 +4,13 @@ import {withStyles} from "@material-ui/core";
 import {inject, observer} from "mobx-react";
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {AppBar, Button, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, Menu, MenuItem, Toolbar, Typography} from '@material-ui/core';
-import {AccountCircle, ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon, Mail as MailIcon, Menu as MenuIcon, MoreVert as MoreIcon, MoveToInbox as InboxIcon} from '@material-ui/icons';
+import {CssBaseline, IconButton, Menu, MenuItem} from '@material-ui/core';
+import {AccountCircle} from '@material-ui/icons';
 import {BrowserRouter, Link, Redirect} from "react-router-dom";
-import logoWingzy from './resources/images/wingzy_line_256.png';
 import './components/header/header.css';
-import AvailabilityToggle from './components/availabilityToggle/AvailabilityToggle';
 import {styles} from './App.css.js'
+import HeaderAppBar from './components/header/HeaderAppBar';
+import HeaderDrawer from './components/header/HeaderDrawer';
 // import { FormattedMessage } from 'react-intl';
 
 class App extends Component {
@@ -19,10 +19,25 @@ class App extends Component {
         this.state = {
             anchorEl: null,
             mobileMoreAnchorEl: null,
-            successLogout: false,
-            auth: false,
+            successLogout: false
         };
     }
+    handleProfileMenuOpen = event => {
+        this.setState({anchorEl: event.currentTarget});
+    };
+    
+    handleMenuClose = () => {
+        this.setState({anchorEl: null});
+        this.handleMobileMenuClose();
+    };
+    
+    handleMobileMenuOpen = event => {
+        this.setState({mobileMoreAnchorEl: event.currentTarget});
+    };
+    
+    handleMobileMenuClose = () => {
+        this.setState({mobileMoreAnchorEl: null});
+    };
     
     componentDidMount() {
         this.props.authStore.isAuth()
@@ -42,30 +57,7 @@ class App extends Component {
     }
     
     
-    handleProfileMenuOpen = event => {
-        this.setState({anchorEl: event.currentTarget});
-    };
     
-    handleMenuClose = () => {
-        this.setState({anchorEl: null});
-        this.handleMobileMenuClose();
-    };
-    
-    handleMobileMenuOpen = event => {
-        this.setState({mobileMoreAnchorEl: event.currentTarget});
-    };
-    
-    handleMobileMenuClose = () => {
-        this.setState({mobileMoreAnchorEl: null});
-    };
-    
-    handleDrawerOpen = () => {
-        this.setState({open: true});
-    };
-    
-    handleDrawerClose = () => {
-        this.setState({open: false});
-    };
     
     handleLogout = () => {
         this.props.authStore.logout()
@@ -76,12 +68,12 @@ class App extends Component {
         const {anchorEl, mobileMoreAnchorEl} = this.state;
         const isMenuOpen = Boolean(anchorEl);
         const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-        const {auth} = this.state;
-        const {classes, theme} = this.props;
+        const {classes} = this.props;
         const {open, successLogout} = this.state;
         
         if (successLogout) return <Redirect to='/'/>;
         
+
         const renderMenu = (
             <Menu
                 anchorEl={anchorEl}
@@ -116,107 +108,13 @@ class App extends Component {
             <BrowserRouter>
                 <div className={classes.root}>
                     <CssBaseline/>
-                    <AppBar
-                        position="fixed"
-                        color="default"
-                        className={classNames(classes.appBar, {
-                            [classes.appBarShift]: open,
-                        })}
-                    >
-                        <Toolbar>
-                            <IconButton style={{padding: 0}}
-                                        color="inherit"
-                                        aria-label="Open drawer"
-                                        onClick={this.handleDrawerOpen}
-                                        className={classNames(classes.menuButton, open && classes.hide)}
-                                        disabled
-                            >
-                                <MenuIcon/>
-                            </IconButton>
-                            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                                <a href={(process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP}>
-                                    <img src={logoWingzy} height="70px" alt="Logo of Wingzy"/>
-                                </a>
-                            </Typography>
-                            
-                            <div className={classes.grow}/>
-                            <div className={classes.sectionDesktop}>
-                                {/* <Button variant={"text"} color="inherit">Why Wingzy ?</Button>
-                                <Button variant={"text"} color="inherit">Pricing</Button>
-                                {auth && (
-                                    <IconButton
-                                        aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                                        aria-haspopup="true"
-                                        onClick={this.handleProfileMenuOpen}
-                                        color="inherit"
-                                    >
-                                        <AccountCircle/>
-                                    </IconButton>
-                                )}
-                                {!auth && (
-                                    <Button variant={"text"} color="inherit">Login</Button>
-                                )} */}
-                            
-                            </div>
-                            <div className={classes.sectionMobile}>
-                                {/* <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit" style={{padding: 0}}>
-                                    <MoreIcon/>
-                                </IconButton> */}
-                            </div>
-                        </Toolbar>
-                    </AppBar>
+                    {/*  import appbar */}
+                    <HeaderAppBar/>
                     {renderMenu}
                     {renderMobileMenu}
                     
-                    <Drawer
-                        className={classes.drawer}
-                        variant="persistent"
-                        anchor="left"
-                        open={open}
-                        classes={{
-                            paper: classes.drawerPaper,
-                        }}
-                    >
-                        <div className={classes.drawerHeader}>
-                            <IconButton onClick={this.handleDrawerClose}>
-                                {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
-                            </IconButton>
-                        </div>
-                        <Divider/>
-                        <Button>List of the orgs</Button>
-                        <Divider/>
-                        
-                        <div className={'leftMenu'}>
-                            <Typography variant="h6" color="inherit" noWrap>
-                                <IconButton
-                                    aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                                    aria-haspopup="true"
-                                    onClick={this.handleProfileMenuOpen}
-                                    color="inherit"
-                                >
-                                    <AccountCircle/>
-                                </IconButton>
-                                Info current Org
-                            </Typography>
-                            
-                            <List className={'leftSubmenu'}>
-                                {auth && (
-                                    <ListItem>
-                                        <ListItemText primary="Disponibilité"/>
-                                        <ListItemSecondaryAction>
-                                            <AvailabilityToggle/>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                )}
-                                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                                    <ListItem button key={text}>
-                                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
-                                        <ListItemText primary={text}/>
-                                    </ListItem>
-                                ))}
-                            </List>
-                        </div>
-                    </Drawer>
+                    {/* import drawer */}
+                    <HeaderDrawer/>
                     
                     <main
                         className={classNames(classes.content, {
