@@ -1,0 +1,43 @@
+import React, {Component} from 'react';
+import {withStyles} from "@material-ui/core";
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import {AppBar} from '@material-ui/core';
+import './header.css';
+import {styles} from './Header.css.js'
+import HeaderToolBar from './HeaderToolBar';
+
+class HeaderAppBar extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        const {classes, open, auth, anchorEl, handleMobileMenuOpen, handleProfileMenuOpen} = this.props;
+
+        return(
+            <AppBar
+                position="fixed"
+                color="default"
+                className={classNames(classes.appBar, {
+                    [classes.appBarShift]: open,
+                })}
+            >
+            <HeaderToolBar handleDrawerOpen={this.props.handleDrawerOpen} 
+                            open={open} auth={auth} anchorEl={anchorEl} 
+                            handleMobileMenuOpen={handleMobileMenuOpen}
+                            handleProfileMenuOpen={handleProfileMenuOpen}/>
+            </AppBar>
+        )
+    }
+}
+
+HeaderAppBar.propTypes = {
+    classes: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
+};
+
+export default
+        withStyles(styles, {withTheme: true})(
+            HeaderAppBar
+        );
