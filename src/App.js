@@ -91,7 +91,7 @@ class App extends Component {
                 open={isMenuOpen}
                 onClose={this.handleMenuClose}
             >
-                <MenuItem onClick={this.handleMenuClose}><Link to='/profile'>Profile</Link></MenuItem>
+                <MenuItem onClick={this.handleMenuClose}><Link to='/profile' className={classes.menuLink}>Profile</Link></MenuItem>
                 <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
             </Menu>
         );
@@ -108,7 +108,7 @@ class App extends Component {
                     <IconButton color="inherit">
                         <AccountCircle/>
                     </IconButton>
-                    <p>Profile</p>
+                    <Link to='/profile' className={classes.menuLink}>Profile</Link>
                 </MenuItem>
             </Menu>
         );

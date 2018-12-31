@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { styles } from './Header.css.js';
 import './header.css';
 import {AccountCircle, MoreVert as MoreIcon} from '@material-ui/icons';
+import {FormattedMessage} from 'react-intl';
 
 class HeaderLinks extends Component {
     constructor(props) {
@@ -21,8 +22,12 @@ class HeaderLinks extends Component {
             <div className={classes.fixToRight}>
                 <div className={classes.grow}/>
                 <div className={classes.sectionDesktop}>
-                    <Button variant={"text"} color="inherit">Why Wingzy ?</Button>
-                    <Button variant={"text"} color="inherit">Pricing</Button>
+                    <Button variant={"text"} color="inherit">
+                        <a href={(process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP} className={classes.menuLink}><FormattedMessage id="Why Wingzy ?" /></a>
+                    </Button>
+                    <Button variant={"text"} color="inherit">
+                        <a href={(process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP + '/pricing'} className={classes.menuLink}><FormattedMessage id="Pricing"/></a>
+                    </Button>
                     {auth && (
                         <IconButton
                             aria-owns={isMenuOpen ? 'material-appbar' : undefined}

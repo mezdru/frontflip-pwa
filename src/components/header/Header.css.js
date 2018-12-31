@@ -56,6 +56,10 @@ export const styles = theme => ({
     // marginLeft: 12,
     marginRight: 20,
   },
+  menuLink: {
+    textDecoration: 'none',
+    color:'inherit'
+  },
   hide: {
     display: 'none',
   },
