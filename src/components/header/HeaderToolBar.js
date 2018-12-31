@@ -25,6 +25,8 @@ class HeaderToolBar extends Component {
                             aria-label="Open drawer"
                             onClick={this.props.handleDrawerOpen}
                             className={classNames(classes.menuButton, open && classes.hide)}
+                            style={{display: 'none'}}
+                            disabled
                             
                 >
                     <MenuIcon/>
