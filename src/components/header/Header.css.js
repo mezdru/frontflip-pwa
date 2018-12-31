@@ -4,7 +4,8 @@ export const styles = theme => ({
   root: {
     display: 'flex',
     width: '100%',
-    textAlign: 'center'
+    textAlign: 'center',
+    backgroundColor: '#fff',
   },
   grow: {
     flexGrow: 1,

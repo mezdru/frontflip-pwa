@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Switch } from 'react-router-dom';
 import Home from './pages/Home';
-import { Search } from './pages/Search';
+import Search  from './pages/Search';
 import Profile from './components/profile/ProfileBox';
 import OnboardWingzy from './pages/OnboardWingzy';
 import OnboardProfile from './pages/OnboardProfile';

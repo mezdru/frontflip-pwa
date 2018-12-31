@@ -1,9 +1,18 @@
 import React from 'react'
 import {inject, observer} from 'mobx-react';
 import {Link} from 'react-router-dom'
-import {TextField, Button, Grid, Paper} from "@material-ui/core";
-import { ErrorOutline, InfoOutlined } from '@material-ui/icons';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import {Button, Grid, Paper, TextField, withStyles} from "@material-ui/core";
+import {ErrorOutline, InfoOutlined} from '@material-ui/icons';
+import {FormattedMessage, injectIntl} from 'react-intl';
+
+import mdpImg from '../../resources/images/butterflyCatch.png';
+
+const styles = {
+    image: {
+        width: '12rem',
+        padding: '1rem'
+    }
+};
 
 class PasswordReset extends React.Component {
     
@@ -41,7 +50,7 @@ class PasswordReset extends React.Component {
             }).catch(err => {
             console.log(err)
         });
-    }
+    };
     
     render() {
         const {values} = this.props.authStore;
@@ -52,7 +61,7 @@ class PasswordReset extends React.Component {
             return (
                 <div>
                     <Paper>
-                        <InfoOutlined/>  <br/>Your password have been updated.
+                        <InfoOutlined/> <br/>Your password have been updated.
                         Go to : <Link to="/">Login page</Link>
                     </Paper>
                 </div>
@@ -60,11 +69,14 @@ class PasswordReset extends React.Component {
         } else {
             return (
                 <Grid container direction={"column"} justify={"center"} alignItems={"center"} className={"margin-form"} xs={12} sm={4} spacing={16}>
+                    <Grid item container justify={"center"} alignItems={"center"}>
+                        <img src={mdpImg} alt="mdp" className={this.props.classes.image}/>
+                    </Grid>
                     <Grid container item justify={"center"}>
                         <FormattedMessage id="You can now choose a new password"/>
                         {passwordErrors && (
                             <Paper>
-                                <ErrorOutline/>  <br/>{passwordErrors}
+                                <ErrorOutline/> <br/>{passwordErrors}
                             </Paper>
                         )}
                     </Grid>
@@ -91,5 +103,10 @@ class PasswordReset extends React.Component {
 }
 
 export default inject("authStore", "organisationStore")(
-    injectIntl(observer(PasswordReset))
-);
+    injectIntl(
+        observer(
+            withStyles(styles)(PasswordReset)
+        )
+    )
+)
+

@@ -1,5 +1,5 @@
 import React from 'react'
-import Auth from './auth/Auth';
+import AuthPage from './auth/AuthPage';
 import {inject, observer} from 'mobx-react';
 
 let Home = inject("organisationStore")(observer(class Home extends React.Component {
@@ -19,7 +19,7 @@ let Home = inject("organisationStore")(observer(class Home extends React.Compone
     render(){
         return(
             <div>
-                <Auth/>
+                <AuthPage/>
             </div>
         );
     }

@@ -3,11 +3,10 @@ import {withTheme} from '@material-ui/core/styles';
 import SwipeableViews from 'react-swipeable-views';
 import {Grid, Tab, Tabs} from '@material-ui/core';
 
-import Login from '../login/Login';
-import Register from '../register/Register';
+import Login from './login/Login';
+import Register from './register/Register';
 import { injectIntl } from 'react-intl';
 
-import './Auth.css';
 
 class Auth extends React.Component {
     state = {

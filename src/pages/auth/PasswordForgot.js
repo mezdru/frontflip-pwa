@@ -1,11 +1,17 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {Button, TextField, Grid, Paper} from "@material-ui/core";
+import {Button, Grid, Paper, TextField, withStyles} from "@material-ui/core";
+import {InfoOutlined} from '@material-ui/icons';
+import {FormattedMessage} from 'react-intl';
 
-import './Auth.css';
-import mdpImg from '../../resources/images/mdp.png';
-import { InfoOutlined } from '@material-ui/icons';
-import { FormattedMessage } from 'react-intl';
+import mdpImg from '../../resources/images/birdFly.png';
+
+const styles = {
+    image: {
+        width: '12rem',
+        padding: '1rem'
+    }
+};
 
 class PasswordForgot extends React.Component {
     
@@ -41,17 +47,17 @@ class PasswordForgot extends React.Component {
         let {successPasswordReset} = this.state;
         
         if (successPasswordReset) {
-            return <Paper><InfoOutlined/>  <br/><FormattedMessage id="If you have an account on Wingzy, we have send you an email to reset your password."/></Paper>;
+            return <Paper><InfoOutlined/> <br/>If you have an account on Wingzy, we have send you an email to reset your password.</Paper>;
         } else {
             return (
                 <Grid container direction={"column"} justify={"center"} alignItems={"center"} className={"margin-form"} xs={12} sm={4} spacing={16}>
                     <Grid item container justify={"center"} alignItems={"center"}>
-                        <img src={mdpImg} alt="mdp" style={{width: '12rem', padding: '1rem'}}/>
+                        <img src={mdpImg} alt="mdp" className={this.props.classes.image}/>
                     </Grid>
                     <Grid item container justify={"center"}>
-                        <p> <FormattedMessage id="You forgot your password or didn't have one yet ? Don't worry ! You can ask for a reset" /></p>
+                        <p><FormattedMessage id="You forgot your password or didn't have one yet ? Don't worry ! You can ask for a reset"/></p>
                     </Grid>
-                    <Grid item container >
+                    <Grid item container>
                         <TextField label="Email"
                                    type="email"
                                    autoComplete="email"
@@ -72,5 +78,8 @@ class PasswordForgot extends React.Component {
 }
 
 export default inject('authStore')(
-    observer(PasswordForgot)
+    observer(
+        withStyles(styles)
+        (PasswordForgot)
+    )
 );
