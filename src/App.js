@@ -8,10 +8,9 @@ import {CssBaseline, IconButton, Menu, MenuItem} from '@material-ui/core';
 import {AccountCircle} from '@material-ui/icons';
 import {BrowserRouter, Link, Redirect} from "react-router-dom";
 import './components/header/header.css';
-import {styles} from './App.css.js'
+import {styles} from './components/header/Header.css.js'
 import HeaderAppBar from './components/header/HeaderAppBar';
 import HeaderDrawer from './components/header/HeaderDrawer';
-// import { FormattedMessage } from 'react-intl';
 
 class App extends Component {
     constructor(props) {
@@ -19,9 +18,20 @@ class App extends Component {
         this.state = {
             anchorEl: null,
             mobileMoreAnchorEl: null,
-            successLogout: false
+            successLogout: false,
+            open: false
         };
     }
+
+    handleDrawerOpen = () => {
+        this.setState({open: true});
+    };
+    
+    handleDrawerClose = () => {
+        this.setState({open: false});
+    };
+
+
     handleProfileMenuOpen = event => {
         this.setState({anchorEl: event.currentTarget});
     };
@@ -65,11 +75,10 @@ class App extends Component {
     };
     
     render() {
-        const {anchorEl, mobileMoreAnchorEl} = this.state;
+        const {anchorEl, mobileMoreAnchorEl, open, successLogout, auth} = this.state;
         const isMenuOpen = Boolean(anchorEl);
         const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
         const {classes} = this.props;
-        const {open, successLogout} = this.state;
         
         if (successLogout) return <Redirect to='/'/>;
         
@@ -108,13 +117,16 @@ class App extends Component {
             <BrowserRouter>
                 <div className={classes.root}>
                     <CssBaseline/>
-                    {/*  import appbar */}
-                    <HeaderAppBar/>
+                    <HeaderAppBar   handleDrawerOpen={this.handleDrawerOpen} 
+                                    open={open} auth={auth} anchorEl={anchorEl} 
+                                    handleMobileMenuOpen={this.handleMobileMenuOpen}
+                                    handleProfileMenuOpen={this.handleProfileMenuOpen}/>
                     {renderMenu}
                     {renderMobileMenu}
-                    
-                    {/* import drawer */}
-                    <HeaderDrawer/>
+                    <HeaderDrawer   handlerDrawerOpen={this.handleDrawerOpen} 
+                                    handleDrawerClose={this.handleDrawerClose}
+                                    handleProfileMenuOpen={this.handleProfileMenuOpen} 
+                                    open={open} auth={auth} anchorEl={anchorEl}/>
                     
                     <main
                         className={classNames(classes.content, {

@@ -96,5 +96,9 @@ export const styles = theme => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
     marginLeft: 0,
+  },
+  fixToRight: {
+    position: 'absolute',
+    right:'24px'
   }
 });

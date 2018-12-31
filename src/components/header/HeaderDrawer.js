@@ -11,28 +11,11 @@ import {styles} from './Header.css.js'
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            anchorEl: null,
-            mobileMoreAnchorEl: null,
-            successLogout: false,
-            auth: false
-        };
     }
-    
-    handleDrawerOpen = () => {
-        this.setState({open: true});
-    };
-    
-    handleDrawerClose = () => {
-        this.setState({open: false});
-    };
 
     render() {
-        const {anchorEl} = this.state;
+        const {classes, theme, auth, anchorEl, open} = this.props;
         const isMenuOpen = Boolean(anchorEl);
-        const {auth} = this.state;
-        const {classes, theme} = this.props;
-        const {open} = this.state;
 
         return(
             <Drawer
@@ -45,7 +28,7 @@ class App extends Component {
                 }}
             >
                 <div className={classes.drawerHeader}>
-                    <IconButton onClick={this.handleDrawerClose}>
+                    <IconButton onClick={this.props.handleDrawerClose}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
                     </IconButton>
                 </div>
@@ -58,7 +41,7 @@ class App extends Component {
                         <IconButton
                             aria-owns={isMenuOpen ? 'material-appbar' : undefined}
                             aria-haspopup="true"
-                            onClick={this.handleProfileMenuOpen}
+                            onClick={this.props.handleProfileMenuOpen}
                             color="inherit"
                         >
                             <AccountCircle/>
@@ -75,12 +58,6 @@ class App extends Component {
                                 </ListItemSecondaryAction>
                             </ListItem>
                         )}
-                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
-                                <ListItemText primary={text}/>
-                            </ListItem>
-                        ))}
                     </List>
                 </div>
             </Drawer>

@@ -1,34 +1,33 @@
-import {withStyles} from "@material-ui/core";
-import React, {Component} from 'react';
+import { withStyles, Button, IconButton } from "@material-ui/core";
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { styles } from './Header.css.js';
 import './header.css';
-import {styles} from './App.css.js'
+import {AccountCircle, MoreVert as MoreIcon} from '@material-ui/icons';
 
 class HeaderLinks extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            anchorEl: null,
-            mobileMoreAnchorEl: null
-        };
     }
 
 
 
     render() {
-        const {classes, theme} = this.props;
+        const {auth, anchorEl, classes, theme, handleMobileMenuOpen, handleProfileMenuOpen} = this.props;
+        const isMenuOpen = Boolean(anchorEl);
+
 
         return(
-            <div>
+            <div className={classes.fixToRight}>
                 <div className={classes.grow}/>
                 <div className={classes.sectionDesktop}>
-                    {/* <Button variant={"text"} color="inherit">Why Wingzy ?</Button>
+                    <Button variant={"text"} color="inherit">Why Wingzy ?</Button>
                     <Button variant={"text"} color="inherit">Pricing</Button>
                     {auth && (
                         <IconButton
                             aria-owns={isMenuOpen ? 'material-appbar' : undefined}
                             aria-haspopup="true"
-                            onClick={this.handleProfileMenuOpen}
+                            onClick={handleProfileMenuOpen}
                             color="inherit"
                         >
                             <AccountCircle/>
@@ -36,13 +35,13 @@ class HeaderLinks extends Component {
                     )}
                     {!auth && (
                         <Button variant={"text"} color="inherit">Login</Button>
-                    )} */}
+                    )}
                 
                 </div>
                 <div className={classes.sectionMobile}>
-                    {/* <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit" style={{padding: 0}}>
+                    <IconButton aria-haspopup="true" onClick={handleMobileMenuOpen} color="inherit">
                         <MoreIcon/>
-                    </IconButton> */}
+                    </IconButton>
                 </div>
             </div>
 

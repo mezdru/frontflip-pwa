@@ -8,28 +8,24 @@ import {Menu as MenuIcon} from '@material-ui/icons';
 import logoWingzy from '../../resources/images/wingzy_line_256.png';
 import './header.css';
 import {styles} from './Header.css.js'
+import HeaderLinks from './HeaderLinks';
 
 class HeaderToolBar extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            mobileMoreAnchorEl: null,
-            open: false
-        };
     }
 
     render() {
-        const {classes} = this.props;
-        const {open} = this.state;
+        const {classes, open, auth, anchorEl, handleMobileMenuOpen, handleProfileMenuOpen} = this.props;
 
         return(
             <Toolbar>
-                <IconButton style={{padding: 0}}
+                <IconButton 
                             color="inherit"
                             aria-label="Open drawer"
-                            onClick={this.handleDrawerOpen}
+                            onClick={this.props.handleDrawerOpen}
                             className={classNames(classes.menuButton, open && classes.hide)}
-                            disabled
+                            
                 >
                     <MenuIcon/>
                 </IconButton>
@@ -39,7 +35,9 @@ class HeaderToolBar extends Component {
                     </a>
                 </Typography>
                 
-            {/* import links */}
+            <HeaderLinks auth={auth} anchorEl={anchorEl} 
+                        handleMobileMenuOpen={handleMobileMenuOpen}
+                        handleProfileMenuOpen={handleProfileMenuOpen}/>
             </Toolbar>
         )
     }

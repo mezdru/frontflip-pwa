@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {withStyles} from "@material-ui/core";
-import {inject, observer} from "mobx-react";
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {AppBar} from '@material-ui/core';
@@ -11,15 +10,10 @@ import HeaderToolBar from './HeaderToolBar';
 class HeaderAppBar extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            mobileMoreAnchorEl: null,
-            open: false
-        };
     }
 
     render() {
-        const {classes} = this.props;
-        const {open} = this.state;
+        const {classes, open, auth, anchorEl, handleMobileMenuOpen, handleProfileMenuOpen} = this.props;
 
         return(
             <AppBar
@@ -29,8 +23,10 @@ class HeaderAppBar extends Component {
                     [classes.appBarShift]: open,
                 })}
             >
-            {/*  import toolbar */}
-            <HeaderToolBar/>
+            <HeaderToolBar handleDrawerOpen={this.props.handleDrawerOpen} 
+                            open={open} auth={auth} anchorEl={anchorEl} 
+                            handleMobileMenuOpen={handleMobileMenuOpen}
+                            handleProfileMenuOpen={handleProfileMenuOpen}/>
             </AppBar>
         )
     }
@@ -41,10 +37,7 @@ HeaderAppBar.propTypes = {
     theme: PropTypes.object.isRequired,
 };
 
-export default inject('authStore', 'organisationStore')(
-    observer(
+export default
         withStyles(styles, {withTheme: true})(
             HeaderAppBar
-        )
-    )
-);
+        );
