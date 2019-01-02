@@ -11,7 +11,7 @@ class RoutesWithLocale extends Component {
                 <div>
                     <Route exact path="/:locale(en|fr|en-UK)/password/forgot" component={PasswordForgot}/>
                     <Route exact path="/:locale(en|fr|en-UK)/password/reset/:token/:hash" component={PasswordReset}/> 
-                    <Route exact path="/" component={Home}/>
+                    <Route exact path="/:locale(en|fr|en-UK)" component={Home}/>
                 </div>
 
         );
