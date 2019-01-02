@@ -16,7 +16,6 @@ class AuthStore {
     };
 
     setEmail(email) {
-        console.log('set email : ' + email)
         this.values.email = email;
     }
 
