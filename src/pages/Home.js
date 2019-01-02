@@ -19,7 +19,6 @@ let Home = inject("organisationStore", "commonStore")(observer(class Home extend
 
           this.props.commonStore.setCookie('locale',matchLocale.params.locale)
 
-        console.log('locale : ' + matchLocale.params.locale);
     }
 
     componentDidMount() {
