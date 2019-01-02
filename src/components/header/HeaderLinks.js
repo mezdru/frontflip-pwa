@@ -22,11 +22,11 @@ class HeaderLinks extends Component {
             <div className={classes.fixToRight}>
                 <div className={classes.grow}/>
                 <div className={classes.sectionDesktop}>
-                    <Button variant={"text"} color="inherit">
-                        <a href={(process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP} className={classes.menuLink}><FormattedMessage id="Why Wingzy ?" /></a>
+                    <Button variant={"text"} color="inherit" href={(process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP} className={classes.menuLink}>
+                        <FormattedMessage id="Why Wingzy ?" />
                     </Button>
-                    <Button variant={"text"} color="inherit">
-                        <a href={(process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP + '/pricing'} className={classes.menuLink}><FormattedMessage id="Pricing"/></a>
+                    <Button variant={"text"} color="inherit" href={(process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP + '/pricing'} className={classes.menuLink}>
+                        <FormattedMessage id="Pricing"/>
                     </Button>
                     {auth && (
                         <IconButton
@@ -39,7 +39,7 @@ class HeaderLinks extends Component {
                         </IconButton>
                     )}
                     {!auth && (
-                        <Button variant={"text"} color="inherit">Login</Button>
+                        <Button variant={"text"} color="inherit"><FormattedMessage id="Sign In"/></Button>
                     )}
                 
                 </div>
