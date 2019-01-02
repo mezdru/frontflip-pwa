@@ -5,6 +5,7 @@ import GoogleButton from "../../utils/buttons/GoogleButton";
 import {ErrorOutline} from '@material-ui/icons';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {FormattedMessage, injectIntl} from 'react-intl';
+import UrlService from '../../../services/url.service';
 
 // const styles = theme => ({
 //     root: {
@@ -50,11 +51,8 @@ class Login extends React.Component {
             .then((response) => {
                 if (response === 200) {
                     this.setState({successLogin: true});
-                    if (process.env.NODE_ENV === 'production') {
-                        window.location = 'https://' + (this.props.organisationStore.values.orgTag ? this.props.organisationStore.values.orgTag + '.' : '') + process.env.REACT_APP_HOST_BACKFLIP + '/'+this.state.locale +'/login/callback';
-                    } else {
-                        window.location = 'http://' + process.env.REACT_APP_HOST_BACKFLIP +'/'+this.state.locale+ '/login/callback' + (this.props.organisationStore.values.orgTag ? '?subdomains=' + this.props.organisationStore.values.orgTag : '');
-                    }
+                    window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/login/callback', this.props.organisationStore.values.orgTag);
+                    
                     // if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0 &&
                     //     this.props.userStore.values.currentUser.orgsAndRecords[0].record){
                     
@@ -75,11 +73,7 @@ class Login extends React.Component {
     };
     
     handleGoogleConnect = (e) => {
-        if (process.env.NODE_ENV === 'production') {
-            window.location = 'https://' + (this.props.organisationStore.values.orgTag ? this.props.organisationStore.values.orgTag + '.' : '') + process.env.REACT_APP_HOST_BACKFLIP + '/'+this.state.locale +'/google/login';
-        } else {
-            window.location = 'http://' + process.env.REACT_APP_HOST_BACKFLIP +'/'+this.state.locale+ '/google/login' + (this.props.organisationStore.values.orgTag ? '?subdomains=' + this.props.organisationStore.values.orgTag : '');
-        }
+        window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/google/login', this.props.organisationStore.values.orgTag);
     };
     
     render() {
