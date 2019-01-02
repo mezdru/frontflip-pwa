@@ -15,8 +15,8 @@ const styles = {
 
 class PasswordForgot extends React.Component {
     
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
             successPasswordReset: false
         }
@@ -43,7 +43,7 @@ class PasswordForgot extends React.Component {
     };
     
     render() {
-        const {values} = this.props.authStore;
+        let {values} = this.props.authStore;
         let {successPasswordReset} = this.state;
         
         if (successPasswordReset) {
@@ -64,7 +64,6 @@ class PasswordForgot extends React.Component {
                                    margin="normal"
                                    variant={"outlined"}
                                    fullWidth={true}
-                                   value={values.email}
                                    onChange={this.handleEmailChange}
                         />
                     </Grid>

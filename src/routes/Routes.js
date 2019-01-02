@@ -21,8 +21,6 @@ export default class Routes extends React.Component {
                 
                 <div>
                     <Switch>
-                        <Route exact path="/password/forgot" component={PasswordForgot}/>
-                        <Route exact path="/password/reset/:token/:hash" component={PasswordReset}/> 
                         <Route path="/redirect" component={RedirectUser} />                    
 
                         <Route path="/:locale(en|fr|en-UK)" component={RoutesWithLocale} />    
