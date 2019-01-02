@@ -1,8 +1,8 @@
 import React from 'react'
 import {Grid} from '@material-ui/core';
 import Banner from '../components/utils/banner/Banner'
-import SearchField from '../components/utils/searchField/SearchField';
-import Card from '../components/profileCard/ProfileCard';
+import SearchField from '../components/algolia/SearchField';
+import Card from '../components/card/CardProfile';
 
 import bannerImg from '../resources/images/fly_away.jpg'
 
