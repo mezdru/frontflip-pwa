@@ -21,6 +21,7 @@ class App extends Component {
             successLogout: false,
             open: false
         };
+        console.log(process.env.NODE_ENV);
     }
 
     handleDrawerOpen = () => {
