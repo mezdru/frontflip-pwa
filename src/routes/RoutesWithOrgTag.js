@@ -10,8 +10,8 @@ class RoutesWithOrgTag extends Component {
     render() {
         return (
                 <div>
-                    <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={PasswordForgot}/>
-                    <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={PasswordReset}/> 
+                    <Route path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={PasswordForgot}/>
+                    <Route path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={PasswordReset}/> 
                     <Route exact path="/:locale(en|fr|en-UK)/:organisationTag" component={Home}/>
                     <Route path="/:locale(en|fr|en-UK)/:organisationTag/search" component={Search}/>
                 </div>
