@@ -4,6 +4,7 @@ import Home from '../pages/Home';
 import PasswordForgot from "../pages/auth/PasswordForgot";
 import PasswordReset from "../pages/auth/PasswordReset";
 import Search from '../pages/Search';
+import RoutesWithOrgTag from './RoutesWithOrgTag';
 
 class RoutesWithLocale extends Component {
     render() {
@@ -12,6 +13,7 @@ class RoutesWithLocale extends Component {
                     <Route exact path="/:locale(en|fr|en-UK)/password/forgot" component={PasswordForgot}/>
                     <Route exact path="/:locale(en|fr|en-UK)/password/reset/:token/:hash" component={PasswordReset}/> 
                     <Route exact path="/:locale(en|fr|en-UK)" component={Home}/>
+                    <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={RoutesWithOrgTag}/>
                 </div>
 
         );

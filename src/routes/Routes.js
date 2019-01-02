@@ -22,17 +22,8 @@ export default class Routes extends React.Component {
                 <div>
                     <Switch>
                         <Route path="/redirect" component={RedirectUser} />                    
-
                         <Route path="/:locale(en|fr|en-UK)" component={RoutesWithLocale} />    
-                        <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={RoutesWithOrgTag} />                    
-
                         <Redirect to={"/en" + endUrl}/>
-
-                        {/* Onboard : new wingzy*/}
-                        {/* <Route path="/onboard/wingzy" component={OnboardWingzy} /> */}
-
-                        {/* Onboard : new profile */}
-                        {/* <Route path="/onboard/profile" component={OnboardProfile} /> */}
                     </Switch>
                 </div>
 
