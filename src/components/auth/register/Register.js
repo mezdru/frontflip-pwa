@@ -55,7 +55,11 @@ class Register extends React.Component {
     };
     
     handleGoogleConnect = (e) => {
-        window.location = (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP + '/google/login';
+        if (process.env.NODE_ENV === 'production') {
+            window.location = 'https://' + (this.props.organisationStore.values.orgTag ? this.props.organisationStore.values.orgTag + '.' : '') + process.env.REACT_APP_HOST_BACKFLIP + '/'+this.state.locale +'/google/login';
+        } else {
+            window.location = 'http://' + process.env.REACT_APP_HOST_BACKFLIP +'/'+this.state.locale+ '/google/login' + (this.props.organisationStore.values.orgTag ? '?subdomains=' + this.props.organisationStore.values.orgTag : '');
+        }
     };
     
     render() {

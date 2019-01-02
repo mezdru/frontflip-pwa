@@ -39,7 +39,7 @@ class HeaderLinks extends Component {
                         </IconButton>
                     )}
                     {!auth && (
-                        <Button variant={"text"} color="inherit"><FormattedMessage id="Sign In"/></Button>
+                        <Button variant={"text"} color="inherit" href="/"><FormattedMessage id="Sign In"/></Button>
                     )}
                 
                 </div>
