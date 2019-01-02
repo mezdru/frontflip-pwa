@@ -1,19 +1,41 @@
 import React from 'react'
-
 import {Grid} from '@material-ui/core';
-import SearchField from '../components/algolia/SearchField';
-import Card from '../components/card/CardProfile'
+import Banner from '../components/utils/banner/Banner'
+import SearchField from '../components/utils/searchField/SearchField';
+import Card from '../components/profileCard/ProfileCard';
 
-export class Search extends React.Component {
-    
+import bannerImg from '../resources/images/fly_away.jpg'
+
+class Search extends React.Component {
     render() {
         return (
             <div>
-                <Grid container direction={'column'} alignItems={'center'}>
-                    <SearchField/>
-                    <Card/>
+                <Grid style={{position: 'relative'}} container direction={'column'} alignItems={'center'}>
+                    <Grid style={{position: 'fixed', zIndex: 1000}} container item alignItems={"stretch"}>
+                        <Banner src={bannerImg} style={{
+                            filter: 'blur(3px)',
+                        }}/>
+                    </Grid>
+                    <Grid style={{position: 'fixed', zIndex: 1001}} container item justify={"center"} alignItems={'center'}>
+                        <SearchField/>
+                    </Grid>
+                    <Grid style={{height: '30vmax'}}>
+                    </Grid>
+                    <Grid container item direction={'column'} alignItems={'center'}>
+                        <Grid item xs={10} sm={6}>
+                            <Card/>
+                        </Grid>
+                        <Grid item xs={10} sm={6}>
+                            <Card/>
+                        </Grid>
+                        <Grid item xs={10} sm={6}>
+                            <Card/>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </div>
         );
     }
 }
+
+export default Search;
