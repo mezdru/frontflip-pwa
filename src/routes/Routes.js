@@ -25,8 +25,8 @@ export default class Routes extends React.Component {
                         <Route exact path="/password/reset/:token/:hash" component={PasswordReset}/> 
                         <Route path="/redirect" component={RedirectUser} />                    
 
-                        <Route path="/:locale(en|fr)" component={RoutesWithLocale} />    
-                        <Route path="/:locale(en|fr)/:organisationTag" component={RoutesWithOrgTag} />                    
+                        <Route path="/:locale(en|fr|en-UK)" component={RoutesWithLocale} />    
+                        <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={RoutesWithOrgTag} />                    
 
                         <Redirect to={"/en" + endUrl}/>
 
