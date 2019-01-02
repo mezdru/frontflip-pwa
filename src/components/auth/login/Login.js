@@ -78,7 +78,7 @@ class Login extends React.Component {
     
     render() {
         const {values, inProgress} = this.props.authStore;
-        let {loginErrors} = this.state;
+        let {loginErrors, locale} = this.state;
         let intl = this.props.intl;
         // if (successLogin) return <Redirect to={redirectTo}/>;
         
@@ -137,7 +137,7 @@ class Login extends React.Component {
                         }
                     </Grid>
                     <Grid item>
-                        <Button variant={"text"} href="/password/forgot">
+                        <Button variant={"text"} href={ "/" + locale + "/password/forgot"}>
                             <FormattedMessage id="I don't have my password"/>
                         </Button>
                     </Grid>
