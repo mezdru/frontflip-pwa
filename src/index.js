@@ -33,7 +33,10 @@ const stores = {
     organisationStore
 };
 
-const language = navigator.language.split(/[-_]/)[0];  // language without region code
+// Fetch first parameters of the URL, default will be 'en'
+let languagesAccepted = ['en', 'fr'];
+let language = window.location.pathname.split('/')[1];
+if(! languagesAccepted.some(lg => lg === language)) language = 'en';
 
 ReactDOM.render(
     <HttpsRedirect>

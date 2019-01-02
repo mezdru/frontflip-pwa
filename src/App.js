@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Routes from './Routes';
+import Routes from './routes/Routes';
 import {withStyles} from "@material-ui/core";
 import {inject, observer} from "mobx-react";
 import PropTypes from 'prop-types';
