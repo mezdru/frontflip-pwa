@@ -22,11 +22,21 @@ class Login extends React.Component {
     
     constructor(props) {
         super(props);
+
+        // Due to a bug of react-router-dom, url parameters are not transmetted to nested routes.
+        // const matchLocale = matchPath(this.props.history.location.pathname, {
+        //     path: '/:locale',
+        //     exact: false,
+        //     strict: false
+        //   });
+
+
         this.state = {
             value: 0,
             successLogin: false,
             redirectTo: '/',
-            loginErrors: null
+            loginErrors: null,
+            locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
         };
     }
     
@@ -49,9 +59,9 @@ class Login extends React.Component {
                 if (response === 200) {
                     this.setState({successLogin: true});
                     if (process.env.NODE_ENV === 'production') {
-                        window.location = 'https://' + (this.props.organisationStore.values.orgTag ? this.props.organisationStore.values.orgTag + '.' : '') + process.env.REACT_APP_HOST_BACKFLIP + '/login/callback';
+                        window.location = 'https://' + (this.props.organisationStore.values.orgTag ? this.props.organisationStore.values.orgTag + '.' : '') + process.env.REACT_APP_HOST_BACKFLIP + '/'+this.state.locale +'/login/callback';
                     } else {
-                        window.location = 'http://' + process.env.REACT_APP_HOST_BACKFLIP + '/login/callback' + (this.props.organisationStore.values.orgTag ? '?subdomains=' + this.props.organisationStore.values.orgTag : '');
+                        window.location = 'http://' + process.env.REACT_APP_HOST_BACKFLIP +'/'+this.state.locale+ '/login/callback' + (this.props.organisationStore.values.orgTag ? '?subdomains=' + this.props.organisationStore.values.orgTag : '');
                     }
                     // if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0 &&
                     //     this.props.userStore.values.currentUser.orgsAndRecords[0].record){
@@ -147,7 +157,7 @@ class Login extends React.Component {
     };
 }
 
-export default inject('authStore', 'userStore', 'organisationStore')(
+export default inject('authStore', 'userStore', 'organisationStore', 'commonStore')(
     injectIntl(observer(
         (Login)
     ))

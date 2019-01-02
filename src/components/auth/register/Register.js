@@ -11,6 +11,7 @@ class Register extends React.Component {
     
     constructor() {
         super();
+
         this.state = {
             value: 0,
             registerErrors: null,
