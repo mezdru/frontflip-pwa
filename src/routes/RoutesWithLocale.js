@@ -5,7 +5,6 @@ import PasswordForgot from "../pages/auth/PasswordForgot";
 import PasswordReset from "../pages/auth/PasswordReset";
 
 class RoutesWithLocale extends Component {
-    
     render() {
         return (
                 <div>

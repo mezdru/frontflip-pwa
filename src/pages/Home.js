@@ -1,11 +1,23 @@
 import React from 'react'
 import AuthPage from './auth/AuthPage';
 import {inject, observer} from 'mobx-react';
+import { matchPath } from 'react-router'
+
+
 
 let Home = inject("organisationStore")(observer(class Home extends React.Component {
 
     constructor(props){
         super(props);
+
+        // Due to a bug of react-router-dom, url parameters are not transmetted to nested routes.
+        const matchLocale = matchPath(this.props.history.location.pathname, {
+            path: '/:locale',
+            exact: false,
+            strict: false
+          });
+
+        console.log('locale : ' + matchLocale.params.locale);
     }
 
     componentDidMount() {
@@ -14,11 +26,6 @@ let Home = inject("organisationStore")(observer(class Home extends React.Compone
             this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
             this.props.organisationStore.getOrganisationForPublic();
         }
-        console.log('locale : ' + this.props.match.params.locale);
-        if(this.props.match.params.locale) {
-            console.log(this.props);
-        }
-        console.log(this.props);
     }
 
     render(){
