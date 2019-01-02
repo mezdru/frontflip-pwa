@@ -88,7 +88,6 @@ class PasswordReset extends React.Component {
                             margin="normal"
                             fullWidth
                             variant={"outlined"}
-                            value={values.password}
                             onChange={this.handlePasswordChange}
                         />
                     </Grid>

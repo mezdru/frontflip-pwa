@@ -23,14 +23,6 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
 
-        // Due to a bug of react-router-dom, url parameters are not transmetted to nested routes.
-        // const matchLocale = matchPath(this.props.history.location.pathname, {
-        //     path: '/:locale',
-        //     exact: false,
-        //     strict: false
-        //   });
-
-
         this.state = {
             value: 0,
             successLogin: false,
