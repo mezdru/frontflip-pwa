@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom'
 import {Button, Grid, Paper, TextField, withStyles} from "@material-ui/core";
 import {ErrorOutline, InfoOutlined} from '@material-ui/icons';
 import {FormattedMessage, injectIntl} from 'react-intl';
+import UrlService from '../../services/url.service';
 
 import mdpImg from '../../resources/images/butterflyCatch.png';
 
@@ -40,11 +41,7 @@ class PasswordReset extends React.Component {
             .then(response => {
                 if (!(response.body) || !(response.body.errors)) {
                     this.setState({successUpdatePassword: true});
-                    if (process.env.NODE_ENV === 'production') {
-                        window.location = 'https://' + (this.props.organisationStore.values.orgTag ? this.props.organisationStore.values.orgTag + '.' : '') + process.env.REACT_APP_HOST_BACKFLIP +'/'+this.state.locale+ '/login/callback';
-                    } else {
-                        window.location = 'http://' + process.env.REACT_APP_HOST_BACKFLIP + '/' + this.state.locale + '/login/callback' + (this.props.organisationStore.values.orgTag ? '?subdomains=' + this.props.organisationStore.values.orgTag : '');
-                    }
+                    window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/login/callback', this.props.organisationStore.values.orgTag);
                 } else {
                     this.setState({passwordErrors: response.body.errors[0].msg});
                 }
