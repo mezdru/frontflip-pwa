@@ -132,7 +132,7 @@ class Login extends React.Component {
                         }
                         {
                             !inProgress && (
-                                <Button fullWidth={true}  color="primary"><FormattedMessage id="Sign In"/></Button>
+                                <Button fullWidth={true}  color="primary" type="submit"><FormattedMessage id="Sign In"/></Button>
                             )
                         }
                     </Grid>
