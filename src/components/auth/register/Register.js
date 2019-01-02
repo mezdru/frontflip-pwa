@@ -32,6 +32,7 @@ class Register extends React.Component {
     };
     
     handleSubmitForm = (e) => {
+        e.preventDefault();
         this.props.authStore.register()
             .then(() => {
                 if(this.props.organisationStore.values.orgTag){
@@ -49,7 +50,7 @@ class Register extends React.Component {
                 }
             }).catch((err) => {
             this.setState({registerErrors: 'There was an error. You probably already have an account on Wingzy.'});
-        })
+            });
     };
     
     handleGoogleConnect = (e) => {
@@ -73,7 +74,7 @@ class Register extends React.Component {
             )
         }else{
             return (
-                <form>
+                <form onSubmit={this.handleSubmitForm} >
                     <Grid className={'form'} container item direction='column' spacing={16}>
                         {registerErrors && (
                             <Grid item>
@@ -121,7 +122,7 @@ class Register extends React.Component {
                             }
                             {
                                 !inProgress && (
-                                    <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary"><FormattedMessage id="Sign Up"/></Button>
+                                    <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="Sign Up"/></Button>
                                 )
                             }
                         </Grid>
