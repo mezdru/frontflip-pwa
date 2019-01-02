@@ -5,7 +5,7 @@ import { matchPath } from 'react-router'
 
 
 
-let Home = inject("organisationStore")(observer(class Home extends React.Component {
+let Home = inject("organisationStore", "commonStore")(observer(class Home extends React.Component {
 
     constructor(props){
         super(props);
@@ -16,6 +16,8 @@ let Home = inject("organisationStore")(observer(class Home extends React.Compone
             exact: false,
             strict: false
           });
+
+          this.props.commonStore.setCookie('locale',matchLocale.params.locale)
 
         console.log('locale : ' + matchLocale.params.locale);
     }

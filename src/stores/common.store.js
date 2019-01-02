@@ -11,6 +11,7 @@ class CommonStore {
     algoliaKey;
     algoliaKeyValidity;
     appLoaded = false;
+    locale = 'en-UK';
 
 
     constructor() {
@@ -18,6 +19,7 @@ class CommonStore {
         this.refreshToken = this.getCookie('refreshToken');
         this.algoliaKey = this.getStorage('algoliaKey');
         this.algoliaKeyValidity = this.getStorage('algoliaKeyValidity');
+        this.locale = this.getCookie('locale');
     }
 
     getAccessToken() {
@@ -94,6 +96,7 @@ decorate(CommonStore, {
     algoliaKey: observable,
     algoliaKeyValidity: observable,
     appLoaded: observable,
+    locale: observable,
     setToken: action,
     setAlgoliaKey: action,
     setAppLoaded: action,

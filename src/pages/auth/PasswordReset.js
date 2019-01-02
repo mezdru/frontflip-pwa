@@ -20,7 +20,8 @@ class PasswordReset extends React.Component {
         super(props);
         this.state = {
             passwordErrors: null,
-            successUpdatePassword: false
+            successUpdatePassword: false,
+            locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
         }
     }
     
@@ -40,9 +41,9 @@ class PasswordReset extends React.Component {
                 if (!(response.body) || !(response.body.errors)) {
                     this.setState({successUpdatePassword: true});
                     if (process.env.NODE_ENV === 'production') {
-                        window.location = 'https://' + (this.props.organisationStore.values.orgTag ? this.props.organisationStore.values.orgTag + '.' : '') + process.env.REACT_APP_HOST_BACKFLIP + '/login/callback';
+                        window.location = 'https://' + (this.props.organisationStore.values.orgTag ? this.props.organisationStore.values.orgTag + '.' : '') + process.env.REACT_APP_HOST_BACKFLIP +'/'+this.state.locale+ '/login/callback';
                     } else {
-                        window.location = 'http://' + process.env.REACT_APP_HOST_BACKFLIP + '/login/callback' + (this.props.organisationStore.values.orgTag ? '?subdomains=' + this.props.organisationStore.values.orgTag : '');
+                        window.location = 'http://' + process.env.REACT_APP_HOST_BACKFLIP + '/' + this.state.locale + '/login/callback' + (this.props.organisationStore.values.orgTag ? '?subdomains=' + this.props.organisationStore.values.orgTag : '');
                     }
                 } else {
                     this.setState({passwordErrors: response.body.errors[0].msg});
@@ -102,7 +103,7 @@ class PasswordReset extends React.Component {
     }
 }
 
-export default inject("authStore", "organisationStore")(
+export default inject("authStore", "organisationStore", "commonStore")(
     injectIntl(
         observer(
             withStyles(styles)(PasswordReset)

@@ -5,7 +5,6 @@ import GoogleButton from "../../utils/buttons/GoogleButton";
 import {ErrorOutline} from '@material-ui/icons';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import { matchPath } from 'react-router'
 
 // const styles = theme => ({
 //     root: {
@@ -25,11 +24,11 @@ class Login extends React.Component {
         super(props);
 
         // Due to a bug of react-router-dom, url parameters are not transmetted to nested routes.
-        const matchLocale = matchPath(this.props.history.location.pathname, {
-            path: '/:locale',
-            exact: false,
-            strict: false
-          });
+        // const matchLocale = matchPath(this.props.history.location.pathname, {
+        //     path: '/:locale',
+        //     exact: false,
+        //     strict: false
+        //   });
 
 
         this.state = {
@@ -37,7 +36,7 @@ class Login extends React.Component {
             successLogin: false,
             redirectTo: '/',
             loginErrors: null,
-            locale: matchLocale.params.locale
+            locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
         };
     }
     
@@ -158,7 +157,7 @@ class Login extends React.Component {
     };
 }
 
-export default inject('authStore', 'userStore', 'organisationStore')(
+export default inject('authStore', 'userStore', 'organisationStore', 'commonStore')(
     injectIntl(observer(
         (Login)
     ))
