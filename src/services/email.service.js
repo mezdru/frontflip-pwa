@@ -7,7 +7,6 @@ class EmailService {
     confirmLoginEmail(orgTag) {
         this.inProgress = true;
         this.errors = null;
-        console.log('eh');
 
         return agent.Email.confirmLoginEmail(orgTag)
             .then((response) => {   
