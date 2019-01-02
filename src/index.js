@@ -33,16 +33,13 @@ const stores = {
     organisationStore
 };
 
-// Fetch first parameters of the URL, default will be 'en'
-let languagesAccepted = ['en', 'fr'];
-let language = window.location.pathname.split('/')[1];
-if(! languagesAccepted.some(lg => lg === language)) language = 'en';
+let locale = commonStore.locale;
 
 ReactDOM.render(
     <HttpsRedirect>
         <Provider {...stores}>
             <MuiThemeProvider theme={theme}>
-                <IntlProvider locale={language} messages={messages[language]}>
+                <IntlProvider locale={locale} messages={messages[locale]}>
                     <App/>
                 </IntlProvider>
             </MuiThemeProvider>

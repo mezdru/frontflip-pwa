@@ -19,7 +19,18 @@ class CommonStore {
         this.refreshToken = this.getCookie('refreshToken');
         this.algoliaKey = this.getStorage('algoliaKey');
         this.algoliaKeyValidity = this.getStorage('algoliaKeyValidity');
-        this.locale = this.getCookie('locale');
+        this.populateLocale();
+        
+    }
+
+    populateLocale() {
+        let localesAccepted = ['en', 'fr'];
+        this.locale = window.location.pathname.split('/')[1];
+        if(! localesAccepted.some(lg => lg === this.locale)) this.locale = this.getCookie('locale');
+        if(!this.locale) {
+            this.locale = 'en';
+            this.setCookie('locale','en');
+        }
     }
 
     getAccessToken() {
