@@ -35,7 +35,7 @@ class OrganisationStore {
 
         if(this.isKeyStillValid()) return Promise.resolve(commonStore.algoliaKey);
 
-        return agent.Organisation.getAlgoliaKey(this.values.organisation.tag, this.values.organisation.public)
+        return agent.Organisation.getAlgoliaKey(this.values.organisation._id, this.values.organisation.public)
             .then(data => { 
                 if(data){
                     commonStore.setAlgoliaKey(data.public_key);
@@ -61,6 +61,7 @@ class OrganisationStore {
             })
             .catch(action((err) => {
                 this.errors = err.response && err.response.body && err.response.body.errors;
+                console.log(err);
                 throw err;
             }))
             .finally(action(()=> { this.inProgress = false; }));

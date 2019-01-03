@@ -10,6 +10,7 @@ import PasswordForgot from "../pages/auth/PasswordForgot";
 import PasswordReset from "../pages/auth/PasswordReset";
 import RoutesWithLocale from "./RoutesWithLocale";
 import RoutesWithOrgTag from "./RoutesWithOrgTag";
+import AutocompleteSearch from "../components/algolia/AutocompleteSearch";
 
 export default class Routes extends React.Component {
     
@@ -21,6 +22,7 @@ export default class Routes extends React.Component {
                 
                 <div>
                     <Switch>
+                        <Route path="/:locale(en|fr|en-UK)/autocomplete" component={AutocompleteSearch}/>
                         <Route path="/redirect" component={RedirectUser} />                    
                         <Route path="/:locale(en|fr|en-UK)" component={RoutesWithLocale} />    
                         <Redirect to={"/en" + endUrl}/>
