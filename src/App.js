@@ -11,6 +11,7 @@ import './components/header/header.css';
 import {styles} from './components/header/Header.css.js'
 import HeaderAppBar from './components/header/HeaderAppBar';
 import HeaderDrawer from './components/header/HeaderDrawer';
+import UrlService from './services/url.service';
 
 class App extends Component {
     constructor(props) {
@@ -21,7 +22,6 @@ class App extends Component {
             successLogout: false,
             open: false
         };
-        console.log(process.env.NODE_ENV);
     }
 
     handleDrawerOpen = () => {
@@ -55,11 +55,7 @@ class App extends Component {
         .then(isAuth => {
             isAuth ? this.setState({auth: true}) : this.setState({auth: false});
             if(isAuth && (this.props.userStore.values.currentUser.google || this.props.userStore.values.currentUser.email.validated)){
-                if (process.env.NODE_ENV === 'production') {
-                    window.location = 'https://' + (this.props.organisationStore.values.orgTag ? this.props.organisationStore.values.orgTag + '.' : '') + process.env.REACT_APP_HOST_BACKFLIP + '/search';
-                } else {
-                    window.location = 'http://' + process.env.REACT_APP_HOST_BACKFLIP + '/search' + (this.props.organisationStore.values.orgTag ? '?subdomains=' + this.props.organisationStore.values.orgTag : '');
-                }
+                window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/search', this.props.organisationStore.values.orgTag);
             }
         });
         if (!this.props.userStore.values.currentUser._id && this.state.auth) {

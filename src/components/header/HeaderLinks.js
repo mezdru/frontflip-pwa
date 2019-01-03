@@ -5,6 +5,8 @@ import { styles } from './Header.css.js';
 import './header.css';
 import {AccountCircle, MoreVert as MoreIcon} from '@material-ui/icons';
 import {FormattedMessage} from 'react-intl';
+import UrlService from '../../services/url.service';
+import {inject, observer} from "mobx-react";
 
 class HeaderLinks extends Component {
     constructor(props) {
@@ -16,16 +18,17 @@ class HeaderLinks extends Component {
     render() {
         const {auth, anchorEl, classes, theme, handleMobileMenuOpen, handleProfileMenuOpen} = this.props;
         const isMenuOpen = Boolean(anchorEl);
+        const {locale} = this.props.commonStore;
 
 
         return(
             <div className={classes.fixToRight}>
                 <div className={classes.grow}/>
                 <div className={classes.sectionDesktop}>
-                    <Button variant={"text"} color="inherit" href={(process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP} className={classes.menuLink}>
+                    <Button variant={"text"} color="inherit" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '', undefined)} className={classes.menuLink}>
                         <FormattedMessage id="Why Wingzy ?" />
                     </Button>
-                    <Button variant={"text"} color="inherit" href={(process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP + '/pricing'} className={classes.menuLink}>
+                    <Button variant={"text"} color="inherit" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/pricing', undefined)} className={classes.menuLink}>
                         <FormattedMessage id="Pricing"/>
                     </Button>
                     {auth && (
@@ -39,7 +42,7 @@ class HeaderLinks extends Component {
                         </IconButton>
                     )}
                     {!auth && (
-                        <Button variant={"text"} color="inherit" href="/"><FormattedMessage id="Sign In"/></Button>
+                        <Button variant={"text"} color="inherit" href={"/" + locale}><FormattedMessage id="Sign In"/></Button>
                     )}
                 
                 </div>
@@ -59,7 +62,11 @@ HeaderLinks.propTypes = {
     theme: PropTypes.object.isRequired,
 };
 
-export default 
+export default inject('commonStore')(
+    observer(
         withStyles(styles, {withTheme: true})(
             HeaderLinks
-        );
+        )
+    )
+);
+        
