@@ -31,11 +31,9 @@ class AuthPage extends React.Component{
                  'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg') });
 
         observe(this.props.organisationStore.values, 'organisation', (change) => {
-            this.setState({banner : 
-                (this.props.organisationStore.values.organisation.cover ? this.props.organisationStore.values.organisation.cover.url : bannerImg) });
-            this.setState({logo : 
-                (this.props.organisationStore.values.organisation.logo ? this.props.organisationStore.values.organisation.logo.url :
-                     'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg') });
+            let org = this.props.organisationStore.values.organisation;
+            this.setState({banner : (org.cover && org.cover.url ? org.cover.url : bannerImg) });
+            this.setState({logo : (org.logo && org.logo.url ? org.logo.url : 'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg') });
         });
     }
 
