@@ -25,8 +25,8 @@ class SearchableSelect extends Component {
       inputValue: '',
       searchApiUrl: props.searchApiUrl,
       limit: props.limit,
-      selectedOption: this.props.defaultValue,
-      actionOnSelectedOption: props.actionOnSelectedOption
+      selectedOption: this.props.defaultValue
+      // actionOnSelectedOption: props.actionOnSelectedOption
     };
     this.getOptions = this.getOptions.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -53,14 +53,23 @@ class SearchableSelect extends Component {
   getOptionLabel = (option) => option.label;
 
   handleChange(selectedOption) {
+    console.log(selectedOption);
     this.setState({
       selectedOption: selectedOption
     });
     // this is for update action on selectedOption
-    this.state.actionOnSelectedOption(selectedOption.value);
+    // this.state.actionOnSelectedOption(selectedOption.value);
+
+    let optionsString= '';
+    selectedOption.forEach(option => {
+      optionsString += option.label + ' ';
+    });
+    console.log('option string : ' + optionsString);
+    this.props.refine(optionsString);
   }
 
   async getOptions(inputValue) {
+    console.log('get options with inputvalue : ' + inputValue);
     if (!inputValue) {
       return [];
     }
@@ -97,6 +106,7 @@ class SearchableSelect extends Component {
         loadOptions={this.getOptions}
         placeholder={placeholder}
         onChange={this.handleChange}
+        isMulti
       />
     );
   }
