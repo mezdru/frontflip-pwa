@@ -41,18 +41,35 @@ class Register extends React.Component {
                     this.props.authStore.registerToOrg()
                         .then(() => {
                             this.setState({registerSuccess: true});
-                            this.setState({registerSuccessMessage: 'To complete your register, we have send you an email. You should confirm your address by clicking this email.'});
+                            this.setState({registerSuccessMessage: this.props.intl.formatMessage({id: 'signup.success'})});
                         }).catch((err) => {
                         this.setState({registerSuccess: true});
-                        this.setState({registerSuccessMessage: 'You are register to Wingzy but can\'t access the Wingzy of ' + this.props.organisationStore.values.orgTag + '. Please confirm your email address to continue.'});
-                    })
+                        this.setState({registerSuccessMessage: this.props.intl.formatMessage({id: 'signup.warning.forbiddenOrg'}, {orgName: this.props.organisationStore.values.organisation.name})});
+                    });
                 }else{
-                    this.setState({registerSuccessMessage: 'To complete your register, we have send you an email. You should confirm your address by clicking this email.'});
+                    this.setState({registerSuccessMessage: this.props.intl.formatMessage({id: 'signup.success'})});
                     this.setState({registerSuccess: true});
                 }
             }).catch((err) => {
-            this.setState({registerErrors: 'There was an error. You probably already have an account on Wingzy.'});
-        });
+                let errorMessage;
+                if(err.status === 422){
+                    err.response.body.errors.forEach(error => {
+                        if(error.param === 'password') {
+                            if(error.type === 'dumb'){
+                                // (frequency over 100 000 passwords, 3 000 000 000 people use internet, 30 000 = 3 000 000 000 / 100 000)
+                                errorMessage = (errorMessage ? errorMessage + '<br/>': '') + this.props.intl.formatMessage({id: 'signup.error.dumbPassword'}, {dumbCount: (parseInt(error.msg)*30000).toLocaleString()});
+                            }else{
+                                errorMessage = (errorMessage ? errorMessage + '<br/>': '') + this.props.intl.formatMessage({id: 'signup.error.shortPassword'});
+                            }
+                        }else if(error.param === 'email') {
+                            errorMessage = (errorMessage ? errorMessage + '<br/>': '') + this.props.intl.formatMessage({id: 'signup.error.wrongEmail'});
+                        }
+                    });
+                }
+
+                if(!errorMessage) this.props.intl({id: 'signup.error.generic'});
+                this.setState({registerErrors: errorMessage});
+            });
     };
     
     handleGoogleConnect = (e) => {
@@ -69,7 +86,8 @@ class Register extends React.Component {
                 <Grid className={'form'} container item direction='column' spacing={16}>
                     <Grid item>
                         <Paper>
-                            <InfoOutlined/>  <br/>{registerSuccessMessage}
+                            <InfoOutlined/>  <br/>
+                            <span dangerouslySetInnerHTML={{__html: registerSuccessMessage}}></span>
                         </Paper>
                     </Grid>
                 </Grid>
@@ -81,7 +99,8 @@ class Register extends React.Component {
                         {registerErrors && (
                             <Grid item>
                                 <Paper>
-                                    <ErrorOutline/> <br/>{registerErrors}
+                                    <ErrorOutline/>  <br/>
+                                    <span dangerouslySetInnerHTML={{__html: registerErrors}}></span>
                                 </Paper>
                             </Grid>
                         )}

@@ -12,5 +12,18 @@
     "You can now choose a new password": "You can now choose a new password",
     "Change password": "Change password",
     "Why Wingzy ?": "Why Wingzy ?",
-    "Pricing": "Pricing"
+    "Pricing": "Pricing",
+    "signin.error.generic": "Sorry, we could not sign you in. Please check your email and password :)",
+    "signin.error.unknown": "We don't know this email, sorry...",
+    "signin.error.wrongPassword": "Wrong password, can you try again or <a href={forgotPasswordLink}>create a new password</a> ?",
+    "signin.error.noPassword": "Welcome back! To sign in securely to Wingzy, can you <a href={forgotPasswordLink}>create a new password ?</a>",
+    "signup.error.wrongEmail": "Your email does not seem right, can you try again ?",
+    "signup.error.shortPassword": "Your password is too short, can you make it 6 signs or more ?",
+    "signup.error.dumbPassword": "Your password is too simple: <strong>{dumbCount}</strong> people have the same! Can you make it harder to guess?",
+    "signup.warning.forbiddenOrg": "<strong>Sorry</strong>, you cannot join the Wingzy of {orgName}. You need an invitation, or the right email domain.<br/>Anyway, thank you for signing up! We just sent you an email to confirm your address, check your inbox...",
+    "signup.success": "<strong>Thank you</strong> for signing up! We just sent you an email to confirm your address, check your inbox...",
+    "signup.error.generic": "Oh. That was an unexpected error from us. Please, try to refresh the page.",
+    "password.forgot.intro": "No password? Password forgotten? We will send you an email to create a new password.",
+    "password.new.intro": "Create a new password to secure your Wingzy account <strong>{userEmail}</strong>.",
+    "password.forgot.success": "We have send you an email to create a new password."
 }

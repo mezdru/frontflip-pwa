@@ -12,5 +12,18 @@
     "You can now choose a new password": "Vous pouvez choisir un nouveau mot de passe",
     "Change password": "Modifier mon mot de passe",
     "Why Wingzy ?": "Pourquoi Wingzy ?",
-    "Pricing": "Tarifs"
+    "Pricing": "Tarifs",
+    "signin.error.generic": "Désolé, nous n'avons pas pu vous connecter. Vérifiez votre email et mot de passe :)",
+    "signin.error.unknown": "Nous ne connaissons pas cet email, désolé...",
+    "signin.error.wrongPassword": "Mauvais mot de passe, pouvez-vous réessayez ou <a href={forgotPasswordLink}>créez un nouveau mot de passe</a> ?",
+    "signin.error.noPassword": "Bienvenue! Pour vous connecter en sécurité à Wingzy, pouvez-vous <a href={forgotPasswordLink}>créer un nouveau mot de passe</a> ?",
+    "signup.error.wrongEmail": "Votre email n'a pas l'air juste, vous pouvez réessayer ?",
+    "signup.error.shortPassword": "Votre mot de passe est trop court, vous pouvez en faire un de plus de 6 caractères ?",
+    "signup.error.dumbPassword": "Votre mot de passe est trop simple : <strong>{dumbCount}</strong> personnes ont le même ! Faites-le plus compliqué à deviner.",
+    "signup.warning.forbiddenOrg": "<strong>Désolé</strong>, vous ne pouvez pas rejoindre le Wingzy de {orgName}. Vous avez besoin d'une invitation, ou du bon domaine email.<br/>Merci pour l'inscription quand même ! Nous venons de vous envoyer un email pour confirmer votre adresse, vérifiez votre boite de réception...",
+    "signup.success": "<strong>Merci</strong> pour l'inscription ! Nous venons de vous envoyer un email pour confirmer votre adresse, vérifiez votre boite de réception...",
+    "signup.error.generic": "Mince. Il y a eu une erreur imprévue de notre part. Essayez de rafraichir la page s'il vous plait.",
+    "password.forgot.intro": "Pas de mot de passe ? Mot de passe oublié ? Nous allons vous envoyer un email pour créer un nouveau mot de passe.",
+    "password.new.intro": "Créez un nouveau mot de passe pour sécuriser votre compte Wingzy <strong>{userEmail}</strong>.",
+    "password.forgot.success": "Nous vous avons envoyé un email pour créer un nouveau mot de passe."
 }
