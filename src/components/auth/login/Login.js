@@ -64,11 +64,22 @@ class Login extends React.Component {
                     // }
                     
                 } else {
-                    this.setState({loginErrors: "We don't know anyone with these credentials. Please check them or ask for a password."});
-                    
+                    this.setState({loginErrors: this.props.intl.formatMessage({id: 'signin.error.generic'})});
                 }
             }).catch((err) => {
-            this.setState({loginErrors: "We don't know anyone with these credentials. Please check them or ask for a password."});
+                // Err can have 3 forms : User has no password. || Wrong password. || User does not exists.
+                let errorMessage;
+                if(err.status === 404){
+                    errorMessage = this.props.intl.formatMessage({id: 'signin.error.unknown'});
+                }else if(err.status === 403){
+                    if(err.response.body.error_description === 'Wrong password.'){
+                        errorMessage = this.props.intl.formatMessage({id: 'signin.error.wrongPassword'}, {forgotPasswordLink: '/' + this.state.locale + '/password/forgot'});
+                    }else{
+                        errorMessage = this.props.intl.formatMessage({id: 'signin.error.noPassword'}, {forgotPasswordLink: '/' + this.state.locale + '/password/forgot'});
+                    }
+                }
+                if(!errorMessage) errorMessage = this.props.intl.formatMessage({id: 'signin.error.generic'});
+                this.setState({loginErrors: errorMessage});
         });
     };
     
@@ -89,7 +100,8 @@ class Login extends React.Component {
                     {loginErrors && (
                         <Grid item>
                             <Paper>
-                                <ErrorOutline/> <br/>{loginErrors}
+                                <ErrorOutline/> <br/>
+                                <span dangerouslySetInnerHTML={{__html: loginErrors}}></span>
                             </Paper>
                         </Grid>
                     )}
