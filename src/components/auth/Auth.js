@@ -26,12 +26,8 @@ class Auth extends React.Component {
         let intl = this.props.intl;
         
         return (
-            <Grid container
-                  justify="center"
-                  alignItems="center"
-                  className="form-root"
-            spacing={16}>
-                <Grid item xs={12}>
+            <Grid container spacing={16}>
+                <Grid item xs={12} style={{marginTop: -8}}>
                     <Tabs
                         value={this.state.value}
                         onChange={this.handleChange}
@@ -39,11 +35,11 @@ class Auth extends React.Component {
                         textColor="primary"
                         fullWidth={true}
                     >
-                        <Tab id="form-tab-left" label={intl.formatMessage({id: 'Sign In'})}/>
-                        <Tab id="form-tab-right" label={intl.formatMessage({id: 'Sign Up'})}/>
+                        <Tab label={intl.formatMessage({id: 'Sign In'})} style={{textAlign: 'left'}}/>
+                        <Tab label={intl.formatMessage({id: 'Sign Up'})} style={{textAlign: 'right'}}/>
                     </Tabs>
                 </Grid>
-                <Grid item style={{width: '100%'}}>
+                <Grid item xs={12}>
                     <SwipeableViews
                         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                         index={this.state.value}

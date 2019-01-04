@@ -67,7 +67,7 @@ export default createMuiTheme({
                 color: "darkgrey",
                 ['&:hover']: {
                     backgroundColor: "transparent",
-                    color: "red"
+                    color: palette.primary.main
                 }
             }
         },
@@ -77,16 +77,17 @@ export default createMuiTheme({
                 borderRadius: 30,
                 [`& fieldset`]: {
                     borderRadius: 30
-                }
+                },
             }
         },
         MuiTab: {
             root: {
-                fontSize: '0.9rem!important',
+                fontSize: '0.875rem!important',
+                fontWeight: '400',
                 ['&:hover']: {
                     color: palette.primary.main
-                }
-            }
+                },
+            },
         },
         MuiPaper: {
             root: {

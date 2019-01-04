@@ -23,7 +23,7 @@ class Login extends React.Component {
     
     constructor(props) {
         super(props);
-
+    
         this.state = {
             value: 0,
             successLogin: false,
@@ -62,7 +62,7 @@ class Login extends React.Component {
                     // }else{
                     //     this.setState({redirectTo: '/onboard/wingzy'});
                     // }
-                    
+    
                 } else {
                     this.setState({loginErrors: "We don't know anyone with these credentials. Please check them or ask for a password."});
                     
@@ -81,8 +81,8 @@ class Login extends React.Component {
         let {loginErrors, locale} = this.state;
         let intl = this.props.intl;
         // if (successLogin) return <Redirect to={redirectTo}/>;
-        
-        
+    
+    
         return (
             <form onSubmit={this.handleSubmitForm}>
                 <Grid container item direction='column' spacing={16}>
@@ -132,12 +132,12 @@ class Login extends React.Component {
                         }
                         {
                             !inProgress && (
-                                <Button fullWidth={true}  color="primary" type="submit"><FormattedMessage id="Sign In"/></Button>
+                                <Button fullWidth={true} color="primary" type="submit"><FormattedMessage id="Sign In"/></Button>
                             )
                         }
                     </Grid>
                     <Grid item>
-                        <Button variant={"text"} href={ "/" + locale + "/password/forgot"}>
+                        <Button variant={"text"} href={"/" + locale + "/password/forgot"}>
                             <FormattedMessage id="I don't have my password"/>
                         </Button>
                     </Grid>

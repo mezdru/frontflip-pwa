@@ -35,13 +35,7 @@ export const styles = theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     background: 'transparent',
-    height: '112px',
-    [theme.breakpoints.down('md')]: {
-      height: '100px',
-    },
-    [theme.breakpoints.down('xs')]: {
-      height: '56px',
-    },
+      height: '64px',
     boxShadow: 'none !important',
     borderTop: '10px solid #dd362e',
   },
@@ -77,13 +71,7 @@ export const styles = theme => ({
     padding: '0 8px',
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
-    height: '112px',
-    [theme.breakpoints.down('md')]: {
-      height: '100px',
-    },
-    [theme.breakpoints.down('xs')]: {
-      height: '56px',
-    },
+      height: '64px',
     borderTop: '10px solid #dd362e',
   },
   content: {

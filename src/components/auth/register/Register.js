@@ -12,7 +12,7 @@ class Register extends React.Component {
     
     constructor() {
         super();
-
+    
         this.state = {
             value: 0,
             registerErrors: null,
@@ -52,7 +52,7 @@ class Register extends React.Component {
                 }
             }).catch((err) => {
             this.setState({registerErrors: 'There was an error. You probably already have an account on Wingzy.'});
-            });
+        });
     };
     
     handleGoogleConnect = (e) => {
@@ -81,7 +81,7 @@ class Register extends React.Component {
                         {registerErrors && (
                             <Grid item>
                                 <Paper>
-                        <ErrorOutline/>  <br/>{registerErrors}
+                                    <ErrorOutline/> <br/>{registerErrors}
                                 </Paper>
                             </Grid>
                         )}
@@ -92,7 +92,7 @@ class Register extends React.Component {
                             <Typography style={{
                                 fontSize: '1rem',
                                 color: '#7c7c7c'
-                            }}> or </Typography>
+                            }}><FormattedMessage id="or"/></Typography>
                         </Grid>
                         <Grid item>
                             <TextField
