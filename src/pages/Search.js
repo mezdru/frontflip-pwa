@@ -1,7 +1,7 @@
 import React from 'react'
 import {Grid} from '@material-ui/core';
 import Banner from '../components/utils/banner/Banner'
-import SearchField from '../components/algolia/SearchField';
+import SearchField from '../components/utils/searchField/SearchField';
 import Card from '../components/card/CardProfile';
 
 import bannerImg from '../resources/images/fly_away.jpg'
@@ -12,9 +12,7 @@ class Search extends React.Component {
             <div>
                 <Grid style={{position: 'relative'}} container direction={'column'} alignItems={'center'}>
                     <Grid style={{position: 'fixed', zIndex: 1000}} container item alignItems={"stretch"}>
-                        <Banner src={bannerImg} style={{
-                            filter: 'blur(3px)',
-                        }}/>
+                        <Banner src={bannerImg} />
                     </Grid>
                     <Grid style={{position: 'fixed', zIndex: 1001}} container item justify={"center"} alignItems={'center'}>
                         <SearchField/>

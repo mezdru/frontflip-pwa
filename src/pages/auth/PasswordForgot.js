@@ -1,8 +1,8 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
 import {Button, Grid, Paper, TextField, withStyles} from "@material-ui/core";
-import {InfoOutlined} from '@material-ui/icons';
-import {FormattedMessage} from 'react-intl';
+import {InfoOutlined, ErrorOutline} from '@material-ui/icons';
+import {FormattedMessage, FormattedHTMLMessage, injectIntl} from 'react-intl';
 
 import mdpImg from '../../resources/images/birdFly.png';
 
@@ -18,7 +18,8 @@ class PasswordForgot extends React.Component {
     constructor() {
         super();
         this.state = {
-            successPasswordReset: false
+            successPasswordReset: false,
+            emailError: null
         }
     }
     
@@ -34,41 +35,58 @@ class PasswordForgot extends React.Component {
         e.preventDefault();
         this.props.authStore.passwordForgot()
             .then(response => {
-                if (response) {
-                    this.setState({successPasswordReset: true});
-                }
+                this.setState({successPasswordReset: true});
             }).catch(err => {
-            // nothing
-        });
+                this.setState({emailError: this.props.intl.formatMessage({id: 'signin.error.unknown'})});
+                this.setState({successPasswordReset: false});
+            });
     };
     
     render() {
         let {values} = this.props.authStore;
-        let {successPasswordReset} = this.state;
+        let {successPasswordReset, emailError} = this.state;
         
         if (successPasswordReset) {
-            return <Paper><InfoOutlined/> <br/>If you have an account on Wingzy, we have send you an email to reset your password.</Paper>;
+            return (
+                <Grid container item xs={12} sm={6} lg={4} spacing={16}>
+                    <Grid item container justify={"center"}>
+                        <Paper><InfoOutlined/> <br/><FormattedHTMLMessage id="password.forgot.success"/></Paper>
+                    </Grid>
+                </Grid>
+            );
         } else {
             return (
-                <Grid container direction={"column"} justify={"center"} alignItems={"center"} className={"margin-form"} xs={12} sm={4} spacing={16}>
+                <Grid container item xs={12} sm={6} lg={4} spacing={16}>
                     <Grid item container justify={"center"} alignItems={"center"}>
                         <img src={mdpImg} alt="mdp" className={this.props.classes.image}/>
                     </Grid>
                     <Grid item container justify={"center"}>
-                        <p><FormattedMessage id="You forgot your password or didn't have one yet ? Don't worry ! You can ask for a reset"/></p>
+                        <p><FormattedHTMLMessage id="password.forgot.intro"/></p>
+                        {emailError && (
+                            <Paper>
+                                <ErrorOutline/> <br/>
+                                <span dangerouslySetInnerHTML={{__html: emailError}}></span>
+                            </Paper>
+                        )}
                     </Grid>
-                    <Grid item container>
-                        <TextField label="Email"
-                                   type="email"
-                                   autoComplete="email"
-                                   margin="normal"
-                                   variant={"outlined"}
-                                   fullWidth={true}
-                                   onChange={this.handleEmailChange}
-                        />
-                    </Grid>
-                    <Grid item container>
-                        <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary"><FormattedMessage id="Reset your password"/></Button>
+                    <Grid item container direction={"column"} justify={"center"}>
+                        <form onSubmit={this.handleSubmitForm}>
+                            <Grid item container direction={"column"} spacing={16}>
+                                <Grid item style={{height: '88px'}}>
+                                    <TextField label="Email"
+                                               type="email"
+                                               autoComplete="email"
+                                               margin="normal"
+                                               variant={"outlined"}
+                                               fullWidth={true}
+                                               onChange={this.handleEmailChange}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="Reset your password"/></Button>
+                                </Grid>
+                            </Grid>
+                        </form>
                     </Grid>
                 </Grid>
             );
@@ -77,8 +95,10 @@ class PasswordForgot extends React.Component {
 }
 
 export default inject('authStore')(
-    observer(
-        withStyles(styles)
-        (PasswordForgot)
+    injectIntl(
+        observer(
+            withStyles(styles)
+            (PasswordForgot)
+        )
     )
 );

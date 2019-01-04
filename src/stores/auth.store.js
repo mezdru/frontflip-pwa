@@ -66,6 +66,8 @@ class AuthStore {
             })
             .catch(action((err) => {
                 this.errors = err.response && err.response.body && err.response.body.errors;
+                console.log(JSON.stringify(err));
+                console.log(err.response.body.error_description);
                 throw err;
             }))
             .finally(action(()=> { this.inProgress = false; }));
@@ -82,7 +84,7 @@ class AuthStore {
             .then((data) => {
                 return this.login(this.values.email, this.values.password)
                 .then((respLogin) => {
-                    return emailService.confirmLoginEmail(organisationStore.values.orgTag)
+                    return emailService.confirmLoginEmail(null)
                     .then((respEmail) => {
                         return true;
                     });
@@ -91,6 +93,7 @@ class AuthStore {
             .catch(action((err) => {
                 // any other response status than 20X is an error
                 this.errors = err.response && err.response.body && err.response.body.errors;
+                console.log(JSON.stringify(err));
                 throw err;
             }))
             .finally(action(() => {this.inProgress = false; }));
@@ -125,7 +128,7 @@ class AuthStore {
             })
             .catch(action((err) => {
                 this.errors = err;
-                return err;
+                throw err;
             }))
             .finally(action(() => {this.inProgress = false; }));   
     }
@@ -140,7 +143,7 @@ class AuthStore {
             })
             .catch((err) => {
                 this.errors = err;
-                return err.response;
+                throw err;
             })
             .finally(action(() => {this.inProgress = false; }));      
     }

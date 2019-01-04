@@ -33,7 +33,7 @@ class HeaderToolBar extends Component {
                 </IconButton>
                 <Typography className={classes.title} variant="h6" color="inherit" noWrap>
                     <a href={(process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP}>
-                        <img src={logoWingzy} height="70px" alt="Logo of Wingzy"/>
+                        <img src={logoWingzy} height="36px" alt="Logo of Wingzy"/>
                     </a>
                 </Typography>
                 

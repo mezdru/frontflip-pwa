@@ -23,7 +23,7 @@ class Login extends React.Component {
     
     constructor(props) {
         super(props);
-
+    
         this.state = {
             value: 0,
             successLogin: false,
@@ -62,13 +62,24 @@ class Login extends React.Component {
                     // }else{
                     //     this.setState({redirectTo: '/onboard/wingzy'});
                     // }
-                    
+    
                 } else {
-                    this.setState({loginErrors: "We don't know anyone with these credentials. Please check them or ask for a password."});
-                    
+                    this.setState({loginErrors: this.props.intl.formatMessage({id: 'signin.error.generic'})});
                 }
             }).catch((err) => {
-            this.setState({loginErrors: "We don't know anyone with these credentials. Please check them or ask for a password."});
+                // Err can have 3 forms : User has no password. || Wrong password. || User does not exists.
+                let errorMessage;
+                if(err.status === 404){
+                    errorMessage = this.props.intl.formatMessage({id: 'signin.error.unknown'});
+                }else if(err.status === 403){
+                    if(err.response.body.error_description === 'Wrong password.'){
+                        errorMessage = this.props.intl.formatMessage({id: 'signin.error.wrongPassword'}, {forgotPasswordLink: '/' + this.state.locale + '/password/forgot'});
+                    }else{
+                        errorMessage = this.props.intl.formatMessage({id: 'signin.error.noPassword'}, {forgotPasswordLink: '/' + this.state.locale + '/password/forgot'});
+                    }
+                }
+                if(!errorMessage) errorMessage = this.props.intl.formatMessage({id: 'signin.error.generic'});
+                this.setState({loginErrors: errorMessage});
         });
     };
     
@@ -81,15 +92,16 @@ class Login extends React.Component {
         let {loginErrors, locale} = this.state;
         let intl = this.props.intl;
         // if (successLogin) return <Redirect to={redirectTo}/>;
-        
-        
+    
+    
         return (
             <form onSubmit={this.handleSubmitForm}>
                 <Grid container item direction='column' spacing={16}>
                     {loginErrors && (
                         <Grid item>
                             <Paper>
-                                <ErrorOutline/> <br/>{loginErrors}
+                                <ErrorOutline/> <br/>
+                                <span dangerouslySetInnerHTML={{__html: loginErrors}}></span>
                             </Paper>
                         </Grid>
                     )}
@@ -132,12 +144,12 @@ class Login extends React.Component {
                         }
                         {
                             !inProgress && (
-                                <Button fullWidth={true}  color="primary" type="submit"><FormattedMessage id="Sign In"/></Button>
+                                <Button fullWidth={true} color="primary" type="submit"><FormattedMessage id="Sign In"/></Button>
                             )
                         }
                     </Grid>
                     <Grid item>
-                        <Button variant={"text"} href={ "/" + locale + "/password/forgot"}>
+                        <Button variant={"text"} href={"/" + locale + "/password/forgot"}>
                             <FormattedMessage id="I don't have my password"/>
                         </Button>
                     </Grid>

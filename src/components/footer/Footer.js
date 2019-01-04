@@ -4,7 +4,7 @@ import {withStyles} from '@material-ui/core/styles';
 // import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
-const styles = theme => ({
+const styles = {
     root: {
         bottom: 0,
         left: 0,
@@ -21,7 +21,7 @@ const styles = theme => ({
     item: {
         padding: 5,
     },
-});
+};
 
 function FooterTestWeb(props) {
     const {classes} = props;

@@ -1,26 +1,45 @@
 import React from 'react';
-import {Card, CardMedia, CardContent, CardActions, Grid, IconButton, Typography} from '@material-ui/core';
+import {Card, CardMedia, CardContent, CardActions, Grid, IconButton, Typography, withStyles} from '@material-ui/core';
 import {Mail, GpsFixedSharp} from '@material-ui/icons';
 
-import Wings from '../utils/wings/Wings';
+import Wings from '../utils/wing/Wing'
 
-import './CardProfile.css'
+const styles = {
+    info: {
+        height: '18vh',
+        paddingTop: '30%',
+        paddingRight: 0,
+        paddingLeft: 0,
+    },
+    infoTitle: {
+        fontSize: '24px',
+        fontWeight: '500'
+    },
+    wingsContainer: {
+        overflowX: 'scroll',
+        whiteSpace: 'nowrap',
+        paddingBottom: 5,
+    },
+    wings: {
+        display: 'inline-block',
+        color: 'white',
+    }
+};
 
 class CardProfile extends React.Component {
     render() {
         return (
-            <Card id="card">
+            <Card>
                 <Grid container justify={'space-between'}>
                     <Grid item>
                         <CardMedia
-                            id="card-picture"
                             image="https://wingzy-staging.herokuapp.com/images/placeholder_person.png"
                             title="Avatar"
                         />
                     </Grid>
                     <Grid item>
-                        <CardContent id="card-info" justify={'center'}>
-                            <Typography style={{fontSize: '24px', fontWeight: '500'}}>
+                        <CardContent className={this.props.classes.info} justify={'center'}>
+                            <Typography className={this.props.classes.infoTitle}>
                                 Jane/John Doe
                             </Typography>
                             <Typography component="p">
@@ -40,19 +59,19 @@ class CardProfile extends React.Component {
                             </Grid>
                         </CardActions>
                     </Grid>
-                    <CardContent id="card-content">
-                        <Grid container id={'card-wings'}>
-                            <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"></Wings>
-                            <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"></Wings>
-                            <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"></Wings>
-                            <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"></Wings>
-                            <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"></Wings>
-                            <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"></Wings>
-                            <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"></Wings>
-                            <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"></Wings>
-                            <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"></Wings>
-                            <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"></Wings>
-                            <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"></Wings>
+                    <CardContent className={this.props.classes.wingsContainer}>
+                        <Grid container className={this.props.classes.wings}>
+                            <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
+                            <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
+                            <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
+                            <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
+                            <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
+                            <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
+                            <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
+                            <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
+                            <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
+                            <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
+                            <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
                         </Grid>
                     </CardContent>
                 </Grid>
@@ -61,4 +80,4 @@ class CardProfile extends React.Component {
     }
 }
 
-export default CardProfile
+export default withStyles(styles)(CardProfile);

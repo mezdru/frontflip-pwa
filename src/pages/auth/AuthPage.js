@@ -15,7 +15,7 @@ const AuthPage = ({...props}) => {
     return (
         <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
             <Grid container item alignItems={"stretch"}>
-                <Banner src={bannerImg} style={{boxShadow: 'inset 0px 65px 65px -30px #FFF'}}/>
+                <Banner src={bannerImg}/>
             </Grid>
             <Grid container item justify={"center"}>
                 <Avatar src="https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg" alt="org-logo" className={props.classes.avatar}/>
