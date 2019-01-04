@@ -128,7 +128,7 @@ class AuthStore {
             })
             .catch(action((err) => {
                 this.errors = err;
-                return err;
+                throw err;
             }))
             .finally(action(() => {this.inProgress = false; }));   
     }

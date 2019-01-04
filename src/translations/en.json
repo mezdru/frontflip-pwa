@@ -24,5 +24,6 @@
     "signup.success": "<strong>Thank you</strong> for signing up! We just sent you an email to confirm your address, check your inbox...",
     "signup.error.generic": "Oh. That was an unexpected error from us. Please, try to refresh the page.",
     "password.forgot.intro": "No password? Password forgotten? We will send you an email to create a new password.",
-    "password.new.intro": "Create a new password to secure your Wingzy account <strong>{userEmail}</strong>."
+    "password.new.intro": "Create a new password to secure your Wingzy account <strong>{userEmail}</strong>.",
+    "password.forgot.success": "We have send you an email to create a new password."
 }

@@ -24,5 +24,6 @@
     "signup.success": "<strong>Merci</strong> pour l'inscription ! Nous venons de vous envoyer un email pour confirmer votre adresse, vérifiez votre boite de réception...",
     "signup.error.generic": "Mince. Il y a eu une erreur imprévue de notre part. Essayez de rafraichir la page s'il vous plait.",
     "password.forgot.intro": "Pas de mot de passe ? Mot de passe oublié ? Nous allons vous envoyer un email pour créer un nouveau mot de passe.",
-    "password.new.intro": "Créez un nouveau mot de passe pour sécuriser votre compte Wingzy <strong>{userEmail}</strong>."
+    "password.new.intro": "Créez un nouveau mot de passe pour sécuriser votre compte Wingzy <strong>{userEmail}</strong>.",
+    "password.forgot.success": "Nous vous avons envoyé un email pour créer un nouveau mot de passe."
 }

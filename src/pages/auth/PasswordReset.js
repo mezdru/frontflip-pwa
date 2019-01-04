@@ -6,8 +6,6 @@ import {ErrorOutline, InfoOutlined} from '@material-ui/icons';
 import {FormattedMessage, injectIntl, FormattedHTMLMessage} from 'react-intl';
 import UrlService from '../../services/url.service';
 
-import mdpImg from '../../resources/images/butterflyCatch.png';
-
 const styles = {
     image: {
         width: '12rem',
@@ -53,7 +51,7 @@ class PasswordReset extends React.Component {
                     });
                 }
 
-                if(!errorMessage) this.props.intl({id: 'signup.error.generic'});
+                if(!errorMessage) this.props.intl.formatMessage({id: 'signup.error.generic'});
                 this.setState({passwordErrors: errorMessage});
             });
     };
