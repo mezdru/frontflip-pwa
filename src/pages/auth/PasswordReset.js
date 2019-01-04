@@ -64,10 +64,7 @@ class PasswordReset extends React.Component {
         let intl = this.props.intl;
         
             return (
-                <Grid container direction={"column"} justify={"center"} alignItems={"center"} className={"margin-form"} xs={12} sm={4} spacing={16}>
-                    <Grid item container justify={"center"} alignItems={"center"}>
-                        <img src={mdpImg} alt="mdp" className={this.props.classes.image}/>
-                    </Grid>
+                <Grid container direction={"column"} justify={"center"} alignItems={"center"} xs={12} sm={4} spacing={16}>
                     <Grid container item justify={"center"}>
                         <FormattedHTMLMessage id="password.new.intro" values={{userEmail: values.email}}/>
                         {passwordErrors && (
@@ -77,18 +74,24 @@ class PasswordReset extends React.Component {
                             </Paper>
                         )}
                     </Grid>
-                    <Grid container item>
-                        <TextField
-                            label={intl.formatMessage({id: 'Password'})}
-                            type="password"
-                            margin="normal"
-                            fullWidth
-                            variant={"outlined"}
-                            onChange={this.handlePasswordChange}
-                        />
-                    </Grid>
-                    <Grid container item>
-                        <Button fullWidth={true} onClick={this.handleSubmitForm} color="primary"><FormattedMessage id="Change password"/></Button>
+                    <Grid item container direction={"column"} justify={"center"}>
+                        <form onSubmit={this.handleSubmitForm}>
+                            <Grid item container direction={"column"} spacing={16}>
+                                <Grid item style={{height: '88px'}}>
+                                    <TextField
+                                        label={intl.formatMessage({id: 'Password'})}
+                                        type="password"
+                                        margin="normal"
+                                        fullWidth
+                                        variant={"outlined"}
+                                        onChange={this.handlePasswordChange}
+                                    />
+                                </Grid>
+                                <Grid container item>
+                                    <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="Change password"/></Button>
+                                </Grid>
+                            </Grid>
+                        </form>
                     </Grid>
                 </Grid>
             );        
