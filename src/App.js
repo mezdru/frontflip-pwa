@@ -55,7 +55,7 @@ class App extends Component {
         .then(isAuth => {
             isAuth ? this.setState({auth: true}) : this.setState({auth: false});
             if(isAuth && (this.props.userStore.values.currentUser.google || this.props.userStore.values.currentUser.email.validated)){
-                window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/search', this.props.organisationStore.values.orgTag);
+                window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/', this.props.organisationStore.values.orgTag);
             }
         });
         if (!this.props.userStore.values.currentUser._id && this.state.auth) {
