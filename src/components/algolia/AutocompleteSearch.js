@@ -22,10 +22,11 @@ class AutocompleteSearch extends Component {
             .then((algoliaKey) => {
                 this.setState({algoliaKey: algoliaKey});
             }).catch((err) => {
-                window.location.href = UrlService.createUrl(window.location.host, '/', undefined);
+                
+                // window.location.href = UrlService.createUrl(window.location.host, '/', undefined);
             });
         }).catch(err => {
-            window.location.href = UrlService.createUrl(window.location.host, '/', undefined);
+            // window.location.href = UrlService.createUrl(window.location.host, '/', undefined);
         })
     }
 
