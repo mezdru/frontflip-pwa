@@ -84,7 +84,7 @@ class AuthStore {
             .then((data) => {
                 return this.login(this.values.email, this.values.password)
                 .then((respLogin) => {
-                    return emailService.confirmLoginEmail(organisationStore.values.orgTag)
+                    return emailService.confirmLoginEmail(null)
                     .then((respEmail) => {
                         return true;
                     });
