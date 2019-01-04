@@ -2,7 +2,7 @@ import React from 'react';
 import {inject, observer} from 'mobx-react';
 import {Button, Grid, Paper, TextField, withStyles} from "@material-ui/core";
 import {InfoOutlined} from '@material-ui/icons';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, FormattedHTMLMessage} from 'react-intl';
 
 import mdpImg from '../../resources/images/birdFly.png';
 
@@ -55,7 +55,7 @@ class PasswordForgot extends React.Component {
                         <img src={mdpImg} alt="mdp" className={this.props.classes.image}/>
                     </Grid>
                     <Grid item container justify={"center"}>
-                        <p><FormattedMessage id="You forgot your password or didn't have one yet ? Don't worry ! You can ask for a reset"/></p>
+                        <p><FormattedHTMLMessage id="password.forgot.intro"/></p>
                     </Grid>
                     <Grid item container>
                         <TextField label="Email"
