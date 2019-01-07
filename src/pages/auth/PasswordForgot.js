@@ -65,7 +65,7 @@ class PasswordForgot extends React.Component {
                     <Grid item container justify={"center"}>
                         <Typography variant="h6"><FormattedHTMLMessage id="password.forgot.intro"/></Typography>
                         {emailError && (
-                            <SnackbarCustom variant="error" message={emailError}/>
+                            <SnackbarCustom variant="warning" message={emailError}/>
                         )}
                     </Grid>
                     <Grid item container direction={"column"} justify={"center"}>

@@ -100,7 +100,7 @@ class Login extends React.Component {
                 <Grid container item direction='column' spacing={16}>
                     {loginErrors && (
                         <Grid item>
-                            <SnackbarCustom variant="error" message={loginErrors} />
+                            <SnackbarCustom variant="warning" message={loginErrors} />
                         </Grid>
                     )}
                     <Grid item>
