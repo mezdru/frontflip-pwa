@@ -54,7 +54,6 @@ class SearchableSelect extends Component {
   getOptionLabel = (option) => option.label;
 
   handleChange(selectedOption) {
-    console.log(selectedOption);
     this.setState({
       selectedOption: selectedOption
     });
@@ -71,11 +70,10 @@ class SearchableSelect extends Component {
 
   async getOptions(inputValue) {
     console.log('get options with inputvalue : ' + inputValue);
-    if (!inputValue) {
-      return [];
-    }
     await this.props.refine(inputValue);
-
+    // if (!inputValue) {
+    //   return [];
+    // }
     return this.prepareLabels(this.props.hits);
   }
 
