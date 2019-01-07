@@ -34,7 +34,7 @@ export const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    background: 'transparent',
+    background: 'white',
       height: '64px',
     boxShadow: 'none !important',
     borderTop: '10px solid #dd362e',
