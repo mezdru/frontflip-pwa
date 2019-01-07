@@ -15,7 +15,7 @@ class AutocompleteSearch extends Component {
     }
 
     componentDidMount() {
-        this.props.organisationStore.setOrgTag('wingzy');
+        this.props.organisationStore.setOrgTag('auto');
         this.props.organisationStore.getOrganisationForPublic()
         .then((res) => {
             this.props.organisationStore.getAlgoliaKey()

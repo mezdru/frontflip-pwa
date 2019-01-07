@@ -24,7 +24,6 @@ class SearchableSelect extends Component {
     super(props);
     this.state = {
       inputValue: '',
-      searchApiUrl: props.searchApiUrl,
       limit: props.limit,
       selectedOption: this.props.defaultValue
       // actionOnSelectedOption: props.actionOnSelectedOption
@@ -40,12 +39,15 @@ class SearchableSelect extends Component {
     array.forEach(hit => {
       let displayedName;
       if(hit.type === 'hashtag'){
-        displayedName = (hit.name_translated ? (hit.name_translated[commonStore.locale] || hit.name_translated['en-UK']) : hit.name );
-      }else {
-        displayedName = hit.name;
+        displayedName = (hit.name_translated ? (hit.name_translated[commonStore.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag );
+      }else if(hit.type === 'person'){
+        displayedName = hit.name || hit.tag;
       }
+      console.log('displayed name : ' + displayedName);
       arrayOfLabel.push({label: displayedName, value: hit.tag});
+      console.log('next');
     });
+    console.log('number of options returned : ' + arrayOfLabel.length);
     return arrayOfLabel;
   }
 
@@ -53,42 +55,50 @@ class SearchableSelect extends Component {
 
   getOptionLabel = (option) => option.label;
 
+  // when option is selected
   handleChange(selectedOption) {
     this.setState({
       selectedOption: selectedOption
+    }, () => {
+      this.refineWithSelectedOptions(selectedOption);
     });
-    // this is for update action on selectedOption
-    // this.state.actionOnSelectedOption(selectedOption.value);
+  }
 
+  refineWithSelectedOptions(selectedOption) {
     let optionsString= '';
-    selectedOption.forEach(option => {
-      optionsString += option.label + ' ';
-    });
-    console.log('option string : ' + optionsString);
+    if(selectedOption && selectedOption.length > 0){
+      selectedOption.forEach(option => {
+        optionsString += option.label + ' ';
+      });
+    }
+    
+    console.log('option selected : ' + optionsString);
     this.props.refine(optionsString);
   }
 
   async getOptions(inputValue) {
-    console.log('get options with inputvalue : ' + inputValue);
+    // console.log('get options with inputvalue : ' + inputValue);
     await this.props.refine(inputValue);
-    // if (!inputValue) {
-    //   return [];
-    // }
+    console.log('number of options : ' + this.props.hits.length);
     return this.prepareLabels(this.props.hits);
   }
 
   handleInputChange(inputValue) {
-    this.setState({ inputValue });
+    // console.log('selected option in handle input change : ' + JSON.stringify(this.state.selectedOption));
+    if((!inputValue || inputValue === '') && (!this.state.selectedOption || this.state.selectedOption.length === 0)){
+      // console.log('reset');
+      this.props.refine();
+    } 
+    // this.refineWithSelectedOptions(this.state.selectedOption);
     return inputValue;
   }
 
   noOptionsMessage(inputValue) {
-    if (this.props.hits.length) return null;
+    if (this.props.hits.length) return 'No results';
     if (!inputValue) {
-      return 'No results';
+      return 'Type something to get options';
     }
-
-    return 'No more options'
+    return 'No results';
   }
 
   render() {
@@ -96,7 +106,6 @@ class SearchableSelect extends Component {
     const { selectedOption } = this.state;
     return (
       <AsyncSelect
-        cacheOptions
         className='hide-options'
         value={selectedOption}
         noOptionsMessage={this.noOptionsMessage}
@@ -106,6 +115,7 @@ class SearchableSelect extends Component {
         loadOptions={this.getOptions}
         placeholder={placeholder}
         onChange={this.handleChange}
+        onInputChange={this.handleInputChange} 
         isMulti
       />
     );
