@@ -42,6 +42,12 @@ const styles = theme => ({
     message: {
         display: 'flex',
         alignItems: 'center',
+    },
+    verticalCenter: {
+        position: 'relative',
+        left: 0,
+        right: 0,
+        margin: 'auto'
     }
 });
 
@@ -61,7 +67,7 @@ class SnackbarCustom extends React.Component {
         return (
             ( open && 
                 <SnackbarContent
-                    className={classNames(classes[variant], className)}
+                    className={classNames(classes[variant], className, classes['verticalCenter'])}
                     aria-describedby="client-snackbar"
                     message={
                         <span id="client-snackbar" className={classes.message}>
