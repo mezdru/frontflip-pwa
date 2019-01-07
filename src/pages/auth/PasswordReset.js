@@ -39,23 +39,22 @@ class PasswordReset extends React.Component {
             .then(response => {
                 window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/login/callback', this.props.organisationStore.values.orgTag);
             }).catch(err => {
-            let errorMessage;
-            if (err.status === 422) {
-                err.response.body.errors.forEach(error => {
-                    if (error.param === 'password') {
-                        if (error.type === 'dumb') {
-                            // (frequency over 100 000 passwords, 3 000 000 000 people use internet, 30 000 = 3 000 000 000 / 100 000)
-                            errorMessage = (errorMessage ? errorMessage + '<br/>' : '') + this.props.intl.formatMessage({id: 'signup.error.dumbPassword'}, {dumbCount: (parseInt(error.msg) * 30000).toLocaleString()});
-                        } else {
-                            errorMessage = (errorMessage ? errorMessage + '<br/>' : '') + this.props.intl.formatMessage({id: 'signup.error.shortPassword'});
+                let errorMessage;
+                if (err.status === 422) {
+                    err.response.body.errors.forEach(error => {
+                        if (error.param === 'password') {
+                            if (error.type === 'dumb') {
+                                // (frequency over 100 000 passwords, 3 000 000 000 people use internet, 30 000 = 3 000 000 000 / 100 000)
+                                errorMessage = (errorMessage ? errorMessage + '<br/>' : '') + this.props.intl.formatMessage({id: 'signup.error.dumbPassword'}, {dumbCount: (parseInt(error.msg) * 30000).toLocaleString()});
+                            } else {
+                                errorMessage = (errorMessage ? errorMessage + '<br/>' : '') + this.props.intl.formatMessage({id: 'signup.error.shortPassword'});
+                            }
                         }
-                    }
-                });
-            }
-            
-            if (!errorMessage) this.props.intl.formatMessage({id: 'signup.error.generic'});
-            this.setState({passwordErrors: errorMessage});
-        });
+                    });
+                }
+                if (!errorMessage) this.props.intl.formatMessage({id: 'signup.error.generic'});
+                this.setState({passwordErrors: errorMessage});
+            });
     };
     
     render() {
@@ -84,6 +83,7 @@ class PasswordReset extends React.Component {
                                 fullWidth
                                 variant={"outlined"}
                                 onChange={this.handlePasswordChange}
+                                required
                             />
                         </Grid>
                         <Grid item>

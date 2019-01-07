@@ -8,10 +8,6 @@ import bannerImg from '../../resources/images/fly_away.jpg';
 import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
 
 const styles = {
-    image: {
-        width: '20rem',
-        padding: '1rem'
-    },
     avatar: {
         bottom: '4rem',
         marginBottom: '-4rem'
@@ -42,9 +38,9 @@ class PasswordForgot extends React.Component {
             .then(response => {
                 this.setState({successPasswordReset: true});
             }).catch(err => {
-            this.setState({emailError: this.props.intl.formatMessage({id: 'signin.error.unknown'})});
-            this.setState({successPasswordReset: false});
-        });
+                this.setState({emailError: this.props.intl.formatMessage({id: 'signin.error.unknown'})});
+                this.setState({successPasswordReset: false});
+            });
     };
     
     render() {
@@ -84,6 +80,7 @@ class PasswordForgot extends React.Component {
                                            variant={"outlined"}
                                            fullWidth={true}
                                            onChange={this.handleEmailChange}
+                                           required
                                 />
                             </Grid>
                             <Grid item>

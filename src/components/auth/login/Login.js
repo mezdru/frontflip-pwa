@@ -1,8 +1,7 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {Button, Grid, Paper, TextField, Typography} from '@material-ui/core';
+import {Button, Grid, TextField, Typography} from '@material-ui/core';
 import GoogleButton from "../../utils/buttons/GoogleButton";
-import {ErrorOutline} from '@material-ui/icons';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import UrlService from '../../../services/url.service';
@@ -24,7 +23,7 @@ class Login extends React.Component {
     
     constructor(props) {
         super(props);
-    
+        
         this.state = {
             value: 0,
             successLogin: false,
@@ -63,25 +62,25 @@ class Login extends React.Component {
                     // }else{
                     //     this.setState({redirectTo: '/onboard/wingzy'});
                     // }
-    
+                    
                 } else {
                     this.setState({loginErrors: this.props.intl.formatMessage({id: 'signin.error.generic'})});
                 }
             }).catch((err) => {
                 // Err can have 3 forms : User has no password. || Wrong password. || User does not exists.
                 let errorMessage;
-                if(err.status === 404){
+                if (err.status === 404) {
                     errorMessage = this.props.intl.formatMessage({id: 'signin.error.unknown'});
-                }else if(err.status === 403){
-                    if(err.response.body.error_description === 'Wrong password.'){
+                } else if (err.status === 403) {
+                    if (err.response.body.error_description === 'Wrong password.') {
                         errorMessage = this.props.intl.formatMessage({id: 'signin.error.wrongPassword'}, {forgotPasswordLink: '/' + this.state.locale + '/password/forgot'});
-                    }else{
+                    } else {
                         errorMessage = this.props.intl.formatMessage({id: 'signin.error.noPassword'}, {forgotPasswordLink: '/' + this.state.locale + '/password/forgot'});
                     }
                 }
-                if(!errorMessage) errorMessage = this.props.intl.formatMessage({id: 'signin.error.generic'});
+                if (!errorMessage) errorMessage = this.props.intl.formatMessage({id: 'signin.error.generic'});
                 this.setState({loginErrors: errorMessage});
-        });
+            });
     };
     
     handleGoogleConnect = (e) => {
@@ -93,14 +92,13 @@ class Login extends React.Component {
         let {loginErrors, locale} = this.state;
         let intl = this.props.intl;
         // if (successLogin) return <Redirect to={redirectTo}/>;
-    
-    
+        
         return (
             <form onSubmit={this.handleSubmitForm}>
                 <Grid container item direction='column' spacing={16}>
                     {loginErrors && (
                         <Grid item>
-                            <SnackbarCustom variant="warning" message={loginErrors} />
+                            <SnackbarCustom variant="warning" message={loginErrors}/>
                         </Grid>
                     )}
                     <Grid item>
@@ -121,6 +119,7 @@ class Login extends React.Component {
                             variant={"outlined"}
                             value={values.email}
                             onChange={this.handleEmailChange}
+                            required
                         />
                     </Grid>
                     <Grid item>
@@ -132,6 +131,7 @@ class Login extends React.Component {
                             variant={"outlined"}
                             value={values.password}
                             onChange={this.handlePasswordChange}
+                            required
                         />
                     </Grid>
                     <Grid item>

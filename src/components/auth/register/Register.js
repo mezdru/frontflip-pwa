@@ -1,10 +1,9 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {Typography, TextField, Grid, Button, Paper} from "@material-ui/core";
+import {Button, Grid, TextField, Typography} from "@material-ui/core";
 
 import GoogleButton from "../../utils/buttons/GoogleButton";
-import { ErrorOutline, InfoOutlined } from '@material-ui/icons';
-import {injectIntl, FormattedMessage} from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import UrlService from '../../../services/url.service';
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
@@ -13,7 +12,7 @@ class Register extends React.Component {
     
     constructor() {
         super();
-    
+        
         this.state = {
             value: 0,
             registerErrors: null,
@@ -38,37 +37,36 @@ class Register extends React.Component {
         e.preventDefault();
         this.props.authStore.register()
             .then(() => {
-                if(this.props.organisationStore.values.orgTag){
+                if (this.props.organisationStore.values.orgTag) {
                     this.props.authStore.registerToOrg()
                         .then(() => {
                             this.setState({registerSuccess: true});
                             this.setState({registerSuccessMessage: this.props.intl.formatMessage({id: 'signup.success'})});
                         }).catch((err) => {
-                        this.setState({registerSuccess: true});
-                        this.setState({registerSuccessMessage: this.props.intl.formatMessage({id: 'signup.warning.forbiddenOrg'}, {orgName: this.props.organisationStore.values.organisation.name})});
-                    });
-                }else{
+                            this.setState({registerSuccess: true});
+                            this.setState({registerSuccessMessage: this.props.intl.formatMessage({id: 'signup.warning.forbiddenOrg'}, {orgName: this.props.organisationStore.values.organisation.name})});
+                        });
+                } else {
                     this.setState({registerSuccessMessage: this.props.intl.formatMessage({id: 'signup.success'})});
                     this.setState({registerSuccess: true});
                 }
             }).catch((err) => {
                 let errorMessage;
-                if(err.status === 422){
+                if (err.status === 422) {
                     err.response.body.errors.forEach(error => {
-                        if(error.param === 'password') {
-                            if(error.type === 'dumb'){
+                        if (error.param === 'password') {
+                            if (error.type === 'dumb') {
                                 // (frequency over 100 000 passwords, 3 000 000 000 people use internet, 30 000 = 3 000 000 000 / 100 000)
-                                errorMessage = (errorMessage ? errorMessage + '<br/>': '') + this.props.intl.formatMessage({id: 'signup.error.dumbPassword'}, {dumbCount: (parseInt(error.msg)*30000).toLocaleString()});
-                            }else{
-                                errorMessage = (errorMessage ? errorMessage + '<br/>': '') + this.props.intl.formatMessage({id: 'signup.error.shortPassword'});
+                                errorMessage = (errorMessage ? errorMessage + '<br/>' : '') + this.props.intl.formatMessage({id: 'signup.error.dumbPassword'}, {dumbCount: (parseInt(error.msg) * 30000).toLocaleString()});
+                            } else {
+                                errorMessage = (errorMessage ? errorMessage + '<br/>' : '') + this.props.intl.formatMessage({id: 'signup.error.shortPassword'});
                             }
-                        }else if(error.param === 'email') {
-                            errorMessage = (errorMessage ? errorMessage + '<br/>': '') + this.props.intl.formatMessage({id: 'signup.error.wrongEmail'});
+                        } else if (error.param === 'email') {
+                            errorMessage = (errorMessage ? errorMessage + '<br/>' : '') + this.props.intl.formatMessage({id: 'signup.error.wrongEmail'});
                         }
                     });
                 }
-
-                if(!errorMessage) this.props.intl({id: 'signup.error.generic'});
+                if (!errorMessage) this.props.intl({id: 'signup.error.generic'});
                 this.setState({registerErrors: errorMessage});
             });
     };
@@ -82,17 +80,17 @@ class Register extends React.Component {
         let {registerErrors, registerSuccess, registerSuccessMessage} = this.state;
         let intl = this.props.intl;
         
-        if(registerSuccess){
+        if (registerSuccess) {
             return (
                 <Grid className={'form'} container item direction='column' spacing={16}>
                     <Grid item>
-                        <SnackbarCustom variant="success" message={registerSuccessMessage} />
+                        <SnackbarCustom variant="success" message={registerSuccessMessage}/>
                     </Grid>
                 </Grid>
             )
-        }else{
+        } else {
             return (
-                <form onSubmit={this.handleSubmitForm} >
+                <form onSubmit={this.handleSubmitForm}>
                     <Grid className={'form'} container item direction='column' spacing={16}>
                         {registerErrors && (
                             <Grid item>
@@ -117,6 +115,7 @@ class Register extends React.Component {
                                 fullWidth
                                 value={values.email}
                                 onChange={this.handleEmailChange}
+                                required
                             />
                         </Grid>
                         <Grid item>
@@ -128,6 +127,7 @@ class Register extends React.Component {
                                 fullWidth
                                 value={values.password}
                                 onChange={this.handlePasswordChange}
+                                required
                             />
                         </Grid>
                         <Grid item>
