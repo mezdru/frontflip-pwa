@@ -93,7 +93,6 @@ class AuthStore {
             .catch(action((err) => {
                 // any other response status than 20X is an error
                 this.errors = err.response && err.response.body && err.response.body.errors;
-                console.log(JSON.stringify(err));
                 throw err;
             }))
             .finally(action(() => {this.inProgress = false; }));

@@ -7,6 +7,7 @@ import { ErrorOutline, InfoOutlined } from '@material-ui/icons';
 import {injectIntl, FormattedMessage} from 'react-intl';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import UrlService from '../../../services/url.service';
+import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 
 class Register extends React.Component {
     
@@ -85,10 +86,7 @@ class Register extends React.Component {
             return (
                 <Grid className={'form'} container item direction='column' spacing={16}>
                     <Grid item>
-                        <Paper>
-                            <InfoOutlined/>  <br/>
-                            <span dangerouslySetInnerHTML={{__html: registerSuccessMessage}}></span>
-                        </Paper>
+                        <SnackbarCustom variant="success" message={registerSuccessMessage} />
                     </Grid>
                 </Grid>
             )
@@ -98,10 +96,7 @@ class Register extends React.Component {
                     <Grid className={'form'} container item direction='column' spacing={16}>
                         {registerErrors && (
                             <Grid item>
-                                <Paper>
-                                    <ErrorOutline/>  <br/>
-                                    <span dangerouslySetInnerHTML={{__html: registerErrors}}></span>
-                                </Paper>
+                                <SnackbarCustom variant="error" message={registerErrors}/>
                             </Grid>
                         )}
                         <Grid item>

@@ -6,6 +6,7 @@ import {ErrorOutline} from '@material-ui/icons';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import UrlService from '../../../services/url.service';
+import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 
 // const styles = theme => ({
 //     root: {
@@ -99,10 +100,7 @@ class Login extends React.Component {
                 <Grid container item direction='column' spacing={16}>
                     {loginErrors && (
                         <Grid item>
-                            <Paper>
-                                <ErrorOutline/> <br/>
-                                <span dangerouslySetInnerHTML={{__html: loginErrors}}></span>
-                            </Paper>
+                            <SnackbarCustom variant="error" message={loginErrors} />
                         </Grid>
                     )}
                     <Grid item>
