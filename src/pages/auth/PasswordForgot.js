@@ -5,6 +5,7 @@ import {ErrorOutline, InfoOutlined} from '@material-ui/icons';
 import {FormattedHTMLMessage, FormattedMessage, injectIntl} from 'react-intl';
 
 import mdpImg from '../../resources/images/birdFly.png';
+import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
 
 const styles = {
     image: {
@@ -45,12 +46,13 @@ class PasswordForgot extends React.Component {
     render() {
         let {values} = this.props.authStore;
         let {successPasswordReset, emailError} = this.state;
+        let {intl} = this.props;
         
         if (successPasswordReset) {
             return (
                 <Grid container item xs={12} sm={6} lg={4} spacing={16}>
                     <Grid item container justify={"center"}>
-                        <Paper><InfoOutlined/> <br/><FormattedHTMLMessage id="password.forgot.success"/></Paper>
+                        <SnackbarCustom variant="success" message={intl.formatMessage({id: 'password.forgot.success'})} />
                     </Grid>
                 </Grid>
             );
@@ -63,10 +65,7 @@ class PasswordForgot extends React.Component {
                     <Grid item container justify={"center"}>
                         <Typography variant="h6"><FormattedHTMLMessage id="password.forgot.intro"/></Typography>
                         {emailError && (
-                            <Paper>
-                                <ErrorOutline/> <br/>
-                                <span dangerouslySetInnerHTML={{__html: emailError}}></span>
-                            </Paper>
+                            <SnackbarCustom variant="error" message={emailError}/>
                         )}
                     </Grid>
                     <Grid item container direction={"column"} justify={"center"}>
@@ -83,7 +82,7 @@ class PasswordForgot extends React.Component {
                                     />
                                 </Grid>
                                 <Grid item>
-                                    <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="Reset your password"/></Button>
+                                    <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="password.forgot.send"/></Button>
                                 </Grid>
                             </Grid>
                         </form>

@@ -7,6 +7,7 @@ import {FormattedMessage, injectIntl, FormattedHTMLMessage} from 'react-intl';
 import UrlService from '../../services/url.service';
 
 import mdpImg from '../../resources/images/butterflyCatch.png';
+import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
 
 const styles = {
     image: {
@@ -71,10 +72,7 @@ class PasswordReset extends React.Component {
                     <Grid container item justify={"center"}>
                     <Typography variant="h6"><FormattedHTMLMessage id="password.new.intro" values={{userEmail: values.email}}/></Typography>
                         {passwordErrors && (
-                            <Paper>
-                                <ErrorOutline/> <br/>
-                                <span dangerouslySetInnerHTML={{__html: passwordErrors}}></span>
-                            </Paper>
+                            <SnackbarCustom variant='error' message={passwordErrors} />
                         )}
                     </Grid>
                     <Grid item container direction={"column"} justify={"center"}>
@@ -91,7 +89,7 @@ class PasswordReset extends React.Component {
                                     />
                                 </Grid>
                                 <Grid container item>
-                                    <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="Change password"/></Button>
+                                    <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="password.new.create"/></Button>
                                 </Grid>
                             </Grid>
                         </form>
