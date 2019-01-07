@@ -49,15 +49,14 @@ class SnackbarCustom extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: true,
-            message: props.message
+            open: true
         };
     }
 
     render() {
-        const {classes, className, onClose, variant, ...other} = this.props;
+        const {classes, className, onClose, variant, message, ...other} = this.props;
         const Icon = variantIcon[variant];
-        const {open, message } = this.state;
+        const {open } = this.state;
         
         return (
             ( open && 
