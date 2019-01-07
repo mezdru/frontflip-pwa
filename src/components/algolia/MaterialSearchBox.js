@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/lib/Async';
 import commonStore from '../../stores/common.store';
 import { connectAutoComplete } from 'react-instantsearch-dom';
+import './MaterialSearchBox.css';
 
 const propTypes = {
   searchApiUrl: PropTypes.string.isRequired,
@@ -98,6 +99,7 @@ class SearchableSelect extends Component {
     return (
       <AsyncSelect
         cacheOptions
+        className='hide-options'
         value={selectedOption}
         noOptionsMessage={this.noOptionsMessage}
         getOptionValue={this.getOptionValue}
