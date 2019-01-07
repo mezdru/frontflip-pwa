@@ -1,14 +1,16 @@
 import React from 'react'
 import {inject, observer} from 'mobx-react';
 import {Link} from 'react-router-dom'
-import {Button, Grid, Paper, TextField, withStyles} from "@material-ui/core";
+import {Button, Grid, Paper, TextField, withStyles, Typography} from "@material-ui/core";
 import {ErrorOutline, InfoOutlined} from '@material-ui/icons';
 import {FormattedMessage, injectIntl, FormattedHTMLMessage} from 'react-intl';
 import UrlService from '../../services/url.service';
 
+import mdpImg from '../../resources/images/butterflyCatch.png';
+
 const styles = {
     image: {
-        width: '12rem',
+        width: '20rem',
         padding: '1rem'
     }
 };
@@ -62,9 +64,12 @@ class PasswordReset extends React.Component {
         let intl = this.props.intl;
         
             return (
-                <Grid container direction={"column"} justify={"center"} alignItems={"center"} xs={12} sm={4} spacing={16}>
+            <Grid container item xs={12} sm={6} lg={4} spacing={16}>
+                <Grid item container justify={"center"} alignItems={"center"}>
+                    <img src={mdpImg} alt="mdp" className={this.props.classes.image}/>
+                </Grid>
                     <Grid container item justify={"center"}>
-                        <FormattedHTMLMessage id="password.new.intro" values={{userEmail: values.email}}/>
+                    <Typography variant="h6"><FormattedHTMLMessage id="password.new.intro" values={{userEmail: values.email}}/></Typography>
                         {passwordErrors && (
                             <Paper>
                                 <ErrorOutline/> <br/>

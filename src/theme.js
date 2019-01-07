@@ -93,7 +93,13 @@ export default createMuiTheme({
             root: {
                 padding: '16px'
             }
-        }
+        },
+        MuiTypography: {
+            root: {
+                display: 'block',
+                padding: 8,
+            }
+        },
     },
     props: {
         MuiButton: {

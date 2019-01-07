@@ -1,14 +1,14 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {Button, Grid, Paper, TextField, withStyles} from "@material-ui/core";
-import {InfoOutlined, ErrorOutline} from '@material-ui/icons';
-import {FormattedMessage, FormattedHTMLMessage, injectIntl} from 'react-intl';
+import {Button, Grid, Paper, TextField, withStyles, Typography} from "@material-ui/core";
+import {ErrorOutline, InfoOutlined} from '@material-ui/icons';
+import {FormattedHTMLMessage, FormattedMessage, injectIntl} from 'react-intl';
 
 import mdpImg from '../../resources/images/birdFly.png';
 
 const styles = {
     image: {
-        width: '12rem',
+        width: '20rem',
         padding: '1rem'
     }
 };
@@ -61,7 +61,7 @@ class PasswordForgot extends React.Component {
                         <img src={mdpImg} alt="mdp" className={this.props.classes.image}/>
                     </Grid>
                     <Grid item container justify={"center"}>
-                        <p><FormattedHTMLMessage id="password.forgot.intro"/></p>
+                        <Typography variant="h6"><FormattedHTMLMessage id="password.forgot.intro"/></Typography>
                         {emailError && (
                             <Paper>
                                 <ErrorOutline/> <br/>
