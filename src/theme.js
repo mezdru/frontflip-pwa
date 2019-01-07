@@ -78,6 +78,9 @@ export default createMuiTheme({
                 [`& fieldset`]: {
                     borderRadius: 30
                 },
+            },
+            input: {
+                borderRadius: 30,
             }
         },
         MuiTab: {
