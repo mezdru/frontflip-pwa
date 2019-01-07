@@ -93,8 +93,53 @@ class SearchableSelect extends Component {
   render() {
     const { defaultOptions, placeholder } = this.props;
     const { selectedOption } = this.state;
+
+    const customStyles = {
+      control: (base, state) => ({
+        ...base,
+        // match with the menu
+        borderRadius: '30px',
+        // Overwrittes the different states of border
+        border: state.isFocused ? "2px solid #dd362e" : "1px solid black",
+        // borderColor: state.isFocused ? "#dd362e" : "black",
+        // Removes weird border around container
+        boxShadow: state.isFocused ? null : null,
+        "&:hover": {
+          // Overwrittes the different states of border
+          borderColor: state.isFocused ? "#dd362e" : "black"
+        },
+        padding: '10px 8px 10px 8px',
+        fontSize: '16px'
+      }),
+      menu: base => ({
+        ...base,
+        // override border radius to match the box
+        borderRadius: '30px',
+        overflow:'hidden',
+        // beautify the word cut by adding a dash see https://caniuse.com/#search=hyphens for the compatibility
+        hyphens: "auto",
+        // kill the gap
+        // marginTop: 0,
+        textAlign: "center",
+        // prevent menu to scroll y
+        wordWrap: "break-word"
+      }),
+      menuList: base => ({
+        ...base,
+        // kill the white space on first and last option
+        padding: 0
+      }),
+      input: base => ({
+        ...base,
+        padding: 0
+      }),
+    };
+  
+
+
     return (
       <AsyncSelect
+      styles={customStyles}
         className='autocomplete-search'
         value={selectedOption}
         noOptionsMessage={this.noOptionsMessage}

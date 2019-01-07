@@ -7,5 +7,9 @@
 }
 
 .autocomplete-search {
-    border-radius: 30px;
+    position: relative;
+    left:0;
+    right:0;
+    margin:auto;
+    width: 50%;
 }
