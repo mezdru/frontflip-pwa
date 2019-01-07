@@ -95,7 +95,7 @@ class SearchableSelect extends Component {
     const { selectedOption } = this.state;
     return (
       <AsyncSelect
-        className='hide-options'
+        className='autocomplete-search'
         value={selectedOption}
         noOptionsMessage={this.noOptionsMessage}
         getOptionValue={this.getOptionValue}

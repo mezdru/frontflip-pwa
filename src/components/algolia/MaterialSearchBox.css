@@ -5,3 +5,7 @@
 .hide-options .Select-menu-outer {
     display: none;
 }
+
+.autocomplete-search {
+    border-radius: 30px;
+}
