@@ -101,7 +101,8 @@ class App extends Component {
                 open={isMobileMenuOpen}
                 onClose={this.handleMobileMenuClose}
             >
-                <MenuItem onClick={this.handleProfileMenuOpen}>
+                <MenuItem>
+                
                     <IconButton color="inherit">
                         <AccountCircle/>
                     </IconButton>
