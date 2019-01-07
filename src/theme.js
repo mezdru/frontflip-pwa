@@ -98,9 +98,10 @@ export default createMuiTheme({
             }
         },
         MuiTypography: {
-            root: {
+            h6: {
                 display: 'block',
                 padding: 8,
+                fontFamily: '"Open sans"',
             }
         },
     },
