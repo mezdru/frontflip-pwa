@@ -43,9 +43,7 @@ class SearchableSelect extends Component {
       }else if(hit.type === 'person'){
         displayedName = hit.name || hit.tag;
       }
-      console.log('displayed name : ' + displayedName);
       arrayOfLabel.push({label: displayedName, value: hit.tag});
-      console.log('next');
     });
     console.log('number of options returned : ' + arrayOfLabel.length);
     return arrayOfLabel;
@@ -70,35 +68,26 @@ class SearchableSelect extends Component {
       selectedOption.forEach(option => {
         optionsString += option.label + ' ';
       });
-    }
-    
-    console.log('option selected : ' + optionsString);
+    }    
     this.props.refine(optionsString);
   }
 
   async getOptions(inputValue) {
-    // console.log('get options with inputvalue : ' + inputValue);
     await this.props.refine(inputValue);
     console.log('number of options : ' + this.props.hits.length);
     return this.prepareLabels(this.props.hits);
   }
 
+  // Handle input change (any change)
   handleInputChange(inputValue) {
-    // console.log('selected option in handle input change : ' + JSON.stringify(this.state.selectedOption));
     if((!inputValue || inputValue === '') && (!this.state.selectedOption || this.state.selectedOption.length === 0)){
-      // console.log('reset');
       this.props.refine();
     } 
-    // this.refineWithSelectedOptions(this.state.selectedOption);
     return inputValue;
   }
 
   noOptionsMessage(inputValue) {
-    if (this.props.hits.length) return 'No results';
-    if (!inputValue) {
-      return 'Type something to get options';
-    }
-    return 'No results';
+    return 'No results' + (inputValue.inputValue ? ' for: ' + inputValue.inputValue : '');
   }
 
   render() {
