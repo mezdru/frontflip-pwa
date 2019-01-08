@@ -66,8 +66,6 @@ class AuthStore {
             })
             .catch(action((err) => {
                 this.errors = err.response && err.response.body && err.response.body.errors;
-                console.log(JSON.stringify(err));
-                console.log(err.response.body.error_description);
                 throw err;
             }))
             .finally(action(()=> { this.inProgress = false; }));

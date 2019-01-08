@@ -7,6 +7,7 @@ import {FormattedMessage, injectIntl} from 'react-intl';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import UrlService from '../../../services/url.service';
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
+import commonStore from '../../../stores/common.store';
 
 class Register extends React.Component {
     
@@ -17,7 +18,8 @@ class Register extends React.Component {
             value: 0,
             registerErrors: null,
             registerSuccess: false,
-            registerSuccessMessage: ''
+            registerSuccessMessage: '',
+            locale: commonStore.locale || commonStore.getCookie('locale')
         };
     }
     
@@ -65,8 +67,10 @@ class Register extends React.Component {
                             errorMessage = (errorMessage ? errorMessage + '<br/>' : '') + this.props.intl.formatMessage({id: 'signup.error.wrongEmail'});
                         }
                     });
+                }else if(err.status === 400 && err.response.body.message === 'User already exists.'){
+                    errorMessage = this.props.intl.formatMessage({id: 'signup.error.userExists'}, {forgotPasswordLink: '/' + this.state.locale + '/password/forgot'});
                 }
-                if (!errorMessage) this.props.intl.formatMessage({id: 'signup.error.generic'});
+                if (!errorMessage) errorMessage = this.props.intl.formatMessage({id: 'signup.error.generic'});
                 this.setState({registerErrors: errorMessage});
             });
     };
@@ -149,7 +153,7 @@ class Register extends React.Component {
     };
 }
 
-export default inject('authStore', 'userStore', 'organisationStore')(
+export default inject('authStore', 'userStore', 'organisationStore', 'commonStore')(
     injectIntl(observer(
         Register
     ))
