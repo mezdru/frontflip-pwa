@@ -58,6 +58,9 @@ export default createMuiTheme({
                 zIndex: 999,
                 backgroundColor:'white',
             },
+            img: {
+                height:'auto',
+            }
         },
         MuiButton: {
             root: {
