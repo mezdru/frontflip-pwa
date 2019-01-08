@@ -77,6 +77,7 @@ class App extends Component {
         const isMenuOpen = Boolean(anchorEl);
         const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
         const {classes} = this.props;
+        const {locale} = this.props.commonStore;
         
         if (successLogout) return <Redirect to='/'/>;
         
@@ -115,9 +116,8 @@ class App extends Component {
                     <Button variant={"text"} color="inherit" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/pricing', undefined)} className={classes.menuLink}>
                         <FormattedMessage id="Pricing"/>
                     </Button>
-                    <Button variant={"text"} color="inherit" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/pricing', undefined)} className={classes.menuLink}>
-                        <FormattedMessage id="Pricing"/>
-                    </Button>
+                </MenuItem>
+                <MenuItem>
                     <Button variant={"text"} color="inherit" href={"/" + locale}>
                         <FormattedMessage id="Sign In"/>
                     </Button>
