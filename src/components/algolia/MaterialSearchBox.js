@@ -99,6 +99,7 @@ class SearchableSelect extends Component {
         ...base,
         // match with the menu
         borderRadius: '30px',
+        boxSizing: 'content-box',
         // Overwrittes the different states of border
         border: state.isFocused ? "2px solid #dd362e" : "1px solid black",
         // borderColor: state.isFocused ? "#dd362e" : "black",

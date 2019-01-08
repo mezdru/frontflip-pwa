@@ -51,20 +51,22 @@ class OrganisationStore {
     }
 
     getOrganisationForPublic() {
-        this.inProgress = true;
-        this.errors = null;
-
-        return agent.Organisation.getForPublic(this.values.orgTag)
-            .then(data => { 
-                if(data) this.setOrganisation(data.organisation);
-                return this.values.organisation;
-            })
-            .catch(action((err) => {
-                this.errors = err.response && err.response.body && err.response.body.errors;
-                console.log(err);
-                throw err;
-            }))
-            .finally(action(()=> { this.inProgress = false; }));
+        if(this.values.orgTag) {
+            this.inProgress = true;
+            this.errors = null;
+    
+            return agent.Organisation.getForPublic(this.values.orgTag)
+                .then(data => { 
+                    if(data) this.setOrganisation(data.organisation);
+                    return this.values.organisation;
+                })
+                .catch(action((err) => {
+                    this.errors = err.response && err.response.body && err.response.body.errors;
+                    console.log(err);
+                    throw err;
+                }))
+                .finally(action(()=> { this.inProgress = false; }));
+        }
     }
 
     isKeyStillValid() {
