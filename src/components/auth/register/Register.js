@@ -66,7 +66,7 @@ class Register extends React.Component {
                         }
                     });
                 }
-                if (!errorMessage) this.props.intl({id: 'signup.error.generic'});
+                if (!errorMessage) this.props.intl.formatMessage({id: 'signup.error.generic'});
                 this.setState({registerErrors: errorMessage});
             });
     };

@@ -16,7 +16,7 @@
     "signin.error.generic": "Sorry, we could not sign you in. Please check your email and password :)",
     "signin.error.unknown": "We don't know this email, sorry...",
     "signin.error.wrongPassword": "Wrong password, can you try again or <a href={forgotPasswordLink}>create a new password</a> ?",
-    "signin.error.noPassword": "Please <a href={forgotPasswordLink}>create a new password ?</a> to secure your account!",
+    "signin.error.noPassword": "Please <a href={forgotPasswordLink}>create a new password</a> to secure your account!",
     "signup.error.wrongEmail": "Your email does not seem right, can you try again ?",
     "signup.error.shortPassword": "Your password is too short, can you make it 6 signs or more ?",
     "signup.error.dumbPassword": "Your password is too simple: <strong>{dumbCount}</strong> people have the same! Can you make it harder to guess?",

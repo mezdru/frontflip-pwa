@@ -48,15 +48,6 @@ class PasswordForgot extends React.Component {
         let {successPasswordReset, emailError} = this.state;
         let {intl} = this.props;
         
-        if (successPasswordReset) {
-            return (
-                <Grid container item xs={12} sm={6} lg={4} spacing={16}>
-                    <Grid item container justify={"center"}>
-                        <SnackbarCustom variant="success" message={intl.formatMessage({id: 'password.forgot.success'})}/>
-                    </Grid>
-                </Grid>
-            );
-        } else {
             return (
                 <Grid container direction={"column"} justify={"space-around"}>
                     <Grid container item alignItems={"stretch"}>
@@ -65,32 +56,42 @@ class PasswordForgot extends React.Component {
                     <Grid container item justify={"center"}>
                         <Avatar src={'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg'} alt="org-logo" className={this.props.classes.avatar}/>
                     </Grid>
-                    <form onSubmit={this.handleSubmitForm}>
-                        <Grid item container direction={'column'} xs={12} sm={6} lg={4} spacing={16}>
-                            <Typography variant="h6"><FormattedHTMLMessage id="password.forgot.intro"/></Typography>
-                            {emailError && (
-                                <Grid item>
-                                    <SnackbarCustom variant="warning" message={emailError}/>
-                                </Grid>
-                            )}
-                            <Grid item>
-                                <TextField label="Email"
-                                           type="email"
-                                           autoComplete="email"
-                                           variant={"outlined"}
-                                           fullWidth={true}
-                                           onChange={this.handleEmailChange}
-                                           required
-                                />
-                            </Grid>
-                            <Grid item>
-                                <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="password.forgot.send"/></Button>
+                    {successPasswordReset && (
+                        <Grid container item xs={12} sm={6} lg={4} spacing={16}>
+                            <Grid item container justify={"center"}>
+                                <SnackbarCustom variant="success" message={intl.formatMessage({id: 'password.forgot.success'})}/>
                             </Grid>
                         </Grid>
-                    </form>
+                    )}
+
+                    {!successPasswordReset && (
+                        <form onSubmit={this.handleSubmitForm}>
+                            <Grid item container direction={'column'} xs={12} sm={6} lg={4} spacing={16}>
+                                <Typography variant="h6"><FormattedHTMLMessage id="password.forgot.intro"/></Typography>
+                                {emailError && (
+                                    <Grid item>
+                                        <SnackbarCustom variant="warning" message={emailError}/>
+                                    </Grid>
+                                )}
+                                <Grid item>
+                                    <TextField label="Email"
+                                               type="email"
+                                               autoComplete="email"
+                                               variant={"outlined"}
+                                               fullWidth={true}
+                                               onChange={this.handleEmailChange}
+                                               required
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="password.forgot.send"/></Button>
+                                </Grid>
+                            </Grid>
+                        </form>
+                    )}
+
                 </Grid>
             );
-        }
     }
 }
 
