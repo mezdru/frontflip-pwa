@@ -11,10 +11,6 @@ export const styles = theme => ({
     flexGrow: 1,
   },
   title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
     lineHeight: '50%',
   },
   sectionDesktop: {

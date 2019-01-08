@@ -4,7 +4,8 @@ import {withStyles} from "@material-ui/core";
 import {inject, observer} from "mobx-react";
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {CssBaseline, IconButton, Menu, MenuItem} from '@material-ui/core';
+import {CssBaseline, IconButton, Menu, MenuItem, Button} from '@material-ui/core';
+import {FormattedMessage} from 'react-intl';
 import {AccountCircle} from '@material-ui/icons';
 import {BrowserRouter, Link, Redirect} from "react-router-dom";
 import './components/header/header.css';
@@ -101,11 +102,19 @@ class App extends Component {
                 open={isMobileMenuOpen}
                 onClose={this.handleMobileMenuClose}
             >
-                <MenuItem onClick={this.handleProfileMenuOpen}>
-                    <IconButton color="inherit">
+                <MenuItem>
+                <Button variant={"text"} color="inherit" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '', undefined)} className={classes.menuLink}>
+                        <FormattedMessage id="Why Wingzy ?" />
+                    </Button>
+                    {/* <IconButton color="inherit">
                         <AccountCircle/>
                     </IconButton>
-                    <Link to='/profile' className={classes.menuLink}>Profile</Link>
+                    <Link to='/profile' className={classes.menuLink}>Profile</Link> */}
+                </MenuItem>
+                <MenuItem>
+                <Button variant={"text"} color="inherit" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/pricing', undefined)} className={classes.menuLink}>
+                        <FormattedMessage id="Pricing"/>
+                    </Button>
                 </MenuItem>
             </Menu>
         );
