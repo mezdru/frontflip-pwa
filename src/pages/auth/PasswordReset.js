@@ -3,7 +3,7 @@ import {inject, observer} from 'mobx-react';
 import {Avatar, Button, Grid, TextField, Typography, withStyles} from "@material-ui/core";
 import {FormattedHTMLMessage, FormattedMessage, injectIntl} from 'react-intl';
 import UrlService from '../../services/url.service';
-
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Banner from '../../components/utils/banner/Banner';
 import bannerImg from '../../resources/images/fly_away.jpg';
 import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
@@ -58,7 +58,7 @@ class PasswordReset extends React.Component {
     };
     
     render() {
-        const {values} = this.props.authStore;
+        const {values, inProgress} = this.props.authStore;
         let {passwordErrors} = this.state;
         let intl = this.props.intl;
         
@@ -87,7 +87,16 @@ class PasswordReset extends React.Component {
                             />
                         </Grid>
                         <Grid item>
-                            <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="password.new.create"/></Button>
+                            {
+                                inProgress && (
+                                    <CircularProgress color="primary"/>
+                                )
+                            }
+                            {
+                                !inProgress && (
+                                    <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="password.new.create"/></Button>
+                                )
+                            }
                         </Grid>
                     </Grid>
                 </form>
