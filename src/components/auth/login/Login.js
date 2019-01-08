@@ -31,6 +31,8 @@ class Login extends React.Component {
             loginErrors: null,
             locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
         };
+
+        console.log('current env = ' + process.env.NODE_ENV);
     }
     
     componentWillUnmount = () => {
