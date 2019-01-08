@@ -56,6 +56,7 @@ export default createMuiTheme({
                 height: '6rem',
                 boxShadow: '0 5px 15px -1px darkgrey, 0 0 0 5px transparent',
                 zIndex: 999,
+                backgroundColor:'white',
             },
         },
         MuiButton: {
