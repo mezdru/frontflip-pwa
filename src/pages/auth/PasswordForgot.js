@@ -1,15 +1,16 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {Button, Grid, Paper, TextField, withStyles} from "@material-ui/core";
-import {InfoOutlined, ErrorOutline} from '@material-ui/icons';
-import {FormattedMessage, FormattedHTMLMessage, injectIntl} from 'react-intl';
+import {Avatar, Button, Grid, TextField, Typography, withStyles} from "@material-ui/core";
+import {FormattedHTMLMessage, FormattedMessage, injectIntl} from 'react-intl';
 
-import mdpImg from '../../resources/images/birdFly.png';
+import Banner from '../../components/utils/banner/Banner';
+import bannerImg from '../../resources/images/fly_away.jpg';
+import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
 
 const styles = {
-    image: {
-        width: '12rem',
-        padding: '1rem'
+    avatar: {
+        bottom: '4rem',
+        marginBottom: '-4rem'
     }
 };
 
@@ -45,52 +46,52 @@ class PasswordForgot extends React.Component {
     render() {
         let {values} = this.props.authStore;
         let {successPasswordReset, emailError} = this.state;
+        let {intl} = this.props;
         
-        if (successPasswordReset) {
             return (
-                <Grid container item xs={12} sm={6} lg={4} spacing={16}>
-                    <Grid item container justify={"center"}>
-                        <Paper><InfoOutlined/> <br/><FormattedHTMLMessage id="password.forgot.success"/></Paper>
+                <Grid container direction={"column"} justify={"space-around"}>
+                    <Grid container item alignItems={"stretch"}>
+                        <Banner src={bannerImg}/>
                     </Grid>
-                </Grid>
-            );
-        } else {
-            return (
-                <Grid container item xs={12} sm={6} lg={4} spacing={16}>
-                    <Grid item container justify={"center"} alignItems={"center"}>
-                        <img src={mdpImg} alt="mdp" className={this.props.classes.image}/>
+                    <Grid container item justify={"center"}>
+                        <Avatar src={'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg'} alt="org-logo" className={this.props.classes.avatar}/>
                     </Grid>
-                    <Grid item container justify={"center"}>
-                        <p><FormattedHTMLMessage id="password.forgot.intro"/></p>
-                        {emailError && (
-                            <Paper>
-                                <ErrorOutline/> <br/>
-                                <span dangerouslySetInnerHTML={{__html: emailError}}></span>
-                            </Paper>
-                        )}
-                    </Grid>
-                    <Grid item container direction={"column"} justify={"center"}>
+                    {successPasswordReset && (
+                        <Grid container item xs={12} sm={6} lg={4} spacing={16}>
+                            <Grid item container justify={"center"}>
+                                <SnackbarCustom variant="success" message={intl.formatMessage({id: 'password.forgot.success'})}/>
+                            </Grid>
+                        </Grid>
+                    )}
+
+                    {!successPasswordReset && (
                         <form onSubmit={this.handleSubmitForm}>
-                            <Grid item container direction={"column"} spacing={16}>
-                                <Grid item style={{height: '88px'}}>
+                            <Grid item container direction={'column'} xs={12} sm={6} lg={4} spacing={16}>
+                                <Typography variant="h6"><FormattedHTMLMessage id="password.forgot.intro"/></Typography>
+                                {emailError && (
+                                    <Grid item>
+                                        <SnackbarCustom variant="warning" message={emailError}/>
+                                    </Grid>
+                                )}
+                                <Grid item>
                                     <TextField label="Email"
                                                type="email"
                                                autoComplete="email"
-                                               margin="normal"
                                                variant={"outlined"}
                                                fullWidth={true}
                                                onChange={this.handleEmailChange}
+                                               required
                                     />
                                 </Grid>
                                 <Grid item>
-                                    <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="Reset your password"/></Button>
+                                    <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="password.forgot.send"/></Button>
                                 </Grid>
                             </Grid>
                         </form>
-                    </Grid>
+                    )}
+
                 </Grid>
             );
-        }
     }
 }
 

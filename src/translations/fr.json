@@ -8,7 +8,7 @@
     "Sign Up": "Inscription",
     "If you have an account on Wingzy, we have send you an email to reset your password.": "Si vous êtes inscrit sur Wingzy, nous vous avons envoyé un mail pour créer un nouveau mot de passe.",
     "You forgot your password or didn't have one yet ? Don't worry ! You can ask for a reset": "Vous avez oublié votre mot de passe ou vous n'en avez pas ? Pas d'inquiétude ! Vous pouvez nous demander d'en recréer un",
-    "Reset your password": "Envoyez moi un mail de récupération",
+    "password.forgot.send": "Envoyer l'email",
     "You can now choose a new password": "Vous pouvez choisir un nouveau mot de passe",
     "Change password": "Modifier mon mot de passe",
     "Why Wingzy ?": "Pourquoi Wingzy ?",
@@ -23,7 +23,9 @@
     "signup.warning.forbiddenOrg": "<strong>Désolé</strong>, vous ne pouvez pas rejoindre le Wingzy de {orgName}. Vous avez besoin d'une invitation, ou du bon domaine email.<br/>Merci pour l'inscription quand même ! Nous venons de vous envoyer un email pour confirmer votre adresse, vérifiez votre boite de réception...",
     "signup.success": "<strong>Merci</strong> pour l'inscription ! Nous venons de vous envoyer un email pour confirmer votre adresse, vérifiez votre boite de réception...",
     "signup.error.generic": "Mince. Il y a eu une erreur imprévue de notre part. Essayez de rafraichir la page s'il vous plait.",
-    "password.forgot.intro": "Pas de mot de passe ? Mot de passe oublié ? Nous allons vous envoyer un email pour créer un nouveau mot de passe.",
+    "signup.error.userExists": "Un utilisateur existe déjà avec cette adresse email. Essayez de vous connecter ou <a href={forgotPasswordLink}>créez un nouveau mot de passe</a>",
+    "password.forgot.intro": "Pas de mot de passe&nbsp;? Mot de passe oublié&nbsp;? Nous allons vous envoyer un email pour créer un nouveau mot de passe.",
     "password.new.intro": "Créez un nouveau mot de passe pour sécuriser votre compte Wingzy <strong>{userEmail}</strong>.",
-    "password.forgot.success": "Nous vous avons envoyé un email pour créer un nouveau mot de passe."
+    "password.forgot.success": "Nous vous avons envoyé un email pour créer un nouveau mot de passe.",
+    "password.new.create": "Créer un nouveau mot de passe"
 }

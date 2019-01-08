@@ -11,10 +11,6 @@ export const styles = theme => ({
     flexGrow: 1,
   },
   title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
     lineHeight: '50%',
   },
   sectionDesktop: {
@@ -34,7 +30,7 @@ export const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    background: 'transparent',
+    background: 'white',
       height: '64px',
     boxShadow: 'none !important',
     borderTop: '10px solid #dd362e',

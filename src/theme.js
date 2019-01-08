@@ -56,7 +56,11 @@ export default createMuiTheme({
                 height: '6rem',
                 boxShadow: '0 5px 15px -1px darkgrey, 0 0 0 5px transparent',
                 zIndex: 999,
+                backgroundColor:'white',
             },
+            img: {
+                height:'auto',
+            }
         },
         MuiButton: {
             root: {
@@ -78,6 +82,9 @@ export default createMuiTheme({
                 [`& fieldset`]: {
                     borderRadius: 30
                 },
+            },
+            input: {
+                borderRadius: 30,
             }
         },
         MuiTab: {
@@ -93,7 +100,14 @@ export default createMuiTheme({
             root: {
                 padding: '16px'
             }
-        }
+        },
+        MuiTypography: {
+            h6: {
+                display: 'block',
+                padding: 8,
+                fontFamily: '"Open sans"',
+            }
+        },
     },
     props: {
         MuiButton: {

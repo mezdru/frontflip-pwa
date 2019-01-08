@@ -43,40 +43,42 @@ const styles = theme => ({
         display: 'flex',
         alignItems: 'center',
     },
+    verticalCenter: {
+        position: 'relative',
+        left: 0,
+        right: 0,
+        margin: 'auto'
+    }
 });
 
 class SnackbarCustom extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            open: true
+        };
     }
-    
+
     render() {
-        const {classes, className, message, onClose, variant, ...other} = this.props;
+        const {classes, className, onClose, variant, message, ...other} = this.props;
         const Icon = variantIcon[variant];
+        const {open } = this.state;
         
         return (
-            <SnackbarContent
-                className={classNames(classes[variant], className)}
-                aria-describedby="client-snackbar"
-                message={
-                    <span id="client-snackbar" className={classes.message}>
-            <Icon className={classNames(classes.icon, classes.iconVariant)}/>
-                        {message}
-          </span>
-                }
-                action={[
-                    <IconButton
-                        key="close"
-                        aria-label="Close"
-                        color="inherit"
-                        className={classes.close}
-                        onClick={onClose}
-                    >
-                        <CloseIcon className={classes.icon}/>
-                    </IconButton>,
-                ]}
-                {...other}
-            />
+            ( open && 
+                <SnackbarContent
+                    className={classNames(classes[variant], className, classes['verticalCenter'])}
+                    aria-describedby="client-snackbar"
+                    message={
+                        <span id="client-snackbar" className={classes.message}>
+                            <Icon className={classNames(classes.icon, classes.iconVariant)}/>
+                            <span dangerouslySetInnerHTML={{ __html: message }}></span>
+                        </span>
+                    }
+                    {...other}
+                />
+            )
+            
         );
     }
 }

@@ -9,7 +9,7 @@ class UrlService {
 
     checkEnv() {
         this.env = process.env.NODE_ENV;
-        if( window.location.href.search('staging') !== '-1') {
+        if( window.location.href.search('staging') !== -1) {
             this.env = 'staging';
         }
     }
