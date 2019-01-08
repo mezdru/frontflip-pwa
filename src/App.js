@@ -103,7 +103,7 @@ class App extends Component {
                 onClose={this.handleMobileMenuClose}
             >
                 <MenuItem>
-                <Button variant={"text"} color="inherit" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '', undefined)} className={classes.menuLink}>
+                    <Button variant={"text"} color="inherit" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '', undefined)} className={classes.menuLink}>
                         <FormattedMessage id="Why Wingzy ?" />
                     </Button>
                     {/* <IconButton color="inherit">
@@ -112,8 +112,14 @@ class App extends Component {
                     <Link to='/profile' className={classes.menuLink}>Profile</Link> */}
                 </MenuItem>
                 <MenuItem>
-                <Button variant={"text"} color="inherit" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/pricing', undefined)} className={classes.menuLink}>
+                    <Button variant={"text"} color="inherit" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/pricing', undefined)} className={classes.menuLink}>
                         <FormattedMessage id="Pricing"/>
+                    </Button>
+                    <Button variant={"text"} color="inherit" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/pricing', undefined)} className={classes.menuLink}>
+                        <FormattedMessage id="Pricing"/>
+                    </Button>
+                    <Button variant={"text"} color="inherit" href={"/" + locale}>
+                        <FormattedMessage id="Sign In"/>
                     </Button>
                 </MenuItem>
             </Menu>
