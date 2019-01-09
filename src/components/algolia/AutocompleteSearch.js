@@ -29,13 +29,16 @@ class AutocompleteSearch extends Component {
     }
 
     componentDidMount() {
-        observe(this.props.organisationStore.values, 'orgTag', (change) => {
-            this.props.organisationStore.getAlgoliaKey()
-            .then((algoliaKey) => {
-                this.setState({algoliaKey: algoliaKey});
-            }).catch((err) => {
-                // window.location.href = UrlService.createUrl(window.location.host, '/', undefined);
-            });
+        // Observe organisation value, if populated, we can try to fetch Algolia Api key.
+        observe(this.props.organisationStore.values, 'organisation', (change) => {
+            if(this.props.organisationStore.values.organisation._id){
+                this.props.organisationStore.getAlgoliaKey()
+                .then((algoliaKey) => {
+                    this.setState({algoliaKey: algoliaKey});
+                }).catch((err) => {
+                    // window.location.href = UrlService.createUrl(window.location.host, '/', undefined);
+                });
+            }
         });
     }
 
