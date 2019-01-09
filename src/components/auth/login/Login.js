@@ -150,12 +150,12 @@ class Login extends React.Component {
                         }
                     </Grid>
                     <Grid item>
-                        <Link 
-                            to={"/" + locale + ( (organisation && organisation.tag) ? '/'+organisation.tag:'') + "/password/forgot"} 
-                            style={{textDecoration: 'none', color: 'rgba(0, 0, 0, 0.54)', textTransform: 'uppercase'}}
+                        <Button component={ Link } 
+                                to={"/" + locale + ( (organisation && organisation.tag) ? '/'+organisation.tag:'') + "/password/forgot"} 
+                                variant="text"
                         >
                             <FormattedMessage id="I don't have my password"/>
-                        </Link>
+                        </Button>
                     </Grid>
                 </Grid>
             </form>

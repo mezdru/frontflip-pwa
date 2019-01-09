@@ -118,7 +118,7 @@ class App extends Component {
                     </Button>
                 </MenuItem>
                 <MenuItem>
-                    <Button variant={"text"} color="inherit" href={"/" + locale}>
+                    <Button variant={"text"} color="inherit" to={"/" + locale} component={ Link }>
                         <FormattedMessage id="Sign In"/>
                     </Button>
                 </MenuItem>
