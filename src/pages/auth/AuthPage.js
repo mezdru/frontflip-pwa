@@ -18,25 +18,9 @@ class AuthPage extends React.Component {
     
     constructor(props) {
         super(props);
-        this.state = {
-            banner: null
-        };
     }
-    
-    componentDidMount() {
-        this.setState({
-            banner:
-                (this.props.organisationStore.values.organisation.cover ? this.props.organisationStore.values.organisation.cover.url : bannerImg)
-        });
 
-        observe(this.props.organisationStore.values, 'organisation', (change) => {
-            let org = this.props.organisationStore.values.organisation;
-            this.setState({banner: (org.cover && org.cover.url ? org.cover.url : bannerImg)});
-        });
-    }
-    
     render() {
-        const {banner} = this.state;
         const {classes} = this.props;
         
         return (

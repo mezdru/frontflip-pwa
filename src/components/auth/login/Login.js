@@ -34,10 +34,6 @@ class Login extends React.Component {
         };
     }
     
-    // componentWillUnmount = () => {
-    //     this.props.authStore.reset();
-    // };
-    
     handleEmailChange = (e) => {
         this.props.authStore.setEmail(e.target.value);
     };
@@ -95,6 +91,7 @@ class Login extends React.Component {
     
     render() {
         const {values, inProgress} = this.props.authStore;
+        const {organisation} = this.props.organisationStore.values;
         let {loginErrors, locale} = this.state;
         let intl = this.props.intl;
         // if (successLogin) return <Redirect to={redirectTo}/>;
@@ -153,7 +150,10 @@ class Login extends React.Component {
                         }
                     </Grid>
                     <Grid item>
-                        <Link to={"/" + locale + "/password/forgot"} style={{textDecoration: 'none', color: 'rgba(0, 0, 0, 0.54)', textTransform: 'uppercase'}}>
+                        <Link 
+                            to={"/" + locale + ( (organisation && organisation.tag) ? '/'+organisation.tag:'') + "/password/forgot"} 
+                            style={{textDecoration: 'none', color: 'rgba(0, 0, 0, 0.54)', textTransform: 'uppercase'}}
+                        >
                             <FormattedMessage id="I don't have my password"/>
                         </Link>
                     </Grid>
