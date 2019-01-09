@@ -6,6 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import UrlService from '../../../services/url.service';
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
+import { Link } from 'react-router-dom';
 
 // const styles = theme => ({
 //     root: {
@@ -152,9 +153,9 @@ class Login extends React.Component {
                         }
                     </Grid>
                     <Grid item>
-                        <Button variant={"text"} href={"/" + locale + "/password/forgot"}>
+                        <Link to={"/" + locale + "/password/forgot"} style={{textDecoration: 'none', color: 'rgba(0, 0, 0, 0.54)', textTransform: 'uppercase'}}>
                             <FormattedMessage id="I don't have my password"/>
-                        </Button>
+                        </Link>
                     </Grid>
                 </Grid>
             </form>

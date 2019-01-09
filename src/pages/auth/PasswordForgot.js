@@ -17,18 +17,21 @@ const styles = {
 
 class PasswordForgot extends React.Component {
     
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             successPasswordReset: false,
             emailError: null
         }
     }
-    
-    componentWillUnmount = () => {
-        this.props.authStore.reset();
-    };
-    
+
+    componentDidMount() {
+        if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
+            this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
+            this.props.organisationStore.getOrganisationForPublic();
+        }
+    }
+
     handleEmailChange = (e) => {
         this.props.authStore.setEmail(e.target.value);
     };
@@ -55,7 +58,7 @@ class PasswordForgot extends React.Component {
                         <Banner src={bannerImg}/>
                     </Grid>
                     <Grid container item justify={"center"}>
-                        <Logo src={'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg'} alt="org-logo" className={this.props.classes.logo}/>
+                        <Logo type={"organisation"} alt="org-logo" className={this.props.classes.logo}/>
                     </Grid>
                     {successPasswordReset && (
                         <Grid container item xs={12} sm={6} lg={4} spacing={16}>
@@ -96,7 +99,7 @@ class PasswordForgot extends React.Component {
     }
 }
 
-export default inject('authStore')(
+export default inject('authStore', 'organisationStore')(
     injectIntl(
         observer(
             withStyles(styles)
