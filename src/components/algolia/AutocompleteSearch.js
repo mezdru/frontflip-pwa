@@ -2,7 +2,7 @@ import { TextField, CircularProgress, withStyles } from "@material-ui/core";
 import React, { Component } from 'react';
 import {FormattedMessage} from 'react-intl';
 import {inject, observer} from "mobx-react";
-import { InstantSearch, Hits } from "react-instantsearch-dom";
+import { InstantSearch, Hits, Configure } from "react-instantsearch-dom";
 import MaterialSearchBox from "./MaterialSearchBox";
 import UrlService from '../../services/url.service';
 import { observe } from 'mobx';
@@ -24,8 +24,11 @@ class AutocompleteSearch extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            algoliaKey: null
+            algoliaKey: null,
+            filters: 'type:person',
+            refresh: false
         }
+        this.updatedSelectedOptions = this.updatedSelectedOptions.bind(this);
     }
 
     componentDidMount() {
@@ -42,25 +45,49 @@ class AutocompleteSearch extends Component {
         });
     }
 
+    updatedSelectedOptions(selectedOptions) {
+        let newFilters = 'type:person';
+        selectedOptions.forEach(option => {
+            if(option.value.charAt(0) === '#'){
+                newFilters += ' AND hashtags.tag:'+option.value;
+            }else if(option.value.charAt(0) === '@'){
+                newFilters += ' AND tag:'+option.value;
+            }
+        });
+        this.setState({filters: newFilters});
+    }
+
     render() {
         const {locale} = this.props.commonStore;
-        const {algoliaKey} = this.state;
-        const { hitComponent, classes } = this.props;
+        const {algoliaKey, filters} = this.state;
+        const { hitComponent, classes, resultsType } = this.props;
 
         if(algoliaKey) {
             return(
                 <div className={classes.fullWidth}>
-                    <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
+                    {/* Search bar */}
+                    <InstantSearch appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                     indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                     apiKey={algoliaKey} >
-                        <MaterialSearchBox/>
-                        {hitComponent &&  (
-                            <Hits hitComponent={hitComponent} className={classes.hitList}/>
-                        )}
-                        { !hitComponent && (
-                            <Hits className={classes.hitList}/>
-                        )}
+                        <MaterialSearchBox updatedSelectedOptions={this.updatedSelectedOptions}/>
                     </InstantSearch>
+
+                    {/* Search results */}
+                    {resultsType === 'person' && (
+                        <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
+                                        indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
+                                        apiKey={algoliaKey}>
+                            <Configure filters={filters} />
+                            {hitComponent &&  (
+                                <Hits hitComponent={hitComponent} className={classes.hitList}/>
+                            )}
+                            { !hitComponent && (
+                                <Hits className={classes.hitList}/>
+                            )}
+                        </InstantSearch>
+                    )}
+
+
                 </div>
             )
         }else{
