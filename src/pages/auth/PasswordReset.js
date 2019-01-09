@@ -78,7 +78,7 @@ class PasswordReset extends React.Component {
                     <Grid item container direction={'column'} xs={12} sm={6} lg={4} spacing={16}>
                         <Typography variant="h6"><FormattedHTMLMessage id="password.new.intro" values={{userEmail: values.email}}/></Typography>
                         {passwordErrors && (
-                            <SnackbarCustom variant='error' message={passwordErrors}/>
+                            <SnackbarCustom variant='warning' message={passwordErrors}/>
                         )}
                         <Grid item>
                             <TextField
