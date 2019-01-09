@@ -33,9 +33,9 @@ class Login extends React.Component {
         };
     }
     
-    componentWillUnmount = () => {
-        this.props.authStore.reset();
-    };
+    // componentWillUnmount = () => {
+    //     this.props.authStore.reset();
+    // };
     
     handleEmailChange = (e) => {
         this.props.authStore.setEmail(e.target.value);
@@ -84,7 +84,11 @@ class Login extends React.Component {
     };
     
     handleGoogleConnect = (e) => {
-        window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/google/login', this.props.organisationStore.values.orgTag);
+        if(this.props.organisationStore.values.orgTag && this.props.authStore.values.invitationCode) {
+            window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/google/login', this.props.organisationStore.values.orgTag) + '&code=' + this.props.authStore.values.invitationCode;
+        } else {
+            window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/google/login', this.props.organisationStore.values.orgTag);
+        }
     };
     
     render() {
