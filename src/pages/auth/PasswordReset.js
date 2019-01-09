@@ -25,10 +25,13 @@ class PasswordReset extends React.Component {
             locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
         }
     }
-    
-    componentWillUnmount = () => {
-        this.props.authStore.reset();
-    };
+
+    componentDidMount() {
+        if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
+            this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
+            this.props.organisationStore.getOrganisationForPublic();
+        }
+    }
     
     handlePasswordChange = (e) => {
         this.props.authStore.setPassword(e.target.value)
@@ -69,7 +72,7 @@ class PasswordReset extends React.Component {
                     <Banner src={bannerImg}/>
                 </Grid>
                 <Grid container item justify={"center"}>
-                    <Logo src={'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg'} alt="org-logo" className={this.props.classes.logo}/>
+                    <Logo type={"organisation"} alt="org-logo" className={this.props.classes.logo}/>
                 </Grid>
                 <form onSubmit={this.handleSubmitForm}>
                     <Grid item container direction={'column'} xs={12} sm={6} lg={4} spacing={16}>

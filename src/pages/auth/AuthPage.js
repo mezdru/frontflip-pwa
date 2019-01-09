@@ -51,7 +51,7 @@ class AuthPage extends React.Component {
                     <Banner src={banner}/>
                 </Grid>
                 <Grid container item justify={"center"}>
-                    <Logo src={logo} alt="org-logo" className={classes.logo}/>
+                    <Logo type={'organisation'} alt="org-logo" className={classes.logo}/>
                 </Grid>
                 <Grid container item xs={12} sm={6} lg={4}>
                     <Auth/>
