@@ -42,7 +42,7 @@ class AuthPage extends React.Component {
         return (
             <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
                 <Grid container item alignItems={"stretch"}>
-                    <Banner src={banner}/>
+                    <Banner/>
                 </Grid>
                 <Grid container item justify={"center"}>
                     <Logo type={'organisation'} alt="org-logo" className={classes.logo}/>

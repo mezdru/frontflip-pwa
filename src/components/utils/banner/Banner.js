@@ -1,4 +1,8 @@
 import React from 'react';
+import {Avatar} from '@material-ui/core';
+import { observe} from 'mobx';
+import {inject, observer} from "mobx-react";
+import defaultBanner from '../../../resources/images/fly_away.jpg';
 import {withStyles} from '@material-ui/core';
 
 const styles = theme => ({
@@ -15,8 +19,40 @@ const styles = theme => ({
     }
 });
 
-const Banner = ({...props}) =>
-    <div className={props.classes.root} style={{backgroundImage: `url(${props.src})`, ...props.style}}/>
-;
+class Banner extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            type: this.props.type || 'organisation',
+            source: null
+        }
+    }
 
-export default withStyles(styles, {withTheme: true})(Banner);
+    componentDidMount() {
+        if(this.state.type === 'organisation') {
+            this.setState({
+                source:
+                    ( (this.props.organisationStore.values.organisation.cover && this.props.organisationStore.values.organisation.cover.url) ? 
+                                    this.props.organisationStore.values.organisation.cover.url : defaultBanner) });
+            
+            observe(this.props.organisationStore.values, 'organisation', (change) => {
+                let org = this.props.organisationStore.values.organisation;
+                this.setState({source: (org.cover && org.cover.url ? org.cover.url : defaultBanner)});
+            });
+        }
+    }
+    
+    render(){
+        const {source} = this.state;
+
+        return(
+            <div className={this.props.classes.root} style={{backgroundImage: `url(${source})`, ...this.props.style}}/>
+        )
+    }
+}
+
+export default inject('organisationStore')(
+    observer(
+        withStyles(styles, {withTheme: true})(Banner)
+    )
+);

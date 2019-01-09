@@ -6,7 +6,6 @@ import UrlService from '../../services/url.service';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Banner from '../../components/utils/banner/Banner';
 import Logo from '../../components/utils/logo/Logo';
-import bannerImg from '../../resources/images/fly_away.jpg';
 import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
 
 const styles = {
@@ -69,7 +68,7 @@ class PasswordReset extends React.Component {
         return (
             <Grid container direction={"column"} justify={"space-around"}>
                 <Grid container item alignItems={"stretch"}>
-                    <Banner src={bannerImg}/>
+                    <Banner/>
                 </Grid>
                 <Grid container item justify={"center"}>
                     <Logo type={"organisation"} alt="org-logo" className={this.props.classes.logo}/>
