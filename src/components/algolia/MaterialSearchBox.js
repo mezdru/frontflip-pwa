@@ -26,7 +26,6 @@ class SearchableSelect extends Component {
       inputValue: '',
       limit: props.limit,
       selectedOption: this.props.defaultValue
-      // actionOnSelectedOption: props.actionOnSelectedOption
     };
     this.getOptions = this.getOptions.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -45,7 +44,6 @@ class SearchableSelect extends Component {
       }
       arrayOfLabel.push({label: displayedName, value: hit.tag});
     });
-    console.log('number of options returned : ' + arrayOfLabel.length);
     return arrayOfLabel;
   }
 
@@ -59,6 +57,7 @@ class SearchableSelect extends Component {
       selectedOption: selectedOption
     }, () => {
       this.refineWithSelectedOptions(selectedOption);
+      this.props.updatedSelectedOptions(selectedOption);
     });
   }
 
@@ -74,7 +73,6 @@ class SearchableSelect extends Component {
 
   async getOptions(inputValue) {
     await this.props.refine(inputValue);
-    console.log('number of options : ' + this.props.hits.length);
     return this.prepareLabels(this.props.hits);
   }
 
