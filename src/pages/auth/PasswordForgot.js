@@ -2,10 +2,8 @@ import React from 'react';
 import {inject, observer} from 'mobx-react';
 import {Button, Grid, TextField, Typography, withStyles} from "@material-ui/core";
 import {FormattedHTMLMessage, FormattedMessage, injectIntl} from 'react-intl';
-
 import Banner from '../../components/utils/banner/Banner';
 import Logo from '../../components/utils/logo/Logo';
-import bannerImg from '../../resources/images/fly_away.jpg';
 import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
 
 const styles = {
@@ -55,7 +53,7 @@ class PasswordForgot extends React.Component {
             return (
                 <Grid container direction={"column"} justify={"space-around"}>
                     <Grid container item alignItems={"stretch"}>
-                        <Banner src={bannerImg}/>
+                        <Banner/>
                     </Grid>
                     <Grid container item justify={"center"}>
                         <Logo type={"organisation"} alt="org-logo" className={this.props.classes.logo}/>

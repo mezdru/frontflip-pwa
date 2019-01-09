@@ -17,7 +17,8 @@ class Logo extends React.Component{
         if(this.state.type === 'organisation') {
             this.setState({
                 source:
-                    (this.props.organisationStore.values.organisation.logo ? this.props.organisationStore.values.organisation.logo.url : defaultLogo) });
+                    ( (this.props.organisationStore.values.organisation.logo && this.props.organisationStore.values.organisation.logo.url) ? 
+                            this.props.organisationStore.values.organisation.logo.url : defaultLogo) });
             
             observe(this.props.organisationStore.values, 'organisation', (change) => {
                 let org = this.props.organisationStore.values.organisation;
