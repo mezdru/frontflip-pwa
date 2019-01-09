@@ -19,8 +19,7 @@ class AuthPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            banner: null,
-            logo: null
+            banner: null
         };
     }
     
@@ -29,20 +28,15 @@ class AuthPage extends React.Component {
             banner:
                 (this.props.organisationStore.values.organisation.cover ? this.props.organisationStore.values.organisation.cover.url : bannerImg)
         });
-        this.setState({
-            logo:
-                (this.props.organisationStore.values.organisation.logo ? this.props.organisationStore.values.organisation.logo.url :
-                 'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg') });
-        
+
         observe(this.props.organisationStore.values, 'organisation', (change) => {
             let org = this.props.organisationStore.values.organisation;
             this.setState({banner: (org.cover && org.cover.url ? org.cover.url : bannerImg)});
-            this.setState({logo: (org.logo && org.logo.url ? org.logo.url : 'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg')});
         });
     }
     
     render() {
-        const {banner, logo} = this.state;
+        const {banner} = this.state;
         const {classes} = this.props;
         
         return (
