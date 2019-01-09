@@ -33,7 +33,7 @@ class OrganisationStore {
         this.inProgress = true;
         this.errors = null;
 
-        if(this.isKeyStillValid()) return Promise.resolve(commonStore.algoliaKey);
+        if(commonStore.algoliaKey || commonStore.getCookie('algoliaKey')) return Promise.resolve(commonStore.algoliaKey);
 
         return agent.Organisation.getAlgoliaKey(this.values.organisation._id, this.values.organisation.public)
             .then(data => { 
