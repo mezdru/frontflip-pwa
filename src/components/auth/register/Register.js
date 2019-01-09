@@ -103,7 +103,7 @@ class Register extends React.Component {
                     <Grid className={'form'} container item direction='column' spacing={16}>
                         {registerErrors && (
                             <Grid item>
-                                <SnackbarCustom variant="error" message={registerErrors}/>
+                                <SnackbarCustom variant="warning" message={registerErrors}/>
                             </Grid>
                         )}
                         <Grid item>
