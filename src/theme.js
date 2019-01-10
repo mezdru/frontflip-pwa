@@ -43,7 +43,7 @@ export default createMuiTheme({
                 color: 'white',
                 margin: 2,
                 borderRadius: 50,
-                height: 40,
+                height: '5vh',
                 overflow: 'visible',
                 ['&:hover']: {
                     boxShadow: '0 2px 2px -1px darkgrey, 0 0 0 5px transparent',
@@ -124,7 +124,11 @@ export default createMuiTheme({
             }
         },
         MuiCardContent: {
-            root: {}
+            root: {
+                paddingBottom: '16px!important',
+                paddingLeft:'8px!important',
+                paddingRight:'16px!important',
+            }
         },
     },
     props: {

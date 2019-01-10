@@ -27,6 +27,10 @@ class AuthStore {
         this.values.orgTag = orgTag;
     }
 
+    setInvitationCode(invitationCode) {
+        this.values.invitationCode = invitationCode;
+    }
+
     reset() {
         this.values.email = '';
         this.values.password = '';
@@ -103,8 +107,9 @@ class AuthStore {
     registerToOrg() {
         this.inProgress = true;
         this.errors = null;
+        console.log(this.values.invitationCode);
 
-        return agent.Auth.registerToOrg(organisationStore.values.organisation._id, this.values.invitationCode || null)
+        return agent.Auth.registerToOrg(organisationStore.values.organisation._id, this.values.invitationCode)
             .then((data) => {
                 return true;
             })
@@ -169,6 +174,7 @@ decorate(AuthStore, {
     setEmail: action,
     setPassword: action,
     setOrgTag: action,
+    setInvitationCode: action,
     reset: action,
     login: action,
     logout: action,
