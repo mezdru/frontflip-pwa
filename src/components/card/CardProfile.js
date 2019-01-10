@@ -33,7 +33,10 @@ class CardProfile extends React.Component {
     }
     
     render() {
+        const {hit} = this.props;
+
         return (
+            <Grid item xs={10} justify={'center'}>
             <Card style={{padding: 0, overflow: 'visible'}}>
                 <Grid container direction={'row'} justify={'space-between'}>
                     <Grid item>
@@ -46,14 +49,14 @@ class CardProfile extends React.Component {
                     <Grid item>
                         <CardContent id="card-info" justify={'center'}>
                             <Typography style={{fontSize: '24px', fontWeight: '500'}}>
-                                Jane/John Doe
+                                {hit.name || hit.tag}
                             </Typography>
                             <Typography component="p">
-                                The first
+                                {hit.intro}
                             </Typography>
                         </CardContent>
                     </Grid>
-                    <Grid item >
+                    {/* <Grid item >
                         <CardActions disableActionSpacing justify={'flex-end'}>
                             <Grid container direction="column">
                                 <IconButton aria-label="Mail">
@@ -64,26 +67,19 @@ class CardProfile extends React.Component {
                                 </IconButton>
                             </Grid>
                         </CardActions>
-                    </Grid>
+                    </Grid> */}
                     <Grid container>
                         <CardContent className={this.props.classes.wingsContainer}>
                             <Grid container className={this.props.classes.wings}>
-                                <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
-                                <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
-                                <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
-                                <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
-                                <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
-                                <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
-                                <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
-                                <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
-                                <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
-                                <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
-                                <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
+                                {hit.hashtags.map((hashtag, i) => {     
+                                    return (<Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label={hashtag.name}/>) 
+                                })}
                             </Grid>
                         </CardContent>
                     </Grid>
                 </Grid>
             </Card>
+            </Grid>
         );
     }
 }

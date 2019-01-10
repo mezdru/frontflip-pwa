@@ -13,6 +13,12 @@ const styles = {
         '& ul': {
             listStyleType: 'none',
             padding:0
+        },
+        '& ul li > div:first-child' : {
+            position: 'relative',
+            left: '0',
+            right: '0',
+            margin: 'auto'
         }
     },
     fullWidth: {
