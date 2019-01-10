@@ -1,9 +1,8 @@
 import React from 'react';
 import {Card, CardActions, CardContent, CardMedia, Grid, IconButton, Typography, withStyles} from '@material-ui/core';
-import {ArrowBack, ArrowForward, GpsFixedSharp, Mail} from '@material-ui/icons';
+import {GpsFixedSharp, Mail} from '@material-ui/icons';
 
 import Wings from '../utils/wing/Wing';
-import RootRef from "@material-ui/core/RootRef";
 
 const styles = {
     info: {
@@ -18,35 +17,25 @@ const styles = {
     },
     wingsContainer: {
         whiteSpace: 'nowrap',
-        paddingBottom: 5,
-        overflow: 'hidden',
-        borderRadius: 30
+        overflowX: 'scroll',
     },
     wings: {
         display: 'inline-block',
         color: 'white',
         position: 'relative',
     }
-};
+}
+
 
 class CardProfile extends React.Component {
     constructor(props) {
         super(props);
-        this.scroller = React.createRef();
     }
-    
-    wingsPrev = () => {
-        this.scroller.current.scrollLeft -= 200;
-    };
-    
-    wingsNext = () => {
-        this.scroller.current.scrollLeft += 200;
-    };
     
     render() {
         return (
             <Card style={{padding: 0, overflow: 'visible'}}>
-                <Grid container justify={'space-between'}>
+                <Grid container direction={'row'} justify={'space-between'}>
                     <Grid item>
                         <CardMedia
                             id="card-picture"
@@ -64,8 +53,8 @@ class CardProfile extends React.Component {
                             </Typography>
                         </CardContent>
                     </Grid>
-                    <Grid item>
-                        <CardActions disableActionSpacing>
+                    <Grid item >
+                        <CardActions disableActionSpacing justify={'flex-end'}>
                             <Grid container direction="column">
                                 <IconButton aria-label="Mail">
                                     <Mail/>
@@ -76,35 +65,22 @@ class CardProfile extends React.Component {
                             </Grid>
                         </CardActions>
                     </Grid>
-    
-                    <Grid container direction={"row"} style={{
-                        left: '-9.7%',
-                        width: '125%',
-                        position: 'relative'
-                    }}>
-                        <IconButton color="secondary" onClick={this.wingsPrev}>
-                            <ArrowBack/>
-                        </IconButton>
-                        <RootRef rootRef={this.scroller}>
-                            <CardContent className={this.props.classes.wingsContainer} style={{width: '80%'}}>
-                                <Grid container className={this.props.classes.wings}>
-                                    <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
-                                    <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
-                                    <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
-                                    <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
-                                    <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
-                                    <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
-                                    <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
-                                    <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
-                                    <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
-                                    <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
-                                    <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
-                                </Grid>
-                            </CardContent>
-                        </RootRef>
-                        <IconButton color="secondary" onClick={this.wingsNext}>
-                            <ArrowForward/>
-                        </IconButton>
+                    <Grid container>
+                        <CardContent className={this.props.classes.wingsContainer}>
+                            <Grid container className={this.props.classes.wings}>
+                                <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
+                                <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
+                                <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
+                                <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
+                                <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
+                                <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
+                                <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
+                                <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
+                                <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
+                                <Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label="Eagle"/>
+                                <Wings src="https://wingzy-staging.herokuapp.com/images/wings/bat.png" label="Bat wings"/>
+                            </Grid>
+                        </CardContent>
                     </Grid>
                 </Grid>
             </Card>

@@ -1,6 +1,7 @@
 import React from 'react'
 import {Grid, withStyles} from '@material-ui/core';
-import Banner from '../components/utils/banner/Banner'
+import Banner from '../components/utils/banner/Banner';
+import Card from '../components/card/CardProfile';
 import SearchField from '../components/utils/searchField/SearchField';
 
 import bannerImg from '../resources/images/fly_away.jpg'
@@ -54,6 +55,12 @@ class Search extends React.Component {
                 </Grid>
                 <Grid container item className={this.props.classes.stickyComponent} xs={6} sm={6} alignItems={'center'}>
                     <SearchField/>
+                </Grid>
+                <Grid item xs={10}>
+                    <Card/>
+                </Grid>
+                <Grid item xs={10}>
+                    <Card/>
                 </Grid>
             </Grid>
         );
