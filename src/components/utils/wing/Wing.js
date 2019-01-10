@@ -21,7 +21,7 @@ const Wing = ({src, label, ...props}) => {
     return (
         <Chip
             avatar={<Avatar className={props.classes.wingImg} src={src}/>}
-            label={label} color={"secondary"} className={props.classes.wingsColor}>
+            label={label} color={"secondary"} className={props.classes.wingsColor} onClick={props.onClick}>
         </Chip>
     )
 };

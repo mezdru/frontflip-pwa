@@ -22,6 +22,18 @@ class SearchableSelect extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.newFilter.value && nextProps.newFilter.label){
+      if(this.state.selectedOption && !this.state.selectedOption.some(val => val.value === nextProps.newFilter.value)){
+        let newSelectedOption = this.state.selectedOption;
+        newSelectedOption.push(nextProps.newFilter);
+        this.handleChange(newSelectedOption);
+      }else{
+        this.handleChange([nextProps.newFilter]);
+      }
+    }
+}
+
   prepareLabels(array) {
     let arrayOfLabel = [];
     array.forEach(hit => {

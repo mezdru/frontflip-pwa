@@ -60,7 +60,7 @@ class Search extends React.Component {
                     <Banner/>
                 </Grid>
                 <Grid container item className={this.props.classes.stickyComponent} xs={12} sm={6} alignItems={'center'}>
-                    <AutocompleteSearch hitComponent={Card} resultsType={'person'}/>
+                    <AutocompleteSearch HitComponent={Card} resultsType={'person'}/>
                 </Grid>
                 {/* <Grid item xs={10}>
                     <Card/>
