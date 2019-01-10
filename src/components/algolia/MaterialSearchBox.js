@@ -4,6 +4,7 @@ import AsyncSelect from 'react-select/lib/Async';
 import commonStore from '../../stores/common.store';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 import {FormattedMessage, injectIntl} from 'react-intl';
+import {inject, observer} from 'mobx-react';
 import './MaterialSearchBox.css';
 
 class SearchableSelect extends Component {
@@ -132,4 +133,8 @@ class SearchableSelect extends Component {
 }
 
 const MaterialSearchBox = connectAutoComplete(SearchableSelect);
-export default injectIntl(MaterialSearchBox);
+export default inject('commonStore')(
+  injectIntl(observer(
+      (MaterialSearchBox)
+  ))
+);
