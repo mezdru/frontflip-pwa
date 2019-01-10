@@ -34,7 +34,7 @@ class AutocompleteSearch extends Component {
             filters: 'type:person',
             refresh: false
         }
-        this.updatedSelectedOptions = this.updatedSelectedOptions.bind(this);
+        this.updateFilters = this.updateFilters.bind(this);
     }
 
     componentDidMount() {
@@ -51,7 +51,7 @@ class AutocompleteSearch extends Component {
         });
     }
 
-    updatedSelectedOptions(selectedOptions) {
+    updateFilters(selectedOptions) {
         let newFilters = 'type:person';
         selectedOptions.forEach(option => {
             if(option.value.charAt(0) === '#'){
@@ -75,7 +75,7 @@ class AutocompleteSearch extends Component {
                     <InstantSearch appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                     indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                     apiKey={algoliaKey} >
-                        <MaterialSearchBox updatedSelectedOptions={this.updatedSelectedOptions}/>
+                        <MaterialSearchBox updateFilters={this.updateFilters}/>
                     </InstantSearch>
 
                     {/* Search results */}
@@ -110,5 +110,4 @@ export default inject('commonStore', 'organisationStore')(
     observer(
         withStyles(styles)(AutocompleteSearch)
         )
-    );
-        
+);
