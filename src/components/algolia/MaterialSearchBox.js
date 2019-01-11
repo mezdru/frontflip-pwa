@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/lib/Async';
-import commonStore from '../../stores/common.store';
 import { connectAutoComplete } from 'react-instantsearch-dom';
-import {FormattedMessage, injectIntl} from 'react-intl';
+import {injectIntl} from 'react-intl';
 import {inject, observer} from 'mobx-react';
 import './MaterialSearchBox.css';
 
@@ -16,12 +14,14 @@ class SearchableSelect extends Component {
       placeholder: this.props.intl.formatMessage({id: 'algolia.search'}),
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
     };
+
     this.getOptions = this.getOptions.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.noOptionsMessage = this.noOptionsMessage.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
+  // Used to fetch an event: User click on a Wing, so we should add it to the search filters
   componentWillReceiveProps(nextProps) {
     if(nextProps.newFilter.value && nextProps.newFilter.label){
       if(this.state.selectedOption && !this.state.selectedOption.some(val => val.value === nextProps.newFilter.value)){
@@ -34,6 +34,8 @@ class SearchableSelect extends Component {
     }
 }
 
+  // Format an array of options so that they all have a label and a value
+  // i18n of options is performed here
   prepareLabels(array) {
     let arrayOfLabel = [];
     array.forEach(hit => {

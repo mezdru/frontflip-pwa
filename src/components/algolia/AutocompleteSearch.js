@@ -1,12 +1,9 @@
-import { TextField, CircularProgress, withStyles } from "@material-ui/core";
+import { CircularProgress, withStyles } from "@material-ui/core";
 import React, { Component } from 'react';
-import {FormattedMessage} from 'react-intl';
 import {inject, observer} from "mobx-react";
 import { InstantSearch, Hits, Configure } from "react-instantsearch-dom";
 import MaterialSearchBox from "./MaterialSearchBox";
-import UrlService from '../../services/url.service';
 import { observe } from 'mobx';
-import RootRef from '@material-ui/core/RootRef';
 
 const styles = {
     hitList: {
@@ -41,7 +38,6 @@ class AutocompleteSearch extends Component {
     }
 
     componentDidMount() {
-        // Observe organisation value, if populated, we can try to fetch Algolia Api key.
         observe(this.props.organisationStore.values, 'organisation', (change) => {
             if(this.props.organisationStore.values.organisation._id){
                 this.props.organisationStore.getAlgoliaKey()
@@ -80,12 +76,10 @@ class AutocompleteSearch extends Component {
             return(
                 <div className={classes.fullWidth}>
                     {/* Search bar */}
-                    <InstantSearch appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
+                    <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                     indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                     apiKey={algoliaKey} >
-                        <RootRef rootRef={this.child}>
-                            <MaterialSearchBox updateFilters={this.updateFilters} ref={this.child2} newFilter={newFilter} />
-                        </RootRef>
+                        <MaterialSearchBox updateFilters={this.updateFilters} newFilter={newFilter} />
                     </InstantSearch>
 
                     {/* Search results */}

@@ -1,6 +1,5 @@
 import React from 'react';
-import {Card, CardActions, CardContent, CardMedia, Grid, IconButton, Typography, withStyles} from '@material-ui/core';
-import {GpsFixedSharp, Mail} from '@material-ui/icons';
+import {Card, CardContent, CardMedia, Grid, Typography, withStyles} from '@material-ui/core';
 import {inject, observer} from 'mobx-react';
 
 import Wings from '../utils/wing/Wing';
@@ -61,18 +60,6 @@ class CardProfile extends React.Component {
                                 </Typography>
                             </CardContent>
                         </Grid>
-                        {/* <Grid item >
-                            <CardActions disableActionSpacing justify={'flex-end'}>
-                                <Grid container direction="column">
-                                    <IconButton aria-label="Mail">
-                                        <Mail/>
-                                    </IconButton>
-                                    <IconButton aria-label="Position">
-                                        <GpsFixedSharp/>
-                                    </IconButton>
-                                </Grid>
-                            </CardActions>
-                        </Grid> */}
                         <Grid container>
                             <CardContent className={this.props.classes.wingsContainer}>
                                 <Grid container className={this.props.classes.wings}>
