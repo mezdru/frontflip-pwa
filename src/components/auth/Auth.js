@@ -6,7 +6,8 @@ import {Grid, Tab, Tabs} from '@material-ui/core';
 import Login from './login/Login';
 import Register from './register/Register';
 import { injectIntl } from 'react-intl';
-
+import {inject, observer} from 'mobx-react';
+import { observe} from 'mobx';
 
 class Auth extends React.Component {
 
@@ -15,6 +16,13 @@ class Auth extends React.Component {
         this.state = {
             value: 0
         }
+    }
+
+    componentDidMount() {
+        if(this.props.authStore.values.invitationCode) this.setState({value: 1});
+        observe(this.props.authStore.values, 'invitationCode', (change) => {
+            this.setState({value: 1});
+        });
     }
     
     handleChange = (event, value) => {
@@ -58,5 +66,8 @@ class Auth extends React.Component {
     }
 }
 
-
-export default withTheme()(injectIntl(Auth));
+export default inject('authStore')(
+    withTheme()(injectIntl(observer(
+        (Auth)
+    )))
+);
