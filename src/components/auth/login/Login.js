@@ -6,18 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import UrlService from '../../../services/url.service';
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
-
-// const styles = theme => ({
-//     root: {
-//         "&:hover:not($disabled):not($focused):not($error) $notchedOutline": {
-//             borderColor: 'darkgrey'
-//         }
-//     },
-//     disabled: {},
-//     focused: {},
-//     error: {},
-//     notchedOutline: {}
-// });
+import { Link } from 'react-router-dom';
 
 class Login extends React.Component {
     
@@ -32,10 +21,6 @@ class Login extends React.Component {
             locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
         };
     }
-    
-    componentWillUnmount = () => {
-        this.props.authStore.reset();
-    };
     
     handleEmailChange = (e) => {
         this.props.authStore.setEmail(e.target.value);
@@ -84,11 +69,17 @@ class Login extends React.Component {
     };
     
     handleGoogleConnect = (e) => {
-        window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/google/login', this.props.organisationStore.values.orgTag);
+        if(this.props.organisationStore.values.orgTag && this.props.authStore.values.invitationCode) {
+            window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/google/login', this.props.organisationStore.values.orgTag) + 
+                (UrlService.env === 'production' ? '?' : '&') + 'code=' + this.props.authStore.values.invitationCode;
+        } else {
+            window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/google/login', this.props.organisationStore.values.orgTag);
+        }    
     };
     
     render() {
         const {values, inProgress} = this.props.authStore;
+        const {organisation} = this.props.organisationStore.values;
         let {loginErrors, locale} = this.state;
         let intl = this.props.intl;
         // if (successLogin) return <Redirect to={redirectTo}/>;
@@ -147,7 +138,10 @@ class Login extends React.Component {
                         }
                     </Grid>
                     <Grid item>
-                        <Button variant={"text"} href={"/" + locale + "/password/forgot"}>
+                        <Button component={ Link } 
+                                to={"/" + locale + ( (organisation && organisation.tag) ? '/'+organisation.tag:'') + "/password/forgot"} 
+                                variant="text"
+                        >
                             <FormattedMessage id="I don't have my password"/>
                         </Button>
                     </Grid>

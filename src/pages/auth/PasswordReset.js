@@ -1,15 +1,15 @@
 import React from 'react'
 import {inject, observer} from 'mobx-react';
-import {Avatar, Button, Grid, TextField, Typography, withStyles} from "@material-ui/core";
+import {Button, Grid, TextField, Typography, withStyles} from "@material-ui/core";
 import {FormattedHTMLMessage, FormattedMessage, injectIntl} from 'react-intl';
 import UrlService from '../../services/url.service';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Banner from '../../components/utils/banner/Banner';
-import bannerImg from '../../resources/images/fly_away.jpg';
+import Logo from '../../components/utils/logo/Logo';
 import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
 
 const styles = {
-    avatar: {
+    logo: {
         bottom: '4rem',
         marginBottom: '-4rem'
     }
@@ -24,10 +24,13 @@ class PasswordReset extends React.Component {
             locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
         }
     }
-    
-    componentWillUnmount = () => {
-        this.props.authStore.reset();
-    };
+
+    componentDidMount() {
+        if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
+            this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
+            this.props.organisationStore.getOrganisationForPublic();
+        }
+    }
     
     handlePasswordChange = (e) => {
         this.props.authStore.setPassword(e.target.value)
@@ -65,16 +68,16 @@ class PasswordReset extends React.Component {
         return (
             <Grid container direction={"column"} justify={"space-around"}>
                 <Grid container item alignItems={"stretch"}>
-                    <Banner src={bannerImg}/>
+                    <Banner/>
                 </Grid>
                 <Grid container item justify={"center"}>
-                    <Avatar src={'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg'} alt="org-logo" className={this.props.classes.avatar}/>
+                    <Logo type={"organisation"} alt="org-logo" className={this.props.classes.logo}/>
                 </Grid>
                 <form onSubmit={this.handleSubmitForm}>
                     <Grid item container direction={'column'} xs={12} sm={6} lg={4} spacing={16}>
                         <Typography variant="h6"><FormattedHTMLMessage id="password.new.intro" values={{userEmail: values.email}}/></Typography>
                         {passwordErrors && (
-                            <SnackbarCustom variant='error' message={passwordErrors}/>
+                            <SnackbarCustom variant='warning' message={passwordErrors}/>
                         )}
                         <Grid item>
                             <TextField

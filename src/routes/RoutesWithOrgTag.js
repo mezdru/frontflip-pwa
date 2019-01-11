@@ -10,10 +10,13 @@ class RoutesWithOrgTag extends Component {
     render() {
         return (
                 <div>
+                    <Switch>
                     <Route path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={PasswordForgot}/>
                     <Route path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={PasswordReset}/> 
-                    <Route exact path="/:locale(en|fr|en-UK)/:organisationTag" component={Home}/>
-                    <Route path="/:locale(en|fr|en-UK)/:organisationTag/search" component={Search}/>
+                    <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/search" component={Search}/>
+                    <Route path="/:locale(en|fr|en-UK)/:organisationTag/:invitationCode?" component={Home}/>
+                    </Switch>
+                    
                 </div>
 
         );

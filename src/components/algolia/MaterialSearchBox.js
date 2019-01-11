@@ -3,29 +3,18 @@ import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/lib/Async';
 import commonStore from '../../stores/common.store';
 import { connectAutoComplete } from 'react-instantsearch-dom';
+import {FormattedMessage, injectIntl} from 'react-intl';
+import {inject, observer} from 'mobx-react';
 import './MaterialSearchBox.css';
 
-const propTypes = {
-  searchApiUrl: PropTypes.string.isRequired,
-  limit: PropTypes.number,
-  defaultValue: PropTypes.object,
-  actionOnSelectedOption: PropTypes.func
-};
-
-const defaultProps = {
-  limit: 25,
-  defaultValue: null
-};
-
 class SearchableSelect extends Component {
-  static propTypes = propTypes;
-  static defaultProps = defaultProps;
   constructor(props) {
     super(props);
     this.state = {
       inputValue: '',
-      limit: props.limit,
-      selectedOption: this.props.defaultValue
+      selectedOption: this.props.defaultValue,
+      placeholder: this.props.intl.formatMessage({id: 'algolia.search'}),
+      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
     };
     this.getOptions = this.getOptions.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -33,12 +22,24 @@ class SearchableSelect extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.newFilter.value && nextProps.newFilter.label){
+      if(this.state.selectedOption && !this.state.selectedOption.some(val => val.value === nextProps.newFilter.value)){
+        let newSelectedOption = this.state.selectedOption;
+        newSelectedOption.push(nextProps.newFilter);
+        this.handleChange(newSelectedOption);
+      }else{
+        this.handleChange([nextProps.newFilter]);
+      }
+    }
+}
+
   prepareLabels(array) {
     let arrayOfLabel = [];
     array.forEach(hit => {
       let displayedName;
       if(hit.type === 'hashtag'){
-        displayedName = (hit.name_translated ? (hit.name_translated[commonStore.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag );
+        displayedName = (hit.name_translated ? (hit.name_translated[this.state.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag );
       }else if(hit.type === 'person'){
         displayedName = hit.name || hit.tag;
       }
@@ -48,7 +49,6 @@ class SearchableSelect extends Component {
   }
 
   getOptionValue = (option) => option.value;
-
   getOptionLabel = (option) => option.label;
 
   // when option is selected
@@ -57,17 +57,13 @@ class SearchableSelect extends Component {
       selectedOption: selectedOption
     }, () => {
       this.refineWithSelectedOptions(selectedOption);
-      this.props.updatedSelectedOptions(selectedOption);
+      this.props.updateFilters(selectedOption);
     });
   }
 
   refineWithSelectedOptions(selectedOption) {
     let optionsString= '';
-    if(selectedOption && selectedOption.length > 0){
-      selectedOption.forEach(option => {
-        optionsString += option.label + ' ';
-      });
-    }    
+    if(selectedOption && selectedOption.length > 0) selectedOption.forEach(option => {optionsString += option.label + ' ';});    
     this.props.refine(optionsString);
   }
 
@@ -78,19 +74,18 @@ class SearchableSelect extends Component {
 
   // Handle input change (any change)
   handleInputChange(inputValue) {
-    if((!inputValue || inputValue === '') && (!this.state.selectedOption || this.state.selectedOption.length === 0)){
-      this.props.refine();
-    } 
+    if((!inputValue || inputValue === '') && (!this.state.selectedOption || this.state.selectedOption.length === 0)) this.props.refine();
     return inputValue;
   }
 
   noOptionsMessage(inputValue) {
-    return 'No results' + (inputValue.inputValue ? ' for: ' + inputValue.inputValue : '');
+    if(inputValue.inputValue) return this.props.intl.formatMessage({id: 'algolia.noOptions'}, {input: inputValue.inputValue});
+    return this.props.intl.formatMessage({id: 'algolia.typeSomething'});
   }
 
   render() {
-    const { defaultOptions, placeholder } = this.props;
-    const { selectedOption } = this.state;
+    const { defaultOptions } = this.props;
+    const { selectedOption, placeholder } = this.state;
 
     const customStyles = {
       control: (base, state) => ({
@@ -115,17 +110,13 @@ class SearchableSelect extends Component {
         // override border radius to match the box
         borderRadius: '30px',
         overflow:'hidden',
-        // beautify the word cut by adding a dash see https://caniuse.com/#search=hyphens for the compatibility
         hyphens: "auto",
-        // kill the gap
-        // marginTop: 0,
         textAlign: "center",
         // prevent menu to scroll y
         wordWrap: "break-word"
       }),
       menuList: base => ({
         ...base,
-        // kill the white space on first and last option
         padding: 0
       }),
       input: base => ({
@@ -133,12 +124,10 @@ class SearchableSelect extends Component {
         padding: 0
       }),
     };
-  
-
 
     return (
       <AsyncSelect
-      styles={customStyles}
+        styles={customStyles}
         className='autocomplete-search'
         value={selectedOption}
         noOptionsMessage={this.noOptionsMessage}
@@ -156,4 +145,8 @@ class SearchableSelect extends Component {
 }
 
 const MaterialSearchBox = connectAutoComplete(SearchableSelect);
-export default MaterialSearchBox;
+export default inject('commonStore')(
+  injectIntl(observer(
+      (MaterialSearchBox)
+  ))
+);

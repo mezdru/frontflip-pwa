@@ -1,14 +1,13 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {Avatar, Button, Grid, TextField, Typography, withStyles} from "@material-ui/core";
+import {Button, Grid, TextField, Typography, withStyles} from "@material-ui/core";
 import {FormattedHTMLMessage, FormattedMessage, injectIntl} from 'react-intl';
-
 import Banner from '../../components/utils/banner/Banner';
-import bannerImg from '../../resources/images/fly_away.jpg';
+import Logo from '../../components/utils/logo/Logo';
 import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
 
 const styles = {
-    avatar: {
+    logo: {
         bottom: '4rem',
         marginBottom: '-4rem'
     }
@@ -16,18 +15,21 @@ const styles = {
 
 class PasswordForgot extends React.Component {
     
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             successPasswordReset: false,
             emailError: null
         }
     }
-    
-    componentWillUnmount = () => {
-        this.props.authStore.reset();
-    };
-    
+
+    componentDidMount() {
+        if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
+            this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
+            this.props.organisationStore.getOrganisationForPublic();
+        }
+    }
+
     handleEmailChange = (e) => {
         this.props.authStore.setEmail(e.target.value);
     };
@@ -51,10 +53,10 @@ class PasswordForgot extends React.Component {
             return (
                 <Grid container direction={"column"} justify={"space-around"}>
                     <Grid container item alignItems={"stretch"}>
-                        <Banner src={bannerImg}/>
+                        <Banner/>
                     </Grid>
                     <Grid container item justify={"center"}>
-                        <Avatar src={'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg'} alt="org-logo" className={this.props.classes.avatar}/>
+                        <Logo type={"organisation"} alt="org-logo" className={this.props.classes.logo}/>
                     </Grid>
                     {successPasswordReset && (
                         <Grid container item xs={12} sm={6} lg={4} spacing={16}>
@@ -95,7 +97,7 @@ class PasswordForgot extends React.Component {
     }
 }
 
-export default inject('authStore')(
+export default inject('authStore', 'organisationStore')(
     injectIntl(
         observer(
             withStyles(styles)

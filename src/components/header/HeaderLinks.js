@@ -7,6 +7,7 @@ import {AccountCircle, MoreVert as MoreIcon} from '@material-ui/icons';
 import {FormattedMessage} from 'react-intl';
 import UrlService from '../../services/url.service';
 import {inject, observer} from "mobx-react";
+import {Link} from 'react-router-dom';
 
 class HeaderLinks extends Component {
     constructor(props) {
@@ -42,7 +43,7 @@ class HeaderLinks extends Component {
                         </IconButton>
                     )}
                     {!auth && (
-                        <Button variant={"text"} color="inherit" href={"/" + locale}><FormattedMessage id="Sign In"/></Button>
+                        <Button variant={"text"} color="inherit" to={"/" + locale} component={ Link }><FormattedMessage id="Sign In"/></Button>
                     )}
                 
                 </div>

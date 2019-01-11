@@ -6,6 +6,7 @@ import { InstantSearch, Hits, Configure } from "react-instantsearch-dom";
 import MaterialSearchBox from "./MaterialSearchBox";
 import UrlService from '../../services/url.service';
 import { observe } from 'mobx';
+import RootRef from '@material-ui/core/RootRef';
 
 const styles = {
     hitList: {
@@ -13,6 +14,12 @@ const styles = {
         '& ul': {
             listStyleType: 'none',
             padding:0
+        },
+        '& ul li > div:first-child' : {
+            position: 'relative',
+            left: '0',
+            right: '0',
+            margin: 'auto'
         }
     },
     fullWidth: {
@@ -26,9 +33,11 @@ class AutocompleteSearch extends Component {
         this.state = {
             algoliaKey: null,
             filters: 'type:person',
-            refresh: false
+            refresh: false,
+            newFilter: {}
         }
-        this.updatedSelectedOptions = this.updatedSelectedOptions.bind(this);
+        this.updateFilters = this.updateFilters.bind(this);
+        this.addToFilters = this.addToFilters.bind(this);
     }
 
     componentDidMount() {
@@ -45,7 +54,7 @@ class AutocompleteSearch extends Component {
         });
     }
 
-    updatedSelectedOptions(selectedOptions) {
+    updateFilters(selectedOptions) {
         let newFilters = 'type:person';
         selectedOptions.forEach(option => {
             if(option.value.charAt(0) === '#'){
@@ -54,13 +63,18 @@ class AutocompleteSearch extends Component {
                 newFilters += ' AND tag:'+option.value;
             }
         });
-        this.setState({filters: newFilters});
+        this.setState({filters: newFilters, newFilter: {}});
+    }
+
+    addToFilters(e, element) {
+        e.preventDefault();
+        this.setState({newFilter: {label: element.name, value: element.tag}});
     }
 
     render() {
         const {locale} = this.props.commonStore;
-        const {algoliaKey, filters} = this.state;
-        const { hitComponent, classes, resultsType } = this.props;
+        const {algoliaKey, filters, newFilter} = this.state;
+        const { HitComponent, classes, resultsType } = this.props;
 
         if(algoliaKey) {
             return(
@@ -69,7 +83,9 @@ class AutocompleteSearch extends Component {
                     <InstantSearch appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                     indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                     apiKey={algoliaKey} >
-                        <MaterialSearchBox updatedSelectedOptions={this.updatedSelectedOptions}/>
+                        <RootRef rootRef={this.child}>
+                            <MaterialSearchBox updateFilters={this.updateFilters} ref={this.child2} newFilter={newFilter} />
+                        </RootRef>
                     </InstantSearch>
 
                     {/* Search results */}
@@ -78,10 +94,12 @@ class AutocompleteSearch extends Component {
                                         indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                         apiKey={algoliaKey}>
                             <Configure filters={filters} />
-                            {hitComponent &&  (
-                                <Hits hitComponent={hitComponent} className={classes.hitList}/>
+                            {HitComponent &&  (
+                                <Hits 
+                                    hitComponent={hit => <HitComponent hit={hit.hit} addToFilters={this.addToFilters} />}
+                                    className={classes.hitList}/>
                             )}
-                            { !hitComponent && (
+                            { !HitComponent && (
                                 <Hits className={classes.hitList}/>
                             )}
                         </InstantSearch>
@@ -104,5 +122,4 @@ export default inject('commonStore', 'organisationStore')(
     observer(
         withStyles(styles)(AutocompleteSearch)
         )
-    );
-        
+);
