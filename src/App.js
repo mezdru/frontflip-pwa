@@ -13,6 +13,7 @@ import {styles} from './components/header/Header.css.js'
 import HeaderAppBar from './components/header/HeaderAppBar';
 import HeaderDrawer from './components/header/HeaderDrawer';
 import UrlService from './services/url.service';
+import { ParallaxProvider } from 'react-scroll-parallax';
 
 class App extends Component {
     constructor(props) {
@@ -146,7 +147,9 @@ class App extends Component {
                         })}
                     >
                         <div className={classes.drawerHeader}/>
+                        <ParallaxProvider>
                         <Routes/>
+                        </ParallaxProvider>
                     </main>
                 </div>
             </BrowserRouter>

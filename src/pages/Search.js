@@ -4,6 +4,7 @@ import Banner from '../components/utils/banner/Banner';
 import Card from '../components/card/CardProfile';
 import AutocompleteSearch from '../components/algolia/AutocompleteSearch';
 import {inject, observer} from "mobx-react";
+import { Parallax } from 'react-scroll-parallax';
 
 const styles = {
     stickyComponent: {
@@ -54,12 +55,10 @@ class Search extends React.Component {
         
         return (
             <Grid container direction={'column'} alignItems={'center'}>
-                <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner} style={{opacity: this.state.bannerOpacity}}>
-                    <Banner/>
-                </Grid>
-                <Grid container item className={this.props.classes.stickyComponent} xs={12} sm={6} alignItems={'center'}>
-                    <AutocompleteSearch HitComponent={Card} resultsType={'person'}/>
-                </Grid>
+                    <Banner style={{width: '100vw', height:'300px', position:'absolute'}} />
+                    <Grid sm={10}>                    
+                        <AutocompleteSearch HitComponent={Card} resultsType={'person'}/>
+                    </Grid>
             </Grid>
         );
     }
