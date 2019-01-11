@@ -17,8 +17,7 @@ class CommonStore {
     constructor() {
         this.accessToken = this.getCookie('accessToken');
         this.refreshToken = this.getCookie('refreshToken');
-        this.algoliaKey = this.getStorage('algoliaKey');
-        this.algoliaKeyValidity = this.getStorage('algoliaKeyValidity');
+        this.algoliaKey = this.getCookie('algoliaKey');
         this.populateLocale();
         
     }
@@ -87,14 +86,8 @@ class CommonStore {
 
     setAlgoliaKey(algoliaKey) {
         this.algoliaKey = algoliaKey.value;
-        this.algoliaKeyValidity = algoliaKey.valid_until;
-        if (algoliaKey) {
-            this.setStorage(this.algoliaKey, 'algoliaKey');
-            this.setStorage(this.algoliaKeyValidity, 'algoliaKeyValidity');
-        } else {
-            this.removeStorage('algoliaKey');
-            this.removeStorage('algoliaKeyValidity');
-        }
+        let expDate = new Date(algoliaKey.valid_until);
+        this.setCookie('algoliaKey', this.algoliaKey, expDate);
     }
 
     setAppLoaded() {
@@ -108,7 +101,6 @@ decorate(CommonStore, {
     accessToken: observable,
     refreshToken: observable,
     algoliaKey: observable,
-    algoliaKeyValidity: observable,
     appLoaded: observable,
     locale: observable,
     setToken: action,

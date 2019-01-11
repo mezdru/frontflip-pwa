@@ -191,10 +191,7 @@ const Organisation = {
         ),
     getAlgoliaKey: (orgId, isPublic) =>
         requests.get(
-            API_ROOT+'/api/organisations/algolia/'+(isPublic?'public':'private')+'/',
-            {
-                orgId: orgId
-            }
+            API_ROOT+'/api/organisations/'+ orgId +'/algolia/'+(isPublic?'public':'private')
         )
 }
 

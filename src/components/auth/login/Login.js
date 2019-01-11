@@ -8,18 +8,6 @@ import UrlService from '../../../services/url.service';
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import { Link } from 'react-router-dom';
 
-// const styles = theme => ({
-//     root: {
-//         "&:hover:not($disabled):not($focused):not($error) $notchedOutline": {
-//             borderColor: 'darkgrey'
-//         }
-//     },
-//     disabled: {},
-//     focused: {},
-//     error: {},
-//     notchedOutline: {}
-// });
-
 class Login extends React.Component {
     
     constructor(props) {

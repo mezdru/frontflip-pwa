@@ -1,0 +1,15 @@
+.hide-options .Select-arrow-zone {
+    display: none;
+}
+
+.hide-options .Select-menu-outer {
+    display: none;
+}
+
+.autocomplete-search {
+    position: relative;
+    left:0;
+    right:0;
+    margin:auto;
+    width: 100%;
+}

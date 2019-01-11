@@ -27,5 +27,8 @@
     "password.forgot.intro": "Pas de mot de passe&nbsp;? Mot de passe oublié&nbsp;? Nous allons vous envoyer un email pour créer un nouveau mot de passe.",
     "password.new.intro": "Créez un nouveau mot de passe pour sécuriser votre compte Wingzy <strong>{userEmail}</strong>.",
     "password.forgot.success": "Nous vous avons envoyé un email pour créer un nouveau mot de passe.",
-    "password.new.create": "Créer un nouveau mot de passe"
+    "password.new.create": "Créer un nouveau mot de passe",
+    "algolia.noOptions": "Pas de résultats pour {input}",
+    "algolia.typeSomething": "Écrivez quelque-chose pour commencer ...",
+    "algolia.search": "Rechercher ..."
 }
