@@ -9,7 +9,7 @@ const styles = {
     stickyComponent: {
         position: "sticky",
         top: 3,
-        zIndex: 9999,
+        zIndex: 2,
     },
     searchBanner: {
         position: 'relative',
