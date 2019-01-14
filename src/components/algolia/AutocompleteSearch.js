@@ -12,6 +12,9 @@ const styles = {
             listStyleType: 'none',
             padding:0
         },
+        '& ul li': {
+            marginBottom: '32px'
+        },
         '& ul li > div:first-child' : {
             position: 'relative',
             left: '0',

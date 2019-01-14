@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Grid, withStyles, Typography, IconButton, CardActions, CardContent, CardHeader, Card} from '@material-ui/core';
-import {loadCSS} from 'fg-loadcss/src/loadCSS';
+import {Grid, withStyles, Typography, IconButton, CardActions, CardContent, CardHeader, Card, Tooltip} from '@material-ui/core';
 import {inject, observer} from 'mobx-react';
-
+import '../../resources/stylesheets/font-awesome.min.css';
 import Logo from '../../components/utils/logo/Logo';
 import Wings from '../utils/wing/Wing';
+import defaultPicture from '../../resources/images/placeholder_person.png';
+import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
 
+const EXTRA_LINK_LIMIT = 5;
 
 const styles = theme => ({
     logo: {
@@ -51,25 +53,82 @@ class RecipeReviewCard extends React.Component {
         this.state = {
             locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
         }
+        this.transformLinks = this.transformLinks.bind(this);
     }
-    
-    componentDidMount() {
-        loadCSS(
-            'https://use.fontawesome.com/releases/v5.1.0/css/all.css',
-            document.querySelector('#insertion-point-jss'),
-        );
+
+    // @todo find somewhere to put & deduplicate the transformLinks (public/js/index.js + views/hbs.js) logic.
+    transformLinks(item) {
+        item.links = item.links || [];
+        item.links.forEach(function (link, index, array) {
+            this.makeLinkDisplay(link);
+            this.makeLinkIcon(link);
+            this.makeLinkUrl(link);
+            if (index > EXTRA_LINK_LIMIT-1) link.class = 'extraLink';
+        }.bind(this));
+    }
+
+    makeLinkIcon(link) {
+        switch (link.type) {
+            case 'email': link.icon = 'envelope-o'; break;
+            case 'address': case 'location': link.icon = 'map-marker'; break;
+            case 'hyperlink': link.icon = 'link'; break;
+            case 'location': link.icon = 'map-marker'; break;
+            case 'workplace': link.icon = 'user'; break;
+            case 'workchat': link.icon = 'comment'; break;
+            default: link.icon = link.type;	break;
+        }
+    }
+
+    makeLinkDisplay(link) {
+        link.display = link.display || link.value;
+    }
+
+    makeLinkUrl(link) {
+        link.url = link.url || link.uri;
+        if (!link.url) {
+            switch (link.type) {
+                case 'email':
+                    link.url = 'mailto:'+link.value;
+                    break;
+                case 'phone':
+                    link.url = 'tel:'+link.value;
+                    break;
+                case 'home':
+                    link.url = 'tel:'+link.value;
+                    break;
+                case 'address':
+                    link.url = 'http://maps.google.com/?q='+encodeURIComponent(link.value);
+                    break;
+                default:
+                    link.url = link.value;
+                    break;
+            }
+        }
+    }
+
+    getPicturePath(picture) {
+        if(picture && picture.path){
+            return null;
+        } else if (picture && picture.url) {
+            return picture.url;
+        } else if (picture && picture.uri) {
+                return picture.uri;
+        } else {
+            return null;
+        }
     }
     
     render() {
         const {classes, hit, addToFilters} = this.props;
-        
+        this.transformLinks(hit);
+
         return (
             <Card>
                 <Grid item>
                     <CardHeader
                         className={classes.header}
                         avatar={
-                            <Logo className={classes.logo} src={'https://media.glamour.com/photos/5a425fd3b6bcee68da9f86f8/master/w_644,c_limit/best-face-oil.png'}/>
+                            <Logo type={'person'} className={classes.logo} src={this.getPicturePath(hit.picture) || defaultPicture}/>
                         }
                         title={
                             <Typography variant="h4" className={classes.name} gutterBottom>
@@ -86,28 +145,15 @@ class RecipeReviewCard extends React.Component {
                 <Grid item container justify={'flex-end'}>
                     <CardActions className={classes.actions} disableActionSpacing>
                         <Grid item container spacing={0}>
-                            <Grid item>
-                                <IconButton className="fas fa-envelope"
-                                            color="secondary"
-                                />
-                            </Grid>
-                            <Grid item>
-                                <IconButton className="fas fa-phone"
-                                            color="secondary"
-                                />
-                            </Grid>
-                            <Grid item>
-                                <IconButton className="fas fa-map-marker-alt"
-                                            color="secondary"/>
-                            </Grid>
-                            <Grid item>
-                                <IconButton className="fab fa-github"
-                                            color="secondary"/>
-                            </Grid>
-                            <Grid item>
-                                <IconButton className="fab fa-linkedin"
-                                            color="secondary"/>
-                            </Grid>
+                            {hit.links.map((link, i) => {
+                                return (
+                                    <Grid item>
+                                        <Tooltip title={link.display || link.value || link.url} >
+                                            <IconButton href={link.url} className={"fa fa-"+link.icon} />
+                                        </Tooltip>
+                                    </Grid>
+                                )
+                            })}
                         </Grid>
                     </CardActions>
                 </Grid>
@@ -116,7 +162,7 @@ class RecipeReviewCard extends React.Component {
                         <Grid container className={this.props.classes.wings}>
                             {hit.hashtags.map((hashtag, i) => {
                                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag )
-                                return (<Wings src="https://twemoji.maxcdn.com/2/svg/1f985.svg" label={displayedName} onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})} />)
+                                return (<Wings src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture} label={displayedName} onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})} />)
                             })}
                         </Grid>
                     </CardContent>
@@ -132,6 +178,6 @@ RecipeReviewCard.propTypes = {
 
 export default inject('commonStore')(
     observer(
-        withStyles(styles)(CardProfile)
+        withStyles(styles)(RecipeReviewCard)
     )
 );

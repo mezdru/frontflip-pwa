@@ -5,7 +5,7 @@ export const styles = theme => ({
     display: 'flex',
     width: '100%',
     textAlign: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#fff'
   },
   grow: {
     flexGrow: 1,
@@ -34,6 +34,7 @@ export const styles = theme => ({
       height: '64px',
     boxShadow: 'none !important',
     borderTop: '10px solid #dd362e',
+    zIndex: '999'
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
