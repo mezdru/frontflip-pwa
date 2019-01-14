@@ -55,13 +55,6 @@ class RecipeReviewCard extends React.Component {
         }
         this.transformLinks = this.transformLinks.bind(this);
     }
-    
-    componentDidMount() {
-        // loadCSS(
-        //     'https://use.fontawesome.com/releases/v4.7.0/css/all.css',
-        //     document.querySelector('#insertion-point-jss'),
-        // );
-    }
 
     // @todo find somewhere to put & deduplicate the transformLinks (public/js/index.js + views/hbs.js) logic.
     transformLinks(item) {
