@@ -7,9 +7,23 @@
 }
 
 .autocomplete-search {
-    position: relative;
+    /* position: relative; */
     left:0;
     right:0;
     margin:auto;
     width: 100%;
+    position: sticky;
+    top:0;
+}
+
+
+.autocomplete-search > div:first-child {
+    -webkit-box-sizing: content-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: content-box;    /* Firefox, other Gecko */
+    box-sizing: content-box;         /* Opera/IE 8+ */
+}
+.autocomplete-search > div:first-child:hover {
+    -webkit-box-sizing: content-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: content-box;    /* Firefox, other Gecko */
+    box-sizing: content-box;         /* Opera/IE 8+ */
 }

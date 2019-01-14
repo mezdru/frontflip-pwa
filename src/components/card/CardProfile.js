@@ -18,6 +18,7 @@ const styles = theme => ({
         ['& img']: {
             height: '100%',
         },
+        zIndex: 2
     },
     name: {
         marginRight: 65,

@@ -7,13 +7,14 @@ import {inject, observer} from "mobx-react";
 
 const styles = {
     stickyComponent: {
-        position: "sticky",
-        top: 3,
+        // position: "sticky",
+        // top: 3,
         zIndex: 2,
     },
     searchBanner: {
-        position: 'relative',
-        transition: 'opacity 0.8s'
+        position: 'absolute',
+        transition: 'opacity 0.8s',
+        filter: 'blur(1px)'
     }
 };
 
@@ -55,11 +56,9 @@ class Search extends React.Component {
         return (
             <Grid container direction={'column'} alignItems={'center'}>
                 <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner} style={{opacity: this.state.bannerOpacity}}>
-                    <Banner/>
+                    <Banner />
                 </Grid>
-                <Grid container item className={this.props.classes.stickyComponent} xs={12} sm={6} alignItems={'center'}>
-                    <AutocompleteSearch HitComponent={Card} resultsType={'person'}/>
-                </Grid>
+                <AutocompleteSearch HitComponent={Card} resultsType={'person'}/>
             </Grid>
         );
     }
