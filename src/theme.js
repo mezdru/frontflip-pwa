@@ -7,7 +7,7 @@ export const palette = {
     },
     secondary: {
         light: '#fff',
-        main: '#a4c5cb',
+        main: '#1667A2',
         dark: '#8fbac0', /*for shadow*/
     }
 };
@@ -41,12 +41,12 @@ export default createMuiTheme({
                 padding: '6px 12px',
                 fontSize: 18,
                 color: 'white',
-                margin: 2,
+                margin: 8,
                 borderRadius: 50,
-                height: '5vh',
-                overflow: 'visible',
+                height: 45,
+                boxShadow: '0 2px 2px -1px darkgrey, 0 0 0 5px transparent',
                 ['&:hover']: {
-                    boxShadow: '0 2px 2px -1px darkgrey, 0 0 0 5px transparent',
+                    boxShadow: '0 5px 15px -1px darkgrey, 0 0 0 5px transparent',
                 },
             },
         },
@@ -56,10 +56,10 @@ export default createMuiTheme({
                 height: '6rem',
                 boxShadow: '0 5px 15px -1px darkgrey, 0 0 0 5px transparent',
                 zIndex: 999,
-                backgroundColor:'white',
+                backgroundColor: 'white',
             },
             img: {
-                height:'auto',
+                height: 'auto',
             }
         },
         MuiButton: {
@@ -98,17 +98,15 @@ export default createMuiTheme({
         },
         MuiCard: {
             root: {
+                padding: 0,
                 maxWidth: 500,
                 borderRadius: 30,
-                maxHeight: '30vh',
                 margin: 15,
             }
         },
-        MuiCardMedia: {
+        MuiCardContent: {
             root: {
-                width: '18vh',
-                height: '18vh',
-                borderRadius: '30px 0 30px 0',
+                paddingBottom: '0!important'
             }
         },
         MuiPaper: {
@@ -121,13 +119,16 @@ export default createMuiTheme({
                 display: 'block',
                 padding: 8,
                 fontFamily: '"Open sans"',
-            }
-        },
-        MuiCardContent: {
-            root: {
-                paddingBottom: '16px!important',
-                paddingLeft:'8px!important',
-                paddingRight:'16px!important',
+            },
+            h4: {
+                color: 'white',
+                fontWeight: '700',
+                fontFamily: '"Open sans"',
+            },
+            subheading: {
+                color: 'white',
+                fontWeight: '500',
+                fontFamily: '"Open sans"',
             }
         },
     },
