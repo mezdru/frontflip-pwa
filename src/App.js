@@ -33,7 +33,6 @@ class App extends Component {
         this.setState({open: false});
     };
 
-
     handleProfileMenuOpen = event => {
         this.setState({anchorEl: event.currentTarget});
     };
@@ -63,9 +62,6 @@ class App extends Component {
             this.props.userStore.getCurrentUser();
         }
     }
-    
-    
-    
     
     handleLogout = () => {
         this.props.authStore.logout()

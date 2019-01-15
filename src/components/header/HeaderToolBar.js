@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import {IconButton, Toolbar, Typography} from '@material-ui/core';
 import {Menu as MenuIcon} from '@material-ui/icons';
 import logoWingzy from '../../resources/images/wingzy_line_256.png';
+import logoWingzyAuth from '../../resources/images/wingzy_512.png';
 import './header.css';
 import {styles} from './Header.css.js'
 import HeaderLinks from './HeaderLinks';
@@ -24,22 +25,22 @@ class HeaderToolBar extends Component {
                             color="inherit"
                             aria-label="Open drawer"
                             onClick={this.props.handleDrawerOpen}
-                            className={classNames(classes.menuButton, open && classes.hide)}
-                            style={{display: 'none'}}
-                            disabled
-                            
+                            className={classNames(classes.menuButton, open && classes.hide)}                            
                 >
                     <MenuIcon/>
                 </IconButton>
                 <Typography className={classes.title} variant="h6" color="inherit" noWrap>
                     <a href={(process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP}>
-                        <img src={logoWingzy} height="36px" alt="Logo of Wingzy"/>
+                        <img src={(auth ? logoWingzyAuth : logoWingzy)} height="36px" alt="Logo of Wingzy"/>
                     </a>
                 </Typography>
                 
-            <HeaderLinks auth={auth} anchorEl={anchorEl} 
+                {!auth && (
+                    <HeaderLinks auth={auth} anchorEl={anchorEl} 
                         handleMobileMenuOpen={handleMobileMenuOpen}
                         handleProfileMenuOpen={handleProfileMenuOpen}/>
+                )}
+            
             </Toolbar>
         )
     }

@@ -7,6 +7,8 @@ import {AccountCircle, ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRi
 import './header.css';
 import AvailabilityToggle from '../availabilityToggle/AvailabilityToggle';
 import {styles} from './Header.css.js'
+import Logo from '../utils/logo/Logo';
+import { FormattedHTMLMessage } from 'react-intl';
 
 class App extends Component {
     constructor(props) {
@@ -33,32 +35,51 @@ class App extends Component {
                     </IconButton>
                 </div>
                 <Divider/>
-                <Button>List of the orgs</Button>
-                <Divider/>
+                {/* <Button>List of the orgs</Button>
+                <Divider/> */}
                 
                 <div className={'leftMenu'}>
                     <Typography variant="h6" color="inherit" noWrap>
-                        <IconButton
-                            aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                            aria-haspopup="true"
-                            onClick={this.props.handleProfileMenuOpen}
-                            color="inherit"
-                        >
-                            <AccountCircle/>
-                        </IconButton>
-                        Info current Org
+                        <FormattedHTMLMessage   id={'menu.organisation.welcome'} 
+                                                values={{name: this.props.organisationStore.values.organisation.name}} />
                     </Typography>
+                    <Divider/>
                     
-                    <List className={'leftSubmenu'}>
                         {auth && (
-                            <ListItem>
-                                <ListItemText primary="Disponibilité"/>
-                                <ListItemSecondaryAction>
-                                    <AvailabilityToggle/>
-                                </ListItemSecondaryAction>
-                            </ListItem>
+                            <List className={'leftSubmenu'}>
+                                <ListItem button >
+                                    <ListItemText primary="Mon profil" />
+                                </ListItem>
+
+                                <ListItem>
+                                    <ListItemText primary="Disponibilité"/>
+                                    <ListItemSecondaryAction>
+                                        <AvailabilityToggle/>
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+
+                                <ListItem button >
+                                    <ListItemText primary="Déconnexion" />
+                                </ListItem>
+
+                                <Divider/>
+                            </List>
                         )}
-                    </List>
+                            <List className={'leftSubmenu'}>
+                                <ListItem button >
+                                    <ListItemText primary="Pourquoi Wingzy ?" />
+                                </ListItem>
+
+                                <ListItem>
+                                    <ListItemText primary="Nos tarifs"/>
+                                </ListItem>
+
+                                <ListItem button >
+                                    <ListItemText primary="Conditions générales d'utilisation" />
+                                </ListItem>
+
+                                <Divider/>
+                            </List>                        
                 </div>
             </Drawer>
         )

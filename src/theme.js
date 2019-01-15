@@ -41,6 +41,11 @@ export default createMuiTheme({
                 margin: "auto",
             },
         },
+        MuiDrawer: {
+            root: {
+                height: 80
+            }
+        },
         MuiChip: {
             root: {
                 padding: '6px 12px',
@@ -131,7 +136,7 @@ export default createMuiTheme({
                 fontFamily: '"Open sans"',
             },
             subheading: {
-                color: 'white',
+                // color: 'white',
                 fontWeight: '500',
                 fontFamily: '"Open sans"',
             }
