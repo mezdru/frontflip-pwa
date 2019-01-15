@@ -13,15 +13,3 @@
     margin:auto;
     width: 50%;
 }
-
-
-.autocomplete-search > div:first-child {
-    -webkit-box-sizing: content-box; /* Safari/Chrome, other WebKit */
-    -moz-box-sizing: content-box;    /* Firefox, other Gecko */
-    box-sizing: content-box;         /* Opera/IE 8+ */
-}
-.autocomplete-search > div:first-child:hover {
-    -webkit-box-sizing: content-box; /* Safari/Chrome, other WebKit */
-    -moz-box-sizing: content-box;    /* Firefox, other Gecko */
-    box-sizing: content-box;         /* Opera/IE 8+ */
-}
