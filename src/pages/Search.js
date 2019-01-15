@@ -22,7 +22,6 @@ class Search extends React.Component {
     }
     
     componentDidMount = () => {
-        console.log('----------------------------- render search page ---------------------------------');
         this.props.commonStore.setSearchFilters([]);
         window.addEventListener('scroll', this.onScroll, false);
 
