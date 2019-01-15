@@ -2,13 +2,13 @@ import { CircularProgress, withStyles, Grid } from "@material-ui/core";
 import React, { Component } from 'react';
 import {inject, observer} from "mobx-react";
 import { InstantSearch, Hits, Configure } from "react-instantsearch-dom";
-import MaterialSearchBox from "./MaterialSearchBox";
+import AutoCompleteSearchField from "./AutoCompleteSearchField";
 import { observe, autorun } from 'mobx';
 import { StickyContainer, Sticky } from 'react-sticky';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
-import {styles} from './AutocompleteSearch.css'
+import {styles} from './MainAlgoliaSearch.css'
 
-class AutocompleteSearch extends Component {
+class MainAlgoliaSearch extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -67,7 +67,7 @@ class AutocompleteSearch extends Component {
                                 <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                                 indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                                 apiKey={algoliaKey} >
-                                    <MaterialSearchBox updateFilters={this.updateFilters} newFilter={newFilter}/>
+                                    <AutoCompleteSearchField updateFilters={this.updateFilters} newFilter={newFilter}/>
                                 </InstantSearch>
                             </div>
                         )}
@@ -104,6 +104,6 @@ class AutocompleteSearch extends Component {
 
 export default inject('commonStore', 'organisationStore')(
     observer(
-        withWidth()(withStyles(styles)(AutocompleteSearch))
+        withWidth()(withStyles(styles)(MainAlgoliaSearch))
         )
 );

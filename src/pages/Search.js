@@ -2,7 +2,7 @@ import React from 'react'
 import {Grid, withStyles} from '@material-ui/core';
 import Banner from '../components/utils/banner/Banner';
 import Card from '../components/card/CardProfile';
-import AutocompleteSearch from '../components/algolia/AutocompleteSearch';
+import MainAlgoliaSearch from '../components/algolia/MainAlgoliaSearch';
 import {inject, observer} from "mobx-react";
 
 const styles = {
@@ -53,7 +53,7 @@ class Search extends React.Component {
                 <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner} style={{opacity: this.state.bannerOpacity}}>
                     <Banner />
                 </Grid>
-                <AutocompleteSearch HitComponent={Card} resultsType={'person'}/>
+                <MainAlgoliaSearch HitComponent={Card} resultsType={'person'}/>
             </Grid>
         );
     }
