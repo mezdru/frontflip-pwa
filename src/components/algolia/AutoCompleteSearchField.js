@@ -56,6 +56,7 @@ class SearchableSelect extends Component {
 
   // when option is selected
   handleChange(selectedOption) {
+    this.props.commonStore.setSearchFilters(selectedOption);
     this.setState({
       selectedOption: selectedOption
     }, () => {

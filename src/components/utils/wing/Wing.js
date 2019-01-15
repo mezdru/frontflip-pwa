@@ -1,5 +1,6 @@
 import React from 'react';
 import {Avatar, Chip, withStyles} from '@material-ui/core';
+import classNames from 'classnames';
 
 const styles = theme => ({
     wingImg: {
@@ -14,6 +15,9 @@ const styles = theme => ({
         ['&:hover']: {
             backgroundColor: theme.palette.secondary.dark
         },
+    },
+    highlighted: {
+        backgroundColor: theme.palette.primary.main
     }
 });
 
@@ -21,7 +25,10 @@ const Wing = ({src, label, ...props}) => {
     return (
         <Chip
             avatar={<Avatar className={props.classes.wingImg} src={src}/>}
-            label={label} color={"secondary"} className={props.classes.wingsColor} onClick={props.onClick}>
+            label={label} 
+            color={"secondary"}
+            className={classNames(props.classes.wingsColor, props.classes[props.className])}
+            onClick={props.onClick}>
         </Chip>
     )
 };

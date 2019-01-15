@@ -12,12 +12,13 @@ class CommonStore {
     algoliaKeyValidity;
     appLoaded = false;
     locale = 'en-UK';
-
+    searchFilters = [];
 
     constructor() {
         this.accessToken = this.getCookie('accessToken');
         this.refreshToken = this.getCookie('refreshToken');
         this.algoliaKey = this.getCookie('algoliaKey');
+        this.searchFilters = this.getCookie('searchFilters');
         this.populateLocale();
         
     }
@@ -38,6 +39,15 @@ class CommonStore {
     getRefreshToken() {
         return this.getCookie('refreshToken');
     }
+
+    setSearchFilters(searchFilters) {
+        let search = JSON.stringify(searchFilters);
+        this.setCookie('searchFilters', search);
+    }
+    getSearchFilters() {
+        let cookie = this.getCookie('searchFilters');
+        return cookie;
+    }
     
     setCookie(name, value, expires) {
         if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
@@ -51,21 +61,13 @@ class CommonStore {
         return cookies.get(name);
     }
 
+    removeCookie(name) {
+        cookies.remove(name);
+    }
+
     removeAuthTokens() {
         cookies.remove('accessToken');
         cookies.remove('refreshToken');
-    }
-
-    setStorage(token, name) {
-        window.localStorage.setItem(name, token);
-    }
-
-    getStorage(name) {
-        return window.localStorage.getItem(name);
-    }
-
-    removeStorage(name) {
-        window.localStorage.removeItem(name);
     }
 
     setAuthTokens(tokens) {
@@ -102,12 +104,17 @@ decorate(CommonStore, {
     refreshToken: observable,
     algoliaKey: observable,
     appLoaded: observable,
+    searchFilters: observable,
     locale: observable,
     setToken: action,
     setAlgoliaKey: action,
     setAppLoaded: action,
     getCookie: action,
-    setCookie: action
+    setCookie: action,
+    removeCookie: action,
+    removeAuthTokens: action,
+    setSearchFilters: action,
+    getSearchFilters: action
 });
 
 export default new CommonStore();
