@@ -22,6 +22,7 @@ class Search extends React.Component {
     }
     
     componentDidMount = () => {
+        this.props.commonStore.setSearchFilters([]);
         window.addEventListener('scroll', this.onScroll, false);
 
         if(this.props.match.params.organisationTag && this.props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) {

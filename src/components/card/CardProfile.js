@@ -117,10 +117,32 @@ class RecipeReviewCard extends React.Component {
             return null;
         }
     }
+
+    makeHightlighted = function(item) {
+        let filters = this.props.commonStore.getSearchFilters() || this.props.commonStore.searchFilters;
+        if(filters.length > 0 ){
+            item.hashtags.forEach((hashtag, index) => {
+                if (hashtag.tag && filters.find(filterValue => filterValue.value === hashtag.tag) ) item.hashtags[index].class = 'highlighted';
+            });
+        }
+    };
+    
+    orderHashtags = function(item) {
+        var highlighted = [];
+        var notHighlighted = [];
+        item.hashtags.forEach(function(hashtag) {
+            if (hashtag.class === 'highlighted') highlighted.push(hashtag);
+            else notHighlighted.push(hashtag);
+        });
+        item.hashtags = highlighted.concat(notHighlighted);
+    };
+    
     
     render() {
         const {classes, hit, addToFilters} = this.props;
         this.transformLinks(hit);
+        this.makeHightlighted(hit);
+        this.orderHashtags(hit);
 
         return (
             <Card>
@@ -162,7 +184,12 @@ class RecipeReviewCard extends React.Component {
                         <Grid container className={this.props.classes.wings}>
                             {hit.hashtags.map((hashtag, i) => {
                                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag )
-                                return (<Wings src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture} label={displayedName} onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})} />)
+                                return (
+                                    <Wings  src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture} 
+                                            label={displayedName} 
+                                            onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
+                                            className={(hashtag.class ? hashtag.class : 'notHighlighted')} />
+                                )
                             })}
                         </Grid>
                     </CardContent>
