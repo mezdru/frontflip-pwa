@@ -15,7 +15,8 @@ class MainAlgoliaSearch extends Component {
             algoliaKey: null,
             filters: 'type:person',
             refresh: false,
-            newFilter: {}
+            newFilter: {},
+            findByQuery: false
         }
         this.updateFilters = this.updateFilters.bind(this);
         this.addToFilters = this.addToFilters.bind(this);
@@ -35,14 +36,26 @@ class MainAlgoliaSearch extends Component {
     }
     
     updateFilters(selectedOptions) {
-        let newFilters = 'type:person';
-        selectedOptions.forEach(option => {
-            if(option.value.charAt(0) === '#'){
-                newFilters += ' AND hashtags.tag:'+option.value;
-            }else if(option.value.charAt(0) === '@'){
-                newFilters += ' AND tag:'+option.value;
-            }
-        });
+        let newFilters = '';
+        if(selectedOptions.find(elt => elt.value.charAt(0) !== '#' && elt.value.charAt(0) !== '@')){
+            selectedOptions.forEach(option => {
+                newFilters += ' '+ option.label;
+            });
+            this.setState({findByQuery: true});
+        }else{
+            this.setState({findByQuery: false});
+            newFilters = 'type:person';
+            selectedOptions.forEach(option => {
+                if(option.value.charAt(0) === '#'){
+                    newFilters += ' AND hashtags.tag:'+option.value;
+                }else if(option.value.charAt(0) === '@'){
+                    newFilters += ' AND tag:'+option.value;
+                }else {
+                    newFilters += ' AND intro:\''+option.value+'\'';
+                }
+            });
+        }
+        
         this.setState({filters: newFilters, newFilter: {}});
     }
 
@@ -53,7 +66,7 @@ class MainAlgoliaSearch extends Component {
 
     render() {
         const {locale} = this.props.commonStore;
-        const {algoliaKey, filters, newFilter} = this.state;
+        const {algoliaKey, filters, newFilter, findByQuery} = this.state;
         const { HitComponent, classes, resultsType } = this.props;
 
         if(algoliaKey) {
@@ -79,7 +92,12 @@ class MainAlgoliaSearch extends Component {
                                 <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                         indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                         apiKey={algoliaKey}>
-                                <Configure filters={filters} />
+                                {findByQuery && (
+                                    <Configure query={filters} filters={"type:person"}/>
+                                )}
+                                {!findByQuery && (
+                                    <Configure filters={filters}  />
+                                )}
                                 {HitComponent &&  (
                                     <Hits 
                                         hitComponent={hit => <HitComponent hit={hit.hit} addToFilters={this.addToFilters} />}

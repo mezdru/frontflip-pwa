@@ -30,5 +30,6 @@
     "password.new.create": "Créer un nouveau mot de passe",
     "algolia.noOptions": "Pas de résultats pour {input}",
     "algolia.typeSomething": "Écrivez quelque-chose pour commencer ...",
-    "algolia.search": "Rechercher ..."
+    "algolia.search": "Rechercher ...",
+    "algolia.createOption": "Rechercher \"{input}\""
 }
