@@ -35,7 +35,6 @@ class MainAlgoliaSearch extends Component {
     }
     
     updateFilters(selectedOptions) {
-        this.props.commonStore.setSearchFilters(selectedOptions);
         let newFilters = 'type:person';
         selectedOptions.forEach(option => {
             if(option.value.charAt(0) === '#'){
