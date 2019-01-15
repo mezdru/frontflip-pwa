@@ -30,6 +30,11 @@ export default createMuiTheme({
         ].join(','),
     },
     overrides: {
+        MuiAppBar: {
+            root: {
+                height: 80
+            }
+        },
         MuiGrid: {
             "spacing-xs-16": {
                 width: "auto",

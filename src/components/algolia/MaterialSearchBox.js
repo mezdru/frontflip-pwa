@@ -106,7 +106,7 @@ class SearchableSelect extends Component {
           borderColor: state.isFocused ? "#dd362e" : "black",
           boxSizing: 'content-box'
         },
-        padding: '10px 8px 10px 8px',
+        padding: '3px 8px 3px 8px',
         fontSize: '16px'
       }),
       menu: base => ({

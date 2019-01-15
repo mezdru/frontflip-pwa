@@ -7,13 +7,11 @@
 }
 
 .autocomplete-search {
-    /* position: relative; */
+    position: relative;
     left:0;
     right:0;
     margin:auto;
-    width: 100%;
-    position: sticky;
-    top:0;
+    width: 50%;
 }
 
 

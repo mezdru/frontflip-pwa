@@ -6,15 +6,10 @@ import AutocompleteSearch from '../components/algolia/AutocompleteSearch';
 import {inject, observer} from "mobx-react";
 
 const styles = {
-    stickyComponent: {
-        // position: "sticky",
-        // top: 3,
-        zIndex: 2,
-    },
     searchBanner: {
         position: 'absolute',
         transition: 'opacity 0.8s',
-        filter: 'blur(1px)'
+        filter: 'blur(.5px)'
     }
 };
 
@@ -22,7 +17,7 @@ class Search extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            bannerOpacity: 1,
+            bannerOpacity: 0.8,
         };
     }
     
@@ -46,7 +41,7 @@ class Search extends React.Component {
             });
         } else {
             this.setState({
-                bannerOpacity: 1
+                bannerOpacity: 0.8
             });
         }
     };

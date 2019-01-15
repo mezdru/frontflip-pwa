@@ -2,6 +2,7 @@
 
 html {
   background-color: #FFFFFF;
+  height: 100%;
 }
 
 body {
@@ -10,6 +11,7 @@ body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
 }
 
 code {

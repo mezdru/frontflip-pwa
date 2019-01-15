@@ -4,14 +4,19 @@ import {inject, observer} from "mobx-react";
 import { InstantSearch, Hits, Configure } from "react-instantsearch-dom";
 import MaterialSearchBox from "./MaterialSearchBox";
 import { observe, autorun } from 'mobx';
+import { StickyContainer, Sticky } from 'react-sticky';
+import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 
 const styles = theme => ({
-    hitList: {
-        position: 'absolute',
-        top: 166,
+    hitListContainer: {
+        position: 'relative',
+        top: 60,
         [theme.breakpoints.up('md')]: {
-            top: 350,
+            top: 150,
         },
+        width: '100%',
+    },
+    hitList: {
         width: '100%',
         '& ul': {
             listStyleType: 'none',
@@ -33,21 +38,20 @@ const styles = theme => ({
         width: '100%'
     },
     searchBar: {
-        position: 'sticky',
-        top: 147,
-        transition: 'top .8s',
-        transform: 'translateY(-50%)',
-        [theme.breakpoints.up('md')]: {
-            // top: 239,
-            top:0,
-        },
         left: 0,
         right: 0,
         margin: 'auto',
-        zIndex: 4
+        zIndex: 1000,
+        marginTop:21,
+        background: 'transparent',
     },
-    whiteBackground: {
-        background: 'white'
+    searchBarMarginTop: {
+        position: 'static',
+        marginTop:59, // 147 - 24 - 64
+        [theme.breakpoints.up('md')]: {
+            marginTop: 151, //239 - 24 - 64
+        },
+        width: '100%',
     }
 });
 
@@ -58,18 +62,13 @@ class AutocompleteSearch extends Component {
             algoliaKey: null,
             filters: 'type:person',
             refresh: false,
-            newFilter: {},
-            searchBarTop: null
+            newFilter: {}
         }
         this.updateFilters = this.updateFilters.bind(this);
         this.addToFilters = this.addToFilters.bind(this);
-        this.onScroll = this.onScroll.bind(this);
     }
 
     componentDidMount() {
-
-        window.addEventListener('scroll', this.onScroll, false);
-
         observe(this.props.organisationStore.values, 'organisation', (change) => {
             if(this.props.organisationStore.values.organisation._id){
                 this.props.organisationStore.getAlgoliaKey()
@@ -82,18 +81,6 @@ class AutocompleteSearch extends Component {
         });
     }
     
-    onScroll() {
-        // if (window.scrollY > 0) {
-        //     this.setState({
-        //         searchBarTop: 95
-        //     });
-        // }else if(window.scrollY === 0) {
-        //     this.setState({
-        //         searchBarTop: null
-        //     });
-        // }
-    }
-
     updateFilters(selectedOptions) {
         let newFilters = 'type:person';
         selectedOptions.forEach(option => {
@@ -113,41 +100,46 @@ class AutocompleteSearch extends Component {
 
     render() {
         const {locale} = this.props.commonStore;
-        const {algoliaKey, filters, newFilter, searchBarTop} = this.state;
+        const {algoliaKey, filters, newFilter} = this.state;
         const { HitComponent, classes, resultsType } = this.props;
 
         if(algoliaKey) {
             return(
-                <div className={classes.fullWidth}>
-                    {/* Search bar */}
-                    <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
-                                    indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
-                                    apiKey={algoliaKey} >
-                <Grid container item className={classes.searchBar} xs={12} sm={6} alignItems={'center'} >
-                        <MaterialSearchBox updateFilters={this.updateFilters} newFilter={newFilter}/>
-                </Grid>
-                
-                    </InstantSearch>
+                    
+                <StickyContainer style={{width:'100%', position: 'relative'}} >
+                    <div className={classes.searchBarMarginTop}></div>
+                    <Sticky topOffset={(isWidthUp('md', this.props.width)) ? 131 : 39}>
+                        {({style}) => (
+                            <div style={{...style}} className={classes.searchBar}>
+                                <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
+                                                indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
+                                                apiKey={algoliaKey} >
+                                    <MaterialSearchBox updateFilters={this.updateFilters} newFilter={newFilter}/>
+                                </InstantSearch>
+                            </div>
+                        )}
+                    </Sticky>
 
                     {/* Search results */}
                     {resultsType === 'person' && (
-                        <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
+                        <div className={classes.hitListContainer}>
+                                <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                         indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                         apiKey={algoliaKey}>
-                            <Configure filters={filters} />
-                            {HitComponent &&  (
-                                <Hits 
-                                    hitComponent={hit => <HitComponent hit={hit.hit} addToFilters={this.addToFilters} />}
-                                    className={classes.hitList}/>
-                            )}
-                            { !HitComponent && (
-                                <Hits className={classes.hitList}/>
-                            )}
-                        </InstantSearch>
+                                <Configure filters={filters} />
+                                {HitComponent &&  (
+                                    <Hits 
+                                        hitComponent={hit => <HitComponent hit={hit.hit} addToFilters={this.addToFilters} />}
+                                        className={classes.hitList}/>
+                                )}
+                                { !HitComponent && (
+                                    <Hits className={classes.hitList}/>
+                                )}
+                            </InstantSearch>
+                        </div>
+
                     )}
-
-
-                </div>
+                </StickyContainer>
             )
         }else{
             return(
@@ -161,6 +153,6 @@ class AutocompleteSearch extends Component {
 
 export default inject('commonStore', 'organisationStore')(
     observer(
-        withStyles(styles)(AutocompleteSearch)
+        withWidth()(withStyles(styles)(AutocompleteSearch))
         )
 );
