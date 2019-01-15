@@ -33,7 +33,7 @@ class SearchableSelect extends Component {
         this.handleChange([nextProps.newFilter]);
       }
     }
-}
+  }
 
   // Format an array of options so that they all have a label and a value
   // i18n of options is performed here

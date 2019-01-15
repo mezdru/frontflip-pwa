@@ -1,9 +1,9 @@
-import { CircularProgress, withStyles, Grid } from "@material-ui/core";
+import { CircularProgress, withStyles } from "@material-ui/core";
 import React, { Component } from 'react';
 import {inject, observer} from "mobx-react";
 import { InstantSearch, Hits, Configure } from "react-instantsearch-dom";
 import AutoCompleteSearchField from "./AutoCompleteSearchField";
-import { observe, autorun } from 'mobx';
+import { observe } from 'mobx';
 import { StickyContainer, Sticky } from 'react-sticky';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import {styles} from './MainAlgoliaSearch.css'
