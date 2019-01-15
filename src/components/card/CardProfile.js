@@ -23,6 +23,11 @@ const styles = theme => ({
     name: {
         marginRight: 65,
     },
+    name: {
+        '& span span': {
+            backgroundColor: theme.palette.primary.main
+        }
+    },
     contact: {
         width: 10
     },
@@ -125,6 +130,11 @@ class RecipeReviewCard extends React.Component {
                 if (hashtag.tag && filters.find(filterValue => filterValue.value === hashtag.tag) ) item.hashtags[index].class = 'highlighted';
             });
         }
+
+        if(item._snippetResult.intro.value && item._snippetResult.intro.matchLevel === 'full'){
+            item.intro = item._snippetResult.intro.value;
+            // item.intro = item.intro.split('ais-highlight-0000000000').join('span');
+        }
     };
     
     orderHashtags = function(item) {
@@ -159,7 +169,7 @@ class RecipeReviewCard extends React.Component {
                         }
                         subheader={
                             <Typography variant="subheading" className={classes.name} gutterBottom>
-                                {hit.intro}
+                                <span dangerouslySetInnerHTML={{__html: hit.intro}}></span>
                             </Typography>
                         }
                     />
@@ -169,7 +179,7 @@ class RecipeReviewCard extends React.Component {
                         <Grid item container spacing={0}>
                             {hit.links.map((link, i) => {
                                 return (
-                                    <Grid item>
+                                    <Grid item key={i}>
                                         <Tooltip title={link.display || link.value || link.url} >
                                             <IconButton href={link.url} className={"fa fa-"+link.icon} />
                                         </Tooltip>
@@ -188,7 +198,7 @@ class RecipeReviewCard extends React.Component {
                                     <Wings  src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture} 
                                             label={displayedName} 
                                             onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
-                                            className={(hashtag.class ? hashtag.class : 'notHighlighted')} />
+                                            className={(hashtag.class ? hashtag.class : 'notHighlighted')} key={i} />
                                 )
                             })}
                         </Grid>

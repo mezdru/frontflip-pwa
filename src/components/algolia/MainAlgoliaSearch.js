@@ -39,7 +39,7 @@ class MainAlgoliaSearch extends Component {
         let newFilters = '';
         if(selectedOptions.find(elt => elt.value.charAt(0) !== '#' && elt.value.charAt(0) !== '@')){
             selectedOptions.forEach(option => {
-                newFilters += ' '+ option.label;
+                newFilters += ( (newFilters !== '') ? ' ' : '') + option.label;
             });
             this.setState({findByQuery: true});
         }else{
@@ -50,12 +50,10 @@ class MainAlgoliaSearch extends Component {
                     newFilters += ' AND hashtags.tag:'+option.value;
                 }else if(option.value.charAt(0) === '@'){
                     newFilters += ' AND tag:'+option.value;
-                }else {
-                    newFilters += ' AND intro:\''+option.value+'\'';
                 }
             });
         }
-        
+        newFilters = newFilters.trim();
         this.setState({filters: newFilters, newFilter: {}});
     }
 
@@ -93,7 +91,8 @@ class MainAlgoliaSearch extends Component {
                                         indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                         apiKey={algoliaKey}>
                                 {findByQuery && (
-                                    <Configure query={filters} filters={"type:person"}/>
+                                    <Configure query={filters} facetFilters={["type:person"]}
+                                        highlightPreTag={"<span>"} highlightPostTag={"</span>"} attributesToSnippet={["intro:15", "description:15"]}/>
                                 )}
                                 {!findByQuery && (
                                     <Configure filters={filters}  />

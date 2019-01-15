@@ -87,8 +87,8 @@ class SearchableSelect extends Component {
 
   handleCreateOption(option) {
     let arrayOfOption = this.state.selectedOption || [];
+    option = option.trim();
     arrayOfOption.push({label: option, value: option});
-    console.log(option);
     return this.handleChange(arrayOfOption);
   }
 
@@ -146,13 +146,6 @@ class SearchableSelect extends Component {
 
     return (
       <AsyncCreatable
-      openOnFocus={false}
-      openOnClick={false}
-      onSelectResetsInput={false}
-      onBlurResetsInput={false}
-      onCloseResetsInput={false}
-      arrowRenderer={() => null}
-      clearRenderer={() => null}
         formatCreateLabel={this.createOptionMessage}
         styles={customStyles}
         className={classNames('autocomplete-search', this.props.className)}
