@@ -2,18 +2,14 @@ import React from 'react'
 import {Grid, withStyles} from '@material-ui/core';
 import Banner from '../components/utils/banner/Banner';
 import Card from '../components/card/CardProfile';
-import AutocompleteSearch from '../components/algolia/AutocompleteSearch';
+import MainAlgoliaSearch from '../components/algolia/MainAlgoliaSearch';
 import {inject, observer} from "mobx-react";
 
 const styles = {
-    stickyComponent: {
-        position: "sticky",
-        top: 3,
-        zIndex: 2,
-    },
     searchBanner: {
-        position: 'relative',
-        transition: 'opacity 0.8s'
+        position: 'absolute',
+        transition: 'opacity 0.8s',
+        filter: 'blur(.5px)'
     }
 };
 
@@ -21,7 +17,7 @@ class Search extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            bannerOpacity: 1,
+            bannerOpacity: 0.8,
         };
     }
     
@@ -45,7 +41,7 @@ class Search extends React.Component {
             });
         } else {
             this.setState({
-                bannerOpacity: 1
+                bannerOpacity: 0.8
             });
         }
     };
@@ -55,11 +51,9 @@ class Search extends React.Component {
         return (
             <Grid container direction={'column'} alignItems={'center'}>
                 <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner} style={{opacity: this.state.bannerOpacity}}>
-                    <Banner/>
+                    <Banner />
                 </Grid>
-                <Grid container item className={this.props.classes.stickyComponent} xs={12} sm={6} alignItems={'center'}>
-                    <AutocompleteSearch HitComponent={Card} resultsType={'person'}/>
-                </Grid>
+                <MainAlgoliaSearch HitComponent={Card} resultsType={'person'}/>
             </Grid>
         );
     }

@@ -31,7 +31,6 @@ export const styles = theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     background: 'white',
-      height: '64px',
     boxShadow: 'none !important',
     borderTop: '10px solid #dd362e',
     zIndex: '999'

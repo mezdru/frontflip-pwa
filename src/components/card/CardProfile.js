@@ -18,6 +18,7 @@ const styles = theme => ({
         ['& img']: {
             height: '100%',
         },
+        zIndex: 2
     },
     name: {
         marginRight: 65,
@@ -56,7 +57,6 @@ class RecipeReviewCard extends React.Component {
         this.transformLinks = this.transformLinks.bind(this);
     }
 
-    // @todo find somewhere to put & deduplicate the transformLinks (public/js/index.js + views/hbs.js) logic.
     transformLinks(item) {
         item.links = item.links || [];
         item.links.forEach(function (link, index, array) {

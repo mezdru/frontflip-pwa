@@ -3,7 +3,8 @@ import AsyncSelect from 'react-select/lib/Async';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 import {injectIntl} from 'react-intl';
 import {inject, observer} from 'mobx-react';
-import './MaterialSearchBox.css';
+import './AutoCompleteSearchField.css';
+import classNames from 'classnames';
 
 class SearchableSelect extends Component {
   constructor(props) {
@@ -32,7 +33,7 @@ class SearchableSelect extends Component {
         this.handleChange([nextProps.newFilter]);
       }
     }
-}
+  }
 
   // Format an array of options so that they all have a label and a value
   // i18n of options is performed here
@@ -96,15 +97,16 @@ class SearchableSelect extends Component {
         borderRadius: '30px',
         boxSizing: 'content-box',
         // Overwrittes the different states of border
-        border: state.isFocused ? "2px solid #dd362e" : "1px solid black",
+        border: state.isFocused ? "2px solid #dd362e" : "2px solid black",
         // borderColor: state.isFocused ? "#dd362e" : "black",
         // Removes weird border around container
         boxShadow: state.isFocused ? null : null,
         "&:hover": {
           // Overwrittes the different states of border
-          borderColor: state.isFocused ? "#dd362e" : "black"
+          borderColor: state.isFocused ? "#dd362e" : "black",
+          boxSizing: 'content-box'
         },
-        padding: '10px 8px 10px 8px',
+        padding: '3px 8px 3px 8px',
         fontSize: '16px'
       }),
       menu: base => ({
@@ -130,7 +132,7 @@ class SearchableSelect extends Component {
     return (
       <AsyncSelect
         styles={customStyles}
-        className='autocomplete-search'
+        className={classNames('autocomplete-search', this.props.className)}
         value={selectedOption}
         noOptionsMessage={this.noOptionsMessage}
         getOptionValue={this.getOptionValue}
@@ -146,9 +148,9 @@ class SearchableSelect extends Component {
   }
 }
 
-const MaterialSearchBox = connectAutoComplete(SearchableSelect);
+const AutoCompleteSearchField = connectAutoComplete(SearchableSelect);
 export default inject('commonStore')(
   injectIntl(observer(
-      (MaterialSearchBox)
+      (AutoCompleteSearchField)
   ))
 );

@@ -10,7 +10,7 @@ import PasswordForgot from "../pages/auth/PasswordForgot";
 import PasswordReset from "../pages/auth/PasswordReset";
 import RoutesWithLocale from "./RoutesWithLocale";
 import RoutesWithOrgTag from "./RoutesWithOrgTag";
-import AutocompleteSearch from "../components/algolia/AutocompleteSearch";
+import AutocompleteSearch from "../components/algolia/MainAlgoliaSearch";
 
 export default class Routes extends React.Component {
     
