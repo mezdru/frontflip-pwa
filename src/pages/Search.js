@@ -4,6 +4,7 @@ import Banner from '../components/utils/banner/Banner';
 import Card from '../components/card/CardProfile';
 import MainAlgoliaSearch from '../components/algolia/MainAlgoliaSearch';
 import {inject, observer} from "mobx-react";
+import {Redirect} from "react-router-dom";
 
 const styles = {
     searchBanner: {
@@ -18,6 +19,8 @@ class Search extends React.Component {
         super(props);
         this.state = {
             bannerOpacity: 0.8,
+            redirectTo: null,
+            locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
         };
     }
     
@@ -27,8 +30,35 @@ class Search extends React.Component {
 
         if(this.props.match.params.organisationTag && this.props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) {
             this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
-            this.props.organisationStore.getOrganisationForPublic();
+            this.props.organisationStore.getOrganisationForPublic().then(currentOrganisation => {
+                this.props.authStore.isAuth()
+                .then(isAuth => {
+                    if(isAuth) {
+                        this.props.recordStore.setRecordId(
+                            this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === currentOrganisation._id).record
+                        );
+                        this.props.recordStore.getRecord()
+                        .then(currentRecord => {
+                            // ok
+                            console.log('current record fetching');
+                        }).catch(err => {
+                            console.log('error in fetching record');
+                            
+                        });
+                    } else if(currentOrganisation.public) {
+                        // ok can access but user has no record here 
+                        // perform better test here (user can be login but not registered in this org)
+                    } else {
+                        // can't access, redirect to login
+                        this.setState({redirectTo: '/' + this.state.locale});
+                    }
+                })
+            })
         }
+
+        
+
+        
     };
     
     componentWillUnmount = () => {
@@ -48,6 +78,9 @@ class Search extends React.Component {
     };
     
     render() {
+        const {redirectTo} = this.state;
+
+        if(redirectTo) return (<Redirect to={redirectTo} />);
         
         return (
             <Grid container direction={'column'} alignItems={'center'}>
@@ -60,7 +93,7 @@ class Search extends React.Component {
     }
 }
 
-export default inject('commonStore', 'organisationStore')(
+export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore')(
     observer(
         withStyles(styles)(Search)
     )

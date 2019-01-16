@@ -107,15 +107,10 @@ class RecipeReviewCard extends React.Component {
     }
 
     getPicturePath(picture) {
-        if(picture && picture.path){
-            return null;
-        } else if (picture && picture.url) {
-            return picture.url;
-        } else if (picture && picture.uri) {
-                return picture.uri;
-        } else {
-            return null;
-        }
+        if(picture && picture.path) return null;
+        else if (picture && picture.url) return picture.url;
+        else if (picture && picture.uri) return picture.uri;
+        else return null;
     }
 
     makeHightlighted = function(item) {

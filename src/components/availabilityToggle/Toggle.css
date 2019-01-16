@@ -1,11 +1,9 @@
 /* TOGGLE USER STATUS */
 #userStatusToggle{
     position: relative;
-    left:0;
-    right:0; 
-    margin:auto;
+    margin-right: 24px;
     text-align: center;
-    width: 180px;
+    min-width: 50px;
 }
 #userStatusToggle a{
     position: relative;
@@ -14,6 +12,9 @@
     padding:2px 12px;
     width:0;
     border-radius: 30px;
+    cursor: pointer;
+    transition: opacity 1s;
+    transition: background 1s;
 }
 #userStatusToggle div{
     position: absolute;
@@ -23,7 +24,7 @@
     top:50%;
     transform: translateY(-50%);
     background: grey;
-    width:30%;
+    width:100%;
     border-radius: 30px;
     height:15px;
 }

@@ -74,7 +74,7 @@ export const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: -drawerWidth,
+    marginLeft: -300,
     padding: 0,
   },
   contentShift: {
@@ -82,7 +82,6 @@ export const styles = theme => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    marginLeft: 0,
   },
   fixToRight: {
     position: 'absolute',
