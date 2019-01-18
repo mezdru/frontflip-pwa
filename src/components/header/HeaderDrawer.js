@@ -8,7 +8,7 @@ import './header.css';
 import AvailabilityToggle from '../availabilityToggle/AvailabilityToggle';
 import {styles} from './Header.css.js'
 import Logo from '../utils/logo/Logo';
-import { FormattedHTMLMessage } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import UrlService from '../../services/url.service';
 import {Link} from "react-router-dom";
@@ -36,7 +36,7 @@ class App extends Component {
     }
 
     render() {
-        const {classes, theme, auth, anchorEl, open} = this.props;
+        const {classes, theme, auth, anchorEl, open, intl} = this.props;
         const {record} = this.props.recordStore.values;
         const {organisation, orgTag} = this.props.organisationStore.values;
         const isMenuOpen = Boolean(anchorEl);
@@ -56,16 +56,9 @@ class App extends Component {
                         {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
                     </IconButton>
                 </div>
-                {/* <Button>List of the orgs</Button>
-                <Divider/> */}
                 
                 <div className={'leftMenu'}>
-                    {/* <Typography variant="h6" color="inherit" noWrap>
-                        <FormattedHTMLMessage   id={'menu.organisation.welcome'} 
-                                                values={{name: this.props.organisationStore.values.organisation.name}} />
-                    </Typography>
-                    <Divider/>
-                     */}
+
                         {auth && (
                             <div>
                                 <List className={'leftSubmenu'}>
@@ -73,16 +66,16 @@ class App extends Component {
                                         <ListItemAvatar>
                                             <Logo type={'person'} src={this.getPicturePath(record.picture) || defaultPicture} alt={record.name || record.tag} />
                                         </ListItemAvatar>
-                                        <ListItemText   primary={record.name || record.tag + 'eeeeeeeeeeeeeee'} 
+                                        <ListItemText   primary={record.name || record.tag} 
                                                         primaryTypographyProps={{variant:'button', noWrap: true, style: {fontWeight: 'bold'}}} />
                                     </ListItem>
 
                                     <ListItem button >
-                                        <ListItemText primary="Mon profil" />
+                                        <ListItemText primary={intl.formatMessage({id: 'menu.drawer.profile'})} />
                                     </ListItem>
 
                                     <ListItem>
-                                        <ListItemText primary="Disponibilité"/>
+                                        <ListItemText primary={intl.formatMessage({id: 'menu.drawer.availability'})} />
                                         <ListItemSecondaryAction>
                                             <AvailabilityToggle/>
                                         </ListItemSecondaryAction>
@@ -114,26 +107,26 @@ class App extends Component {
                         )}
                             <List className={'leftSubmenu'}>
                             <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/', undefined)}>
-                                    <ListItemText primary="Pourquoi Wingzy ?" />
+                                    <ListItemText primary={intl.formatMessage({id: 'menu.drawer.whyWingzy'})} />
                                 </ListItem>
 
                                 <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/pricing', undefined)}>
-                                    <ListItemText primary="Nos tarifs" />
+                                    <ListItemText primary={intl.formatMessage({id: 'menu.drawer.pricing'})} />
                                 </ListItem>
 
                                 <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/terms', undefined)}>
-                                    <ListItemText primary="Conditions d'utilisation" />
+                                    <ListItemText primary={intl.formatMessage({id: 'menu.drawer.terms'})} />
                                 </ListItem>
 
                                 <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/protectingYourData', undefined)}>
-                                    <ListItemText primary="Protection des données" />
+                                    <ListItemText primary={intl.formatMessage({id: 'menu.drawer.protectingYourData'})} />
                                 </ListItem>
                             </List>
                             <Divider/>
                         {auth && (
                             <List className={'leftSubmenu'}>
                                 <ListItem button onClick={this.handleLogout} >
-                                    <ListItemText primary="Déconnexion" />
+                                    <ListItemText primary={intl.formatMessage({id: 'menu.drawer.logout'})} />
                                 </ListItem>
                             </List>
                         )}    
@@ -149,9 +142,9 @@ App.propTypes = {
 };
 
 export default inject('authStore', 'organisationStore', 'recordStore')(
-    observer(
+    injectIntl(observer(
         withStyles(styles, {withTheme: true})(
             App
         )
-    )
+    ))
 );

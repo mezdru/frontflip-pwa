@@ -31,5 +31,12 @@
     "algolia.noOptions": "Pas de résultats pour {input}",
     "algolia.typeSomething": "Écrivez quelque-chose pour commencer ...",
     "algolia.search": "Rechercher ...",
-    "menu.organisation.welcome": "Bienvenue sur {name}"
+    "menu.organisation.welcome": "Bienvenue sur {name}",
+    "menu.drawer.profile": "Mon profil",
+    "menu.drawer.availability": "Disponibilité",
+    "menu.drawer.whyWingzy": "Pourquoi Wingzy ?",
+    "menu.drawer.pricing": "Nos tarifs",
+    "menu.drawer.terms": "Conditions d'utilisation",
+    "menu.drawer.protectingYourData": "Protection des données",
+    "menu.drawer.logout": "Déconnexion"
 }

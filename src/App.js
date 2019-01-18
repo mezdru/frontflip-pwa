@@ -55,7 +55,7 @@ class App extends Component {
         this.props.authStore.isAuth()
         .then(isAuth => {
             isAuth ? this.setState({auth: true}) : this.setState({auth: false});
-            if(isAuth && (this.props.userStore.values.currentUser.google || this.props.userStore.values.currentUser.email.validated)){
+            if(isAuth && (this.props.userStore.values.currentUser.google || this.props.userStore.values.currentUser.email.validated && false)){
                 window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/search', this.props.organisationStore.values.orgTag);
             }
         });

@@ -31,5 +31,12 @@
     "algolia.noOptions": "No results found for {input}",
     "algolia.typeSomething": "Type something to begin ...",
     "algolia.search": "Search ...",
-    "menu.organisation.welcome": "Welcome to {name}"
+    "menu.organisation.welcome": "Welcome to {name}",
+    "menu.drawer.profile": "My profile",
+    "menu.drawer.availability": "Availability",
+    "menu.drawer.whyWingzy": "Why Wingzy ?",
+    "menu.drawer.pricing": "Pricing",
+    "menu.drawer.terms": "Terms",
+    "menu.drawer.protectingYourData": "Protecting your data",
+    "menu.drawer.logout": "Logout"
 }
