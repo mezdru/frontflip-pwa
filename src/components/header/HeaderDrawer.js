@@ -11,7 +11,7 @@ import Logo from '../utils/logo/Logo';
 import { injectIntl } from 'react-intl';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import UrlService from '../../services/url.service';
-import {Link} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 
 const defaultLogo = 'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg';
 
@@ -19,7 +19,7 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-
+        this.handleLogout = this.handleLogout.bind(this);
     }
 
     getPicturePath(picture) {
@@ -31,15 +31,16 @@ class App extends Component {
 
     handleLogout(e) {
         e.preventDefault();
-        this.props.authStore.logout();
-        //redirect 
+        this.props.handleDrawerClose();
+        this.props.authStore.logout().then(() => {
+            window.location.href = UrlService.createUrl(window.location.host, '/' + this.props.organisationStore.values.orgTag, null);
+        });
     }
 
     render() {
         const {classes, theme, auth, anchorEl, open, intl} = this.props;
         const {record} = this.props.recordStore.values;
         const {organisation, orgTag} = this.props.organisationStore.values;
-        const isMenuOpen = Boolean(anchorEl);
 
         return(
             <Drawer
@@ -59,30 +60,34 @@ class App extends Component {
                 
                 <div className={'leftMenu'}>
 
-                        {auth && (
+                        {(auth && organisation._id) && (
                             <div>
-                                <List className={'leftSubmenu'}>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                            <Logo type={'person'} src={this.getPicturePath(record.picture) || defaultPicture} alt={record.name || record.tag} />
-                                        </ListItemAvatar>
-                                        <ListItemText   primary={record.name || record.tag} 
-                                                        primaryTypographyProps={{variant:'button', noWrap: true, style: {fontWeight: 'bold'}}} />
-                                    </ListItem>
+                                {record._id && (
+                                    <div>
+                                        <List className={'leftSubmenu'}>
+                                            <ListItem>
+                                                <ListItemAvatar>
+                                                    <Logo type={'person'} src={this.getPicturePath(record.picture) || defaultPicture} alt={record.name || record.tag} />
+                                                </ListItemAvatar>
+                                                <ListItemText   primary={record.name || record.tag} 
+                                                                primaryTypographyProps={{variant:'button', noWrap: true, style: {fontWeight: 'bold'}}} />
+                                            </ListItem>
 
-                                    <ListItem button >
-                                        <ListItemText primary={intl.formatMessage({id: 'menu.drawer.profile'})} />
-                                    </ListItem>
+                                            <ListItem button >
+                                                <ListItemText primary={intl.formatMessage({id: 'menu.drawer.profile'})} />
+                                            </ListItem>
 
-                                    <ListItem>
-                                        <ListItemText primary={intl.formatMessage({id: 'menu.drawer.availability'})} />
-                                        <ListItemSecondaryAction>
-                                            <AvailabilityToggle/>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
+                                            <ListItem>
+                                                <ListItemText primary={intl.formatMessage({id: 'menu.drawer.availability'})} />
+                                                <ListItemSecondaryAction>
+                                                    <AvailabilityToggle/>
+                                                </ListItemSecondaryAction>
+                                            </ListItem>
 
-                                </List>
-                                <Divider/>
+                                        </List>
+                                        <Divider/>
+                                    </div>
+                                )}
 
                                 <List className={'leftSubmenu'}>
                                     <ListItem>
