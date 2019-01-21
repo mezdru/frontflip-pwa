@@ -151,6 +151,7 @@ class AuthStore {
     }
 
     logout() {
+        console.log('logout');
         commonStore.removeAuthTokens();
         userStore.forgetUser();
         return Promise.resolve();

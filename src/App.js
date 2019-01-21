@@ -13,6 +13,7 @@ import {styles} from './components/header/Header.css.js'
 import HeaderAppBar from './components/header/HeaderAppBar';
 import HeaderDrawer from './components/header/HeaderDrawer';
 import UrlService from './services/url.service';
+import { observe } from 'mobx';
 
 class App extends Component {
     constructor(props) {
@@ -32,7 +33,6 @@ class App extends Component {
     handleDrawerClose = () => {
         this.setState({open: false});
     };
-
 
     handleProfileMenuOpen = event => {
         this.setState({anchorEl: event.currentTarget});
@@ -55,7 +55,7 @@ class App extends Component {
         this.props.authStore.isAuth()
         .then(isAuth => {
             isAuth ? this.setState({auth: true}) : this.setState({auth: false});
-            if(isAuth && (this.props.userStore.values.currentUser.google || this.props.userStore.values.currentUser.email.validated)){
+            if(isAuth && (this.props.userStore.values.currentUser.google || this.props.userStore.values.currentUser.email.validated && false)){
                 window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/search', this.props.organisationStore.values.orgTag);
             }
         });
@@ -63,10 +63,7 @@ class App extends Component {
             this.props.userStore.getCurrentUser();
         }
     }
-    
-    
-    
-    
+
     handleLogout = () => {
         this.props.authStore.logout()
             .then(this.setState({successLogout: true}));

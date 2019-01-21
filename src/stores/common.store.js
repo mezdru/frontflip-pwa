@@ -66,8 +66,14 @@ class CommonStore {
     }
 
     removeAuthTokens() {
-        cookies.remove('accessToken');
-        cookies.remove('refreshToken');
+        let options = {};
+        if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
+            options = {path: '/', domain: 'wingzy.com'};
+        }else{
+            options = {path: '/'};
+        }
+        cookies.remove('accessToken', options);
+        cookies.remove('refreshToken', options);
     }
 
     setAuthTokens(tokens) {

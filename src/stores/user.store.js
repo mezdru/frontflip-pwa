@@ -1,5 +1,6 @@
 import { observable, action, decorate } from 'mobx';
 import agent from '../agent';
+import authStore from './auth.store';
 
 class UserStore {
 

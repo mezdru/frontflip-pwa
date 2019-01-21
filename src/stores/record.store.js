@@ -27,11 +27,14 @@ class RecordStore {
     }
 
     getRecord() {
+        if(!this.values.recordId) return Promise.reject(new Error('No record Id'));
         this.inProgress = true;
         this.errors = null;
 
         return agent.Record.get(this.values.recordId)
-            .then(data => { console.log('data recieve : ' + data); this.values.record = (data? data.record : {});})
+            .then(data => { 
+                this.values.record = (data? data.record : {});
+            })
             .catch(action((err) => {
                 this.errors = err.response && err.response.body && err.response.body.errors;
                 throw err;
