@@ -67,8 +67,6 @@ export const styles = theme => ({
     padding: '0 8px',
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
-      height: '64px',
-    borderTop: '10px solid #dd362e',
   },
   content: {
     flexGrow: 1,
@@ -76,7 +74,7 @@ export const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: -drawerWidth,
+    marginLeft: -300,
     padding: 0,
   },
   contentShift: {
@@ -84,10 +82,16 @@ export const styles = theme => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    marginLeft: 0,
   },
   fixToRight: {
     position: 'absolute',
     right:'24px'
+  },
+  leftSubmenuLogo: {
+    height: 30,
+    width: 30,
+    position: 'relative',
+    top: '50%',
+    transform: 'translateY(-50%)'
   }
 });

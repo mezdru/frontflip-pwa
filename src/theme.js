@@ -41,6 +41,11 @@ export default createMuiTheme({
                 margin: "auto",
             },
         },
+        MuiDrawer: {
+            root: {
+                height: 80,
+            }
+        },
         MuiChip: {
             root: {
                 padding: '6px 12px',
@@ -57,9 +62,9 @@ export default createMuiTheme({
         },
         MuiAvatar: {
             root: {
-                width: '6rem',
-                height: '6rem',
-                boxShadow: '0 5px 15px -1px darkgrey, 0 0 0 5px transparent',
+                // width: '6rem',
+                // height: '6rem',
+                // boxShadow: '0 5px 15px -1px darkgrey, 0 0 0 5px transparent',
                 zIndex: 999,
                 backgroundColor: 'white',
             },
@@ -131,7 +136,7 @@ export default createMuiTheme({
                 fontFamily: '"Open sans"',
             },
             subheading: {
-                color: 'white',
+                // color: 'white',
                 fontWeight: '500',
                 fontFamily: '"Open sans"',
             }
