@@ -30,9 +30,8 @@ class Search extends React.Component {
         window.addEventListener('scroll', this.onScroll, false);
 
         if(this.props.authStore.isAuth()) {
-            this.props.recordStore.setRecordId(
-                this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === currentOrganisation._id).record
-            );
+            let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === this.props.organisationStore.values.organisation._id);
+            this.props.recordStore.setRecordId(currentOrgAndRecord ? currentOrgAndRecord.record : null);
             this.props.recordStore.getRecord()
             .then(currentRecord => {
                 // ok
@@ -41,7 +40,7 @@ class Search extends React.Component {
                 console.log('error in fetching record');
                 
             });
-        } else if(currentOrganisation.public) {
+        } else if(this.props.organisationStore.values.organisation.public) {
             // ok can access but user has no record here 
             // perform better test here (user can be login but not registered in this org)
         } else {
