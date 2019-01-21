@@ -4,6 +4,7 @@ import MainRouteOrganisationRedirect from './MainRouteOrganisationRedirect';
 import PasswordForgot from "../pages/auth/PasswordForgot";
 import PasswordReset from "../pages/auth/PasswordReset";
 import {inject, observer} from 'mobx-react';
+import AuthPage from "../pages/auth/AuthPage";
 
 class MainRouteOrganisation extends React.Component {
 
@@ -33,13 +34,13 @@ class MainRouteOrganisation extends React.Component {
                         {/* All routes without orgTag */}
                         <Route exact path="/:locale(en|fr|en-UK)/password/forgot" component={PasswordForgot}/>
                         <Route exact path="/:locale(en|fr|en-UK)/password/reset/:token/:hash" component={PasswordReset}/> 
-                        <Route exact path="/:locale(en|fr|en-UK)/signup" />
-                        <Route exact path="/:locale(en|fr|en-UK)/signin" />
+                        <Route  path="/:locale(en|fr|en-UK)/signup" component={<AuthPage initialTab={1} />} />
+                        <Route  path="/:locale(en|fr|en-UK)/signin" component={AuthPage} />
 
                         {/* Route which will need organisationTag */}
                         <Route exact path="/:locale(en|fr|en-UK)/search" component={MainRouteOrganisationRedirect} />
                         <Route exact path="/:locale(en|fr|en-UK)/search/profile" component={MainRouteOrganisationRedirect} />
-                        <Route exact path="/:locale(en|fr|en-UK)/search/profile/:profileTag" component={MainRouteOrganisationRedirect} />
+                        <Route  path="/:locale(en|fr|en-UK)/search/profile/:profileTag" component={MainRouteOrganisationRedirect} />
 
                         {/* Main route with orgTag */}
                         <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={MainRouteOrganisationRedirect} />

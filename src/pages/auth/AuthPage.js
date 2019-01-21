@@ -20,7 +20,7 @@ class AuthPage extends React.Component {
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, initialTab} = this.props;
         
         return (
             <div>
@@ -34,7 +34,7 @@ class AuthPage extends React.Component {
                             <Logo type={'organisation'} alt="org-logo" className={classes.logo}/>
                         </Grid>
                         <Grid container item xs={12} sm={6} lg={4}>
-                            <Auth/>
+                            <Auth initialTab={initialTab || 0} />
                         </Grid>
                     </Grid>
                 </main>

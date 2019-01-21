@@ -62,16 +62,16 @@ class MainRouteOrganisationRedirect extends React.Component {
         const endUrl = window.location.pathname + window.location.search;
         const {redirectTo, renderComponent} = this.state;
 
+        console.log(renderComponent);
+        if(redirectTo) return (<Redirect to={redirectTo} />);
+
         if(renderComponent) {
             return (
                 <div>
                     <Switch>
-                        {redirectTo && (
-                            <Redirect to={redirectTo} />
-                        )}
                         <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={PasswordForgot}/>
                         <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={PasswordReset}/>
-                        <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={AuthPage} />
+                        <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={<AuthPage initialTab={1} />} />
                         <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
                         
                         {/* Route which will need organisationTag */}

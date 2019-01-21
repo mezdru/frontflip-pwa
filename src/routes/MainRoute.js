@@ -10,16 +10,14 @@ class MainRoute extends React.Component {
 
         this.state = {
             locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
-            renderComponent: false
+            renderComponent: !this.props.authStore.isAuth()
         }
-
+        
         // set current user 
         if(this.props.authStore.isAuth()) {
             this.props.userStore.getCurrentUser()
             .then(() => {this.setState({renderComponent: true})})
             .catch((err) => {this.setState({renderComponent: true})});
-        } else {
-            this.setState({renderComponent: true});
         }
     }
 
@@ -30,7 +28,6 @@ class MainRoute extends React.Component {
 
         if(renderComponent) {
             return (
-                
                 <div>
                     <Switch>
                         <Route path="/:locale(en|fr|en-UK)" component={MainRouteOrganisation} />
