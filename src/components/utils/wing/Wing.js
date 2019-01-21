@@ -11,11 +11,6 @@ const styles = theme => ({
         backgroundColor: 'transparent',
         overflow: 'visible',
     },
-    wingsColor: {
-        ['&:hover']: {
-            backgroundColor: theme.palette.secondary.dark
-        },
-    },
     highlighted: {
         backgroundColor: theme.palette.primary.main
     }
@@ -27,7 +22,7 @@ const Wing = ({src, label, ...props}) => {
             avatar={<Avatar className={props.classes.wingImg} src={src}/>}
             label={label} 
             color={"secondary"}
-            className={classNames(props.classes.wingsColor, props.classes[props.className])}
+            className={classNames(props.classes[props.className])}
             onClick={props.onClick}>
         </Chip>
     )
