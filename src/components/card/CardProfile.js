@@ -12,33 +12,14 @@ const EXTRA_LINK_LIMIT = 5;
 
 const styles = theme => ({
     logo: {
-        width: '9rem',
-        height: '9rem',
-        marginBottom: '-4rem',
+        width: 160,
+        height: 170,
+        marginBottom: '-5rem',
         ['& img']: {
-            height: '100%',
+            height: '90%',
+            width: '90%',
+            borderRadius: '50%',
         },
-        zIndex: 2
-    },
-    name: {
-        marginRight: 65,
-    },
-    contact: {
-        width: 10
-    },
-    header: {
-        backgroundColor: theme.palette.secondary.main,
-        textAlign: 'center',
-        boxShadow: '0 2px 2px -1px darkgrey',
-        
-    },
-    actions: {
-        display: 'flex',
-        padding: '8px',
-    },
-    wingsContainer: {
-        whiteSpace: 'nowrap',
-        overflowX: 'scroll',
     },
     wings: {
         display: 'inline-block',
@@ -47,7 +28,7 @@ const styles = theme => ({
     }
 });
 
-class RecipeReviewCard extends React.Component {
+class CardProfile extends React.Component {
     constructor(props) {
         super(props);
         
@@ -56,48 +37,63 @@ class RecipeReviewCard extends React.Component {
         }
         this.transformLinks = this.transformLinks.bind(this);
     }
-
+    
     transformLinks(item) {
         item.links = item.links || [];
         item.links.forEach(function (link, index, array) {
             this.makeLinkDisplay(link);
             this.makeLinkIcon(link);
             this.makeLinkUrl(link);
-            if (index > EXTRA_LINK_LIMIT-1) link.class = 'extraLink';
+            if (index > EXTRA_LINK_LIMIT - 1) link.class = 'extraLink';
         }.bind(this));
     }
-
+    
     makeLinkIcon(link) {
         switch (link.type) {
-            case 'email': link.icon = 'envelope-o'; break;
-            case 'address': case 'location': link.icon = 'map-marker'; break;
-            case 'hyperlink': link.icon = 'link'; break;
-            case 'location': link.icon = 'map-marker'; break;
-            case 'workplace': link.icon = 'user'; break;
-            case 'workchat': link.icon = 'comment'; break;
-            default: link.icon = link.type;	break;
+            case 'email':
+                link.icon = 'envelope-o';
+                break;
+            case 'address':
+            case 'location':
+                link.icon = 'map-marker';
+                break;
+            case 'hyperlink':
+                link.icon = 'link';
+                break;
+            case 'location':
+                link.icon = 'map-marker';
+                break;
+            case 'workplace':
+                link.icon = 'user';
+                break;
+            case 'workchat':
+                link.icon = 'comment';
+                break;
+            default:
+                link.icon = link.type;
+                break;
         }
     }
-
+    
     makeLinkDisplay(link) {
         link.display = link.display || link.value;
     }
-
+    
     makeLinkUrl(link) {
         link.url = link.url || link.uri;
         if (!link.url) {
             switch (link.type) {
                 case 'email':
-                    link.url = 'mailto:'+link.value;
+                    link.url = 'mailto:' + link.value;
                     break;
                 case 'phone':
-                    link.url = 'tel:'+link.value;
+                    link.url = 'tel:' + link.value;
                     break;
                 case 'home':
-                    link.url = 'tel:'+link.value;
+                    link.url = 'tel:' + link.value;
                     break;
                 case 'address':
-                    link.url = 'http://maps.google.com/?q='+encodeURIComponent(link.value);
+                    link.url = 'http://maps.google.com/?q=' + encodeURIComponent(link.value);
                     break;
                 default:
                     link.url = link.value;
@@ -105,27 +101,27 @@ class RecipeReviewCard extends React.Component {
             }
         }
     }
-
+    
     getPicturePath(picture) {
         if(picture && picture.path) return null;
         else if (picture && picture.url) return picture.url;
         else if (picture && picture.uri) return picture.uri;
         else return null;
     }
-
-    makeHightlighted = function(item) {
+    
+    makeHightlighted = function (item) {
         let filters = this.props.commonStore.getSearchFilters() || this.props.commonStore.searchFilters;
-        if(filters.length > 0 ){
+        if (filters.length > 0) {
             item.hashtags.forEach((hashtag, index) => {
-                if (hashtag.tag && filters.find(filterValue => filterValue.value === hashtag.tag) ) item.hashtags[index].class = 'highlighted';
+                if (hashtag.tag && filters.find(filterValue => filterValue.value === hashtag.tag)) item.hashtags[index].class = 'highlighted';
             });
         }
     };
     
-    orderHashtags = function(item) {
+    orderHashtags = function (item) {
         var highlighted = [];
         var notHighlighted = [];
-        item.hashtags.forEach(function(hashtag) {
+        item.hashtags.forEach(function (hashtag) {
             if (hashtag.class === 'highlighted') highlighted.push(hashtag);
             else notHighlighted.push(hashtag);
         });
@@ -138,12 +134,11 @@ class RecipeReviewCard extends React.Component {
         this.transformLinks(hit);
         this.makeHightlighted(hit);
         this.orderHashtags(hit);
-
+        
         return (
             <Card>
-                <Grid item>
+                <Grid item container>
                     <CardHeader
-                        className={classes.header}
                         avatar={
                             <Logo type={'person'} className={classes.logo} src={this.getPicturePath(hit.picture) || defaultPicture}/>
                         }
@@ -165,8 +160,8 @@ class RecipeReviewCard extends React.Component {
                             {hit.links.map((link, i) => {
                                 return (
                                     <Grid item>
-                                        <Tooltip title={link.display || link.value || link.url} >
-                                            <IconButton href={link.url} className={"fa fa-"+link.icon} />
+                                        <Tooltip title={link.display || link.value || link.url}>
+                                            <IconButton href={link.url} className={"fa fa-" + link.icon}/>
                                         </Tooltip>
                                     </Grid>
                                 )
@@ -174,16 +169,16 @@ class RecipeReviewCard extends React.Component {
                         </Grid>
                     </CardActions>
                 </Grid>
-                <Grid item container spacing={8}>
+                <Grid container item>
                     <CardContent className={this.props.classes.wingsContainer}>
                         <Grid container className={this.props.classes.wings}>
                             {hit.hashtags.map((hashtag, i) => {
-                                let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag )
+                                let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
                                 return (
-                                    <Wings  src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture} 
-                                            label={displayedName} 
-                                            onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
-                                            className={(hashtag.class ? hashtag.class : 'notHighlighted')} />
+                                    <Wings src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture}
+                                           label={displayedName}
+                                           onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
+                                           className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
                                 )
                             })}
                         </Grid>
@@ -194,12 +189,12 @@ class RecipeReviewCard extends React.Component {
     }
 }
 
-RecipeReviewCard.propTypes = {
+CardProfile.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
 export default inject('commonStore')(
     observer(
-        withStyles(styles)(RecipeReviewCard)
+        withStyles(styles)(CardProfile)
     )
 );
