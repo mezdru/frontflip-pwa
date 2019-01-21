@@ -8,6 +8,8 @@ import Register from './register/Register';
 import { injectIntl } from 'react-intl';
 import {inject, observer} from 'mobx-react';
 import { observe} from 'mobx';
+import Banner from '../../components/utils/banner/Banner';
+import Logo from '../../components/utils/logo/Logo';
 
 class Auth extends React.Component {
 
@@ -34,32 +36,42 @@ class Auth extends React.Component {
     };
     
     render() {
-        const {theme} = this.props;
+        const {theme, classes} = this.props;
         let intl = this.props.intl;
         
         return (
-            <Grid container spacing={16}>
-                <Grid item xs={12} style={{marginTop: -8}}>
-                    <Tabs
-                        value={this.state.value}
-                        onChange={this.handleChange}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        fullWidth={true}
-                    >
-                        <Tab label={intl.formatMessage({id: 'Sign In'})} style={{textAlign: 'left'}}/>
-                        <Tab label={intl.formatMessage({id: 'Sign Up'})} style={{textAlign: 'right'}}/>
-                    </Tabs>
+            <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
+                <Grid container item alignItems={"stretch"}>
+                    <Banner/>
                 </Grid>
-                <Grid item xs={12}>
-                    <SwipeableViews
-                        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                        index={this.state.value}
-                        onChangeIndex={this.handleChangeIndex}
-                    >
-                        <Login/>
-                        <Register/>
-                    </SwipeableViews>
+                <Grid container item justify={"center"}>
+                    <Logo type={'organisation'} alt="org-logo" className={classes.logo}/>
+                </Grid>
+                <Grid container item xs={12} sm={6} lg={4}>
+                    <Grid container spacing={16}>
+                        <Grid item xs={12} style={{marginTop: -8}}>
+                            <Tabs
+                                value={this.state.value}
+                                onChange={this.handleChange}
+                                indicatorColor="primary"
+                                textColor="primary"
+                                fullWidth={true}
+                            >
+                                <Tab label={intl.formatMessage({id: 'Sign In'})} style={{textAlign: 'left'}}/>
+                                <Tab label={intl.formatMessage({id: 'Sign Up'})} style={{textAlign: 'right'}}/>
+                            </Tabs>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <SwipeableViews
+                                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                                index={this.state.value}
+                                onChangeIndex={this.handleChangeIndex}
+                            >
+                                <Login/>
+                                <Register/>
+                            </SwipeableViews>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         );

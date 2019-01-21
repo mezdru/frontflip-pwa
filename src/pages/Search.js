@@ -4,6 +4,7 @@ import Banner from '../components/utils/banner/Banner';
 import Card from '../components/card/CardProfile';
 import MainAlgoliaSearch from '../components/algolia/MainAlgoliaSearch';
 import {inject, observer} from "mobx-react";
+import Header from '../components/header/Header';
 
 const styles = {
     searchBanner: {
@@ -25,10 +26,10 @@ class Search extends React.Component {
         this.props.commonStore.setSearchFilters([]);
         window.addEventListener('scroll', this.onScroll, false);
 
-        if(this.props.match.params.organisationTag && this.props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) {
-            this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
-            this.props.organisationStore.getOrganisationForPublic();
-        }
+        // if(this.props.match.params.organisationTag && this.props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) {
+        //     this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
+        //     this.props.organisationStore.getOrganisationForPublic();
+        // }
     };
     
     componentWillUnmount = () => {
@@ -50,12 +51,17 @@ class Search extends React.Component {
     render() {
         
         return (
-            <Grid container direction={'column'} alignItems={'center'}>
-                <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner} style={{opacity: this.state.bannerOpacity}}>
-                    <Banner />
-                </Grid>
-                <MainAlgoliaSearch HitComponent={Card} resultsType={'person'}/>
-            </Grid>
+            <div>
+                <Header />
+                <main>
+                    <Grid container direction={'column'} alignItems={'center'}>
+                        <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner} style={{opacity: this.state.bannerOpacity}}>
+                            <Banner />
+                        </Grid>
+                        <MainAlgoliaSearch HitComponent={Card} resultsType={'person'}/>
+                    </Grid>
+                </main>
+            </div>
         );
     }
 }

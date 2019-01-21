@@ -29,6 +29,24 @@ class OrganisationStore {
         this.values.orgTag = '';
     }
 
+    getOrganisation() {
+        if(this.values.orgId) {
+            this.inProgress = true;
+            this.errors = null;
+    
+            return agent.Organisation.get(this.values.orgId)
+                .then(data => { 
+                    if(data) this.setOrganisation(data.organisation);
+                    return this.values.organisation;
+                })
+                .catch(action((err) => {
+                    this.errors = err.response && err.response.body && err.response.body.errors;
+                    throw err;
+                }))
+                .finally(action(()=> { this.inProgress = false; }));   
+        }
+    }
+
     getAlgoliaKey() {
         this.inProgress = true;
         this.errors = null;
@@ -87,6 +105,7 @@ decorate(OrganisationStore, {
     setOrganisation: action,
     setOrgTag: action,
     setOrgId: action,
+    getOrganisation: action,
     getAlgoliaKey: action,
     getOrganisationForPublic: action
 });

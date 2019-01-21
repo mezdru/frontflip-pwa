@@ -3,7 +3,6 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 import Home from '../pages/Home';
 import PasswordForgot from "../pages/auth/PasswordForgot";
 import PasswordReset from "../pages/auth/PasswordReset";
-import Search from '../pages/Search';
 import RoutesWithOrgTag from './RoutesWithOrgTag';
 
 class RoutesWithLocale extends Component {
