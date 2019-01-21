@@ -3,9 +3,7 @@ import {Grid, withStyles} from '@material-ui/core';
 import Banner from '../../components/utils/banner/Banner';
 import Logo from '../../components/utils/logo/Logo';
 import Auth from '../../components/auth/Auth';
-import bannerImg from '../../resources/images/fly_away.jpg';
 import {inject, observer} from "mobx-react";
-import {observe} from 'mobx';
 import Header from '../../components/header/Header';
 
 const styles = {
