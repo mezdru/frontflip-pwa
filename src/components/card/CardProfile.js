@@ -25,6 +25,9 @@ const styles = theme => ({
         display: 'inline-block',
         color: 'white',
         position: 'relative',
+    },
+    fullWidth: {
+        width: '100%'
     }
 });
 
@@ -136,7 +139,7 @@ class CardProfile extends React.Component {
         this.orderHashtags(hit);
         
         return (
-            <Card>
+            <Card className={classes.fullWidth}>
                 <Grid item container>
                     <CardHeader
                         avatar={

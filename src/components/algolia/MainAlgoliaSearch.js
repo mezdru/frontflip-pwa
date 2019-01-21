@@ -1,4 +1,4 @@
-import { CircularProgress, withStyles } from "@material-ui/core";
+import { CircularProgress, withStyles, Grid } from "@material-ui/core";
 import React, { Component } from 'react';
 import {inject, observer} from "mobx-react";
 import { InstantSearch, Hits, Configure } from "react-instantsearch-dom";
@@ -89,9 +89,16 @@ class MainAlgoliaSearch extends Component {
                                         apiKey={algoliaKey}>
                                 <Configure filters={filters} />
                                 {HitComponent &&  (
-                                    <Hits 
-                                        hitComponent={hit => <HitComponent hit={hit.hit} addToFilters={this.addToFilters} />}
-                                        className={classes.hitList}/>
+                                    // <Grid container xs={12} sm={6}>
+                                    <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
+                                        <Hits 
+                                            hitComponent={hit => (
+                                                <Grid container xs={10} et sm={6} lg={4}>
+                                                    <HitComponent hit={hit.hit} addToFilters={this.addToFilters} />
+                                                </Grid>
+                                            )}
+                                            className={classes.hitList}/>
+                                    </Grid>
                                 )}
                                 { !HitComponent && (
                                     <Hits className={classes.hitList}/>
