@@ -44,8 +44,8 @@ class Search extends React.Component {
             // ok can access but user has no record here 
             // perform better test here (user can be login but not registered in this org)
         } else {
-            // can't access, redirect to login
-            this.setState({redirectTo: '/' + this.state.locale});
+            // can't access, redirect to signin
+            this.setState({redirectTo: '/' + this.state.locale + '/signin'});
         }        
     };
     

@@ -18,13 +18,16 @@ class MainRouteOrganisationRedirect extends React.Component {
         this.state = {
             redirectTo: null,
             locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
-            isAuth: this.props.authStore.isAuth()
+            isAuth: this.props.authStore.isAuth(),
+            renderComponent: false
         };
 
         if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
             // set orgTag params and let the user go where he wants to
             this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
-            this.props.organisationStore.getOrganisationForPublic();
+            this.props.organisationStore.getOrganisationForPublic()
+            .then(() => {this.setState({renderComponent: true})})
+            .catch(() => {this.setState({renderComponent: true})});
             // next, if user is auth and can access the org, it's ok
             // if user isn't auth and org is public, it's ok
             // if user isn't auth and org isn't public, it's not ok
@@ -40,8 +43,9 @@ class MainRouteOrganisationRedirect extends React.Component {
                         if(organisation) {
                             console.log('auth & org found');
                             this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/search'});
+                            this.setState({renderComponent: true});
                         }
-                    })
+                    }).catch(()=>{this.setState({renderComponent: true})});
                     // get org by id & set orgTag url parameter (redirect)
                     // search page will next decide if the user should create his profile or not
                 } else {
@@ -56,9 +60,10 @@ class MainRouteOrganisationRedirect extends React.Component {
     
     render() {
         const endUrl = window.location.pathname + window.location.search;
-        const {redirectTo} = this.state;
+        const {redirectTo, renderComponent} = this.state;
 
-        return (
+        if(renderComponent) {
+            return (
                 <div>
                     <Switch>
                         {redirectTo && (
@@ -78,7 +83,12 @@ class MainRouteOrganisationRedirect extends React.Component {
                         <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={Search} />
                     </Switch>
                 </div>
-        );
+            );
+        } else {
+            return (<div></div>);
+        }
+
+
     }
 }
 

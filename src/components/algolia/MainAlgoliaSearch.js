@@ -22,6 +22,14 @@ class MainAlgoliaSearch extends Component {
     }
 
     componentDidMount() {
+        if(this.props.organisationStore.values.organisation._id){
+            this.props.organisationStore.getAlgoliaKey()
+            .then((algoliaKey) => {
+                this.setState({algoliaKey: algoliaKey});
+            }).catch((err) => {
+                // window.location.href = UrlService.createUrl(window.location.host, '/', undefined);
+            });
+        }
         observe(this.props.organisationStore.values, 'organisation', (change) => {
             if(this.props.organisationStore.values.organisation._id){
                 this.props.organisationStore.getAlgoliaKey()

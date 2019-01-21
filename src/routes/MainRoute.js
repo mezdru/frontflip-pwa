@@ -12,11 +12,9 @@ class MainRoute extends React.Component {
             locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
             renderComponent: false
         }
-        console.log('route1');
 
         // set current user 
         if(this.props.authStore.isAuth()) {
-            console.log('get current user');
             this.props.userStore.getCurrentUser()
             .then(() => {this.setState({renderComponent: true})})
             .catch((err) => {this.setState({renderComponent: true})});
