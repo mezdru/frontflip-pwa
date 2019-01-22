@@ -8,6 +8,14 @@ export const styles = theme => ({
         width: '100%',
         marginBottom: 150
     },
+    hitListContainerWithoutMargin: {
+        position: 'relative',
+        top: 60,
+        [theme.breakpoints.up('md')]: {
+            top: 150,
+        },
+        width: '100%'
+    },
     hitList: {
         width: '100%',
         '& ul': {

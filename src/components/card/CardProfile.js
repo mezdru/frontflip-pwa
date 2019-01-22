@@ -130,7 +130,7 @@ class CardProfile extends React.Component {
     
     
     render() {
-        const {classes, hit, addToFilters} = this.props;
+        const {classes, hit, addToFilters, handleDisplayProfile} = this.props;
         this.transformLinks(hit);
         this.makeHightlighted(hit);
         this.orderHashtags(hit);
@@ -151,6 +151,7 @@ class CardProfile extends React.Component {
                                 {hit.intro}
                             </Typography>
                         }
+                        onClick={(e) => handleDisplayProfile(e, hit)}
                     />
                 </Grid>
                 <Grid item container justify={'flex-end'}>

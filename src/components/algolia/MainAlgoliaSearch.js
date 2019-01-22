@@ -17,7 +17,8 @@ class MainAlgoliaSearch extends Component {
             filters: 'type:person',
             refresh: false,
             newFilter: {},
-            displayedHit: null
+            displayedHit: null,
+            resultsType: 'person'
         }
         this.updateFilters = this.updateFilters.bind(this);
         this.addToFilters = this.addToFilters.bind(this);
@@ -70,8 +71,9 @@ class MainAlgoliaSearch extends Component {
     }
 
     render() {
-        const {algoliaKey, filters, newFilter, displayedHit} = this.state;
-        const { HitComponent, classes, resultsType } = this.props;
+        const {algoliaKey, filters, newFilter, displayedHit, resultsType} = this.state;
+        const { HitComponent, classes } = this.props;
+        console.log(resultsType)
 
         if(algoliaKey) {
             return(
@@ -103,7 +105,7 @@ class MainAlgoliaSearch extends Component {
                                         <Hits 
                                             hitComponent={hit => (
                                                 <Grid item xs={10} sm={6} lg={4}>
-                                                    <HitComponent hit={hit.hit} addToFilters={this.addToFilters} />
+                                                    <HitComponent hit={hit.hit} addToFilters={this.addToFilters} handleDisplayProfile={this.handleDisplayProfile} />
                                                 </Grid>
                                             )}
                                             className={classes.hitList}/>
@@ -115,8 +117,8 @@ class MainAlgoliaSearch extends Component {
                             </InstantSearch>
                         </div>
                     )}
-                    {resultsType === 'profile' &&(
-                        <ProfileLayout hit={displayedHit} />
+                    {resultsType === 'profile' && (
+                        <ProfileLayout hit={displayedHit} className={classes.hitListContainerWithoutMargin} />
                     )}
                 </StickyContainer>
             )
