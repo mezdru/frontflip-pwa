@@ -10,7 +10,6 @@ class MainRouteOrganisation extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log('route2');
 
         this.state = {
             isAuth: this.props.authStore.isAuth()

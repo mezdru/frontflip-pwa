@@ -2,6 +2,7 @@ import superagentPromise from 'superagent-promise';
 import _superagent from 'superagent';
 import authStore from './stores/auth.store';
 import commonStore from './stores/common.store';
+import UrlService from './services/url.service';
 
 const superagent = superagentPromise(_superagent, global.Promise);
 //const API_ROOT_AUTH = 'https://auth-wingzy-staging.herokuapp.com';
@@ -12,6 +13,7 @@ const API_ROOT = process.env.REACT_APP_API_ROOT + '/' + locale;
 const handleErrors = err => {
     if (err && err.response && err.response.status === 401) {
         authStore.logout();
+        window.location.href = UrlService.createUrl(window.location.host, '/signin', null);
     }
     return err;
 };
