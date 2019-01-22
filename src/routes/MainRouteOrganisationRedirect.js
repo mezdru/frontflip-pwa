@@ -24,27 +24,30 @@ class MainRouteOrganisationRedirect extends React.Component {
             this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
             this.props.organisationStore.getOrganisationForPublic()
             .then((organisation) => {
+                this.props.organisationStore.setOrgId(organisation._id);
                 console.log('get org tag ok')
                 if(organisation.public) {
-                    console.log('org public')
                     // ok
                     this.setState({renderComponent: true});
                 } else if(this.state.isAuth) {
-                    console.log('org private but user auth')
                     // org isn't public
                     this.props.organisationStore.getOrganisation()
                     .then((organisation) => {
-                        console.log('get org ok ')
                         // ok : try to get record
-                        this.props.recordStore.setOrgId(organisation._id);
+                        let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
+                        this.props.recordStore.setRecordId(currentOrgAndRecord.record);
                         this.props.recordStore.getRecord()
                         .then(() => {
                             // ALL OK : user can access
                             this.setState({renderComponent: true});
-                        }).catch(() => {
+                        }).catch((error) => {
+                            console.log('redirect to welcome because error : ')
+                            console.log(error)
                             window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
                         });
                     }).catch((error) => {
+                        console.log('error')
+                        console.log(error)
                         this.controlAccessWithoutOrgTag();
                     });
                 } else {
@@ -55,10 +58,12 @@ class MainRouteOrganisationRedirect extends React.Component {
                 }
             }).catch(() => {
                 // 404 organisation not found
+                console.log('404')
                 this.controlAccessWithoutOrgTag();
             });
         } else {
             // no orgTag provided
+            console.log('no org tag')
             this.controlAccessWithoutOrgTag();
         }
     }
@@ -113,8 +118,8 @@ class MainRouteOrganisationRedirect extends React.Component {
                         <Route exact path="/:locale(en|fr|en-UK)/search" component={null} />
 
                         {/* Main route with orgTag */}
-                        <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/search" component={Search} />
                         <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/search/profile/:profileTag" component={Search} />
+                        <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/search" component={Search} />
                         <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={Search} />
                     </Switch>
                 </div>

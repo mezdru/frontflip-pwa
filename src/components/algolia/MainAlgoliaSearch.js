@@ -8,6 +8,7 @@ import { StickyContainer, Sticky } from 'react-sticky';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import {styles} from './MainAlgoliaSearch.css'
 import ProfileLayout from "../profile/ProfileLayout";
+import { Redirect } from 'react-router-dom';
 
 class MainAlgoliaSearch extends Component {
     constructor(props) {
@@ -17,8 +18,8 @@ class MainAlgoliaSearch extends Component {
             filters: 'type:person',
             refresh: false,
             newFilter: {},
-            displayedHit: null,
-            resultsType: 'person'
+            displayedHit: this.props.profileTag ? {tag: this.props.profileTag} : null,
+            resultsType: this.props.resultsType || 'person'
         }
         this.updateFilters = this.updateFilters.bind(this);
         this.addToFilters = this.addToFilters.bind(this);
@@ -61,19 +62,20 @@ class MainAlgoliaSearch extends Component {
     addToFilters(e, element) {
         e.preventDefault();
         this.setState({newFilter: {label: element.name, value: element.tag}});
+        this.setState({resultsType: 'person'});
     }
 
     handleDisplayProfile(e, hit) {
         e.preventDefault();
         this.setState({displayedHit: hit});
         this.setState({resultsType: 'profile'});
-        console.log(hit);
     }
 
     render() {
         const {algoliaKey, filters, newFilter, displayedHit, resultsType} = this.state;
         const { HitComponent, classes } = this.props;
-        console.log(resultsType)
+        const { locale } = this.props.commonStore;
+        const { orgTag } = this.props.organisationStore.values;
 
         if(algoliaKey) {
             return(
@@ -118,7 +120,18 @@ class MainAlgoliaSearch extends Component {
                         </div>
                     )}
                     {resultsType === 'profile' && (
-                        <ProfileLayout hit={displayedHit} className={classes.hitListContainerWithoutMargin} />
+                        <Redirect push to={'/' + locale + '/' + orgTag + '/search/profile/' + displayedHit.tag } />
+                    )}
+                    {resultsType === 'profile' && (
+                        <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
+                                        indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
+                                        apiKey={algoliaKey}>
+                            <Configure filters={'type:person AND tag:'+displayedHit.tag} />
+                            <Hits hitComponent={hit => (
+                                <ProfileLayout hit={hit.hit} className={classes.hitListContainerWithoutMargin} addToFilters={this.addToFilters}/>
+                            )} className={classes.hitProfile} />
+                            
+                        </InstantSearch>
                     )}
                 </StickyContainer>
             )

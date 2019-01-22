@@ -34,6 +34,14 @@ export const styles = theme => ({
             margin: 'auto'
         }
     },
+    hitProfile: {
+        width: '100%',
+        '& ul': {
+            listStyleType: 'none',
+            padding:0,
+            marginTop:0,
+        }
+    },
     fullWidth: {
         width: '100%'
     },

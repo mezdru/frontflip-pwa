@@ -8,6 +8,7 @@ import defaultPicture from '../../resources/images/placeholder_person.png';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
 
 const LOGO_HEIGHT = 170;
+const EXTRA_LINK_LIMIT = 20;
 const styles = theme => ({
     generalPart: {
         position: 'relative',
@@ -24,6 +25,7 @@ const styles = theme => ({
         [theme.breakpoints.up('md')]: {
             minHeight: 'calc(100vh - 429px)'
         },
+        padding: 16
     },
     logoContainer: {
         position: 'relative',
@@ -62,7 +64,6 @@ const styles = theme => ({
         color: 'red'
     }
 });
-const EXTRA_LINK_LIMIT = 5;
 
 class ProfileLayout extends React.Component {
 
@@ -136,6 +137,7 @@ class ProfileLayout extends React.Component {
         if(picture && picture.path) return null;
         else if (picture && picture.url) return picture.url;
         else if (picture && picture.uri) return picture.uri;
+        else if (picture && picture.emoji) return picture.emoji;
         else return null;
     }
     
@@ -163,10 +165,13 @@ class ProfileLayout extends React.Component {
     };
 
     render(){
-        const { hit, className, classes, theme } = this.props;
+        const { hit, className, classes, theme, addToFilters } = this.props;
+        const { locale } = this.props.commonStore;
         this.transformLinks(hit);
         this.makeHightlighted(hit);
         this.orderHashtags(hit);
+
+        console.log(hit.hashtags)
 
         if(hit) {
             return(
@@ -199,7 +204,15 @@ class ProfileLayout extends React.Component {
                         
                     </Grid>
                     <Grid container item xs={12} sm={6} lg={9} className={classes.hashtagsPart} >
-
+                        {hit.hashtags.map((hashtag, i) => {
+                                let displayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
+                                return (
+                                    <Wings src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture}
+                                           label={displayedName} key={hashtag.tag}
+                                           onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
+                                           className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
+                                )
+                        })}
                     </Grid>
                 </Grid>
             )

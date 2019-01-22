@@ -21,32 +21,14 @@ class Search extends React.Component {
         this.state = {
             bannerOpacity: 0.8,
             redirectTo: null,
-            locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
+            locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
+            profileTag: (this.props.match && this.props.match.params && this.props.match.params.profileTag) ? this.props.match.params.profileTag : null
         };
     }
     
     componentDidMount = () => {
         this.props.commonStore.setSearchFilters([]);
-        window.addEventListener('scroll', this.onScroll, false);
-
-        if(this.props.authStore.isAuth()) {
-            let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === this.props.organisationStore.values.organisation._id);
-            this.props.recordStore.setRecordId(currentOrgAndRecord ? currentOrgAndRecord.record : null);
-            this.props.recordStore.getRecord()
-            .then(currentRecord => {
-                // ok
-                console.log('current record fetching');
-            }).catch(err => {
-                console.log('error in fetching record');
-                
-            });
-        } else if(this.props.organisationStore.values.organisation.public) {
-            // ok can access but user has no record here 
-            // perform better test here (user can be login but not registered in this org)
-        } else {
-            // can't access, redirect to signin
-            this.setState({redirectTo: '/' + this.state.locale + '/signin'});
-        }        
+        window.addEventListener('scroll', this.onScroll, false);   
     };
     
     componentWillUnmount = () => {
@@ -66,7 +48,7 @@ class Search extends React.Component {
     };
     
     render() {
-        const {redirectTo} = this.state;
+        const {redirectTo, profileTag} = this.state;
 
         if(redirectTo) return (<Redirect to={redirectTo} />);
         
@@ -78,7 +60,12 @@ class Search extends React.Component {
                         <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner} style={{opacity: this.state.bannerOpacity}}>
                             <Banner />
                         </Grid>
-                        <MainAlgoliaSearch HitComponent={Card} resultsType={'person'}/>
+                        {!profileTag &&(
+                            <MainAlgoliaSearch HitComponent={Card} resultsType={'person'}/>
+                        )}
+                        {profileTag &&(
+                            <MainAlgoliaSearch HitComponent={Card} resultsType={'profile'} profileTag={profileTag} />
+                        )}
                     </Grid>
                 </main>
             </div>
