@@ -28,6 +28,9 @@ const styles = theme => ({
     },
     fullWidth: {
         width: '100%'
+    },
+    cardHeader: {
+        cursor: 'pointer'
     }
 });
 
@@ -153,6 +156,7 @@ class CardProfile extends React.Component {
                             </Typography>
                         }
                         onClick={(e) => handleDisplayProfile(e, hit)}
+                        className={classes.cardHeader}
                     />
                 </Grid>
                 <Grid item container justify={'flex-end'}>

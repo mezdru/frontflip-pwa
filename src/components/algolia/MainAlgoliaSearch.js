@@ -62,7 +62,7 @@ class MainAlgoliaSearch extends Component {
     addToFilters(e, element) {
         e.preventDefault();
         this.setState({newFilter: {label: element.name, value: element.tag}});
-        this.setState({resultsType: 'person'});
+        this.setState({resultsType: 'person', displayedHit: null});
     }
 
     handleDisplayProfile(e, hit) {
@@ -97,6 +97,7 @@ class MainAlgoliaSearch extends Component {
                     {/* Search results */}
                     {resultsType === 'person' && (
                         <div className={classes.hitListContainer}>
+                                <Redirect push to={'/' + locale + '/' + orgTag + '/search'} />
                                 <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                         indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                         apiKey={algoliaKey}>

@@ -10,6 +10,7 @@ import logoWingzyAuth from '../../resources/images/wingzy_512.png';
 import './header.css';
 import {styles} from './Header.css.js'
 import HeaderLinks from './HeaderLinks';
+import Logo from '../utils/logo/Logo';
 
 class HeaderToolBar extends Component {
     render() {
@@ -27,7 +28,7 @@ class HeaderToolBar extends Component {
                 </IconButton>
                 <Typography className={classes.title} variant="h6" color="inherit" noWrap>
                     <a href={(process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP}>
-                        <img src={(auth ? logoWingzyAuth : logoWingzy)} height="36px" alt="Logo of Wingzy"/>
+                        <Logo />
                     </a>
                 </Typography>
                 
