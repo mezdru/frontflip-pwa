@@ -93,7 +93,7 @@ class MainAlgoliaSearch extends Component {
                                     <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
                                         <Hits 
                                             hitComponent={hit => (
-                                                <Grid container xs={10} et sm={6} lg={4}>
+                                                <Grid item xs={10} sm={6} lg={4}>
                                                     <HitComponent hit={hit.hit} addToFilters={this.addToFilters} />
                                                 </Grid>
                                             )}
