@@ -5,7 +5,6 @@ import AuthPage from '../pages/auth/AuthPage';
 import Search from "../pages/Search";
 import PasswordForgot from "../pages/auth/PasswordForgot";
 import PasswordReset from "../pages/auth/PasswordReset";
-import Profile from '../pages/Profile';
 import {inject, observer} from 'mobx-react';
 
 class MainRouteOrganisationRedirect extends React.Component {
@@ -21,7 +20,6 @@ class MainRouteOrganisationRedirect extends React.Component {
         };
 
         if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
-            console.log('orgTAg found')
             // set orgTag params
             this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
             this.props.organisationStore.getOrganisationForPublic()
@@ -41,14 +39,12 @@ class MainRouteOrganisationRedirect extends React.Component {
                         this.props.recordStore.setOrgId(organisation._id);
                         this.props.recordStore.getRecord()
                         .then(() => {
-                            console.log('get record ok')
                             // ALL OK : user can access
                             this.setState({renderComponent: true});
                         }).catch(() => {
                             window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
                         });
                     }).catch((error) => {
-                        console.log('get org fail')
                         this.controlAccessWithoutOrgTag();
                     });
                 } else {
@@ -58,9 +54,8 @@ class MainRouteOrganisationRedirect extends React.Component {
                     this.setState({renderComponent: true});
                 }
             }).catch(() => {
-                // should inform the user that we can't retreive the organisation
-                // 404
-                this.setState({renderComponent: true});
+                // 404 organisation not found
+                this.controlAccessWithoutOrgTag();
             });
         } else {
             // no orgTag provided
@@ -114,12 +109,12 @@ class MainRouteOrganisationRedirect extends React.Component {
                         <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={() => {return <AuthPage initialTab={1} />}} />
                         <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
                         
-                        {/* Route which will need organisationTag */}
+                        {/* Route which will need organisationTag | should not be possible to access */}
                         <Route exact path="/:locale(en|fr|en-UK)/search" component={null} />
 
                         {/* Main route with orgTag */}
                         <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/search" component={Search} />
-                        <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/search/profile/:profileTag" component={Profile} />
+                        <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/search/profile/:profileTag" component={Search} />
                         <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={Search} />
                     </Switch>
                 </div>

@@ -7,6 +7,7 @@ import { observe } from 'mobx';
 import { StickyContainer, Sticky } from 'react-sticky';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import {styles} from './MainAlgoliaSearch.css'
+import ProfileLayout from "../profile/ProfileLayout";
 
 class MainAlgoliaSearch extends Component {
     constructor(props) {
@@ -15,10 +16,12 @@ class MainAlgoliaSearch extends Component {
             algoliaKey: null,
             filters: 'type:person',
             refresh: false,
-            newFilter: {}
+            newFilter: {},
+            displayedHit: null
         }
         this.updateFilters = this.updateFilters.bind(this);
         this.addToFilters = this.addToFilters.bind(this);
+        this.handleDisplayProfile = this.handleDisplayProfile.bind(this);
     }
 
     componentDidMount() {
@@ -59,9 +62,16 @@ class MainAlgoliaSearch extends Component {
         this.setState({newFilter: {label: element.name, value: element.tag}});
     }
 
+    handleDisplayProfile(e, hit) {
+        e.preventDefault();
+        this.setState({displayedHit: hit});
+        this.setState({resultsType: 'profile'});
+        console.log(hit);
+    }
+
     render() {
         const {locale} = this.props.commonStore;
-        const {algoliaKey, filters, newFilter} = this.state;
+        const {algoliaKey, filters, newFilter, displayedHit} = this.state;
         const { HitComponent, classes, resultsType } = this.props;
 
         if(algoliaKey) {
@@ -105,7 +115,9 @@ class MainAlgoliaSearch extends Component {
                                 )}
                             </InstantSearch>
                         </div>
-
+                    )}
+                    {resultsType === 'profile' &&(
+                        <ProfileLayout hit={displayedHit} />
                     )}
                 </StickyContainer>
             )
