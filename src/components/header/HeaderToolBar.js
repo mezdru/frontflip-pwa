@@ -12,10 +12,6 @@ import {styles} from './Header.css.js'
 import HeaderLinks from './HeaderLinks';
 
 class HeaderToolBar extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const {classes, open, auth, anchorEl, handleMobileMenuOpen, handleProfileMenuOpen} = this.props;
 

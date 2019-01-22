@@ -112,7 +112,8 @@ class Register extends React.Component {
                         <Grid item>
                             <Typography style={{
                                 fontSize: '1rem',
-                                color: '#7c7c7c'
+                                color: '#7c7c7c',
+                                textAlign: 'center'
                             }}><FormattedMessage id="or"/></Typography>
                         </Grid>
                         <Grid item>

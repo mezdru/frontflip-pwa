@@ -1,4 +1,4 @@
-import { CircularProgress, withStyles } from "@material-ui/core";
+import { CircularProgress, withStyles, Grid } from "@material-ui/core";
 import React, { Component } from 'react';
 import {inject, observer} from "mobx-react";
 import { InstantSearch, Hits, Configure } from "react-instantsearch-dom";
@@ -7,6 +7,7 @@ import { observe } from 'mobx';
 import { StickyContainer, Sticky } from 'react-sticky';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import {styles} from './MainAlgoliaSearch.css'
+import ProfileLayout from "../profile/ProfileLayout";
 
 class MainAlgoliaSearch extends Component {
     constructor(props) {
@@ -15,13 +16,23 @@ class MainAlgoliaSearch extends Component {
             algoliaKey: null,
             filters: 'type:person',
             refresh: false,
-            newFilter: {}
+            newFilter: {},
+            displayedHit: null
         }
         this.updateFilters = this.updateFilters.bind(this);
         this.addToFilters = this.addToFilters.bind(this);
+        this.handleDisplayProfile = this.handleDisplayProfile.bind(this);
     }
 
     componentDidMount() {
+        if(this.props.organisationStore.values.organisation._id){
+            this.props.organisationStore.getAlgoliaKey()
+            .then((algoliaKey) => {
+                this.setState({algoliaKey: algoliaKey});
+            }).catch((err) => {
+                // window.location.href = UrlService.createUrl(window.location.host, '/', undefined);
+            });
+        }
         observe(this.props.organisationStore.values, 'organisation', (change) => {
             if(this.props.organisationStore.values.organisation._id){
                 this.props.organisationStore.getAlgoliaKey()
@@ -51,9 +62,15 @@ class MainAlgoliaSearch extends Component {
         this.setState({newFilter: {label: element.name, value: element.tag}});
     }
 
+    handleDisplayProfile(e, hit) {
+        e.preventDefault();
+        this.setState({displayedHit: hit});
+        this.setState({resultsType: 'profile'});
+        console.log(hit);
+    }
+
     render() {
-        const {locale} = this.props.commonStore;
-        const {algoliaKey, filters, newFilter} = this.state;
+        const {algoliaKey, filters, newFilter, displayedHit} = this.state;
         const { HitComponent, classes, resultsType } = this.props;
 
         if(algoliaKey) {
@@ -81,16 +98,25 @@ class MainAlgoliaSearch extends Component {
                                         apiKey={algoliaKey}>
                                 <Configure filters={filters} />
                                 {HitComponent &&  (
-                                    <Hits 
-                                        hitComponent={hit => <HitComponent hit={hit.hit} addToFilters={this.addToFilters} />}
-                                        className={classes.hitList}/>
+                                    // <Grid container xs={12} sm={6}>
+                                    <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
+                                        <Hits 
+                                            hitComponent={hit => (
+                                                <Grid item xs={10} sm={6} lg={4}>
+                                                    <HitComponent hit={hit.hit} addToFilters={this.addToFilters} />
+                                                </Grid>
+                                            )}
+                                            className={classes.hitList}/>
+                                    </Grid>
                                 )}
                                 { !HitComponent && (
                                     <Hits className={classes.hitList}/>
                                 )}
                             </InstantSearch>
                         </div>
-
+                    )}
+                    {resultsType === 'profile' &&(
+                        <ProfileLayout hit={displayedHit} />
                     )}
                 </StickyContainer>
             )

@@ -16,27 +16,27 @@ let RedirectUser = inject("authStore", "commonStore", "userStore", "organisation
     }
 
     componentDidMount() {
-        this.props.authStore.isAuth()
-        .then((isAuth) => {
-            console.log('isauth : ' + isAuth);
-            if(!isAuth) this.setState({redirectTo: '/'});
-            else{
-                console.log('is auth should be true');
-                if(this.props.commonStore.getCookie('orgToRegister')){
-                    //set orgId to auth
-                    this.props.authStore.registerToOrg()
-                    .then(() => {
-                        // suppose ok 
-                        this.setState({redirectTo: '/onboard/profile'});
-                    }).catch(() => {
-                        this.redirectWithOrgsAndRecords();
-                    });
-                }else{
-                    console.log('should be here');
-                    this.redirectWithOrgsAndRecords();
-                }
-            }
-        }).catch(()=> { this.setState({redirectTo: '/'})});
+        // this.props.authStore.isAuth()
+        // .then((isAuth) => {
+        //     console.log('isauth : ' + isAuth);
+        //     if(!isAuth) this.setState({redirectTo: '/'});
+        //     else{
+        //         console.log('is auth should be true');
+        //         if(this.props.commonStore.getCookie('orgToRegister')){
+        //             //set orgId to auth
+        //             this.props.authStore.registerToOrg()
+        //             .then(() => {
+        //                 // suppose ok 
+        //                 this.setState({redirectTo: '/onboard/profile'});
+        //             }).catch(() => {
+        //                 this.redirectWithOrgsAndRecords();
+        //             });
+        //         }else{
+        //             console.log('should be here');
+        //             this.redirectWithOrgsAndRecords();
+        //         }
+        //     }
+        // }).catch(()=> { this.setState({redirectTo: '/'})});
     }
 
     redirectWithOrgsAndRecords(){

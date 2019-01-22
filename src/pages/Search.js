@@ -4,6 +4,7 @@ import Banner from '../components/utils/banner/Banner';
 import Card from '../components/card/CardProfile';
 import MainAlgoliaSearch from '../components/algolia/MainAlgoliaSearch';
 import {inject, observer} from "mobx-react";
+import Header from '../components/header/Header';
 import {Redirect} from "react-router-dom";
 
 const styles = {
@@ -28,37 +29,24 @@ class Search extends React.Component {
         this.props.commonStore.setSearchFilters([]);
         window.addEventListener('scroll', this.onScroll, false);
 
-        if(this.props.match.params.organisationTag && this.props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) {
-            this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
-            this.props.organisationStore.getOrganisationForPublic().then(currentOrganisation => {
-                this.props.authStore.isAuth()
-                .then(isAuth => {
-                    if(isAuth) {
-                        this.props.recordStore.setRecordId(
-                            this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === currentOrganisation._id).record
-                        );
-                        this.props.recordStore.getRecord()
-                        .then(currentRecord => {
-                            // ok
-                            console.log('current record fetching');
-                        }).catch(err => {
-                            console.log('error in fetching record');
-                            
-                        });
-                    } else if(currentOrganisation.public) {
-                        // ok can access but user has no record here 
-                        // perform better test here (user can be login but not registered in this org)
-                    } else {
-                        // can't access, redirect to login
-                        this.setState({redirectTo: '/' + this.state.locale});
-                    }
-                })
-            })
-        }
-
-        
-
-        
+        if(this.props.authStore.isAuth()) {
+            let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === this.props.organisationStore.values.organisation._id);
+            this.props.recordStore.setRecordId(currentOrgAndRecord ? currentOrgAndRecord.record : null);
+            this.props.recordStore.getRecord()
+            .then(currentRecord => {
+                // ok
+                console.log('current record fetching');
+            }).catch(err => {
+                console.log('error in fetching record');
+                
+            });
+        } else if(this.props.organisationStore.values.organisation.public) {
+            // ok can access but user has no record here 
+            // perform better test here (user can be login but not registered in this org)
+        } else {
+            // can't access, redirect to signin
+            this.setState({redirectTo: '/' + this.state.locale + '/signin'});
+        }        
     };
     
     componentWillUnmount = () => {
@@ -83,12 +71,17 @@ class Search extends React.Component {
         if(redirectTo) return (<Redirect to={redirectTo} />);
         
         return (
-            <Grid container direction={'column'} alignItems={'center'}>
-                <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner} style={{opacity: this.state.bannerOpacity}}>
-                    <Banner />
-                </Grid>
-                <MainAlgoliaSearch HitComponent={Card} resultsType={'person'}/>
-            </Grid>
+            <div>
+                <Header />
+                <main>
+                    <Grid container direction={'column'} alignItems={'center'}>
+                        <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner} style={{opacity: this.state.bannerOpacity}}>
+                            <Banner />
+                        </Grid>
+                        <MainAlgoliaSearch HitComponent={Card} resultsType={'person'}/>
+                    </Grid>
+                </main>
+            </div>
         );
     }
 }

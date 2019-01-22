@@ -6,6 +6,7 @@ export const styles = theme => ({
             top: 150,
         },
         width: '100%',
+        marginBottom: 150
     },
     hitList: {
         width: '100%',

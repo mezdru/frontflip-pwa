@@ -15,7 +15,7 @@ const styles = theme => ({
         width: 160,
         height: 170,
         marginBottom: '-5rem',
-        ['& img']: {
+        '& img': {
             height: '90%',
             width: '90%',
             borderRadius: '50%',
@@ -25,6 +25,9 @@ const styles = theme => ({
         display: 'inline-block',
         color: 'white',
         position: 'relative',
+    },
+    fullWidth: {
+        width: '100%'
     }
 });
 
@@ -59,9 +62,6 @@ class CardProfile extends React.Component {
                 break;
             case 'hyperlink':
                 link.icon = 'link';
-                break;
-            case 'location':
-                link.icon = 'map-marker';
                 break;
             case 'workplace':
                 link.icon = 'user';
@@ -134,9 +134,8 @@ class CardProfile extends React.Component {
         this.transformLinks(hit);
         this.makeHightlighted(hit);
         this.orderHashtags(hit);
-        
         return (
-            <Card>
+            <Card className={classes.fullWidth} key={hit.objectID}>
                 <Grid item container>
                     <CardHeader
                         avatar={
@@ -159,7 +158,7 @@ class CardProfile extends React.Component {
                         <Grid item container spacing={0}>
                             {hit.links.map((link, i) => {
                                 return (
-                                    <Grid item>
+                                    <Grid item key={link._id}>
                                         <Tooltip title={link.display || link.value || link.url}>
                                             <IconButton href={link.url} className={"fa fa-" + link.icon}/>
                                         </Tooltip>
@@ -176,7 +175,7 @@ class CardProfile extends React.Component {
                                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
                                 return (
                                     <Wings src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture}
-                                           label={displayedName}
+                                           label={displayedName} key={hashtag.tag}
                                            onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
                                            className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
                                 )

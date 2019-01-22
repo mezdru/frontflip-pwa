@@ -98,7 +98,8 @@ class Login extends React.Component {
                     <Grid item>
                         <Typography style={{
                             fontSize: '1rem',
-                            color: '#7c7c7c'
+                            color: '#7c7c7c',
+                            textAlign: 'center'
                         }}><FormattedMessage id="or"/></Typography>
                     </Grid>
                     <Grid item>
@@ -137,13 +138,16 @@ class Login extends React.Component {
                             )
                         }
                     </Grid>
-                    <Grid item>
-                        <Button component={ Link } 
-                                to={"/" + locale + ( (organisation && organisation.tag) ? '/'+organisation.tag:'') + "/password/forgot"} 
-                                variant="text"
-                        >
-                            <FormattedMessage id="I don't have my password"/>
-                        </Button>
+                    <Grid item container justify="center">
+                        <Grid item>
+                            <Button component={ Link } 
+                                    to={"/" + locale + ( (organisation && organisation.tag) ? '/'+organisation.tag:'') + "/password/forgot"} 
+                                    variant="text"
+                            >
+                                <FormattedMessage id="I don't have my password"/>
+                            </Button>
+                        </Grid>
+                        
                     </Grid>
                 </Grid>
             </form>

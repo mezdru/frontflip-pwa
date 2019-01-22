@@ -8,10 +8,6 @@ import {styles} from './Header.css.js'
 import HeaderToolBar from './HeaderToolBar';
 
 class HeaderAppBar extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const {classes, open, auth, anchorEl, handleMobileMenuOpen, handleProfileMenuOpen} = this.props;
 

@@ -40,14 +40,9 @@ class AuthStore {
 
     isAuth() {
         if(commonStore.getAccessToken() || commonStore.getRefreshToken()){
-            return userStore.getCurrentUser()
-            .then(() => {
-                return true;
-            }).catch(() => {
-                return false;
-            })
+            return true;
         }else{
-            return Promise.resolve(false);
+            return false;
         }
     }
 
