@@ -15,7 +15,7 @@ const styles = theme => ({
         width: 160,
         height: 170,
         marginBottom: '-5rem',
-        ['& img']: {
+        '& img': {
             height: '90%',
             width: '90%',
             borderRadius: '50%',
@@ -62,9 +62,6 @@ class CardProfile extends React.Component {
                 break;
             case 'hyperlink':
                 link.icon = 'link';
-                break;
-            case 'location':
-                link.icon = 'map-marker';
                 break;
             case 'workplace':
                 link.icon = 'user';

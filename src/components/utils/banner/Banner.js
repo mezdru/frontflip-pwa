@@ -1,5 +1,4 @@
 import React from 'react';
-import {Avatar} from '@material-ui/core';
 import { observe} from 'mobx';
 import {inject, observer} from "mobx-react";
 import defaultBanner from '../../../resources/images/fly_away.jpg';

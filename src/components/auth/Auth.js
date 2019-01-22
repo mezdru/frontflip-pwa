@@ -8,8 +8,6 @@ import Register from './register/Register';
 import { injectIntl } from 'react-intl';
 import {inject, observer} from 'mobx-react';
 import { observe} from 'mobx';
-import Banner from '../../components/utils/banner/Banner';
-import Logo from '../../components/utils/logo/Logo';
 
 class Auth extends React.Component {
 
@@ -36,7 +34,7 @@ class Auth extends React.Component {
     };
     
     render() {
-        const {theme, classes} = this.props;
+        const {theme} = this.props;
         let intl = this.props.intl;
         
         return (

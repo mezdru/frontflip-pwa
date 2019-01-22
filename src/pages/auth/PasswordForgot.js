@@ -46,7 +46,6 @@ class PasswordForgot extends React.Component {
     };
     
     render() {
-        let {values} = this.props.authStore;
         let {successPasswordReset, emailError} = this.state;
         let {intl} = this.props;
         
@@ -98,10 +97,5 @@ class PasswordForgot extends React.Component {
 }
 
 export default inject('authStore', 'organisationStore')(
-    injectIntl(
-        observer(
-            withStyles(styles)
-            (PasswordForgot)
-        )
-    )
+    injectIntl(observer(withStyles(styles)(PasswordForgot)))
 );

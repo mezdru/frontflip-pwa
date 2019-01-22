@@ -1,16 +1,11 @@
 import React, {Component} from 'react';
-import {inject, observer} from "mobx-react";
-import {BrowserRouter, Link, Redirect} from "react-router-dom";
+import {BrowserRouter} from "react-router-dom";
 import MainRoute from './routes/MainRoute';
 import './components/header/header.css';
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-    }
     
     render() {
-        
         return (
             <BrowserRouter>
                 <MainRoute/>
@@ -19,8 +14,4 @@ class App extends Component {
     }
 }
 
-export default inject('commonStore', 'userStore', 'authStore', 'organisationStore')(
-    observer(
-            App
-    )
-);
+export default App;

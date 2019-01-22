@@ -3,7 +3,6 @@ import {Grid, withStyles} from '@material-ui/core';
 import Banner from '../../components/utils/banner/Banner';
 import Logo from '../../components/utils/logo/Logo';
 import Auth from '../../components/auth/Auth';
-import {inject, observer} from "mobx-react";
 import Header from '../../components/header/Header';
 
 const styles = {
@@ -14,10 +13,6 @@ const styles = {
 };
 
 class AuthPage extends React.Component {
-    
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         const {classes, initialTab} = this.props;
@@ -43,10 +38,7 @@ class AuthPage extends React.Component {
     }
 }
 
-export default inject('organisationStore')(
-    observer(
+export default 
         withStyles(styles, {withTheme: true})(
             AuthPage
-        )
-    )
-);
+        );

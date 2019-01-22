@@ -2,11 +2,9 @@ import React, {Component} from 'react';
 import {withStyles} from "@material-ui/core";
 import {inject, observer} from "mobx-react";
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import {CssBaseline, IconButton, Menu, MenuItem, Button} from '@material-ui/core';
+import {CssBaseline, Menu, MenuItem, Button} from '@material-ui/core';
 import {FormattedMessage} from 'react-intl';
-import {AccountCircle} from '@material-ui/icons';
-import {BrowserRouter, Link, Redirect} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import './header.css';
 import {styles} from './Header.css.js'
 import HeaderAppBar from './HeaderAppBar';
@@ -51,22 +49,6 @@ class App extends Component {
         this.setState({mobileMoreAnchorEl: null});
     };
     
-    componentDidMount() {
-        // this.props.authStore.isAuth()
-        // .then(isAuth => {
-        //     isAuth ? this.setState({auth: true}) : this.setState({auth: false});
-        //     if(isAuth && (this.props.userStore.values.currentUser.google || this.props.userStore.values.currentUser.email.validated)){
-        //         window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/search', this.props.organisationStore.values.orgTag);
-        //     }
-        // });
-        // if (!this.props.userStore.values.currentUser._id && this.state.auth) {
-        //     this.props.userStore.getCurrentUser();
-        // }
-    }
-    
-    
-    
-    
     handleLogout = () => {
         this.props.authStore.logout()
             .then(this.setState({successLogout: true}));
@@ -76,7 +58,7 @@ class App extends Component {
         const {anchorEl, mobileMoreAnchorEl, open, successLogout, auth} = this.state;
         const isMenuOpen = Boolean(anchorEl);
         const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-        const {classes, ComponentToRender} = this.props;
+        const {classes} = this.props;
         const {locale} = this.props.commonStore;
         
         if (successLogout) return <Redirect to='/'/>;

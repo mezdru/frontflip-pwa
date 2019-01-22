@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {withStyles} from "@material-ui/core";
 import {inject, observer} from "mobx-react";
 import PropTypes from 'prop-types';
-import {Button, Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText, Typography, ListItemAvatar, Avatar} from '@material-ui/core';
-import {AccountCircle, ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon, Mail as MailIcon, MoveToInbox as InboxIcon} from '@material-ui/icons';
+import {Divider, Drawer, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, ListItemAvatar} from '@material-ui/core';
+import {ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon} from '@material-ui/icons';
 import './header.css';
 import AvailabilityToggle from '../availabilityToggle/AvailabilityToggle';
 import {styles} from './Header.css.js'
@@ -11,9 +11,6 @@ import Logo from '../utils/logo/Logo';
 import { injectIntl } from 'react-intl';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import UrlService from '../../services/url.service';
-import {Redirect} from "react-router-dom";
-
-const defaultLogo = 'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg';
 
 class App extends Component {
     constructor(props) {
@@ -38,9 +35,9 @@ class App extends Component {
     }
 
     render() {
-        const {classes, theme, auth, anchorEl, open, intl} = this.props;
+        const {classes, theme, auth, open, intl} = this.props;
         const {record} = this.props.recordStore.values;
-        const {organisation, orgTag} = this.props.organisationStore.values;
+        const {organisation} = this.props.organisationStore.values;
 
         return(
             <Drawer

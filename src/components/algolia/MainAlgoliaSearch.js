@@ -70,7 +70,6 @@ class MainAlgoliaSearch extends Component {
     }
 
     render() {
-        const {locale} = this.props.commonStore;
         const {algoliaKey, filters, newFilter, displayedHit} = this.state;
         const { HitComponent, classes, resultsType } = this.props;
 

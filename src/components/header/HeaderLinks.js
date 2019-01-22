@@ -10,14 +10,8 @@ import {inject, observer} from "mobx-react";
 import {Link} from 'react-router-dom';
 
 class HeaderLinks extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-
-
     render() {
-        const {auth, anchorEl, classes, theme, handleMobileMenuOpen, handleProfileMenuOpen} = this.props;
+        const {auth, anchorEl, classes, handleMobileMenuOpen, handleProfileMenuOpen} = this.props;
         const isMenuOpen = Boolean(anchorEl);
         const {locale} = this.props.commonStore;
 
