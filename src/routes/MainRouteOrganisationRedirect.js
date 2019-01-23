@@ -26,14 +26,12 @@ class MainRouteOrganisationRedirect extends React.Component {
     }
 
     manageAccessRight() {
-        console.log('componentn did update')
         if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
             // set orgTag params
             this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
             this.props.organisationStore.getOrganisationForPublic()
             .then((organisation) => {
                 this.props.organisationStore.setOrgId(organisation._id);
-                console.log('get org tag ok')
                 if(organisation.public) {
                     // ok
                     this.setState({renderComponent: true});
@@ -49,44 +47,34 @@ class MainRouteOrganisationRedirect extends React.Component {
                             // ALL OK : user can access
                             this.setState({renderComponent: true});
                         }).catch((error) => {
-                            console.log('redirect to welcome because error : ')
-                            console.log(error)
                             window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
                         });
                     }).catch((error) => {
-                        console.log('error')
-                        console.log(error)
                         this.controlAccessWithoutOrgTag();
                     });
                 } else {
-                    console.log('user no auth and org private')
                     // not ok : redirect to signin in this org, user may has forgot to login
                     this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/signin'});
                     this.setState({renderComponent: true});
                 }
             }).catch(() => {
                 // 404 organisation not found
-                console.log('404')
                 this.controlAccessWithoutOrgTag();
             });
         } else {
             // no orgTag provided
-            console.log('no org tag')
             this.controlAccessWithoutOrgTag();
         }
     }
 
     controlAccessWithoutOrgTag() {
         if(this.state.isAuth && this.props.userStore.values.currentUser._id) {
-            console.log('auth and no org, current url : ' + window.location.href)
             // user is auth
             if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0 ) {
-                console.log('user has orgsandrecords')
                 // user has org
                 this.props.organisationStore.setOrgId(this.props.userStore.values.currentUser.orgsAndRecords[0].organisation);
                 this.props.organisationStore.getOrganisation()
                 .then(organisation => {
-                    console.log('will redirect to search in org : ' + organisation.tag + ' | current urkl : ' +window.location.href)
                     this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/search'});
                     this.setState({renderComponent: true});
                 }).catch(()=>{
@@ -113,7 +101,6 @@ class MainRouteOrganisationRedirect extends React.Component {
     
     render() {
         const {redirectTo, renderComponent} = this.state;
-        console.log('redirectTo value : ' + redirectTo + ' | current location : ' + window.location.href)
         
             if(redirectTo){
                 if(window.location.pathname !== redirectTo) {

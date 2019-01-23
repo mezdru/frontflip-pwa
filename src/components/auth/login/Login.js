@@ -6,7 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import UrlService from '../../../services/url.service';
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 class Login extends React.Component {
     
@@ -16,9 +16,10 @@ class Login extends React.Component {
         this.state = {
             value: 0,
             successLogin: false,
-            redirectTo: '/',
+            redirectTo: null,
             loginErrors: null,
-            locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
+            locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
+            isAuth: this.props.authStore.isAuth()
         };
     }
     
@@ -35,19 +36,8 @@ class Login extends React.Component {
         this.props.authStore.login()
             .then((response) => {
                 if (response === 200) {
-                    this.setState({successLogin: true});
-                    window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/login/callback', this.props.organisationStore.values.orgTag);
-                    
-                    // if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0 &&
-                    //     this.props.userStore.values.currentUser.orgsAndRecords[0].record){
-                    
-                    //     this.setState({redirectTo: '/profile'});
-                    // }else if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0){
-                    //     this.setState({redirectTo: '/onboard/profile'});
-                    // }else{
-                    //     this.setState({redirectTo: '/onboard/wingzy'});
-                    // }
-                    
+                    this.setState({successLogin: true, redirectTo: '/' + this.state.locale + (this.props.organisationStore.values.orgTag ? '/'+this.props.organisationStore.values.orgTag : '') + '/search'});
+                    //window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/login/callback', this.props.organisationStore.values.orgTag);
                 } else {
                     this.setState({loginErrors: this.props.intl.formatMessage({id: 'signin.error.generic'})});
                 }
@@ -80,9 +70,11 @@ class Login extends React.Component {
     render() {
         const {values, inProgress} = this.props.authStore;
         const {organisation} = this.props.organisationStore.values;
-        let {loginErrors, locale} = this.state;
+        let {loginErrors, locale, redirectTo, isAuth} = this.state;
         let intl = this.props.intl;
-        // if (successLogin) return <Redirect to={redirectTo}/>;
+
+        if (redirectTo) return <Redirect to={redirectTo}/>;
+        if (isAuth) return <Redirect to={'/'+locale+(this.props.organisationStore.values.orgTag ? '/'+this.props.organisationStore.values.orgTag : '') +'/search'}/>;
         
         return (
             <form onSubmit={this.handleSubmitForm}>
