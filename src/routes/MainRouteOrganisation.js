@@ -25,7 +25,6 @@ class MainRouteOrganisation extends React.Component {
     render() {
         const {isAuth} = this.state;
         const {locale} = this.props.match.params;
-
         return (
                 <div>
                     <Switch>

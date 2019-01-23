@@ -1,4 +1,4 @@
-import { CircularProgress, withStyles, Grid } from "@material-ui/core";
+import { CircularProgress, withStyles, Grid, IconButton } from "@material-ui/core";
 import React, { Component } from 'react';
 import {inject, observer} from "mobx-react";
 import { InstantSearch, Hits, Configure } from "react-instantsearch-dom";
@@ -9,6 +9,7 @@ import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import {styles} from './MainAlgoliaSearch.css'
 import ProfileLayout from "../profile/ProfileLayout";
 import { Redirect } from 'react-router-dom';
+import { ArrowBack } from "@material-ui/icons";
 
 class MainAlgoliaSearch extends Component {
     constructor(props) {
@@ -19,11 +20,13 @@ class MainAlgoliaSearch extends Component {
             refresh: false,
             newFilter: {},
             displayedHit: this.props.profileTag ? {tag: this.props.profileTag} : null,
-            resultsType: this.props.resultsType || 'person'
+            resultsType: this.props.resultsType || 'person',
+            shouldUpdateUrl: false
         }
         this.updateFilters = this.updateFilters.bind(this);
         this.addToFilters = this.addToFilters.bind(this);
         this.handleDisplayProfile = this.handleDisplayProfile.bind(this);
+        this.handleReturnToSearch = this.handleReturnToSearch.bind(this);
     }
 
     componentDidMount() {
@@ -56,13 +59,18 @@ class MainAlgoliaSearch extends Component {
                 newFilters += ' AND tag:'+option.value;
             }
         });
+        if(this.state.resultsType === 'profile') {
+            this.setState({resultsType: 'person', displayedHit: null, shouldUpdateUrl: true});
+        }
         this.setState({filters: newFilters, newFilter: {}});
     }
 
     addToFilters(e, element) {
         e.preventDefault();
         this.setState({newFilter: {label: element.name, value: element.tag}});
-        this.setState({resultsType: 'person', displayedHit: null});
+        if(this.state.resultsType === 'profile') {
+            this.setState({resultsType: 'person', displayedHit: null, shouldUpdateUrl: true});
+        }
     }
 
     handleDisplayProfile(e, hit) {
@@ -71,8 +79,12 @@ class MainAlgoliaSearch extends Component {
         this.setState({resultsType: 'profile'});
     }
 
+    handleReturnToSearch() {
+        this.setState({resultsType: 'person', displayedHit: null, shouldUpdateUrl: true});
+    }
+
     render() {
-        const {algoliaKey, filters, newFilter, displayedHit, resultsType} = this.state;
+        const {algoliaKey, filters, newFilter, displayedHit, resultsType, shouldUpdateUrl} = this.state;
         const { HitComponent, classes } = this.props;
         const { locale } = this.props.commonStore;
         const { orgTag } = this.props.organisationStore.values;
@@ -81,10 +93,15 @@ class MainAlgoliaSearch extends Component {
             return(
                     
                 <StickyContainer style={{width:'100%', position: 'relative'}} >
+                    {resultsType === 'profile' && (
+                        <IconButton aria-label="Edit" className={classes.returnButton} onClick={this.handleReturnToSearch}>
+                            <ArrowBack fontSize="large"  />
+                        </IconButton>
+                    )}
                     <div className={classes.searchBarMarginTop}></div>
                     <Sticky topOffset={(isWidthUp('md', this.props.width)) ? 131 : 39}>
                         {({style}) => (
-                            <div style={{...style}} className={classes.searchBar}>
+                            <div style={{...style, width: '50%'}} className={(resultsType !== 'profile') ? classes.searchBar : classes.searchBarProfile}>
                                 <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                                 indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                                 apiKey={algoliaKey} >
@@ -97,10 +114,12 @@ class MainAlgoliaSearch extends Component {
                     {/* Search results */}
                     {resultsType === 'person' && (
                         <div className={classes.hitListContainer}>
-                                <Redirect push to={'/' + locale + '/' + orgTag + '/search'} />
-                                <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
-                                        indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
-                                        apiKey={algoliaKey}>
+                            {shouldUpdateUrl && (<Redirect push to={'/' + locale + '/' + orgTag + '/search'} />)}
+                            
+                            <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
+                                            indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
+                                            apiKey={algoliaKey}>
+
                                 <Configure filters={filters} />
                                 {HitComponent &&  (
                                     // <Grid container xs={12} sm={6}>
@@ -129,8 +148,8 @@ class MainAlgoliaSearch extends Component {
                                         apiKey={algoliaKey}>
                             <Configure filters={'type:person AND tag:'+displayedHit.tag} />
                             <Hits hitComponent={hit => (
-                                <ProfileLayout hit={hit.hit} className={classes.hitListContainerWithoutMargin} addToFilters={this.addToFilters}/>
-                            )} className={classes.hitProfile} />
+                                <ProfileLayout hit={hit.hit} addToFilters={this.addToFilters} />
+                            )} className={classes.hitListContainerWithoutMargin} />
                             
                         </InstantSearch>
                     )}

@@ -1,12 +1,16 @@
 import React from 'react'
 import { inject, observer} from 'mobx-react';
 import {Grid, withStyles, Typography, IconButton, CardActions, CardContent, CardHeader, Card, Tooltip, Button} from '@material-ui/core';
+import { Edit } from '@material-ui/icons';
 import '../../resources/stylesheets/font-awesome.min.css';
 import Logo from '../../components/utils/logo/Logo';
 import Wings from '../utils/wing/Wing';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
 import './ContactsColors.css';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import classNames from 'classnames';
+import UrlService from '../../services/url.service';
 
 const LOGO_HEIGHT = 170;
 const EXTRA_LINK_LIMIT = 20;
@@ -34,9 +38,9 @@ const styles = theme => ({
         top:0,
     },
     logo: {
-        position: 'relative',
+        position: 'absolute',
         transform: 'translateY(-50%)',
-        top: -16,
+        top: 0,
         left:0,
         right:0,
         marginLeft: 'auto',
@@ -51,8 +55,8 @@ const styles = theme => ({
     },
     subheader: {
         position: 'relative',
-        top: -(LOGO_HEIGHT/2),
-        marginTop: 16,
+        marginTop: (LOGO_HEIGHT/2),
+        marginBottom: 16,
     },
     button: {
         color: theme.palette.secondary.contrastText,
@@ -73,6 +77,24 @@ const styles = theme => ({
         height: '-moz-min-content',
         height: '-webkit-min-content',
         height: 'min-content',
+    },
+    editButton: {
+        color: theme.palette.primary.main,
+        marginLeft: 16
+    },
+    updateCoverButton: {
+        position: 'absolute',
+        top:-16,
+        right: 16,
+        transform: 'translateY(-100%)',
+    },
+    contactIcon: {
+        color: theme.palette.secondary.contrastText, 
+        marginRight: 16, 
+        marginLeft: -8, 
+        position:'relative', 
+        width: 40,
+        fontSize: 24
     }
 });
 
@@ -80,7 +102,19 @@ class ProfileLayout extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            canEdit: this.canEdit()
+        }
+
         this.transformLinks = this.transformLinks.bind(this);
+        this.canEdit = this.canEdit.bind(this);
+    }
+
+    canEdit() {
+        if(!(this.props.userStore.values.currentUser && this.props.userStore.values.currentUser._id)) return false;
+        if(this.props.userStore.values.currentUser.superadmin) return true;
+        else if(this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.record === this.props.hit.objectID)) return true;
+        else return false;
     }
 
     transformLinks(item) {
@@ -177,44 +211,64 @@ class ProfileLayout extends React.Component {
 
     render(){
         const { hit, className, classes, theme, addToFilters } = this.props;
+        const { canEdit } = this.state;
         const { locale } = this.props.commonStore;
+        const orgTag = this.props.organisationStore.values.organisation.tag;
         this.transformLinks(hit);
         this.makeHightlighted(hit);
         this.orderHashtags(hit);
-
-        console.log(hit.hashtags)
 
         if(hit) {
             return(
                 <Grid container className={className} >
                     <Grid item xs={12} sm={6} lg={3} className={classes.generalPart} >
+                        <Grid item>
                         <Logo type={'person'} className={classes.logo} src={this.getPicturePath(hit.picture) || defaultPicture} />
                         <div className={classes.subheader}>
                             <Typography variant="h4" className={classes.name}>
                                     {hit.name || hit.tag}
+                                    {canEdit && (
+                                        <IconButton aria-label="Edit" className={classes.editButton} 
+                                                    href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', orgTag, 'recordId='+hit.objectID)}>
+                                            <Edit fontSize="default"  />
+                                        </IconButton>
+                                    )}
                             </Typography>
                             <Typography variant="subheading" className={classes.name}>
                                     {hit.intro}
                             </Typography>
-                        </div>
 
-                        <Grid item container spacing={0}>
+                        </div>
+                        </Grid>
+
                             {hit.links.map((link, i) => {
                                 return (
-                                    <Grid item key={link._id} xs={12} >
-                                        <Button variant="text" className={classes.button}>
-                                            <IconButton href={link.url} className={"fa fa-" + link.icon} 
-                                                        style={{color: theme.palette.secondary.contrastText, marginRight:16, position:'relative', width: 40}}/>
+                                    <Grid item key={link._id} xs={12} style={{position: 'relative'}}>
+                                        <Button variant="text" className={classes.button} key={link._id}>
+                                            <div href={link.url} className={classNames(classes.contactIcon, "fa fa-"+link.icon)}></div>
                                             {link.display || link.value || link.url}
                                         </Button>
                                     </Grid>
                                 )
                             })}
-                        </Grid>
 
-                        
+                            {canEdit && (
+                                <Grid item xs={12} style={{position: 'relative'}}>
+                                    <Button variant="text" className={classes.button} style={{color: theme.palette.primary.main, fontWeight: 'bold'}}
+                                            href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/links', orgTag, 'recordId='+hit.objectID)} >
+                                        <div href={''} className={classNames(classes.contactIcon, "fa fa-plus")} style={{color: theme.palette.primary.main}}></div>
+                                        <FormattedMessage id="profile.addContacts"/>
+                                    </Button>
+                                </Grid>
+                            )}
                     </Grid>
                     <Grid container item xs={12} sm={6} lg={9} className={classes.hashtagsPart} >
+                            {canEdit && (
+                                <Button className={classes.updateCoverButton} color="primary"
+                                        href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/cover/id/'+hit.objectID, orgTag)} >
+                                    <FormattedMessage id="profile.updateCover" />
+                                </Button>
+                            )}
 
                             <Grid item xs={12} className={classes.minHeightPossible} >
                                 {hit.hashtags.map((hashtag, i) => {
@@ -226,11 +280,25 @@ class ProfileLayout extends React.Component {
                                             className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
                                     )
                                 })}
+                                {canEdit && (
+                                    <Wings label={this.props.intl.formatMessage({id: 'profile.addWings'})} className={'highlighted'} 
+                                            onClick={()=>{window.location.href=UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/hashtags', orgTag, 'recordId='+hit.objectID)}} />
+                                )}
+                                <div style={{marginTop: 16}}>
+                                    <Typography variant="h5" style={{padding: 16}}>
+                                        <FormattedMessage id={'profile.aboutMe'} />
+                                        {canEdit && (
+                                            <IconButton aria-label="Edit" className={classes.editButton}
+                                                        href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/about/id/'+hit.objectID, orgTag)}>
+                                                <Edit fontSize="default"  />
+                                            </IconButton>
+                                        )}
+                                    </Typography>
+                                    <div>
+                                        {hit.description}
+                                    </div>
+                                </div>
                             </Grid>
-
-                            <Grid item xs={12} className={classes.minHeightPossible} >
-                            </Grid>
-
                     </Grid>
                 </Grid>
             )
@@ -243,7 +311,7 @@ class ProfileLayout extends React.Component {
 };
 
 export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore')(
-    observer(
+    injectIntl(observer(
         withStyles(styles, {withTheme: true})(ProfileLayout)
-    )
+    ))
 );

@@ -167,9 +167,9 @@ export default createMuiTheme({
         },
         MuiTypography: {
             root: {
-                whiteSpace: 'nowrap',
+                // whiteSpace: 'nowrap',
                 overflow: 'hidden',
-                textOverflow: 'ellipsis',
+                // textOverflow: 'ellipsis',
             },
             h6: {
                 display: 'block',

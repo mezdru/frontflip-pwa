@@ -19,6 +19,14 @@ class MainRouteOrganisationRedirect extends React.Component {
             renderComponent: false
         };
 
+        this.manageAccessRight = this.manageAccessRight.bind(this);
+        this.dismiss = this.dismiss.bind(this);
+
+        this.manageAccessRight();
+    }
+
+    manageAccessRight() {
+        console.log('componentn did update')
         if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
             // set orgTag params
             this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
@@ -69,7 +77,7 @@ class MainRouteOrganisationRedirect extends React.Component {
     }
 
     controlAccessWithoutOrgTag() {
-        if(this.state.isAuth && this.props.userStore.values.currentUser) {
+        if(this.state.isAuth && this.props.userStore.values.currentUser._id) {
             console.log('auth and no org, current url : ' + window.location.href)
             // user is auth
             if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0 ) {
@@ -78,12 +86,9 @@ class MainRouteOrganisationRedirect extends React.Component {
                 this.props.organisationStore.setOrgId(this.props.userStore.values.currentUser.orgsAndRecords[0].organisation);
                 this.props.organisationStore.getOrganisation()
                 .then(organisation => {
-                    console.log('get org ok 2, current url : ' + window.location.href)
-                    if(organisation) {
-                        console.log('will redirect to search in org : ' + organisation.tag + ' | current urkl : ' +window.location.href)
-                        this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/search'});
-                        this.setState({renderComponent: true})
-                    }
+                    console.log('will redirect to search in org : ' + organisation.tag + ' | current urkl : ' +window.location.href)
+                    this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/search'});
+                    this.setState({renderComponent: true});
                 }).catch(()=>{
                     // can't get org so authorization problem.
                     window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
@@ -97,34 +102,44 @@ class MainRouteOrganisationRedirect extends React.Component {
             this.setState({renderComponent: true});
         }
     }
+
+    refreshState() {
+        this.setState({redirectTo: null, renderComponent: true});
+    }
+
+    dismiss() {
+        this.props.unmountMe();
+    } 
     
     render() {
         const {redirectTo, renderComponent} = this.state;
         console.log('redirectTo value : ' + redirectTo + ' | current location : ' + window.location.href)
-        if(redirectTo){
-            this.setState({redirectTo: null});
-            return (<Redirect to={redirectTo} />);
-        } 
-        if(renderComponent) {
-            return (
-                <div>
-                    <Switch>
-                        <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={PasswordForgot}/>
-                        <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={PasswordReset}/>
-                        <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={() => {return <AuthPage initialTab={1} />}} />
-                        <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
-                        
-                        {/* Route which will need organisationTag | should not be possible to access */}
-                        <Route exact path="/:locale(en|fr|en-UK)/search" component={null} />
+        
+            if(redirectTo){
+                if(window.location.pathname !== redirectTo) {
+                    return (<Redirect to={redirectTo} />);
+                }else {
+                    this.refreshState();
+                }
+            }
+            if(renderComponent) {
+                return (
+                    <div>
+                        <Switch>
+                            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={PasswordForgot}/>
+                            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={PasswordReset}/>
+                            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={() => {return <AuthPage initialTab={1} />}} />
+                            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
 
-                        {/* Main route with orgTag */}
-                        <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/search/profile/:profileTag" component={Search} />
-                        <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/search" component={Search} />
-                        <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={Search} />
-                    </Switch>
-                </div>
-            );
-        } else {
+                            {/* Main route with orgTag */}
+                            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/search/profile/:profileTag" component={Search} />
+                            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/search" component={Search} />
+                            <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={Search} />
+                        </Switch>
+                    </div>
+                );
+            }
+         else {
             return (<div></div>);
         }
     }
