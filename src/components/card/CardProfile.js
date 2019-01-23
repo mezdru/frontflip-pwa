@@ -28,6 +28,9 @@ const styles = theme => ({
     },
     fullWidth: {
         width: '100%'
+    },
+    cardHeader: {
+        cursor: 'pointer'
     }
 });
 
@@ -106,6 +109,7 @@ class CardProfile extends React.Component {
         if(picture && picture.path) return null;
         else if (picture && picture.url) return picture.url;
         else if (picture && picture.uri) return picture.uri;
+        else if (picture && picture.emoji) return picture.emoji;
         else return null;
     }
     
@@ -130,7 +134,7 @@ class CardProfile extends React.Component {
     
     
     render() {
-        const {classes, hit, addToFilters} = this.props;
+        const {classes, hit, addToFilters, handleDisplayProfile} = this.props;
         this.transformLinks(hit);
         this.makeHightlighted(hit);
         this.orderHashtags(hit);
@@ -151,6 +155,8 @@ class CardProfile extends React.Component {
                                 {hit.intro}
                             </Typography>
                         }
+                        onClick={(e) => handleDisplayProfile(e, hit)}
+                        className={classes.cardHeader}
                     />
                 </Grid>
                 <Grid item container justify={'flex-end'}>

@@ -12,7 +12,9 @@ class MainRoute extends React.Component {
             locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
             renderComponent: !this.props.authStore.isAuth()
         }
-        
+    }
+
+    componentDidMount() {
         // set current user 
         if(this.props.authStore.isAuth()) {
             this.props.userStore.getCurrentUser()
@@ -20,7 +22,6 @@ class MainRoute extends React.Component {
             .catch((err) => {this.setState({renderComponent: true})});
         }
     }
-
     
     render() {
         const {renderComponent, locale} = this.state;

@@ -34,6 +34,7 @@ const stores = {
 };
 
 let locale = commonStore.locale;
+if(locale === 'en-UK') locale = 'en';
 
 ReactDOM.render(
     <HttpsRedirect>

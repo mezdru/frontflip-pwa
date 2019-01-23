@@ -7,9 +7,9 @@
 }
 
 .autocomplete-search {
-    position: relative;
+    position: absolute;
     left:0;
     right:0;
     margin:auto;
-    width: 50%;
+    width: 100%;
 }

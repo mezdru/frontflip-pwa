@@ -102,7 +102,6 @@ class AuthStore {
     registerToOrg() {
         this.inProgress = true;
         this.errors = null;
-        console.log(this.values.invitationCode);
 
         return agent.Auth.registerToOrg(organisationStore.values.organisation._id, this.values.invitationCode)
             .then((data) => {
@@ -146,7 +145,6 @@ class AuthStore {
     }
 
     logout() {
-        console.log('logout');
         commonStore.removeAuthTokens();
         userStore.forgetUser();
         return Promise.resolve();
