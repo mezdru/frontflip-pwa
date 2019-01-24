@@ -17,9 +17,10 @@ const styles = theme => ({
         height: 170,
         marginBottom: '-5rem',
         '& img': {
-            height: '90%',
-            width: '90%',
+            width: '100%',
+            height: '100%',
             borderRadius: '50%',
+            border: '9px solid white'
         },
     },
     wings: {

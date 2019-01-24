@@ -31,12 +31,13 @@ export const styles = theme => ({
         right:0,
         marginLeft: 'auto',
         marginRight: 'auto',
-        width: LOGO_HEIGHT-10,
+        width: LOGO_HEIGHT,
         height: LOGO_HEIGHT,
         '& img': {
-            height: '90%',
-            width: '90%',
+            width: '100%',
+            height: '100%',
             borderRadius: '50%',
+            border: '9px solid white'
         },
     },
     subheader: {
