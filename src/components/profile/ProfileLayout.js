@@ -22,7 +22,8 @@ class ProfileLayout extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            canEdit: this.canEdit()
+            canEdit: this.canEdit(),
+            record: null
         }
 
         this.transformLinks = this.transformLinks.bind(this);
@@ -101,8 +102,15 @@ class ProfileLayout extends React.Component {
         if(picture && picture.path) return null;
         else if (picture && picture.url) return picture.url;
         else if (picture && picture.uri) return picture.uri;
-        else if (picture && picture.emoji) return twemoji.parse(picture.emoji).src;
+        else if (picture && picture.emoji) return this.getEmojiUrl(picture.emoji);
         else return null;
+    }
+
+    getEmojiUrl(emoji) {
+        let str = twemoji.parse(emoji);
+        str = str.split(/ /g);
+        str = str[4].split(/"/g);
+        return str[1];
     }
     
     makeHightlighted = function (item) {
@@ -127,109 +135,107 @@ class ProfileLayout extends React.Component {
     
 
     componentDidMount() {
-        // fetch data to wingzy
+        this.props.recordStore.setRecordTag(this.props.hit.tag);
+        this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
+        this.props.recordStore.getRecordByTag()
+        .then((record) => {
+            record.objectID = record._id;
+            this.setState({record: record});
+        })
     };
 
     render(){
         const { hit, className, classes, theme, addToFilters } = this.props;
-        const { canEdit } = this.state;
+        const { canEdit, record } = this.state;
         const { locale } = this.props.commonStore;
         const orgTag = this.props.organisationStore.values.organisation.tag;
-        this.transformLinks(hit);
-        this.makeHightlighted(hit);
-        this.orderHashtags(hit);
 
-        console.log(hit.hashtags);
+        const currentHit = record || hit;
+        this.transformLinks(currentHit);
+        this.makeHightlighted(currentHit);
+        this.orderHashtags(currentHit);
 
-        if(hit) {
-            return(
-                <Grid container className={className} >
-                    <Grid item xs={12} sm={6} lg={3} className={classes.generalPart} >
-                        <Grid item>
-                        <Logo type={'person'} className={classes.logo} src={this.getPicturePath(hit.picture) || defaultPicture} />
-                        <div className={classes.subheader}>
-                            <Typography variant="h4" className={classes.name}>
-                                    {hit.name || hit.tag}
+        if(!currentHit) return (<div></div>);
+
+        return(
+            <Grid container className={className} >
+                <Grid item xs={12} sm={6} lg={3} className={classes.generalPart} >
+                    <Grid item>
+                    <Logo type={'person'} className={classes.logo} src={this.getPicturePath(currentHit.picture) || defaultPicture} />
+                    <div className={classes.subheader}>
+                        <Typography variant="h4" className={classes.name}>
+                                {currentHit.name || currentHit.tag}
+                                {canEdit && (
+                                    <IconButton aria-label="Edit" className={classes.editButton} 
+                                                href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', orgTag, 'recordId='+currentHit.objectID)}>
+                                        <Edit fontSize="default"  />
+                                    </IconButton>
+                                )}
+                        </Typography>
+                        <Typography variant="subheading" className={classes.name}>
+                                {currentHit.intro}
+                        </Typography>
+                    </div>
+                    </Grid>
+                        {currentHit.links.map((link, i) => {
+                            return (
+                                <Grid item key={link._id} xs={12} style={{position: 'relative'}}>
+                                    <Button variant="text" className={classes.button} key={link._id}>
+                                        <div href={link.url} className={classNames(classes.contactIcon, "fa fa-"+link.icon)}></div>
+                                        {link.display || link.value || link.url}
+                                    </Button>
+                                </Grid>
+                            )
+                        })}
+                        {canEdit && (
+                            <Grid item xs={12} style={{position: 'relative'}}>
+                                <Button variant="text" className={classes.button} style={{color: theme.palette.primary.main, fontWeight: 'bold'}}
+                                        href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/links', orgTag, 'recordId='+currentHit.objectID)} >
+                                    <div href={''} className={classNames(classes.contactIcon, "fa fa-plus")} style={{color: theme.palette.primary.main}}></div>
+                                    <FormattedMessage id="profile.addContacts"/>
+                                </Button>
+                            </Grid>
+                        )}
+                </Grid>
+                <Grid container item xs={12} sm={6} lg={9} className={classes.hashtagsPart} >
+                        {canEdit && (
+                            <Button className={classes.updateCoverButton} color="primary"
+                                    href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/cover/id/'+currentHit.objectID, orgTag)} >
+                                <FormattedMessage id="profile.updateCover" />
+                            </Button>
+                        )}
+                        <Grid item xs={12} className={classes.minHeightPossible} >
+                            {currentHit.hashtags && currentHit.hashtags.map((hashtag, i) => {
+                                let displayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || currentHit.tag)
+                                return (
+                                    <Wings src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture}
+                                        label={displayedName} key={hashtag.tag}
+                                        onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
+                                        className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
+                                )
+                            })}
+                            {canEdit && (
+                                <Wings label={this.props.intl.formatMessage({id: 'profile.addWings'})} className={'highlighted'} 
+                                        onClick={()=>{window.location.href=UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/hashtags', orgTag, 'recordId='+currentHit.objectID)}} />
+                            )}
+                            <div style={{marginTop: 16}}>
+                                <Typography variant="h5" style={{padding: 16}}>
+                                    <FormattedMessage id={'profile.aboutMe'} />
                                     {canEdit && (
-                                        <IconButton aria-label="Edit" className={classes.editButton} 
-                                                    href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', orgTag, 'recordId='+hit.objectID)}>
+                                        <IconButton aria-label="Edit" className={classes.editButton}
+                                                    href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/about/id/'+currentHit.objectID, orgTag)}>
                                             <Edit fontSize="default"  />
                                         </IconButton>
                                     )}
-                            </Typography>
-                            <Typography variant="subheading" className={classes.name}>
-                                    {hit.intro}
-                            </Typography>
-
-                        </div>
-                        </Grid>
-
-                            {hit.links.map((link, i) => {
-                                return (
-                                    <Grid item key={link._id} xs={12} style={{position: 'relative'}}>
-                                        <Button variant="text" className={classes.button} key={link._id}>
-                                            <div href={link.url} className={classNames(classes.contactIcon, "fa fa-"+link.icon)}></div>
-                                            {link.display || link.value || link.url}
-                                        </Button>
-                                    </Grid>
-                                )
-                            })}
-
-                            {canEdit && (
-                                <Grid item xs={12} style={{position: 'relative'}}>
-                                    <Button variant="text" className={classes.button} style={{color: theme.palette.primary.main, fontWeight: 'bold'}}
-                                            href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/links', orgTag, 'recordId='+hit.objectID)} >
-                                        <div href={''} className={classNames(classes.contactIcon, "fa fa-plus")} style={{color: theme.palette.primary.main}}></div>
-                                        <FormattedMessage id="profile.addContacts"/>
-                                    </Button>
-                                </Grid>
-                            )}
-                    </Grid>
-                    <Grid container item xs={12} sm={6} lg={9} className={classes.hashtagsPart} >
-                            {canEdit && (
-                                <Button className={classes.updateCoverButton} color="primary"
-                                        href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/cover/id/'+hit.objectID, orgTag)} >
-                                    <FormattedMessage id="profile.updateCover" />
-                                </Button>
-                            )}
-
-                            <Grid item xs={12} className={classes.minHeightPossible} >
-                                {hit.hashtags && hit.hashtags.map((hashtag, i) => {
-                                    let displayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
-                                    return (
-                                        <Wings src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture}
-                                            label={displayedName} key={hashtag.tag}
-                                            onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
-                                            className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
-                                    )
-                                })}
-                                {canEdit && (
-                                    <Wings label={this.props.intl.formatMessage({id: 'profile.addWings'})} className={'highlighted'} 
-                                            onClick={()=>{window.location.href=UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/hashtags', orgTag, 'recordId='+hit.objectID)}} />
-                                )}
-                                <div style={{marginTop: 16}}>
-                                    <Typography variant="h5" style={{padding: 16}}>
-                                        <FormattedMessage id={'profile.aboutMe'} />
-                                        {canEdit && (
-                                            <IconButton aria-label="Edit" className={classes.editButton}
-                                                        href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/about/id/'+hit.objectID, orgTag)}>
-                                                <Edit fontSize="default"  />
-                                            </IconButton>
-                                        )}
-                                    </Typography>
-                                    <div>
-                                        {hit.description}
-                                    </div>
+                                </Typography>
+                                <div>
+                                    {currentHit.description}
                                 </div>
-                            </Grid>
-                    </Grid>
+                            </div>
+                        </Grid>
                 </Grid>
-            )
-        } else {
-            return (<div className={className}>You should provide a hit.</div>);
-        }
-
-
+            </Grid>
+        )
     }
 };
 

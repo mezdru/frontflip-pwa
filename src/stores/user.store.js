@@ -14,7 +14,10 @@ class UserStore {
         this.errors = null;
 
         return agent.User.getCurrent()
-            .then(data => { this.values.currentUser = (data? data.user : {});})
+            .then(data => { 
+                this.values.currentUser = (data? data.user : {});
+                return this.values.currentUser;
+            })
             .catch(action((err) => {
                 this.errors = err.response && err.response.body && err.response.body.errors;
                 throw err;
