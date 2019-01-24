@@ -47,7 +47,7 @@ export const styles = theme => ({
         right: 0,
         margin: 'auto',
         zIndex: 1000,
-        marginTop:21,
+        marginTop:16,
         background: 'transparent',
         width: '50%'
     },
@@ -58,7 +58,7 @@ export const styles = theme => ({
         right: 0,
         margin: 'auto',
         zIndex: 1000,
-        marginTop:21,
+        marginTop:16,
         background: 'transparent',
         width: '50%'
     },
