@@ -12,6 +12,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import classNames from 'classnames';
 import UrlService from '../../services/url.service';
 import {styles} from './ProfileLayout.css';
+import twemoji from 'twemoji';
 
 const EXTRA_LINK_LIMIT = 20;
 
@@ -100,13 +101,13 @@ class ProfileLayout extends React.Component {
         if(picture && picture.path) return null;
         else if (picture && picture.url) return picture.url;
         else if (picture && picture.uri) return picture.uri;
-        else if (picture && picture.emoji) return picture.emoji;
+        else if (picture && picture.emoji) return twemoji.parse(picture.emoji).src;
         else return null;
     }
     
     makeHightlighted = function (item) {
         let filters = this.props.commonStore.getSearchFilters() || this.props.commonStore.searchFilters;
-        if (filters.length > 0) {
+        if (filters && filters.length > 0) {
             item.hashtags.forEach((hashtag, index) => {
                 if (hashtag.tag && filters.find(filterValue => filterValue.value === hashtag.tag)) item.hashtags[index].class = 'highlighted';
             });
@@ -114,6 +115,7 @@ class ProfileLayout extends React.Component {
     };
     
     orderHashtags = function (item) {
+        if(!item.hashtags) return;
         var highlighted = [];
         var notHighlighted = [];
         item.hashtags.forEach(function (hashtag) {
@@ -125,6 +127,7 @@ class ProfileLayout extends React.Component {
     
 
     componentDidMount() {
+        // fetch data to wingzy
     };
 
     render(){
@@ -135,6 +138,8 @@ class ProfileLayout extends React.Component {
         this.transformLinks(hit);
         this.makeHightlighted(hit);
         this.orderHashtags(hit);
+
+        console.log(hit.hashtags);
 
         if(hit) {
             return(
@@ -189,7 +194,7 @@ class ProfileLayout extends React.Component {
                             )}
 
                             <Grid item xs={12} className={classes.minHeightPossible} >
-                                {hit.hashtags.map((hashtag, i) => {
+                                {hit.hashtags && hit.hashtags.map((hashtag, i) => {
                                     let displayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
                                     return (
                                         <Wings src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture}

@@ -115,7 +115,7 @@ class CardProfile extends React.Component {
     
     makeHightlighted = function (item) {
         let filters = this.props.commonStore.getSearchFilters() || this.props.commonStore.searchFilters;
-        if (filters.length > 0) {
+        if (filters && filters.length > 0) {
             item.hashtags.forEach((hashtag, index) => {
                 if (hashtag.tag && filters.find(filterValue => filterValue.value === hashtag.tag)) item.hashtags[index].class = 'highlighted';
             });
@@ -123,6 +123,7 @@ class CardProfile extends React.Component {
     };
     
     orderHashtags = function (item) {
+        if(!item.hashtags) return;
         var highlighted = [];
         var notHighlighted = [];
         item.hashtags.forEach(function (hashtag) {
@@ -162,7 +163,7 @@ class CardProfile extends React.Component {
                 <Grid item container justify={'flex-end'}>
                     <CardActions className={classes.actions} disableActionSpacing>
                         <Grid item container spacing={0}>
-                            {hit.links.map((link, i) => {
+                            {hit.links && hit.links.map((link, i) => {
                                 return (
                                     <Grid item key={link._id}>
                                         <Tooltip title={link.display || link.value || link.url}>
@@ -177,7 +178,7 @@ class CardProfile extends React.Component {
                 <Grid container item>
                     <CardContent className={this.props.classes.wingsContainer}>
                         <Grid container className={this.props.classes.wings}>
-                            {hit.hashtags.map((hashtag, i) => {
+                            {hit.hashtags && hit.hashtags.map((hashtag, i) => {
                                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
                                 return (
                                     <Wings src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture}

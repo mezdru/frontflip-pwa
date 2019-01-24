@@ -114,7 +114,7 @@ class MainAlgoliaSearch extends Component {
                     {/* Search results */}
                     {resultsType === 'person' && (
                         <div className={classes.hitListContainer}>
-                            {shouldUpdateUrl && (<Redirect push to={'/' + locale + '/' + orgTag + '/search'} />)}
+                            {shouldUpdateUrl && (<Redirect push to={'/' + locale + '/' + orgTag} />)}
                             
                             <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                             indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
@@ -140,18 +140,11 @@ class MainAlgoliaSearch extends Component {
                         </div>
                     )}
                     {resultsType === 'profile' && (
-                        <Redirect push to={'/' + locale + '/' + orgTag + '/search/profile/' + displayedHit.tag } />
+                        <Redirect push to={'/' + locale + '/' + orgTag + '/' + displayedHit.tag } />
                     )}
                     {resultsType === 'profile' && (
-                        <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
-                                        indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
-                                        apiKey={algoliaKey}>
-                            <Configure filters={'type:person AND tag:'+displayedHit.tag} />
-                            <Hits hitComponent={hit => (
-                                <ProfileLayout hit={hit.hit} addToFilters={this.addToFilters} />
-                            )} className={classes.hitListContainerWithoutMargin} />
-                            
-                        </InstantSearch>
+      
+                                <ProfileLayout hit={displayedHit} addToFilters={this.addToFilters} className={classes.hitListContainerWithoutMargin}/>
                     )}
                 </StickyContainer>
             )
