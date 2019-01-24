@@ -123,7 +123,8 @@ export default createMuiTheme({
             root: {
                 padding: 0,
                 borderRadius: 20,
-                margin: 15,
+                marginTop: 15,
+                marginBottom: 15,
             }
         },
         MuiCardActions: {
