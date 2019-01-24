@@ -88,6 +88,15 @@ class MainAlgoliaSearch extends Component {
         const { HitComponent, classes } = this.props;
         const { locale } = this.props.commonStore;
         const { orgTag } = this.props.organisationStore.values;
+        
+        let searchBarWidth;
+        if(isWidthUp('lg', this.props.width)){
+            searchBarWidth = (4/12)*100 + '%';
+        }else if(isWidthUp('sm', this.props.width)){
+            searchBarWidth = (6/12)*100 + '%';
+        }else if(isWidthUp('xs', this.props.width)){
+            searchBarWidth = (10/12)*100 + '%';
+        }
 
         if(algoliaKey) {
             return(
@@ -101,7 +110,7 @@ class MainAlgoliaSearch extends Component {
                     <div className={classes.searchBarMarginTop}></div>
                     <Sticky topOffset={(isWidthUp('md', this.props.width)) ? 131 : 39}>
                         {({style}) => (
-                            <div style={{...style, width: '50%'}} className={(resultsType !== 'profile') ? classes.searchBar : classes.searchBarProfile}>
+                            <div style={{...style, width: searchBarWidth }} className={(resultsType !== 'profile') ? classes.searchBar : classes.searchBarProfile}>
                                 <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                                 indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                                 apiKey={algoliaKey} >

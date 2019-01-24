@@ -42,6 +42,7 @@ export const styles = theme => ({
     fullWidth: {
         width: '100%'
     },
+    //<Grid item xs={10} sm={6} lg={4}>
     searchBar: {
         left: 0,
         right: 0,
@@ -49,7 +50,7 @@ export const styles = theme => ({
         zIndex: 1000,
         marginTop:16,
         background: 'transparent',
-        width: '50%'
+        width: '100%'
     },
     '@keyframes moveTop': {
         from: {marginTop: 139},
@@ -67,7 +68,7 @@ export const styles = theme => ({
         zIndex: 1000,
         marginTop:16,
         background: 'transparent',
-        width: '50%',
+        width: '100%',
         animationName: 'moveTop',
         animationDuration: '1s'
     },
