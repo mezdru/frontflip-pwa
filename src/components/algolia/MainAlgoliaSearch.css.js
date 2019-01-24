@@ -51,6 +51,13 @@ export const styles = theme => ({
         background: 'transparent',
         width: '50%'
     },
+    '@keyframes moveTop': {
+        from: {marginTop: 139},
+        [theme.breakpoints.up('md')]: {
+            from: {marginTop: 231}
+        },
+        to: {marginTop: 16}
+    },
     searchBarProfile: {
         position: 'fixed !important',
         top:0,
@@ -60,7 +67,9 @@ export const styles = theme => ({
         zIndex: 1000,
         marginTop:16,
         background: 'transparent',
-        width: '50%'
+        width: '50%',
+        animationName: 'moveTop',
+        animationDuration: '1s'
     },
     searchBarMarginTop: {
         position: 'static',
