@@ -56,6 +56,7 @@ class MainRouteOrganisationRedirect extends React.Component {
                 } else {
                     // not ok : redirect to signin in this org, user may has forgot to login
                     //this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/signin'});
+                    console.log('here');
                     this.setState({renderComponent: true, shouldManageAccessRight: false});
                 }
             }).catch(() => {

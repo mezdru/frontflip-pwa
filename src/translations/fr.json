@@ -17,6 +17,7 @@
     "signin.error.unknown": "Nous ne connaissons pas cet email, désolé...",
     "signin.error.wrongPassword": "Mauvais mot de passe, pouvez-vous réessayez ou <a href={forgotPasswordLink}>créez un nouveau mot de passe</a> ?",
     "signin.error.noPassword": "Bienvenue! Pour vous connecter en sécurité à Wingzy, pouvez-vous <a href={forgotPasswordLink}>créer un nouveau mot de passe</a> ?",
+    "signin.error.useGoogle": "Vous êtes déjà inscrit avec Google, essayez <strong>Connexion avec Google</strong> ?",
     "signup.error.wrongEmail": "Votre email n'a pas l'air juste, vous pouvez réessayer ?",
     "signup.error.shortPassword": "Votre mot de passe est trop court, vous pouvez en faire un de plus de 6 caractères ?",
     "signup.error.dumbPassword": "Votre mot de passe est trop simple : <strong>{dumbCount}</strong> personnes ont le même ! Faites-le plus compliqué à deviner.",

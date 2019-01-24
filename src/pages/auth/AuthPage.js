@@ -4,6 +4,7 @@ import Banner from '../../components/utils/banner/Banner';
 import Logo from '../../components/utils/logo/Logo';
 import Auth from '../../components/auth/Auth';
 import Header from '../../components/header/Header';
+import {inject, observer} from 'mobx-react';
 
 const styles = {
     logo: {
@@ -17,6 +18,15 @@ const styles = {
 };
 
 class AuthPage extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
+        if(this.props.match && this.props.match.params && this.props.match.params.invitationCode) {
+            this.props.authStore.setInvitationCode(this.props.match.params.invitationCode);
+        }
+    }
 
     render() {
         const {classes, initialTab} = this.props;
@@ -42,7 +52,8 @@ class AuthPage extends React.Component {
     }
 }
 
-export default 
-        withStyles(styles, {withTheme: true})(
-            AuthPage
-        );
+export default inject('authStore')(
+    withStyles(styles, {withTheme: true})(observer(
+        (AuthPage)
+    ))
+);
