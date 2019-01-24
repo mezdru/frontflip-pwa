@@ -111,11 +111,15 @@ class App extends Component {
                                     
 
                                     <ListItem>
-                                        <ListItemText primary={"Vous utilisez actuellement un Wingzy gratuit limité à 1000 recherches par mois."} />
+                                        <ListItemText primary={
+                                            (organisation.premium ? intl.formatMessage({id: 'menu.drawer.organisationInfoPremium'}) : intl.formatMessage({id: 'menu.drawer.organisationInfo'}))
+                                        } />
                                     </ListItem>
 
                                     <ListItem button>
-                                        <ListItemText primary={"Contactez-nous pour passer premium !"} />
+                                        <ListItemText primary={
+                                            (organisation.premium ? intl.formatMessage({id: 'menu.drawer.contactUsPremium'}) : intl.formatMessage({id: 'menu.drawer.contactUs'}))
+                                        } />
                                     </ListItem>
 
                                 </List>

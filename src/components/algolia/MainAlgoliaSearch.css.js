@@ -21,6 +21,10 @@ export const styles = theme => ({
             marginTop:0,
         }    
     },
+    '@keyframes fadeIn': {
+        from: {opacity: 0},
+        to: {opacity: 1}
+    },
     hitList: {
         width: '100%',
         '& ul': {
@@ -30,7 +34,22 @@ export const styles = theme => ({
             marginBottom: '32px',
         },
         '& ul li': {
-            marginBottom: '32px'
+            marginBottom: '32px',
+            opacity: 0,
+            animation: 'fadeIn 0.9s 1',
+            animationFillMode: 'forwards',
+        },
+        '& ul li:nth-child(1)': {
+            WebkitAnimationDelay: '0s',
+            animationDelay: '0s',
+        },
+        '& ul li:nth-child(2)': {
+            WebkitAnimationDelay: '.3s',
+            animationDelay: '.3s',
+        },
+        '& ul li:nth-child(3)': {
+            WebkitAnimationDelay: '.6s',
+            animationDelay: '.6s',
         },
         '& ul li > div:first-child' : {
             position: 'relative',
