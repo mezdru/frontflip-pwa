@@ -7,8 +7,12 @@ import Header from '../../components/header/Header';
 
 const styles = {
     logo: {
+        width: '6rem',
+        height: '6rem',
+        boxShadow: '0 5px 15px -1px darkgrey, 0 0 0 5px transparent',
         bottom: '3rem',
         marginBottom: '-6rem',
+        zIndex:2,
     }
 };
 

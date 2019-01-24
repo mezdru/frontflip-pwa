@@ -45,7 +45,8 @@ class App extends Component {
         const {organisation} = this.props.organisationStore.values;
         const {currentUser} = this.props.userStore.values;
         const {locale} = this.state;
-        const currentOrgAndRecord = currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
+        const currentOrgAndRecord = ((currentUser && currentUser.orgsAndRecords) ? 
+                                    currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id) : null);
 
         return(
             <Drawer
