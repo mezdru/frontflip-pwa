@@ -75,15 +75,6 @@ class Register extends React.Component {
             });
     };
     
-    handleGoogleConnect = (e) => {
-        if(this.props.organisationStore.values.orgTag && this.props.authStore.values.invitationCode) {
-            window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/google/login', this.props.organisationStore.values.orgTag) + 
-                (UrlService.env === 'production' ? '?' : '&') + 'code=' + this.props.authStore.values.invitationCode;
-        } else {
-            window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/google/login', this.props.organisationStore.values.orgTag);
-        }    
-    };
-    
     render() {
         const {values, inProgress} = this.props.authStore;
         let {registerErrors, registerSuccess, registerSuccessMessage} = this.state;
@@ -107,7 +98,7 @@ class Register extends React.Component {
                             </Grid>
                         )}
                         <Grid item>
-                            <GoogleButton fullWidth={true} onClick={this.handleGoogleConnect}/>
+                            <GoogleButton fullWidth={true} onClick={this.props.handleGoogleAuth}/>
                         </Grid>
                         <Grid item>
                             <Typography style={{

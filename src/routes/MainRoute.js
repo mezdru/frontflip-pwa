@@ -27,6 +27,8 @@ class MainRoute extends React.Component {
         const {renderComponent, locale} = this.state;
         const endUrl = window.location.pathname + window.location.search;
 
+        console.log('endUrl router 1 : ' + endUrl);
+
         if(renderComponent) {
             return (
                 <div>

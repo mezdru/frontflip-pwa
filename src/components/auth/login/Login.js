@@ -22,7 +22,7 @@ class Login extends React.Component {
             isAuth: this.props.authStore.isAuth()
         };
     }
-    
+
     handleEmailChange = (e) => {
         this.props.authStore.setEmail(e.target.value);
     };
@@ -37,7 +37,6 @@ class Login extends React.Component {
             .then((response) => {
                 if (response === 200) {
                     this.setState({successLogin: true, redirectTo: '/' + this.state.locale + (this.props.organisationStore.values.orgTag ? '/'+this.props.organisationStore.values.orgTag : '') + '/search'});
-                    //window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/login/callback', this.props.organisationStore.values.orgTag);
                 } else {
                     this.setState({loginErrors: this.props.intl.formatMessage({id: 'signin.error.generic'})});
                 }
@@ -58,15 +57,6 @@ class Login extends React.Component {
             });
     };
     
-    handleGoogleConnect = (e) => {
-        if(this.props.organisationStore.values.orgTag && this.props.authStore.values.invitationCode) {
-            window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/google/login', this.props.organisationStore.values.orgTag) + 
-                (UrlService.env === 'production' ? '?' : '&') + 'code=' + this.props.authStore.values.invitationCode;
-        } else {
-            window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/google/login', this.props.organisationStore.values.orgTag);
-        }    
-    };
-    
     render() {
         const {values, inProgress} = this.props.authStore;
         const {organisation} = this.props.organisationStore.values;
@@ -85,7 +75,7 @@ class Login extends React.Component {
                         </Grid>
                     )}
                     <Grid item>
-                        <GoogleButton fullWidth={true} onClick={this.handleGoogleConnect}/>
+                        <GoogleButton fullWidth={true} onClick={this.props.handleGoogleAuth}/>
                     </Grid>
                     <Grid item>
                         <Typography style={{
