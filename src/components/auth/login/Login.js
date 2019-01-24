@@ -57,16 +57,6 @@ class Login extends React.Component {
             });
     };
     
-    handleGoogleConnect = (e) => {
-        window.location.href = 'http://localhost:3001/google';
-        // if(this.props.organisationStore.values.orgTag && this.props.authStore.values.invitationCode) {
-        //     window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/google/login', this.props.organisationStore.values.orgTag) + 
-        //         (UrlService.env === 'production' ? '?' : '&') + 'code=' + this.props.authStore.values.invitationCode;
-        // } else {
-        //     window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/google/login', this.props.organisationStore.values.orgTag);
-        // }    
-    };
-    
     render() {
         const {values, inProgress} = this.props.authStore;
         const {organisation} = this.props.organisationStore.values;

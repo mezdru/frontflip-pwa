@@ -103,7 +103,7 @@ class Auth extends React.Component {
                         onChangeIndex={this.handleChangeIndex}
                     >
                         <Login handleGoogleAuth={this.handleGoogleAuth} />
-                        <Register/>
+                        <Register handleGoogleAuth={this.handleGoogleAuth} />
                     </SwipeableViews>
                 </Grid>
             </Grid>
