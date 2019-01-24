@@ -26,6 +26,7 @@ class MainRouteOrganisationRedirect extends React.Component {
     }
 
     manageAccessRight() {
+        console.log('manage access right');
         if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
             // set orgTag params
             this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
@@ -101,6 +102,8 @@ class MainRouteOrganisationRedirect extends React.Component {
     
     render() {
         const {redirectTo, renderComponent} = this.state;
+
+        console.log('render router 3');
         
             if(redirectTo){
                 if(window.location.pathname !== redirectTo) {

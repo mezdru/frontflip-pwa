@@ -14,6 +14,7 @@ class HeaderLinks extends Component {
         const {auth, anchorEl, classes, handleMobileMenuOpen, handleProfileMenuOpen} = this.props;
         const isMenuOpen = Boolean(anchorEl);
         const {locale} = this.props.commonStore;
+        const orgTag = this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag;
 
 
         return(
@@ -37,7 +38,7 @@ class HeaderLinks extends Component {
                         </IconButton>
                     )}
                     {!auth && (
-                        <Button variant={"text"} color="inherit" to={"/" + locale} component={ Link }><FormattedMessage id="Sign In"/></Button>
+                        <Button variant={"text"} color="inherit" to={"/" + locale + (orgTag ? '/'+orgTag : '') + '/signin'} component={ Link }><FormattedMessage id="Sign In"/></Button>
                     )}
                 
                 </div>
@@ -57,7 +58,7 @@ HeaderLinks.propTypes = {
     theme: PropTypes.object.isRequired,
 };
 
-export default inject('commonStore')(
+export default inject('commonStore', 'organisationStore')(
     observer(
         withStyles(styles, {withTheme: true})(
             HeaderLinks

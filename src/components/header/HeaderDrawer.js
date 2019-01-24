@@ -11,10 +11,15 @@ import Logo from '../utils/logo/Logo';
 import { injectIntl } from 'react-intl';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import UrlService from '../../services/url.service';
+import {Link} from 'react-router-dom';
 
 class App extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
+        }
 
         this.handleLogout = this.handleLogout.bind(this);
     }
@@ -30,7 +35,7 @@ class App extends Component {
         e.preventDefault();
         this.props.handleDrawerClose();
         this.props.authStore.logout().then(() => {
-            window.location.href = UrlService.createUrl(window.location.host, '/' + this.props.organisationStore.values.orgTag, null);
+            window.location.href = UrlService.createUrl(window.location.host, '/' + this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag, null);
         });
     }
 
@@ -38,6 +43,7 @@ class App extends Component {
         const {classes, theme, auth, open, intl} = this.props;
         const {record} = this.props.recordStore.values;
         const {organisation} = this.props.organisationStore.values;
+        const {locale} = this.state;
 
         return(
             <Drawer
@@ -70,7 +76,7 @@ class App extends Component {
                                                                 primaryTypographyProps={{variant:'button', noWrap: true, style: {fontWeight: 'bold'}}} />
                                             </ListItem>
 
-                                            <ListItem button >
+                                            <ListItem button component={Link} to={'/' +locale + '/' + organisation.tag + '/search/profile/' + record.tag} >
                                                 <ListItemText primary={intl.formatMessage({id: 'menu.drawer.profile'})} />
                                             </ListItem>
 
@@ -143,7 +149,7 @@ App.propTypes = {
     theme: PropTypes.object.isRequired,
 };
 
-export default inject('authStore', 'organisationStore', 'recordStore')(
+export default inject('authStore', 'organisationStore', 'recordStore', 'commonStore')(
     injectIntl(observer(
         withStyles(styles, {withTheme: true})(
             App

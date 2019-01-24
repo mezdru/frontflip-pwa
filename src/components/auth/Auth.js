@@ -9,6 +9,7 @@ import { injectIntl } from 'react-intl';
 import {inject, observer} from 'mobx-react';
 import { observe} from 'mobx';
 import { Redirect } from 'react-router-dom';
+import UrlService from '../../services/url.service';
 const queryString = require('query-string');
 
 class Auth extends React.Component {
@@ -30,27 +31,32 @@ class Auth extends React.Component {
         observe(this.props.authStore.values, 'invitationCode', (change) => {
             this.setState({value: 1});
         });
-        console.log('in auth : ' + window.location.href)
 
-        // if google callback, should have orgTag / invitationCode / shouldRegisterToOrg
+        // HANDLE GOOGLE AUTH CALLBACK
         if(this.state.queryParams && this.state.queryParams.refresh_token && this.state.queryParams.access_token) {
-            console.log(this.state.queryParams);
             let googleState = JSON.parse(this.state.queryParams.state);
-
-            // save cookies
             this.props.commonStore.setAuthTokens(this.state.queryParams);
-            this.props.userStore.getCurrentUser();
 
-            // register to org if needed
-            if(googleState && googleState.invitationCode) this.props.authStore.setInvitationCode(googleState.invitationCode);
-            this.props.authStore.registerToOrg()
+            this.props.userStore.getCurrentUser()
             .then(() => {
-                // success
-                this.setState({redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag + '/search'});
+                if(googleState && googleState.invitationCode) this.props.authStore.setInvitationCode(googleState.invitationCode);
+                this.props.authStore.registerToOrg()
+                .then((data) => {
+                    let organisation = data.organisation;
+                    let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
+                    this.props.recordStore.setRecordId(currentOrgAndRecord.record);
+                    this.props.recordStore.getRecord()
+                    .then(() => {
+                        this.setState({redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag + '/search'});
+                    }).catch(() => {
+                        window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
+                    });
+                }).catch((err) => {
+                    this.setState({redirectTo: '/' + this.state.locale + '/search'});
+                });
             }).catch(() => {
-                // error
                 this.setState({redirectTo: '/' + this.state.locale + '/search'});
-            })
+            });
         }
     }
     
@@ -74,7 +80,6 @@ class Auth extends React.Component {
         const {theme} = this.props;
         const {redirectTo} = this.state;
         let intl = this.props.intl;
-        
         if(redirectTo) return (<Redirect to={redirectTo}/>);
 
         return (
@@ -106,7 +111,7 @@ class Auth extends React.Component {
     }
 }
 
-export default inject('authStore', 'organisationStore', 'commonStore', 'userStore')(
+export default inject('authStore', 'organisationStore', 'commonStore', 'userStore', 'recordStore')(
     withTheme()(injectIntl(observer(
         (Auth)
     )))
