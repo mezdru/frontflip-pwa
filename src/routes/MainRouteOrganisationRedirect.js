@@ -25,70 +25,65 @@ class MainRouteOrganisationRedirect extends React.Component {
         this.manageAccessRight();
     }
 
-    manageAccessRight() {
-        console.log('manage access right');
-        if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
-            // set orgTag params
-            this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
-            this.props.organisationStore.getOrganisationForPublic()
-            .then((organisation) => {
-                this.props.organisationStore.setOrgId(organisation._id);
-                if(organisation.public) {
-                    // ok
-                    this.setState({renderComponent: true});
-                } else if(this.state.isAuth) {
-                    // org isn't public
-                    this.props.organisationStore.getOrganisation()
-                    .then((organisation) => {
-                        // ok : try to get record
-                        let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
-                        this.props.recordStore.setRecordId(currentOrgAndRecord.record);
-                        this.props.recordStore.getRecord()
-                        .then(() => {
-                            // ALL OK : user can access
-                            this.setState({renderComponent: true});
-                        }).catch((error) => {
-                            window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
-                        });
-                    }).catch((error) => {
-                        this.controlAccessWithoutOrgTag();
-                    });
-                } else {
-                    // not ok : redirect to signin in this org, user may has forgot to login
-                    //this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/signin'});
-                    this.setState({renderComponent: true});
-                }
-            }).catch(() => {
-                // 404 organisation not found
-                this.controlAccessWithoutOrgTag();
-            });
+    canUserAccessOrganisation(organisation) {
+        if(organisation.public) {
+            return true;
         } else {
-            // no orgTag provided
-            this.controlAccessWithoutOrgTag();
+            if(!this.state.isAuth) return false;
+            return (this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id) !== undefined);
         }
     }
 
-    controlAccessWithoutOrgTag() {
-        if(this.state.isAuth && this.props.userStore.values.currentUser._id) {
-            // user is auth
-            if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0 ) {
-                // user has org
-                this.props.organisationStore.setOrgId(this.props.userStore.values.currentUser.orgsAndRecords[0].organisation);
-                this.props.organisationStore.getOrganisation()
-                .then(organisation => {
-                    this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/search'});
-                    this.setState({renderComponent: true});
-                }).catch(()=>{
-                    // can't get org so authorization problem.
-                    window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
-                });
+    redirectUserAuthWithoutAccess() {
+        if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0) {
+            this.props.organisationStore.setOrgId(this.props.userStore.values.currentUser.orgsAndRecords[0].organisation);
+            this.props.organisationStore.getOrganisation()
+            .then(organisation => {
+                this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag});
+                this.setState({renderComponent: true});
+            });
+        } else {
+            window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
+        }
+    }
+
+    redirectUserAuthWithAccess(organisation) {
+        let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
+        this.props.recordStore.setRecordId(currentOrgAndRecord.record);
+        this.props.recordStore.getRecord()
+        .then(() => {
+            this.setState({renderComponent: true});
+        }).catch((error) => {
+            window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
+        });
+    }
+
+    async manageAccessRight() {
+        console.log('manage access right');
+        if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
+            let organisation;     
+            if(!(this.props.organisationStore.values.orgTag === this.props.match.params.organisationTag)) {
+                console.log('need refetch organisation : mobx : ' + this.props.organisationStore.values.orgTag + ' url : ' + this.props.match.params.organisationTag);
+                this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
+                organisation = await this.props.organisationStore.getOrganisationForPublic();
+            }
+
+            if(!this.canUserAccessOrganisation(organisation) && this.state.isAuth) {
+                console.log('user auth but cant access');
+                this.redirectUserAuthWithoutAccess();
+            } else if(!this.canUserAccessOrganisation(organisation)) {
+                console.log('user cant access because no auth');
+                this.setState({redirectTo: '/' + this.state.locale + '/signin'});
+                this.setState({renderComponent: true});
             } else {
-                // user hasn't org
-                window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
+                console.log('user can access');
+                this.props.organisationStore.setOrgId(organisation._id);
+                organisation = await this.props.organisationStore.getOrganisation();
+                this.redirectUserAuthWithAccess(organisation);
             }
         } else {
-            this.setState({redirectTo: '/' + this.state.locale + '/signin'});
-            this.setState({renderComponent: true});
+            console.log('no org tag provided');
+            this.redirectUserAuthWithoutAccess();
         }
     }
 
