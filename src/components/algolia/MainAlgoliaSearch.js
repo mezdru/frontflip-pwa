@@ -38,11 +38,6 @@ class MainAlgoliaSearch extends Component {
         if(this.props.organisationStore.values.organisation._id){
             this.props.organisationStore.getAlgoliaKey();
         }
-        observe(this.props.organisationStore.values, 'organisation', (change) => {
-            if(this.props.organisationStore.values.organisation._id){
-                this.props.organisationStore.getAlgoliaKey();
-            }
-        });
 
         observe(this.props.commonStore, 'algoliaKey', (change) => {
             this.forceUpdate();

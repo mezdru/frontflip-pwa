@@ -44,7 +44,6 @@ class MainRouteOrganisationRedirect extends React.Component {
             this.props.organisationStore.setOrgId(this.props.userStore.values.currentUser.orgsAndRecords[0].organisation);
             this.props.organisationStore.getOrganisation()
             .then(organisation => {
-                console.log('orgAndRecord found');
                 this.redirectUserAuthWithAccess(organisation, true);
             });
         } else {
@@ -54,7 +53,6 @@ class MainRouteOrganisationRedirect extends React.Component {
 
     redirectUserAuthWithAccess(organisation, isNewOrg) {
         let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
-        console.log(currentOrgAndRecord);
         
         if(!currentOrgAndRecord && !this.props.userStore.values.currentUser.superadmin) {
             window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
@@ -64,7 +62,6 @@ class MainRouteOrganisationRedirect extends React.Component {
             .then(() => {
                 if(isNewOrg) this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag});
             }).catch((error) => {
-                console.log(error);
                 window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
             });
         }
@@ -72,49 +69,32 @@ class MainRouteOrganisationRedirect extends React.Component {
     }
 
     async manageAccessRight() {
-        console.log('manage access right');
         if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
-            console.log('will perform manage access right');
             let organisation = this.props.organisationStore.values.organisation;     
             if(!(this.props.organisationStore.values.orgTag === this.props.match.params.organisationTag)) {
-                console.log('need refetch organisation : mobx : ' + this.props.organisationStore.values.orgTag + ' url : ' + this.props.match.params.organisationTag);
                 this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
                 organisation = await this.props.organisationStore.getOrganisationForPublic();
             }
 
-            console.log('will control access for organisation : ' + organisation.tag);
             if(!this.canUserAccessOrganisation(organisation) && this.state.isAuth) {
-                console.log('user auth but cant access');
                 await this.redirectUserAuthWithoutAccess();
             } else if(!this.canUserAccessOrganisation(organisation)) {
-                console.log('user cant access because no auth');
             } else {
-                console.log('user can access');
                 this.props.organisationStore.setOrgId(organisation._id);
-                console.log('orgId set.')
                 organisation = await this.props.organisationStore.getOrganisation();
-                console.log('organisation fetched.')
                 await this.redirectUserAuthWithAccess(organisation);
-                console.log('end of treatment');
             }
         } else {
-            console.log('no org tag provided');
             if(this.state.isAuth) await this.redirectUserAuthWithoutAccess();
             else this.setState({redirectTo: '/' + this.state.locale + '/signin'});
         }
     }
 
-    refreshState() {
-        //this.setState({redirectTo: null, renderComponent: false});
-    }
-    
     render() {
         const {redirectTo, renderComponent, shouldManageAccessRight} = this.state;
         const {locale} = this.props.commonStore;
         const {orgTag, organisation} = this.props.organisationStore.values;
         let isAuth = this.props.authStore.isAuth();
-
-        console.log('render router 3');
         
         if(redirectTo){
             if(window.location.pathname !== redirectTo) {
