@@ -25,6 +25,7 @@ class MainRouteOrganisation extends React.Component {
     render() {
         const {isAuth} = this.state;
         const {locale} = this.props.match.params;
+        console.log('render router 2');
         return (
                 <div>
                     <Switch>
@@ -35,15 +36,13 @@ class MainRouteOrganisation extends React.Component {
                         <Route  path="/:locale(en|fr|en-UK)/signin" component={AuthPage} />
 
                         {/* Route which will need organisationTag */}
-                        <Route exact path="/:locale(en|fr|en-UK)/search" component={MainRouteOrganisationRedirect} />
-                        <Route exact path="/:locale(en|fr|en-UK)/search/profile" component={MainRouteOrganisationRedirect} />
-                        <Route  path="/:locale(en|fr|en-UK)/search/profile/:profileTag" component={MainRouteOrganisationRedirect} />
 
                         {/* Main route with orgTag */}
                         <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={MainRouteOrganisationRedirect} />
+                        <Route path="/:locale(en|fr|en-UK)" component={MainRouteOrganisationRedirect} />
 
                         {isAuth && (
-                            <Redirect to={"/" + locale + "/search"} />
+                            <Redirect to={"/" + locale} />
                         )}
                         {!isAuth && (
                             <Redirect to={"/" + locale + "/signin"} />

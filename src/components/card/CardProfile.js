@@ -7,18 +7,20 @@ import Logo from '../../components/utils/logo/Logo';
 import Wings from '../utils/wing/Wing';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
+import twemoji from 'twemoji';
 
 const EXTRA_LINK_LIMIT = 5;
 
 const styles = theme => ({
     logo: {
-        width: 160,
+        width: 170,
         height: 170,
         marginBottom: '-5rem',
         '& img': {
-            height: '90%',
-            width: '90%',
+            width: '100%',
+            height: '100%',
             borderRadius: '50%',
+            border: '9px solid white'
         },
     },
     wings: {
@@ -109,13 +111,20 @@ class CardProfile extends React.Component {
         if(picture && picture.path) return null;
         else if (picture && picture.url) return picture.url;
         else if (picture && picture.uri) return picture.uri;
-        else if (picture && picture.emoji) return picture.emoji;
+        else if (picture && picture.emoji) return this.getEmojiUrl(picture.emoji);
         else return null;
+    }
+
+    getEmojiUrl(emoji) {
+        let str = twemoji.parse(emoji);
+        str = str.split(/ /g);
+        str = str[4].split(/"/g);
+        return str[1];
     }
     
     makeHightlighted = function (item) {
         let filters = this.props.commonStore.getSearchFilters() || this.props.commonStore.searchFilters;
-        if (filters.length > 0) {
+        if (filters && filters.length > 0) {
             item.hashtags.forEach((hashtag, index) => {
                 if (hashtag.tag && filters.find(filterValue => filterValue.value === hashtag.tag)) item.hashtags[index].class = 'highlighted';
             });
@@ -123,6 +132,7 @@ class CardProfile extends React.Component {
     };
     
     orderHashtags = function (item) {
+        if(!item.hashtags) return;
         var highlighted = [];
         var notHighlighted = [];
         item.hashtags.forEach(function (hashtag) {
@@ -162,7 +172,7 @@ class CardProfile extends React.Component {
                 <Grid item container justify={'flex-end'}>
                     <CardActions className={classes.actions} disableActionSpacing>
                         <Grid item container spacing={0}>
-                            {hit.links.map((link, i) => {
+                            {hit.links && hit.links.map((link, i) => {
                                 return (
                                     <Grid item key={link._id}>
                                         <Tooltip title={link.display || link.value || link.url}>
@@ -177,7 +187,7 @@ class CardProfile extends React.Component {
                 <Grid container item>
                     <CardContent className={this.props.classes.wingsContainer}>
                         <Grid container className={this.props.classes.wings}>
-                            {hit.hashtags.map((hashtag, i) => {
+                            {hit.hashtags && hit.hashtags.map((hashtag, i) => {
                                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
                                 return (
                                     <Wings src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture}

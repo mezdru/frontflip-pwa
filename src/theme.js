@@ -75,12 +75,6 @@ export default createMuiTheme({
             }
         },
         MuiAvatar: {
-            root: {
-                // width: '6rem',
-                // height: '6rem',
-                // boxShadow: '0 5px 15px -1px darkgrey, 0 0 0 5px transparent',
-                backgroundColor: 'white',
-            },
             img: {
                 height: 'auto',
             }
@@ -129,7 +123,8 @@ export default createMuiTheme({
             root: {
                 padding: 0,
                 borderRadius: 20,
-                margin: 15,
+                marginTop: 15,
+                marginBottom: 15,
             }
         },
         MuiCardActions: {

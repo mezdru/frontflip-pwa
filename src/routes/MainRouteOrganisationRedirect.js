@@ -16,12 +16,10 @@ class MainRouteOrganisationRedirect extends React.Component {
             redirectTo: null,
             locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
             isAuth: this.props.authStore.isAuth(),
-            renderComponent: false
+            renderComponent: false,
+            shouldManageAccessRight: true
         };
-
         this.manageAccessRight = this.manageAccessRight.bind(this);
-        this.dismiss = this.dismiss.bind(this);
-
         this.manageAccessRight();
     }
 
@@ -90,13 +88,9 @@ class MainRouteOrganisationRedirect extends React.Component {
     refreshState() {
         this.setState({redirectTo: null, renderComponent: true});
     }
-
-    dismiss() {
-        this.props.unmountMe();
-    } 
     
     render() {
-        const {redirectTo, renderComponent} = this.state;
+        const {redirectTo, renderComponent, shouldManageAccessRight} = this.state;
 
         console.log('render router 3');
         
@@ -107,6 +101,8 @@ class MainRouteOrganisationRedirect extends React.Component {
                     this.refreshState();
                 }
             }
+            if(shouldManageAccessRight) this.manageAccessRight();
+
             if(renderComponent) {
                 return (
                     <div>
@@ -117,8 +113,7 @@ class MainRouteOrganisationRedirect extends React.Component {
                             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
 
                             {/* Main route with orgTag */}
-                            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/search/profile/:profileTag" component={Search} />
-                            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/search" component={Search} />
+                            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={Search} />
                             <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={Search} />
                         </Switch>
                     </div>

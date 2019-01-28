@@ -165,6 +165,10 @@ const Record = {
         requests.get(
             API_ROOT+'/api/profiles/'+recordId
         ),
+    getByTag: (recordTag, orgId) =>
+        requests.get(
+            API_ROOT+'/api/profiles/tag/'+recordTag+'/organisation/'+orgId
+        ),
     post: (orgId, record) => 
         requests.post(
             API_ROOT+'/api/profiles/',
