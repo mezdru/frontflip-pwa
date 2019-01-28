@@ -16,16 +16,25 @@ class MainRoute extends React.Component {
 
     componentDidMount() {
         // set current user 
+        this.getUser();
+    }
+
+    async getUser() {
+        console.log('will get user');
         if(this.props.authStore.isAuth()) {
-            this.props.userStore.getCurrentUser()
-            .then(() => {this.setState({renderComponent: true})})
-            .catch((err) => {this.setState({renderComponent: true})});
+            console.log('user auth');
+            await this.props.userStore.getCurrentUser();
+            if(!this.state.renderComponent) this.setState({renderComponent: true});
         }
     }
     
     render() {
         const {renderComponent, locale} = this.state;
         const endUrl = window.location.pathname + window.location.search;
+        const {currentUser} = this.props.userStore.values;
+
+        if(!currentUser) this.getUser();
+        
 
         console.log('endUrl router 1 : ' + endUrl);
 

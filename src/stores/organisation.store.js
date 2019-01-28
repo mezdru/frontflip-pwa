@@ -1,6 +1,7 @@
 import { observable, action, decorate } from "mobx";
 import agent from '../agent';
 import commonStore from "./common.store";
+import { truncate } from "fs";
 
 class OrganisationStore {
     inProgress = false;
@@ -37,6 +38,7 @@ class OrganisationStore {
             return agent.Organisation.get(this.values.orgId)
                 .then(data => { 
                     if(data) this.setOrganisation(data.organisation);
+                    this.getAlgoliaKey(true);
                     return this.values.organisation;
                 })
                 .catch(action((err) => {
@@ -47,16 +49,17 @@ class OrganisationStore {
         }
     }
 
-    getAlgoliaKey() {
+    getAlgoliaKey(forceUpdate) {
         this.inProgress = true;
         this.errors = null;
 
-        if(commonStore.algoliaKey || commonStore.getCookie('algoliaKey')) return Promise.resolve(commonStore.algoliaKey);
+        if( (commonStore.algoliaKey || commonStore.getCookie('algoliaKey')) && !forceUpdate) return Promise.resolve(commonStore.algoliaKey);
+        if( (commonStore.algoliaKeyOrganisation) === this.values.organisation.tag) return Promise.resolve(commonStore.algoliaKey);
 
         return agent.Organisation.getAlgoliaKey(this.values.organisation._id, this.values.organisation.public)
             .then(data => { 
                 if(data){
-                    commonStore.setAlgoliaKey(data.public_key);
+                    commonStore.setAlgoliaKey(data.public_key, this.values.organisation.tag);
                     return data.public_key.value;
                 }
                 return null;
@@ -80,7 +83,6 @@ class OrganisationStore {
                 })
                 .catch(action((err) => {
                     this.errors = err.response && err.response.body && err.response.body.errors;
-                    console.log(err);
                     throw err;
                 }))
                 .finally(action(()=> { this.inProgress = false; }));

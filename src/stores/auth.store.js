@@ -146,6 +146,7 @@ class AuthStore {
 
     logout() {
         commonStore.removeAuthTokens();
+        commonStore.removeCookie('algoliaKey');
         userStore.forgetUser();
         return Promise.resolve();
     }

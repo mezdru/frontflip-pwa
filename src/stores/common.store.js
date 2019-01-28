@@ -9,18 +9,22 @@ class CommonStore {
     accessToken;
     refreshToken;
     algoliaKey;
-    algoliaKeyValidity;
+    algoliaKeyOrganisation;
     appLoaded = false;
     locale = 'en-UK';
     searchFilters = [];
 
     constructor() {
+        this.init();
+    }
+
+    init() {
         this.accessToken = this.getCookie('accessToken');
         this.refreshToken = this.getCookie('refreshToken');
         this.algoliaKey = this.getCookie('algoliaKey');
+        this.algoliaKeyOrganisation = this.getCookie('algoliaKeyOrganisation');
         this.searchFilters = this.getCookie('searchFilters');
         this.populateLocale();
-        
     }
 
     populateLocale() {
@@ -55,6 +59,7 @@ class CommonStore {
         }else{
             cookies.set(name, value, (expires ? {expires: expires, path: '/'} : {path: '/'}));
         }
+        this.init();
     }
 
     getCookie(name) {
@@ -62,7 +67,14 @@ class CommonStore {
     }
 
     removeCookie(name) {
-        cookies.remove(name);
+        let options = {};
+        if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
+            options = {path: '/', domain: 'wingzy.com'};
+        }else{
+            options = {path: '/'};
+        }
+        cookies.remove(name, options);
+        this.init();
     }
 
     removeAuthTokens() {
@@ -74,6 +86,7 @@ class CommonStore {
         }
         cookies.remove('accessToken', options);
         cookies.remove('refreshToken', options);
+        this.init();
     }
 
     setAuthTokens(tokens) {
@@ -90,12 +103,15 @@ class CommonStore {
             this.refreshToken = tokens.refresh_token;
             this.setCookie('refreshToken',this.refreshToken, expDate2);
         }
+        this.init();
     }
 
-    setAlgoliaKey(algoliaKey) {
+    setAlgoliaKey(algoliaKey, orgTag) {
         this.algoliaKey = algoliaKey.value;
         let expDate = new Date(algoliaKey.valid_until);
         this.setCookie('algoliaKey', this.algoliaKey, expDate);
+        this.setCookie('algoliaKeyOrganisation', orgTag, expDate);
+        this.init();
     }
 
     setAppLoaded() {
@@ -109,6 +125,7 @@ decorate(CommonStore, {
     accessToken: observable,
     refreshToken: observable,
     algoliaKey: observable,
+    algoliaKeyOrganisation: observable,
     appLoaded: observable,
     searchFilters: observable,
     locale: observable,

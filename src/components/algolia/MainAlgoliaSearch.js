@@ -15,11 +15,10 @@ class MainAlgoliaSearch extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            algoliaKey: null,
             filters: 'type:person',
             refresh: false,
             newFilter: {},
-            displayedHit: this.props.profileTag ? {tag: this.props.profileTag} : null,
+            displayedHit: null,
             resultsType: this.props.resultsType || 'person',
             shouldUpdateUrl: false
         }
@@ -29,24 +28,24 @@ class MainAlgoliaSearch extends Component {
         this.handleReturnToSearch = this.handleReturnToSearch.bind(this);
     }
 
+    componentWillReceiveProps(nextProp) {
+        if(nextProp.profileTag) {
+            this.handleDisplayProfile(null, {tag: nextProp.profileTag});
+        }
+    }
+
     componentDidMount() {
         if(this.props.organisationStore.values.organisation._id){
-            this.props.organisationStore.getAlgoliaKey()
-            .then((algoliaKey) => {
-                this.setState({algoliaKey: algoliaKey});
-            }).catch((err) => {
-                // window.location.href = UrlService.createUrl(window.location.host, '/', undefined);
-            });
+            this.props.organisationStore.getAlgoliaKey();
         }
         observe(this.props.organisationStore.values, 'organisation', (change) => {
             if(this.props.organisationStore.values.organisation._id){
-                this.props.organisationStore.getAlgoliaKey()
-                .then((algoliaKey) => {
-                    this.setState({algoliaKey: algoliaKey});
-                }).catch((err) => {
-                    // window.location.href = UrlService.createUrl(window.location.host, '/', undefined);
-                });
+                this.props.organisationStore.getAlgoliaKey();
             }
+        });
+
+        observe(this.props.commonStore, 'algoliaKey', (change) => {
+            this.forceUpdate();
         });
     }
     
@@ -74,9 +73,8 @@ class MainAlgoliaSearch extends Component {
     }
 
     handleDisplayProfile(e, hit) {
-        e.preventDefault();
-        this.setState({displayedHit: hit});
-        this.setState({resultsType: 'profile'});
+        if(e) e.preventDefault();
+        this.setState({displayedHit: hit, resultsType: 'profile'});
     }
 
     handleReturnToSearch() {
@@ -84,10 +82,14 @@ class MainAlgoliaSearch extends Component {
     }
 
     render() {
-        const {algoliaKey, filters, newFilter, displayedHit, resultsType, shouldUpdateUrl} = this.state;
-        const { HitComponent, classes } = this.props;
+        const { filters, newFilter, shouldUpdateUrl} = this.state;
+        const { HitComponent, classes, profileTag } = this.props;
         const { locale } = this.props.commonStore;
         const { orgTag } = this.props.organisationStore.values;
+        const { algoliaKey } = this.props.commonStore;
+        let resultsType = ( (profileTag && !shouldUpdateUrl) ? 'profile' : null) || this.state.resultsType;
+        let displayedHit = ( (profileTag && !shouldUpdateUrl) ? {tag: profileTag} : null) || this.state.displayedHit;
+        let rootUrl = '/' + locale + '/' + orgTag;
         
         let searchBarWidth;
         if(isWidthUp('lg', this.props.width)){
@@ -123,7 +125,7 @@ class MainAlgoliaSearch extends Component {
                     {/* Search results */}
                     {resultsType === 'person' && (
                         <div className={classes.hitListContainer}>
-                            {shouldUpdateUrl && (<Redirect push to={'/' + locale + '/' + orgTag} />)}
+                            { (shouldUpdateUrl && (window.location.pathname !== rootUrl) ) && (<Redirect push to={rootUrl} />)}
                             
                             <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                             indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
@@ -148,11 +150,10 @@ class MainAlgoliaSearch extends Component {
                             </InstantSearch>
                         </div>
                     )}
-                    {resultsType === 'profile' && (
-                        <Redirect push to={'/' + locale + '/' + orgTag + '/' + displayedHit.tag } />
+                    {((resultsType === 'profile') && (window.location.pathname !== rootUrl + '/' + displayedHit.tag)) && (
+                        <Redirect push to={rootUrl + '/' + displayedHit.tag } />
                     )}
                     {resultsType === 'profile' && (
-      
                                 <ProfileLayout hit={displayedHit} addToFilters={this.addToFilters} className={classes.hitListContainerWithoutMargin}/>
                     )}
                 </StickyContainer>

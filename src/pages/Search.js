@@ -19,17 +19,20 @@ class Search extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            redirectTo: null,
-            locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
-            profileTag: (this.props.match && this.props.match.params && this.props.match.params.profileTag) ? this.props.match.params.profileTag : null
+            locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
         };
     }
     
     render() {
-        const {redirectTo, profileTag} = this.state;
+        const {locale} = this.state;
+        const {organisation} = this.props.organisationStore.values;
+        let profileTag = (this.props.match.params ? this.props.match.params.profileTag : null);
+        let redirecTo = null;
 
-        if(redirectTo) return (<Redirect to={redirectTo} />);
-        
+        if(profileTag && profileTag.charAt(0) !== '@') redirecTo = '/' + locale + '/' + organisation.tag;
+
+        if(redirecTo) return (<Redirect to={redirecTo} />);
+
         return (
             <div>
                 <Header />
@@ -38,12 +41,7 @@ class Search extends React.Component {
                         <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner}>
                             <Banner />
                         </Grid>
-                        {!profileTag &&(
-                            <MainAlgoliaSearch HitComponent={Card} resultsType={'person'}/>
-                        )}
-                        {profileTag &&(
-                            <MainAlgoliaSearch HitComponent={Card} resultsType={'profile'} profileTag={profileTag} />
-                        )}
+                        <MainAlgoliaSearch HitComponent={Card} profileTag={profileTag} />
                     </Grid>
                 </main>
             </div>

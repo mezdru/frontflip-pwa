@@ -36,7 +36,7 @@ class Login extends React.Component {
         this.props.authStore.login()
             .then((response) => {
                 if (response === 200) {
-                    this.setState({successLogin: true, redirectTo: '/' + this.state.locale + (this.props.organisationStore.values.orgTag ? '/'+this.props.organisationStore.values.orgTag : '') + '/search'});
+                    this.setState({successLogin: true, redirectTo: '/' + this.state.locale + (this.props.organisationStore.values.orgTag ? '/'+this.props.organisationStore.values.orgTag : '')});
                 } else {
                     this.setState({loginErrors: this.props.intl.formatMessage({id: 'signin.error.generic'})});
                 }
@@ -66,7 +66,7 @@ class Login extends React.Component {
         let intl = this.props.intl;
 
         if (redirectTo) return <Redirect to={redirectTo}/>;
-        if (isAuth) return <Redirect to={'/'+locale+(this.props.organisationStore.values.orgTag ? '/'+this.props.organisationStore.values.orgTag : '') +'/search'}/>;
+        if (isAuth) return <Redirect to={'/'+locale+(this.props.organisationStore.values.orgTag ? '/'+this.props.organisationStore.values.orgTag : '')}/>;
         
         return (
             <form onSubmit={this.handleSubmitForm}>
