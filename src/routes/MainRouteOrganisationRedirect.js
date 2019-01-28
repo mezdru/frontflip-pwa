@@ -16,16 +16,15 @@ class MainRouteOrganisationRedirect extends React.Component {
             redirectTo: null,
             locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
             isAuth: this.props.authStore.isAuth(),
-            renderComponent: false
+            renderComponent: false,
+            shouldManageAccessRight: true
         };
-
         this.manageAccessRight = this.manageAccessRight.bind(this);
-        this.dismiss = this.dismiss.bind(this);
-
         this.manageAccessRight();
     }
 
     manageAccessRight() {
+        if(!this.state.shouldManageAccessRight) return;
         console.log('manage access right');
         if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
             // set orgTag params
@@ -35,18 +34,19 @@ class MainRouteOrganisationRedirect extends React.Component {
                 this.props.organisationStore.setOrgId(organisation._id);
                 if(organisation.public) {
                     // ok
-                    this.setState({renderComponent: true});
+                    this.setState({renderComponent: true, shouldManageAccessRight: false});
                 } else if(this.state.isAuth) {
                     // org isn't public
                     this.props.organisationStore.getOrganisation()
                     .then((organisation) => {
                         // ok : try to get record
                         let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
+                        console.log('currentOrgAndRecord : ' + JSON.stringify(currentOrgAndRecord));
                         this.props.recordStore.setRecordId(currentOrgAndRecord.record);
                         this.props.recordStore.getRecord()
                         .then(() => {
                             // ALL OK : user can access
-                            this.setState({renderComponent: true});
+                            this.setState({renderComponent: true, shouldManageAccessRight: false});
                         }).catch((error) => {
                             window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
                         });
@@ -56,7 +56,8 @@ class MainRouteOrganisationRedirect extends React.Component {
                 } else {
                     // not ok : redirect to signin in this org, user may has forgot to login
                     //this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/signin'});
-                    this.setState({renderComponent: true});
+                    console.log('here');
+                    this.setState({renderComponent: true, shouldManageAccessRight: false});
                 }
             }).catch(() => {
                 // 404 organisation not found
@@ -69,6 +70,7 @@ class MainRouteOrganisationRedirect extends React.Component {
     }
 
     controlAccessWithoutOrgTag() {
+        console.log('no org tag for user : ' + JSON.stringify(this.props.userStore.values.currentUser));
         if(this.state.isAuth && this.props.userStore.values.currentUser._id) {
             // user is auth
             if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0 ) {
@@ -76,7 +78,7 @@ class MainRouteOrganisationRedirect extends React.Component {
                 this.props.organisationStore.setOrgId(this.props.userStore.values.currentUser.orgsAndRecords[0].organisation);
                 this.props.organisationStore.getOrganisation()
                 .then(organisation => {
-                    this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/search'});
+                    this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag, shouldManageAccessRight: true});
                     this.setState({renderComponent: true});
                 }).catch(()=>{
                     // can't get org so authorization problem.
@@ -87,7 +89,7 @@ class MainRouteOrganisationRedirect extends React.Component {
                 window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
             }
         } else {
-            this.setState({redirectTo: '/' + this.state.locale + '/signin'});
+            this.setState({redirectTo: '/' + this.state.locale + '/signin', shouldManageAccessRight: true});
             this.setState({renderComponent: true});
         }
     }
@@ -95,13 +97,9 @@ class MainRouteOrganisationRedirect extends React.Component {
     refreshState() {
         this.setState({redirectTo: null, renderComponent: true});
     }
-
-    dismiss() {
-        this.props.unmountMe();
-    } 
     
     render() {
-        const {redirectTo, renderComponent} = this.state;
+        const {redirectTo, renderComponent, shouldManageAccessRight} = this.state;
 
         console.log('render router 3');
         
@@ -112,6 +110,8 @@ class MainRouteOrganisationRedirect extends React.Component {
                     this.refreshState();
                 }
             }
+            if(shouldManageAccessRight) this.manageAccessRight();
+
             if(renderComponent) {
                 return (
                     <div>
@@ -122,8 +122,7 @@ class MainRouteOrganisationRedirect extends React.Component {
                             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
 
                             {/* Main route with orgTag */}
-                            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/search/profile/:profileTag" component={Search} />
-                            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/search" component={Search} />
+                            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={Search} />
                             <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={Search} />
                         </Switch>
                     </div>

@@ -43,7 +43,10 @@ class App extends Component {
         const {classes, theme, auth, open, intl} = this.props;
         const {record} = this.props.recordStore.values;
         const {organisation} = this.props.organisationStore.values;
+        const {currentUser} = this.props.userStore.values;
         const {locale} = this.state;
+        const currentOrgAndRecord = ((currentUser && currentUser.orgsAndRecords) ? 
+                                    currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id) : null);
 
         return(
             <Drawer
@@ -100,13 +103,23 @@ class App extends Component {
                                         <ListItemText   primary={organisation.name || organisation.tag} 
                                                         primaryTypographyProps={{variant:'button', noWrap: true, style: {fontWeight: 'bold'}}} />
                                     </ListItem>
+                                    {(currentUser.superadmin || (currentOrgAndRecord &&  currentOrgAndRecord.admin)) && (
+                                        <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/organisation', organisation.tag)}>
+                                            <ListItemText primary={intl.formatMessage({id: 'menu.drawer.organisationAdmin'})} />
+                                        </ListItem>
+                                    )}
+                                    
 
                                     <ListItem>
-                                        <ListItemText primary={"Vous utilisez actuellement un Wingzy gratuit limité à 1000 recherches par mois."} />
+                                        <ListItemText primary={
+                                            (organisation.premium ? intl.formatMessage({id: 'menu.drawer.organisationInfoPremium'}) : intl.formatMessage({id: 'menu.drawer.organisationInfo'}))
+                                        } />
                                     </ListItem>
 
                                     <ListItem button>
-                                        <ListItemText primary={"Contactez-nous pour passer premium !"} />
+                                        <ListItemText primary={
+                                            (organisation.premium ? intl.formatMessage({id: 'menu.drawer.contactUsPremium'}) : intl.formatMessage({id: 'menu.drawer.contactUs'}))
+                                        } />
                                     </ListItem>
 
                                 </List>
@@ -149,7 +162,7 @@ App.propTypes = {
     theme: PropTypes.object.isRequired,
 };
 
-export default inject('authStore', 'organisationStore', 'recordStore', 'commonStore')(
+export default inject('authStore', 'organisationStore', 'recordStore', 'commonStore', 'userStore')(
     injectIntl(observer(
         withStyles(styles, {withTheme: true})(
             App

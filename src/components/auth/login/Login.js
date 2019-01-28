@@ -48,6 +48,8 @@ class Login extends React.Component {
                 } else if (err.status === 403) {
                     if (err.response.body.error_description === 'Wrong password.') {
                         errorMessage = this.props.intl.formatMessage({id: 'signin.error.wrongPassword'}, {forgotPasswordLink: '/' + this.state.locale + '/password/forgot'});
+                    } else if (err.response.body.error_description === 'User use Google Auth.') {
+                        errorMessage = this.props.intl.formatMessage({id: 'signin.error.useGoogle'});
                     } else {
                         errorMessage = this.props.intl.formatMessage({id: 'signin.error.noPassword'}, {forgotPasswordLink: '/' + this.state.locale + '/password/forgot'});
                     }

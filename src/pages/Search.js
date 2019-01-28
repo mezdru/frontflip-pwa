@@ -10,7 +10,7 @@ import {Redirect} from "react-router-dom";
 const styles = {
     searchBanner: {
         position: 'absolute',
-        transition: 'opacity 0.8s',
+        opacity: 0.8,
         filter: 'blur(.5px)'
     }
 };
@@ -19,33 +19,11 @@ class Search extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            bannerOpacity: 0.8,
             redirectTo: null,
             locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
             profileTag: (this.props.match && this.props.match.params && this.props.match.params.profileTag) ? this.props.match.params.profileTag : null
         };
     }
-    
-    componentDidMount = () => {
-        this.props.commonStore.setSearchFilters([]);
-        window.addEventListener('scroll', this.onScroll, false);   
-    };
-    
-    componentWillUnmount = () => {
-        window.removeEventListener('scroll', this.onScroll, false);
-    };
-    
-    onScroll = () => {
-        if (window.scrollY > 65) {
-            this.setState({
-                bannerOpacity: 0
-            });
-        } else {
-            this.setState({
-                bannerOpacity: 0.8
-            });
-        }
-    };
     
     render() {
         const {redirectTo, profileTag} = this.state;
@@ -57,7 +35,7 @@ class Search extends React.Component {
                 <Header />
                 <main>
                     <Grid container direction={'column'} alignItems={'center'}>
-                        <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner} style={{opacity: this.state.bannerOpacity}}>
+                        <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner}>
                             <Banner />
                         </Grid>
                         {!profileTag &&(

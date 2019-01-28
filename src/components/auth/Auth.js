@@ -47,15 +47,15 @@ class Auth extends React.Component {
                     this.props.recordStore.setRecordId(currentOrgAndRecord.record);
                     this.props.recordStore.getRecord()
                     .then(() => {
-                        this.setState({redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag + '/search'});
+                        this.setState({redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag});
                     }).catch(() => {
                         window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
                     });
                 }).catch((err) => {
-                    this.setState({redirectTo: '/' + this.state.locale + '/search'});
+                    this.setState({redirectTo: '/' + this.state.locale});
                 });
             }).catch(() => {
-                this.setState({redirectTo: '/' + this.state.locale + '/search'});
+                this.setState({redirectTo: '/' + this.state.locale});
             });
         }
     }
