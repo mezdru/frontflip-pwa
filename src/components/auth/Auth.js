@@ -41,10 +41,10 @@ class Auth extends React.Component {
             .then(() => {
                 if(googleState && googleState.invitationCode) this.props.authStore.setInvitationCode(googleState.invitationCode);
                 this.props.authStore.registerToOrg()
-                .then((data) => {
+                .then((data) => {                    
                     let organisation = data.organisation;
                     let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
-                    this.props.recordStore.setRecordId(currentOrgAndRecord.record);
+                    if(currentOrgAndRecord) this.props.recordStore.setRecordId(currentOrgAndRecord.record);
                     this.props.recordStore.getRecord()
                     .then(() => {
                         this.setState({redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag});
@@ -52,10 +52,10 @@ class Auth extends React.Component {
                         window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
                     });
                 }).catch((err) => {
-                    this.setState({redirectTo: '/' + this.state.locale});
+                    window.location.href = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + window.location.host + '/' + this.state.locale;
                 });
-            }).catch(() => {
-                this.setState({redirectTo: '/' + this.state.locale});
+            }).catch((err) => {
+                window.location.href = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + window.location.host + '/' + this.state.locale;
             });
         }
     }

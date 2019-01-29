@@ -138,7 +138,7 @@ class CardProfile extends React.Component {
             });
         }
 
-        if(item._snippetResult.intro.value && item._snippetResult.intro.matchLevel === 'full'){
+        if(item && item._snippetResult && item._snippetResult.intro.value && item._snippetResult.intro.matchLevel === 'full'){
             item.intro = item._snippetResult.intro.value;
         }
     };
@@ -179,7 +179,7 @@ class CardProfile extends React.Component {
                         }
                         subheader={
                             <Typography variant="subheading" className={classes.name} gutterBottom>
-                                <span dangerouslySetInnerHTML={{__html: this.htmlDecode(hit.intro)}}></span>
+                                <span dangerouslySetInnerHTML={{__html: this.htmlDecode(hit.intro || '')}}></span>
                             </Typography>
                         }
                         onClick={(e) => handleDisplayProfile(e, hit)}
