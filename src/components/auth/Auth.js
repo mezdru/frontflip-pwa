@@ -52,10 +52,10 @@ class Auth extends React.Component {
                         window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
                     });
                 }).catch((err) => {
-                    window.location.href = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + window.location.host + '/' + this.state.locale
+                    window.location.href = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + window.location.host + '/' + this.state.locale;
                 });
             }).catch((err) => {
-                window.location.href = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + window.location.host + '/' + this.state.locale
+                window.location.href = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + window.location.host + '/' + this.state.locale;
             });
         }
     }
