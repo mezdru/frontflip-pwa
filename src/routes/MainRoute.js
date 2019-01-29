@@ -12,6 +12,9 @@ class MainRoute extends React.Component {
             locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
             renderComponent: !this.props.authStore.isAuth()
         }
+
+        // Remove for the moment, this cookie will be usefull to persist filters if needed
+        this.props.commonStore.removeCookie('searchFilters');
     }
 
     componentDidMount() {
