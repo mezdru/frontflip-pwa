@@ -31,8 +31,10 @@ class UserStore {
     syncRecord() {
         if(!recordStore.values.record._id && organisationStore.values.organisation._id){
             let currentOrgAndRecord = this.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisationStore.values.organisation._id);
-            recordStore.setRecordId(currentOrgAndRecord.record);
-            recordStore.getRecord();
+            if(currentOrgAndRecord) {
+                recordStore.setRecordId(currentOrgAndRecord.record);
+                recordStore.getRecord();
+            }
         }
     }
 

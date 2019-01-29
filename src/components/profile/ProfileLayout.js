@@ -178,7 +178,7 @@ class ProfileLayout extends React.Component {
                                 )}
                         </Typography>
                         <Typography variant="subheading" className={classes.name}>
-                                {this.htmlDecode(currentHit.intro)}
+                                {this.htmlDecode(currentHit.intro || '')}
                         </Typography>
                     </div>
                     </Grid>
@@ -234,7 +234,7 @@ class ProfileLayout extends React.Component {
                                     )}
                                 </Typography>
                                 <div>
-                                    {this.htmlDecode(currentHit.description)}
+                                    {this.htmlDecode(currentHit.description || '')}
                                 </div>
                             </div>
                         </Grid>
