@@ -132,7 +132,12 @@ class ProfileLayout extends React.Component {
         });
         item.hashtags = highlighted.concat(notHighlighted);
     };
-    
+
+    htmlDecode = function(input){
+        var e = document.createElement('textarea');
+        e.innerHTML = input;
+        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    }
 
     componentDidMount() {
         this.props.recordStore.setRecordTag(this.props.hit.tag);
@@ -164,7 +169,7 @@ class ProfileLayout extends React.Component {
                     <Logo type={'person'} className={classes.logo} src={this.getPicturePath(currentHit.picture) || defaultPicture} />
                     <div className={classes.subheader}>
                         <Typography variant="h4" className={classes.name}>
-                                {currentHit.name || currentHit.tag}
+                                {this.htmlDecode(currentHit.name) || currentHit.tag}
                                 {canEdit && (
                                     <IconButton aria-label="Edit" className={classes.editButton} 
                                                 href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', orgTag, 'recordId='+currentHit.objectID)}>
@@ -173,7 +178,7 @@ class ProfileLayout extends React.Component {
                                 )}
                         </Typography>
                         <Typography variant="subheading" className={classes.name}>
-                                {currentHit.intro}
+                                {this.htmlDecode(currentHit.intro)}
                         </Typography>
                     </div>
                     </Grid>
@@ -182,7 +187,7 @@ class ProfileLayout extends React.Component {
                                 <Grid item key={link._id} xs={12} style={{position: 'relative'}}>
                                     <Button variant="text" className={classes.button} key={link._id}>
                                         <div href={link.url} className={classNames(classes.contactIcon, "fa fa-"+link.icon)}></div>
-                                        {link.display || link.value || link.url}
+                                        {this.htmlDecode(link.display) || this.htmlDecode(link.value) || this.htmlDecode(link.url)}
                                     </Button>
                                 </Grid>
                             )
@@ -209,7 +214,7 @@ class ProfileLayout extends React.Component {
                                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || currentHit.tag)
                                 return (
                                     <Wings src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture}
-                                        label={displayedName} key={hashtag.tag}
+                                        label={this.htmlDecode(displayedName)} key={hashtag.tag}
                                         onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
                                         className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
                                 )
@@ -229,7 +234,7 @@ class ProfileLayout extends React.Component {
                                     )}
                                 </Typography>
                                 <div>
-                                    {currentHit.description}
+                                    {this.htmlDecode(currentHit.description)}
                                 </div>
                             </div>
                         </Grid>
