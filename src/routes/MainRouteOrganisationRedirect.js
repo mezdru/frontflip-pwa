@@ -33,6 +33,7 @@ class MainRouteOrganisationRedirect extends React.Component {
      * @param {Organisation} organisation 
      */
     canUserAccessOrganisation(organisation) {
+        if(!organisation) return false;
         if(organisation.public) {
             return true;
         } else {
@@ -86,7 +87,8 @@ class MainRouteOrganisationRedirect extends React.Component {
             let organisation = this.props.organisationStore.values.organisation;     
             if(!(this.props.organisationStore.values.orgTag === this.props.match.params.organisationTag)) {
                 this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
-                organisation = await this.props.organisationStore.getOrganisationForPublic();
+                organisation = await this.props.organisationStore.getOrganisationForPublic()
+                                        .catch((err) => {return null});
             }
 
             if(!this.canUserAccessOrganisation(organisation) && this.state.isAuth) {
