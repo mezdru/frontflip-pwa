@@ -5,7 +5,6 @@ import {Button, Grid, TextField, Typography} from "@material-ui/core";
 import GoogleButton from "../../utils/buttons/GoogleButton";
 import {FormattedMessage, injectIntl} from 'react-intl';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import UrlService from '../../../services/url.service';
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import commonStore from '../../../stores/common.store';
 
@@ -22,11 +21,7 @@ class Register extends React.Component {
             locale: commonStore.locale || commonStore.getCookie('locale')
         };
     }
-    
-    // componentWillMount = () => {
-    //     this.props.authStore.reset();
-    // };
-    
+
     handleEmailChange = (e) => {
         this.props.authStore.setEmail(e.target.value);
     };

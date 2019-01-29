@@ -18,9 +18,6 @@ const styles = {
 };
 
 class AuthPage extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount() {
         if(this.props.match && this.props.match.params && this.props.match.params.invitationCode) {

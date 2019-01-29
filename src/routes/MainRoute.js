@@ -15,20 +15,23 @@ class MainRoute extends React.Component {
     }
 
     componentDidMount() {
-        // set current user 
+        this.getUser();
+    }
+
+    async getUser() {
         if(this.props.authStore.isAuth()) {
-            this.props.userStore.getCurrentUser()
-            .then(() => {this.setState({renderComponent: true})})
-            .catch((err) => {this.setState({renderComponent: true})});
+            await this.props.userStore.getCurrentUser();
+            if(!this.state.renderComponent) this.setState({renderComponent: true});
         }
     }
     
     render() {
         const {renderComponent, locale} = this.state;
         const endUrl = window.location.pathname + window.location.search;
+        const {currentUser} = this.props.userStore.values;
 
-        console.log('endUrl router 1 : ' + endUrl);
-
+        if(!currentUser) this.getUser();
+        
         if(renderComponent) {
             return (
                 <div>
@@ -37,7 +40,6 @@ class MainRoute extends React.Component {
                         <Redirect from="*" to={"/" + (locale ? locale : '') + endUrl}/>
                     </Switch>
                 </div>
-
             );
         } else {
             return (<div></div>);

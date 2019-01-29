@@ -6,6 +6,7 @@ import Search from "../pages/Search";
 import PasswordForgot from "../pages/auth/PasswordForgot";
 import PasswordReset from "../pages/auth/PasswordReset";
 import {inject, observer} from 'mobx-react';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 class MainRouteOrganisationRedirect extends React.Component {
 
@@ -16,120 +17,144 @@ class MainRouteOrganisationRedirect extends React.Component {
             redirectTo: null,
             locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
             isAuth: this.props.authStore.isAuth(),
-            renderComponent: false,
-            shouldManageAccessRight: true
+            renderComponent: false
         };
         this.manageAccessRight = this.manageAccessRight.bind(this);
-        this.manageAccessRight();
     }
 
-    manageAccessRight() {
-        if(!this.state.shouldManageAccessRight) return;
-        console.log('manage access right');
-        if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
-            // set orgTag params
-            this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
-            this.props.organisationStore.getOrganisationForPublic()
-            .then((organisation) => {
-                this.props.organisationStore.setOrgId(organisation._id);
-                if(organisation.public) {
-                    // ok
-                    this.setState({renderComponent: true, shouldManageAccessRight: false});
-                } else if(this.state.isAuth) {
-                    // org isn't public
-                    this.props.organisationStore.getOrganisation()
-                    .then((organisation) => {
-                        // ok : try to get record
-                        let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
-                        console.log('currentOrgAndRecord : ' + JSON.stringify(currentOrgAndRecord));
-                        this.props.recordStore.setRecordId(currentOrgAndRecord.record);
-                        this.props.recordStore.getRecord()
-                        .then(() => {
-                            // ALL OK : user can access
-                            this.setState({renderComponent: true, shouldManageAccessRight: false});
-                        }).catch((error) => {
-                            window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
-                        });
-                    }).catch((error) => {
-                        this.controlAccessWithoutOrgTag();
-                    });
-                } else {
-                    // not ok : redirect to signin in this org, user may has forgot to login
-                    //this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/signin'});
-                    console.log('here');
-                    this.setState({renderComponent: true, shouldManageAccessRight: false});
-                }
-            }).catch(() => {
-                // 404 organisation not found
-                this.controlAccessWithoutOrgTag();
+    componentDidMount() {
+        this.manageAccessRight().then(() => {
+            this.setState({renderComponent: true});
+        })
+    }
+
+    /**
+     * @description Perform the authorization process to access the organisation or not
+     * @param {Organisation} organisation 
+     */
+    canUserAccessOrganisation(organisation) {
+        if(organisation.public) {
+            return true;
+        } else {
+            if(!this.state.isAuth) return false;
+            if(this.props.userStore.values.currentUser.superadmin) return true;
+            return (this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id) !== undefined);
+        }
+    }
+
+    /**
+     * @description Redirect user who is auth but hasn't access to current organisation
+     */
+    redirectUserAuthWithoutAccess() {
+        if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0) {
+            this.props.organisationStore.setOrgId(this.props.userStore.values.currentUser.orgsAndRecords[0].organisation);
+            this.props.organisationStore.getOrganisation()
+            .then(organisation => {
+                this.redirectUserAuthWithAccess(organisation, true);
             });
         } else {
-            // no orgTag provided
-            this.controlAccessWithoutOrgTag();
+            window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
         }
     }
 
-    controlAccessWithoutOrgTag() {
-        console.log('no org tag for user : ' + JSON.stringify(this.props.userStore.values.currentUser));
-        if(this.state.isAuth && this.props.userStore.values.currentUser._id) {
-            // user is auth
-            if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0 ) {
-                // user has org
-                this.props.organisationStore.setOrgId(this.props.userStore.values.currentUser.orgsAndRecords[0].organisation);
-                this.props.organisationStore.getOrganisation()
-                .then(organisation => {
-                    this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag, shouldManageAccessRight: true});
-                    this.setState({renderComponent: true});
-                }).catch(()=>{
-                    // can't get org so authorization problem.
-                    window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
-                });
+    /**
+     * @description Redirect user who is auth and has access to organisation provided
+     * @param {Organisation} organisation 
+     * @param {Boolean} isNewOrg 
+     */
+    redirectUserAuthWithAccess(organisation, isNewOrg) {
+        let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
+        
+        if(!currentOrgAndRecord && !this.props.userStore.values.currentUser.superadmin) {
+            window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
+        } else if(currentOrgAndRecord) {
+            this.props.recordStore.setRecordId(currentOrgAndRecord.record);
+            this.props.recordStore.getRecord()
+            .then(() => {
+                if(isNewOrg) this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag});
+            }).catch(() => {
+                window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
+            });
+        }
+    }
+
+    /**
+     * @description Manage access right of the user and redirect him if needed.
+     */
+    async manageAccessRight() {
+        if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
+            let organisation = this.props.organisationStore.values.organisation;     
+            if(!(this.props.organisationStore.values.orgTag === this.props.match.params.organisationTag)) {
+                this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
+                organisation = await this.props.organisationStore.getOrganisationForPublic();
+            }
+
+            if(!this.canUserAccessOrganisation(organisation) && this.state.isAuth) {
+                await this.redirectUserAuthWithoutAccess();
+            } else if(!this.canUserAccessOrganisation(organisation)) {
+                this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/signin'});
             } else {
-                // user hasn't org
-                window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
+                this.props.organisationStore.setOrgId(organisation._id);
+                organisation = await this.props.organisationStore.getOrganisation();
+                await this.redirectUserAuthWithAccess(organisation);
             }
         } else {
-            this.setState({redirectTo: '/' + this.state.locale + '/signin', shouldManageAccessRight: true});
-            this.setState({renderComponent: true});
+            if(this.state.isAuth) await this.redirectUserAuthWithoutAccess();
+            else this.setState({redirectTo: '/' + this.state.locale + '/signin'});
         }
     }
 
-    refreshState() {
-        this.setState({redirectTo: null, renderComponent: true});
+    resetRedirectTo() {
+        this.setState({redirectTo: null});
     }
-    
+
     render() {
-        const {redirectTo, renderComponent, shouldManageAccessRight} = this.state;
-
-        console.log('render router 3');
+        const {redirectTo, renderComponent} = this.state;
+        const {locale} = this.props.commonStore;
+        const {orgTag, organisation} = this.props.organisationStore.values;
+        const {record} = this.props.recordStore.values;
+        let isAuth = this.props.authStore.isAuth();
         
-            if(redirectTo){
-                if(window.location.pathname !== redirectTo) {
-                    return (<Redirect to={redirectTo} />);
-                }else {
-                    this.refreshState();
-                }
+        if(redirectTo){
+            this.resetRedirectTo();
+            if(window.location.pathname !== redirectTo) {
+                return (<Redirect to={redirectTo} />);
             }
-            if(shouldManageAccessRight) this.manageAccessRight();
+        }
 
-            if(renderComponent) {
-                return (
-                    <div>
-                        <Switch>
-                            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={PasswordForgot}/>
-                            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={PasswordReset}/>
-                            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={() => {return <AuthPage initialTab={1} />}} />
-                            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
-
-                            {/* Main route with orgTag */}
-                            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={Search} />
-                            <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={Search} />
-                        </Switch>
-                    </div>
-                );
-            }
-         else {
-            return (<div></div>);
+        if(renderComponent && isAuth) {
+            return (
+                <div>
+                    <Switch>
+                        <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={PasswordForgot}/>
+                        <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={PasswordReset}/>
+                        <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={() => {return <AuthPage initialTab={1} />}} />
+                        <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
+                        
+                        {/* Main route with orgTag */}
+                        <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={Search} />
+                        <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={Search} />
+                    </Switch>
+                </div>
+            );
+        } else if (renderComponent) {
+            return (
+                <div>
+                    <Switch>
+                        <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={PasswordForgot}/>
+                        <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={PasswordReset}/>
+                        <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={() => {return <AuthPage initialTab={1} />}} />
+                        <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
+                        <Redirect to={'/' + locale + (orgTag ? '/' + orgTag : '') + '/signin'} />
+                    </Switch>
+                </div>
+            );
+        } else {
+            return (
+                <div style={{position: 'absolute', top: '50%', transform: 'translateY(-50%)', textAlign: 'center', width: '100%'}}>
+                    <CircularProgress color='primary'/>
+                </div>
+            );
         }
     }
 }
