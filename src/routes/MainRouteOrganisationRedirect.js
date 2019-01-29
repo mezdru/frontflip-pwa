@@ -28,6 +28,10 @@ class MainRouteOrganisationRedirect extends React.Component {
         })
     }
 
+    /**
+     * @description Perform the authorization process to access the organisation or not
+     * @param {Organisation} organisation 
+     */
     canUserAccessOrganisation(organisation) {
         if(organisation.public) {
             return true;
@@ -38,6 +42,9 @@ class MainRouteOrganisationRedirect extends React.Component {
         }
     }
 
+    /**
+     * @description Redirect user who is auth but hasn't access to current organisation
+     */
     redirectUserAuthWithoutAccess() {
         if(this.props.userStore.values.currentUser.orgsAndRecords.length > 0) {
             this.props.organisationStore.setOrgId(this.props.userStore.values.currentUser.orgsAndRecords[0].organisation);
@@ -50,6 +57,11 @@ class MainRouteOrganisationRedirect extends React.Component {
         }
     }
 
+    /**
+     * @description Redirect user who is auth and has access to organisation provided
+     * @param {Organisation} organisation 
+     * @param {Boolean} isNewOrg 
+     */
     redirectUserAuthWithAccess(organisation, isNewOrg) {
         let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
         
@@ -60,13 +72,15 @@ class MainRouteOrganisationRedirect extends React.Component {
             this.props.recordStore.getRecord()
             .then(() => {
                 if(isNewOrg) this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag});
-            }).catch((error) => {
+            }).catch(() => {
                 window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
             });
         }
-
     }
 
+    /**
+     * @description Manage access right of the user and redirect him if needed.
+     */
     async manageAccessRight() {
         if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
             let organisation = this.props.organisationStore.values.organisation;     
@@ -78,6 +92,7 @@ class MainRouteOrganisationRedirect extends React.Component {
             if(!this.canUserAccessOrganisation(organisation) && this.state.isAuth) {
                 await this.redirectUserAuthWithoutAccess();
             } else if(!this.canUserAccessOrganisation(organisation)) {
+                this.setState({redirectTo: '/' + this.state.locale + '/signin'});
             } else {
                 this.props.organisationStore.setOrgId(organisation._id);
                 organisation = await this.props.organisationStore.getOrganisation();

@@ -21,11 +21,7 @@ class Register extends React.Component {
             locale: commonStore.locale || commonStore.getCookie('locale')
         };
     }
-    
-    // componentWillMount = () => {
-    //     this.props.authStore.reset();
-    // };
-    
+
     handleEmailChange = (e) => {
         this.props.authStore.setEmail(e.target.value);
     };
