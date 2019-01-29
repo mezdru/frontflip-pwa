@@ -92,7 +92,7 @@ class MainRouteOrganisationRedirect extends React.Component {
             if(!this.canUserAccessOrganisation(organisation) && this.state.isAuth) {
                 await this.redirectUserAuthWithoutAccess();
             } else if(!this.canUserAccessOrganisation(organisation)) {
-                this.setState({redirectTo: '/' + this.state.locale + '/signin'});
+                this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/signin'});
             } else {
                 this.props.organisationStore.setOrgId(organisation._id);
                 organisation = await this.props.organisationStore.getOrganisation();
