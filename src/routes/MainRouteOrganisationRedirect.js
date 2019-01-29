@@ -17,8 +17,7 @@ class MainRouteOrganisationRedirect extends React.Component {
             redirectTo: null,
             locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
             isAuth: this.props.authStore.isAuth(),
-            renderComponent: false,
-            shouldManageAccessRight: false
+            renderComponent: false
         };
         this.manageAccessRight = this.manageAccessRight.bind(this);
     }
@@ -91,9 +90,9 @@ class MainRouteOrganisationRedirect extends React.Component {
     }
 
     render() {
-        const {redirectTo, renderComponent, shouldManageAccessRight} = this.state;
+        const {redirectTo, renderComponent} = this.state;
         const {locale} = this.props.commonStore;
-        const {orgTag, organisation} = this.props.organisationStore.values;
+        const {orgTag} = this.props.organisationStore.values;
         let isAuth = this.props.authStore.isAuth();
         
         if(redirectTo){

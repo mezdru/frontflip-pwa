@@ -4,7 +4,6 @@ import {Button, Grid, TextField, Typography} from '@material-ui/core';
 import GoogleButton from "../../utils/buttons/GoogleButton";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import UrlService from '../../../services/url.service';
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import { Link, Redirect } from 'react-router-dom';
 

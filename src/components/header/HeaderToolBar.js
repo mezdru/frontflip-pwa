@@ -5,8 +5,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import {IconButton, Toolbar, Typography} from '@material-ui/core';
 import {Menu as MenuIcon} from '@material-ui/icons';
-import logoWingzy from '../../resources/images/wingzy_line_256.png';
-import logoWingzyAuth from '../../resources/images/wingzy_512.png';
 import './header.css';
 import {styles} from './Header.css.js'
 import HeaderLinks from './HeaderLinks';

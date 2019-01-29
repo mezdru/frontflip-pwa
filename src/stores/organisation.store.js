@@ -1,7 +1,6 @@
 import { observable, action, decorate } from "mobx";
 import agent from '../agent';
 import commonStore from "./common.store";
-import { truncate } from "fs";
 
 class OrganisationStore {
     inProgress = false;
