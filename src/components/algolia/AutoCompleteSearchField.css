@@ -20,3 +20,7 @@
 .editableChip span {
     padding-right:  5px !important;
 }
+
+.editableChip span div:nth-child(1) {
+    padding-right: 6px !important;
+}

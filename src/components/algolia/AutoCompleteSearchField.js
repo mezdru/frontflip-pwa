@@ -1,14 +1,11 @@
 import React, {Component} from 'react';
-import AsyncSelect from 'react-select/lib/Async';
-import { AsyncCreatable, components, makeAnimated } from 'react-select';
+import { AsyncCreatable } from 'react-select';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 import {injectIntl} from 'react-intl';
 import {inject, observer} from 'mobx-react';
 import './AutoCompleteSearchField.css';
 import classNames from 'classnames';
-import Wing from '../utils/wing/Wing';
-import {Tooltip, withStyles,Chip} from '@material-ui/core'
-import CancelIcon from '@material-ui/icons/Cancel';
+import {withStyles,Chip} from '@material-ui/core'
 
 class SearchableSelect extends Component {
   constructor(props) {
@@ -116,15 +113,8 @@ class SearchableSelect extends Component {
 
 
     const MultiValueContainer = (props) => {
-      console.log(props)
       return (
-                      <Chip
-                        label={props.children} 
-                        color="primary"
-                        onClick={props.onClick}
-                        className={'editableChip'}
-                        >
-                      </Chip>
+        <Chip label={props.children} color="primary" onClick={props.onClick} className={'editableChip'}/>
       );
     };
 
@@ -136,7 +126,6 @@ class SearchableSelect extends Component {
         boxSizing: 'content-box',
         // Overwrittes the different states of border
         border: state.isFocused ? "2px solid #dd362e" : "2px solid black",
-        // borderColor: state.isFocused ? "#dd362e" : "black",
         // Removes weird border around container
         boxShadow: state.isFocused ? null : null,
         "&:hover": {
@@ -171,11 +160,6 @@ class SearchableSelect extends Component {
       }),
     };
 
-    const components = {
-      MultiValueContainer,
-      makeAnimated,
-    };
-
     return (
       <AsyncCreatable
         formatCreateLabel={this.createOptionMessage}
@@ -191,7 +175,7 @@ class SearchableSelect extends Component {
         onChange={this.handleChange}
         onInputChange={this.handleInputChange} 
         onCreateOption={this.handleCreateOption}
-        components={components}
+        components={{MultiValueContainer}}
         isMulti
       />
     );
