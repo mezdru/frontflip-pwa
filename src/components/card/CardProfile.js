@@ -7,52 +7,36 @@ import Logo from '../../components/utils/logo/Logo';
 import Wings from '../utils/wing/Wing';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
+import twemoji from 'twemoji';
 
 const EXTRA_LINK_LIMIT = 5;
 
 const styles = theme => ({
     logo: {
-        width: '9rem',
-        height: '9rem',
-        marginBottom: '-4rem',
-        ['& img']: {
+        width: 170,
+        height: 170,
+        marginBottom: '-5rem',
+        '& img': {
+            width: '100%',
             height: '100%',
+            borderRadius: '50%',
+            border: '9px solid white'
         },
-        zIndex: 2
-    },
-    name: {
-        marginRight: 65,
-    },
-    name: {
-        '& span span': {
-            backgroundColor: theme.palette.primary.main
-        }
-    },
-    contact: {
-        width: 10
-    },
-    header: {
-        backgroundColor: theme.palette.secondary.main,
-        textAlign: 'center',
-        boxShadow: '0 2px 2px -1px darkgrey',
-        
-    },
-    actions: {
-        display: 'flex',
-        padding: '8px',
-    },
-    wingsContainer: {
-        whiteSpace: 'nowrap',
-        overflowX: 'scroll',
     },
     wings: {
         display: 'inline-block',
         color: 'white',
         position: 'relative',
+    },
+    fullWidth: {
+        width: '100%'
+    },
+    cardHeader: {
+        cursor: 'pointer'
     }
 });
 
-class RecipeReviewCard extends React.Component {
+class CardProfile extends React.Component {
     constructor(props) {
         super(props);
         
@@ -61,48 +45,60 @@ class RecipeReviewCard extends React.Component {
         }
         this.transformLinks = this.transformLinks.bind(this);
     }
-
+    
     transformLinks(item) {
         item.links = item.links || [];
         item.links.forEach(function (link, index, array) {
             this.makeLinkDisplay(link);
             this.makeLinkIcon(link);
             this.makeLinkUrl(link);
-            if (index > EXTRA_LINK_LIMIT-1) link.class = 'extraLink';
+            if (index > EXTRA_LINK_LIMIT - 1) link.class = 'extraLink';
         }.bind(this));
     }
-
+    
     makeLinkIcon(link) {
         switch (link.type) {
-            case 'email': link.icon = 'envelope-o'; break;
-            case 'address': case 'location': link.icon = 'map-marker'; break;
-            case 'hyperlink': link.icon = 'link'; break;
-            case 'location': link.icon = 'map-marker'; break;
-            case 'workplace': link.icon = 'user'; break;
-            case 'workchat': link.icon = 'comment'; break;
-            default: link.icon = link.type;	break;
+            case 'email':
+                link.icon = 'envelope-o';
+                break;
+            case 'address':
+            case 'location':
+                link.icon = 'map-marker';
+                break;
+            case 'hyperlink':
+                link.icon = 'link';
+                break;
+            case 'workplace':
+                link.icon = 'user';
+                break;
+            case 'workchat':
+                link.icon = 'comment';
+                break;
+            default:
+                link.icon = link.type;
+                break;
         }
     }
-
+    
     makeLinkDisplay(link) {
         link.display = link.display || link.value;
     }
-
+    
     makeLinkUrl(link) {
         link.url = link.url || link.uri;
         if (!link.url) {
             switch (link.type) {
                 case 'email':
-                    link.url = 'mailto:'+link.value;
+                    link.url = 'mailto:' + link.value;
                     break;
                 case 'phone':
-                    link.url = 'tel:'+link.value;
+                    link.url = 'tel:' + link.value;
                     break;
                 case 'home':
-                    link.url = 'tel:'+link.value;
+                    link.url = 'tel:' + link.value;
                     break;
                 case 'address':
-                    link.url = 'http://maps.google.com/?q='+encodeURIComponent(link.value);
+                    link.url = 'http://maps.google.com/?q=' + encodeURIComponent(link.value);
                     break;
                 default:
                     link.url = link.value;
@@ -110,24 +106,27 @@ class RecipeReviewCard extends React.Component {
             }
         }
     }
-
+    
     getPicturePath(picture) {
-        if(picture && picture.path){
-            return null;
-        } else if (picture && picture.url) {
-            return picture.url;
-        } else if (picture && picture.uri) {
-                return picture.uri;
-        } else {
-            return null;
-        }
+        if(picture && picture.path) return null;
+        else if (picture && picture.url) return picture.url;
+        else if (picture && picture.uri) return picture.uri;
+        else if (picture && picture.emoji) return this.getEmojiUrl(picture.emoji);
+        else return null;
     }
 
-    makeHightlighted = function(item) {
+    getEmojiUrl(emoji) {
+        let str = twemoji.parse(emoji);
+        str = str.split(/ /g);
+        str = str[4].split(/"/g);
+        return str[1];
+    }
+    
+    makeHightlighted = function (item) {
         let filters = this.props.commonStore.getSearchFilters() || this.props.commonStore.searchFilters;
-        if(filters.length > 0 ){
+        if (filters && filters.length > 0) {
             item.hashtags.forEach((hashtag, index) => {
-                if (hashtag.tag && filters.find(filterValue => filterValue.value === hashtag.tag) ) item.hashtags[index].class = 'highlighted';
+                if (hashtag.tag && filters.find(filterValue => filterValue.value === hashtag.tag)) item.hashtags[index].class = 'highlighted';
             });
         }
 
@@ -137,68 +136,76 @@ class RecipeReviewCard extends React.Component {
         }
     };
     
-    orderHashtags = function(item) {
+    orderHashtags = function (item) {
+        if(!item.hashtags) return;
         var highlighted = [];
         var notHighlighted = [];
-        item.hashtags.forEach(function(hashtag) {
+        item.hashtags.forEach(function (hashtag) {
             if (hashtag.class === 'highlighted') highlighted.push(hashtag);
             else notHighlighted.push(hashtag);
         });
         item.hashtags = highlighted.concat(notHighlighted);
     };
-    
+
+    htmlDecode = function(input){
+        var e = document.createElement('textarea');
+        e.innerHTML = input;
+        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    }
     
     render() {
-        const {classes, hit, addToFilters} = this.props;
+        const {classes, hit, addToFilters, handleDisplayProfile} = this.props;
         this.transformLinks(hit);
         this.makeHightlighted(hit);
         this.orderHashtags(hit);
-
         return (
-            <Card>
-                <Grid item>
+            <Card className={classes.fullWidth} key={hit.objectID}>
+                <Grid item container>
                     <CardHeader
-                        className={classes.header}
                         avatar={
                             <Logo type={'person'} className={classes.logo} src={this.getPicturePath(hit.picture) || defaultPicture}/>
                         }
                         title={
                             <Typography variant="h4" className={classes.name} gutterBottom>
-                                {hit.name || hit.tag}
+                                {this.htmlDecode(hit.name) || hit.tag}
                             </Typography>
                         }
                         subheader={
                             <Typography variant="subheading" className={classes.name} gutterBottom>
-                                <span dangerouslySetInnerHTML={{__html: hit.intro}}></span>
+                                <span dangerouslySetInnerHTML={{__html: this.htmlDecode(hit.intro)}}></span>
                             </Typography>
                         }
+                        onClick={(e) => handleDisplayProfile(e, hit)}
+                        className={classes.cardHeader}
                     />
                 </Grid>
                 <Grid item container justify={'flex-end'}>
                     <CardActions className={classes.actions} disableActionSpacing>
                         <Grid item container spacing={0}>
-                            {hit.links.map((link, i) => {
-                                return (
-                                    <Grid item key={i}>
-                                        <Tooltip title={link.display || link.value || link.url} >
-                                            <IconButton href={link.url} className={"fa fa-"+link.icon} />
-                                        </Tooltip>
-                                    </Grid>
-                                )
+                            {hit.links && hit.links.map((link, i) => {
+                                if(link.class !== 'extraLink'){
+                                    return (
+                                        <Grid item key={link._id}>
+                                            <Tooltip title={this.htmlDecode(link.display) || this.htmlDecode(link.value) || this.htmlDecode(link.url)}>
+                                                <IconButton href={link.url} className={"fa fa-" + link.icon}/>
+                                            </Tooltip>
+                                        </Grid>
+                                    )
+                                }
                             })}
                         </Grid>
                     </CardActions>
                 </Grid>
-                <Grid item container spacing={8}>
+                <Grid container item>
                     <CardContent className={this.props.classes.wingsContainer}>
                         <Grid container className={this.props.classes.wings}>
-                            {hit.hashtags.map((hashtag, i) => {
-                                let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag )
+                            {hit.hashtags && hit.hashtags.map((hashtag, i) => {
+                                let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
                                 return (
-                                    <Wings  src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture} 
-                                            label={displayedName} 
-                                            onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
-                                            className={(hashtag.class ? hashtag.class : 'notHighlighted')} key={i} />
+                                    <Wings src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture}
+                                           label={this.htmlDecode(displayedName)} key={hashtag.tag}
+                                           onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
+                                           className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
                                 )
                             })}
                         </Grid>
@@ -209,12 +216,12 @@ class RecipeReviewCard extends React.Component {
     }
 }
 
-RecipeReviewCard.propTypes = {
+CardProfile.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
 export default inject('commonStore')(
     observer(
-        withStyles(styles)(RecipeReviewCard)
+        withStyles(styles)(CardProfile)
     )
 );

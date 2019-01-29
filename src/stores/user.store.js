@@ -1,5 +1,7 @@
 import { observable, action, decorate } from 'mobx';
 import agent from '../agent';
+import recordStore from './record.store';
+import organisationStore from './organisation.store';
 
 class UserStore {
 
@@ -14,12 +16,24 @@ class UserStore {
         this.errors = null;
 
         return agent.User.getCurrent()
-            .then(data => { this.values.currentUser = (data? data.user : {});})
+            .then(data => { 
+                this.values.currentUser = (data? data.user : {});
+                this.syncRecord();
+                return this.values.currentUser;
+            })
             .catch(action((err) => {
                 this.errors = err.response && err.response.body && err.response.body.errors;
                 throw err;
             }))
             .finally(action(()=> { this.inProgress = false; }));
+    }
+
+    syncRecord() {
+        if(!recordStore.values.record._id && organisationStore.values.organisation._id){
+            let currentOrgAndRecord = this.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisationStore.values.organisation._id);
+            recordStore.setRecordId(currentOrgAndRecord.record);
+            recordStore.getRecord();
+        }
     }
 
     forgetUser() {

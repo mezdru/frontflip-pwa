@@ -6,6 +6,24 @@ export const styles = theme => ({
             top: 150,
         },
         width: '100%',
+        marginBottom: 150
+    },
+    hitListContainerWithoutMargin: {
+        position: 'relative',
+        top: 108,
+        [theme.breakpoints.up('md')]: {
+            top: 198,
+        },
+        width: '100%',
+        '& ul': {
+            listStyleType: 'none',
+            padding:0,
+            marginTop:0,
+        }    
+    },
+    '@keyframes fadeIn': {
+        from: {opacity: 0},
+        to: {opacity: 1}
     },
     hitList: {
         width: '100%',
@@ -16,7 +34,22 @@ export const styles = theme => ({
             marginBottom: '32px',
         },
         '& ul li': {
-            marginBottom: '32px'
+            marginBottom: '32px',
+            opacity: 0,
+            animation: 'fadeIn 0.9s 1',
+            animationFillMode: 'forwards',
+        },
+        '& ul li:nth-child(1)': {
+            WebkitAnimationDelay: '0s',
+            animationDelay: '0s',
+        },
+        '& ul li:nth-child(2)': {
+            WebkitAnimationDelay: '.3s',
+            animationDelay: '.3s',
+        },
+        '& ul li:nth-child(3)': {
+            WebkitAnimationDelay: '.6s',
+            animationDelay: '.6s',
         },
         '& ul li > div:first-child' : {
             position: 'relative',
@@ -28,13 +61,35 @@ export const styles = theme => ({
     fullWidth: {
         width: '100%'
     },
+    //<Grid item xs={10} sm={6} lg={4}>
     searchBar: {
         left: 0,
         right: 0,
         margin: 'auto',
         zIndex: 1000,
-        marginTop:21,
+        marginTop:16,
         background: 'transparent',
+        width: '100%'
+    },
+    '@keyframes moveTop': {
+        from: {marginTop: 139},
+        [theme.breakpoints.up('md')]: {
+            from: {marginTop: 231}
+        },
+        to: {marginTop: 16}
+    },
+    searchBarProfile: {
+        position: 'fixed !important',
+        top:0,
+        left: 0,
+        right: 0,
+        margin: 'auto',
+        zIndex: 1000,
+        marginTop:16,
+        background: 'transparent',
+        width: '100%',
+        animationName: 'moveTop',
+        animationDuration: '1s'
     },
     searchBarMarginTop: {
         position: 'static',
@@ -43,5 +98,11 @@ export const styles = theme => ({
             marginTop: 151, //239 - 24 - 64
         },
         width: '100%',
+    },
+    returnButton: {
+        position: 'absolute',
+        margin: 16,
+        background: 'white',
+        color: 'black'
     }
 });

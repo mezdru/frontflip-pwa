@@ -26,22 +26,22 @@ class UrlService {
         }
     }
 
-    createUrl(host, path, organisationTag) {
+    createUrl(host, path, organisationTag, params) {
         this.checkEnv();
         this.checkLocale();
         this.checkHttp();
         
         if(this.env === 'production'){
             if(organisationTag) {
-                this.url = this.httpType + organisationTag + '.' + host + '/' + this.locale + path;
+                this.url = this.httpType + organisationTag + '.' + host + '/' + this.locale + path + (params ? '?' + params : '');
             }else{
-                this.url = this.httpType + host + '/' + this.locale + path;
+                this.url = this.httpType + host + '/' + this.locale + path + (params ? '?' + params : '');
             }
         }else{
             if(organisationTag) {
-                this.url = this.httpType + host + '/' + this.locale + path + '?subdomains='+organisationTag;
+                this.url = this.httpType + host + '/' + this.locale + path + '?subdomains='+organisationTag + (params ? '&' + params : '');
             }else{
-                this.url = this.httpType + host + '/' + this.locale + path;
+                this.url = this.httpType + host + '/' + this.locale + path + (params ? '?' + params : '');
             }
         }
         return this.url;

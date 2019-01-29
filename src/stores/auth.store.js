@@ -40,14 +40,9 @@ class AuthStore {
 
     isAuth() {
         if(commonStore.getAccessToken() || commonStore.getRefreshToken()){
-            return userStore.getCurrentUser()
-            .then(() => {
-                return true;
-            }).catch(() => {
-                return false;
-            })
+            return true;
         }else{
-            return Promise.resolve(false);
+            return false;
         }
     }
 
@@ -107,11 +102,10 @@ class AuthStore {
     registerToOrg() {
         this.inProgress = true;
         this.errors = null;
-        console.log(this.values.invitationCode);
 
         return agent.Auth.registerToOrg(organisationStore.values.organisation._id, this.values.invitationCode)
             .then((data) => {
-                return true;
+                return data;
             })
             .catch(action((err) => {
                 this.errors = err.response && err.response.body && err.response.body.errors;
@@ -152,6 +146,8 @@ class AuthStore {
 
     logout() {
         commonStore.removeAuthTokens();
+        commonStore.removeCookie('algoliaKey');
+        commonStore.removeCookie('algoliaKeyOrganisation');
         userStore.forgetUser();
         return Promise.resolve();
     }

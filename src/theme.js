@@ -2,14 +2,17 @@ import {createMuiTheme} from '@material-ui/core/styles';
 
 export const palette = {
     primary: {
-        main: '#dd362e',
-        dark: '#ca342e'
+        light: '#EFA3A0',
+        main: '#DD362E',
+        dark: '#A12B22',
+        contrastText: '#fff',
     },
     secondary: {
-        light: '#fff',
-        main: '#1667A2',
-        dark: '#8fbac0', /*for shadow*/
-    }
+        light: '#DDE9EB',
+        main: '#A3C4C9',
+        dark: '#789094',
+        contrastText: '#0D0221',
+    },
 };
 
 export default createMuiTheme({
@@ -41,28 +44,37 @@ export default createMuiTheme({
                 margin: "auto",
             },
         },
+        MuiDrawer: {
+            root: {
+                height: 80,
+            }
+        },
         MuiChip: {
             root: {
                 padding: '6px 12px',
-                fontSize: 18,
-                color: 'white',
+                fontWeight: 'bold',
                 margin: 8,
-                borderRadius: 50,
-                height: 45,
                 boxShadow: '0 2px 2px -1px darkgrey, 0 0 0 5px transparent',
                 ['&:hover']: {
                     boxShadow: '0 5px 15px -1px darkgrey, 0 0 0 5px transparent',
                 },
             },
+            colorPrimary: {
+                backgroundColor: palette.primary.main,
+                ['&:hover']: {
+                    backgroundColor: palette.primary.dark,
+                },
+            },
+            colorSecondary: {
+                color:'white',
+                backgroundColor: palette.secondary.main,
+                ['&:hover']: {
+                    color:'white',
+                    backgroundColor: palette.secondary.dark
+                },
+            }
         },
         MuiAvatar: {
-            root: {
-                width: '6rem',
-                height: '6rem',
-                boxShadow: '0 5px 15px -1px darkgrey, 0 0 0 5px transparent',
-                zIndex: 999,
-                backgroundColor: 'white',
-            },
             img: {
                 height: 'auto',
             }
@@ -78,6 +90,12 @@ export default createMuiTheme({
                     backgroundColor: "transparent",
                     color: palette.primary.main
                 }
+            }
+        },
+        MuiIconButton: {
+            root: {
+                padding: '8px!important',
+                color: palette.secondary.light,
             }
         },
         MuiOutlinedInput: {
@@ -104,14 +122,36 @@ export default createMuiTheme({
         MuiCard: {
             root: {
                 padding: 0,
-                maxWidth: 500,
-                borderRadius: 30,
+                borderRadius: 20,
                 margin: 15,
             }
         },
+        MuiCardActions: {
+            root: {
+                padding: '0 8px!important',
+                display: 'flex',
+            }
+        },
+        MuiCardHeader: {
+            root: {
+                width: '100%',
+                backgroundColor: palette.secondary.light,
+                paddingRight: '16px!important',
+                paddingLeft: '16px!important',
+            },
+            content: {
+                display: 'inline-grid',
+                textAlign: 'left',
+                resize: 'horizontal',
+            },
+        },
         MuiCardContent: {
             root: {
-                paddingBottom: '0!important'
+                marginTop: 20,
+                paddingLeft: '8px!important',
+                padding: '16px!important',
+                whiteSpace: 'nowrap',
+                overflowX: 'scroll',
             }
         },
         MuiPaper: {
@@ -120,18 +160,23 @@ export default createMuiTheme({
             }
         },
         MuiTypography: {
+            root: {
+                // whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                // textOverflow: 'ellipsis',
+            },
             h6: {
                 display: 'block',
                 padding: 8,
                 fontFamily: '"Open sans"',
             },
-            h4: {
-                color: 'white',
+            h5: {
+                color: palette.secondary.contrastText,
                 fontWeight: '700',
                 fontFamily: '"Open sans"',
             },
             subheading: {
-                color: 'white',
+                color: palette.secondary.contrastText,
                 fontWeight: '500',
                 fontFamily: '"Open sans"',
             }
@@ -147,7 +192,7 @@ export default createMuiTheme({
     },
     global: {
         body: {
-            fontFamily: '"Open sans',
+            fontFamily: '"Open sans"',
         },
     }
 });

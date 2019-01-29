@@ -20,7 +20,7 @@ let AvailabilityToggle = inject("recordStore") (observer(class AvailabilityToggl
         if(this.props.recordStore.values.record.personAvailability) this.setState({current : this.props.recordStore.values.record.personAvailability});
         else this.setState({current : this.state.labels.middle});
         observe(this.props.recordStore.values, 'record', (change)=>{
-            this.setState({current : change.newValue.personAvailability});
+            this.setState({current : change.newValue.personAvailability || 'unspecified'});
         });
     }
 
@@ -36,11 +36,12 @@ let AvailabilityToggle = inject("recordStore") (observer(class AvailabilityToggl
         
         return (
             <div id="userStatusToggle" className={`menu-status-${current}`}>
-                <a  title={labels.left} className="u" onClick={() => this.handleAvailabilityClick(labels.left)}>
-                </a>
+                {/* eslint-disable-next-line */}
+                <a  title={labels.left} className="u" onClick={() => this.handleAvailabilityClick(labels.left)}></a>
+                {/* eslint-disable-next-line */}
                 <a  title={labels.middle} className="n" onClick={() => this.handleAvailabilityClick(labels.middle)}></a>
-                <a  title={labels.right} className="a" onClick={() => this.handleAvailabilityClick(labels.right)}>
-                </a>
+                {/* eslint-disable-next-line */}
+                <a  title={labels.right} className="a" onClick={() => this.handleAvailabilityClick(labels.right)}></a>
                 <div></div>
             </div>
         );

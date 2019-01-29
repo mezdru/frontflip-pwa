@@ -31,12 +31,10 @@ export const styles = theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     background: 'white',
-    boxShadow: 'none !important',
-    borderTop: '10px solid #dd362e',
     zIndex: '999'
   },
   appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
+    width: '100%',
     marginLeft: drawerWidth,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
@@ -44,12 +42,7 @@ export const styles = theme => ({
     }),
   },
   menuButton: {
-    // marginLeft: 12,
-    marginRight: 20,
-  },
-  menuLink: {
-    textDecoration: 'none',
-    color:'inherit'
+    marginRight: 16,
   },
   hide: {
     display: 'none',
@@ -60,15 +53,13 @@ export const styles = theme => ({
   },
   drawerPaper: {
     width: drawerWidth,
+    padding: '0 !important',
   },
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
-    padding: '0 8px',
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
-      height: '64px',
-    borderTop: '10px solid #dd362e',
   },
   content: {
     flexGrow: 1,
@@ -76,7 +67,7 @@ export const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: -drawerWidth,
+    marginLeft: -300,
     padding: 0,
   },
   contentShift: {
@@ -84,10 +75,16 @@ export const styles = theme => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    marginLeft: 0,
   },
   fixToRight: {
     position: 'absolute',
-    right:'24px'
+    right:16
+  },
+  leftSubmenuLogo: {
+    height: 30,
+    width: 30,
+    position: 'relative',
+    top: '50%',
+    transform: 'translateY(-50%)'
   }
 });

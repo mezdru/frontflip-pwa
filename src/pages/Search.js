@@ -4,11 +4,13 @@ import Banner from '../components/utils/banner/Banner';
 import Card from '../components/card/CardProfile';
 import MainAlgoliaSearch from '../components/algolia/MainAlgoliaSearch';
 import {inject, observer} from "mobx-react";
+import Header from '../components/header/Header';
+import {Redirect} from "react-router-dom";
 
 const styles = {
     searchBanner: {
         position: 'absolute',
-        transition: 'opacity 0.8s',
+        opacity: 0.8,
         filter: 'blur(.5px)'
     }
 };
@@ -17,50 +19,37 @@ class Search extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            bannerOpacity: 0.8,
+            locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
         };
     }
     
-    componentDidMount = () => {
-        this.props.commonStore.setSearchFilters([]);
-        window.addEventListener('scroll', this.onScroll, false);
-
-        if(this.props.match.params.organisationTag && this.props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) {
-            this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
-            this.props.organisationStore.getOrganisationForPublic();
-        }
-    };
-    
-    componentWillUnmount = () => {
-        window.removeEventListener('scroll', this.onScroll, false);
-    };
-    
-    onScroll = () => {
-        if (window.scrollY > 65) {
-            this.setState({
-                bannerOpacity: 0
-            });
-        } else {
-            this.setState({
-                bannerOpacity: 0.8
-            });
-        }
-    };
-    
     render() {
-        
+        const {locale} = this.state;
+        const {organisation} = this.props.organisationStore.values;
+        let profileTag = (this.props.match.params ? this.props.match.params.profileTag : null);
+        let redirecTo = null;
+
+        if(profileTag && profileTag.charAt(0) !== '@') redirecTo = '/' + locale + '/' + organisation.tag;
+
+        if(redirecTo) return (<Redirect to={redirecTo} />);
+
         return (
-            <Grid container direction={'column'} alignItems={'center'}>
-                <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner} style={{opacity: this.state.bannerOpacity}}>
-                    <Banner />
-                </Grid>
-                <MainAlgoliaSearch HitComponent={Card} resultsType={'person'}/>
-            </Grid>
+            <div>
+                <Header />
+                <main>
+                    <Grid container direction={'column'} alignItems={'center'}>
+                        <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner}>
+                            <Banner />
+                        </Grid>
+                        <MainAlgoliaSearch HitComponent={Card} profileTag={profileTag} />
+                    </Grid>
+                </main>
+            </div>
         );
     }
 }
 
-export default inject('commonStore', 'organisationStore')(
+export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore')(
     observer(
         withStyles(styles)(Search)
     )

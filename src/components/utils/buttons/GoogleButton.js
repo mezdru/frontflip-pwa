@@ -5,7 +5,7 @@ import {FormattedMessage} from 'react-intl';
 
 const styles = {
     root: {
-        ['&:not(:hover)']: {
+        '&:not(:hover)': {
             backgroundColor: "white"
         },
     }

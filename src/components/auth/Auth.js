@@ -8,14 +8,22 @@ import Register from './register/Register';
 import { injectIntl } from 'react-intl';
 import {inject, observer} from 'mobx-react';
 import { observe} from 'mobx';
+import { Redirect } from 'react-router-dom';
+import UrlService from '../../services/url.service';
+const queryString = require('query-string');
 
 class Auth extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            value: 0
+            value: this.props.initialTab,
+            queryParams: queryString.parse(window.location.search),
+            redirectTo: null,
+            locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
         }
+
+        this.handleGoogleAuth = this.handleGoogleAuth.bind(this);
     }
 
     componentDidMount() {
@@ -23,6 +31,33 @@ class Auth extends React.Component {
         observe(this.props.authStore.values, 'invitationCode', (change) => {
             this.setState({value: 1});
         });
+
+        // HANDLE GOOGLE AUTH CALLBACK
+        if(this.state.queryParams && this.state.queryParams.refresh_token && this.state.queryParams.access_token) {
+            let googleState = JSON.parse(this.state.queryParams.state);
+            this.props.commonStore.setAuthTokens(this.state.queryParams);
+
+            this.props.userStore.getCurrentUser()
+            .then(() => {
+                if(googleState && googleState.invitationCode) this.props.authStore.setInvitationCode(googleState.invitationCode);
+                this.props.authStore.registerToOrg()
+                .then((data) => {
+                    let organisation = data.organisation;
+                    let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
+                    this.props.recordStore.setRecordId(currentOrgAndRecord.record);
+                    this.props.recordStore.getRecord()
+                    .then(() => {
+                        this.setState({redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag});
+                    }).catch(() => {
+                        window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
+                    });
+                }).catch((err) => {
+                    this.setState({redirectTo: '/' + this.state.locale});
+                });
+            }).catch(() => {
+                this.setState({redirectTo: '/' + this.state.locale});
+            });
+        }
     }
     
     handleChange = (event, value) => {
@@ -32,11 +67,21 @@ class Auth extends React.Component {
     handleChangeIndex = index => {
         this.setState({value: index});
     };
+
+    handleGoogleAuth() {
+        let state  = {};
+        if(this.props.organisationStore.values.orgTag) state.orgTag = this.props.organisationStore.values.orgTag
+        if(this.props.organisationStore.values.organisation.tag) state.orgTag = this.props.organisationStore.values.organisation.tag;
+        if(this.props.authStore.values.invitationCode) state.invitationCode = this.props.authStore.values.invitationCode;
+        window.location.href = 'https://' + process.env.REACT_APP_API_ROOT_AUTH + '/google?state=' + JSON.stringify(state);
+    }
     
     render() {
         const {theme} = this.props;
+        const {redirectTo} = this.state;
         let intl = this.props.intl;
-        
+        if(redirectTo) return (<Redirect to={redirectTo}/>);
+
         return (
             <Grid container spacing={16}>
                 <Grid item xs={12} style={{marginTop: -8}}>
@@ -57,8 +102,8 @@ class Auth extends React.Component {
                         index={this.state.value}
                         onChangeIndex={this.handleChangeIndex}
                     >
-                        <Login/>
-                        <Register/>
+                        <Login handleGoogleAuth={this.handleGoogleAuth} />
+                        <Register handleGoogleAuth={this.handleGoogleAuth} />
                     </SwipeableViews>
                 </Grid>
             </Grid>
@@ -66,7 +111,7 @@ class Auth extends React.Component {
     }
 }
 
-export default inject('authStore')(
+export default inject('authStore', 'organisationStore', 'commonStore', 'userStore', 'recordStore')(
     withTheme()(injectIntl(observer(
         (Auth)
     )))
