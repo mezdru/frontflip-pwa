@@ -140,7 +140,6 @@ class CardProfile extends React.Component {
 
         if(item._snippetResult.intro.value && item._snippetResult.intro.matchLevel === 'full'){
             item.intro = item._snippetResult.intro.value;
-            // item.intro = item.intro.split('ais-highlight-0000000000').join('span');
         }
     };
     
