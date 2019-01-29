@@ -80,11 +80,11 @@ class MainAlgoliaSearch extends Component {
         const { filters, newFilter, shouldUpdateUrl} = this.state;
         const { HitComponent, classes, profileTag } = this.props;
         const { locale } = this.props.commonStore;
-        const { orgTag } = this.props.organisationStore.values;
+        const orgTag = this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag;
         const { algoliaKey } = this.props.commonStore;
         let resultsType = ( (profileTag && !shouldUpdateUrl) ? 'profile' : null) || this.state.resultsType;
         let displayedHit = ( (profileTag && !shouldUpdateUrl) ? {tag: profileTag} : null) || this.state.displayedHit;
-        let rootUrl = '/' + locale + '/' + orgTag;
+        let rootUrl = '/' + locale + (orgTag ? '/' + orgTag : '');
         
         let searchBarWidth;
         if(isWidthUp('lg', this.props.width)){
