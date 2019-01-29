@@ -23,6 +23,14 @@ const styles = theme => ({
             border: '9px solid white'
         },
     },
+    name: {
+        '& span span': {
+            backgroundColor: theme.palette.primary.main,
+            borderRadius: 30,
+            paddingLeft: 8,
+            paddingRight: 8,
+        }
+    },
     wings: {
         display: 'inline-block',
         color: 'white',

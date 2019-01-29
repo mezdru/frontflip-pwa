@@ -86,9 +86,8 @@ class MainAlgoliaSearch extends Component {
 
     render() {
         const {locale} = this.props.commonStore;
-        const { filters, newFilter, shouldUpdateUrl, filters, findByQuery} = this.state;
+        const { filters, newFilter, shouldUpdateUrl, findByQuery} = this.state;
         const { HitComponent, classes, profileTag } = this.props;
-        const { locale } = this.props.commonStore;
         const orgTag = this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag;
         const { algoliaKey } = this.props.commonStore;
         let resultsType = ( (profileTag && !shouldUpdateUrl) ? 'profile' : null) || this.state.resultsType;
