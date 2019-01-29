@@ -32,6 +32,7 @@
     "algolia.noOptions": "No results found for {input}",
     "algolia.typeSomething": "Type something to begin ...",
     "algolia.search": "Search ...",
+    "algolia.createOption": "Search \"{input}\"",
     "menu.organisation.welcome": "Welcome to {name}",
     "menu.drawer.profile": "My profile",
     "menu.drawer.availability": "Availability",

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import AsyncSelect from 'react-select/lib/Async';
+import { AsyncCreatable } from 'react-select';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 import {injectIntl} from 'react-intl';
 import {inject, observer} from 'mobx-react';
@@ -20,6 +21,8 @@ class SearchableSelect extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.noOptionsMessage = this.noOptionsMessage.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.createOptionMessage = this.createOptionMessage.bind(this);
+    this.handleCreateOption = this.handleCreateOption.bind(this);
   }
 
   // Used to fetch an event: User click on a Wing, so we should add it to the search filters
@@ -82,13 +85,24 @@ class SearchableSelect extends Component {
     return inputValue;
   }
 
+  handleCreateOption(option) {
+    let arrayOfOption = this.state.selectedOption || [];
+    option = option.trim();
+    arrayOfOption.push({label: option, value: option});
+    return this.handleChange(arrayOfOption);
+  }
+
   noOptionsMessage(inputValue) {
     if(inputValue.inputValue) return this.props.intl.formatMessage({id: 'algolia.noOptions'}, {input: inputValue.inputValue});
     return this.props.intl.formatMessage({id: 'algolia.typeSomething'});
   }
 
+  createOptionMessage(inputValue) {
+    return this.props.intl.formatMessage({id: 'algolia.createOption'}, {input: inputValue});
+  }
+
   render() {
-    const { defaultOptions } = this.props;
+    const { defaultOptions, intl } = this.props;
     const { selectedOption, placeholder } = this.state;
 
     const customStyles = {
@@ -131,7 +145,8 @@ class SearchableSelect extends Component {
     };
 
     return (
-      <AsyncSelect
+      <AsyncCreatable
+        formatCreateLabel={this.createOptionMessage}
         styles={customStyles}
         className={classNames('autocomplete-search', this.props.className)}
         value={selectedOption}
@@ -143,6 +158,7 @@ class SearchableSelect extends Component {
         placeholder={placeholder}
         onChange={this.handleChange}
         onInputChange={this.handleInputChange} 
+        onCreateOption={this.handleCreateOption}
         isMulti
       />
     );

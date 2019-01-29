@@ -23,6 +23,14 @@ const styles = theme => ({
             border: '9px solid white'
         },
     },
+    name: {
+        '& span span': {
+            backgroundColor: theme.palette.primary.main,
+            borderRadius: 30,
+            paddingLeft: 8,
+            paddingRight: 8,
+        }
+    },
     wings: {
         display: 'inline-block',
         color: 'white',
@@ -129,6 +137,10 @@ class CardProfile extends React.Component {
                 if (hashtag.tag && filters.find(filterValue => filterValue.value === hashtag.tag)) item.hashtags[index].class = 'highlighted';
             });
         }
+
+        if(item._snippetResult.intro.value && item._snippetResult.intro.matchLevel === 'full'){
+            item.intro = item._snippetResult.intro.value;
+        }
     };
     
     orderHashtags = function (item) {
@@ -167,7 +179,7 @@ class CardProfile extends React.Component {
                         }
                         subheader={
                             <Typography variant="subheading" className={classes.name} gutterBottom>
-                                {this.htmlDecode(hit.intro)}
+                                <span dangerouslySetInnerHTML={{__html: this.htmlDecode(hit.intro)}}></span>
                             </Typography>
                         }
                         onClick={(e) => handleDisplayProfile(e, hit)}

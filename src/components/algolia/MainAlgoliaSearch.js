@@ -18,6 +18,7 @@ class MainAlgoliaSearch extends Component {
             filters: 'type:person',
             refresh: false,
             newFilter: {},
+            findByQuery: false,
             displayedHit: null,
             resultsType: this.props.resultsType || 'person',
             shouldUpdateUrl: false
@@ -45,17 +46,24 @@ class MainAlgoliaSearch extends Component {
     }
     
     updateFilters(selectedOptions) {
-        let newFilters = 'type:person';
-        selectedOptions.forEach(option => {
-            if(option.value.charAt(0) === '#'){
-                newFilters += ' AND hashtags.tag:'+option.value;
-            }else if(option.value.charAt(0) === '@'){
-                newFilters += ' AND tag:'+option.value;
-            }
-        });
-        if(this.state.resultsType === 'profile') {
-            this.setState({resultsType: 'person', displayedHit: null, shouldUpdateUrl: true});
+        let newFilters = '';
+        if(selectedOptions.find(elt => elt.value.charAt(0) !== '#' && elt.value.charAt(0) !== '@')){
+            selectedOptions.forEach(option => {
+                newFilters += ( (newFilters !== '') ? ' ' : '') + option.label;
+            });
+            this.setState({findByQuery: true});
+        }else{
+            this.setState({findByQuery: false});
+            newFilters = 'type:person';
+            selectedOptions.forEach(option => {
+                if(option.value.charAt(0) === '#'){
+                    newFilters += ' AND hashtags.tag:'+option.value;
+                }else if(option.value.charAt(0) === '@'){
+                    newFilters += ' AND tag:'+option.value;
+                }
+            });
         }
+        newFilters = newFilters.trim();
         this.setState({filters: newFilters, newFilter: {}});
     }
 
@@ -77,9 +85,9 @@ class MainAlgoliaSearch extends Component {
     }
 
     render() {
-        const { filters, newFilter, shouldUpdateUrl} = this.state;
+        const {locale} = this.props.commonStore;
+        const { filters, newFilter, shouldUpdateUrl, findByQuery} = this.state;
         const { HitComponent, classes, profileTag } = this.props;
-        const { locale } = this.props.commonStore;
         const orgTag = this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag;
         const { algoliaKey } = this.props.commonStore;
         let resultsType = ( (profileTag && !shouldUpdateUrl) ? 'profile' : null) || this.state.resultsType;
@@ -120,13 +128,17 @@ class MainAlgoliaSearch extends Component {
                     {/* Search results */}
                     {resultsType === 'person' && (
                         <div className={classes.hitListContainer}>
-                            { (shouldUpdateUrl && (window.location.pathname !== rootUrl) ) && (<Redirect push to={rootUrl} />)}
-                            
-                            <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
-                                            indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
-                                            apiKey={algoliaKey}>
-
-                                <Configure filters={filters} />
+                                { (shouldUpdateUrl && (window.location.pathname !== rootUrl) ) && (<Redirect push to={rootUrl} />)}
+                                <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
+                                        indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
+                                        apiKey={algoliaKey}>
+                                {findByQuery && (
+                                    <Configure query={filters} facetFilters={["type:person"]}
+                                        highlightPreTag={"<span>"} highlightPostTag={"</span>"} attributesToSnippet={["intro:15", "description:15"]}/>
+                                )}
+                                {!findByQuery && (
+                                    <Configure filters={filters}  />
+                                )}
                                 {HitComponent &&  (
                                     // <Grid container xs={12} sm={6}>
                                     <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
