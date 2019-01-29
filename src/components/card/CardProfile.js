@@ -141,7 +141,12 @@ class CardProfile extends React.Component {
         });
         item.hashtags = highlighted.concat(notHighlighted);
     };
-    
+
+    htmlDecode = function(input){
+        var e = document.createElement('textarea');
+        e.innerHTML = input;
+        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    }
     
     render() {
         const {classes, hit, addToFilters, handleDisplayProfile} = this.props;
@@ -157,12 +162,12 @@ class CardProfile extends React.Component {
                         }
                         title={
                             <Typography variant="h4" className={classes.name} gutterBottom>
-                                {hit.name || hit.tag}
+                                {this.htmlDecode(hit.name) || hit.tag}
                             </Typography>
                         }
                         subheader={
                             <Typography variant="subheading" className={classes.name} gutterBottom>
-                                {hit.intro}
+                                {this.htmlDecode(hit.intro)}
                             </Typography>
                         }
                         onClick={(e) => handleDisplayProfile(e, hit)}
@@ -176,7 +181,7 @@ class CardProfile extends React.Component {
                                 if(link.class !== 'extraLink'){
                                     return (
                                         <Grid item key={link._id}>
-                                            <Tooltip title={link.display || link.value || link.url}>
+                                            <Tooltip title={this.htmlDecode(link.display) || this.htmlDecode(link.value) || this.htmlDecode(link.url)}>
                                                 <IconButton href={link.url} className={"fa fa-" + link.icon}/>
                                             </Tooltip>
                                         </Grid>
@@ -193,7 +198,7 @@ class CardProfile extends React.Component {
                                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
                                 return (
                                     <Wings src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture}
-                                           label={displayedName} key={hashtag.tag}
+                                           label={this.htmlDecode(displayedName)} key={hashtag.tag}
                                            onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
                                            className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
                                 )
