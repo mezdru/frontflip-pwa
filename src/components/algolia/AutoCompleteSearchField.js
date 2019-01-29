@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
 import AsyncSelect from 'react-select/lib/Async';
-import { AsyncCreatable } from 'react-select';
+import { AsyncCreatable, components, makeAnimated } from 'react-select';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 import {injectIntl} from 'react-intl';
 import {inject, observer} from 'mobx-react';
 import './AutoCompleteSearchField.css';
 import classNames from 'classnames';
+import Wing from '../utils/wing/Wing';
+import {Tooltip, withStyles,Chip} from '@material-ui/core'
+import CancelIcon from '@material-ui/icons/Cancel';
 
 class SearchableSelect extends Component {
   constructor(props) {
@@ -55,7 +58,7 @@ class SearchableSelect extends Component {
   }
 
   getOptionValue = (option) => option.value;
-  getOptionLabel = (option) => option.label;
+  getOptionLabel = (option) => this.htmlDecode(option.label);
 
   // when option is selected
   handleChange(selectedOption) {
@@ -101,9 +104,28 @@ class SearchableSelect extends Component {
     return this.props.intl.formatMessage({id: 'algolia.createOption'}, {input: inputValue});
   }
 
+  htmlDecode = function(input){
+    var e = document.createElement('textarea');
+    e.innerHTML = input;
+    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+  }
+
   render() {
-    const { defaultOptions, intl } = this.props;
+    const { defaultOptions, intl, theme } = this.props;
     const { selectedOption, placeholder } = this.state;
+
+
+    const MultiValueContainer = (props) => {
+      console.log(props)
+      return (
+                      <Chip
+                        label={props.children} 
+                        color="primary"
+                        onClick={props.onClick}
+                        >
+                      </Chip>
+      );
+    };
 
     const customStyles = {
       control: (base, state) => ({
@@ -142,6 +164,15 @@ class SearchableSelect extends Component {
         ...base,
         padding: 0
       }),
+      multiValue: base => ({
+        ...base,
+        background: theme.palette.primary.main,
+      }),
+    };
+
+    const components = {
+      MultiValueContainer,
+      makeAnimated,
     };
 
     return (
@@ -159,6 +190,7 @@ class SearchableSelect extends Component {
         onChange={this.handleChange}
         onInputChange={this.handleInputChange} 
         onCreateOption={this.handleCreateOption}
+        components={components}
         isMulti
       />
     );
@@ -168,6 +200,6 @@ class SearchableSelect extends Component {
 const AutoCompleteSearchField = connectAutoComplete(SearchableSelect);
 export default inject('commonStore')(
   injectIntl(observer(
-      (AutoCompleteSearchField)
+    withStyles(null, {withTheme: true})(AutoCompleteSearchField)
   ))
 );

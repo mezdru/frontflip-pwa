@@ -52,12 +52,24 @@ export default createMuiTheme({
         MuiChip: {
             root: {
                 padding: '6px 12px',
-                fontWeight: 'bold',
+                fontWeight: '600',
                 margin: 8,
                 boxShadow: '0 2px 2px -1px darkgrey, 0 0 0 5px transparent',
                 ['&:hover']: {
                     boxShadow: '0 5px 15px -1px darkgrey, 0 0 0 5px transparent',
                 },
+            },
+            label: {
+                '& div': {
+                    color: 'white',
+                    fontSize: '0.8125rem',
+                },
+                '& div:nth-child(2)': {
+                    cursor: 'pointer',
+                    height: 22,
+                    width: 22,
+                    borderRadius: '50%'
+                }
             },
             colorPrimary: {
                 backgroundColor: palette.primary.main,
