@@ -13,3 +13,10 @@
     margin:auto;
     width: 100%;
 }
+
+.editableChip {
+    padding-right: 0 !important;
+}
+.editableChip span {
+    padding-right:  5px !important;
+}

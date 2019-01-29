@@ -122,6 +122,7 @@ class SearchableSelect extends Component {
                         label={props.children} 
                         color="primary"
                         onClick={props.onClick}
+                        className={'editableChip'}
                         >
                       </Chip>
       );
