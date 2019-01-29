@@ -2,16 +2,16 @@ import {createMuiTheme} from '@material-ui/core/styles';
 
 export const palette = {
     primary: {
-        light: '#c69a96',
-        main: '#FF0018',
-        dark: '#9c001d',
-        contrastText: '#ffffff',
+        light: '#EFA3A0',
+        main: '#DD362E',
+        dark: '#A12B22',
+        contrastText: '#fff',
     },
     secondary: {
-        light: '#b6cce2',
-        main: '#466180',
-        dark: '#293643',
-        contrastText: '#070d14',
+        light: '#DDE9EB',
+        main: '#A3C4C9',
+        dark: '#789094',
+        contrastText: '#0D0221',
     },
 };
 
@@ -123,8 +123,7 @@ export default createMuiTheme({
             root: {
                 padding: 0,
                 borderRadius: 20,
-                marginTop: 15,
-                marginBottom: 15,
+                margin: 15,
             }
         },
         MuiCardActions: {
@@ -193,7 +192,7 @@ export default createMuiTheme({
     },
     global: {
         body: {
-            fontFamily: '"Open sans',
+            fontFamily: '"Open sans"',
         },
     }
 });
