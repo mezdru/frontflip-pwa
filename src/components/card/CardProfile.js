@@ -173,13 +173,15 @@ class CardProfile extends React.Component {
                     <CardActions className={classes.actions} disableActionSpacing>
                         <Grid item container spacing={0}>
                             {hit.links && hit.links.map((link, i) => {
-                                return (
-                                    <Grid item key={link._id}>
-                                        <Tooltip title={link.display || link.value || link.url}>
-                                            <IconButton href={link.url} className={"fa fa-" + link.icon}/>
-                                        </Tooltip>
-                                    </Grid>
-                                )
+                                if(link.class !== 'extraLink'){
+                                    return (
+                                        <Grid item key={link._id}>
+                                            <Tooltip title={link.display || link.value || link.url}>
+                                                <IconButton href={link.url} className={"fa fa-" + link.icon}/>
+                                            </Tooltip>
+                                        </Grid>
+                                    )
+                                }
                             })}
                         </Grid>
                     </CardActions>
