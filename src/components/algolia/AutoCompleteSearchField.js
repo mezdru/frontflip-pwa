@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import AsyncSelect from 'react-select/lib/Async';
 import { AsyncCreatable } from 'react-select';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 import {injectIntl} from 'react-intl';
 import {inject, observer} from 'mobx-react';
 import './AutoCompleteSearchField.css';
 import classNames from 'classnames';
+import {withStyles,Chip} from '@material-ui/core'
 
 class SearchableSelect extends Component {
   constructor(props) {
@@ -55,7 +55,7 @@ class SearchableSelect extends Component {
   }
 
   getOptionValue = (option) => option.value;
-  getOptionLabel = (option) => option.label;
+  getOptionLabel = (option) => this.htmlDecode(option.label);
 
   // when option is selected
   handleChange(selectedOption) {
@@ -101,9 +101,22 @@ class SearchableSelect extends Component {
     return this.props.intl.formatMessage({id: 'algolia.createOption'}, {input: inputValue});
   }
 
+  htmlDecode = function(input){
+    var e = document.createElement('textarea');
+    e.innerHTML = input;
+    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+  }
+
   render() {
-    const { defaultOptions, intl } = this.props;
+    const { defaultOptions, intl, theme } = this.props;
     const { selectedOption, placeholder } = this.state;
+
+
+    const MultiValueContainer = (props) => {
+      return (
+        <Chip label={props.children} color="primary" onClick={props.onClick} className={'editableChip'}/>
+      );
+    };
 
     const customStyles = {
       control: (base, state) => ({
@@ -113,7 +126,6 @@ class SearchableSelect extends Component {
         boxSizing: 'content-box',
         // Overwrittes the different states of border
         border: state.isFocused ? "2px solid #dd362e" : "2px solid black",
-        // borderColor: state.isFocused ? "#dd362e" : "black",
         // Removes weird border around container
         boxShadow: state.isFocused ? null : null,
         "&:hover": {
@@ -142,6 +154,10 @@ class SearchableSelect extends Component {
         ...base,
         padding: 0
       }),
+      multiValue: base => ({
+        ...base,
+        background: theme.palette.primary.main,
+      }),
     };
 
     return (
@@ -159,6 +175,7 @@ class SearchableSelect extends Component {
         onChange={this.handleChange}
         onInputChange={this.handleInputChange} 
         onCreateOption={this.handleCreateOption}
+        components={{MultiValueContainer}}
         isMulti
       />
     );
@@ -168,6 +185,6 @@ class SearchableSelect extends Component {
 const AutoCompleteSearchField = connectAutoComplete(SearchableSelect);
 export default inject('commonStore')(
   injectIntl(observer(
-      (AutoCompleteSearchField)
+    withStyles(null, {withTheme: true})(AutoCompleteSearchField)
   ))
 );
