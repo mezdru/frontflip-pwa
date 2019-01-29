@@ -104,13 +104,19 @@ class MainRouteOrganisationRedirect extends React.Component {
         }
     }
 
+    resetRedirectTo() {
+        this.setState({redirectTo: null});
+    }
+
     render() {
         const {redirectTo, renderComponent} = this.state;
         const {locale} = this.props.commonStore;
-        const {orgTag} = this.props.organisationStore.values;
+        const {orgTag, organisation} = this.props.organisationStore.values;
+        const {record} = this.props.recordStore.values;
         let isAuth = this.props.authStore.isAuth();
         
         if(redirectTo){
+            this.resetRedirectTo();
             if(window.location.pathname !== redirectTo) {
                 return (<Redirect to={redirectTo} />);
             }

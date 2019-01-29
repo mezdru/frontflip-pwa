@@ -14,7 +14,6 @@ class Login extends React.Component {
         
         this.state = {
             value: 0,
-            successLogin: false,
             redirectTo: null,
             loginErrors: null,
             locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
@@ -32,10 +31,11 @@ class Login extends React.Component {
     
     handleSubmitForm = (e) => {
         e.preventDefault();
+        console.log('submit form')
         this.props.authStore.login()
             .then((response) => {
                 if (response === 200) {
-                    this.setState({successLogin: true, redirectTo: '/' + this.state.locale + (this.props.organisationStore.values.orgTag ? '/'+this.props.organisationStore.values.orgTag : '')});
+                    this.setState({redirectTo: '/' + this.state.locale + (this.props.organisationStore.values.orgTag ? '/'+this.props.organisationStore.values.orgTag : '')});
                 } else {
                     this.setState({loginErrors: this.props.intl.formatMessage({id: 'signin.error.generic'})});
                 }
@@ -65,76 +65,79 @@ class Login extends React.Component {
         let intl = this.props.intl;
 
         if (redirectTo) return <Redirect to={redirectTo}/>;
-        if (isAuth) return <Redirect to={'/'+locale+(this.props.organisationStore.values.orgTag ? '/'+this.props.organisationStore.values.orgTag : '')}/>;
+        else if (isAuth) return <Redirect to={'/'+locale+(this.props.organisationStore.values.orgTag ? '/'+this.props.organisationStore.values.orgTag : '')}/>;
+        else {
+            return (
+                <form onSubmit={this.handleSubmitForm}>
+                    <Grid container item direction='column' spacing={16}>
+                        {loginErrors && (
+                            <Grid item>
+                                <SnackbarCustom variant="warning" message={loginErrors}/>
+                            </Grid>
+                        )}
+                        <Grid item>
+                            <GoogleButton fullWidth={true} onClick={this.props.handleGoogleAuth}/>
+                        </Grid>
+                        <Grid item>
+                            <Typography style={{
+                                fontSize: '1rem',
+                                color: '#7c7c7c',
+                                textAlign: 'center'
+                            }}><FormattedMessage id="or"/></Typography>
+                        </Grid>
+                        <Grid item>
+                            <TextField
+                                label="Email"
+                                type="email"
+                                autoComplete="email"
+                                fullWidth
+                                variant={"outlined"}
+                                value={values.email}
+                                onChange={this.handleEmailChange}
+                                required
+                            />
+                        </Grid>
+                        <Grid item>
+                            <TextField
+                                label={intl.formatMessage({id: 'Password'})}
+                                type="password"
+                                autoComplete="current-password"
+                                fullWidth
+                                variant={"outlined"}
+                                value={values.password}
+                                onChange={this.handlePasswordChange}
+                                required
+                            />
+                        </Grid>
+                        <Grid item>
+                            {
+                                inProgress && (
+                                    <CircularProgress color="primary"/>
+                                )
+                            }
+                            {
+                                !inProgress && (
+                                    <Button fullWidth={true} color="primary" type="submit"><FormattedMessage id="Sign In"/></Button>
+                                )
+                            }
+                        </Grid>
+                        <Grid item container justify="center">
+                            <Grid item>
+                                <Button component={ Link } 
+                                        to={"/" + locale + ( (organisation && organisation.tag) ? '/'+organisation.tag:'') + "/password/forgot"} 
+                                        variant="text"
+                                >
+                                    <FormattedMessage id="I don't have my password"/>
+                                </Button>
+                            </Grid>
+                            
+                        </Grid>
+                    </Grid>
+                </form>
+            )
+        }
         
-        return (
-            <form onSubmit={this.handleSubmitForm}>
-                <Grid container item direction='column' spacing={16}>
-                    {loginErrors && (
-                        <Grid item>
-                            <SnackbarCustom variant="warning" message={loginErrors}/>
-                        </Grid>
-                    )}
-                    <Grid item>
-                        <GoogleButton fullWidth={true} onClick={this.props.handleGoogleAuth}/>
-                    </Grid>
-                    <Grid item>
-                        <Typography style={{
-                            fontSize: '1rem',
-                            color: '#7c7c7c',
-                            textAlign: 'center'
-                        }}><FormattedMessage id="or"/></Typography>
-                    </Grid>
-                    <Grid item>
-                        <TextField
-                            label="Email"
-                            type="email"
-                            autoComplete="email"
-                            fullWidth
-                            variant={"outlined"}
-                            value={values.email}
-                            onChange={this.handleEmailChange}
-                            required
-                        />
-                    </Grid>
-                    <Grid item>
-                        <TextField
-                            label={intl.formatMessage({id: 'Password'})}
-                            type="password"
-                            autoComplete="current-password"
-                            fullWidth
-                            variant={"outlined"}
-                            value={values.password}
-                            onChange={this.handlePasswordChange}
-                            required
-                        />
-                    </Grid>
-                    <Grid item>
-                        {
-                            inProgress && (
-                                <CircularProgress color="primary"/>
-                            )
-                        }
-                        {
-                            !inProgress && (
-                                <Button fullWidth={true} color="primary" type="submit"><FormattedMessage id="Sign In"/></Button>
-                            )
-                        }
-                    </Grid>
-                    <Grid item container justify="center">
-                        <Grid item>
-                            <Button component={ Link } 
-                                    to={"/" + locale + ( (organisation && organisation.tag) ? '/'+organisation.tag:'') + "/password/forgot"} 
-                                    variant="text"
-                            >
-                                <FormattedMessage id="I don't have my password"/>
-                            </Button>
-                        </Grid>
-                        
-                    </Grid>
-                </Grid>
-            </form>
-        )
+
     };
 }
 
