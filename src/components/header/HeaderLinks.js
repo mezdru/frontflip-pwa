@@ -1,7 +1,7 @@
-import { withStyles, Button, IconButton } from "@material-ui/core";
+import {withStyles, Button, IconButton} from "@material-ui/core";
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { styles } from './Header.css.js';
+import React, {Component} from 'react';
+import {styles} from './Header.css.js';
 import './header.css';
 import {AccountCircle, MoreVert as MoreIcon} from '@material-ui/icons';
 import {FormattedMessage} from 'react-intl';
@@ -15,16 +15,16 @@ class HeaderLinks extends Component {
         const isMenuOpen = Boolean(anchorEl);
         const {locale} = this.props.commonStore;
         const orgTag = this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag;
-
-
-        return(
+        
+        
+        return (
             <div className={classes.fixToRight}>
                 <div className={classes.grow}/>
                 <div className={classes.sectionDesktop}>
-                    <Button variant={"text"} color="inherit" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '', undefined)} className={classes.menuLink}>
-                        <FormattedMessage id="Why Wingzy ?" />
+                    <Button variant="text" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '', undefined)} className={classes.menuLink}>
+                        <FormattedMessage id="Why Wingzy ?"/>
                     </Button>
-                    <Button variant={"text"} color="inherit" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/pricing', undefined)} className={classes.menuLink}>
+                    <Button variant="text" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/pricing', undefined)} className={classes.menuLink}>
                         <FormattedMessage id="Pricing"/>
                     </Button>
                     {auth && (
@@ -38,7 +38,7 @@ class HeaderLinks extends Component {
                         </IconButton>
                     )}
                     {!auth && (
-                        <Button variant={"text"} color="inherit" to={"/" + locale + (orgTag ? '/'+orgTag : '') + '/signin'} component={ Link }><FormattedMessage id="Sign In"/></Button>
+                        <Button variant="text" to={"/" + locale + (orgTag ? '/' + orgTag : '') + '/signin'} component={Link}><FormattedMessage id="Sign In"/></Button>
                     )}
                 
                 </div>
@@ -48,7 +48,7 @@ class HeaderLinks extends Component {
                     </IconButton>
                 </div>
             </div>
-
+        
         )
     }
 }
@@ -65,4 +65,3 @@ export default inject('commonStore', 'organisationStore')(
         )
     )
 );
-        
