@@ -95,12 +95,12 @@ export default createMuiTheme({
             root: {
                 borderRadius: 30,
                 height: "56px",
+                fontWeight: "600",
             },
             text: {
                 color: "darkgrey",
                 ['&:hover']: {
-                    backgroundColor: "transparent",
-                    color: palette.primary.main
+                    color: 'black',
                 }
             }
         },
@@ -125,7 +125,7 @@ export default createMuiTheme({
         MuiTab: {
             root: {
                 fontSize: '0.875rem!important',
-                fontWeight: '400',
+                fontWeight: '600',
                 ['&:hover']: {
                     color: palette.primary.main
                 },
