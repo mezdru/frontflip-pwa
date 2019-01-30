@@ -114,8 +114,8 @@ class MainAlgoliaSearch extends Component {
                     )}
                     <div className={classes.searchBarMarginTop}></div>
                     <Sticky topOffset={(isWidthUp('md', this.props.width)) ? 131 : 39}>
-                        {({style}) => (
-                            <div style={{...style, width: searchBarWidth }} className={(resultsType !== 'profile') ? classes.searchBar : classes.searchBarProfile}>
+                        {({style, isSticky}) => (
+                            <div style={{...style, width: searchBarWidth, transform: ( (isSticky || (resultsType === 'profile')) ? '' : 'translateY(-50%)') }} className={(resultsType !== 'profile') ? classes.searchBar : classes.searchBarProfile}>
                                 <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                                 indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                                 apiKey={algoliaKey} >

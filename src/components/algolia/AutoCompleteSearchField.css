@@ -16,6 +16,7 @@
 
 .editableChip {
     padding-right: 0 !important;
+    margin: 5px !important;
 }
 .editableChip span {
     padding-right:  5px !important;
