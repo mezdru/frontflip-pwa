@@ -29,7 +29,11 @@ const styles = theme => ({
             borderRadius: 30,
             paddingLeft: 8,
             paddingRight: 8,
-        }
+        },
+        display: 'block',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
     },
     wings: {
         display: 'inline-block',
