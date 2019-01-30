@@ -114,7 +114,7 @@ class SearchableSelect extends Component {
 
     const MultiValueContainer = (props) => {
       return (
-        <Chip label={props.children} color="primary" onClick={props.onClick} className={'editableChip'}/>
+        <Chip label={props.children} color="secondary" onClick={props.onClick} className={'editableChip'}/>
       );
     };
 
@@ -134,7 +134,8 @@ class SearchableSelect extends Component {
           boxSizing: 'content-box'
         },
         padding: '3px 8px 3px 8px',
-        fontSize: '16px'
+        minHeight: 46,
+        fontSize: 16
       }),
       menu: base => ({
         ...base,
@@ -157,6 +158,11 @@ class SearchableSelect extends Component {
       multiValue: base => ({
         ...base,
         background: theme.palette.primary.main,
+      }),
+      valueContainer: (provided, state) => ({
+        ...provided,
+        padding:0,
+        margin: 0,
       }),
     };
 

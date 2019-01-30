@@ -35,7 +35,7 @@ export default createMuiTheme({
     overrides: {
         MuiAppBar: {
             root: {
-                height: 80
+                height: 72
             }
         },
         MuiGrid: {
@@ -46,7 +46,7 @@ export default createMuiTheme({
         },
         MuiDrawer: {
             root: {
-                height: 80,
+                height: 72,
             }
         },
         MuiChip: {
@@ -54,10 +54,6 @@ export default createMuiTheme({
                 padding: '6px 12px',
                 fontWeight: '600',
                 margin: 8,
-                boxShadow: '0 2px 2px -1px darkgrey, 0 0 0 5px transparent',
-                ['&:hover']: {
-                    boxShadow: '0 5px 15px -1px darkgrey, 0 0 0 5px transparent',
-                },
             },
             label: {
                 '& div': {
@@ -136,6 +132,7 @@ export default createMuiTheme({
                 padding: 0,
                 borderRadius: 20,
                 margin: 15,
+                marginLeft: 0,
             }
         },
         MuiCardActions: {
@@ -173,9 +170,7 @@ export default createMuiTheme({
         },
         MuiTypography: {
             root: {
-                // whiteSpace: 'nowrap',
                 overflow: 'hidden',
-                // textOverflow: 'ellipsis',
             },
             h6: {
                 display: 'block',

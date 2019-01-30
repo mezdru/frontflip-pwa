@@ -61,13 +61,12 @@ export const styles = theme => ({
     fullWidth: {
         width: '100%'
     },
-    //<Grid item xs={10} sm={6} lg={4}>
     searchBar: {
         left: 0,
         right: 0,
         margin: 'auto',
         zIndex: 1000,
-        marginTop:16,
+        marginTop:8,
         background: 'transparent',
         width: '100%'
     },
@@ -76,7 +75,7 @@ export const styles = theme => ({
         [theme.breakpoints.up('md')]: {
             from: {marginTop: 231}
         },
-        to: {marginTop: 16}
+        to: {marginTop: 8}
     },
     searchBarProfile: {
         position: 'fixed !important',
@@ -85,17 +84,17 @@ export const styles = theme => ({
         right: 0,
         margin: 'auto',
         zIndex: 1000,
-        marginTop:16,
+        marginTop:8,
         background: 'transparent',
         width: '100%',
         animationName: 'moveTop',
-        animationDuration: '1s'
+        animationDuration: '1s',
     },
     searchBarMarginTop: {
         position: 'static',
-        marginTop:59, // 147 - 24 - 64
+        marginTop: 83, // bannerHeight / 2
         [theme.breakpoints.up('md')]: {
-            marginTop: 151, //239 - 24 - 64
+            marginTop: 175, // bannerHeight / 2
         },
         width: '100%',
     },
