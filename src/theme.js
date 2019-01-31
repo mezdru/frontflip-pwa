@@ -53,7 +53,7 @@ export default createMuiTheme({
             root: {
                 padding: '6px 12px',
                 fontWeight: '600',
-                margin: 8,
+                margin: '16px 8px 8px 8px',
             },
             label: {
                 '& div': {
