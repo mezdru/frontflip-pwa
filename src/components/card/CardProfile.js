@@ -55,6 +55,11 @@ const styles = theme => ({
     },
     cardHeader: {
         cursor: 'pointer'
+    },
+    contact: {
+        [theme.breakpoints.up(400)]: {
+            margin: 4,
+        }
     }
 });
 
@@ -74,7 +79,11 @@ class CardProfile extends React.Component {
             this.makeLinkDisplay(link);
             this.makeLinkIcon(link);
             this.makeLinkUrl(link);
-            if (index > EXTRA_LINK_LIMIT - 1) link.class = 'extraLink';
+            if (isWidthDown('xs', this.props.width)) {
+                if (index > EXTRA_LINK_LIMIT - 2) link.class = 'extraLink';
+            } else {
+                if (index > EXTRA_LINK_LIMIT - 1) link.class = 'extraLink';
+            }
         }.bind(this));
     }
     
@@ -201,8 +210,8 @@ class CardProfile extends React.Component {
                     />
                 </Grid>
                 <Grid item container justify={'flex-end'}>
-                    <CardActions className={classes.actions} disableActionSpacing>
-                        <Grid item container spacing={0}>
+                    <CardActions disableActionSpacing>
+                        <Grid item container>
                             {hit.links && hit.links.map((link, i) => {
                                 if(link.class !== 'extraLink'){
                                     return (
@@ -243,6 +252,6 @@ CardProfile.propTypes = {
 
 export default inject('commonStore')(
     observer(
-        withStyles(styles)(CardProfile)
+        withWidth()(withStyles(styles)(CardProfile))
     )
 );
