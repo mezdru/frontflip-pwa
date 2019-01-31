@@ -16,11 +16,21 @@ const styles = theme => ({
         width: 170,
         height: 170,
         marginBottom: '-5rem',
+        [theme.breakpoints.down('xs')]: {
+            width: 146,
+            height: 146,
+            marginBottom: '-3rem',
+        },
+        [theme.breakpoints.down(400)]: {
+            width: 124,
+            height: 124,
+            marginBottom: '-3rem',
+        },
         '& img': {
             width: '100%',
             height: '100%',
             borderRadius: '50%',
-            border: '9px solid white'
+            border: '8px solid white'
         },
     },
     name: {
