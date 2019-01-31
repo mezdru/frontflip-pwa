@@ -12,6 +12,7 @@ import { injectIntl } from 'react-intl';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import UrlService from '../../services/url.service';
 import {Link} from 'react-router-dom';
+import OrganisationsList from '../utils/orgsList/OrganisationsList';
 
 class App extends Component {
     constructor(props) {
@@ -145,11 +146,15 @@ class App extends Component {
                             </List>
                             <Divider/>
                         {auth && (
-                            <List className={'leftSubmenu'}>
-                                <ListItem button onClick={this.handleLogout} >
-                                    <ListItemText primary={intl.formatMessage({id: 'menu.drawer.logout'})} />
-                                </ListItem>
-                            </List>
+                            <div>
+                                <List className={'leftSubmenu'}>
+                                    <ListItem button onClick={this.handleLogout} >
+                                        <ListItemText primary={intl.formatMessage({id: 'menu.drawer.logout'})} />
+                                    </ListItem>
+                                </List>
+                                <Divider/>
+                                <OrganisationsList />
+                            </div>
                         )}    
                 </div>
             </Drawer>

@@ -1,6 +1,7 @@
 import { observable, action, decorate } from "mobx";
 import agent from '../agent';
 import commonStore from "./common.store";
+import userStore from "./user.store";
 
 class OrganisationStore {
     inProgress = false;
@@ -9,6 +10,7 @@ class OrganisationStore {
         orgTag: '',
         orgId: '',
         organisation: {},
+        currentUserOrganisations: []
     };
 
     setOrgTag(orgTag) {
@@ -47,6 +49,21 @@ class OrganisationStore {
                 .finally(action(()=> { this.inProgress = false; }));   
         }
     }
+
+    async getCurrentUserOrganisations() {
+        if(userStore.values.currentUser && userStore.values.currentUser.orgsAndRecords.length > 0) {
+            await this.asyncForEach(userStore.values.currentUser.orgsAndRecords, async (orgAndRecord) => {
+                let org = await agent.Organisation.get(orgAndRecord.organisation).catch();
+                this.values.currentUserOrganisations.push(org.organisation);
+            });
+        }
+    }
+
+    async asyncForEach(array, callback) {
+        for (let index = 0; index < array.length; index++) {
+          await callback(array[index], index, array);
+        }
+      }
 
     getAlgoliaKey(forceUpdate) {
         this.inProgress = true;
@@ -108,7 +125,8 @@ decorate(OrganisationStore, {
     setOrgId: action,
     getOrganisation: action,
     getAlgoliaKey: action,
-    getOrganisationForPublic: action
+    getOrganisationForPublic: action,
+    getCurrentUserOrganisations: action
 });
 
 export default new OrganisationStore();
