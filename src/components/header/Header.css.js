@@ -45,9 +45,6 @@ export const styles = theme => ({
             duration: theme.transitions.duration.enteringScreen,
         }),
     },
-    menuButton: {
-        marginRight: 16,
-    },
     hide: {
         display: 'none',
     },
@@ -90,5 +87,10 @@ export const styles = theme => ({
         position: 'relative',
         top: '50%',
         transform: 'translateY(-50%)'
+    },
+    toolbar: {
+        [theme.breakpoints.down('md')]: {
+            padding:0
+        }
     }
 });

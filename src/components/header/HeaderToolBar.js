@@ -15,7 +15,7 @@ class HeaderToolBar extends Component {
         const {classes, open, auth, anchorEl, handleMobileMenuOpen, handleProfileMenuOpen} = this.props;
 
         return(
-            <Toolbar>
+            <Toolbar className={classes.toolbar}>
                 <IconButton 
                             color="inherit"
                             aria-label="Open drawer"
