@@ -12,6 +12,7 @@
     right:0;
     margin:auto;
     width: 100%;
+    z-index: 9999;
 }
 
 .editableChip {

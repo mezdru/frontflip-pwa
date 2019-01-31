@@ -145,11 +145,12 @@ class SearchableSelect extends Component {
         hyphens: "auto",
         textAlign: "center",
         // prevent menu to scroll y
-        wordWrap: "break-word"
+        wordWrap: "break-word",
+ 
       }),
       menuList: base => ({
         ...base,
-        padding: 0
+        padding: 0,
       }),
       input: base => ({
         ...base,

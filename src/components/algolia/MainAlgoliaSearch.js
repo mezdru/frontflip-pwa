@@ -10,6 +10,7 @@ import {styles} from './MainAlgoliaSearch.css'
 import ProfileLayout from "../profile/ProfileLayout";
 import { Redirect } from 'react-router-dom';
 import { ArrowBack } from "@material-ui/icons";
+import SearchSuggestions from "./SearchSuggestions";
 
 class MainAlgoliaSearch extends Component {
     constructor(props) {
@@ -113,20 +114,35 @@ class MainAlgoliaSearch extends Component {
                         </IconButton>
                     )}
                     <div className={classes.searchBarMarginTop}></div>
-                    <Sticky topOffset={(isWidthUp('md', this.props.width)) ? 131 : 39} disableCompensation={(resultsType === 'profile' ? true : false)} >
-                        {({style, isSticky}) => (
-                            <div    style={{...style,   width: ( (isSticky && (isWidthDown('md', this.props.width))) ? '75%' : searchBarWidth), 
-                                                        transform: ( (isSticky || (resultsType === 'profile')) ? '' : 'translateY(-50%)'),
-                                                        marginRight: ( (isSticky && (isWidthDown('md', this.props.width))) ? 16 : '')}} 
-                                    className={(resultsType !== 'profile') ? classes.searchBar : classes.searchBarProfile}>
-                                <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
+
+                    <div style={{zIndex: 9999, position: 'relative'}}>
+                        <Sticky topOffset={(isWidthUp('md', this.props.width)) ? 131 : 39} disableCompensation={(resultsType === 'profile' ? true : false)} >
+                            {({style, isSticky}) => (
+                                <div    style={{...style,   width: ( (isSticky && (isWidthDown('md', this.props.width))) ? '75%' : searchBarWidth), 
+                                                            transform: ( (isSticky || (resultsType === 'profile')) ? '' : 'translateY(-50%)'),
+                                                            marginRight: ( (isSticky && (isWidthDown('md', this.props.width))) ? 16 : '')}} 
+                                        className={(resultsType !== 'profile') ? classes.searchBar : classes.searchBarProfile}>
+                                    <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
+                                                    indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
+                                                    apiKey={algoliaKey} >
+                                        <AutoCompleteSearchField updateFilters={this.updateFilters} newFilter={newFilter}/>
+                                    </InstantSearch>
+                                </div>
+                            )}
+                        </Sticky>
+                    </div>
+
+                    {/* Search suggestions */}
+                    {!findByQuery && (
+                        <div style={{width: searchBarWidth, position: 'relative', left:0, right:0, margin: 'auto'}}>
+                            <InstantSearch      appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                                 indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
-                                                apiKey={algoliaKey} >
-                                    <AutoCompleteSearchField updateFilters={this.updateFilters} newFilter={newFilter}/>
-                                </InstantSearch>
-                            </div>
-                        )}
-                    </Sticky>
+                                                apiKey={algoliaKey}>
+                                <Configure facetFilters={filters.split(' AND ')} />
+                                <SearchSuggestions attribute="hashtags.tag" addToFilters={this.addToFilters} limit={5} />
+                            </InstantSearch>
+                        </div>
+                    )}
 
                     {/* Search results */}
                     {resultsType === 'person' && (
