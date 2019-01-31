@@ -103,7 +103,7 @@ export default createMuiTheme({
         MuiIconButton: {
             root: {
                 padding: '8px!important',
-                color: '#DDE9EB!important',
+                color: '#DDE9EB',
             }
         },
         MuiOutlinedInput: {
@@ -145,8 +145,6 @@ export default createMuiTheme({
             root: {
                 width: '100%',
                 backgroundColor: palette.secondary.light,
-                paddingRight: '16px!important',
-                paddingLeft: '16px!important',
             },
             content: {
                 display: 'inline-grid',

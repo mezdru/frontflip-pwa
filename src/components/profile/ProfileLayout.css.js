@@ -3,7 +3,12 @@ const LOGO_HEIGHT = 170;
 export const styles = theme => ({
     generalPart: {
         position: 'relative',
-        minHeight: 'calc(100vh - 247px)',
+        [theme.breakpoints.down('sm')]: {
+            minHeight: 'unset'
+        },
+        [theme.breakpoints.up('sm')]: {
+            minHeight: 'calc(100vh - 247px)'
+        },
         [theme.breakpoints.up('md')]: {
             minHeight: 'calc(100vh - 429px)'
         },
@@ -12,7 +17,12 @@ export const styles = theme => ({
     },
     hashtagsPart: {
         position: 'relative',
-        minHeight: 'calc(100vh - 247px)',
+        [theme.breakpoints.down('sm')]: {
+            minHeight: 'unset'
+        },
+        [theme.breakpoints.up('sm')]: {
+            minHeight: 'calc(100vh - 247px)'
+        },
         [theme.breakpoints.up('md')]: {
             minHeight: 'calc(100vh - 429px)'
         },
@@ -47,13 +57,12 @@ export const styles = theme => ({
     },
     button: {
         color: theme.palette.secondary.contrastText,
-        paddingLeft: 0,
         wordBreak: 'break-all',
     },
     buttonIcon: {
-        width: 40,
-        height: 40,
-        color: 'red'
+        // width: 40,
+        // height: 40,
+        color: theme.palette.primary.main
     },
     wings: {
         display: 'inline-block',
@@ -76,11 +85,10 @@ export const styles = theme => ({
         transform: 'translateY(-100%)',
     },
     contactIcon: {
-        color: theme.palette.secondary.contrastText, 
         marginRight: 16, 
-        marginLeft: -8, 
         position:'relative', 
-        width: 40,
+        textAlgin: 'center',
+        width: 24,
         fontSize: 24
     }
 });

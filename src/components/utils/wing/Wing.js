@@ -17,15 +17,27 @@ const styles = theme => ({
 });
 
 const Wing = ({src, label, ...props}) => {
-    return (
-        <Chip
-            avatar={<Avatar className={props.classes.wingImg} src={src}/>}
-            label={label} 
-            color={"secondary"}
-            className={classNames(props.classes[props.className])}
-            onClick={props.onClick}>
-        </Chip>
-    )
+    if(src) {
+        return (
+            <Chip
+                avatar={<Avatar className={props.classes.wingImg} src={src}/>}
+                label={label} 
+                color={"secondary"}
+                className={classNames(props.classes[props.className])}
+                onClick={props.onClick}>
+            </Chip>
+        )
+    } else {
+        return (
+            <Chip
+                label={label} 
+                color={"secondary"}
+                className={classNames(props.classes[props.className])}
+                onClick={props.onClick}>
+            </Chip>
+        )
+    }
+
 };
 
 export default withStyles(styles)(Wing)

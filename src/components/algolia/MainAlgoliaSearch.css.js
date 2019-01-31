@@ -10,9 +10,9 @@ export const styles = theme => ({
     },
     hitListContainerWithoutMargin: {
         position: 'relative',
-        top: 108,
+        top: 86,
         [theme.breakpoints.up('md')]: {
-            top: 198,
+            top: 176,
         },
         width: '100%',
         '& ul': {

@@ -5,7 +5,7 @@ import { InstantSearch, Hits, Configure } from "react-instantsearch-dom";
 import AutoCompleteSearchField from "./AutoCompleteSearchField";
 import { observe } from 'mobx';
 import { StickyContainer, Sticky } from 'react-sticky';
-import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
+import withWidth, { isWidthUp, isWidthDown } from '@material-ui/core/withWidth';
 import {styles} from './MainAlgoliaSearch.css'
 import ProfileLayout from "../profile/ProfileLayout";
 import { Redirect } from 'react-router-dom';
@@ -113,9 +113,12 @@ class MainAlgoliaSearch extends Component {
                         </IconButton>
                     )}
                     <div className={classes.searchBarMarginTop}></div>
-                    <Sticky topOffset={(isWidthUp('md', this.props.width)) ? 131 : 39}>
+                    <Sticky topOffset={(isWidthUp('md', this.props.width)) ? 131 : 39} disableCompensation={(resultsType === 'profile' ? true : false)} >
                         {({style, isSticky}) => (
-                            <div style={{...style, width: searchBarWidth, transform: ( (isSticky || (resultsType === 'profile')) ? '' : 'translateY(-50%)') }} className={(resultsType !== 'profile') ? classes.searchBar : classes.searchBarProfile}>
+                            <div    style={{...style,   width: ( (isSticky && (isWidthDown('md', this.props.width))) ? '75%' : searchBarWidth), 
+                                                        transform: ( (isSticky || (resultsType === 'profile')) ? '' : 'translateY(-50%)'),
+                                                        marginRight: ( (isSticky && (isWidthDown('md', this.props.width))) ? 16 : '')}} 
+                                    className={(resultsType !== 'profile') ? classes.searchBar : classes.searchBarProfile}>
                                 <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                                 indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                                 apiKey={algoliaKey} >
