@@ -1,7 +1,7 @@
-import { CircularProgress, withStyles, Grid, IconButton, Chip } from "@material-ui/core";
+import { CircularProgress, withStyles, Grid, IconButton } from "@material-ui/core";
 import React, { Component } from 'react';
 import {inject, observer} from "mobx-react";
-import { InstantSearch, Hits, Configure, Menu, connectMenu } from "react-instantsearch-dom";
+import { InstantSearch, Hits, Configure } from "react-instantsearch-dom";
 import AutoCompleteSearchField from "./AutoCompleteSearchField";
 import { observe } from 'mobx';
 import { StickyContainer, Sticky } from 'react-sticky';
@@ -114,21 +114,22 @@ class MainAlgoliaSearch extends Component {
                         </IconButton>
                     )}
                     <div className={classes.searchBarMarginTop}></div>
+
                     <div style={{zIndex: 9999, position: 'relative'}}>
-                    <Sticky topOffset={(isWidthUp('md', this.props.width)) ? 131 : 39} disableCompensation={(resultsType === 'profile' ? true : false)} >
-                        {({style, isSticky}) => (
-                            <div    style={{...style,   width: ( (isSticky && (isWidthDown('md', this.props.width))) ? '75%' : searchBarWidth), 
-                                                        transform: ( (isSticky || (resultsType === 'profile')) ? '' : 'translateY(-50%)'),
-                                                        marginRight: ( (isSticky && (isWidthDown('md', this.props.width))) ? 16 : '')}} 
-                                    className={(resultsType !== 'profile') ? classes.searchBar : classes.searchBarProfile}>
-                                <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
-                                                indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
-                                                apiKey={algoliaKey} >
-                                    <AutoCompleteSearchField updateFilters={this.updateFilters} newFilter={newFilter}/>
-                                </InstantSearch>
-                            </div>
-                        )}
-                    </Sticky>
+                        <Sticky topOffset={(isWidthUp('md', this.props.width)) ? 131 : 39} disableCompensation={(resultsType === 'profile' ? true : false)} >
+                            {({style, isSticky}) => (
+                                <div    style={{...style,   width: ( (isSticky && (isWidthDown('md', this.props.width))) ? '75%' : searchBarWidth), 
+                                                            transform: ( (isSticky || (resultsType === 'profile')) ? '' : 'translateY(-50%)'),
+                                                            marginRight: ( (isSticky && (isWidthDown('md', this.props.width))) ? 16 : '')}} 
+                                        className={(resultsType !== 'profile') ? classes.searchBar : classes.searchBarProfile}>
+                                    <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
+                                                    indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
+                                                    apiKey={algoliaKey} >
+                                        <AutoCompleteSearchField updateFilters={this.updateFilters} newFilter={newFilter}/>
+                                    </InstantSearch>
+                                </div>
+                            )}
+                        </Sticky>
                     </div>
 
                     {/* Search suggestions */}
@@ -142,8 +143,6 @@ class MainAlgoliaSearch extends Component {
                             </InstantSearch>
                         </div>
                     )}
-
-                    
 
                     {/* Search results */}
                     {resultsType === 'person' && (
