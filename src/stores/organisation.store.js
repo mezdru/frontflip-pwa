@@ -52,6 +52,7 @@ class OrganisationStore {
 
     async getCurrentUserOrganisations() {
         if(userStore.values.currentUser && userStore.values.currentUser.orgsAndRecords.length > 0) {
+            this.values.currentUserOrganisations = [];
             await this.asyncForEach(userStore.values.currentUser.orgsAndRecords, async (orgAndRecord) => {
                 let org = await agent.Organisation.get(orgAndRecord.organisation).catch();
                 this.values.currentUserOrganisations.push(org.organisation);
