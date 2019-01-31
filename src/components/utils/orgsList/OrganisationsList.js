@@ -2,6 +2,7 @@ import React from 'react';
 import {Avatar, withStyles, Typography} from '@material-ui/core';
 import {inject, observer} from "mobx-react";
 import Logo from '../logo/Logo';
+import {Link} from 'react-router-dom';
 const defaultLogo = 'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg';
 
 const style = theme => ({
@@ -35,6 +36,8 @@ const style = theme => ({
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
+        marginTop: 8,
+        color: 'black'
     },
     borderBox: {
         position: 'absolute',
@@ -61,11 +64,13 @@ class OrganisationsList extends React.Component{
     
     render(){
         const {currentUserOrganisations} = this.props.organisationStore.values;
+        const {locale} = this.props.commonStore;
         const {classes} = this.props;
 
         return(
             <ul className={classes.orgsContainer}>
                 {currentUserOrganisations.map((org, i) => {return (
+                    <Link to={'/' + locale + '/' + org.tag}>
                         <li className={classes.orgItem} key={org._id}>
                             <Logo type={'smallOrg'} alt={org.name} src={org.logo.url || defaultLogo} className={classes.itemLogo} />
                             <div className={classes.itemName} >{org.name}</div>
@@ -73,13 +78,15 @@ class OrganisationsList extends React.Component{
                                 <div className={classes.borderBox}></div>
                             )}
                         </li>
+                    </Link>
+
                 );})}
             </ul>
         )
     }
 }
 
-export default inject('organisationStore')(
+export default inject('organisationStore', 'commonStore')(
     observer(
         withStyles(style, {withTheme: true})(OrganisationsList)
     )
