@@ -132,14 +132,17 @@ class MainAlgoliaSearch extends Component {
                     </div>
 
                     {/* Search suggestions */}
-                    <div style={{width: searchBarWidth, position: 'relative', left:0, right:0, margin: 'auto'}}>
-                        <InstantSearch      appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
-                                            indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
-                                            apiKey={algoliaKey}>
-                            <Configure facetFilters={filters.split(' AND ')} />
-                            <SearchSuggestions attribute="hashtags.tag" addToFilters={this.addToFilters} limit={5} />
-                        </InstantSearch>
-                    </div>
+                    {!findByQuery && (
+                        <div style={{width: searchBarWidth, position: 'relative', left:0, right:0, margin: 'auto'}}>
+                            <InstantSearch      appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
+                                                indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
+                                                apiKey={algoliaKey}>
+                                <Configure facetFilters={filters.split(' AND ')} />
+                                <SearchSuggestions attribute="hashtags.tag" addToFilters={this.addToFilters} limit={5} />
+                            </InstantSearch>
+                        </div>
+                    )}
+
                     
 
                     {/* Search results */}
