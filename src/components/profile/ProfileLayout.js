@@ -22,7 +22,7 @@ class ProfileLayout extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            canEdit: this.canEdit(),
+            canEdit: false,
             record: null
         }
 
@@ -30,10 +30,10 @@ class ProfileLayout extends React.Component {
         this.canEdit = this.canEdit.bind(this);
     }
 
-    canEdit() {
+    canEdit(workingRecord) {
         if(!(this.props.userStore.values.currentUser && this.props.userStore.values.currentUser._id)) return false;
         if(this.props.userStore.values.currentUser.superadmin) return true;
-        else if(this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.record === this.props.hit.objectID)) return true;
+        else if(this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.record === workingRecord.objectID)) return true;
         else return false;
     }
 
@@ -145,7 +145,7 @@ class ProfileLayout extends React.Component {
         this.props.recordStore.getRecordByTag()
         .then((record) => {
             record.objectID = record._id;
-            this.setState({record: record});
+            this.setState({record: record, canEdit: this.canEdit(record)});
         })
     };
 
