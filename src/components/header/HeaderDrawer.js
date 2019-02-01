@@ -11,7 +11,7 @@ import Logo from '../utils/logo/Logo';
 import { injectIntl } from 'react-intl';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import UrlService from '../../services/url.service';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import OrganisationsList from '../utils/orgsList/OrganisationsList';
 
 class App extends Component {
@@ -168,9 +168,9 @@ App.propTypes = {
 };
 
 export default inject('authStore', 'organisationStore', 'recordStore', 'commonStore', 'userStore')(
-    injectIntl(observer(
+    injectIntl(withRouter(observer(
         withStyles(styles, {withTheme: true})(
             App
         )
-    ))
+    )))
 );
