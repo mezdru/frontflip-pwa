@@ -106,7 +106,6 @@ class MainAlgoliaSearch extends Component {
 
         if(algoliaKey) {
             return(
-                    
                 <StickyContainer style={{width:'100%', position: 'relative'}} >
                     {resultsType === 'profile' && (
                         <IconButton aria-label="Edit" className={classes.returnButton} onClick={this.handleReturnToSearch}>
@@ -118,10 +117,15 @@ class MainAlgoliaSearch extends Component {
                     <div style={{zIndex: 1199, position: 'relative'}}>
                         <Sticky topOffset={(isWidthUp('md', this.props.width)) ? 131 : 39} disableCompensation={(resultsType === 'profile' ? true : false)} >
                             {({style, isSticky}) => (
-                                <div    style={{...style,   width: ( (isSticky && (isWidthDown('md', this.props.width))) ? '75%' : searchBarWidth), 
-                                                            transform: ( (isSticky || (resultsType === 'profile')) ? '' : 'translateY(-50%)'),
-                                                            marginRight: ( (isSticky && (isWidthDown('md', this.props.width))) ? 16 : '')}} 
-                                        className={(resultsType !== 'profile') ? classes.searchBar : classes.searchBarProfile}>
+                                <div    style={     {...style,   
+                                                    width:          (((isSticky && (isWidthDown('md', this.props.width))) || 
+                                                                    (isWidthDown('md', this.props.width) && (resultsType === 'profile')))? 
+                                                                    '75%' : searchBarWidth), 
+                                                    transform:      ((isSticky || (resultsType === 'profile')) ? '' : 'translateY(-50%)'),
+                                                    marginRight:    (((isSticky && (isWidthDown('md', this.props.width))) || 
+                                                                    (isWidthDown('md', this.props.width) && (resultsType === 'profile')))? 
+                                                                    16 : '')}}
+                                        className={ (resultsType !== 'profile') ? classes.searchBar : classes.searchBarProfile}>
                                     <InstantSearch  appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                                     indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                                     apiKey={algoliaKey} >
@@ -152,8 +156,9 @@ class MainAlgoliaSearch extends Component {
                                         indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                         apiKey={algoliaKey}>
                                 {findByQuery && (
-                                    <Configure query={filters} facetFilters={["type:person"]}
-                                        highlightPreTag={"<span>"} highlightPostTag={"</span>"} attributesToHighlight={["intro:40", "description:40", "name:40"]} attributesToSnippet={["intro:8"]} />
+                                    <Configure  query={filters} facetFilters={["type:person"]}
+                                                highlightPreTag={"<span>"} highlightPostTag={"</span>"} 
+                                                attributesToHighlight={["intro:40", "description:40", "name:40"]} attributesToSnippet={["intro:8"]} />
                                 )}
                                 {!findByQuery && (
                                     // Return an intro of 12 words
