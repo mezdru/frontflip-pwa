@@ -162,8 +162,9 @@ class CardProfile extends React.Component {
             });
         }
 
-        if(item && item._snippetResult && item._snippetResult.intro.value && item._snippetResult.intro.matchLevel === 'full'){
-            item.intro = item._snippetResult.intro.value;
+        if(item && item._highlightResult) {
+            if(item._highlightResult.intro && item._highlightResult.intro.value) item.intro = item._highlightResult.intro.value;
+            if(item._highlightResult.name && item._highlightResult.name.value && item._highlightResult.name.matchLevel === 'full') item.name = item._highlightResult.name.value;
         }
     };
     
@@ -198,7 +199,7 @@ class CardProfile extends React.Component {
                         }
                         title={
                             <Typography variant="h4" className={classes.name} gutterBottom>
-                                {this.htmlDecode(hit.name) || hit.tag}
+                                <span dangerouslySetInnerHTML={{__html: this.htmlDecode(hit.name) || hit.tag}}></span>
                             </Typography>
                         }
                         subheader={
