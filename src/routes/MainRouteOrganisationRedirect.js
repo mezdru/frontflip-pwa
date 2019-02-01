@@ -94,7 +94,7 @@ class MainRouteOrganisationRedirect extends React.Component {
             if(!this.canUserAccessOrganisation(organisation) && this.state.isAuth) {
                 await this.redirectUserAuthWithoutAccess();
             } else if(!this.canUserAccessOrganisation(organisation)) {
-                this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/signin' + (window.location.search || '')});
+                //this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/signin' + (window.location.search || '')});
             } else {
                 this.props.organisationStore.setOrgId(organisation._id);
                 organisation = await this.props.organisationStore.getOrganisation();
@@ -102,7 +102,7 @@ class MainRouteOrganisationRedirect extends React.Component {
             }
         } else {
             if(this.state.isAuth) await this.redirectUserAuthWithoutAccess();
-            else this.setState({redirectTo: '/' + this.state.locale + '/signin'});
+            // else this.setState({redirectTo: '/' + this.state.locale + '/signin'});
         }
     }
 
@@ -147,7 +147,7 @@ class MainRouteOrganisationRedirect extends React.Component {
                         <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={PasswordReset}/>
                         <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={() => {return <AuthPage initialTab={1} />}} />
                         <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
-                        <Redirect to={'/' + locale + (orgTag ? '/' + orgTag : '') + '/signin'} />
+                        <Redirect to={'/' + locale + (orgTag ? '/' + orgTag : '') + '/signin' + window.location.search} />
                     </Switch>
                 </div>
             );
