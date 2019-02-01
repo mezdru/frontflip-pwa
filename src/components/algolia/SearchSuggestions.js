@@ -20,12 +20,17 @@ class SearchSuggestionsComponent extends Component {
     super(props);
   }
 
+  shouldDisplaySuggestion(tag) {
+   return (this.props.currentFilters.search(tag) === -1);
+  }
+
   render() {
     const { items, classes } = this.props;
 
     return (
       <div className={classes.suggestionsContainer} >
         {items.map((item, i) => {
+          if(this.shouldDisplaySuggestion(item.value))
             return <Chip key={i} label={ '('+item.count + ') - ' + item.label} onClick={(e) => this.props.addToFilters(e, {name: item.label, tag: item.value})} className={classes.suggestion} />;
         })}
       </div>

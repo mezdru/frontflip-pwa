@@ -139,7 +139,7 @@ class MainAlgoliaSearch extends Component {
                                                 indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                                 apiKey={algoliaKey}>
                                 <Configure facetFilters={filters.split(' AND ')} />
-                                <SearchSuggestions attribute="hashtags.tag" addToFilters={this.addToFilters} limit={7} />
+                                <SearchSuggestions attribute="hashtags.tag" addToFilters={this.addToFilters} limit={7} currentFilters={filters} />
                             </InstantSearch>
                         </div>
                     )}
