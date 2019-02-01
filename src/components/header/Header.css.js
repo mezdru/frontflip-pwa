@@ -89,8 +89,7 @@ export const styles = theme => ({
         transform: 'translateY(-50%)'
     },
     toolbar: {
-        [theme.breakpoints.down('md')]: {
-            padding:0
-        }
+        padding:0
+      
     }
 });
