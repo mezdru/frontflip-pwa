@@ -117,7 +117,7 @@ class ProfileLayout extends React.Component {
         let filters = this.props.commonStore.getSearchFilters() || this.props.commonStore.searchFilters;
         if (filters && filters.length > 0 && item.hashtags && item.hashtags.length > 0) {
             item.hashtags.forEach((hashtag, index) => {
-                if (hashtag.tag && filters.find(filterValue => filterValue.value === hashtag.tag)) item.hashtags[index].class = 'highlighted';
+                if (hashtag.tag && filters.find(filterValue => filterValue.value.toLowerCase() === hashtag.tag.toLowerCase())) item.hashtags[index].class = 'highlighted';
             });
         }
     };
