@@ -158,8 +158,8 @@ class CardProfile extends React.Component {
 
     getEmojiUrl(emoji) {
         let str = twemoji.parse(emoji);
-        str = str.split(/ /g);
-        str = str[4].split(/"/g);
+        str = str.split(/ /g); // split all attributes of <img> html balise
+        str = str[4].split(/"/g); // split attrbiute name and value
         return str[1];
     }
     
@@ -167,7 +167,7 @@ class CardProfile extends React.Component {
         let filters = this.props.commonStore.getSearchFilters() || this.props.commonStore.searchFilters;
         if (filters && filters.length > 0) {
             item.hashtags.forEach((hashtag, index) => {
-                if (hashtag.tag && filters.find(filterValue => filterValue.value === hashtag.tag)) item.hashtags[index].class = 'highlighted';
+                if (hashtag.tag && filters.find(filterValue => filterValue.value.toLowerCase() === hashtag.tag.toLowerCase())) item.hashtags[index].class = 'highlighted';
             });
         }
 
