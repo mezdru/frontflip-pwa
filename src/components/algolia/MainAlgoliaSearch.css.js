@@ -8,6 +8,16 @@ export const styles = theme => ({
         width: '100%',
         marginBottom: 150
     },
+    suggestionsContainer: {
+        position: 'relative', 
+        left:0, 
+        right:0, 
+        margin: 'auto',
+        top: 60,
+        [theme.breakpoints.up('md')]: {
+            top: 150,
+        },
+    },
     hitListContainerWithoutMargin: {
         position: 'relative',
         top: 86,

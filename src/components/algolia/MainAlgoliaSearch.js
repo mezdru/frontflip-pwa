@@ -134,12 +134,12 @@ class MainAlgoliaSearch extends Component {
 
                     {/* Search suggestions */}
                     {!findByQuery && (resultsType !== 'profile') && (
-                        <div style={{width: searchBarWidth, position: 'relative', left:0, right:0, margin: 'auto'}}>
+                        <div style={{width: searchBarWidth}} className={classes.suggestionsContainer}>
                             <InstantSearch      appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                                 indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
                                                 apiKey={algoliaKey}>
                                 <Configure facetFilters={filters.split(' AND ')} />
-                                <SearchSuggestions attribute="hashtags.tag" addToFilters={this.addToFilters} limit={5} />
+                                <SearchSuggestions attribute="hashtags.tag" addToFilters={this.addToFilters} limit={7} />
                             </InstantSearch>
                         </div>
                     )}
