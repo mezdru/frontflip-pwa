@@ -9,6 +9,7 @@ import './header.css';
 import {styles} from './Header.css.js'
 import HeaderLinks from './HeaderLinks';
 import Logo from '../utils/logo/Logo';
+import logoNoAuth from '../../resources/images/wingzy_line_256.png';
 
 class HeaderToolBar extends Component {
     render() {
@@ -16,17 +17,25 @@ class HeaderToolBar extends Component {
 
         return(
             <Toolbar className={classes.toolbar}>
-                <IconButton 
-                            color="inherit"
-                            aria-label="Open drawer"
-                            onClick={this.props.handleDrawerOpen}
-                            className={classNames(classes.menuButton, open && classes.hide)}                            
-                >
-                    <MenuIcon/>
-                </IconButton>
-                <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+                {auth && (
+                    <IconButton 
+                        color="inherit"
+                        aria-label="Open drawer"
+                        onClick={this.props.handleDrawerOpen}
+                        className={classNames(classes.menuButton, open && classes.hide)}                            
+                    >
+                        <MenuIcon/>
+                    </IconButton>
+                )}
+
+                <Typography className={classes.title} variant="h6" color="inherit" noWrap style={{paddding: 0}}>
                     <a href={(process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP}>
-                        <Logo />
+                        { auth && (
+                            <Logo />
+                        )}
+                        { !auth && (
+                            <img src={logoNoAuth} alt={"Wingzy"} height="40px" />
+                        )}
                     </a>
                 </Typography>
                 
