@@ -213,7 +213,7 @@ class CardProfile extends React.Component {
                         }
                         subheader={
                             <Typography variant="body1" className={classes.name} gutterBottom>
-                                <span dangerouslySetInnerHTML={{__html: this.htmlDecode(hit._snippetResult.intro.value || hit.intro || '')}}></span>
+                                <span dangerouslySetInnerHTML={{__html: this.htmlDecode(( (hit._snippetResult && hit._snippetResult.intro) ? hit._snippetResult.intro.value : null) || hit.intro || '')}}></span>
                             </Typography>
                         }
                         onClick={(e) => handleDisplayProfile(e, hit)}
