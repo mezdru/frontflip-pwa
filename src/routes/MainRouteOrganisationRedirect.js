@@ -22,6 +22,18 @@ class MainRouteOrganisationRedirect extends React.Component {
         this.manageAccessRight = this.manageAccessRight.bind(this);
     }
 
+    componentWillReceiveProps(props) {
+        console.log(props);
+        if(props.history.action === 'PUSH' && props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) {
+            this.setState({renderComponent: false}, () => {
+                this.manageAccessRight().then(() => {
+                    this.setState({renderComponent: true});
+                })
+            })
+
+        }
+    }
+
     componentDidMount() {
         this.manageAccessRight().then(() => {
             this.setState({renderComponent: true});
@@ -64,16 +76,21 @@ class MainRouteOrganisationRedirect extends React.Component {
      * @param {Boolean} isNewOrg 
      */
     redirectUserAuthWithAccess(organisation, isNewOrg) {
+        console.log(10)
         let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
-        
+        console.log(11)
         if(!currentOrgAndRecord && !this.props.userStore.values.currentUser.superadmin) {
+            console.log(12)
             window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
         } else if(currentOrgAndRecord) {
+            console.log(13)
             this.props.recordStore.setRecordId(currentOrgAndRecord.record);
             this.props.recordStore.getRecord()
             .then(() => {
+                console.log(14)
                 if(isNewOrg) this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag});
             }).catch(() => {
+                console.log(15)
                 window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
             });
         }
@@ -83,25 +100,36 @@ class MainRouteOrganisationRedirect extends React.Component {
      * @description Manage access right of the user and redirect him if needed.
      */
     async manageAccessRight() {
+        console.log(1)
         if(this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
             let organisation = this.props.organisationStore.values.organisation;     
             if(!(this.props.organisationStore.values.orgTag === this.props.match.params.organisationTag)) {
                 this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
                 organisation = await this.props.organisationStore.getOrganisationForPublic()
                                         .catch((err) => {return null});
+                                        console.log(2)
             }
 
             if(!this.canUserAccessOrganisation(organisation) && this.state.isAuth) {
+                console.log(3)
                 await this.redirectUserAuthWithoutAccess();
+                console.log(4)
             } else if(!this.canUserAccessOrganisation(organisation)) {
+                console.log(5)
                 //this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/signin' + (window.location.search || '')});
+            } else if(!this.state.isAuth){
+
             } else {
+                console.log(6)
                 this.props.organisationStore.setOrgId(organisation._id);
                 organisation = await this.props.organisationStore.getOrganisation();
                 await this.redirectUserAuthWithAccess(organisation);
+                console.log(7)
             }
         } else {
+            console.log(8)
             if(this.state.isAuth) await this.redirectUserAuthWithoutAccess();
+            console.log(9)
             // else this.setState({redirectTo: '/' + this.state.locale + '/signin'});
         }
     }

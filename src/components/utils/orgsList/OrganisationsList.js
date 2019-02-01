@@ -70,8 +70,8 @@ class OrganisationsList extends React.Component{
         return(
             <ul className={classes.orgsContainer}>
                 {currentUserOrganisations.map((org, i) => {return (
-                    <Link to={'/' + locale + '/' + org.tag}>
-                        <li className={classes.orgItem} key={org._id}>
+                    <Link to={'/' + locale + '/' + org.tag} key={org._id}>
+                        <li className={classes.orgItem}>
                             <Logo type={'smallOrg'} alt={org.name} src={org.logo.url || defaultLogo} className={classes.itemLogo} />
                             <div className={classes.itemName} >{org.name}</div>
                             { (((i+1)%3 !== 0) && currentUserOrganisations.length > i+1) && (
