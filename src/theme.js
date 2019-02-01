@@ -18,6 +18,7 @@ export const palette = {
 export default createMuiTheme({
     palette: palette,
     typography: {
+        useNextVariants: true,
         fontFamily: [
             '"Open sans"',
             '-apple-system',
