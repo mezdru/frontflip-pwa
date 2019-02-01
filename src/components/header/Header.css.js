@@ -79,7 +79,7 @@ export const styles = theme => ({
     },
     fixToRight: {
         position: 'absolute',
-        right: 16
+        right: 0
     },
     leftSubmenuLogo: {
         height: 30,
