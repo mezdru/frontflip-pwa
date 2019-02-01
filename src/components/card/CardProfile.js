@@ -46,16 +46,25 @@ const styles = theme => ({
         textOverflow: 'ellipsis',
         overflow: 'hidden',
     },
+    titleSmallestView: {
+        [theme.breakpoints.down('xs')]: {
+           fontSize: '1.2rem!important',
+        },
+    },
     wings: {
         display: 'inline-block',
         color: 'white',
         position: 'relative',
+        [theme.breakpoints.up('sm')]: {
+            marginTop: '32px!important',
+        },
     },
     fullWidth: {
         width: '100%'
     },
     cardHeader: {
-        cursor: 'pointer'
+        cursor: 'pointer',
+        maxHeight: 138,
     },
     contact: {
         [theme.breakpoints.up(400)]: {
@@ -198,12 +207,12 @@ class CardProfile extends React.Component {
                             <Logo type={'person'} className={classes.logo} src={this.getPicturePath(hit.picture) || defaultPicture}/>
                         }
                         title={
-                            <Typography variant="h4" className={classes.name} gutterBottom>
-                                <span dangerouslySetInnerHTML={{__html: this.htmlDecode(hit.name) || hit.tag}}></span>
+                            <Typography variant="h4" className={`${classes.name} ${classes.titleSmallestView}`} gutterBottom>
+                                {this.htmlDecode(hit.name) || hit.tag}
                             </Typography>
                         }
                         subheader={
-                            <Typography variant="subheading" className={classes.name} gutterBottom>
+                            <Typography variant="body1" className={classes.name} gutterBottom>
                                 <span dangerouslySetInnerHTML={{__html: this.htmlDecode(hit.intro || '')}}></span>
                             </Typography>
                         }
@@ -217,7 +226,7 @@ class CardProfile extends React.Component {
                             {hit.links && hit.links.map((link, i) => {
                                 if(link.class !== 'extraLink'){
                                     return (
-                                        <Grid item key={link._id}>
+                                        <Grid item key={link._id} className={classes.contact}>
                                             <Tooltip title={this.htmlDecode(link.display) || this.htmlDecode(link.value) || this.htmlDecode(link.url)}>
                                                 <IconButton href={link.url} className={"fa fa-" + link.icon}/>
                                             </Tooltip>
@@ -229,8 +238,8 @@ class CardProfile extends React.Component {
                     </CardActions>
                 </Grid>
                 <Grid container item>
-                    <CardContent className={this.props.classes.wingsContainer}>
-                        <Grid container className={this.props.classes.wings}>
+                    <CardContent>
+                        <Grid container className={classes.wings}>
                             {hit.hashtags && hit.hashtags.map((hashtag, i) => {
                                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
                                 return (

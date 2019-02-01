@@ -163,7 +163,7 @@ class MainAlgoliaSearch extends Component {
                                     <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
                                         <Hits 
                                             hitComponent={hit => (
-                                                <Grid item xs={10} sm={6} lg={4}>
+                                                <Grid item xs={12} sm={8} md={6} lg={4}  className={classes.cardMobileView}>
                                                     <HitComponent hit={hit.hit} addToFilters={this.addToFilters} handleDisplayProfile={this.handleDisplayProfile} />
                                                 </Grid>
                                             )}

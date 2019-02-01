@@ -35,6 +35,11 @@ export const styles = theme => ({
         from: {opacity: 0},
         to: {opacity: 1}
     },
+    cardMobileView: {
+        [theme.breakpoints.down('xs')]: {
+            margin: '16px!important',
+        },
+    },
     hitList: {
         width: '100%',
         '& ul': {

@@ -19,6 +19,7 @@ export default createMuiTheme({
     palette: palette,
     typography: {
         useNextVariants: true,
+        fontSize: 12,
         fontFamily: [
             '"Open sans"',
             '-apple-system',
@@ -54,7 +55,7 @@ export default createMuiTheme({
             root: {
                 padding: '6px 12px',
                 fontWeight: '600',
-                margin: '16px 8px 8px 8px',
+                margin: '16px 8px 4px 8px',
             },
             label: {
                 '& div': {
@@ -155,9 +156,7 @@ export default createMuiTheme({
         },
         MuiCardContent: {
             root: {
-                marginTop: 20,
-                paddingLeft: '8px!important',
-                padding: '16px!important',
+                padding: '0 0 16px 8px!important',
                 whiteSpace: 'nowrap',
                 overflowX: 'scroll',
             }
@@ -181,9 +180,13 @@ export default createMuiTheme({
                 fontWeight: '700',
                 fontFamily: '"Open sans"',
             },
-            subheading: {
+            h4: {
+              color: palette.secondary.contrastText,
+              fontWeight: '600',
+            },
+            body1: {
                 color: palette.secondary.contrastText,
-                fontWeight: '500',
+                fontWeight: '400',
                 fontFamily: '"Open sans"',
             }
         },
