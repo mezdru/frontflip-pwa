@@ -115,7 +115,7 @@ class MainAlgoliaSearch extends Component {
                     )}
                     <div className={classes.searchBarMarginTop}></div>
 
-                    <div style={{zIndex: 9999, position: 'relative'}}>
+                    <div style={{zIndex: 1199, position: 'relative'}}>
                         <Sticky topOffset={(isWidthUp('md', this.props.width)) ? 131 : 39} disableCompensation={(resultsType === 'profile' ? true : false)} >
                             {({style, isSticky}) => (
                                 <div    style={{...style,   width: ( (isSticky && (isWidthDown('md', this.props.width))) ? '75%' : searchBarWidth), 
@@ -133,7 +133,7 @@ class MainAlgoliaSearch extends Component {
                     </div>
 
                     {/* Search suggestions */}
-                    {!findByQuery && (
+                    {!findByQuery && (resultsType !== 'profile') && (
                         <div style={{width: searchBarWidth, position: 'relative', left:0, right:0, margin: 'auto'}}>
                             <InstantSearch      appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID} 
                                                 indexName={process.env.REACT_APP_ALGOLIA_INDEX} 
