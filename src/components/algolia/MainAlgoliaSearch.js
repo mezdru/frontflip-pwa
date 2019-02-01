@@ -153,10 +153,11 @@ class MainAlgoliaSearch extends Component {
                                         apiKey={algoliaKey}>
                                 {findByQuery && (
                                     <Configure query={filters} facetFilters={["type:person"]}
-                                        highlightPreTag={"<span>"} highlightPostTag={"</span>"} attributesToHighlight={["intro:15", "description:15", "name:10"]}/>
+                                        highlightPreTag={"<span>"} highlightPostTag={"</span>"} attributesToHighlight={["intro:40", "description:40", "name:40"]} attributesToSnippet={["intro:8"]} />
                                 )}
                                 {!findByQuery && (
-                                    <Configure filters={filters}  />
+                                    // Return an intro of 12 words
+                                    <Configure filters={filters} attributesToSnippet={["intro:12"]} />
                                 )}
                                 {HitComponent &&  (
                                     // <Grid container xs={12} sm={6}>
