@@ -135,7 +135,6 @@ class CardProfile extends React.Component {
     }
     
     makeHightlighted = function (item) {
-        console.log(item);
         let filters = this.props.commonStore.getSearchFilters() || this.props.commonStore.searchFilters;
         if (filters && filters.length > 0) {
             item.hashtags.forEach((hashtag, index) => {
