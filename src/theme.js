@@ -102,10 +102,22 @@ export default createMuiTheme({
                 }
             }
         },
+        MuiListItem: {
+            root: {
+                paddingTop: 8,
+                paddingBottom: 8,
+            },
+        },
+        MuiList: {
+            padding: {
+                paddingTop: 0,
+                paddingBottom: 0,
+            }
+        },
         MuiIconButton: {
             root: {
-                padding: '8px!important',
                 color: '#DDE9EB',
+                padding: 8,
             }
         },
         MuiOutlinedInput: {

@@ -8,8 +8,8 @@ export const styles = theme => ({
         backgroundColor: '#fff'
     },
     menuLink: {
-        width:'180px',
-        height: '40px',
+        width:'70px',
+        height: '30px',
     },
     grow: {
         flexGrow: 1,
@@ -57,6 +57,7 @@ export const styles = theme => ({
         padding: '0 !important',
     },
     drawerHeader: {
+        padding: 16,
         display: 'flex',
         alignItems: 'center',
         ...theme.mixins.toolbar,
@@ -90,6 +91,5 @@ export const styles = theme => ({
     },
     toolbar: {
         padding:0
-      
     }
 });
