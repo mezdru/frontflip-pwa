@@ -180,10 +180,8 @@ class ProfileLayout extends React.Component {
     if (!currentHit) return (<div></div>);
 
     return (
-      // <Slide direction="up" in={displayIn} mountOnEnter unmountOnExit timeout={600}>
       <Grid container className={(displayIn ? className : classes.profileContainerHide)} >
-
-
+      
         <Grid container item alignItems={"stretch"} >
           <Banner>
             <IconButton aria-label="Edit" className={classes.returnButton} onClick={this.handleReturnToSearch}>

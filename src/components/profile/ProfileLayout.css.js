@@ -61,8 +61,6 @@ export const styles = theme => ({
     wordBreak: 'break-all',
   },
   buttonIcon: {
-    // width: 40,
-    // height: 40,
     color: theme.palette.primary.main
   },
   wings: {

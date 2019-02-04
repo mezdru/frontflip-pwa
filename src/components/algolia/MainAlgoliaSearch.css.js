@@ -6,11 +6,9 @@ export const styles = theme => ({
   },
   suggestionsContainer: {
     position: 'relative',
-    // top: '50%',
     left: 0,
     right: 0,
     margin: 'auto',
-    // transform: 'translateY(-50%)',
   },
   profileContainer: {
     position: 'fixed',

@@ -1,18 +1,15 @@
-import { CircularProgress, withStyles, Grid, IconButton } from "@material-ui/core";
+import { CircularProgress, withStyles, Grid } from "@material-ui/core";
 import React, { Component } from 'react';
 import { inject, observer } from "mobx-react";
 import { InstantSearch, Hits, Configure } from "react-instantsearch-dom";
 import AutoCompleteSearchField from "./AutoCompleteSearchField";
 import { observe } from 'mobx';
-import { StickyContainer, Sticky } from 'react-sticky';
 import withWidth, { isWidthUp, isWidthDown } from '@material-ui/core/withWidth';
 import { styles } from './MainAlgoliaSearch.css'
 import ProfileLayout from "../profile/ProfileLayout";
 import { Redirect } from 'react-router-dom';
-import { ArrowBack } from "@material-ui/icons";
 import SearchSuggestions from "./SearchSuggestions";
 import Banner from '../../components/utils/banner/Banner';
-import Slide from '@material-ui/core/Slide';
 
 class MainAlgoliaSearch extends Component {
   constructor(props) {
@@ -117,15 +114,9 @@ class MainAlgoliaSearch extends Component {
             <div>
 
               <div  style={{
-                      width: ((((isWidthDown('md', this.props.width))) ||
-                        (isWidthDown('md', this.props.width))) ?
-                        '75%' : searchBarWidth),
-                      marginRight: ((((isWidthDown('md', this.props.width))) ||
-                        (isWidthDown('md', this.props.width))) ?
-                        16 : '')
-                    }}
-                    className={classes.searchBar}
-              > 
+                      width: ((((isWidthDown('md', this.props.width))) || (isWidthDown('md', this.props.width))) ? '75%' : searchBarWidth),
+                      marginRight: ((((isWidthDown('md', this.props.width))) || (isWidthDown('md', this.props.width))) ? 16 : '') }} 
+                    className={classes.searchBar} > 
                 <InstantSearch appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID}
                   indexName={process.env.REACT_APP_ALGOLIA_INDEX}
                   apiKey={algoliaKey} >
@@ -178,13 +169,13 @@ class MainAlgoliaSearch extends Component {
               </div>
             </div>
 
-          {((resultsType === 'profile') && (window.location.pathname !== rootUrl + '/' + displayedHit.tag)) && (
-            <Redirect push to={rootUrl + '/' + displayedHit.tag} />
-          )}
-          {resultsType === 'profile' && (
-              <ProfileLayout hit={displayedHit} addToFilters={this.addToFilters} className={classes.profileContainer}
-                  handleReturnToSearch={this.handleReturnToSearch}/>
-          )}
+            {((resultsType === 'profile') && (window.location.pathname !== rootUrl + '/' + displayedHit.tag)) && (
+              <Redirect push to={rootUrl + '/' + displayedHit.tag} />
+            )}
+            {resultsType === 'profile' && (
+                <ProfileLayout hit={displayedHit} addToFilters={this.addToFilters} className={classes.profileContainer}
+                    handleReturnToSearch={this.handleReturnToSearch}/>
+            )}
           </div>
       )
     } else {
