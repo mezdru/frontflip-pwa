@@ -1,16 +1,15 @@
-import { CircularProgress, withStyles, Grid, IconButton } from "@material-ui/core";
+import { CircularProgress, withStyles, Grid } from "@material-ui/core";
 import React, { Component } from 'react';
 import { inject, observer } from "mobx-react";
 import { InstantSearch, Hits, Configure } from "react-instantsearch-dom";
 import AutoCompleteSearchField from "./AutoCompleteSearchField";
 import { observe } from 'mobx';
-import { StickyContainer, Sticky } from 'react-sticky';
 import withWidth, { isWidthUp, isWidthDown } from '@material-ui/core/withWidth';
 import { styles } from './MainAlgoliaSearch.css'
 import ProfileLayout from "../profile/ProfileLayout";
 import { Redirect } from 'react-router-dom';
-import { ArrowBack } from "@material-ui/icons";
 import SearchSuggestions from "./SearchSuggestions";
+import Banner from '../../components/utils/banner/Banner';
 
 class MainAlgoliaSearch extends Component {
   constructor(props) {
@@ -22,7 +21,7 @@ class MainAlgoliaSearch extends Component {
       findByQuery: false,
       displayedHit: null,
       resultsType: this.props.resultsType || 'person',
-      shouldUpdateUrl: false
+      shouldUpdateUrl: false,
     }
     this.updateFilters = this.updateFilters.bind(this);
     this.addToFilters = this.addToFilters.bind(this);
@@ -68,21 +67,25 @@ class MainAlgoliaSearch extends Component {
     this.setState({ filters: newFilters, newFilter: {} });
   }
 
-  addToFilters(e, element) {
+  addToFilters(e, element, shouldAwaitToUpdateLayout) {
     e.preventDefault();
     this.setState({ newFilter: { label: element.name, value: element.tag } });
     if (this.state.resultsType === 'profile') {
-      this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true });
+      if(shouldAwaitToUpdateLayout) {
+        setTimeout(function() {this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true });}.bind(this), 600);
+      } else {
+        this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true });
+      }
     }
   }
 
   handleDisplayProfile(e, hit) {
     if (e) e.preventDefault();
-    this.setState({ displayedHit: hit, resultsType: 'profile' });
+    this.setState({ displayedHit: hit, resultsType: 'profile', displayIn: true });
   }
 
   handleReturnToSearch() {
-    this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true });
+    this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true, displayIn: false});
   }
 
   render() {
@@ -106,91 +109,74 @@ class MainAlgoliaSearch extends Component {
 
     if (algoliaKey) {
       return (
-        <StickyContainer style={{ width: '100%', position: 'relative' }} >
-          {resultsType === 'profile' && (
-            <IconButton aria-label="Edit" className={classes.returnButton} onClick={this.handleReturnToSearch}>
-              <ArrowBack fontSize="large" />
-            </IconButton>
-          )}
-          <div className={classes.searchBarMarginTop}></div>
+        <div style={{ width: '100%', position: 'relative' }}>
 
-          <div style={{ zIndex: 1199, position: 'relative' }}>
-            <Sticky topOffset={(isWidthUp('md', this.props.width)) ? 131 : 39} disableCompensation={(resultsType === 'profile' ? true : false)} >
-              {({ style, isSticky }) => (
-                <div style={{
-                  ...style,
-                  width: (((isSticky && (isWidthDown('md', this.props.width))) ||
-                    (isWidthDown('md', this.props.width) && (resultsType === 'profile'))) ?
-                    '75%' : searchBarWidth),
-                  transform: ((isSticky || (resultsType === 'profile')) ? '' : 'translateY(-50%)'),
-                  marginRight: (((isSticky && (isWidthDown('md', this.props.width))) ||
-                    (isWidthDown('md', this.props.width) && (resultsType === 'profile'))) ?
-                    16 : '')
-                }}
-                  className={(resultsType !== 'profile') ? classes.searchBar : classes.searchBarProfile}>
-                  <InstantSearch appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID}
-                    indexName={process.env.REACT_APP_ALGOLIA_INDEX}
-                    apiKey={algoliaKey} >
-                    <AutoCompleteSearchField updateFilters={this.updateFilters} newFilter={newFilter} />
-                  </InstantSearch>
-                </div>
-              )}
-            </Sticky>
+            <div>
+
+              <div  style={{
+                      width: ((((isWidthDown('md', this.props.width))) || (isWidthDown('md', this.props.width))) ? '75%' : searchBarWidth),
+                      marginRight: ((((isWidthDown('md', this.props.width))) || (isWidthDown('md', this.props.width))) ? 16 : '') }} 
+                    className={classes.searchBar} > 
+                <InstantSearch appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID}
+                  indexName={process.env.REACT_APP_ALGOLIA_INDEX}
+                  apiKey={algoliaKey} >
+                  <AutoCompleteSearchField updateFilters={this.updateFilters} newFilter={newFilter} />
+                </InstantSearch>
+              </div>
+
+              <Grid container item alignItems={"stretch"} >
+                  <Banner style={{filter: 'brightness(90%)'}}>
+                  <div style={{ width: searchBarWidth }} className={classes.suggestionsContainer}>
+                    <InstantSearch appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID}
+                      indexName={process.env.REACT_APP_ALGOLIA_INDEX}
+                      apiKey={algoliaKey}>
+                      <Configure facetFilters={filters.split(' AND ')} />
+                      <SearchSuggestions attribute="hashtags.tag" addToFilters={this.addToFilters} limit={7} currentFilters={filters} />
+                    </InstantSearch>
+                  </div>
+                  </Banner>
+              </Grid>
+            
+              <div className={classes.hitListContainer}>
+                {(shouldUpdateUrl && resultsType === 'person' && (window.location.pathname !== rootUrl)) && (<Redirect push to={rootUrl} />)}
+                <InstantSearch appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID}
+                  indexName={process.env.REACT_APP_ALGOLIA_INDEX}
+                  apiKey={algoliaKey}>
+                  {findByQuery && (
+                    <Configure query={filters} facetFilters={["type:person"]}
+                      highlightPreTag={"<span>"} highlightPostTag={"</span>"}
+                      attributesToHighlight={["intro:40", "description:40", "name:40"]} attributesToSnippet={["intro:8"]} />
+                  )}
+                  {!findByQuery && (
+                    // Return an intro of 12 words
+                    <Configure filters={filters} attributesToSnippet={["intro:12"]} />
+                  )}
+                  {HitComponent && (
+                    <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
+                      <Hits
+                        hitComponent={hit => (
+                          <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView}>
+                            <HitComponent hit={hit.hit} addToFilters={this.addToFilters} handleDisplayProfile={this.handleDisplayProfile} />
+                          </Grid>
+                        )}
+                        className={classes.hitList} />
+                    </Grid>
+                  )}
+                  {!HitComponent && (
+                    <Hits className={classes.hitList} />
+                  )}
+                </InstantSearch>
+              </div>
+            </div>
+
+            {((resultsType === 'profile') && (window.location.pathname !== rootUrl + '/' + displayedHit.tag)) && (
+              <Redirect push to={rootUrl + '/' + displayedHit.tag} />
+            )}
+            {resultsType === 'profile' && (
+                <ProfileLayout hit={displayedHit} addToFilters={this.addToFilters} className={classes.profileContainer}
+                    handleReturnToSearch={this.handleReturnToSearch}/>
+            )}
           </div>
-
-          {/* Search suggestions */}
-          {!findByQuery && (resultsType !== 'profile') && (
-            <div style={{ width: searchBarWidth }} className={classes.suggestionsContainer}>
-              <InstantSearch appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID}
-                indexName={process.env.REACT_APP_ALGOLIA_INDEX}
-                apiKey={algoliaKey}>
-                <Configure facetFilters={filters.split(' AND ')} />
-                <SearchSuggestions attribute="hashtags.tag" addToFilters={this.addToFilters} limit={7} currentFilters={filters} />
-              </InstantSearch>
-            </div>
-          )}
-
-          {/* Search results */}
-          {resultsType === 'person' && (
-            <div className={classes.hitListContainer}>
-              {(shouldUpdateUrl && (window.location.pathname !== rootUrl)) && (<Redirect push to={rootUrl} />)}
-              <InstantSearch appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID}
-                indexName={process.env.REACT_APP_ALGOLIA_INDEX}
-                apiKey={algoliaKey}>
-                {findByQuery && (
-                  <Configure query={filters} facetFilters={["type:person"]}
-                    highlightPreTag={"<span>"} highlightPostTag={"</span>"}
-                    attributesToHighlight={["intro:40", "description:40", "name:40"]} attributesToSnippet={["intro:8"]} />
-                )}
-                {!findByQuery && (
-                  // Return an intro of 12 words
-                  <Configure filters={filters} attributesToSnippet={["intro:12"]} />
-                )}
-                {HitComponent && (
-                  // <Grid container xs={12} sm={6}>
-                  <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
-                    <Hits
-                      hitComponent={hit => (
-                        <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView}>
-                          <HitComponent hit={hit.hit} addToFilters={this.addToFilters} handleDisplayProfile={this.handleDisplayProfile} />
-                        </Grid>
-                      )}
-                      className={classes.hitList} />
-                  </Grid>
-                )}
-                {!HitComponent && (
-                  <Hits className={classes.hitList} />
-                )}
-              </InstantSearch>
-            </div>
-          )}
-          {((resultsType === 'profile') && (window.location.pathname !== rootUrl + '/' + displayedHit.tag)) && (
-            <Redirect push to={rootUrl + '/' + displayedHit.tag} />
-          )}
-          {resultsType === 'profile' && (
-            <ProfileLayout hit={displayedHit} addToFilters={this.addToFilters} className={classes.hitListContainerWithoutMargin} />
-          )}
-        </StickyContainer>
       )
     } else {
       return (

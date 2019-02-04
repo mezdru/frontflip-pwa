@@ -4,14 +4,19 @@ import { withStyles, Chip } from '@material-ui/core'
 
 const style = theme => ({
   suggestionsContainer: {
-    textAlign: 'center',
-    maxHeight: 82,
-    overflow: 'hidden'
+    textAlign: 'left',
+    maxHeight: 112, // 48 * 2 + 8 + 8
+    overflow: 'hidden',
+    padding: '8px 0px',
+    marginLeft: '-8px',
   },
   suggestion: {
-    margin: 4,
-    padding: 3,
-    fontSize: '.6rem'
+    margin: 8,
+    background: 'white',
+    color: theme.palette.secondary.main,
+    '&:hover': {
+      background: 'rgb(220,220,220)'
+    }
   }
 });
 

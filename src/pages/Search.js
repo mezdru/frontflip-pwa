@@ -8,11 +8,7 @@ import Header from '../components/header/Header';
 import { Redirect } from "react-router-dom";
 
 const styles = {
-  searchBanner: {
-    position: 'absolute',
-    opacity: 0.8,
-    filter: 'blur(.5px)'
-  }
+
 };
 
 class Search extends React.Component {
@@ -38,9 +34,6 @@ class Search extends React.Component {
         <Header />
         <main>
           <Grid container direction={'column'} alignItems={'center'}>
-            <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner}>
-              <Banner />
-            </Grid>
             <MainAlgoliaSearch HitComponent={Card} profileTag={profileTag} />
           </Grid>
         </main>

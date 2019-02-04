@@ -9,6 +9,15 @@ const styles = theme => ({
     width: '100%',
     height: 166,
     boxShadow: '0 8px 20px -12px darkgrey',
+    [theme.breakpoints.up('md')]: {
+      height: 350,
+    },
+  },
+  rootBanner: {
+    position: 'absolute',
+    width: '100%',
+    height: 166,
+    boxShadow: '0 8px 20px -12px darkgrey',
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',
@@ -46,7 +55,11 @@ class Banner extends React.Component {
     const { source } = this.state;
 
     return (
-      <div className={this.props.classes.root} style={{ backgroundImage: `url(${source})`, ...this.props.style }} />
+      <div className={this.props.classes.root} >
+        <div style={{ backgroundImage: `url(${source})`, ...this.props.style }} className={this.props.classes.rootBanner}>
+        </div>
+        {this.props.children}
+      </div>
     )
   }
 }

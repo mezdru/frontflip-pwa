@@ -7,24 +7,25 @@ export const styles = theme => ({
       minHeight: 'unset'
     },
     [theme.breakpoints.up('sm')]: {
-      minHeight: 'calc(100vh - 247px)'
+      minHeight: 'calc(100vh - 175px)'
     },
     [theme.breakpoints.up('md')]: {
-      minHeight: 'calc(100vh - 429px)'
+      minHeight: 'calc(100vh - 357px)'
     },
     background: theme.palette.secondary.light,
     padding: 16
   },
   hashtagsPart: {
     position: 'relative',
+    background: 'white',
     [theme.breakpoints.down('sm')]: {
       minHeight: 'unset'
     },
     [theme.breakpoints.up('sm')]: {
-      minHeight: 'calc(100vh - 247px)'
+      minHeight: 'calc(100vh - 175px)'
     },
     [theme.breakpoints.up('md')]: {
-      minHeight: 'calc(100vh - 429px)'
+      minHeight: 'calc(100vh - 357px)'
     },
     padding: 16
   },
@@ -60,8 +61,6 @@ export const styles = theme => ({
     wordBreak: 'break-all',
   },
   buttonIcon: {
-    // width: 40,
-    // height: 40,
     color: theme.palette.primary.main
   },
   wings: {
@@ -90,5 +89,28 @@ export const styles = theme => ({
     textAlgin: 'center',
     width: 24,
     fontSize: 24
-  }
+  },
+  returnButton: {
+    position: 'absolute',
+    margin: 16,
+    background: 'white',
+    color: 'black'
+  },
+  profileContainerHide: {
+    position: 'fixed',
+    top: 0,
+    zIndex:99999,
+    width: '100%',
+    '& ul': {
+      listStyleType: 'none',
+      padding: 0,
+      marginTop: 0,
+    },
+    animationName: 'popOut',
+    animationDuration: '.6s'
+  },
+  '@keyframes popOut': {
+    from: { top: 0 },
+    to: { top: '100vh' }
+  },
 });

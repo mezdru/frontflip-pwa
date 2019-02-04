@@ -1,10 +1,6 @@
 export const styles = theme => ({
   hitListContainer: {
     position: 'relative',
-    top: 60,
-    [theme.breakpoints.up('md')]: {
-      top: 150,
-    },
     width: '100%',
     marginBottom: 150
   },
@@ -13,23 +9,40 @@ export const styles = theme => ({
     left: 0,
     right: 0,
     margin: 'auto',
-    top: 60,
-    [theme.breakpoints.up('md')]: {
-      top: 150,
-    },
   },
-  hitListContainerWithoutMargin: {
-    position: 'relative',
-    top: 86,
-    [theme.breakpoints.up('md')]: {
-      top: 176,
-    },
+  profileContainer: {
+    position: 'fixed',
+    top: 0,
+    zIndex:99999,
     width: '100%',
     '& ul': {
       listStyleType: 'none',
       padding: 0,
       marginTop: 0,
-    }
+    },
+    animationName: 'popIn',
+    animationDuration: '.6s'
+  },
+  profileContainerHide: {
+    position: 'fixed',
+    top: 0,
+    zIndex:99999,
+    width: '100%',
+    '& ul': {
+      listStyleType: 'none',
+      padding: 0,
+      marginTop: 0,
+    },
+    animationName: 'popIn',
+    animationDuration: '.6s'
+  },
+  '@keyframes popIn': {
+    from: { top: '100vh' },
+    to: { top: 0 }
+  },
+  '@keyframes popOut': {
+    from: { top: 0 },
+    to: { top: '100vh' }
   },
   '@keyframes fadeIn': {
     from: { opacity: 0 },
@@ -77,22 +90,6 @@ export const styles = theme => ({
     width: '100%'
   },
   searchBar: {
-    left: 0,
-    right: 0,
-    margin: 'auto',
-    zIndex: 1000,
-    marginTop: 8,
-    background: 'transparent',
-    width: '100%'
-  },
-  '@keyframes moveTop': {
-    from: { marginTop: 139 },
-    [theme.breakpoints.up('md')]: {
-      from: { marginTop: 231 }
-    },
-    to: { marginTop: 8 }
-  },
-  searchBarProfile: {
     position: 'fixed !important',
     top: 0,
     left: 0,
@@ -102,21 +99,11 @@ export const styles = theme => ({
     marginTop: 8,
     background: 'transparent',
     width: '100%',
-    animationName: 'moveTop',
-    animationDuration: '1s',
   },
-  searchBarMarginTop: {
-    position: 'static',
-    marginTop: 83, // bannerHeight / 2
-    [theme.breakpoints.up('md')]: {
-      marginTop: 175, // bannerHeight / 2
-    },
-    width: '100%',
-  },
-  returnButton: {
-    position: 'absolute',
-    margin: 16,
-    background: 'white',
-    color: 'black'
+
+  searchBanner: {
+    position: 'relative',
+    opacity: 0.8,
+    filter: 'blur(.5px) brightness(55%)'
   }
 });
