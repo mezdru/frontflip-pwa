@@ -207,7 +207,7 @@ class SearchableSelect extends Component {
       }),
       input: base => ({
         ...base,
-        padding: 0
+        padding: 0,
       }),
       multiValue: base => ({
         ...base,
@@ -217,6 +217,9 @@ class SearchableSelect extends Component {
         ...provided,
         padding: 0,
         margin: 0,
+        // maxHeight: !state.isFocused ? 42 : 3000,
+        overflow: 'auto',
+        maxHeight: 42
       }),
     };
 
