@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { AsyncCreatable } from 'react-select';
 import { connectAutoComplete } from 'react-instantsearch-dom';
-import {injectIntl} from 'react-intl';
-import {inject, observer} from 'mobx-react';
+import { injectIntl } from 'react-intl';
+import { inject, observer } from 'mobx-react';
 import './AutoCompleteSearchField.css';
 import classNames from 'classnames';
-import {withStyles,Chip} from '@material-ui/core'
+import { withStyles, Chip } from '@material-ui/core'
 
 class SearchableSelect extends Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class SearchableSelect extends Component {
     this.state = {
       inputValue: '',
       selectedOption: this.props.defaultValue,
-      placeholder: this.props.intl.formatMessage({id: 'algolia.search'}),
+      placeholder: this.props.intl.formatMessage({ id: 'algolia.search' }),
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
     };
 
@@ -27,12 +27,12 @@ class SearchableSelect extends Component {
 
   // Used to fetch an event: User click on a Wing, so we should add it to the search filters
   componentWillReceiveProps(nextProps) {
-    if(nextProps.newFilter.value && nextProps.newFilter.label){
-      if(this.state.selectedOption && !this.state.selectedOption.some(val => val.value === nextProps.newFilter.value)){
+    if (nextProps.newFilter.value && nextProps.newFilter.label) {
+      if (this.state.selectedOption && !this.state.selectedOption.some(val => val.value === nextProps.newFilter.value)) {
         let newSelectedOption = this.state.selectedOption;
         newSelectedOption.push(nextProps.newFilter);
         this.handleChange(newSelectedOption);
-      }else{
+      } else {
         this.handleChange([nextProps.newFilter]);
       }
     }
@@ -44,12 +44,12 @@ class SearchableSelect extends Component {
     let arrayOfLabel = [];
     array.forEach(hit => {
       let displayedName;
-      if(hit.type === 'hashtag'){
-        displayedName = (hit.name_translated ? (hit.name_translated[this.state.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag );
-      }else if(hit.type === 'person'){
+      if (hit.type === 'hashtag') {
+        displayedName = (hit.name_translated ? (hit.name_translated[this.state.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag);
+      } else if (hit.type === 'person') {
         displayedName = hit.name || hit.tag;
       }
-      arrayOfLabel.push({label: displayedName, value: hit.tag});
+      arrayOfLabel.push({ label: displayedName, value: hit.tag });
     });
     return arrayOfLabel;
   }
@@ -69,8 +69,8 @@ class SearchableSelect extends Component {
   }
 
   refineWithSelectedOptions(selectedOption) {
-    let optionsString= '';
-    if(selectedOption && selectedOption.length > 0) selectedOption.forEach(option => {optionsString += option.label + ' ';});    
+    let optionsString = '';
+    if (selectedOption && selectedOption.length > 0) selectedOption.forEach(option => { optionsString += option.label + ' '; });
     this.props.refine(optionsString);
   }
 
@@ -81,27 +81,27 @@ class SearchableSelect extends Component {
 
   // Handle input change (any change)
   handleInputChange(inputValue) {
-    if((!inputValue || inputValue === '') && (!this.state.selectedOption || this.state.selectedOption.length === 0)) this.props.refine();
+    if ((!inputValue || inputValue === '') && (!this.state.selectedOption || this.state.selectedOption.length === 0)) this.props.refine();
     return inputValue;
   }
 
   handleCreateOption(option) {
     let arrayOfOption = this.state.selectedOption || [];
     option = option.trim();
-    arrayOfOption.push({label: option, value: option});
+    arrayOfOption.push({ label: option, value: option });
     return this.handleChange(arrayOfOption);
   }
 
   noOptionsMessage(inputValue) {
-    if(inputValue.inputValue) return this.props.intl.formatMessage({id: 'algolia.noOptions'}, {input: inputValue.inputValue});
-    return this.props.intl.formatMessage({id: 'algolia.typeSomething'});
+    if (inputValue.inputValue) return this.props.intl.formatMessage({ id: 'algolia.noOptions' }, { input: inputValue.inputValue });
+    return this.props.intl.formatMessage({ id: 'algolia.typeSomething' });
   }
 
   createOptionMessage(inputValue) {
-    return this.props.intl.formatMessage({id: 'algolia.createOption'}, {input: inputValue});
+    return this.props.intl.formatMessage({ id: 'algolia.createOption' }, { input: inputValue });
   }
 
-  htmlDecode = function(input){
+  htmlDecode = function (input) {
     var e = document.createElement('textarea');
     e.innerHTML = input;
     return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
@@ -114,7 +114,7 @@ class SearchableSelect extends Component {
 
     const MultiValueContainer = (props) => {
       return (
-        <Chip label={props.children} color="secondary" onClick={props.onClick} className={'editableChip'}/>
+        <Chip label={props.children} color="secondary" onClick={props.onClick} className={'editableChip'} />
       );
     };
 
@@ -141,12 +141,12 @@ class SearchableSelect extends Component {
         ...base,
         // override border radius to match the box
         borderRadius: '30px',
-        overflow:'hidden',
+        overflow: 'hidden',
         hyphens: "auto",
         textAlign: "center",
         // prevent menu to scroll y
         wordWrap: "break-word",
- 
+
       }),
       menuList: base => ({
         ...base,
@@ -162,7 +162,7 @@ class SearchableSelect extends Component {
       }),
       valueContainer: (provided, state) => ({
         ...provided,
-        padding:0,
+        padding: 0,
         margin: 0,
       }),
     };
@@ -180,9 +180,9 @@ class SearchableSelect extends Component {
         loadOptions={this.getOptions}
         placeholder={placeholder}
         onChange={this.handleChange}
-        onInputChange={this.handleInputChange} 
+        onInputChange={this.handleInputChange}
         onCreateOption={this.handleCreateOption}
-        components={{MultiValueContainer}}
+        components={{ MultiValueContainer }}
         isMulti
       />
     );
@@ -192,6 +192,6 @@ class SearchableSelect extends Component {
 const AutoCompleteSearchField = connectAutoComplete(SearchableSelect);
 export default inject('commonStore')(
   injectIntl(observer(
-    withStyles(null, {withTheme: true})(AutoCompleteSearchField)
+    withStyles(null, { withTheme: true })(AutoCompleteSearchField)
   ))
 );

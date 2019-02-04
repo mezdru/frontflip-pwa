@@ -1,56 +1,56 @@
 import React from 'react'
-import {Grid, withStyles} from '@material-ui/core';
+import { Grid, withStyles } from '@material-ui/core';
 import Banner from '../components/utils/banner/Banner';
 import Card from '../components/card/CardProfile';
 import MainAlgoliaSearch from '../components/algolia/MainAlgoliaSearch';
-import {inject, observer} from "mobx-react";
+import { inject, observer } from "mobx-react";
 import Header from '../components/header/Header';
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 const styles = {
-    searchBanner: {
-        position: 'absolute',
-        opacity: 0.8,
-        filter: 'blur(.5px)'
-    }
+  searchBanner: {
+    position: 'absolute',
+    opacity: 0.8,
+    filter: 'blur(.5px)'
+  }
 };
 
 class Search extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
-        };
-    }
-    
-    render() {
-        const {locale} = this.state;
-        const {organisation} = this.props.organisationStore.values;
-        let profileTag = (this.props.match.params ? this.props.match.params.profileTag : null);
-        let redirecTo = null;
+  constructor(props) {
+    super(props);
+    this.state = {
+      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
+    };
+  }
 
-        if(profileTag && profileTag.charAt(0) !== '@') redirecTo = '/' + locale + '/' + organisation.tag;
+  render() {
+    const { locale } = this.state;
+    const { organisation } = this.props.organisationStore.values;
+    let profileTag = (this.props.match.params ? this.props.match.params.profileTag : null);
+    let redirecTo = null;
 
-        if(redirecTo) return (<Redirect to={redirecTo} />);
+    if (profileTag && profileTag.charAt(0) !== '@') redirecTo = '/' + locale + '/' + organisation.tag;
 
-        return (
-            <div>
-                <Header />
-                <main>
-                    <Grid container direction={'column'} alignItems={'center'}>
-                        <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner}>
-                            <Banner />
-                        </Grid>
-                        <MainAlgoliaSearch HitComponent={Card} profileTag={profileTag} />
-                    </Grid>
-                </main>
-            </div>
-        );
-    }
+    if (redirecTo) return (<Redirect to={redirecTo} />);
+
+    return (
+      <div>
+        <Header />
+        <main>
+          <Grid container direction={'column'} alignItems={'center'}>
+            <Grid container item alignItems={"stretch"} className={this.props.classes.searchBanner}>
+              <Banner />
+            </Grid>
+            <MainAlgoliaSearch HitComponent={Card} profileTag={profileTag} />
+          </Grid>
+        </main>
+      </div>
+    );
+  }
 }
 
 export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore')(
-    observer(
-        withStyles(styles)(Search)
-    )
+  observer(
+    withStyles(styles)(Search)
+  )
 );

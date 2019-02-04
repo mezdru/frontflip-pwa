@@ -1,43 +1,44 @@
 import React from 'react';
-import {Avatar} from '@material-ui/core';
-import { observe} from 'mobx';
-import {inject, observer} from "mobx-react";
+import { Avatar } from '@material-ui/core';
+import { observe } from 'mobx';
+import { inject, observer } from "mobx-react";
 const defaultLogo = 'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg';
 
-class Logo extends React.Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            type: this.props.type || 'organisation',
-            source: null
-        }
+class Logo extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      type: this.props.type || 'organisation',
+      source: null
     }
+  }
 
-    componentDidMount() {
-        if(this.state.type === 'organisation') {
-            this.setState({
-                source:
-                    ( (this.props.organisationStore.values.organisation.logo && this.props.organisationStore.values.organisation.logo.url) ? 
-                            this.props.organisationStore.values.organisation.logo.url : defaultLogo) });
-            
-            observe(this.props.organisationStore.values, 'organisation', (change) => {
-                let org = this.props.organisationStore.values.organisation;
-                this.setState({source: (org.logo && org.logo.url ? org.logo.url : defaultLogo)});
-            });
-        }
-    }
-    
-    render(){
-        const {source} = this.state;
+  componentDidMount() {
+    if (this.state.type === 'organisation') {
+      this.setState({
+        source:
+          ((this.props.organisationStore.values.organisation.logo && this.props.organisationStore.values.organisation.logo.url) ?
+            this.props.organisationStore.values.organisation.logo.url : defaultLogo)
+      });
 
-        return(
-            <Avatar src={source || this.props.src} alt="org-logo" className={this.props.className}/>
-        )
+      observe(this.props.organisationStore.values, 'organisation', (change) => {
+        let org = this.props.organisationStore.values.organisation;
+        this.setState({ source: (org.logo && org.logo.url ? org.logo.url : defaultLogo) });
+      });
     }
+  }
+
+  render() {
+    const { source } = this.state;
+
+    return (
+      <Avatar src={source || this.props.src} alt="org-logo" className={this.props.className} />
+    )
+  }
 }
 
 export default inject('organisationStore')(
-    observer(
-            Logo
-    )
+  observer(
+    Logo
+  )
 );
