@@ -5,51 +5,51 @@ import organisationStore from './organisation.store';
 
 class UserStore {
 
-    inProgress = false;
-    errors = null;
-    values = {
-        currentUser: {}
-    };
+  inProgress = false;
+  errors = null;
+  values = {
+    currentUser: {}
+  };
 
-    getCurrentUser() {
-        this.inProgress = true;
-        this.errors = null;
+  getCurrentUser() {
+    this.inProgress = true;
+    this.errors = null;
 
-        return agent.User.getCurrent()
-            .then(data => { 
-                this.values.currentUser = (data? data.user : {});
-                this.syncRecord();
-                return this.values.currentUser;
-            })
-            .catch(action((err) => {
-                this.errors = err.response && err.response.body && err.response.body.errors;
-                throw err;
-            }))
-            .finally(action(()=> { this.inProgress = false; }));
+    return agent.User.getCurrent()
+      .then(data => {
+        this.values.currentUser = (data ? data.user : {});
+        this.syncRecord();
+        return this.values.currentUser;
+      })
+      .catch(action((err) => {
+        this.errors = err.response && err.response.body && err.response.body.errors;
+        throw err;
+      }))
+      .finally(action(() => { this.inProgress = false; }));
+  }
+
+  syncRecord() {
+    if (!recordStore.values.record._id && organisationStore.values.organisation._id) {
+      let currentOrgAndRecord = this.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisationStore.values.organisation._id);
+      if (currentOrgAndRecord) {
+        recordStore.setRecordId(currentOrgAndRecord.record);
+        recordStore.getRecord();
+      }
     }
+  }
 
-    syncRecord() {
-        if(!recordStore.values.record._id && organisationStore.values.organisation._id){
-            let currentOrgAndRecord = this.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisationStore.values.organisation._id);
-            if(currentOrgAndRecord) {
-                recordStore.setRecordId(currentOrgAndRecord.record);
-                recordStore.getRecord();
-            }
-        }
-    }
-
-    forgetUser() {
-        this.currentUser = undefined;
-    }
+  forgetUser() {
+    this.currentUser = undefined;
+  }
 
 }
 decorate(UserStore, {
-    inProgress: observable,
-    errors: observable,
-    values: observable,
-    getCurrentUser: action,
-    updateUser: action,
-    forgetUser: action
+  inProgress: observable,
+  errors: observable,
+  values: observable,
+  getCurrentUser: action,
+  updateUser: action,
+  forgetUser: action
 });
 
 export default new UserStore();

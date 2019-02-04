@@ -6,16 +6,16 @@ import UrlService from './services/url.service';
 
 const superagent = superagentPromise(_superagent, global.Promise);
 //const API_ROOT_AUTH = 'https://auth-wingzy-staging.herokuapp.com';
-const locale = ( (process.env.NODE_ENV === 'production' || process.env.NODE_ENV ==='staging') ? (commonStore.getCookie('locale') || commonStore.locale) : 'en-UK');
+const locale = ((process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') ? (commonStore.getCookie('locale') || commonStore.locale) : 'en-UK');
 const API_ROOT_AUTH = process.env.REACT_APP_API_ROOT_AUTH;
 const API_ROOT = process.env.REACT_APP_API_ROOT + '/' + locale;
 
 const handleErrors = err => {
-    if (err && err.response && err.response.status === 401) {
-        authStore.logout();
-        window.location.href = UrlService.createUrl(window.location.host, '/signin', null);
-    }
-    return err;
+  if (err && err.response && err.response.status === 401) {
+    authStore.logout();
+    window.location.href = UrlService.createUrl(window.location.host, '/signin', null);
+  }
+  return err;
 };
 
 const responseBody = res => res.body;
@@ -24,86 +24,86 @@ const responseBody = res => res.body;
  * @description Set token to header
  */
 const tokenPlugin = req => {
-    if(commonStore.getAccessToken() ||commonStore.accessToken) {
-        req.set('Authorization', `Bearer `+ (commonStore.getAccessToken() ||commonStore.accessToken));
-    }
+  if (commonStore.getAccessToken() || commonStore.accessToken) {
+    req.set('Authorization', `Bearer ` + (commonStore.getAccessToken() || commonStore.accessToken));
+  }
 };
 
 /**
  * @description Create requests, will be used by all other actions in this file
  */
 const requests = {
-    del: (url) => {
-        return validateToken()
-        .then(()=>
-            superagent
-            .del((process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${url}`)
-            .use(tokenPlugin)
-            .end(handleErrors)
-            .then(responseBody)
-        );
-    },
-        
-    get: (url) => {
-        return validateToken()
-        .then(()=>
-            superagent
-            .get((process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${url}`)
-            .use(tokenPlugin)
-            .end(handleErrors)
-            .then(responseBody)
-        );
-    },
-        
-    put: (url, body) => {
-        return validateToken()
-        .then( () => 
-            superagent
-            .put((process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${url}`, body)
-            .use(tokenPlugin)
-            .end(handleErrors)
-            .then(responseBody)
-        );
-    },
+  del: (url) => {
+    return validateToken()
+      .then(() =>
+        superagent
+          .del((process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${url}`)
+          .use(tokenPlugin)
+          .end(handleErrors)
+          .then(responseBody)
+      );
+  },
 
-    post: (url, body) => {
-        return validateToken()
-        .then( () => 
-            superagent
-            .post((process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${url}`, body)
-            .use(tokenPlugin)
-            .end(handleErrors)
-            .then(responseBody)
-        );
-    },
+  get: (url) => {
+    return validateToken()
+      .then(() =>
+        superagent
+          .get((process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${url}`)
+          .use(tokenPlugin)
+          .end(handleErrors)
+          .then(responseBody)
+      );
+  },
+
+  put: (url, body) => {
+    return validateToken()
+      .then(() =>
+        superagent
+          .put((process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${url}`, body)
+          .use(tokenPlugin)
+          .end(handleErrors)
+          .then(responseBody)
+      );
+  },
+
+  post: (url, body) => {
+    return validateToken()
+      .then(() =>
+        superagent
+          .post((process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${url}`, body)
+          .use(tokenPlugin)
+          .end(handleErrors)
+          .then(responseBody)
+      );
+  },
 };
 
 /**
  * @description Get new access token if the older one is expired
  */
 let validateToken = () => {
-    if (commonStore.getRefreshToken() && !commonStore.getAccessToken()) {
-        return new Promise( (resolve, reject) => {
-            superagent.post(
-                (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${API_ROOT_AUTH}/locale`,
-                {
-                    client_id: 'frontflip',
-                    client_secret: 'abcd1234',
-                    grant_type: 'refresh_token',
-                    refresh_token: commonStore.getRefreshToken()
-                }
-            )
-            .end(handleErrors)
-            .then((response)=>{
-                commonStore.setAuthTokens(JSON.parse(response.text));
-                resolve(); 
-            }).catch((err) => {
-                authStore.logout();
-            });
+  if (commonStore.getRefreshToken() && !commonStore.getAccessToken()) {
+    return new Promise((resolve, reject) => {
+      superagent.post(
+        (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${API_ROOT_AUTH}/locale`,
+        {
+          client_id: 'frontflip',
+          client_secret: 'abcd1234',
+          grant_type: 'refresh_token',
+          refresh_token: commonStore.getRefreshToken()
+        }
+      )
+        .end(handleErrors)
+        .then((response) => {
+          commonStore.setAuthTokens(JSON.parse(response.text));
+          resolve();
+        }).catch((err) => {
+          authStore.logout();
         });
-    }else{
-        return Promise.resolve();
-    }
+    });
+  } else {
+    return Promise.resolve();
+  }
 };
 
 /**
@@ -114,136 +114,136 @@ let validateToken = () => {
  *              1 User can have many Organisation
  */
 const Auth = {
-    login: (email, password) => 
-        requests.post(
-            `${API_ROOT_AUTH}/locale`,
-            {
-                username: email,
-                password: password,
-                client_id: 'frontflip',
-                client_secret: 'abcd1234',
-                grant_type: 'password'
-            }
-        ),
-    register: (email, password) =>
-        requests.post(
-            `${API_ROOT_AUTH}/register`,
-            {
-                email: email,
-                password: password
-            }
-        ),
-    registerToOrg: (orgId, invitationCode) =>
-        requests.post(
-            `${API_ROOT_AUTH}/register/organisation/`+orgId+`/`+(invitationCode ? invitationCode : '')
-        )
+  login: (email, password) =>
+    requests.post(
+      `${API_ROOT_AUTH}/locale`,
+      {
+        username: email,
+        password: password,
+        client_id: 'frontflip',
+        client_secret: 'abcd1234',
+        grant_type: 'password'
+      }
+    ),
+  register: (email, password) =>
+    requests.post(
+      `${API_ROOT_AUTH}/register`,
+      {
+        email: email,
+        password: password
+      }
+    ),
+  registerToOrg: (orgId, invitationCode) =>
+    requests.post(
+      `${API_ROOT_AUTH}/register/organisation/` + orgId + `/` + (invitationCode ? invitationCode : '')
+    )
 };
 
 const User = {
-    getCurrent: () =>
-        requests.get(
-            API_ROOT+'/api/users/current'
-        ),
-    updateCurrent: (user) => 
-        requests.put(
-            API_ROOT+'/api/users/',
-            {
-                user: user
-            }
-        ),
-    update: (userId, user) =>
-        requests.put(
-            API_ROOT+'/api/users/'+userId,
-            {
-                user: user
-            }
-        )
+  getCurrent: () =>
+    requests.get(
+      API_ROOT + '/api/users/current'
+    ),
+  updateCurrent: (user) =>
+    requests.put(
+      API_ROOT + '/api/users/',
+      {
+        user: user
+      }
+    ),
+  update: (userId, user) =>
+    requests.put(
+      API_ROOT + '/api/users/' + userId,
+      {
+        user: user
+      }
+    )
 }
 
 const Record = {
-    get: (recordId) => 
-        requests.get(
-            API_ROOT+'/api/profiles/'+recordId
-        ),
-    getByTag: (recordTag, orgId) =>
-        requests.get(
-            API_ROOT+'/api/profiles/tag/'+recordTag+'/organisation/'+orgId
-        ),
-    post: (orgId, record) => 
-        requests.post(
-            API_ROOT+'/api/profiles/',
-            {
-                orgId: orgId,
-                record: record
-            }
-        ),
-    put: (orgId, recordId, record) => 
-        requests.put(
-            API_ROOT+'/api/profiles/'+recordId,
-            {
-                orgId: orgId,
-                record: record
-            }
-        ),
-    delete: (recordId) => 
-        requests.del(
-            API_ROOT+'/api/profiles/'+recordId
-        )
+  get: (recordId) =>
+    requests.get(
+      API_ROOT + '/api/profiles/' + recordId
+    ),
+  getByTag: (recordTag, orgId) =>
+    requests.get(
+      API_ROOT + '/api/profiles/tag/' + recordTag + '/organisation/' + orgId
+    ),
+  post: (orgId, record) =>
+    requests.post(
+      API_ROOT + '/api/profiles/',
+      {
+        orgId: orgId,
+        record: record
+      }
+    ),
+  put: (orgId, recordId, record) =>
+    requests.put(
+      API_ROOT + '/api/profiles/' + recordId,
+      {
+        orgId: orgId,
+        record: record
+      }
+    ),
+  delete: (recordId) =>
+    requests.del(
+      API_ROOT + '/api/profiles/' + recordId
+    )
 
 };
 
 const Organisation = {
-    getForPublic: (orgTag) =>
-        requests.get(
-            API_ROOT+'/api/organisations/'+orgTag+'/forpublic'
-        ),
-    getAlgoliaKey: (orgId, isPublic) =>
-        requests.get(
-            API_ROOT+'/api/organisations/'+ orgId +'/algolia/'+(isPublic?'public':'private')
-        ),
-    get: (orgId) =>
-        requests.get(
-            API_ROOT+'/api/organisations/'+ orgId
-        )
+  getForPublic: (orgTag) =>
+    requests.get(
+      API_ROOT + '/api/organisations/' + orgTag + '/forpublic'
+    ),
+  getAlgoliaKey: (orgId, isPublic) =>
+    requests.get(
+      API_ROOT + '/api/organisations/' + orgId + '/algolia/' + (isPublic ? 'public' : 'private')
+    ),
+  get: (orgId) =>
+    requests.get(
+      API_ROOT + '/api/organisations/' + orgId
+    )
 }
 
 /**
  * @description Email API
  */
 const Email = {
-    confirmLoginEmail: (orgTag) => 
-        requests.post(
-            API_ROOT+'/api/emails/confirmation/' + (orgTag ? orgTag : '')
-        ),
-    passwordForgot: (userEmail) => 
-        requests.post(
-            API_ROOT+'/api/emails/password',
-            {
-                userEmail: userEmail
-            }
-        ),
-    updatePassword: (token, hash, password) =>
-        requests.post(
-            API_ROOT_AUTH+'/password/reset/'+token+'/'+hash,
-            {
-                password: password
-            }
-        )
-}   
+  confirmLoginEmail: (orgTag) =>
+    requests.post(
+      API_ROOT + '/api/emails/confirmation/' + (orgTag ? orgTag : '')
+    ),
+  passwordForgot: (userEmail) =>
+    requests.post(
+      API_ROOT + '/api/emails/password',
+      {
+        userEmail: userEmail
+      }
+    ),
+  updatePassword: (token, hash, password) =>
+    requests.post(
+      API_ROOT_AUTH + '/password/reset/' + token + '/' + hash,
+      {
+        password: password
+      }
+    )
+}
 
 /**
  * @description Test get user with secure call to API
  */
 const Test = {
-    getUser: () => 
+  getUser: () =>
     requests.get('/test/secure')
 };
 
 export default {
-    Auth,
-    Test,
-    Record,
-    Organisation,
-    User,
-    Email
+  Auth,
+  Test,
+  Record,
+  Organisation,
+  User,
+  Email
 }
