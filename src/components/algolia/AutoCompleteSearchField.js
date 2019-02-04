@@ -125,7 +125,7 @@ class SearchableSelect extends Component {
         borderRadius: '30px',
         boxSizing: 'content-box',
         // Overwrittes the different states of border
-        border: state.isFocused ? "2px solid #dd362e" : "2px solid black",
+        border: state.isFocused ? "1px solid #dd362e" : "1px solid grey",
         // Removes weird border around container
         boxShadow: state.isFocused ? null : null,
         "&:hover": {

@@ -1,18 +1,20 @@
-import React from 'react'
-import { inject, observer } from 'mobx-react';
-import { Grid, withStyles, Typography, IconButton, Button } from '@material-ui/core';
+import { Button, Grid, IconButton, Typography, withStyles } from '@material-ui/core';
 import { Edit } from '@material-ui/icons';
-import '../../resources/stylesheets/font-awesome.min.css';
-import Logo from '../../components/utils/logo/Logo';
-import Wings from '../utils/wing/Wing';
-import defaultPicture from '../../resources/images/placeholder_person.png';
-import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
-import './ContactsColors.css';
-import { FormattedMessage, injectIntl } from 'react-intl';
 import classNames from 'classnames';
-import UrlService from '../../services/url.service';
-import { styles } from './ProfileLayout.css';
+import { inject, observer } from 'mobx-react';
+import React from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import twemoji from 'twemoji';
+import Logo from '../../components/utils/logo/Logo';
+import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
+import defaultPicture from '../../resources/images/placeholder_person.png';
+import '../../resources/stylesheets/font-awesome.min.css';
+import UrlService from '../../services/url.service';
+import Wings from '../utils/wing/Wing';
+import './ContactsColors.css';
+import { styles } from './ProfileLayout.css';
+import Banner from '../../components/utils/banner/Banner';
+import {Clear} from '@material-ui/icons'
 
 const EXTRA_LINK_LIMIT = 20;
 
@@ -23,11 +25,13 @@ class ProfileLayout extends React.Component {
     super(props);
     this.state = {
       canEdit: false,
-      record: null
+      record: null,
+      displayIn: true,
     }
 
     this.transformLinks = this.transformLinks.bind(this);
     this.canEdit = this.canEdit.bind(this);
+    this.handleReturnToSearch = this.handleReturnToSearch.bind(this);
   }
 
   canEdit(workingRecord) {
@@ -38,6 +42,7 @@ class ProfileLayout extends React.Component {
   }
 
   transformLinks(item) {
+    if(!item) return;
     item.links = item.links || [];
     item.links.forEach(function (link, index, array) {
       this.makeLinkDisplay(link);
@@ -114,6 +119,7 @@ class ProfileLayout extends React.Component {
   }
 
   makeHightlighted = function (item) {
+    if(!item) return;
     let filters = this.props.commonStore.getSearchFilters() || this.props.commonStore.searchFilters;
     if (filters && filters.length > 0 && item.hashtags && item.hashtags.length > 0) {
       item.hashtags.forEach((hashtag, index) => {
@@ -123,7 +129,7 @@ class ProfileLayout extends React.Component {
   };
 
   orderHashtags = function (item) {
-    if (!item.hashtags) return;
+    if (!item || !item.hashtags) return;
     var highlighted = [];
     var notHighlighted = [];
     item.hashtags.forEach(function (hashtag) {
@@ -140,6 +146,7 @@ class ProfileLayout extends React.Component {
   }
 
   componentDidMount() {
+    if(!this.props.hit) return;
     this.props.recordStore.setRecordTag(this.props.hit.tag);
     this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
     this.props.recordStore.getRecordByTag()
@@ -149,9 +156,19 @@ class ProfileLayout extends React.Component {
       })
   };
 
+  handleReturnToSearch(e, element) {
+    this.setState({displayIn: false}, () => {
+      if(!element) {
+        setTimeout(function() {this.props.handleReturnToSearch();}.bind(this), 600);
+      }else {
+        this.props.addToFilters(e, element, true);
+      }
+    });
+  }
+
   render() {
     const { hit, className, classes, theme, addToFilters } = this.props;
-    const { canEdit, record } = this.state;
+    const { canEdit, record, displayIn } = this.state;
     const { locale } = this.props.commonStore;
     const orgTag = this.props.organisationStore.values.organisation.tag;
 
@@ -163,7 +180,18 @@ class ProfileLayout extends React.Component {
     if (!currentHit) return (<div></div>);
 
     return (
-      <Grid container className={className} >
+      // <Slide direction="up" in={displayIn} mountOnEnter unmountOnExit timeout={600}>
+      <Grid container className={(displayIn ? className : classes.profileContainerHide)} >
+
+
+        <Grid container item alignItems={"stretch"} >
+          <Banner>
+            <IconButton aria-label="Edit" className={classes.returnButton} onClick={this.handleReturnToSearch}>
+              <Clear fontSize="large" />
+            </IconButton>
+          </Banner>
+        </Grid>
+
         <Grid item xs={12} sm={6} lg={3} className={classes.generalPart} >
           <Grid item>
             <Logo type={'person'} className={classes.logo} src={this.getPicturePath(currentHit.picture) || defaultPicture} />
@@ -215,7 +243,7 @@ class ProfileLayout extends React.Component {
               return (
                 <Wings src={this.getPicturePath(hashtag.picture) || defaultHashtagPicture}
                   label={this.htmlDecode(displayedName)} key={hashtag.tag}
-                  onClick={(e) => addToFilters(e, { name: displayedName, tag: hashtag.tag })}
+                  onClick={(e) => this.handleReturnToSearch(e, { name: displayedName, tag: hashtag.tag })}
                   className={(hashtag.class ? hashtag.class : 'notHighlighted')} />
               )
             })}
