@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { AsyncCreatable } from 'react-select';
+import { AsyncCreatable, components } from 'react-select';
 import { connectAutoComplete } from 'react-instantsearch-dom';
 import { injectIntl } from 'react-intl';
 import { inject, observer } from 'mobx-react';
 import './AutoCompleteSearchField.css';
 import classNames from 'classnames';
-import { withStyles, Chip } from '@material-ui/core'
+import { withStyles, Chip } from '@material-ui/core';
+import {Search} from '@material-ui/icons';
 
 class SearchableSelect extends Component {
   constructor(props) {
@@ -14,7 +15,8 @@ class SearchableSelect extends Component {
       inputValue: '',
       selectedOption: this.props.defaultValue,
       placeholder: this.props.intl.formatMessage({ id: 'algolia.search' }),
-      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
+      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
+      inputValue: ''
     };
 
     this.getOptions = this.getOptions.bind(this);
@@ -23,6 +25,7 @@ class SearchableSelect extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.createOptionMessage = this.createOptionMessage.bind(this);
     this.handleCreateOption = this.handleCreateOption.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
   }
 
   // Used to fetch an event: User click on a Wing, so we should add it to the search filters
@@ -61,7 +64,8 @@ class SearchableSelect extends Component {
   handleChange(selectedOption) {
     this.props.commonStore.setSearchFilters(selectedOption);
     this.setState({
-      selectedOption: selectedOption
+      selectedOption: selectedOption,
+      inputValue: ''
     }, () => {
       this.refineWithSelectedOptions(selectedOption);
       this.props.updateFilters(selectedOption);
@@ -107,9 +111,49 @@ class SearchableSelect extends Component {
     return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
   }
 
+  handleSearchClick(props) {
+    console.log(props);
+    console.log('this is the value inside search bar : ' + props.selectProps.inputValue);
+    if(props.selectProps.inputValue.trim() !== '') {
+      this.handleCreateOption(props.selectProps.inputValue);
+    }
+  }
+
+  onInputChange = (inputValue, { action }) => {
+    console.log(inputValue, action);
+    switch (action) {
+      case 'input-change':
+        this.setState({ inputValue });
+        return;
+      case 'menu-close':
+        console.log(this.state.inputValue);
+        let menuIsOpen = undefined;
+        if (this.state.inputValue) {
+          menuIsOpen = true;
+        }
+        this.setState({
+          menuIsOpen
+        });
+        return;
+      default:
+        return;
+    }
+  }
+
+  onKeyDown(event, props) {
+    switch (event.keyCode) {
+        case 13: // ENTER
+            event.preventDefault();
+            console.log('enter pressed');
+            this.handleSearchClick({selectProps: {inputValue: this.state.inputValue}});
+            break;
+    }
+}
+
+
   render() {
     const { defaultOptions, intl, theme } = this.props;
-    const { selectedOption, placeholder } = this.state;
+    const { selectedOption, placeholder, inputValue } = this.state;
 
 
     const MultiValueContainer = (props) => {
@@ -117,6 +161,15 @@ class SearchableSelect extends Component {
         <Chip label={props.children} color="secondary" onClick={props.onClick} className={'editableChip'} />
       );
     };
+
+    const DropdownIndicator = (props) => {
+      return (
+        <components.DropdownIndicator {...props}>
+          <Search onClick={(e) => {this.handleSearchClick(props)}} />
+        </components.DropdownIndicator>
+      );
+    };
+    
 
     const customStyles = {
       control: (base, state) => ({
@@ -133,7 +186,7 @@ class SearchableSelect extends Component {
           borderColor: state.isFocused ? "#dd362e" : "black",
           boxSizing: 'content-box'
         },
-        padding: '3px 8px 3px 8px',
+        padding: '3px 16px',
         minHeight: 46,
         fontSize: 16
       }),
@@ -182,8 +235,16 @@ class SearchableSelect extends Component {
         onChange={this.handleChange}
         onInputChange={this.handleInputChange}
         onCreateOption={this.handleCreateOption}
-        components={{ MultiValueContainer }}
+        components={{ MultiValueContainer, DropdownIndicator }}
         isMulti
+        onSelectResetsInput={true}
+        onBlurResetsInput={true}
+        onCloseResetsInput={false}
+        arrowRenderer={() => null}
+        clearRenderer={() => null}
+        inputValue={inputValue}
+        onInputChange={this.onInputChange}
+        onKeyDown={this.onKeyDown}
       />
     );
   }
