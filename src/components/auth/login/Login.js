@@ -31,7 +31,6 @@ class Login extends React.Component {
     
     handleSubmitForm = (e) => {
         e.preventDefault();
-        console.log('submit form')
         this.props.authStore.login()
             .then((response) => {
                 if (response === 200) {
@@ -60,12 +59,12 @@ class Login extends React.Component {
     
     render() {
         const {values, inProgress} = this.props.authStore;
-        const {organisation} = this.props.organisationStore.values;
+        const {organisation, orgTag} = this.props.organisationStore.values;
         let {loginErrors, locale, redirectTo, isAuth} = this.state;
         let intl = this.props.intl;
 
         if (redirectTo) return <Redirect to={redirectTo}/>;
-        else if (isAuth) return <Redirect to={'/'+locale+(this.props.organisationStore.values.orgTag ? '/'+this.props.organisationStore.values.orgTag : '')}/>;
+        else if (isAuth) return <Redirect to={'/'+locale+(orgTag ? '/'+orgTag : '')}/>;
         else {
             return (
                 <form onSubmit={this.handleSubmitForm}>
@@ -124,7 +123,7 @@ class Login extends React.Component {
                         <Grid item container justify="center">
                             <Grid item>
                                 <Button component={ Link } 
-                                        to={"/" + locale + ( (organisation && organisation.tag) ? '/'+organisation.tag:'') + "/password/forgot"} 
+                                        to={"/" + locale + ( (orgTag) ? '/'+orgTag:'') + "/password/forgot"} 
                                         variant="text"
                                 >
                                     <FormattedMessage id="I don't have my password"/>

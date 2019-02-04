@@ -1,5 +1,5 @@
 import React from 'react';
-import {Avatar, withStyles, Typography} from '@material-ui/core';
+import {Avatar, withStyles, Typography, Button, ListItem, List} from '@material-ui/core';
 import {inject, observer} from "mobx-react";
 import Logo from '../logo/Logo';
 import {Link} from 'react-router-dom';
@@ -12,16 +12,13 @@ const style = theme => ({
         width: '33%',
         textAlign: 'center',
         padding: 8,
-        paddingTop: 0,
     },
     orgsContainer: {
         position: 'relative',
         width: '100%',
         listStyleType: 'none',
-        padding:0,
         textAlign: 'left',
-        paddingLeft: 8,
-        paddingRight: 8,
+        padding: 8,
     },
     itemLogo: {
         position: 'relative',
@@ -43,7 +40,7 @@ const style = theme => ({
         position: 'absolute',
         top: '50%',
         transform: 'translateY(-50%)',
-        height:'30%',
+        height:'15%',
         right:0,
         borderRight: '1px solid rgba(0, 0, 0, 0.12)'
     }
@@ -63,25 +60,26 @@ class OrganisationsList extends React.Component{
     }
     
     render(){
-        const {currentUserOrganisations} = this.props.organisationStore.values;
+        const {currentUserOrganisations, orgTag} = this.props.organisationStore.values;
         const {locale} = this.props.commonStore;
         const {classes} = this.props;
 
         return(
-            <ul className={classes.orgsContainer}>
-                {currentUserOrganisations.map((org, i) => {return (
-                    <Link to={'/' + locale + '/' + org.tag} key={org._id}>
-                        <li className={classes.orgItem}>
-                            <Logo type={'smallOrg'} alt={org.name} src={org.logo.url || defaultLogo} className={classes.itemLogo} />
-                            <div className={classes.itemName} >{org.name}</div>
-                            { (((i+1)%3 !== 0) && currentUserOrganisations.length > i+1) && (
-                                <div className={classes.borderBox}></div>
-                            )}
-                        </li>
-                    </Link>
-
-                );})}
-            </ul>
+          <List className={classes.orgsContainer}>
+              {currentUserOrganisations.map((org, i) => {
+                if(org.tag !== orgTag) {
+                  return (
+                    <ListItem button component={Link} to={'/' + locale + '/' + org.tag} key={org._id} className={classes.orgItem}>
+                        <Logo type={'smallOrg'} alt={org.name} src={org.logo.url || defaultLogo} className={classes.itemLogo} />
+                        <div className={classes.itemName} >{org.name}</div>
+                        { (((i+1)%3 !== 0) && currentUserOrganisations.length > i+1) && (
+                          <div className={classes.borderBox}></div>
+                        )}
+                    </ListItem>
+                  );
+                }
+              })}
+          </List>
         )
     }
 }
