@@ -72,7 +72,7 @@ class App extends Component {
                                 {record._id && (
                                     <div>
                                         <List className={'leftSubmenu'}>
-                                            <ListItem>
+                                            <ListItem >
                                                 <ListItemAvatar>
                                                     <Logo type={'person'} src={this.getPicturePath(record.picture) || defaultPicture} alt={record.name || record.tag} />
                                                 </ListItemAvatar>
@@ -80,7 +80,7 @@ class App extends Component {
                                                                 primaryTypographyProps={{variant:'button', noWrap: true, style: {fontWeight: 'bold'}}} />
                                             </ListItem>
 
-                                            <ListItem button component={Link} to={'/' +locale + '/' + organisation.tag + '/' + record.tag} >
+                                            <ListItem button component={Link} to={'/' +locale + '/' + organisation.tag + '/' + record.tag} onClick={this.props.handleDrawerClose}>
                                                 <ListItemText primary={intl.formatMessage({id: 'menu.drawer.profile'})} />
                                             </ListItem>
 
@@ -97,7 +97,7 @@ class App extends Component {
                                 )}
 
                                 <List className={'leftSubmenu'}>
-                                    <ListItem>
+                                    <ListItem onClick={this.props.handleDrawerClose} component={Link} to={'/' + locale + '/' + organisation.tag }>
                                         <ListItemAvatar>
                                             <Logo type={'organisation'} alt={organisation.name} />
                                         </ListItemAvatar>
