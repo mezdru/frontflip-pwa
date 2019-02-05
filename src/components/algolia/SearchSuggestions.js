@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connectMenu } from 'react-instantsearch-dom';
 import { withStyles, Chip } from '@material-ui/core'
-import { green } from '@material-ui/core/colors';
 
 const style = theme => ({
   suggestionsContainer: {
@@ -21,7 +20,7 @@ const style = theme => ({
     },
   },
   suggestionCount: {
-    background: theme.palette.primary.main,
+    background: theme.palette.secondary.light,
     color: 'white',
     borderRadius: '50%',
     width: 32,
