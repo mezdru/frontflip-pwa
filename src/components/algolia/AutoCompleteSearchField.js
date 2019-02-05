@@ -207,7 +207,8 @@ class SearchableSelect extends Component {
         },
         padding: '3px 16px',
         minHeight: 46,
-        fontSize: 16
+        fontSize: 16,
+        background: '#f8f8f8'
       }),
       menu: base => ({
         ...base,
