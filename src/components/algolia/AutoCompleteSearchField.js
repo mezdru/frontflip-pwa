@@ -47,18 +47,37 @@ class SearchableSelect extends Component {
     let arrayOfLabel = [];
     array.forEach(hit => {
       let displayedName;
+      let displayedNameText;
       if (hit.type === 'hashtag') {
-        displayedName = (hit.name_translated ? (hit.name_translated[this.state.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag);
+        displayedNameText = this.getTextLabel(hit);
+        if(hit._highlightResult && hit._highlightResult.name && hit._highlightResult.name.value) {
+          displayedName = hit._highlightResult.name.value;
+        } else if(hit._highlightResult && hit._highlightResult.tag && hit._highlightResult.tag.value){
+          displayedName = hit._highlightResult.tag.value;
+        } else {
+          displayedName = this.getTextLabel(hit);
+        }
       } else if (hit.type === 'person') {
-        displayedName = hit.name || hit.tag;
+        displayedNameText = hit.name || hit.tag;
+        if(hit._highlightResult && hit._highlightResult.name && hit._highlightResult.name.value) {
+          displayedName = hit._highlightResult.name.value
+        } else {
+          displayedName = hit.name || hit.tag;
+        }
       }
-      arrayOfLabel.push({ label: displayedName, value: hit.tag });
+      arrayOfLabel.push({ label: displayedName, value: hit.tag, labelText: displayedNameText });
     });
     return arrayOfLabel;
   }
 
+  getTextLabel(hit) {
+    if(!hit) return '';
+    return (hit.name_translated ? 
+      (hit.name_translated[this.state.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag);
+  }
+
   getOptionValue = (option) => option.value;
-  getOptionLabel = (option) => this.htmlDecode(option.label);
+  getOptionLabel = (option) => this.htmlDecode(option.labelText || option.label);
 
   // when option is selected
   handleChange(selectedOption) {
@@ -145,7 +164,6 @@ class SearchableSelect extends Component {
     }
 }
 
-
   render() {
     const { defaultOptions, intl, theme } = this.props;
     const { selectedOption, placeholder, inputValue } = this.state;
@@ -164,8 +182,16 @@ class SearchableSelect extends Component {
         </components.DropdownIndicator>
       );
     };
-    
 
+    const Option = props => {
+      const { innerProps, innerRef } = props;
+      return (
+        <div ref={innerRef} {...innerProps} className="custom-option">
+          <span dangerouslySetInnerHTML={{__html: props.data.label}}></span>
+        </div>
+      );
+    };
+    
     const customStyles = {
       control: (base, state) => ({
         ...base,
@@ -227,7 +253,7 @@ class SearchableSelect extends Component {
         onChange={this.handleChange}
         onInputChange={this.handleInputChange}
         onCreateOption={this.handleCreateOption}
-        components={{ MultiValueContainer, DropdownIndicator }}
+        components={{ MultiValueContainer, DropdownIndicator, Option }}
         isMulti
         onSelectResetsInput={true}
         onBlurResetsInput={true}

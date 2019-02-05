@@ -120,6 +120,7 @@ class MainAlgoliaSearch extends Component {
                 <InstantSearch appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID}
                   indexName={process.env.REACT_APP_ALGOLIA_INDEX}
                   apiKey={algoliaKey} >
+                  <Configure highlightPreTag={"<span>"} highlightPostTag={"</span>"} />
                   <AutoCompleteSearchField updateFilters={this.updateFilters} newFilter={newFilter} />
                 </InstantSearch>
               </div>
