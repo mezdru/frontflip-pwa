@@ -16,6 +16,9 @@ export const styles = theme => ({
   },
   title: {
     lineHeight: '50%',
+    [theme.breakpoints.down('sm')] : {
+      display : 'none'
+    }
   },
   sectionDesktop: {
     display: 'none',
