@@ -100,12 +100,15 @@ class MainAlgoliaSearch extends Component {
     let rootUrl = '/' + locale + (orgTag ? '/' + orgTag : '');
 
     let searchBarWidth;
+    // xs={12} sm={8} md={6} lg={4} 
     if (isWidthUp('lg', this.props.width)) {
       searchBarWidth = (4 / 12) * 100 + '%';
-    } else if (isWidthUp('sm', this.props.width)) {
+    }else if (isWidthUp('md', this.props.width)) {
       searchBarWidth = (6 / 12) * 100 + '%';
+    } else if (isWidthUp('sm', this.props.width)) {
+      searchBarWidth = (8 / 12) * 100 + '%';
     } else if (isWidthUp('xs', this.props.width)) {
-      searchBarWidth = (10 / 12) * 100 + '%';
+      searchBarWidth = 'calc(100% - 32px)';
     }
 
     if (algoliaKey) {
@@ -117,8 +120,8 @@ class MainAlgoliaSearch extends Component {
             <div>
 
               <div  style={{
-                      width: ((((isWidthDown('md', this.props.width))) || (isWidthDown('md', this.props.width))) ? '75%' : searchBarWidth),
-                      marginRight: ((((isWidthDown('md', this.props.width))) || (isWidthDown('md', this.props.width))) ? 16 : '') }} 
+                      width: ((((isWidthDown('sm', this.props.width)))) ? '75%' : searchBarWidth),
+                      marginRight: ((((isWidthDown('sm', this.props.width)))) ? 16 : '') }} 
                     className={classes.searchBar} > 
                 <InstantSearch algoliaClient={algoliaClient} indexName={process.env.REACT_APP_ALGOLIA_INDEX} >
                   <Configure highlightPreTag={"<span>"} highlightPostTag={"</span>"} />
@@ -131,7 +134,7 @@ class MainAlgoliaSearch extends Component {
                   <div style={{ width: searchBarWidth }} className={classes.suggestionsContainer}>
                   <InstantSearch algoliaClient={algoliaClient} indexName={process.env.REACT_APP_ALGOLIA_INDEX} >
                       <Configure facetFilters={filters.split(' AND ')} />
-                      <SearchSuggestions attribute="hashtags.tag" addToFilters={this.addToFilters} limit={7} currentFilters={filters} />
+                      <SearchSuggestions attribute="hashtags.tag" addToFilters={this.addToFilters} limit={7} currentFilters={filters}/>
                     </InstantSearch>
                   </div>
                   </Banner>
