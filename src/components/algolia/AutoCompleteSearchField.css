@@ -26,3 +26,13 @@
 .editableChip span div:nth-child(1) {
     padding-right: 6px !important;
 }
+.custom-option {
+    padding: 16px;
+    cursor: pointer;
+}
+.custom-option:hover {
+    background: #e0e0e0;
+}
+.custom-option span span{
+    font-weight: bold;
+}
