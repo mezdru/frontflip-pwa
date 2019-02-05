@@ -112,21 +112,17 @@ class SearchableSelect extends Component {
   }
 
   handleSearchClick(props) {
-    console.log(props);
-    console.log('this is the value inside search bar : ' + props.selectProps.inputValue);
     if(props.selectProps.inputValue.trim() !== '') {
       this.handleCreateOption(props.selectProps.inputValue);
     }
   }
 
   onInputChange = (inputValue, { action }) => {
-    console.log(inputValue, action);
     switch (action) {
       case 'input-change':
         this.setState({ inputValue });
         return;
       case 'menu-close':
-        console.log(this.state.inputValue);
         let menuIsOpen = undefined;
         if (this.state.inputValue) {
           menuIsOpen = true;
@@ -144,7 +140,6 @@ class SearchableSelect extends Component {
     switch (event.keyCode) {
         case 13: // ENTER
             event.preventDefault();
-            console.log('enter pressed');
             this.handleSearchClick({selectProps: {inputValue: this.state.inputValue}});
             break;
     }
@@ -174,15 +169,11 @@ class SearchableSelect extends Component {
     const customStyles = {
       control: (base, state) => ({
         ...base,
-        // match with the menu
         borderRadius: '30px',
         boxSizing: 'content-box',
-        // Overwrittes the different states of border
         border: state.isFocused ? "1px solid #dd362e" : "1px solid grey",
-        // Removes weird border around container
         boxShadow: state.isFocused ? null : null,
         "&:hover": {
-          // Overwrittes the different states of border
           borderColor: state.isFocused ? "#dd362e" : "black",
           boxSizing: 'content-box'
         },
@@ -192,7 +183,6 @@ class SearchableSelect extends Component {
       }),
       menu: base => ({
         ...base,
-        // override border radius to match the box
         borderRadius: '30px',
         overflow: 'hidden',
         hyphens: "auto",
@@ -217,7 +207,6 @@ class SearchableSelect extends Component {
         ...provided,
         padding: 0,
         margin: 0,
-        // maxHeight: !state.isFocused ? 42 : 3000,
         overflow: 'auto',
         maxHeight: 42
       }),
