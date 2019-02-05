@@ -106,7 +106,7 @@ class Login extends React.Component {
                 required
               />
             </Grid>
-            <Grid item>
+            <Grid item container justify={'center'}>
               {
                 inProgress && (
                   <CircularProgress color="primary" />
