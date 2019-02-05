@@ -12,11 +12,24 @@ const style = theme => ({
   },
   suggestion: {
     margin: 8,
+    paddingRight: 0,
     background: 'white',
-    color: theme.palette.secondary.main,
+    color: theme.palette.secondary.dark,
     '&:hover': {
       background: 'rgb(220,220,220)'
-    }
+    },
+  },
+  suggestionCount: {
+    background: theme.palette.secondary.light,
+    color: 'white',
+    borderRadius: '50%',
+    width: 32,
+    height:32,
+    textAlign: 'center',
+    lineHeight: '32px'
+  },
+  suggestionLabel: {
+    marginRight: 8,
   }
 });
 
@@ -36,7 +49,12 @@ class SearchSuggestionsComponent extends Component {
       <div className={classes.suggestionsContainer} >
         {items.map((item, i) => {
           if (this.shouldDisplaySuggestion(item.value))
-            return <Chip key={i} label={'(' + item.count + ') - ' + item.label} onClick={(e) => this.props.addToFilters(e, { name: item.label, tag: item.value })} className={classes.suggestion} />;
+            return (
+              <Chip key={i} 
+                    component={(props)=>{return <div {...props}><div className={classes.suggestionLabel}>{item.label}</div><div className={classes.suggestionCount}>{item.count}</div></div>;}}
+                    onClick={(e) => this.props.addToFilters(e, { name: item.label, tag: item.value })} 
+                    className={classes.suggestion} />
+            );
         })}
       </div>
     );

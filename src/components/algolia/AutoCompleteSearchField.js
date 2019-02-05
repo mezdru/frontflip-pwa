@@ -178,7 +178,7 @@ class SearchableSelect extends Component {
     const DropdownIndicator = (props) => {
       return (
         <components.DropdownIndicator {...props}>
-          <Search onClick={(e) => {this.handleSearchClick(props)}} />
+          <Search onClick={(e) => {this.handleSearchClick(props)}} style={{color: theme.palette.primary.main}} />
         </components.DropdownIndicator>
       );
     };
@@ -197,10 +197,10 @@ class SearchableSelect extends Component {
         ...base,
         borderRadius: '30px',
         boxSizing: 'content-box',
-        border: state.isFocused ? "1px solid #dd362e" : "1px solid grey",
+        border: state.isFocused ? "2px solid #dd362e" : "1px solid #dd362e",
         boxShadow: state.isFocused ? null : null,
         "&:hover": {
-          borderColor: state.isFocused ? "#dd362e" : "black",
+          borderColor: state.isFocused ? "#dd362e" : "#dd362e",
           boxSizing: 'content-box'
         },
         padding: '3px 16px',
