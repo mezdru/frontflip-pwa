@@ -31,7 +31,7 @@
     cursor: pointer;
 }
 .custom-option:hover {
-    background: #e0e0e0;
+    background: #DDE9EB;
 }
 .custom-option span span{
     font-weight: bold;
