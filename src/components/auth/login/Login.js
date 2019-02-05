@@ -1,17 +1,15 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react';
-import { Button, Grid, TextField, Typography } from '@material-ui/core';
+import {FormattedMessage, injectIntl} from 'react-intl';
+import {Link, Redirect} from 'react-router-dom';
+import {inject, observer} from 'mobx-react';
+
+import {Button, CircularProgress, Grid, TextField, Typography} from '@material-ui/core';
 import GoogleButton from "../../utils/buttons/GoogleButton";
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { FormattedMessage, injectIntl } from 'react-intl';
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
-import { Link, Redirect } from 'react-router-dom';
 
 class Login extends React.Component {
-
   constructor(props) {
     super(props);
-
     this.state = {
       value: 0,
       redirectTo: null,
@@ -120,23 +118,19 @@ class Login extends React.Component {
                 )
               }
             </Grid>
-            <Grid item container justify="center">
-              <Grid item>
-                <Button component={Link}
-                  to={"/" + locale + ((orgTag) ? '/' + orgTag : '') + "/password/forgot"}
-                  variant="text"
-                >
-                  <FormattedMessage id="I don't have my password" />
-                </Button>
-              </Grid>
-
+            <Grid item>
+              <Button component={Link}
+                      to={"/" + locale + ((orgTag) ? '/' + orgTag : '') + "/password/forgot"}
+                      variant="text"
+                      fullWidth={true}
+              >
+                <FormattedMessage id="I don't have my password" />
+              </Button>
             </Grid>
           </Grid>
         </form>
       )
     }
-
-
   };
 }
 

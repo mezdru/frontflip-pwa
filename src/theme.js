@@ -1,4 +1,4 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import {createMuiTheme} from '@material-ui/core/styles';
 
 export const palette = {
   primary: {
@@ -35,20 +35,62 @@ export default createMuiTheme({
     ].join(','),
   },
   overrides: {
-    MuiAppBar: {
-      root: {
-        height: 72
-      }
-    },
+    // General styles
     MuiGrid: {
       "spacing-xs-16": {
         width: "auto",
         margin: "auto",
       },
     },
-    MuiDrawer: {
+    MuiTypography: {
       root: {
-        height: 72,
+        overflow: 'hidden',
+      },
+      h6: {
+        display: 'block',
+        padding: 8,
+      },
+      h5: {
+        color: palette.secondary.contrastText,
+        fontWeight: '700',
+      },
+      h4: {
+        color: palette.secondary.contrastText,
+        fontWeight: '500',
+      },
+      body1: {
+        color: palette.secondary.contrastText,
+        fontWeight: '400',
+      },
+      body2: {
+        fontWeight: '600',
+      }
+    },
+    // Avatar
+    MuiAvatar: {
+      img: {
+        height: 'auto',
+      }
+    },
+    //Buttons
+    MuiButton: {
+      root: {
+        borderRadius: 30,
+        height: "56px",
+        fontWeight: "600",
+        transition: 'all 250ms',
+      },
+      text: {
+        color: "darkgrey",
+        '&:hover': {
+          color: 'black',
+        }
+      }
+    },
+    MuiIconButton: {
+      root: {
+        color: '#DDE9EB',
+        padding: 8,
       }
     },
     MuiChip: {
@@ -72,76 +114,20 @@ export default createMuiTheme({
       },
       colorPrimary: {
         backgroundColor: palette.primary.main,
-        ['&:hover']: {
+        '&:hover': {
           backgroundColor: palette.primary.dark,
         },
       },
       colorSecondary: {
         color: 'white',
         backgroundColor: palette.secondary.main,
-        ['&:hover']: {
+        '&:hover': {
           color: 'white',
           backgroundColor: palette.secondary.dark
         },
       }
     },
-    MuiAvatar: {
-      img: {
-        height: 'auto',
-      }
-    },
-    MuiButton: {
-      root: {
-        borderRadius: 30,
-        height: "56px",
-        fontWeight: "600",
-      },
-      text: {
-        color: "darkgrey",
-        ['&:hover']: {
-          color: 'black',
-        }
-      }
-    },
-    MuiListItem: {
-      root: {
-        paddingTop: 8,
-        paddingBottom: 8,
-      },
-    },
-    MuiList: {
-      padding: {
-        paddingTop: 0,
-        paddingBottom: 0,
-      }
-    },
-    MuiIconButton: {
-      root: {
-        color: '#DDE9EB',
-        padding: 8,
-      }
-    },
-    MuiOutlinedInput: {
-      root: {
-        backgroundColor: 'white',
-        borderRadius: 30,
-        [`& fieldset`]: {
-          borderRadius: 30
-        },
-      },
-      input: {
-        borderRadius: 30,
-      }
-    },
-    MuiTab: {
-      root: {
-        fontSize: '0.875rem!important',
-        fontWeight: '600',
-        ['&:hover']: {
-          color: palette.primary.main
-        },
-      },
-    },
+    //Cards
     MuiCard: {
       root: {
         padding: 0,
@@ -156,6 +142,13 @@ export default createMuiTheme({
         display: 'flex',
       }
     },
+    MuiCardContent: {
+      root: {
+        padding: '0 0 16px 8px!important',
+        whiteSpace: 'nowrap',
+        overflowX: 'scroll',
+      }
+    },
     MuiCardHeader: {
       root: {
         width: '100%',
@@ -167,11 +160,15 @@ export default createMuiTheme({
         resize: 'horizontal',
       },
     },
-    MuiCardContent: {
+    //Header
+    MuiAppBar: {
       root: {
-        padding: '0 0 16px 8px!important',
-        whiteSpace: 'nowrap',
-        overflowX: 'scroll',
+        height: 72
+      }
+    },
+    MuiDrawer: {
+      root: {
+        height: 72,
       }
     },
     MuiPaper: {
@@ -179,42 +176,53 @@ export default createMuiTheme({
         padding: '16px'
       }
     },
-    MuiTypography: {
+    //Inputs
+    MuiOutlinedInput: {
       root: {
-        overflow: 'hidden',
+        backgroundColor: 'white',
+        borderRadius: 30,
+        [`& fieldset`]: {
+          borderRadius: 30
+        },
       },
-      h6: {
-        display: 'block',
-        padding: 8,
-        fontFamily: '"Open sans"',
+      input: {
+        borderRadius: 30,
+      }
+    },
+    //List
+    MuiList: {
+      padding: {
+        paddingTop: 0,
+        paddingBottom: 0,
+      }
+    },
+    MuiListItem: {
+      root: {
+        paddingTop: 8,
+        paddingBottom: 8,
       },
-      h5: {
-        color: palette.secondary.contrastText,
-        fontWeight: '700',
-        fontFamily: '"Open sans"',
-      },
-      h4: {
-        color: palette.secondary.contrastText,
+    },
+    // Tabs
+    MuiTab: {
+      root: {
+        fontSize: '0.875rem!important',
         fontWeight: '600',
+        '&:hover': {
+          color: palette.primary.main
+        },
       },
-      body1: {
-        color: palette.secondary.contrastText,
-        fontWeight: '400',
-        fontFamily: '"Open sans"',
+      labelContainer: {
+        padding: '0px!important', // nous permet d'avoir nos espacement de 16px à chaques view
       }
     },
   },
-  props: {
-    MuiButton: {
-      variant: "contained"
+  // Props
+    props: {
+      MuiButton: {
+        variant: "contained",
+      },
+      MuiInput: {
+        margin: "none"
+      }
     },
-    MuiInput: {
-      margin: "none"
-    }
-  },
-  global: {
-    body: {
-      fontFamily: '"Open sans"',
-    },
-  }
-});
+  });

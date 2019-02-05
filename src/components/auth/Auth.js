@@ -1,19 +1,42 @@
 import React from 'react';
-import { withTheme } from '@material-ui/core/styles';
-import SwipeableViews from 'react-swipeable-views';
-import { Grid, Tab, Tabs } from '@material-ui/core';
+import {injectIntl} from 'react-intl';
+import {Redirect} from 'react-router-dom';
+import {observe} from 'mobx';
+import {inject, observer} from 'mobx-react';
 
+import {Grid, Tab, Tabs} from '@material-ui/core';
+import {withTheme, withStyles} from '@material-ui/core/styles';
+import SwipeableViews from 'react-swipeable-views';
 import Login from './login/Login';
 import Register from './register/Register';
-import { injectIntl } from 'react-intl';
-import { inject, observer } from 'mobx-react';
-import { observe } from 'mobx';
-import { Redirect } from 'react-router-dom';
 import UrlService from '../../services/url.service';
+
 const queryString = require('query-string');
 
-class Auth extends React.Component {
+const styles = (theme) => ({
+  tabs: {
+    marginTop: -8,
+    [theme.breakpoints.down('xs')]: {
+      padding: '8px 0 8px 0!important',
+    }
+  },
+  leftTabs: {
+    paddingLeft: 8,
+    textAlign: 'left',
+    [theme.breakpoints.down('xs')]: {
+      paddingLeft: 16,
+    },
+  },
+  rightTabs: {
+    paddingRight: 8,
+    textAlign: 'right',
+    [theme.breakpoints.down('xs')]: {
+      paddingRight: 16,
+    },
+  }
+});
 
+class Auth extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,11 +44,10 @@ class Auth extends React.Component {
       queryParams: queryString.parse(window.location.search),
       redirectTo: null,
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
-    }
-
+    };
     this.handleGoogleAuth = this.handleGoogleAuth.bind(this);
-  }
-
+  };
+  
   componentDidMount() {
     if (this.props.authStore.values.invitationCode) this.setState({ value: 1 });
     observe(this.props.authStore.values, 'invitationCode', (change) => {
@@ -36,7 +58,6 @@ class Auth extends React.Component {
     if (this.state.queryParams && this.state.queryParams.refresh_token && this.state.queryParams.access_token) {
       let googleState = JSON.parse(this.state.queryParams.state);
       this.props.commonStore.setAuthTokens(this.state.queryParams);
-
       this.props.userStore.getCurrentUser()
         .then(() => {
           if (googleState && googleState.invitationCode) this.props.authStore.setInvitationCode(googleState.invitationCode);
@@ -77,14 +98,14 @@ class Auth extends React.Component {
   }
 
   render() {
-    const { theme } = this.props;
-    const { redirectTo } = this.state;
+    const {classes, theme} = this.props;
+    const {redirectTo} = this.state;
     let intl = this.props.intl;
     if (redirectTo) return (<Redirect to={redirectTo} />);
 
     return (
       <Grid container spacing={16}>
-        <Grid item xs={12} style={{ marginTop: -8 }}>
+        <Grid item xs={12} className={classes.tabs}>
           <Tabs
             value={this.state.value}
             onChange={this.handleChange}
@@ -92,8 +113,8 @@ class Auth extends React.Component {
             textColor="primary"
             fullWidth={true}
           >
-            <Tab label={intl.formatMessage({ id: 'Sign In' })} style={{ textAlign: 'left' }} />
-            <Tab label={intl.formatMessage({ id: 'Sign Up' })} style={{ textAlign: 'right' }} />
+            <Tab label={intl.formatMessage({id: 'Sign In'})} className={classes.leftTabs}/>
+            <Tab label={intl.formatMessage({id: 'Sign Up'})} className={classes.rightTabs}/>
           </Tabs>
         </Grid>
         <Grid item xs={12}>
@@ -112,7 +133,9 @@ class Auth extends React.Component {
 }
 
 export default inject('authStore', 'organisationStore', 'commonStore', 'userStore', 'recordStore')(
-  withTheme()(injectIntl(observer(
-    (Auth)
-  )))
+  withTheme()(
+    withStyles(styles, {withTheme: true})(
+      injectIntl(observer((Auth)))
+    )
+  )
 );

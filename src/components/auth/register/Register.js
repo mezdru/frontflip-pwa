@@ -1,18 +1,15 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react';
-import { Button, Grid, TextField, Typography } from "@material-ui/core";
+import {FormattedMessage, injectIntl} from 'react-intl';
+import {inject, observer} from 'mobx-react';
 
+import {Button, CircularProgress, Grid, TextField, Typography} from "@material-ui/core";
 import GoogleButton from "../../utils/buttons/GoogleButton";
-import { FormattedMessage, injectIntl } from 'react-intl';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import commonStore from '../../../stores/common.store';
 
 class Register extends React.Component {
-
-  constructor() {
-    super();
-
+  constructor(props) {
+    super(props);
     this.state = {
       value: 0,
       registerErrors: null,
@@ -77,7 +74,7 @@ class Register extends React.Component {
 
     if (registerSuccess) {
       return (
-        <Grid className={'form'} container item direction='column' spacing={16}>
+        <Grid container item direction='column' spacing={16}>
           <Grid item>
             <SnackbarCustom variant="success" message={registerSuccessMessage} />
           </Grid>
@@ -86,7 +83,7 @@ class Register extends React.Component {
     } else {
       return (
         <form onSubmit={this.handleSubmitForm}>
-          <Grid className={'form'} container item direction='column' spacing={16}>
+          <Grid container item direction='column' spacing={16}>
             {registerErrors && (
               <Grid item>
                 <SnackbarCustom variant="warning" message={registerErrors} />
@@ -134,7 +131,7 @@ class Register extends React.Component {
               }
               {
                 !inProgress && (
-                  <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="Sign Up" /></Button>
+                  <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="Sign Up"/></Button>
                 )
               }
             </Grid>
