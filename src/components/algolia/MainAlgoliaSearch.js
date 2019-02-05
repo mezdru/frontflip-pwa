@@ -10,6 +10,7 @@ import ProfileLayout from "../profile/ProfileLayout";
 import { Redirect } from 'react-router-dom';
 import SearchSuggestions from "./SearchSuggestions";
 import Banner from '../../components/utils/banner/Banner';
+import algoliasearch from 'algoliasearch'; 
 
 class MainAlgoliaSearch extends Component {
   constructor(props) {
@@ -108,6 +109,8 @@ class MainAlgoliaSearch extends Component {
     }
 
     if (algoliaKey) {
+      var algoliaClient = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, algoliaKey);
+      algoliaClient.clearCache();
       return (
         <div style={{ width: '100%', position: 'relative' }}>
 
@@ -117,9 +120,7 @@ class MainAlgoliaSearch extends Component {
                       width: ((((isWidthDown('md', this.props.width))) || (isWidthDown('md', this.props.width))) ? '75%' : searchBarWidth),
                       marginRight: ((((isWidthDown('md', this.props.width))) || (isWidthDown('md', this.props.width))) ? 16 : '') }} 
                     className={classes.searchBar} > 
-                <InstantSearch appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID}
-                  indexName={process.env.REACT_APP_ALGOLIA_INDEX}
-                  apiKey={algoliaKey} >
+                <InstantSearch algoliaClient={algoliaClient} indexName={process.env.REACT_APP_ALGOLIA_INDEX} >
                   <Configure highlightPreTag={"<span>"} highlightPostTag={"</span>"} />
                   <AutoCompleteSearchField updateFilters={this.updateFilters} newFilter={newFilter} />
                 </InstantSearch>
@@ -128,9 +129,7 @@ class MainAlgoliaSearch extends Component {
               <Grid container item alignItems={"stretch"} >
                   <Banner style={{filter: 'brightness(90%)'}}>
                   <div style={{ width: searchBarWidth }} className={classes.suggestionsContainer}>
-                    <InstantSearch appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID}
-                      indexName={process.env.REACT_APP_ALGOLIA_INDEX}
-                      apiKey={algoliaKey}>
+                  <InstantSearch algoliaClient={algoliaClient} indexName={process.env.REACT_APP_ALGOLIA_INDEX} >
                       <Configure facetFilters={filters.split(' AND ')} />
                       <SearchSuggestions attribute="hashtags.tag" addToFilters={this.addToFilters} limit={7} currentFilters={filters} />
                     </InstantSearch>
@@ -140,9 +139,7 @@ class MainAlgoliaSearch extends Component {
             
               <div className={classes.hitListContainer}>
                 {(shouldUpdateUrl && resultsType === 'person' && (window.location.pathname !== rootUrl)) && (<Redirect push to={rootUrl} />)}
-                <InstantSearch appId={process.env.REACT_APP_ALGOLIA_APPLICATION_ID}
-                  indexName={process.env.REACT_APP_ALGOLIA_INDEX}
-                  apiKey={algoliaKey}>
+                <InstantSearch algoliaClient={algoliaClient} indexName={process.env.REACT_APP_ALGOLIA_INDEX}>
                   {findByQuery && (
                     <Configure query={filters} facetFilters={["type:person"]}
                       highlightPreTag={"<span>"} highlightPostTag={"</span>"}
