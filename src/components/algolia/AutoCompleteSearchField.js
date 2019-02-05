@@ -50,7 +50,9 @@ class SearchableSelect extends Component {
       let displayedNameText;
       if (hit.type === 'hashtag') {
         displayedNameText = this.getTextLabel(hit);
-        if(hit._highlightResult && hit._highlightResult.name && hit._highlightResult.name.value) {
+        if(hit._highlightResult && hit._highlightResult.name_translated && hit._highlightResult.name_translated[this.state.locale]&& hit._highlightResult.name_translated[this.state.locale].value) {
+          displayedName = hit._highlightResult.name_translated[this.state.locale].value;
+        } else if(hit._highlightResult && hit._highlightResult.name && hit._highlightResult.name.value) {
           displayedName = hit._highlightResult.name.value;
         } else if(hit._highlightResult && hit._highlightResult.tag && hit._highlightResult.tag.value){
           displayedName = hit._highlightResult.tag.value;
