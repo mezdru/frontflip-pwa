@@ -18,6 +18,7 @@ const styles = theme => ({
     width: '100%',
     height: 166,
     boxShadow: '0 8px 20px -12px darkgrey',
+    backgroundColor: 'white',
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',

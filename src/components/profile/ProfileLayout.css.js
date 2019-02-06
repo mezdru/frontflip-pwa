@@ -100,6 +100,7 @@ export const styles = theme => ({
     position: 'fixed',
     top: 0,
     zIndex:99999,
+    backgroundColor: 'white',
     width: '100%',
     '& ul': {
       listStyleType: 'none',
