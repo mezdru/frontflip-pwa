@@ -8,8 +8,13 @@ export const styles = theme => ({
     backgroundColor: '#fff'
   },
   menuLink: {
-    width: '70px',
+    width: '120px',
     height: '30px',
+    [theme.breakpoints.down('md')] : {
+      '&:hover': {
+        backgroundColor: 'transparent',
+      }
+    }
   },
   grow: {
     flexGrow: 1,
@@ -60,12 +65,19 @@ export const styles = theme => ({
     padding: '0 !important',
   },
   drawerHeader: {
-    padding: 16,
+    padding: '8px 16px',
     display: 'flex',
     alignItems: 'center',
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end',
   },
+    drawerIconButton: {
+    padding: 0,
+    },
+  drawerIcon: {
+    color: theme.palette.primary.main,
+    fontSize: 56,
+   },
   content: {
     flexGrow: 1,
     transition: theme.transitions.create('margin', {

@@ -60,8 +60,8 @@ class App extends Component {
         }}
       >
         <div className={classes.drawerHeader}>
-          <IconButton onClick={this.props.handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          <IconButton onClick={this.props.handleDrawerClose} className={classes.drawerIconButton} >
+            <ChevronLeftIcon className={classes.drawerIcon} />
           </IconButton>
         </div>
 
