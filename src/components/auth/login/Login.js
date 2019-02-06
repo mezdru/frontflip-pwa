@@ -61,8 +61,8 @@ class Login extends React.Component {
     let { loginErrors, locale, redirectTo, isAuth } = this.state;
     let intl = this.props.intl;
 
-    if (redirectTo) return <Redirect to={redirectTo} />;
-    else if (isAuth) return <Redirect to={'/' + locale + (orgTag ? '/' + orgTag : '')} />;
+    if (redirectTo) return <Redirect push to={redirectTo} />;
+    else if (isAuth) return <Redirect push to={'/' + locale + (orgTag ? '/' + orgTag : '')} />;
     else {
       return (
         <form onSubmit={this.handleSubmitForm}>

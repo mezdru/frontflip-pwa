@@ -16,14 +16,13 @@ class MainRouteOrganisationRedirect extends React.Component {
     this.state = {
       redirectTo: null,
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
-      isAuth: this.props.authStore.isAuth(),
       renderComponent: false
     };
     this.manageAccessRight = this.manageAccessRight.bind(this);
   }
 
   componentWillReceiveProps(props) {
-    if (props.history.action === 'PUSH' && props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) {
+    if (props.history.action === 'PUSH' && ( (props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) || (!this.props.organisationStore.values.fullOrgFetch) ) ) {
       this.setState({ renderComponent: false }, () => {
         this.manageAccessRight().then(() => {
           this.setState({ renderComponent: true });
@@ -47,7 +46,7 @@ class MainRouteOrganisationRedirect extends React.Component {
     if (organisation.public) {
       return true;
     } else {
-      if (!this.state.isAuth) return false;
+      if (!this.props.authStore.isAuth()) return false;
       if (this.props.userStore.values.currentUser.superadmin) return true;
       return (this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id) !== undefined);
     }
@@ -56,10 +55,10 @@ class MainRouteOrganisationRedirect extends React.Component {
   /**
    * @description Redirect user who is auth but hasn't access to current organisation
    */
-  redirectUserAuthWithoutAccess() {
+  async redirectUserAuthWithoutAccess() {
     if (this.props.userStore.values.currentUser.orgsAndRecords.length > 0) {
       this.props.organisationStore.setOrgId(this.props.userStore.values.currentUser.orgsAndRecords[0].organisation);
-      this.props.organisationStore.getOrganisation()
+      await this.props.organisationStore.getOrganisation()
         .then(organisation => {
           this.redirectUserAuthWithAccess(organisation, true);
         });
@@ -99,14 +98,14 @@ class MainRouteOrganisationRedirect extends React.Component {
         organisation = await this.props.organisationStore.getOrganisationForPublic().catch((err) => { return null });
       }
 
-      if (!this.canUserAccessOrganisation(organisation) && this.state.isAuth) {
+      if (!this.canUserAccessOrganisation(organisation) && this.props.authStore.isAuth()) {
         await this.redirectUserAuthWithoutAccess();
-      } else if (this.state.isAuth) {
+      } else if (this.props.authStore.isAuth()) {
         this.props.organisationStore.setOrgId(organisation._id);
-        organisation = await this.props.organisationStore.getOrganisation();
+        organisation = await this.props.organisationStore.getOrganisation().catch(() => {this.redirectUserAuthWithoutAccess()});
         await this.redirectUserAuthWithAccess(organisation);
       }
-    } else if (this.state.isAuth) {
+    } else if (this.props.authStore.isAuth()) {
       await this.redirectUserAuthWithoutAccess();
     }
   }
