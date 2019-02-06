@@ -10,7 +10,8 @@ class OrganisationStore {
     orgTag: '',
     orgId: '',
     organisation: {},
-    currentUserOrganisations: []
+    currentUserOrganisations: [],
+    fullOrgFetch: false
   };
 
   setOrgTag(orgTag) {
@@ -23,6 +24,10 @@ class OrganisationStore {
 
   setOrganisation(organisation) {
     this.values.organisation = organisation;
+  }
+
+  setFullOrgFetch(val) {
+    this.values.fullOrgFetch = val;
   }
 
 
@@ -38,7 +43,8 @@ class OrganisationStore {
 
       return agent.Organisation.get(this.values.orgId)
         .then(data => {
-          if (data) this.setOrganisation(data.organisation);
+          this.setOrganisation(data.organisation);
+          this.setFullOrgFetch(true);
           this.getAlgoliaKey(true);
           return this.values.organisation;
         })
@@ -95,7 +101,8 @@ class OrganisationStore {
 
       return agent.Organisation.getForPublic(this.values.orgTag)
         .then(data => {
-          if (data) this.setOrganisation(data.organisation);
+          this.setOrganisation(data.organisation);
+          this.setFullOrgFetch(false);
           return this.values.organisation;
         })
         .catch(action((err) => {
@@ -122,6 +129,7 @@ decorate(OrganisationStore, {
   values: observable,
   reset: action,
   setOrganisation: action,
+  setFullOrgFetch: action,
   setOrgTag: action,
   setOrgId: action,
   getOrganisation: action,
