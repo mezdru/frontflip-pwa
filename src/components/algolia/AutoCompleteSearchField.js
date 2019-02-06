@@ -7,6 +7,7 @@ import './AutoCompleteSearchField.css';
 import classNames from 'classnames';
 import { withStyles, Chip } from '@material-ui/core';
 import {Search} from '@material-ui/icons';
+import ProfileService from '../../services/profile.service';
 
 class SearchableSelect extends Component {
   constructor(props) {
@@ -79,7 +80,7 @@ class SearchableSelect extends Component {
   }
 
   getOptionValue = (option) => option.value;
-  getOptionLabel = (option) => this.htmlDecode(option.labelText || option.label);
+  getOptionLabel = (option) => ProfileService.htmlDecode(option.labelText || option.label);
 
   // when option is selected
   handleChange(selectedOption) {
@@ -124,12 +125,6 @@ class SearchableSelect extends Component {
 
   createOptionMessage(inputValue) {
     return this.props.intl.formatMessage({ id: 'algolia.createOption' }, { input: inputValue });
-  }
-
-  htmlDecode = function (input) {
-    var e = document.createElement('textarea');
-    e.innerHTML = input;
-    return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
   }
 
   handleSearchClick(props) {
