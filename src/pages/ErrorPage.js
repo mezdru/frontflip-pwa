@@ -72,18 +72,6 @@ class ErrorPage extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-
-
-          {/* <Grid container direction={'column'} alignItems={'center'} justify={'center'} className={classes.layout} xs={12} spacing={16}> 
-            <Grid item xs={12}>
-              <h1 className={classes.title}>{errorCode} Oops</h1>
-            </Grid>
-            <Grid item >
-                {errorType === 'email' && (
-                  <FormattedMessage id="errorPage.emailNotValidated" values={{email: currentUser.email.value}} />
-                )}
-            </Grid>
-          </Grid> */}
         </main>
       </div>
     );
