@@ -5,6 +5,7 @@ import PasswordForgot from "../pages/auth/PasswordForgot";
 import PasswordReset from "../pages/auth/PasswordReset";
 import { inject, observer } from 'mobx-react';
 import AuthPage from "../pages/auth/AuthPage";
+import ErrorPage from "../pages/ErrorPage";
 
 class MainRouteOrganisation extends React.Component {
 
@@ -33,6 +34,7 @@ class MainRouteOrganisation extends React.Component {
           <Route exact path="/:locale(en|fr|en-UK)/password/reset/:token/:hash" component={PasswordReset} />
           <Route path="/:locale(en|fr|en-UK)/signup" component={() => { return <AuthPage initialTab={1} /> }} />
           <Route path="/:locale(en|fr|en-UK)/signin" component={AuthPage} />
+          <Route exact path="/:locale(en|fr|en-UK)/error/:errorCode/:errorType" component={ErrorPage} />
 
           {/* Route which will need organisationTag */}
 

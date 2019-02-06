@@ -49,5 +49,7 @@
     "profile.aboutMe": "About me",
     "profile.addWings": "Add Wings",
     "profile.updateCover": "Change cover",
-    "profile.addContacts": "Add"
+    "profile.addContacts": "Add",
+    "errorPage.emailNotValidated": "Your email address isn't validated yet. We just sent you an email at <strong>{email}</strong> to confirm your address, check your inbox..."
+
 }

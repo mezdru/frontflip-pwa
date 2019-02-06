@@ -7,6 +7,7 @@ import PasswordForgot from "../pages/auth/PasswordForgot";
 import PasswordReset from "../pages/auth/PasswordReset";
 import { inject, observer } from 'mobx-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import EmailService from '../services/email.service';
 
 class MainRouteOrganisationRedirect extends React.Component {
 
@@ -102,7 +103,13 @@ class MainRouteOrganisationRedirect extends React.Component {
         await this.redirectUserAuthWithoutAccess();
       } else if (this.props.authStore.isAuth()) {
         this.props.organisationStore.setOrgId(organisation._id);
-        organisation = await this.props.organisationStore.getOrganisation().catch(() => {this.redirectUserAuthWithoutAccess()});
+        organisation = await this.props.organisationStore.getOrganisation()
+                      .catch((err) => {
+                        if(err.status === 403 && err.response.body.message === 'Email not validated') {
+                          EmailService.confirmLoginEmail(organisation.tag);
+                          this.setState({redirectTo: '/' + this.state.locale + '/error/' + err.status + '/email'});
+                        }
+                      });
         await this.redirectUserAuthWithAccess(organisation);
       }
     } else if (this.props.authStore.isAuth()) {
