@@ -7,6 +7,7 @@ import Header from '../components/header/Header';
 import { Redirect } from "react-router-dom";
 import { FormattedHTMLMessage } from 'react-intl';
 import ProfileService from '../services/profile.service';
+import UrlService from '../services/url.service';
 
 const styles = theme =>  ({
   layout: {
@@ -41,6 +42,7 @@ class ErrorPage extends React.Component {
     const {classes} = this.props;
     const { errorCode, errorType} = this.state;
     const {currentUser} = this.props.userStore.values;
+    const { orgTag} = this.props.organisationStore.values;
 
     return (
       <div>
@@ -66,6 +68,11 @@ class ErrorPage extends React.Component {
                   {errorType === 'email' && (
                     <Typography variant={'subheading'}>
                       <FormattedHTMLMessage id="errorPage.emailNotValidated" values={{email: currentUser.email.value}} />
+                    </Typography>
+                  )}
+                  {(errorType === 'organisation' && errorCode == 404) && (
+                    <Typography variant={'subheading'}>
+                      <FormattedHTMLMessage id="errorPage.organisationNotFound" values={{newOrgLink: UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', null, null), orgTag: orgTag}} />
                     </Typography>
                   )}
                 </Grid>
