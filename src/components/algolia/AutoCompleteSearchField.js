@@ -84,6 +84,8 @@ class SearchableSelect extends Component {
 
   // when option is selected
   handleChange(selectedOption) {
+    this.scrollToBottom();
+
     this.props.commonStore.setSearchFilters(selectedOption);
     this.setState({
       selectedOption: selectedOption,
@@ -92,6 +94,18 @@ class SearchableSelect extends Component {
       this.refineWithSelectedOptions(selectedOption);
       this.props.updateFilters(selectedOption);
     });
+  }
+
+  async scrollToBottom() {
+    setTimeout(() => {
+      let valueContainer = document.querySelector('.autocomplete-search div div:nth-child(1)');
+      if(valueContainer) valueContainer.scrollTop = valueContainer.scrollHeight;
+      if(valueContainer.scrollHeight > 42) {
+        valueContainer.style.marginBottom = '8px';
+      } else {
+        valueContainer.style.marginBottom = '';
+      }
+    }, 100);    
   }
 
   refineWithSelectedOptions(selectedOption) {
@@ -233,11 +247,14 @@ class SearchableSelect extends Component {
       }),
       valueContainer: (provided, state) => ({
         ...provided,
-        padding: 0,
+        padding: '0 !important',
         margin: 0,
         marginLeft: -8,
         overflow: 'auto',
-        maxHeight: 42
+        maxHeight: 42,
+        '&:last-child': {
+          marginBottom: 8,
+        },
       }),
     };
 
