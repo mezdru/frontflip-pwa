@@ -96,7 +96,10 @@ class MainRouteOrganisationRedirect extends React.Component {
       let organisation = this.props.organisationStore.values.organisation;
       if (!(this.props.organisationStore.values.orgTag === this.props.match.params.organisationTag)) {
         this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
-        organisation = await this.props.organisationStore.getOrganisationForPublic().catch((err) => { return null });
+        organisation = await this.props.organisationStore.getOrganisationForPublic()
+                      .catch((err) => {
+                        this.setState({redirectTo: '/' + this.state.locale + '/error/404/organisation'});
+                      });
       }
 
       if (!this.canUserAccessOrganisation(organisation) && this.props.authStore.isAuth()) {

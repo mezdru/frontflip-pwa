@@ -50,5 +50,6 @@
     "profile.addWings": "Ajouter des Wings",
     "profile.updateCover": "Changer la couverture",
     "profile.addContacts": "Ajouter",
-    "errorPage.emailNotValidated": "Votre adresse mail n'a pas encore été validée. Nous vous avons renvoyé un mail de confirmation à l'adresse : <strong>{email}</strong>"
+    "errorPage.emailNotValidated": "Votre adresse mail n'a pas encore été validée. Nous vous avons renvoyé un mail de confirmation à l'adresse : <strong>{email}</strong>",
+    "errorPage.organisationNotFound": "Nous ne connaissons pas l'organisation (<strong>{orgTag}</strong>) que vous recherchez. <a href='{newOrgLink}'>Cliquez ici pour créer le Wingzy de {orgTag}</a>"
 }
