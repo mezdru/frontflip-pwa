@@ -193,17 +193,16 @@ class SearchableSelect extends Component {
       control: (base, state) => ({
         ...base,
         borderRadius: '30px',
-        boxSizing: 'content-box',
+        boxSizing: 'border-box',
         border: state.isFocused ? "2px solid #dd362e" : "1px solid #dd362e",
         boxShadow: state.isFocused ? null : null,
         "&:hover": {
           borderColor: state.isFocused ? "#dd362e" : "#dd362e",
-          boxSizing: 'content-box'
+          boxSizing: 'border-box'
         },
         padding: '3px 16px',
-        minHeight: 46,
-        fontSize: 16,
-        background: '#f8f8f8'
+        minHeight: 54,
+        fontSize: 16
       }),
       menu: base => ({
         ...base,
@@ -222,15 +221,21 @@ class SearchableSelect extends Component {
       input: base => ({
         ...base,
         padding: 0,
+        marginLeft: 8,
       }),
       multiValue: base => ({
         ...base,
         background: theme.palette.primary.main,
       }),
+      placeholder: base => ({
+        ...base,
+        marginLeft: 8,
+      }),
       valueContainer: (provided, state) => ({
         ...provided,
         padding: 0,
         margin: 0,
+        marginLeft: -8,
         overflow: 'auto',
         maxHeight: 42
       }),
