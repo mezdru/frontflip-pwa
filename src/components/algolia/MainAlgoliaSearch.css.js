@@ -15,19 +15,9 @@ export const styles = theme => ({
     top: 0,
     zIndex:99999,
     width: '100%',
-    '& ul': {
-      listStyleType: 'none',
-      padding: 0,
-      marginTop: 0,
-    },
-    animationName: 'popIn',
-    animationDuration: '.6s'
-  },
-  profileContainerHide: {
-    position: 'fixed',
-    top: 0,
-    zIndex:99999,
-    width: '100%',
+    height: '100vh',
+    overflow: 'scroll',
+    backgroundColor: 'white',
     '& ul': {
       listStyleType: 'none',
       padding: 0,
