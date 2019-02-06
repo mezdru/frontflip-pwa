@@ -16,7 +16,7 @@ export const styles = theme => ({
     zIndex:99999,
     width: '100%',
     height: '100vh',
-    overflow: 'scroll',
+    overflowY: 'scroll',
     backgroundColor: 'white',
     '& ul': {
       listStyleType: 'none',
