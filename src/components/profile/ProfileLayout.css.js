@@ -7,10 +7,10 @@ export const styles = theme => ({
       minHeight: 'unset'
     },
     [theme.breakpoints.up('sm')]: {
-      minHeight: 'calc(100vh - 175px)'
+      minHeight: 'calc(100vh - 166px)'
     },
     [theme.breakpoints.up('md')]: {
-      minHeight: 'calc(100vh - 357px)'
+      minHeight: 'calc(100vh - 350px)'
     },
     background: theme.palette.secondary.light,
     padding: 16
@@ -22,10 +22,10 @@ export const styles = theme => ({
       minHeight: 'unset'
     },
     [theme.breakpoints.up('sm')]: {
-      minHeight: 'calc(100vh - 175px)'
+      minHeight: 'calc(100vh - 166px)'
     },
     [theme.breakpoints.up('md')]: {
-      minHeight: 'calc(100vh - 357px)'
+      minHeight: 'calc(100vh - 350px)'
     },
     padding: 16
   },
