@@ -25,6 +25,7 @@ class MainAlgoliaSearch extends Component {
       resultsType: this.props.resultsType || 'person',
       shouldUpdateUrl: false,
       shouldDisplayHitResults: true,
+      algoliaClient: null,
     }
     this.updateFilters = this.updateFilters.bind(this);
     this.addToFilters = this.addToFilters.bind(this);
@@ -39,12 +40,15 @@ class MainAlgoliaSearch extends Component {
   }
 
   componentDidMount() {
+    if(this.props.commonStore.algoliaKey)
+      this.setState({algoliaClient: algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.props.commonStore.algoliaKey)});
+
     if (this.props.organisationStore.values.organisation._id) {
       this.props.organisationStore.getAlgoliaKey();
     }
 
     observe(this.props.commonStore, 'algoliaKey', (change) => {
-      this.forceUpdate();
+      this.setState({algoliaClient: algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.props.commonStore.algoliaKey)});
     });
   }
 
@@ -96,7 +100,7 @@ class MainAlgoliaSearch extends Component {
 
   render() {
     const { locale } = this.props.commonStore;
-    const { filters, newFilter, shouldUpdateUrl, findByQuery, shouldDisplayHitResults } = this.state;
+    const { filters, newFilter, shouldUpdateUrl, findByQuery, shouldDisplayHitResults, algoliaClient } = this.state;
     const { HitComponent, classes, profileTag } = this.props;
     const orgTag = this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag;
     const { algoliaKey } = this.props.commonStore;
@@ -115,9 +119,7 @@ class MainAlgoliaSearch extends Component {
       searchBarWidth = 'calc(100% - 32px)';
     }
 
-    if (algoliaKey) {
-      var algoliaClient = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, algoliaKey);
-      algoliaClient.clearCache();
+    if (algoliaKey && algoliaClient) {
       return (
         <div style={{ width: '100%', position: 'relative' }}>
 
@@ -136,10 +138,12 @@ class MainAlgoliaSearch extends Component {
               <Grid container item alignItems={"stretch"} >
                   <Banner style={{filter: 'brightness(90%)'}}>
                   <div style={{ width: searchBarWidth }} className={classes.suggestionsContainer}>
-                  <InstantSearch algoliaClient={algoliaClient} indexName={process.env.REACT_APP_ALGOLIA_INDEX} >
-                      <Configure facetFilters={filters.split(' AND ')} />
-                      <SearchSuggestions attribute="hashtags.tag" addToFilters={this.addToFilters} limit={7} currentFilters={filters}/>
-                    </InstantSearch>
+                    {shouldDisplayHitResults && (
+                      <InstantSearch algoliaClient={algoliaClient} indexName={process.env.REACT_APP_ALGOLIA_INDEX} >
+                        <Configure facetFilters={filters.split(' AND ')} />
+                        <SearchSuggestions attribute="hashtags.tag" addToFilters={this.addToFilters} limit={7} currentFilters={filters}/>
+                      </InstantSearch>
+                    )}
                   </div>
                   </Banner>
               </Grid>

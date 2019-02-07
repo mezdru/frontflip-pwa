@@ -123,7 +123,9 @@ class SearchableSelect extends Component {
 
   // Handle input change (any change)
   handleInputChange(inputValue) {
-    if ((!inputValue || inputValue === '') && (!this.state.selectedOption || this.state.selectedOption.length === 0)) this.props.refine();
+    if ((!inputValue || inputValue === '') && (!this.state.selectedOption || this.state.selectedOption.length === 0)){
+      this.props.refine();
+    }
     return inputValue;
   }
 

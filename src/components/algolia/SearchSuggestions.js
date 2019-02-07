@@ -37,7 +37,7 @@ class SearchSuggestionsComponent extends Component {
   constructor(props) {
     super(props);
   }
-
+  
   shouldDisplaySuggestion(tag) {
     return (this.props.currentFilters.search(tag) === -1);
   }
