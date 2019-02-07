@@ -43,18 +43,26 @@ class SearchSuggestionsComponent extends Component {
   }
 
   render() {
-    const { items, classes } = this.props;
+    const { items, classes, addToFilters } = this.props;
 
     return (
       <div className={classes.suggestionsContainer} >
         {items.map((item, i) => {
-          if (this.shouldDisplaySuggestion(item.value))
+          if (this.shouldDisplaySuggestion(item.value)){
             return (
               <Chip key={i} 
-                    component={(props)=>{return <div {...props}><div className={classes.suggestionLabel}>{item.label}</div><div className={classes.suggestionCount}>{item.count}</div></div>;}}
-                    onClick={(e) => this.props.addToFilters(e, { name: item.label, tag: item.value })} 
+                    component={ (props)=>{
+                      return (<div {...props}>
+                                <div className={classes.suggestionLabel}>{item.label}</div>
+                                <div className={classes.suggestionCount}>{item.count}</div>
+                              </div>);
+                    }}
+                    onClick={(e) => addToFilters(e, { name: item.label, tag: item.value })} 
                     className={classes.suggestion} />
             );
+          }else {
+            return null;
+          }
         })}
       </div>
     );
