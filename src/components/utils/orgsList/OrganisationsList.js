@@ -18,7 +18,6 @@ const style = theme => ({
     width: '100%',
     listStyleType: 'none',
     textAlign: 'left',
-    padding: 8,
   },
   itemLogo: {
     position: 'relative',
@@ -36,14 +35,6 @@ const style = theme => ({
     marginTop: 8,
     color: 'black'
   },
-  borderBox: {
-    position: 'absolute',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    height: '15%',
-    right: 0,
-    borderRight: '1px solid rgba(0, 0, 0, 0.12)'
-  }
 });
 
 class OrganisationsList extends React.Component {
@@ -72,9 +63,6 @@ class OrganisationsList extends React.Component {
               <ListItem button component={Link} to={'/' + locale + '/' + org.tag} key={org._id} className={classes.orgItem}>
                 <Logo type={'smallOrg'} alt={org.name} src={org.logo.url || defaultLogo} className={classes.itemLogo} />
                 <div className={classes.itemName} >{org.name}</div>
-                {(((i + 1) % 3 !== 0) && currentUserOrganisations.length > i + 1) && (
-                  <div className={classes.borderBox}></div>
-                )}
               </ListItem>
             );
           }
