@@ -48,7 +48,6 @@ class MainAlgoliaSearch extends Component {
     }
 
     observe(this.props.commonStore, 'algoliaKey', (change) => {
-      // this.forceUpdate();
       this.setState({algoliaClient: algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.props.commonStore.algoliaKey)});
     });
   }
@@ -120,12 +119,7 @@ class MainAlgoliaSearch extends Component {
       searchBarWidth = 'calc(100% - 32px)';
     }
 
-    console.log('render search')
-    console.log(this.state)
-
     if (algoliaKey && algoliaClient) {
-      // var algoliaClient = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, algoliaKey);
-      // algoliaClient.clearCache();
       return (
         <div style={{ width: '100%', position: 'relative' }}>
 
