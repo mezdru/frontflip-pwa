@@ -16,6 +16,9 @@ export const styles = theme => ({
       }
     }
   },
+  menuButton: {
+    fontSize: 40,
+   },
   grow: {
     flexGrow: 1,
   },

@@ -77,7 +77,7 @@ class ProfileLayout extends React.Component {
         <Grid container item alignItems={"stretch"} >
           <Banner>
             <IconButton aria-label="Edit" className={classes.returnButton} onClick={this.handleReturnToSearch}>
-              <Clear fontSize="large" />
+              <Clear fontSize="large" className={classes.returnButtonSize} />
             </IconButton>
           </Banner>
         </Grid>

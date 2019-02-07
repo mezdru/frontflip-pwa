@@ -24,7 +24,7 @@ class HeaderToolBar extends Component {
             onClick={this.props.handleDrawerOpen}
             className={classNames(classes.menuButton, open && classes.hide)}
           >
-            <MenuIcon />
+            <MenuIcon className={classes.menuButton} />
           </IconButton>
         )}
 
