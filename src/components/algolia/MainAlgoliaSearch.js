@@ -48,7 +48,11 @@ class MainAlgoliaSearch extends Component {
     }
 
     observe(this.props.commonStore, 'algoliaKey', (change) => {
-      this.setState({algoliaClient: algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.props.commonStore.algoliaKey)});
+      if(this.props.commonStore.algoliaKey)
+        this.setState({algoliaClient: algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.props.commonStore.algoliaKey)});
+      else {
+        this.setState({algoliaClient: null});
+      }
     });
   }
 
