@@ -5,6 +5,7 @@ import withWidth,{isWidthDown} from '@material-ui/core/withWidth';
 import {inject, observer} from 'mobx-react';
 import '../../resources/stylesheets/font-awesome.min.css';
 import Logo from '../../components/utils/logo/Logo';
+import Availability from '../availabilityToggle/Availability';
 import Wings from '../utils/wing/Wing';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
@@ -13,149 +14,184 @@ ProfileService.setExtraLinkLimit(5);
 
 
 const styles = theme => ({
-    logo: {
-        width: 170,
-        height: 170,
-        marginBottom: '-5rem',
-        [theme.breakpoints.down('xs')]: {
-            width: 146,
-            height: 146,
-            marginBottom: '-3rem',
-        },
-        [theme.breakpoints.down(400)]: {
-            width: 124,
-            height: 124,
-            marginBottom: '-3rem',
-        },
-        '& img': {
-            width: '100%',
-            height: '100%',
-            borderRadius: '50%',
-            border: '8px solid white'
-        },
+  logo: {
+    width: 170,
+    height: 170,
+    marginBottom: '-5rem',
+    [theme.breakpoints.down('xs')]: {
+      width: 146,
+      height: 146,
+      marginBottom: '-3rem',
     },
-    name: {
-        '& span span': {
-            backgroundColor: theme.palette.primary.main,
-            borderRadius: 30,
-            paddingLeft: 8,
-            paddingRight: 8,
-        },
-        display: 'block',
+    [theme.breakpoints.down(400)]: {
+      width: 124,
+      height: 124,
+      marginBottom: '-3rem',
     },
-    intro: {
-        maxHeight: '3em',
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
+    '& img': {
+      width: '100%',
+      height: '100%',
+      borderRadius: '50%',
+      border: '8px solid white'
     },
-    titleSmallestView: {
-        [theme.breakpoints.down('xs')]: {
-          fontSize: '1.2rem!important',
-        },
+  },
+  name: {
+    '& span span': {
+      backgroundColor: theme.palette.primary.main,
+      borderRadius: 30,
+      paddingLeft: 8,
+      paddingRight: 8,
     },
-    wings: {
-        display: 'inline-block',
-        color: 'white',
-        position: 'relative',
-        [theme.breakpoints.up('sm')]: {
-            marginTop: '32px!important',
-        },
+    display: 'block',
+  },
+  intro: {
+    maxHeight: '3em',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+  },
+  titleSmallestView: {
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '1.2rem!important',
     },
-    fullWidth: {
-        width: '100%'
+  },
+  wings: {
+    display: 'inline-block',
+    color: 'white',
+    position: 'relative',
+    [theme.breakpoints.up('sm')]: {
+      marginTop: '32px!important',
     },
-    cardHeader: {
-        cursor: 'pointer',
-        maxHeight: 138,
-    },
-    contact: {
-        [theme.breakpoints.up(400)]: {
-            margin: 4,
-        }
-    },
-    contactButton: {
-        width: 37,
-        height: 37,
-        '&::before': {
-            position:'absolute',
-            left:0,
-            right:0,
-            margin:'auto',
-        }
+  },
+  fullWidth: {
+    width: '100%'
+  },
+  cardHeader: {
+    cursor: 'pointer',
+    maxHeight: 138,
+  },
+  contact: {
+    [theme.breakpoints.up(400)]: {
+      margin: 4,
     }
+  },
+  contactButton: {
+    width: 37,
+    height: 37,
+    '&::before': {
+      position:'absolute',
+      left:0,
+      right:0,
+      margin:'auto',
+    }
+  },
+  dispo: {
+    position: 'relative',
+    borderRadius: 30,
+    height: 34,
+    width: 34,
+    backgroundColor: '#C2CACF',
+  
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: -42,
+      marginTop: 106,
+      marginBottom: -50,
+    },
+    [theme.breakpoints.down(400)]: {
+      marginLeft: -36,
+      marginTop: 90,
+      marginBottom: -50,
+    },
+    marginLeft: -42,
+    marginTop: 125,
+    marginBottom: -120,
+  },
+  available: {
+    backgroundColor: 'green',
+  },
+  unavailable: {
+    backgroundColor: 'red',
+  },
+  unspecified: {
+    backgroundColor: '#C2CACF',
+  }
 });
 
 class CardProfile extends React.Component {
-    constructor(props) {
-        super(props);
-        
-        this.state = {
-            locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
-        }
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
     }
-
-    render() {
-        const {classes, hit, addToFilters, handleDisplayProfile} = this.props;
-        ProfileService.transformLinks(hit);
-        ProfileService.makeHightlighted(hit);
-        ProfileService.orderHashtags(hit);
-
-        return (
-            <Card className={classes.fullWidth} key={hit.objectID}>
-                <Grid item container>
-                    <CardHeader
-                        avatar={
-                            <Logo type={'person'} className={classes.logo} src={ProfileService.getPicturePath(hit.picture) || defaultPicture}/>
-                        }
-                        title={
-                            <Typography variant="h4" className={`${classes.name} ${classes.titleSmallestView}`} gutterBottom>
+  }
+  
+  render() {
+    const {classes, hit, addToFilters, handleDisplayProfile} = this.props;
+    ProfileService.transformLinks(hit);
+    ProfileService.makeHightlighted(hit);
+    ProfileService.orderHashtags(hit);
+    
+    return (
+      <Card className={classes.fullWidth} key={hit.objectID}>
+        <Grid item container>
+          <CardHeader
+            avatar={
+              <Grid item container>
+              <Logo type={'person'} className={classes.logo} src={ProfileService.getPicturePath(hit.picture) || defaultPicture}/>
+              <Grid item className={`${classes.dispo} ${classes[hit.personAvailability]}`}>
+              <Availability />
+              </Grid>
+              </Grid>
+            }
+            title={
+              <Typography variant="h4" className={`${classes.name} ${classes.titleSmallestView}`} gutterBottom>
                                 <span dangerouslySetInnerHTML={{__html: ProfileService.htmlDecode(( (hit._highlightResult && hit._highlightResult.name) ? hit._highlightResult.name.value : null) || hit.name) || hit.tag}}></span>
-                            </Typography>
-                        }
-                        subheader={
-                            <Typography variant="body1" className={`${classes.name} ${classes.intro}`} gutterBottom>
+              </Typography>
+            }
+            subheader={
+              <Typography variant="body1" className={`${classes.name} ${classes.intro}`} gutterBottom>
                                 <span dangerouslySetInnerHTML={{__html: ProfileService.htmlDecode(( (hit._highlightResult && hit._highlightResult.intro) ? hit._highlightResult.intro.value : null) || hit.intro || '')}}></span>
-                            </Typography>
-                        }
-                        onClick={(e) => handleDisplayProfile(e, hit)}
-                        className={classes.cardHeader}
-                    />
-                </Grid>
-                <Grid item container justify={'flex-end'}>
-                    <CardActions disableActionSpacing>
-                        <Grid item container>
-                            {hit.links && hit.links.map((link, i) => {
-                                if(link.class !== 'extraLink'){
-                                    return (
-                                        <Grid item key={link._id} className={classes.contact}>
-                                            <Tooltip title={ProfileService.htmlDecode(link.display) || ProfileService.htmlDecode(link.value) || ProfileService.htmlDecode(link.url)}>
-                                                <IconButton href={link.url} className={classes.contactButton + " fa fa-" + link.icon}/>
-                                            </Tooltip>
-                                        </Grid>
-                                    )
-                                }
-                            })}
-                        </Grid>
-                    </CardActions>
-                </Grid>
-                <Grid container item>
-                    <CardContent>
-                        <Grid container className={classes.wings}>
-                            {hit.hashtags && hit.hashtags.map((hashtag, i) => {
-                                let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
-                                return (
+              </Typography>
+            }
+            onClick={(e) => handleDisplayProfile(e, hit)}
+            className={classes.cardHeader}
+          />
+        </Grid>
+        <Grid item container justify={'flex-end'}>
+          <CardActions disableActionSpacing>
+            <Grid item container>
+              {hit.links && hit.links.map((link, i) => {
+                if(link.class !== 'extraLink'){
+                  return (
+                    <Grid item key={link._id} className={classes.contact}>
+                      <Tooltip title={ProfileService.htmlDecode(link.display) || ProfileService.htmlDecode(link.value) || ProfileService.htmlDecode(link.url)}>
+                        <IconButton href={link.url} className={classes.contactButton + " fa fa-" + link.icon}/>
+                      </Tooltip>
+                    </Grid>
+                  )
+                }
+              })}
+            </Grid>
+          </CardActions>
+        </Grid>
+        <Grid container item>
+          <CardContent>
+            <Grid container className={classes.wings}>
+              {hit.hashtags && hit.hashtags.map((hashtag, i) => {
+                let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
+                return (
                                     <Wings  src={ProfileService.getPicturePath(hashtag.picture) || defaultHashtagPicture}
-                                            label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
-                                            onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
-                                            className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
-                                )
-                            })}
-                        </Grid>
-                    </CardContent>
-                </Grid>
-            </Card>
-        );
-    }
+                         label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
+                         onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
+                         className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
+                )
+              })}
+            </Grid>
+          </CardContent>
+        </Grid>
+      </Card>
+    );
+  }
 }
 
 CardProfile.propTypes = {
