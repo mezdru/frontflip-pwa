@@ -72,6 +72,16 @@ const styles = theme => ({
         [theme.breakpoints.up(400)]: {
             margin: 4,
         }
+    },
+    contactButton: {
+        width: 37,
+        height: 37,
+        '&::before': {
+            position:'absolute',
+            left:0,
+            right:0,
+            margin:'auto',
+        }
     }
 });
 
@@ -119,7 +129,7 @@ class CardProfile extends React.Component {
                                     return (
                                         <Grid item key={link._id} className={classes.contact}>
                                             <Tooltip title={ProfileService.htmlDecode(link.display) || ProfileService.htmlDecode(link.value) || ProfileService.htmlDecode(link.url)}>
-                                                <IconButton href={link.url} className={"fa fa-" + link.icon}/>
+                                                <IconButton href={link.url} className={classes.contactButton + " fa fa-" + link.icon}/>
                                             </Tooltip>
                                         </Grid>
                                     )
