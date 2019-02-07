@@ -89,6 +89,7 @@ class CardProfile extends React.Component {
         ProfileService.transformLinks(hit);
         ProfileService.makeHightlighted(hit);
         ProfileService.orderHashtags(hit);
+
         return (
             <Card className={classes.fullWidth} key={hit.objectID}>
                 <Grid item container>

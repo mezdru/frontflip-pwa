@@ -57,18 +57,6 @@ export const styles = theme => ({
       animation: 'fadeIn 0.9s 1',
       animationFillMode: 'forwards',
     },
-    '& ul li:nth-child(1)': {
-      WebkitAnimationDelay: '0s',
-      animationDelay: '0s',
-    },
-    '& ul li:nth-child(2)': {
-      WebkitAnimationDelay: '.3s',
-      animationDelay: '.3s',
-    },
-    '& ul li:nth-child(3)': {
-      WebkitAnimationDelay: '.6s',
-      animationDelay: '.6s',
-    },
     '& ul li > div:first-child': {
       position: 'relative',
       left: '0',

@@ -11,6 +11,7 @@ import { Redirect } from 'react-router-dom';
 import SearchSuggestions from "./SearchSuggestions";
 import Banner from '../../components/utils/banner/Banner';
 import algoliasearch from 'algoliasearch'; 
+import AlgoliaSearchResults from "./AlgoliaSearchResults";
 
 class MainAlgoliaSearch extends Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class MainAlgoliaSearch extends Component {
       displayedHit: null,
       resultsType: this.props.resultsType || 'person',
       shouldUpdateUrl: false,
+      shouldDisplayHitResults: true,
     }
     this.updateFilters = this.updateFilters.bind(this);
     this.addToFilters = this.addToFilters.bind(this);
@@ -47,6 +49,7 @@ class MainAlgoliaSearch extends Component {
   }
 
   updateFilters(selectedOptions) {
+    this.setState({shouldDisplayHitResults: false});
     let newFilters = '';
     if (selectedOptions.find(elt => elt.value.charAt(0) !== '#' && elt.value.charAt(0) !== '@')) {
       selectedOptions.forEach(option => {
@@ -65,7 +68,9 @@ class MainAlgoliaSearch extends Component {
       });
     }
     newFilters = newFilters.trim();
-    this.setState({ filters: newFilters, newFilter: {} });
+    this.setState({ filters: newFilters, newFilter: {} }, () => {
+      this.setState({shouldDisplayHitResults: true});
+    });
   }
 
   addToFilters(e, element, shouldAwaitToUpdateLayout) {
@@ -91,16 +96,15 @@ class MainAlgoliaSearch extends Component {
 
   render() {
     const { locale } = this.props.commonStore;
-    const { filters, newFilter, shouldUpdateUrl, findByQuery } = this.state;
+    const { filters, newFilter, shouldUpdateUrl, findByQuery, shouldDisplayHitResults } = this.state;
     const { HitComponent, classes, profileTag } = this.props;
     const orgTag = this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag;
     const { algoliaKey } = this.props.commonStore;
     let resultsType = ((profileTag && !shouldUpdateUrl) ? 'profile' : null) || this.state.resultsType;
     let displayedHit = ((profileTag && !shouldUpdateUrl) ? { tag: profileTag } : null) || this.state.displayedHit;
     let rootUrl = '/' + locale + (orgTag ? '/' + orgTag : '');
-
     let searchBarWidth;
-    // xs={12} sm={8} md={6} lg={4} 
+
     if (isWidthUp('lg', this.props.width)) {
       searchBarWidth = (4 / 12) * 100 + '%';
     }else if (isWidthUp('md', this.props.width)) {
@@ -149,18 +153,13 @@ class MainAlgoliaSearch extends Component {
                       attributesToHighlight={["intro:40", "description:40", "name:40"]} attributesToSnippet={["intro:8"]} />
                   )}
                   {!findByQuery && (
-                    // Return an intro of 12 words
                     <Configure filters={filters} attributesToSnippet={["intro:12"]} />
                   )}
-                  {HitComponent && (
+                  
+                  {HitComponent && shouldDisplayHitResults && (
                     <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
-                      <Hits
-                        hitComponent={hit => (
-                          <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView}>
-                            <HitComponent hit={hit.hit} addToFilters={this.addToFilters} handleDisplayProfile={this.handleDisplayProfile} />
-                          </Grid>
-                        )}
-                        className={classes.hitList} />
+                      <AlgoliaSearchResults addToFilters={this.addToFilters} handleDisplayProfile={this.handleDisplayProfile} 
+                                            classes={classes} HitComponent={HitComponent} />
                     </Grid>
                   )}
                   {!HitComponent && (
