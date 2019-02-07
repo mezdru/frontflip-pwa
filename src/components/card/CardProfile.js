@@ -113,7 +113,7 @@ class CardProfile extends React.Component {
                             </Typography>
                         }
                         subheader={
-                            <Typography variant="body1" className={classes.name} gutterBottom>
+                            <Typography variant="body1" className={`${classes.name} ${classes.intro}`} gutterBottom>
                                 <span dangerouslySetInnerHTML={{__html: ProfileService.htmlDecode(( (hit._highlightResult && hit._highlightResult.intro) ? hit._highlightResult.intro.value : null) || hit.intro || '')}}></span>
                             </Typography>
                         }
