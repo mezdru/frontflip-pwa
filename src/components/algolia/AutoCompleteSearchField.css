@@ -29,12 +29,54 @@
     padding-right: 6px !important;
 }
 .custom-option {
-    padding: 16px;
     cursor: pointer;
+    position: relative;
+    padding: 16px;
+}
+.custom-option-main {
+    position: relative;
+    padding: 16px;
+    top:0;
+    left:0;
+    width: 66%;
+}
+.custom-option-secondary {
+    position: absolute;
+    padding: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+    width:33%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 0.8rem;
+    font-style: italic;
+    color: rgb(150,150,150);
+}
+.custom-option-img {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 50%;
+    left:0;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    overflow:hidden;
+}
+.custom-option-label {
+    position: absolute;
+    left: 72px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: left;
+    top : 50%;
+    transform: translateY(-50%);
 }
 .custom-option:hover {
     background: #DDE9EB;
 }
-.custom-option span span{
+.custom-option-main span span{
     font-weight: bold;
 }

@@ -68,9 +68,13 @@ class SearchableSelect extends Component {
           displayedName = hit.name || hit.tag;
         }
       }
-      arrayOfLabel.push({ label: displayedName, value: hit.tag, labelText: displayedNameText });
+      arrayOfLabel.push({ label: displayedName, value: hit.tag, labelText: displayedNameText, picturePath: this.getPictureUrl(hit) });
     });
     return arrayOfLabel;
+  }
+
+  getPictureUrl(hit) {
+    return ProfileService.getPicturePath(hit.picture);
   }
 
   getTextLabel(hit) {
@@ -202,7 +206,17 @@ class SearchableSelect extends Component {
       const { innerProps, innerRef } = props;
       return (
         <div ref={innerRef} {...innerProps} className="custom-option">
-          <span dangerouslySetInnerHTML={{__html: props.data.label}}></span>
+          <div className="custom-option-main">
+            {props.data.picturePath && (
+              <img src={props.data.picturePath} className="custom-option-img" />
+            )}
+            <span dangerouslySetInnerHTML={{__html: props.data.label}} className="custom-option-label"></span>
+          </div>
+          { (props.data.value && ((props.data.value.charAt(0) === '#') || (props.data.value.charAt(0) === '@') )) && (
+            <div className="custom-option-secondary">
+              {props.data.value}
+            </div>
+          )}
         </div>
       );
     };
