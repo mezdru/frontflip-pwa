@@ -102,8 +102,8 @@ class ProfileLayout extends React.Component {
           {currentHit.links.map((link, i) => {
             return (
               <Grid item key={link._id} xs={12} style={{ position: 'relative' }}>
-                <Button variant="text" className={classes.button} key={link._id}>
-                  <div href={link.url} className={classNames(classes.contactIcon, "fa fa-" + link.icon)}></div>
+                <Button variant="text" className={classes.button} key={link._id} href={link.url}>
+                  <div className={classNames(classes.contactIcon, "fa fa-" + link.icon)}></div>
                   {ProfileService.htmlDecode(link.display) || ProfileService.htmlDecode(link.value) || ProfileService.htmlDecode(link.url)}
                 </Button>
               </Grid>
