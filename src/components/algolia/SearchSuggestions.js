@@ -38,6 +38,11 @@ class SearchSuggestionsComponent extends Component {
     super(props);
   }
 
+  componentWillReceiveProps(props) {
+    console.log('suggestions update');
+    console.log(props.currentFilters)
+  }
+
   shouldDisplaySuggestion(tag) {
     return (this.props.currentFilters.search(tag) === -1);
   }

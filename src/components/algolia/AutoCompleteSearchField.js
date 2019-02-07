@@ -113,17 +113,22 @@ class SearchableSelect extends Component {
   refineWithSelectedOptions(selectedOption) {
     let optionsString = '';
     if (selectedOption && selectedOption.length > 0) selectedOption.forEach(option => { optionsString += option.label + ' '; });
+    console.log('will refine');
     this.props.refine(optionsString);
   }
 
   async getOptions(inputValue) {
+    console.log('will refine');
     await this.props.refine(inputValue);
     return this.prepareLabels(this.props.hits);
   }
 
   // Handle input change (any change)
   handleInputChange(inputValue) {
-    if ((!inputValue || inputValue === '') && (!this.state.selectedOption || this.state.selectedOption.length === 0)) this.props.refine();
+    if ((!inputValue || inputValue === '') && (!this.state.selectedOption || this.state.selectedOption.length === 0)){
+      console.log('will refine');
+      this.props.refine();
+    }
     return inputValue;
   }
 
