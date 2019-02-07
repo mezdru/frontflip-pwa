@@ -27,7 +27,8 @@ export const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       minHeight: 'calc(100vh - 362px)'
     },
-    padding: 16
+    paddingLeft:  16,
+    paddingTop: 8,
   },
   logoContainer: {
     position: 'relative',
@@ -79,7 +80,7 @@ export const styles = theme => ({
   },
   updateCoverButton: {
     position: 'absolute',
-    top: -16,
+    top: -24,
     right: 16,
     transform: 'translateY(-100%)',
   },
@@ -114,4 +115,7 @@ export const styles = theme => ({
     from: { top: 0 },
     to: { top: '100vh' }
   },
+  name: {
+    marginLeft: 16,
+  }
 });

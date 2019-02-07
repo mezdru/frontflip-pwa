@@ -42,7 +42,9 @@ const styles = theme => ({
             paddingRight: 8,
         },
         display: 'block',
-        whiteSpace: 'nowrap',
+    },
+    intro: {
+        maxHeight: '3em',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
     },

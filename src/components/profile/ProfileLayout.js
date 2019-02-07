@@ -81,7 +81,6 @@ class ProfileLayout extends React.Component {
             </IconButton>
           </Banner>
         </Grid>
-
         <Grid item xs={12} sm={6} lg={3} className={classes.generalPart} >
           <Grid item>
             <Logo type={'person'} className={classes.logo} src={ProfileService.getPicturePath(currentHit.picture) || defaultPicture} />
@@ -138,7 +137,7 @@ class ProfileLayout extends React.Component {
               )
             })}
             {canEdit && (
-              <Wings label={this.props.intl.formatMessage({ id: 'profile.addWings' })} className={'highlighted'}
+              <Wings label={this.props.intl.formatMessage({ id: 'profile.addWings' })} className={'button'}
                 onClick={() => { window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/hashtags', orgTag, 'recordId=' + currentHit.objectID) }} />
             )}
             <div style={{ marginTop: 16 }}>

@@ -56,7 +56,7 @@ export default createMuiTheme({
       },
       h4: {
         color: palette.secondary.contrastText,
-        fontWeight: '500',
+        fontWeight: '400',
       },
       body1: {
         color: palette.secondary.contrastText,
@@ -79,6 +79,7 @@ export default createMuiTheme({
         height: "56px",
         fontWeight: "600",
         transition: 'all 250ms',
+        padding: '8px 24px',
       },
       text: {
         color: "darkgrey",

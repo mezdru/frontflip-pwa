@@ -8,7 +8,7 @@ export const styles = theme => ({
     backgroundColor: '#fff'
   },
   menuLink: {
-    width: '120px',
+    minWidth: '130px',
     height: '30px',
     [theme.breakpoints.down('md')] : {
       '&:hover': {
