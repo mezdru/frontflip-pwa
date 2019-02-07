@@ -87,7 +87,7 @@ export const styles = theme => ({
   contactIcon: {
     marginRight: 16,
     position: 'relative',
-    textAlgin: 'center',
+    textAlign: 'center',
     width: 24,
     fontSize: 24
   },
