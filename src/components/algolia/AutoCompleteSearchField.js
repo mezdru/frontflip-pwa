@@ -118,8 +118,12 @@ class SearchableSelect extends Component {
 
   async getOptions(inputValue) {
     await this.props.refine(inputValue);
-    return this.prepareLabels(this.props.hits);
+    return this.timeout(30).then(() => {return this.prepareLabels(this.props.hits)});
   }
+
+  async timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
   // Handle input change (any change)
   handleInputChange(inputValue) {
