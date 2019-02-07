@@ -20,7 +20,7 @@ const style = theme => ({
     },
   },
   suggestionCount: {
-    background: theme.palette.secondary.light,
+    background: 'rgb(220,220,220)',
     color: 'white',
     borderRadius: '50%',
     width: 32,
