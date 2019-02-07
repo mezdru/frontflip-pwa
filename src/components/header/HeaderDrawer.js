@@ -122,7 +122,7 @@ class App extends Component {
                     (organisation.premium ? intl.formatMessage({ id: 'menu.drawer.contactUsPremium' }) : intl.formatMessage({ id: 'menu.drawer.contactUs' }))
                   } />
                 </ListItem>
-
+                <Divider />
                 <ListItem>
                   <ListItemText primary={intl.formatMessage({id: 'menu.drawer.listOrgTitle'})}
                     primaryTypographyProps={{noWrap: true, style: { fontWeight: 'bold' } }} />
