@@ -123,6 +123,12 @@ class App extends Component {
                   } />
                 </ListItem>
 
+                <ListItem>
+                  <ListItemText primary={intl.formatMessage({id: 'menu.drawer.listOrgTitle'})}
+                    primaryTypographyProps={{noWrap: true, style: { fontWeight: 'bold' } }} />
+                </ListItem>
+                <OrganisationsList />
+
               </List>
               <Divider />
             </div>
@@ -152,8 +158,6 @@ class App extends Component {
                   <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.logout' })} />
                 </ListItem>
               </List>
-              <Divider />
-              <OrganisationsList />
             </div>
           )}
         </div>
