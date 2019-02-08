@@ -6,7 +6,6 @@ import './SearchField.css';
 
 export const Option = props => {
   const { innerProps, innerRef } = props;
-  console.log(props.data)
   return (
     <div ref={innerRef} {...innerProps} className="custom-option">
       <div className="custom-option-main">

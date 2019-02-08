@@ -17,19 +17,21 @@ class SearchResults extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchHits(this.props.filters, null, null);
+    this.fetchHits(this.props.filters, this.props.query, null);
   }
 
   fetchHits(filters, query, facetFilters) {
+    console.log(filters)
+    // if(filters) filters.p('type:person');
     this.props.index.search({
       query: query || '',
       facetFilters: facetFilters || '',
-      filters: filters || '',
+      filters: filters || 'type:person',
       hitsPerPage: 50,
       attributesToSnippet: [
-        "intro:"+8,
-        "description:"+8
-      ]
+        "intro:"+15,
+        "description:"+15
+      ],
     }, (err, content) => {
       if (err) throw new Error(err);
       this.setState({hits: content.hits});

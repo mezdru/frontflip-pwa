@@ -18,6 +18,13 @@ const styles = theme => ({
     '&:hover': {
       background: 'rgb(220,220,220)'
     },
+    opacity: 0,
+    animation: 'easeIn .6s',
+    animationFillMode: 'forwards',
+  },
+  '@keyframes easeIn': {
+    from: { opacity: 0 },
+    to: { opacity: 1 }
   },
   suggestionCount: {
     background: 'rgb(220,220,220)',
@@ -88,7 +95,8 @@ class SearchSuggestions extends React.Component {
                               </div>);
                     }}
                     onClick={(e) => addToFilters(e, { name: item.value, tag: item.value })} 
-                    className={classes.suggestion} />
+                    className={classes.suggestion} 
+                    style={{animationDelay: (i*0.05) +'s'}} />
             );
           }else {
             return null;

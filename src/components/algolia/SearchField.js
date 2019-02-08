@@ -122,7 +122,6 @@ class SearchField extends React.Component {
 
   async getOptions(inputValue) {
     let algoliaResponse = await this.updateOptions(inputValue);
-    console.log(algoliaResponse)
     return this.prepareLabels(algoliaResponse.hits);
   }
 

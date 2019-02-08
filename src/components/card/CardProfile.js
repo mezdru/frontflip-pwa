@@ -36,11 +36,15 @@ const styles = theme => ({
     },
   },
   name: {
-    '& span span': {
+    '& span em': {
       backgroundColor: theme.palette.primary.main,
       borderRadius: 30,
-      paddingLeft: 8,
-      paddingRight: 8,
+      color: 'white',
+      fontWeight: '600',
+      paddingLeft: 2,
+      paddingRight: 2,
+      // paddingLeft: 8,
+      // paddingRight: 8,
     },
     display: 'block',
   },
@@ -150,7 +154,7 @@ class CardProfile extends React.Component {
             }
             subheader={
               <Typography variant="body1" className={`${classes.name} ${classes.intro}`} gutterBottom>
-                                <span dangerouslySetInnerHTML={{__html: ProfileService.htmlDecode(( (hit._highlightResult && hit._highlightResult.intro) ? hit._highlightResult.intro.value : null) || hit.intro || '')}}></span>
+                                <span dangerouslySetInnerHTML={{__html: ProfileService.htmlDecode(( (hit._snippetResult && hit._snippetResult.intro) ? hit._snippetResult.intro.value : null) || hit.intro || '')}}></span>
               </Typography>
             }
             onClick={(e) => handleDisplayProfile(e, hit)}
