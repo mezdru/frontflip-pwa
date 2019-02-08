@@ -26,8 +26,9 @@ const styles = theme => ({
     to: { opacity: 1 }
   },
   suggestionCount: {
-    background: 'rgb(220,220,220)',
-    color: 'white',
+    // background: 'rgb(220,220,220)',
+    // color: 'white',
+    color: 'grey',
     borderRadius: '50%',
     width: 32,
     height:32,
