@@ -100,6 +100,7 @@ class AuthStore {
    * @param {access_token} needed.
    */
   registerToOrg() {
+    if(!organisationStore.values.organisation._id) return;
     this.inProgress = true;
     this.errors = null;
 
