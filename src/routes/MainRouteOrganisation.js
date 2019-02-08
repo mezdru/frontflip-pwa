@@ -19,7 +19,8 @@ class MainRouteOrganisation extends React.Component {
     // set locale
     if (this.props.match && this.props.match.params && this.props.match.params.locale) {
       this.props.commonStore.locale = this.props.match.params.locale;
-      this.props.commonStore.setCookie('locale', this.props.match.params.locale);
+      this.props.commonStore.populateLocale();
+      //this.props.commonStore.setCookie('locale', this.props.match.params.locale);
     }
   }
 

@@ -32,8 +32,12 @@ class CommonStore {
     this.locale = window.location.pathname.split('/')[1];
     if (!localesAccepted.some(lg => lg === this.locale)) this.locale = this.getCookie('locale');
     if (!this.locale) {
-      this.locale = 'en';
-      this.setCookie('locale', 'en');
+      this.locale = navigator.language || navigator.userLanguage || 'en';
+      if(localesAccepted.some(lg => lg === this.locale)){
+        this.setCookie('locale', this.locale);
+      }else {
+        this.setCookie('locale', 'en');
+      }
     }
   }
 
