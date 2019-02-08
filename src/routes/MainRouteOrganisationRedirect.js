@@ -27,7 +27,7 @@ class MainRouteOrganisationRedirect extends React.Component {
       this.setState({ renderComponent: false }, () => {
         this.manageAccessRight().then(() => {
           this.setState({ renderComponent: true });
-        }).catch(() => {
+        }).catch((err) => {
           this.setState({redirectTo: '/' + this.state.locale + '/error/500/routes'});
         });
       });
@@ -37,7 +37,7 @@ class MainRouteOrganisationRedirect extends React.Component {
   componentDidMount() {
     this.manageAccessRight().then(() => {
       this.setState({ renderComponent: true });
-    }).catch(() => {
+    }).catch((err) => {
       this.setState({redirectTo: '/' + this.state.locale + '/error/500/routes'});
     });
   }
@@ -66,7 +66,7 @@ class MainRouteOrganisationRedirect extends React.Component {
       await this.props.organisationStore.getOrganisation()
         .then(organisation => {
           this.redirectUserAuthWithAccess(organisation, true);
-        });
+        }).catch(() => {return;})
     } else {
       window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
     }
@@ -77,7 +77,7 @@ class MainRouteOrganisationRedirect extends React.Component {
    * @param {Organisation} organisation 
    * @param {Boolean} isNewOrg 
    */
-  redirectUserAuthWithAccess(organisation, isNewOrg) {
+  async redirectUserAuthWithAccess(organisation, isNewOrg) {
     let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
     if (!currentOrgAndRecord && !this.props.userStore.values.currentUser.superadmin) {
       window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
@@ -117,7 +117,7 @@ class MainRouteOrganisationRedirect extends React.Component {
                           this.setState({redirectTo: '/' + this.state.locale + '/error/' + err.status + '/email'});
                         }
                       });
-        await this.redirectUserAuthWithAccess(organisation);
+        await this.redirectUserAuthWithAccess(organisation, false).catch(() => {return;});
       }
     } else if (this.props.authStore.isAuth()) {
       await this.redirectUserAuthWithoutAccess();
