@@ -9,7 +9,7 @@ const style = theme => ({
   orgItem: {
     position: 'relative',
     display: 'inline-block',
-    width: '33%',
+    width: '33.33%',
     textAlign: 'center',
     padding: 8,
   },
