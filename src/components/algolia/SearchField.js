@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { AsyncCreatable, components } from 'react-select';
 import { injectIntl } from 'react-intl';
 import { inject, observer } from 'mobx-react';
-import './AutoCompleteSearchField.css';
+import './SearchField.css';
 import classNames from 'classnames';
 import { Chip, withTheme } from '@material-ui/core';
 import {Search} from '@material-ui/icons';

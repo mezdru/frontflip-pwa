@@ -2,7 +2,7 @@ import ProfileService from '../../services/profile.service';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import withWidth, { isWidthUp, isWidthDown } from '@material-ui/core/withWidth';
 import React from 'react';
-import './AutoCompleteSearchField.css';
+import './SearchField.css';
 
 export const Option = props => {
   const { innerProps, innerRef } = props;

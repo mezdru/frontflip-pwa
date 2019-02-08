@@ -7,10 +7,10 @@ import algoliasearch  from 'algoliasearch';
 import SearchField from '../components/algolia/SearchField';
 import { observe } from 'mobx';
 import withWidth, { isWidthUp, isWidthDown } from '@material-ui/core/withWidth';
-import { styles } from '../components/algolia/MainAlgoliaSearch.css';
+import { styles } from '../components/algolia/Search.css';
 import ProfileLayout from "../components/profile/ProfileLayout";
 import Banner from '../components/utils/banner/Banner';
-import SearchSuggestions2 from '../components/algolia/SearchSuggestions2';
+import SearchSuggestions from '../components/algolia/SearchSuggestions';
 import SearchResults from '../components/algolia/SearchResults';
 import Card from '../components/card/CardProfile';
 
@@ -22,7 +22,6 @@ class SearchPage extends React.Component {
       algoliaClient: null,
       algoliaIndex: null,
       filters: 'type:person',
-      refresh: false,
       newFilter: {},
       findByQuery: false,
       displayedHit: null,
@@ -142,31 +141,30 @@ class SearchPage extends React.Component {
         <main>
           {(shouldUpdateUrl && resultsType === 'person' && (window.location.pathname !== rootUrl)) && (<Redirect push to={rootUrl} />)}
           <Grid container direction={'column'} alignItems={'center'}>
-            <div  style={{
-                        width: ((((isWidthDown('sm', this.props.width)))) ? '75%' : searchBarWidth),
-                        marginRight: ((((isWidthDown('sm', this.props.width)))) ? 16 : '') }} 
-                      className={classes.searchBar} > 
+            
+            <div  style={{  width: ((((isWidthDown('sm', this.props.width)))) ? '75%' : searchBarWidth),
+                            marginRight: ((((isWidthDown('sm', this.props.width)))) ? 16 : '') }} 
+                  className={classes.searchBar} > 
               <SearchField index={algoliaIndex} updateFilters={this.updateFilters} newFilter={newFilter}/>
             </div>
 
             <Grid container item alignItems={"stretch"} >
                   <Banner style={{filter: 'brightness(90%)'}}>
-                  <div style={{ width: searchBarWidth }} className={classes.suggestionsContainer}>
-                    {shouldDisplayHitResults && (<SearchSuggestions2  index={algoliaIndex} addToFilters={this.addToFilters} filters={filters}/>)}
-                  </div>
+                    <div style={{ width: searchBarWidth }} className={classes.suggestionsContainer}>
+                      {shouldDisplayHitResults && (
+                        <SearchSuggestions  index={algoliaIndex} addToFilters={this.addToFilters} filters={filters}/>
+                      )}
+                    </div>
                   </Banner>
             </Grid>
 
             {shouldDisplayHitResults && (
-                    <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
-                      <SearchResults addToFilters={this.addToFilters} handleDisplayProfile={this.handleDisplayProfile} 
-                                            classes={classes} HitComponent={Card} index={algoliaIndex} filters={filters}/>
-                    </Grid>
+              <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
+                <SearchResults addToFilters={this.addToFilters} handleDisplayProfile={this.handleDisplayProfile} 
+                                      classes={classes} HitComponent={Card} index={algoliaIndex} filters={filters}/>
+              </Grid>
             )}
 
-            {((resultsType === 'profile') && (window.location.pathname !== rootUrl + '/' + displayedHit.tag)) && (
-              <Redirect push to={rootUrl + '/' + displayedHit.tag} />
-            )}
             {resultsType === 'profile' && (
                 <ProfileLayout hit={displayedHit} addToFilters={this.addToFilters} className={classes.profileContainer}
                     handleReturnToSearch={this.handleReturnToSearch}/>
