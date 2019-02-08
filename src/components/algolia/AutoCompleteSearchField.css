@@ -71,6 +71,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-align: left;
+    max-width: 100%;
     top : 50%;
     transform: translateY(-50%);
 }

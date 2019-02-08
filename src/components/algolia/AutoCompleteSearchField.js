@@ -9,6 +9,7 @@ import { withStyles, Chip } from '@material-ui/core';
 import {Search} from '@material-ui/icons';
 import ProfileService from '../../services/profile.service';
 import defaultPicture from '../../resources/images/placeholder_person.png';
+import withWidth, { isWidthUp, isWidthDown } from '@material-ui/core/withWidth';
 
 class SearchableSelect extends Component {
   constructor(props) {
@@ -217,7 +218,7 @@ class SearchableSelect extends Component {
             )}
             <span dangerouslySetInnerHTML={{__html: props.data.label}} className="custom-option-label"></span>
           </div>
-          { (props.data.value && ProfileService.getProfileType(props.data.value)) && (
+          { (props.data.value && ProfileService.getProfileType(props.data.value) && !isWidthDown('xs', this.props.width)) && (
             <div className="custom-option-secondary">
               {props.data.value}
             </div>
@@ -314,6 +315,6 @@ class SearchableSelect extends Component {
 const AutoCompleteSearchField = connectAutoComplete(SearchableSelect);
 export default inject('commonStore')(
   injectIntl(observer(
-    withStyles(null, { withTheme: true })(AutoCompleteSearchField)
+    withWidth()(withStyles(null, { withTheme: true })(AutoCompleteSearchField))
   ))
 );
