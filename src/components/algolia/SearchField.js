@@ -67,13 +67,9 @@ class SearchField extends React.Component {
           displayedName = hit.name || hit.tag;
         }
       }
-      arrayOfLabel.push({ label: displayedName, value: hit.tag, labelText: displayedNameText, picturePath: this.getPictureUrl(hit) });
+      arrayOfLabel.push({ label: displayedName, value: hit.tag, labelText: displayedNameText, picturePath: ProfileService.getPicturePath(hit.picture) });
     });
     return arrayOfLabel;
-  }
-
-  getPictureUrl(hit) {
-    return ProfileService.getPicturePath(hit.picture);
   }
 
   getTextLabel(hit) {
@@ -157,9 +153,7 @@ class SearchField extends React.Component {
     return this.props.intl.formatMessage({ id: 'algolia.typeSomething' });
   }
 
-  createOptionMessage(inputValue) {
-    return this.props.intl.formatMessage({ id: 'algolia.createOption' }, { input: inputValue });
-  }
+  createOptionMessage = (inputValue) => this.props.intl.formatMessage({ id: 'algolia.createOption' }, { input: inputValue });
 
   handleSearchClick(props) {
     if(props.selectProps.inputValue.trim() !== '') {
@@ -198,8 +192,6 @@ class SearchField extends React.Component {
   render() {
     const { defaultOptions} = this.props;
     const { selectedOption, placeholder, inputValue } = this.state;
-
-
 
     return (
       <AsyncCreatable
