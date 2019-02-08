@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, withStyles, Chip } from '@material-ui/core';
+import { withStyles, Chip } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 
 const styles = theme => ({

@@ -7,7 +7,8 @@ import classNames from 'classnames';
 import { Chip, withTheme } from '@material-ui/core';
 import {Search} from '@material-ui/icons';
 import ProfileService from '../../services/profile.service';
-import {Option} from './SearchFieldOption';
+import defaultPicture from '../../resources/images/placeholder_person.png';
+import  withWidth, {isWidthDown, isWidthUp} from '@material-ui/core/withWidth';
 
 class SearchField extends React.Component {
   constructor(props) {
@@ -214,6 +215,30 @@ class SearchField extends React.Component {
       );
     };
 
+    const Option = props => {
+      const { innerProps } = props;
+      console.log(props.data)
+      return (
+        <div {...innerProps} className="custom-option">
+          <div className="custom-option-main">
+            {props.data.picturePath && (
+              <img src={props.data.picturePath || 
+                (ProfileService.getProfileType(props.data.value) === 'person' ? 
+                  (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') +window.location.host + defaultPicture : 
+                  null) } 
+                  className="custom-option-img" />
+            )}
+            <span dangerouslySetInnerHTML={{__html: props.data.label}} className="custom-option-label"></span>
+          </div>
+          { (props.data.value && ProfileService.getProfileType(props.data.value)) && (
+            <div className="custom-option-secondary">
+              {props.data.value}
+            </div>
+          )}
+        </div>
+      );
+    };
+
     const customStyles = {
       control: (base, state) => ({
         ...base,
@@ -301,6 +326,6 @@ class SearchField extends React.Component {
 
 export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore')(
   observer(
-    injectIntl(withTheme()(SearchField))
+    injectIntl(withWidth()(withTheme()(SearchField)))
   )
 );
