@@ -1,6 +1,5 @@
 import React from 'react'
 import { withStyles, Chip } from '@material-ui/core';
-import { inject, observer } from "mobx-react";
 
 const styles = theme => ({
   suggestionsContainer: {
@@ -107,8 +106,4 @@ class SearchSuggestions extends React.Component {
   }
 }
 
-export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore')(
-  observer(
-    withStyles(styles)(SearchSuggestions)
-  )
-);
+export default withStyles(styles)(SearchSuggestions);

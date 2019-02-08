@@ -223,7 +223,7 @@ class SearchField extends React.Component {
   }
 }
 
-export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore')(
+export default inject('commonStore')(
   observer(
     injectIntl(withTheme()(SearchField))
   )

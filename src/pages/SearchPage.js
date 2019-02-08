@@ -76,13 +76,9 @@ class SearchPage extends React.Component {
     let newQuery = '';
 
     selectedOptions.forEach(option => {
-      if(option.value.charAt(0) !== '#' && option.value.charAt(0) !== '@'){
-        newQuery += ((newQuery !== '') ? ' ' : '') + option.label;
-      }else if (option.value.charAt(0) === '#') {
-        newFilters += ' AND hashtags.tag:' + option.value;
-      } else if (option.value.charAt(0) === '@') {
-        newFilters += ' AND tag:' + option.value;
-      }
+      if(option.value.charAt(0) !== '#' && option.value.charAt(0) !== '@') newQuery += ((newQuery !== '') ? ' ' : '') + option.label;
+      else if (option.value.charAt(0) === '#') newFilters += ' AND hashtags.tag:' + option.value;
+      else if (option.value.charAt(0) === '@') newFilters += ' AND tag:' + option.value;
     });
 
     this.setState({ filters: newFilters, newFilter: {}, query: newQuery }, () => {
@@ -103,9 +99,7 @@ class SearchPage extends React.Component {
     this.setState({ displayedHit: hit, resultsType: 'profile'});
   }
 
-  handleReturnToSearch() {
-    this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true});
-  }
+  handleReturnToSearch = () => this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true});
 
   render() {
     const { algoliaIndex, shouldDisplayHitResults, filters, newFilter, shouldUpdateUrl, query } = this.state;
@@ -167,7 +161,7 @@ class SearchPage extends React.Component {
   }
 }
 
-export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore')(
+export default inject('commonStore', 'organisationStore')(
   observer(
     withWidth()(withStyles(styles)(SearchPage))
   )

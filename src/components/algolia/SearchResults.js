@@ -1,10 +1,5 @@
 import React from 'react'
-import { Grid, withStyles } from '@material-ui/core';
-import { inject, observer } from "mobx-react";
-
-const styles = {
-
-};
+import { Grid } from '@material-ui/core';
 
 class SearchResults extends React.Component {
   constructor(props) {
@@ -21,8 +16,6 @@ class SearchResults extends React.Component {
   }
 
   fetchHits(filters, query, facetFilters) {
-    console.log(filters)
-    // if(filters) filters.p('type:person');
     this.props.index.search({
       query: query || '',
       facetFilters: facetFilters || '',
@@ -33,7 +26,7 @@ class SearchResults extends React.Component {
         "description:"+15
       ],
     }, (err, content) => {
-      if (err) throw new Error(err);
+      if (err) this.setState({hits: []});
       this.setState({hits: content.hits});
     });
   }
@@ -61,8 +54,4 @@ class SearchResults extends React.Component {
   }
 }
 
-export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore')(
-  observer(
-    withStyles(styles)(SearchResults)
-  )
-);
+export default SearchResults;
