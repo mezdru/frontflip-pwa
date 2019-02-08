@@ -119,5 +119,8 @@ export const styles = theme => ({
   },
   name: {
     marginLeft: 24,
+  },
+  aboutMe: {
+    padding: 16,
   }
 });

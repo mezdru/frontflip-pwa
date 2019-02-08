@@ -155,7 +155,7 @@ class ProfileLayout extends React.Component {
                   </IconButton>
                 )}
               </Typography>
-              <div>
+              <div className={classes.aboutMe}>
                 {ProfileService.htmlDecode(currentHit.description || '')}
               </div>
             </div>
