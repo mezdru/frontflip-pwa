@@ -26,8 +26,6 @@ const styles = theme => ({
     to: { opacity: 1 }
   },
   suggestionCount: {
-    // background: 'rgb(220,220,220)',
-    // color: 'white',
     color: 'rgb(190,190,190)',
     borderRadius: '50%',
     width: 32,
@@ -51,20 +49,20 @@ class SearchSuggestions extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchSuggestions(this.props.filters);
+    this.fetchSuggestions(this.props.filters, this.props.query);
   }
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.filters) {
-      this.fetchSuggestions(nextProps.filters);
+      this.fetchSuggestions(nextProps.filters, nextProps.query);
     }
   }
 
-  fetchSuggestions(filters) {
+  fetchSuggestions(filters, query) {
     return this.props.index.searchForFacetValues({
       facetName: 'hashtags.tag',
       facetQuery: '',
-      query: '',
+      query: query || '',
       facetFilters: filters.split(' AND '),
       filters: filters || '',
     }, (err, res) => {
