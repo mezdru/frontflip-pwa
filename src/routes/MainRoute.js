@@ -24,7 +24,7 @@ class MainRoute extends React.Component {
 
   async getUser() {
     if (this.props.authStore.isAuth()) {
-      await this.props.userStore.getCurrentUser();
+      await this.props.userStore.getCurrentUser().catch(()=>{return;});
       if (!this.state.renderComponent) this.setState({ renderComponent: true });
     }
   }
@@ -41,7 +41,7 @@ class MainRoute extends React.Component {
         <div>
           <Switch>
             <Route path="/:locale(en|fr|en-UK)" component={MainRouteOrganisation} />
-            <Redirect from="*" to={"/" + (locale ? locale : '') + endUrl} />
+            <Redirect from="*" to={"/" + (locale ? locale : 'en') + endUrl} />
           </Switch>
         </div>
       );

@@ -27,6 +27,8 @@ class MainRouteOrganisationRedirect extends React.Component {
       this.setState({ renderComponent: false }, () => {
         this.manageAccessRight().then(() => {
           this.setState({ renderComponent: true });
+        }).catch(() => {
+          this.setState({redirectTo: '/' + this.state.locale + '/error/500/routes'});
         });
       });
     }
@@ -35,7 +37,9 @@ class MainRouteOrganisationRedirect extends React.Component {
   componentDidMount() {
     this.manageAccessRight().then(() => {
       this.setState({ renderComponent: true });
-    })
+    }).catch(() => {
+      this.setState({redirectTo: '/' + this.state.locale + '/error/500/routes'});
+    });
   }
 
   /**
