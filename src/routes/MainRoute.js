@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import MainRouteOrganisation from './MainRouteOrganisation';
 import { inject, observer } from 'mobx-react';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 class MainRoute extends React.Component {
 
@@ -45,7 +46,11 @@ class MainRoute extends React.Component {
         </div>
       );
     } else {
-      return (<div></div>);
+      return (
+        <div style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', textAlign: 'center', width: '100%' }}>
+          <CircularProgress color='primary' />
+        </div>
+      );
     }
   }
 }

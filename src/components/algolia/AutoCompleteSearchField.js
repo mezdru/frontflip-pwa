@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import { withStyles, Chip } from '@material-ui/core';
 import {Search} from '@material-ui/icons';
 import ProfileService from '../../services/profile.service';
+import defaultPicture from '../../resources/images/placeholder_person.png';
 
 class SearchableSelect extends Component {
   constructor(props) {
@@ -208,11 +209,15 @@ class SearchableSelect extends Component {
         <div ref={innerRef} {...innerProps} className="custom-option">
           <div className="custom-option-main">
             {props.data.picturePath && (
-              <img src={props.data.picturePath} className="custom-option-img" />
+              <img src={props.data.picturePath || 
+                (ProfileService.getProfileType(props.data.value) === 'person' ? 
+                  (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') +window.location.host + defaultPicture : 
+                  null) } 
+                  className="custom-option-img" />
             )}
             <span dangerouslySetInnerHTML={{__html: props.data.label}} className="custom-option-label"></span>
           </div>
-          { (props.data.value && ((props.data.value.charAt(0) === '#') || (props.data.value.charAt(0) === '@') )) && (
+          { (props.data.value && ProfileService.getProfileType(props.data.value)) && (
             <div className="custom-option-secondary">
               {props.data.value}
             </div>
