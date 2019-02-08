@@ -164,7 +164,9 @@ export default createMuiTheme({
     //Header
     MuiAppBar: {
       root: {
-        height: 72
+        height: 72,
+        maxWidth: '100vw',
+        left: '0 !important',
       }
     },
     MuiDrawer: {

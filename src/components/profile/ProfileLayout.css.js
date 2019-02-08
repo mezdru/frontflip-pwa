@@ -10,7 +10,7 @@ export const styles = theme => ({
       minHeight: 'calc(100vh - 166px)'
     },
     [theme.breakpoints.up('md')]: {
-      minHeight: 'calc(100vh - 362px)'
+      minHeight: 'calc(100vh - 350px)'
     },
     background: theme.palette.secondary.light,
     padding: 16
@@ -25,10 +25,9 @@ export const styles = theme => ({
       minHeight: 'calc(100vh - 166px)'
     },
     [theme.breakpoints.up('md')]: {
-      minHeight: 'calc(100vh - 362px)'
+      minHeight: 'calc(100vh - 350px)'
     },
-    paddingLeft:  16,
-    paddingTop: 8,
+    padding:  16,
   },
   logoContainer: {
     position: 'relative',

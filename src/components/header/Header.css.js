@@ -71,7 +71,6 @@ export const styles = theme => ({
     padding: '0 !important',
   },
   drawerHeader: {
-    padding: '8px 16px',
     display: 'flex',
     alignItems: 'center',
     ...theme.mixins.toolbar,
@@ -79,6 +78,7 @@ export const styles = theme => ({
   },
     drawerIconButton: {
     padding: 0,
+    margin: '8px 16px',
     },
   drawerIcon: {
     color: theme.palette.primary.main,
