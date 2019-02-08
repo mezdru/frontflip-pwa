@@ -165,7 +165,7 @@ class CardProfile extends React.Component {
                   return (
                     <Grid item key={link._id} className={classes.contact}>
                       <Tooltip title={ProfileService.htmlDecode(link.display) || ProfileService.htmlDecode(link.value) || ProfileService.htmlDecode(link.url)}>
-                        <IconButton href={link.url} className={classes.contactButton + " fa fa-" + link.icon}/>
+                        <IconButton href={link.url} target="_blank" className={classes.contactButton + " fa fa-" + link.icon}/>
                       </Tooltip>
                     </Grid>
                   )
