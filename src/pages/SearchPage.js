@@ -24,7 +24,6 @@ class SearchPage extends React.Component {
       filters: 'type:person',
       query: '',
       newFilter: {},
-      findByQuery: false,
       displayedHit: null,
       resultsType: this.props.resultsType || 'person',
       shouldUpdateUrl: false,
@@ -63,7 +62,7 @@ class SearchPage extends React.Component {
     this.setState({ newFilter: { label: element.name, value: element.tag } });
     if (this.state.resultsType === 'profile') {
       if(shouldAwaitToUpdateLayout) {
-        setTimeout(function() {this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true });}.bind(this), 600);
+        setTimeout(function() {this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true });}.bind(this), 550);
       } else {
         this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true });
       }
@@ -92,26 +91,20 @@ class SearchPage extends React.Component {
   }
 
   getSearchBarWidth() {
-    let searchBarWidth;
-    if (isWidthUp('lg', this.props.width)) {
-      searchBarWidth = (4 / 12) * 100 + '%';
-    }else if (isWidthUp('md', this.props.width)) {
-      searchBarWidth = (6 / 12) * 100 + '%';
-    } else if (isWidthUp('sm', this.props.width)) {
-      searchBarWidth = (8 / 12) * 100 + '%';
-    } else if (isWidthUp('xs', this.props.width)) {
-      searchBarWidth = 'calc(100% - 32px)';
-    }
-    return searchBarWidth;
+    if (isWidthUp('lg', this.props.width)) return (4 / 12) * 100 + '%';
+    else if (isWidthUp('md', this.props.width)) return (6 / 12) * 100 + '%';
+    else if (isWidthUp('sm', this.props.width)) return (8 / 12) * 100 + '%';
+    else if (isWidthUp('xs', this.props.width)) return 'calc(100% - 32px)';
+    return null;
   }
 
   handleDisplayProfile(e, hit) {
     if (e) e.preventDefault();
-    this.setState({ displayedHit: hit, resultsType: 'profile', displayIn: true });
+    this.setState({ displayedHit: hit, resultsType: 'profile'});
   }
 
   handleReturnToSearch() {
-    this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true, displayIn: false});
+    this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true});
   }
 
   render() {
