@@ -52,7 +52,9 @@ class MainRouteOrganisationRedirect extends React.Component {
       return true;
     } else {
       if (!this.props.authStore.isAuth()) return false;
+      if(!this.props.userStore.values.currentUser._id) return false;
       if (this.props.userStore.values.currentUser.superadmin) return true;
+      if(this.props.userStore.values.currentUser.orgsAndRecords.length === 0 || !this.props.userStore.values.currentUser.orgsAndRecords) return false;
       return (this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id) !== undefined);
     }
   }
@@ -61,7 +63,7 @@ class MainRouteOrganisationRedirect extends React.Component {
    * @description Redirect user who is auth but hasn't access to current organisation
    */
   async redirectUserAuthWithoutAccess() {
-    if (this.props.userStore.values.currentUser.orgsAndRecords.length > 0) {
+    if (this.props.userStore.values.currentUser.orgsAndRecords && this.props.userStore.values.currentUser.orgsAndRecords.length > 0) {
       this.props.organisationStore.setOrgId(this.props.userStore.values.currentUser.orgsAndRecords[0].organisation);
       await this.props.organisationStore.getOrganisation()
         .then(organisation => {
@@ -116,6 +118,7 @@ class MainRouteOrganisationRedirect extends React.Component {
                           EmailService.confirmLoginEmail(organisation.tag);
                           this.setState({redirectTo: '/' + this.state.locale + '/error/' + err.status + '/email'});
                         }
+                        return;
                       });
         await this.redirectUserAuthWithAccess(organisation, false).catch(() => {return;});
       }

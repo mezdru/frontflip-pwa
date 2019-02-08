@@ -34,7 +34,7 @@ class MainRoute extends React.Component {
     const endUrl = window.location.pathname + window.location.search;
     const { currentUser } = this.props.userStore.values;
 
-    if (!currentUser) this.getUser();
+    if (!currentUser && this.props.authStore.isAuth()) this.getUser();
 
     if (renderComponent) {
       return (
