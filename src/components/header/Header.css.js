@@ -17,6 +17,7 @@ export const styles = theme => ({
     }
   },
   menuButton: {
+    paddingLeft: 0,
     fontSize: 40,
    },
   grow: {

@@ -119,6 +119,6 @@ export const styles = theme => ({
     to: { top: '100vh' }
   },
   name: {
-    marginLeft: 16,
+    marginLeft: 24,
   }
 });
