@@ -71,26 +71,21 @@ class SearchPage extends React.Component {
   }
 
   updateFilters(selectedOptions) {
+    if(!selectedOptions) return;
     this.setState({shouldDisplayHitResults: false});
-    let newFilters = '';
+    let newFilters = 'type:person';
     let newQuery = '';
-    if (selectedOptions.find(elt => elt.value.charAt(0) !== '#' && elt.value.charAt(0) !== '@')) {
-      selectedOptions.forEach(option => {
+
+    selectedOptions.forEach(option => {
+      if(option.value.charAt(0) !== '#' && option.value.charAt(0) !== '@'){
         newQuery += ((newQuery !== '') ? ' ' : '') + option.label;
-      });
-      this.setState({ findByQuery: true });
-    } else {
-      this.setState({ findByQuery: false });
-      newFilters = 'type:person';
-      selectedOptions.forEach(option => {
-        if (option.value.charAt(0) === '#') {
-          newFilters += ' AND hashtags.tag:' + option.value;
-        } else if (option.value.charAt(0) === '@') {
-          newFilters += ' AND tag:' + option.value;
-        }
-      });
-    }
-    newFilters = newFilters.trim();
+      }else if (option.value.charAt(0) === '#') {
+        newFilters += ' AND hashtags.tag:' + option.value;
+      } else if (option.value.charAt(0) === '@') {
+        newFilters += ' AND tag:' + option.value;
+      }
+    });
+
     this.setState({ filters: newFilters, newFilter: {}, query: newQuery }, () => {
       this.setState({shouldDisplayHitResults: true});
     });
