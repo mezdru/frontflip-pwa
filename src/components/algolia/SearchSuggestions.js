@@ -28,7 +28,7 @@ const styles = theme => ({
   suggestionCount: {
     // background: 'rgb(220,220,220)',
     // color: 'white',
-    color: 'grey',
+    color: 'rgb(190,190,190)',
     borderRadius: '50%',
     width: 32,
     height:32,
