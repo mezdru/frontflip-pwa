@@ -81,3 +81,8 @@
 .custom-option-main span span{
     font-weight: bold;
 }
+@media screen and (max-width: 600px) {
+    .custom-option-secondary {
+        display: none;
+    }
+}

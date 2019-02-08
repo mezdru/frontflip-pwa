@@ -2,12 +2,12 @@ import React from "react";
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import UrlService from '../services/url.service';
 import AuthPage from '../pages/auth/AuthPage';
-import Search from "../pages/Search";
 import PasswordForgot from "../pages/auth/PasswordForgot";
 import PasswordReset from "../pages/auth/PasswordReset";
 import { inject, observer } from 'mobx-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import EmailService from '../services/email.service';
+import SearchPage from "../pages/SearchPage";
 
 class MainRouteOrganisationRedirect extends React.Component {
 
@@ -151,8 +151,8 @@ class MainRouteOrganisationRedirect extends React.Component {
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
 
             {/* Main route with orgTag */}
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={Search} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={Search} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={SearchPage} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={SearchPage} />
           </Switch>
         </div>
       );

@@ -15,6 +15,7 @@ import { styles } from './ProfileLayout.css';
 import Banner from '../../components/utils/banner/Banner';
 import {Clear} from '@material-ui/icons';
 import ProfileService from '../../services/profile.service';
+import {Redirect} from 'react-router-dom';
 
 class ProfileLayout extends React.Component {
 
@@ -63,6 +64,7 @@ class ProfileLayout extends React.Component {
     const { canEdit, record, displayIn } = this.state;
     const { locale } = this.props.commonStore;
     const orgTag = this.props.organisationStore.values.organisation.tag;
+    let rootUrl = '/' + locale + (orgTag ? '/' + orgTag : '');
 
     const currentHit = record || hit;
     ProfileService.transformLinks(currentHit);
@@ -72,8 +74,11 @@ class ProfileLayout extends React.Component {
     if (!currentHit) return (<div></div>);
 
     return (
-      <Grid container className={(displayIn ? className : classes.profileContainerHide)} >
       
+      <Grid container className={(displayIn ? className : classes.profileContainerHide)} >
+        {(window.location.pathname !== rootUrl + '/' + hit.tag) && (
+          <Redirect push to={rootUrl + '/' + hit.tag} />
+        )}
         <Grid container item alignItems={"stretch"} >
           <Banner>
             <IconButton aria-label="Edit" className={classes.returnButton} onClick={this.handleReturnToSearch}>

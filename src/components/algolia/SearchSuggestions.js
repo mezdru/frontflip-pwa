@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
-import { connectMenu } from 'react-instantsearch-dom';
-import { withStyles, Chip } from '@material-ui/core'
+import React from 'react'
+import { withStyles, Chip } from '@material-ui/core';
 
-const style = theme => ({
+const styles = theme => ({
   suggestionsContainer: {
     textAlign: 'left',
     maxHeight: 112, // 48 * 2 + 8 + 8
@@ -18,10 +17,18 @@ const style = theme => ({
     '&:hover': {
       background: 'rgb(220,220,220)'
     },
+    opacity: 0,
+    animation: 'easeIn .6s',
+    animationFillMode: 'forwards',
+  },
+  '@keyframes easeIn': {
+    from: { opacity: 0 },
+    to: { opacity: 1 }
   },
   suggestionCount: {
-    background: 'rgb(220,220,220)',
-    color: 'white',
+    // background: 'rgb(220,220,220)',
+    // color: 'white',
+    color: 'rgb(190,190,190)',
     borderRadius: '50%',
     width: 32,
     height:32,
@@ -33,32 +40,63 @@ const style = theme => ({
   }
 });
 
-class SearchSuggestionsComponent extends Component {
+class SearchSuggestions extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      facetHits: []
+    };
+
+    this.fetchSuggestions = this.fetchSuggestions.bind(this);
   }
-  
+
+  componentDidMount() {
+    this.fetchSuggestions(this.props.filters);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.filters) {
+      this.fetchSuggestions(nextProps.filters);
+    }
+  }
+
+  fetchSuggestions(filters) {
+    return this.props.index.searchForFacetValues({
+      facetName: 'hashtags.tag',
+      facetQuery: '',
+      query: '',
+      facetFilters: filters.split(' AND '),
+      filters: filters || '',
+    }, (err, res) => {
+      if(!err) {
+        this.setState({facetHits: res.facetHits});
+      }
+    });
+  }
+
   shouldDisplaySuggestion(tag) {
-    return (this.props.currentFilters.search(tag) === -1);
+    return (this.props.filters.search(tag) === -1);
   }
 
   render() {
-    const { items, classes, addToFilters } = this.props;
+    const {facetHits} = this.state;
+    const {classes, addToFilters} = this.props;
 
     return (
       <div className={classes.suggestionsContainer} >
-        {items.map((item, i) => {
+        {facetHits.map((item, i) => {
           if (this.shouldDisplaySuggestion(item.value)){
             return (
               <Chip key={i} 
                     component={ (props)=>{
                       return (<div {...props}>
-                                <div className={classes.suggestionLabel}>{item.label}</div>
+                                <div className={classes.suggestionLabel}>{item.value}</div>
                                 <div className={classes.suggestionCount}>{item.count}</div>
                               </div>);
                     }}
-                    onClick={(e) => addToFilters(e, { name: item.label, tag: item.value })} 
-                    className={classes.suggestion} />
+                    onClick={(e) => addToFilters(e, { name: item.value, tag: item.value })} 
+                    className={classes.suggestion} 
+                    style={{animationDelay: (i*0.05) +'s'}} />
             );
           }else {
             return null;
@@ -69,5 +107,4 @@ class SearchSuggestionsComponent extends Component {
   }
 }
 
-const SearchSuggestions = connectMenu(SearchSuggestionsComponent);
-export default withStyles(style, { withTheme: true })(SearchSuggestions);
+export default withStyles(styles)(SearchSuggestions);

@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import { AsyncCreatable, components } from 'react-select';
-import { connectAutoComplete } from 'react-instantsearch-dom';
+import { AsyncCreatable } from 'react-select';
 import { injectIntl } from 'react-intl';
 import { inject, observer } from 'mobx-react';
-import './AutoCompleteSearchField.css';
+import './SearchField.css';
 import classNames from 'classnames';
-import { withStyles, Chip } from '@material-ui/core';
-import {Search} from '@material-ui/icons';
+import { withTheme } from '@material-ui/core';
 import ProfileService from '../../services/profile.service';
-import defaultPicture from '../../resources/images/placeholder_person.png';
-import withWidth, { isWidthUp, isWidthDown } from '@material-ui/core/withWidth';
+import {Option, customStyles, MultiValueContainer, DropdownIndicator} from './SearchFieldElements';
 
-class SearchableSelect extends Component {
+class SearchField extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -70,13 +67,9 @@ class SearchableSelect extends Component {
           displayedName = hit.name || hit.tag;
         }
       }
-      arrayOfLabel.push({ label: displayedName, value: hit.tag, labelText: displayedNameText, picturePath: this.getPictureUrl(hit) });
+      arrayOfLabel.push({ label: displayedName, value: hit.tag, labelText: displayedNameText, picturePath: ProfileService.getPicturePath(hit.picture) });
     });
     return arrayOfLabel;
-  }
-
-  getPictureUrl(hit) {
-    return ProfileService.getPicturePath(hit.picture);
   }
 
   getTextLabel(hit) {
@@ -119,18 +112,31 @@ class SearchableSelect extends Component {
   refineWithSelectedOptions(selectedOption) {
     let optionsString = '';
     if (selectedOption && selectedOption.length > 0) selectedOption.forEach(option => { optionsString += option.label + ' '; });
-    this.props.refine(optionsString);
+    this.updateOptions(optionsString);
   }
 
   async getOptions(inputValue) {
-    await this.props.refine(inputValue);
-    return this.prepareLabels(this.props.hits);
+    let algoliaResponse = await this.updateOptions(inputValue);
+    return this.prepareLabels(algoliaResponse.hits);
+  }
+
+  async updateOptions(inputValue) {
+    return await this.props.index.search(
+      {
+        query: inputValue,
+        attributesToRetrieve: ['type','name', 'name_translated', 'tag','picture'],
+        restrictSearchableAttributes: ['name', 'name_translated', 'tag'],
+        highlightPreTag: '<span>',
+        highlightPostTag: '</span>',
+        hitsPerPage: 5
+      }
+    );
   }
 
   // Handle input change (any change)
   handleInputChange(inputValue) {
     if ((!inputValue || inputValue === '') && (!this.state.selectedOption || this.state.selectedOption.length === 0)){
-      this.props.refine();
+      this.updateOptions(inputValue);
     }
     return inputValue;
   }
@@ -147,9 +153,7 @@ class SearchableSelect extends Component {
     return this.props.intl.formatMessage({ id: 'algolia.typeSomething' });
   }
 
-  createOptionMessage(inputValue) {
-    return this.props.intl.formatMessage({ id: 'algolia.createOption' }, { input: inputValue });
-  }
+  createOptionMessage = (inputValue) => this.props.intl.formatMessage({ id: 'algolia.createOption' }, { input: inputValue });
 
   handleSearchClick(props) {
     if(props.selectProps.inputValue.trim() !== '') {
@@ -183,104 +187,11 @@ class SearchableSelect extends Component {
             this.handleSearchClick({selectProps: {inputValue: this.state.inputValue}});
             break;
     }
-}
+  }
 
   render() {
-    const { defaultOptions, intl, theme } = this.props;
+    const { defaultOptions} = this.props;
     const { selectedOption, placeholder, inputValue } = this.state;
-
-
-    const MultiValueContainer = (props) => {
-      return (
-        <Chip label={props.children} color="secondary" onClick={props.onClick} className={'editableChip'} />
-      );
-    };
-
-    const DropdownIndicator = (props) => {
-      return (
-        <components.DropdownIndicator {...props}>
-          <Search onClick={(e) => {this.handleSearchClick(props)}} style={{color: theme.palette.primary.main}} />
-        </components.DropdownIndicator>
-      );
-    };
-
-    const Option = props => {
-      const { innerProps, innerRef } = props;
-      return (
-        <div ref={innerRef} {...innerProps} className="custom-option">
-          <div className="custom-option-main">
-            {props.data.picturePath && (
-              <img src={props.data.picturePath || 
-                (ProfileService.getProfileType(props.data.value) === 'person' ? 
-                  (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') +window.location.host + defaultPicture : 
-                  null) } 
-                  className="custom-option-img" />
-            )}
-            <span dangerouslySetInnerHTML={{__html: props.data.label}} className="custom-option-label"></span>
-          </div>
-          { (props.data.value && ProfileService.getProfileType(props.data.value) && !isWidthDown('xs', this.props.width)) && (
-            <div className="custom-option-secondary">
-              {props.data.value}
-            </div>
-          )}
-        </div>
-      );
-    };
-    
-    const customStyles = {
-      control: (base, state) => ({
-        ...base,
-        borderRadius: '30px',
-        boxSizing: 'border-box',
-        border: state.isFocused ? "2px solid #dd362e" : "1px solid #dd362e",
-        boxShadow: state.isFocused ? null : null,
-        "&:hover": {
-          borderColor: state.isFocused ? "#dd362e" : "#dd362e",
-          boxSizing: 'border-box'
-        },
-        padding: '3px 16px',
-        minHeight: 54,
-        fontSize: 16
-      }),
-      menu: base => ({
-        ...base,
-        borderRadius: '30px',
-        overflow: 'hidden',
-        hyphens: "auto",
-        textAlign: "center",
-        // prevent menu to scroll y
-        wordWrap: "break-word",
-
-      }),
-      menuList: base => ({
-        ...base,
-        padding: 0,
-      }),
-      input: base => ({
-        ...base,
-        padding: 0,
-        marginLeft: 8,
-      }),
-      multiValue: base => ({
-        ...base,
-        background: theme.palette.primary.main,
-      }),
-      placeholder: base => ({
-        ...base,
-        marginLeft: 8,
-      }),
-      valueContainer: (provided, state) => ({
-        ...provided,
-        padding: '0 !important',
-        margin: 0,
-        marginLeft: -8,
-        overflow: 'auto',
-        maxHeight: 42,
-        '&:last-child': {
-          marginBottom: 8,
-        },
-      }),
-    };
 
     return (
       <AsyncCreatable
@@ -312,9 +223,8 @@ class SearchableSelect extends Component {
   }
 }
 
-const AutoCompleteSearchField = connectAutoComplete(SearchableSelect);
 export default inject('commonStore')(
-  injectIntl(observer(
-    withWidth()(withStyles(null, { withTheme: true })(AutoCompleteSearchField))
-  ))
+  observer(
+    injectIntl(withTheme()(SearchField))
+  )
 );
