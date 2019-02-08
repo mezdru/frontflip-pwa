@@ -1,11 +1,29 @@
 import commonStore from '../stores/common.store';
 import twemoji from 'twemoji';
+import defaultPicture from '../resources/images/placeholder_person.png';
+import defaultHashtagPicture from '../resources/images/placeholder_hashtag.png';
 
 class ProfileService {
   EXTRA_LINK_LIMIT = 20;
 
   setExtraLinkLimit(number) {
     this.EXTRA_LINK_LIMIT = number;
+  }
+
+  getProfileType(tag) {
+    if(tag.charAt(0) === '#') {
+      return 'hashtag';
+    }else if (tag.charAt(0) === '@') {
+      return 'person';
+    }else {
+      return null;
+    }
+  }
+
+  getDefaultPictureByType(type) {
+    if(type === 'hashtag') return defaultHashtagPicture;
+    else if(type === 'person') return defaultPicture;
+    else return null;
   }
 
   transformLinks(item) {
