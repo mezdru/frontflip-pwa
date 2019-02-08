@@ -7,7 +7,7 @@ import algoliasearch  from 'algoliasearch';
 import SearchField from '../components/algolia/SearchField';
 import { observe } from 'mobx';
 import withWidth, { isWidthUp, isWidthDown } from '@material-ui/core/withWidth';
-import { styles } from './Search.css';
+import { styles } from './SearchPage.css';
 import ProfileLayout from "../components/profile/ProfileLayout";
 import Banner from '../components/utils/banner/Banner';
 import SearchSuggestions from '../components/algolia/SearchSuggestions';
