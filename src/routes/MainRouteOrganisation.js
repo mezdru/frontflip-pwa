@@ -6,7 +6,6 @@ import PasswordReset from "../pages/auth/PasswordReset";
 import { inject, observer } from 'mobx-react';
 import AuthPage from "../pages/auth/AuthPage";
 import ErrorPage from "../pages/ErrorPage";
-
 class MainRouteOrganisation extends React.Component {
 
   constructor(props) {
