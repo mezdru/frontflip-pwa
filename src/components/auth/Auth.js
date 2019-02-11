@@ -56,7 +56,7 @@ class Auth extends React.Component {
 
     // HANDLE GOOGLE AUTH CALLBACK
     if (this.state.queryParams && this.state.queryParams.refresh_token && this.state.queryParams.access_token) {
-      let googleState = JSON.parse(this.state.queryParams.state);
+      let googleState = (this.state.queryParams.state ? JSON.parse(this.state.queryParams.state) : null);
       this.props.commonStore.setAuthTokens(this.state.queryParams);
       this.props.userStore.getCurrentUser()
         .then(() => {
@@ -73,10 +73,12 @@ class Auth extends React.Component {
                   window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
                 });
             }).catch((err) => {
-              window.location.href = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + window.location.host + '/' + this.state.locale;
+              // window.location.href = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + window.location.host + '/' + this.state.locale;
+              this.setState({redirectTo: '/' + this.state.locale});
             });
         }).catch((err) => {
-          window.location.href = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + window.location.host + '/' + this.state.locale;
+          this.setState({redirectTo: '/' + this.state.locale});
+          // window.location.href = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + window.location.host + '/' + this.state.locale;
         });
     }
   }
