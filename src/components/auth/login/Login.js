@@ -57,7 +57,7 @@ class Login extends React.Component {
 
   render() {
     const { values, inProgress } = this.props.authStore;
-    const { organisation, orgTag } = this.props.organisationStore.values;
+    const { orgTag } = this.props.organisationStore.values;
     let { loginErrors, locale, redirectTo, isAuth } = this.state;
     let intl = this.props.intl;
 

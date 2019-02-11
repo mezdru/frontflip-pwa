@@ -70,7 +70,9 @@ export const styles = theme => ({
   },
   minHeightPossible: {
     height: '-moz-min-content',
+    // eslint-disable-next-line
     height: '-webkit-min-content',
+    // eslint-disable-next-line
     height: 'min-content',
   },
   editButton: {

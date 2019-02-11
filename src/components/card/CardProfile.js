@@ -173,7 +173,7 @@ class CardProfile extends React.Component {
                       </Tooltip>
                     </Grid>
                   )
-                }
+                } else { return null; }
               })}
             </Grid>
           </CardActions>

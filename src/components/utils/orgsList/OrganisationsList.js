@@ -65,7 +65,7 @@ class OrganisationsList extends React.Component {
                 <div className={classes.itemName} >{org.name}</div>
               </ListItem>
             );
-          }
+          }else {return null; }
         })}
       </List>
     )
