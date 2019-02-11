@@ -2,7 +2,7 @@ export const styles = theme => ({
   hitListContainer: {
     position: 'relative',
     width: '100%',
-    marginBottom: 150
+    marginBottom: 150,
   },
   suggestionsContainer: {
     position: 'relative',
@@ -45,6 +45,7 @@ export const styles = theme => ({
   },
   hitList: {
     width: '100%',
+    backgroundColor: '#f2f2f2',
     '& ul': {
       listStyleType: 'none',
       padding: 0,

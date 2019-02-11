@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { components } from 'react-select';
 import './SearchField.css';
 import { Chip } from '@material-ui/core';
@@ -16,7 +16,7 @@ export const MultiValueContainer = (props) => {
 export const DropdownIndicator = (props) => {
   return (
     <components.DropdownIndicator {...props}>
-      <Search onClick={(e) => {this.handleSearchClick(props)}} style={{color: theme.palette.primary.main}} />
+      <Search onClick={() => {this.handleSearchClick(props)}} style={{color: theme.palette.primary.main}} />
     </components.DropdownIndicator>
   );
 };
@@ -27,7 +27,7 @@ export const Option = props => {
     <div {...innerProps} className="custom-option">
       <div className="custom-option-main">
         {props.data.picturePath && (
-          <img src={props.data.picturePath || 
+          <img alt="img-logo" src={props.data.picturePath ||
             (ProfileService.getProfileType(props.data.value) === 'person' ? 
               (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') +window.location.host + defaultPicture : 
               null) } 

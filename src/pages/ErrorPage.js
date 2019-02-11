@@ -1,10 +1,7 @@
 import React from 'react'
 import { Grid, withStyles, Typography } from '@material-ui/core';
-import Banner from '../components/utils/banner/Banner';
-import Card from '../components/card/CardProfile';
 import { inject, observer } from "mobx-react";
 import Header from '../components/header/Header';
-import { Redirect } from "react-router-dom";
 import { FormattedHTMLMessage } from 'react-intl';
 import ProfileService from '../services/profile.service';
 import UrlService from '../services/url.service';
@@ -59,7 +56,7 @@ class ErrorPage extends React.Component {
                 justify={'center'}
               >
                 <Grid item>
-                  <img className={classes.bigPicture} src={ProfileService.getEmojiUrl('🧰')} />
+                  <img className={classes.bigPicture} src={ProfileService.getEmojiUrl('🧰')} alt="bigPicture" />
                 </Grid>
                 <Grid item>
                   <Typography variant={'h1'} className={classes.title}>{errorCode} Oops</Typography>

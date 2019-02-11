@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Typography, withStyles } from '@material-ui/core';
+import { Button, withStyles } from '@material-ui/core';
 import googleLogo from '../../../resources/images/g.svg';
 import { FormattedMessage } from 'react-intl';
 

@@ -13,6 +13,9 @@ export const palette = {
     dark: '#789094',
     contrastText: '#0D0221',
   },
+  background: {
+    default: '#f2f2f2',
+  }
 };
 
 export default createMuiTheme({

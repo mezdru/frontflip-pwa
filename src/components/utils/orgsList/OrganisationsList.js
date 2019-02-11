@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, withStyles, Typography, Button, ListItem, List } from '@material-ui/core';
+import { withStyles, ListItem, List } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import Logo from '../logo/Logo';
 import { Link } from 'react-router-dom';

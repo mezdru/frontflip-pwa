@@ -92,13 +92,13 @@ export const styles = theme => ({
   },
   returnButton: {
     position: 'absolute',
-    margin: '8px 16px',
+    margin: 16,
     background: 'white',
     color: theme.palette.primary.main
   },
-    returnButtonSize: {
-    fontSize: 40,
-    },
+  returnButtonSize: {
+    fontSize: 24,
+  },
   profileContainerHide: {
     position: 'fixed',
     top: 0,

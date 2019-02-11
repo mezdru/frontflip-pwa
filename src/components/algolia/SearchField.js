@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { AsyncCreatable } from 'react-select';
 import { injectIntl } from 'react-intl';
 import { inject, observer } from 'mobx-react';
@@ -16,7 +16,6 @@ class SearchField extends React.Component {
       selectedOption: this.props.defaultValue,
       placeholder: this.props.intl.formatMessage({ id: 'algolia.search' }),
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
-      inputValue: ''
     };
 
     this.getOptions = this.getOptions.bind(this);

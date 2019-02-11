@@ -16,12 +16,6 @@ export const styles = theme => ({
       }
     }
   },
-  menuButton: {
-    fontSize: 40,
-    [theme.breakpoints.down(400)] : {
-      left: -8,
-    },
-   },
   grow: {
     flexGrow: 1,
   },

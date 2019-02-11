@@ -28,7 +28,6 @@ class SearchPage extends React.Component {
       resultsType: this.props.resultsType || 'person',
       shouldUpdateUrl: false,
       shouldDisplayHitResults: true,
-      algoliaClient: null,
     };
 
     this.updateFilters = this.updateFilters.bind(this);

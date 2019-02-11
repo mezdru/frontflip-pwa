@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Grid, withStyles, Typography, IconButton, CardActions, CardContent, CardHeader, Card, Tooltip} from '@material-ui/core';
-import withWidth,{isWidthDown} from '@material-ui/core/withWidth';
+import withWidth from '@material-ui/core/withWidth';
 import {inject, observer} from 'mobx-react';
 import '../../resources/stylesheets/font-awesome.min.css';
 import Logo from '../../components/utils/logo/Logo';
