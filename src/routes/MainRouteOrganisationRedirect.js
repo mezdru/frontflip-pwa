@@ -8,6 +8,7 @@ import { inject, observer } from 'mobx-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import EmailService from '../services/email.service';
 import SearchPage from "../pages/SearchPage";
+import SlackService from '../services/slack.service';
 
 class MainRouteOrganisationRedirect extends React.Component {
 
@@ -28,6 +29,7 @@ class MainRouteOrganisationRedirect extends React.Component {
         this.manageAccessRight().then(() => {
           this.setState({ renderComponent: true });
         }).catch((err) => {
+          SlackService.notifyError(err, '32', 'quentin', 'MainRouteOrganisationRedirect.js');
           this.setState({redirectTo: '/' + this.state.locale + '/error/500/routes'});
         });
       });
@@ -38,6 +40,7 @@ class MainRouteOrganisationRedirect extends React.Component {
     this.manageAccessRight().then(() => {
       this.setState({ renderComponent: true });
     }).catch((err) => {
+      SlackService.notifyError(err, '42', 'quentin', 'MainRouteOrganisationRedirect.js');
       this.setState({redirectTo: '/' + this.state.locale + '/error/500/routes'});
     });
   }
@@ -104,6 +107,8 @@ class MainRouteOrganisationRedirect extends React.Component {
         this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
         organisation = await this.props.organisationStore.getOrganisationForPublic()
                       .catch((err) => {
+                        SlackService.notifyError('Someone try to access : ' + this.props.match.params.organisationTag + ' and got 404.', 
+                                                  '110', 'quentin', 'MainRouteOrganisationRedirect.js');
                         this.setState({redirectTo: '/' + this.state.locale + '/error/404/organisation'});
                       });
       }

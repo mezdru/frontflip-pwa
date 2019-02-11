@@ -4,6 +4,7 @@ import commonStore from "./common.store";
 import userStore from "./user.store";
 import organisationStore from "./organisation.store";
 import emailService from "../services/email.service";
+import SlackService from '../services/slack.service';
 
 class AuthStore {
   inProgress = false;
@@ -57,6 +58,7 @@ class AuthStore {
     return agent.Auth.login(this.values.email, this.values.password)
       .then((response) => {
         if (response && response.access_token) {
+          SlackService.notifyError(this.values.email + ' logged in with email and password.', '61', 'quentin', 'auth.store.js');
           commonStore.setAuthTokens(response);
           return userStore.getCurrentUser()
             .then(() => { return 200; });

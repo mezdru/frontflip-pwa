@@ -10,6 +10,7 @@ import SwipeableViews from 'react-swipeable-views';
 import Login from './login/Login';
 import Register from './register/Register';
 import UrlService from '../../services/url.service';
+import SlackService from '../../services/slack.service';
 
 const queryString = require('query-string');
 
@@ -59,7 +60,8 @@ class Auth extends React.Component {
       let googleState = (this.state.queryParams.state ? JSON.parse(this.state.queryParams.state) : null);
       this.props.commonStore.setAuthTokens(this.state.queryParams);
       this.props.userStore.getCurrentUser()
-        .then(() => {
+        .then((user) => {
+          SlackService.notifyError( (user.google && user.google.email ? user.google.email : '?') + ' logged in with Google.', '63', 'quentin', 'Auth.js');
           if (googleState && googleState.invitationCode) this.props.authStore.setInvitationCode(googleState.invitationCode);
           this.props.authStore.registerToOrg()
             .then((data) => {
