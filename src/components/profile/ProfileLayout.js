@@ -60,7 +60,7 @@ class ProfileLayout extends React.Component {
   }
 
   render() {
-    const { hit, className, classes, theme, addToFilters } = this.props;
+    const { hit, className, classes, theme } = this.props;
     const { canEdit, record, displayIn } = this.state;
     const { locale } = this.props.commonStore;
     const orgTag = this.props.organisationStore.values.organisation.tag;

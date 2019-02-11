@@ -185,6 +185,8 @@ class SearchField extends React.Component {
             event.preventDefault();
             this.handleSearchClick({selectProps: {inputValue: this.state.inputValue}});
             break;
+        default:
+          return;
     }
   }
 

@@ -3,7 +3,7 @@ import { withStyles } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import PropTypes from 'prop-types';
 import { Divider, Drawer, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, ListItemAvatar } from '@material-ui/core';
-import { ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon } from '@material-ui/icons';
+import { ChevronLeft as ChevronLeftIcon } from '@material-ui/icons';
 import './header.css';
 import AvailabilityToggle from '../availabilityToggle/AvailabilityToggle';
 import { styles } from './Header.css.js'
@@ -41,7 +41,7 @@ class App extends Component {
   }
 
   render() {
-    const { classes, theme, auth, open, intl } = this.props;
+    const { classes, auth, open, intl } = this.props;
     const { record } = this.props.recordStore.values;
     const { organisation } = this.props.organisationStore.values;
     const { currentUser } = this.props.userStore.values;

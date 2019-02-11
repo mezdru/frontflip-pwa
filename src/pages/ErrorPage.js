@@ -67,12 +67,12 @@ class ErrorPage extends React.Component {
                       <FormattedHTMLMessage id="errorPage.emailNotValidated" values={{email: currentUser.email.value}} />
                     </Typography>
                   )}
-                  {(errorType === 'organisation' && errorCode == 404) && (
+                  {(errorType === 'organisation' && errorCode === '404') && (
                     <Typography variant={'subheading'}>
                       <FormattedHTMLMessage id="errorPage.organisationNotFound" values={{newOrgLink: UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', null, null), orgTag: orgTag}} />
                     </Typography>
                   )}
-                  {(errorCode == 500 && errorType === 'routes') && (
+                  {(errorCode === '500' && errorType === 'routes') && (
                     <Typography variant={'subheading'}>
                       <FormattedHTMLMessage id="errorPage.unhandledError" />
                     </Typography>
