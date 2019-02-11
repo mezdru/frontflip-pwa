@@ -98,7 +98,7 @@ let validateToken = () => {
           commonStore.setAuthTokens(JSON.parse(response.text));
           resolve();
         }).catch((err) => {
-          authStore.logout();
+          handleErrors(err);
         });
     });
   } else {

@@ -45,8 +45,9 @@ class OrganisationStore {
         .then(data => {
           this.setOrganisation(data.organisation);
           this.setFullOrgFetch(true);
-          this.getAlgoliaKey(true);
-          return this.values.organisation;
+          return this.getAlgoliaKey(true).then(() => {
+            return this.values.organisation;
+          });
         })
         .catch(action((err) => {
           this.errors = err.response && err.response.body && err.response.body.errors;
@@ -75,6 +76,8 @@ class OrganisationStore {
   getAlgoliaKey(forceUpdate) {
     this.inProgress = true;
     this.errors = null;
+
+    if(forceUpdate) commonStore.removeCookie('algoliaKey');
 
     if ((commonStore.algoliaKey || commonStore.getCookie('algoliaKey')) && !forceUpdate) return Promise.resolve(commonStore.algoliaKey);
     if ((commonStore.algoliaKeyOrganisation) === this.values.organisation.tag) return Promise.resolve(commonStore.algoliaKey);
