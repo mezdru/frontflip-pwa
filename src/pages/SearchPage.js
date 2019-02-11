@@ -62,7 +62,7 @@ class SearchPage extends React.Component {
     this.setState({ newFilter: { label: element.name, value: element.tag } });
     if (this.state.resultsType === 'profile') {
       if(shouldAwaitToUpdateLayout) {
-        setTimeout(function() {this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true });}.bind(this), 550);
+        setTimeout(function() {this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true });}.bind(this), 500);
       } else {
         this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true });
       }
@@ -113,15 +113,18 @@ class SearchPage extends React.Component {
     let displayedHit = ((profileTag && !shouldUpdateUrl) ? { tag: profileTag } : null) || this.state.displayedHit;
     let rootUrl = '/' + locale + (orgTag ? '/' + orgTag : '');
     let searchBarWidth = this.getSearchBarWidth();
-    let redirecTo;
+    let redirectTo;
 
-    if (profileTag && profileTag.charAt(0) !== '@') redirecTo = '/' + locale + '/' + orgTag;
-    if (redirecTo) return (<Redirect to={redirecTo} />);
+
+    if (profileTag && profileTag.charAt(0) !== '@') redirectTo = '/' + locale + '/' + orgTag;
+    if (redirectTo) {
+      return (<Redirect to={redirectTo} />);
+    }
     if(!algoliaIndex) return null;
 
     return (
       <div>
-        <Header />
+        <Header handleDisplayProfile={this.handleDisplayProfile}/>
         <main>
           {(shouldUpdateUrl && resultsType === 'person' && (window.location.pathname !== rootUrl)) && (<Redirect push to={rootUrl} />)}
           <Grid container direction={'column'} alignItems={'center'}>

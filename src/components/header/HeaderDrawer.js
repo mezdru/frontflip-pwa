@@ -80,7 +80,7 @@ class App extends Component {
                         primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold' } }} />
                     </ListItem>
 
-                    <ListItem button component={Link} to={'/' + locale + '/' + organisation.tag + '/' + record.tag} onClick={this.props.handleDrawerClose}>
+                    <ListItem button component={Link} to={'/' + locale + '/' + organisation.tag + '/' + record.tag} onClick={(e) => {this.props.handleDisplayProfile(e, {tag: record.tag})}}>
                       <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.profile' })} />
                     </ListItem>
 
