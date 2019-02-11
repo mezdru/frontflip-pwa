@@ -76,7 +76,7 @@ class Auth extends React.Component {
                 });
             }).catch((err) => {
               // window.location.href = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + window.location.host + '/' + this.state.locale;
-              this.setState({redirectTo: '/' + this.state.locale});
+              this.setState({redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag});
             });
         }).catch((err) => {
           this.setState({redirectTo: '/' + this.state.locale});
@@ -105,7 +105,7 @@ class Auth extends React.Component {
     const {classes, theme} = this.props;
     const {redirectTo} = this.state;
     let intl = this.props.intl;
-    if (redirectTo) return (<Redirect to={redirectTo} />);
+    if (redirectTo) return (<Redirect push to={redirectTo} />);
 
     return (
       <Grid container spacing={16}>
