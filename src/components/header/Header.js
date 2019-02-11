@@ -54,6 +54,11 @@ class App extends Component {
       .then(this.setState({ successLogout: true }));
   };
 
+  handleDisplayProfile = (e, record) => {
+    this.handleDrawerClose();
+    this.props.handleDisplayProfile(e, record);
+  }
+
   render() {
     const { anchorEl, mobileMoreAnchorEl, open, successLogout, auth } = this.state;
     const isMenuOpen = Boolean(anchorEl);
@@ -119,15 +124,10 @@ class App extends Component {
         <HeaderDrawer handlerDrawerOpen={this.handleDrawerOpen}
           handleDrawerClose={this.handleDrawerClose}
           handleProfileMenuOpen={this.handleProfileMenuOpen}
-          open={open} auth={auth} anchorEl={anchorEl} />
+          open={open} auth={auth} anchorEl={anchorEl} 
+          handleDisplayProfile={this.handleDisplayProfile} />
 
         <div className={classes.drawerHeader} />
-        {/* <main
-                        className={classNames(classes.content, {
-                            [classes.contentShift]: open,
-                        })}
-                    >
-                    </main> */}
       </div>
     );
   }
