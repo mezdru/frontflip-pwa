@@ -77,10 +77,8 @@ class OrganisationStore {
     this.inProgress = true;
     this.errors = null;
 
-    if(forceUpdate) commonStore.removeCookie('algoliaKey');
-
     if ((commonStore.algoliaKey || commonStore.getCookie('algoliaKey')) && !forceUpdate) return Promise.resolve(commonStore.algoliaKey);
-    if ((commonStore.algoliaKeyOrganisation) === this.values.organisation.tag) return Promise.resolve(commonStore.algoliaKey);
+    if (commonStore.algoliaKeyOrganisation === this.values.organisation.tag && !forceUpdate) return Promise.resolve(commonStore.algoliaKey);
 
     return agent.Organisation.getAlgoliaKey(this.values.organisation._id, this.values.organisation.public)
       .then(data => {
