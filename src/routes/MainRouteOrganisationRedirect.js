@@ -67,11 +67,16 @@ class MainRouteOrganisationRedirect extends React.Component {
    */
   async redirectUserAuthWithoutAccess() {
     if (this.props.userStore.values.currentUser.orgsAndRecords && this.props.userStore.values.currentUser.orgsAndRecords.length > 0) {
-      this.props.organisationStore.setOrgId(this.props.userStore.values.currentUser.orgsAndRecords[0].organisation);
-      await this.props.organisationStore.getOrganisation()
+      let orgId = this.props.userStore.values.currentUser.orgsAndRecords[0].organisation;
+      if(orgId) {
+        this.props.organisationStore.setOrgId(orgId);
+        await this.props.organisationStore.getOrganisation()
         .then(organisation => {
           this.redirectUserAuthWithAccess(organisation, true);
         }).catch(() => {return;})
+      } else {
+        window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
+      }
     } else {
       window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
     }
