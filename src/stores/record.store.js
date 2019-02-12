@@ -8,7 +8,7 @@ class RecordStore {
     orgId: '',
     recordId: '',
     recordTag: '',
-    record: {},
+    record: null,
     otherRecord: {},
   };
 
