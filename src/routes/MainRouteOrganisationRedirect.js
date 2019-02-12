@@ -89,7 +89,7 @@ class MainRouteOrganisationRedirect extends React.Component {
    */
   async redirectUserAuthWithAccess(organisation, isNewOrg) {
     let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
-    if (!currentOrgAndRecord && !this.props.userStore.values.currentUser.superadmin) {
+    if ( (!currentOrgAndRecord && !this.props.userStore.values.currentUser.superadmin) || (currentOrgAndRecord && !currentOrgAndRecord.welcomed)) {
       window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
     } else if (currentOrgAndRecord) {
       this.props.recordStore.setRecordId(currentOrgAndRecord.record);
