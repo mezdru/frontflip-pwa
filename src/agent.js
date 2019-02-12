@@ -98,7 +98,8 @@ let validateToken = () => {
           commonStore.setAuthTokens(JSON.parse(response.text));
           resolve();
         }).catch((err) => {
-          handleErrors(err);
+          authStore.logout();
+          window.location.href = UrlService.createUrl(window.location.host, '/signin', null);
         });
     });
   } else {
