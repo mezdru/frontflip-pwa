@@ -8,7 +8,7 @@ const styles = {
     height: 35,
     border: '6px solid white',
     borderRadius: 30,
-    backgroundColor: 'transparent',
+    backgroundColor: '#C2CACF',
     zIndex: 9000,
   }
 };
@@ -17,7 +17,7 @@ class Availability extends React.Component {
   render() {
     const {classes} = this.props;
   
-    return( <div className={classes.dispo}/> )
+    return( <div className={`${classes.dispo} ${this.props.available}`}/> )
   }
 }
 

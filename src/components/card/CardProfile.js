@@ -90,11 +90,6 @@ const styles = theme => ({
   },
   dispo: {
     position: 'relative',
-    borderRadius: 30,
-    height: 34,
-    width: 34,
-    backgroundColor: '#C2CACF',
-  
     [theme.breakpoints.down('xs')]: {
       marginLeft: -42,
       marginTop: 106,
@@ -142,8 +137,8 @@ class CardProfile extends React.Component {
             avatar={
               <Grid item container>
               <Logo type={'person'} className={classes.logo} src={ProfileService.getPicturePath(hit.picture) || defaultPicture}/>
-              <Grid item className={`${classes.dispo} ${classes[hit.personAvailability]}`}>
-              <Availability />
+                <Grid item className={classes.dispo}>
+                <Availability available={`${classes[hit.personAvailability]}`} />
               </Grid>
               </Grid>
             }
