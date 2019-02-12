@@ -58,17 +58,17 @@ class OrganisationsList extends React.Component {
     return (
       <List className={classes.orgsContainer}>
         {currentUserOrganisations.map((org, i) => {
-          if (org.tag !== orgTag) {
+          if (org && (org.tag !== orgTag)) {
             return (
               <ListItem button component={Link} to={'/' + locale + '/' + org.tag} key={org._id} className={classes.orgItem}>
-                <Logo type={'smallOrg'} alt={org.name} src={org.logo.url || defaultLogo} className={classes.itemLogo} />
+                <Logo type={'smallOrg'} alt={org.name} src={ (org.logo ? org.logo.url : null) || defaultLogo} className={classes.itemLogo} />
                 <div className={classes.itemName} >{org.name}</div>
               </ListItem>
             );
           }else {return null; }
         })}
       </List>
-    )
+    );
   }
 }
 
