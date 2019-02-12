@@ -76,7 +76,7 @@ export const styles = theme => ({
     },
   drawerIcon: {
     color: theme.palette.primary.main,
-    fontSize: 56,
+    fontSize: 40,
    },
   content: {
     flexGrow: 1,
