@@ -47,7 +47,7 @@ class ProfileLayout extends React.Component {
       .then((record) => {
         record.objectID = record._id;
         this.setState({ record: record, canEdit: this.canEdit(record) });
-      })
+      }).catch(() => {return;})
   };
 
   handleReturnToSearch(e, element) {
