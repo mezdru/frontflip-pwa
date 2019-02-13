@@ -8,6 +8,7 @@ import Header from '../../components/header/Header';
 import Logo from '../../components/utils/logo/Logo';
 import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
 import UrlService from '../../services/url.service';
+import {Redirect} from 'react-router-dom';
 
 const styles = (theme) => ({
   logo: {
@@ -32,6 +33,14 @@ const styles = (theme) => ({
       padding: 5,
     }
   },
+  title: {
+    textAlign: 'center',
+    paddingTop: 16,
+    paddingBottom:16,
+    [theme.breakpoints.down(400)]: {
+      padding: 5,
+    } 
+  },
   form: {
     width: '100%',
   }
@@ -42,7 +51,9 @@ class PasswordReset extends React.Component {
     super(props);
     this.state = {
       passwordErrors: null,
-      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
+      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
+      userEmail: ( (this.props.match.params && this.props.match.params.email) ? this.props.match.params.email : null ),
+      redirectTo: null
     }
   }
   
@@ -61,7 +72,7 @@ class PasswordReset extends React.Component {
     e.preventDefault();
     this.props.authStore.updatePassword(this.props.match.params.token, this.props.match.params.hash)
       .then(response => {
-        window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/login/callback', this.props.organisationStore.values.orgTag);
+        this.setState({redirectTo: '/' + this.props.commonStore.locale + (this.props.organisationStore.values.orgTag ? '/'+this.props.organisationStore.values.orgTag : '')});
       }).catch(err => {
       let errorMessage;
       if (err.status === 422) {
@@ -83,8 +94,10 @@ class PasswordReset extends React.Component {
   
   render() {
     const {values, inProgress} = this.props.authStore;
-    let {passwordErrors} = this.state;
+    let {passwordErrors, userEmail, redirectTo} = this.state;
     let {classes, intl} = this.props;
+
+    if(redirectTo) return <Redirect push to={redirectTo}/>;
     
     return (
       <Grid container direction={"column"} justify={"space-around"}>
@@ -100,9 +113,37 @@ class PasswordReset extends React.Component {
         <Grid container item justify={"center"} className={classes.container}>
           <form onSubmit={this.handleSubmitForm} className={classes.form}>
             <Grid item container direction={'column'} xs={12} sm={6} lg={4} spacing={16}>
-              <Typography variant="h6" className={classes.intro}><FormattedHTMLMessage id="password.new.intro" values={{userEmail: values.email}}/></Typography>
+              {!userEmail && (
+                <Typography variant="h6" className={classes.intro}><FormattedHTMLMessage id="password.new.intro" values={{userEmail: values.email}}/></Typography>
+              )}
+              {userEmail && (
+                <div>
+                  <Grid item>
+                    <Typography variant="h4" className={classes.title}>
+                      {this.props.organisationStore.values.orgTag && (
+                        <FormattedHTMLMessage id="password.create.title.orgTag" values={{orgTag: this.props.organisationStore.values.orgTag}} />
+                      )}
+                      {!this.props.organisationStore.values.orgTag && (
+                        <FormattedHTMLMessage id="password.create.title.noOrgTag" />
+                      )}
+                    </Typography>
+                  </Grid>
+                  <Typography variant="h6" className={classes.intro}><FormattedHTMLMessage id="password.create.intro" values={{userEmail: values.email}}/></Typography>
+                </div>
+               )}
               {passwordErrors && (
                 <SnackbarCustom variant='warning' message={passwordErrors}/>
+              )}
+              {userEmail && (
+                <Grid item>
+                  <TextField
+                    label="Email"
+                    fullWidth
+                    variant={"outlined"}
+                    disabled
+                    value={userEmail}
+                  />
+                </Grid>
               )}
               <Grid item>
                 <TextField
@@ -120,11 +161,28 @@ class PasswordReset extends React.Component {
                     <CircularProgress color="primary"/>
                   )
                 }
-                {
-                  !inProgress && (
-                    <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="password.new.create"/></Button>
-                  )
-                }
+                {!inProgress && (
+                    <Button fullWidth={true} type="submit" color="primary">
+                      {!userEmail && (
+                        <FormattedMessage id="password.new.create"/>
+                      )}
+                      {userEmail && (
+                        <FormattedMessage id="password.create.next"/>
+                      )}
+                    </Button>
+                )}
+              </Grid>
+              <Grid item container direction="row" justify="space-around" alignItems="center">
+                <Grid item>
+                  <Button variant="text" component="a" target="_blank" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/terms', undefined)}>
+                    <FormattedMessage id="menu.drawer.terms" />
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button variant="text" component="a" target="_blank" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/protectingYourData', undefined)}>
+                    <FormattedMessage id="menu.drawer.protectingYourData" />
+                  </Button>
+                </Grid>
               </Grid>
             </Grid>
           </form>
