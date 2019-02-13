@@ -40,6 +40,7 @@ class ProfileLayout extends React.Component {
 
   componentDidMount() {
     if(!this.props.hit) return;
+    if(!this.props.authStore.isAuth()) return;
     this.props.recordStore.setRecordTag(this.props.hit.tag);
     this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
     this.props.recordStore.getRecordByTag()
@@ -77,7 +78,7 @@ class ProfileLayout extends React.Component {
       
       <Grid container className={(displayIn ? className : classes.profileContainerHide)} >
         {(window.location.pathname !== rootUrl + '/' + hit.tag) && (
-          <Redirect push to={rootUrl + '/' + hit.tag} />
+          <Redirect to={rootUrl + '/' + hit.tag} />
         )}
         <Grid container item alignItems={"stretch"} >
           <Banner>

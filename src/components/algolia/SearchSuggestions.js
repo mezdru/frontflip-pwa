@@ -49,11 +49,16 @@ class SearchSuggestions extends React.Component {
   }
 
   componentDidMount() {
+    this._ismounted = true;
     this.fetchSuggestions(this.props.filters, this.props.query);
   }
 
+  componentWillUnmount() {
+    this._ismounted = false;
+  }
+
   componentWillReceiveProps(nextProps) {
-    if(nextProps.filters) {
+    if(nextProps.filters && this._ismounted) {
       this.fetchSuggestions(nextProps.filters, nextProps.query);
     }
   }
@@ -86,12 +91,12 @@ class SearchSuggestions extends React.Component {
           if (this.shouldDisplaySuggestion(item.value)){
             return (
               <Chip key={i} 
-                    component={ (props)=>{
-                      return (<div {...props}>
+                    component={ (props)=>
+                              <div {...props}>
                                 <div className={classes.suggestionLabel}>{item.value}</div>
                                 <div className={classes.suggestionCount}>{item.count}</div>
-                              </div>);
-                    }}
+                              </div>
+                    }
                     onClick={(e) => addToFilters(e, { name: item.value, tag: item.value })} 
                     className={classes.suggestion} 
                     style={{animationDelay: (i*0.05) +'s'}} />

@@ -188,6 +188,11 @@ class MainRouteOrganisationRedirect extends React.Component {
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={AuthPage} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={() => { return <AuthPage initialTab={1} /> }} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
+
+            {/* Main route with orgTag */}
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag" component={SearchPage} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag" component={SearchPage} />
+
             <Redirect to={'/' + locale + (orgTag ? '/' + orgTag : '') + '/signin' + window.location.search} />
           </Switch>
         </div>

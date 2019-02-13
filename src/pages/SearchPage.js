@@ -94,8 +94,7 @@ class SearchPage extends React.Component {
   }
 
   handleDisplayProfile(e, hit) {
-    if (e) e.preventDefault();
-    this.setState({ displayedHit: hit, resultsType: 'profile'});
+    this.setState({resultsType: 'profile', displayedHit: hit});
   }
 
   handleReturnToSearch = () => this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true});
@@ -109,7 +108,7 @@ class SearchPage extends React.Component {
     const orgTag = this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag;
 
     let resultsType = ((profileTag && !shouldUpdateUrl) ? 'profile' : null) || this.state.resultsType;
-    let displayedHit = ((profileTag && !shouldUpdateUrl) ? { tag: profileTag } : null) || this.state.displayedHit;
+    let displayedHit = ((profileTag && !shouldUpdateUrl) ? (this.state.displayedHit || { tag: profileTag }) : null) || this.state.displayedHit;
     let rootUrl = '/' + locale + (orgTag ? '/' + orgTag : '');
     let searchBarWidth = this.getSearchBarWidth();
     let redirectTo;

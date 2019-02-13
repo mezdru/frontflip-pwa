@@ -18,6 +18,7 @@ const styles = theme => ({
     width: 170,
     height: 170,
     marginBottom: '-5rem',
+    backgroundColor: 'white',
     [theme.breakpoints.down('xs')]: {
       width: 146,
       height: 146,
@@ -137,7 +138,7 @@ class CardProfile extends React.Component {
             avatar={
               <Grid item container>
                 <Logo type={'person'} className={classes.logo} src={ProfileService.getPicturePath(hit.picture) || defaultPicture}/>
-                {hit.personAvailability !== 'unspecified' ? <Grid item className={classes.dispo}>
+                { ((hit.personAvailability) && (hit.personAvailability !== 'unspecified') )? <Grid item className={classes.dispo}>
                   <Availability available={`${classes[hit.personAvailability]}`}/>
                 </Grid> : ''}
               </Grid>
@@ -180,9 +181,9 @@ class CardProfile extends React.Component {
                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
                 return (
                                     <Wings  src={ProfileService.getPicturePath(hashtag.picture) || defaultHashtagPicture}
-                         label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
-                         onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
-                         className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
+                        label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
+                        onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
+                        className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
                 )
               })}
             </Grid>
