@@ -97,7 +97,7 @@ class MainRouteOrganisationRedirect extends React.Component {
         .then(() => {
           if (isNewOrg) this.setState({ redirectTo: '/' + this.state.locale + '/' + organisation.tag });
         }).catch(() => {
-          window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', organisation.tag);
+          window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', organisation.tag, 'first=true');
         });
     }
   }
