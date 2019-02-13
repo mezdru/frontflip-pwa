@@ -124,7 +124,7 @@ class SearchPage extends React.Component {
       <div>
         <Header handleDisplayProfile={this.handleDisplayProfile}/>
         <main>
-          {(shouldUpdateUrl && resultsType === 'person' && (window.location.pathname !== rootUrl)) && (<Redirect push to={rootUrl} />)}
+          {(shouldUpdateUrl && resultsType === 'person' && (window.location.pathname !== rootUrl)) && (<Redirect to={rootUrl} />)}
           <Grid container direction={'column'} alignItems={'center'}>
             
             <div  style={{  width: ((((isWidthDown('sm', this.props.width)))) ? '75%' : searchBarWidth),
