@@ -76,9 +76,11 @@ class MainRouteOrganisationRedirect extends React.Component {
         }).catch(() => {return;})
       } else {
         window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
+        await this.wait(3000);
       }
     } else {
       window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
+      await this.wait(3000);
     }
   }
 
@@ -91,6 +93,7 @@ class MainRouteOrganisationRedirect extends React.Component {
     let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
     if ( (!currentOrgAndRecord && !this.props.userStore.values.currentUser.superadmin) || (currentOrgAndRecord && !currentOrgAndRecord.welcomed)) {
       window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', organisation.tag, 'first=true');
+      await this.wait(3000);
     } else if (currentOrgAndRecord) {
       this.props.recordStore.setRecordId(currentOrgAndRecord.record);
       await this.props.recordStore.getRecord()
@@ -135,6 +138,10 @@ class MainRouteOrganisationRedirect extends React.Component {
     } else if (this.props.authStore.isAuth()) {
       await this.redirectUserAuthWithoutAccess();
     }
+  }
+
+  async wait(ms) {
+    return new Promise((r, j)=>setTimeout(r, ms));
   }
 
   resetRedirectTo() {
