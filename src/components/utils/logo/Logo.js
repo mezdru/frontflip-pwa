@@ -32,7 +32,7 @@ class Logo extends React.Component {
     const { source } = this.state;
 
     return (
-      <Avatar src={source || this.props.src} alt="org-logo" className={this.props.className} />
+      <Avatar src={source || this.props.src} alt="org-logo" className={this.props.className} style={{backgroundColor: 'white'}} />
     )
   }
 }

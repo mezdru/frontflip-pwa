@@ -106,7 +106,14 @@ class OrganisationStore {
         .then(data => {
           this.setOrganisation(data.organisation);
           this.setFullOrgFetch(false);
-          return this.values.organisation;
+          if(this.values.organisation.public) {
+            return this.getAlgoliaKey(true).then(() => {
+              return this.values.organisation;
+            });
+          } else {
+            return this.values.organisation;
+          }
+
         })
         .catch(action((err) => {
           this.errors = err.response && err.response.body && err.response.body.errors;

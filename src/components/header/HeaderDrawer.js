@@ -131,7 +131,7 @@ class App extends Component {
                   } />
                 </ListItem>
                 <Divider />
-                {(currentUser.orgsAndRecords && currentUser.orgsAndRecords.length > 1) && (
+                {(currentUser.orgsAndRecords && (currentUser.orgsAndRecords.length > 1) ) && (
                   <div>
                     <ListItem>
                       <ListItemText primary={intl.formatMessage({id: 'menu.drawer.listOrgTitle'})}
