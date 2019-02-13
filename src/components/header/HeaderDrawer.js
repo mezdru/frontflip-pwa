@@ -125,7 +125,7 @@ class App extends Component {
                   } />
                 </ListItem>
 
-                <ListItem button>
+                <ListItem button component="a" href={'mailto:premium@wingzy.io'} target="_blank" >
                   <ListItemText primary={
                     (organisation.premium ? intl.formatMessage({ id: 'menu.drawer.contactUsPremium' }) : intl.formatMessage({ id: 'menu.drawer.contactUs' }))
                   } />

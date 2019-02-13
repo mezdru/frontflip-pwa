@@ -59,6 +59,7 @@ export const styles = theme => ({
   button: {
     color: theme.palette.secondary.contrastText,
     wordBreak: 'break-all',
+    padding: '8px 24px',
   },
   buttonIcon: {
     color: theme.palette.primary.main
