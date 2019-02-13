@@ -99,9 +99,8 @@ class MainRouteOrganisationRedirect extends React.Component {
       await this.props.recordStore.getRecord()
         .then(() => {
           if (isNewOrg) this.setState({ redirectTo: '/' + this.state.locale + '/' + organisation.tag });
-        }).catch(async () => {
+        }).catch(() => {
           window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', organisation.tag, 'first=true');
-          await this.wait(3000);
         });
     }
   }
