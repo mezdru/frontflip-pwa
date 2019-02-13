@@ -24,8 +24,6 @@ class MainRouteOrganisationRedirect extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    console.log(props.history.action);
-    console.log(props.history);
     if (props.history.action === 'PUSH' && ( (props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) || (!this.props.organisationStore.values.fullOrgFetch) ) ) {
       this.setState({ renderComponent: false }, () => {
         this.manageAccessRight().then(() => {
