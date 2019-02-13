@@ -6,12 +6,39 @@ html {
 }
 
 body {
-  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  margin: 0;
-  padding: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  min-height: 100%;
+    font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100%;
+    /*for firefox */
+    scrollbar-color:  #DDE9EB white;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    opacity: 1;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+    border: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #DDE9EB;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #789094;
+    opacity: 0;
 }
 
 a {
@@ -19,7 +46,7 @@ a {
 }
 
 #root{
-  min-height: 100%;
+    min-height: 100%;
 }
 
 code {
