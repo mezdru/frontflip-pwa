@@ -81,7 +81,7 @@ class ProfileLayout extends React.Component {
           <Redirect to={rootUrl + '/' + hit.tag} />
         )}
         <Grid container item alignItems={"stretch"} >
-          <Banner>
+          <Banner source={(currentHit && currentHit.cover && currentHit.cover.url) ? currentHit.cover.url : null} >
             <IconButton aria-label="Edit" className={classes.returnButton} onClick={this.handleReturnToSearch}>
               <Clear fontSize="large" className={classes.returnButtonSize} />
             </IconButton>

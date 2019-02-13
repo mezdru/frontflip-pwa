@@ -56,7 +56,7 @@ class Banner extends React.Component {
 
     return (
       <div className={this.props.classes.root} >
-        <div style={{ backgroundImage: `url(${source})`, ...this.props.style }} className={this.props.classes.rootBanner}>
+        <div style={{ backgroundImage: `url(${this.props.source || source})`, ...this.props.style }} className={this.props.classes.rootBanner}>
         </div>
         {this.props.children}
       </div>
