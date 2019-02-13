@@ -148,7 +148,7 @@ export default createMuiTheme({
     },
     MuiCardContent: {
       root: {
-        padding: '0 0 16px 8px!important',
+        padding: '0 0 8px 8px!important',
         whiteSpace: 'nowrap',
         overflowX: 'scroll',
       }
