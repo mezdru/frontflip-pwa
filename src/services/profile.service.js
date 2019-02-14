@@ -85,7 +85,7 @@ class ProfileService {
           link.url = this.setWorkplaceLink(link.url);
           break;
         case 'workchat':
-          link.url = this.setWorkplaceLink(link.url);
+          link.url = this.setWorkchatLink(link.url);
           break;
         default:
           link.url = link.value;
@@ -103,7 +103,17 @@ class ProfileService {
       return linkUrl;
     }
   }
-  
+
+  setWorkchatLink(linkUrl) {
+    let newLinkUrl = this.setWorkplaceLink(linkUrl);
+    if(linkUrl === newLinkUrl) return linkUrl;
+
+    let linkUrlArray = newLinkUrl.split('/');
+    linkUrlArray[linkUrlArray.length -2] = 'thread';
+    linkUrlArray[linkUrlArray.length -3] = 'messages';
+
+    return linkUrlArray.join('/');
+  }  
 
   mobileAndTabletcheck() {
     var check = false;
