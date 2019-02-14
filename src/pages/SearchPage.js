@@ -74,6 +74,7 @@ class SearchPage extends React.Component {
 
   updateFilters(selectedOptions) {
     if(!selectedOptions) return;
+    ReactGA.event({category: 'Search',action: 'Perform search'});
     this.setState({shouldDisplayHitResults: false});
     let newFilters = 'type:person';
     let newQuery = '';

@@ -64,8 +64,13 @@ class Auth extends React.Component {
       this.props.commonStore.setAuthTokens(this.state.queryParams);
       this.props.userStore.getCurrentUser()
         .then((user) => {
+          ReactGA.event({category: 'User',action: 'Login with Google'});
           SlackService.notifyError( (user.google && user.google.email ? user.google.email : '?') + ' logged in with Google.', '63', 'quentin', 'Auth.js');
           if (googleState && googleState.invitationCode) this.props.authStore.setInvitationCode(googleState.invitationCode);
+          if(user.superadmin){
+            this.setState({redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag});
+            return;
+          }
           this.props.authStore.registerToOrg()
             .then((data) => {
               let organisation = data.organisation;
