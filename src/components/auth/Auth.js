@@ -11,6 +11,9 @@ import Login from './login/Login';
 import Register from './register/Register';
 import UrlService from '../../services/url.service';
 import SlackService from '../../services/slack.service';
+import ReactGA from 'react-ga';
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
+ReactGA.pageview(window.location.pathname);
 
 const queryString = require('query-string');
 

@@ -7,6 +7,9 @@ import Banner from '../../components/utils/banner/Banner';
 import Header from '../../components/header/Header';
 import Logo from '../../components/utils/logo/Logo';
 import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
+import ReactGA from 'react-ga';
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
+ReactGA.pageview(window.location.pathname);
 
 const styles = (theme) => ({
   logo: {

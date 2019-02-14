@@ -13,6 +13,9 @@ import Banner from '../components/utils/banner/Banner';
 import SearchSuggestions from '../components/algolia/SearchSuggestions';
 import SearchResults from '../components/algolia/SearchResults';
 import Card from '../components/card/CardProfile';
+import ReactGA from 'react-ga';
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
+ReactGA.pageview(window.location.pathname);
 
 class SearchPage extends React.Component {
   constructor(props) {

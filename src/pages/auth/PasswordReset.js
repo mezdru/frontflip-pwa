@@ -9,6 +9,9 @@ import Logo from '../../components/utils/logo/Logo';
 import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
 import UrlService from '../../services/url.service';
 import {Redirect} from 'react-router-dom';
+import ReactGA from 'react-ga';
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
+ReactGA.pageview(window.location.pathname);
 
 const styles = (theme) => ({
   logo: {
