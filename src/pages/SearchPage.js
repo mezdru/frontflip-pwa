@@ -13,6 +13,8 @@ import Banner from '../components/utils/banner/Banner';
 import SearchSuggestions from '../components/algolia/SearchSuggestions';
 import SearchResults from '../components/algolia/SearchResults';
 import Card from '../components/card/CardProfile';
+import ReactGA from 'react-ga';
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class SearchPage extends React.Component {
   constructor(props) {
@@ -38,6 +40,8 @@ class SearchPage extends React.Component {
   }
 
   componentDidMount() {
+    ReactGA.pageview(window.location.pathname);
+    this.props.history.listen((location, action) => ReactGA.pageview(window.location.pathname));
     if(this.props.commonStore.algoliaKey)
       this.setState({algoliaClient: algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.props.commonStore.algoliaKey)}, () => {
         this.setState({algoliaIndex: this.state.algoliaClient.initIndex('world')});
