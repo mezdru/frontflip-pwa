@@ -85,7 +85,7 @@ class ProfileService {
           link.url = this.setWorkplaceLink(link.url);
           break;
         case 'workchat':
-          link.url = this.setWorkplaceLink(link.url);
+          link.url = this.setWorkchatLink(link.url);
           break;
         default:
           link.url = link.value;
