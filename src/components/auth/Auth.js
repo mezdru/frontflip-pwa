@@ -13,7 +13,6 @@ import UrlService from '../../services/url.service';
 import SlackService from '../../services/slack.service';
 import ReactGA from 'react-ga';
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
-ReactGA.pageview(window.location.pathname);
 
 const queryString = require('query-string');
 
@@ -53,6 +52,7 @@ class Auth extends React.Component {
   };
   
   componentDidMount() {
+    ReactGA.pageview(window.location.pathname);
     if (this.props.authStore.values.invitationCode) this.setState({ value: 1 });
     observe(this.props.authStore.values, 'invitationCode', (change) => {
       this.setState({ value: 1 });

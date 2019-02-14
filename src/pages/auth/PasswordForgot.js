@@ -9,7 +9,6 @@ import Logo from '../../components/utils/logo/Logo';
 import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
 import ReactGA from 'react-ga';
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
-ReactGA.pageview(window.location.pathname);
 
 const styles = (theme) => ({
   logo: {
@@ -49,6 +48,7 @@ class PasswordForgot extends React.Component {
   }
   
   componentDidMount() {
+    ReactGA.pageview(window.location.pathname);
     if (this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
       this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
       this.props.organisationStore.getOrganisationForPublic();

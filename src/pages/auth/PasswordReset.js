@@ -11,7 +11,6 @@ import UrlService from '../../services/url.service';
 import {Redirect} from 'react-router-dom';
 import ReactGA from 'react-ga';
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
-ReactGA.pageview(window.location.pathname);
 
 const styles = (theme) => ({
   logo: {
@@ -61,6 +60,7 @@ class PasswordReset extends React.Component {
   }
   
   componentDidMount() {
+    ReactGA.pageview(window.location.pathname);
     if (this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
       this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
       this.props.organisationStore.getOrganisationForPublic();

@@ -7,7 +7,6 @@ import ProfileService from '../services/profile.service';
 import UrlService from '../services/url.service';
 import ReactGA from 'react-ga';
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
-ReactGA.pageview(window.location.pathname);
 
 const styles = theme =>  ({
   layout: {
@@ -33,6 +32,7 @@ class ErrorPage extends React.Component {
   }
 
   componentDidMount() {
+    ReactGA.pageview(window.location.pathname);
     if(this.props.match && this.props.match.params) {
       this.setState({errorCode: this.props.match.params.errorCode, errorType: this.props.match.params.errorType});
     }
