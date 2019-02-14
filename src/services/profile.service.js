@@ -103,7 +103,17 @@ class ProfileService {
       return linkUrl;
     }
   }
-  
+
+  setWorkchatLink(linkUrl) {
+    let newLinkUrl = this.setWorkplaceLink(linkUrl);
+    if(linkUrl === newLinkUrl) return linkUrl;
+
+    let linkUrlArray = newLinkUrl.split('/');
+    linkUrlArray[linkUrlArray.length -2] = 'thread';
+    linkUrlArray[linkUrlArray.length -3] = 'messages';
+
+    return linkUrlArray.join('/');
+  }  
 
   mobileAndTabletcheck() {
     var check = false;
