@@ -28,7 +28,7 @@ class SearchResults extends React.Component {
       query: query || '',
       facetFilters: facetFilters || '',
       filters: filters || 'type:person',
-      hitsPerPage: 5,
+      hitsPerPage: 20,
       attributesToSnippet: [
         "intro:"+15,
         "description:"+15
