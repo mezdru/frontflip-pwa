@@ -159,7 +159,8 @@ class App extends Component {
               <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.terms' })} />
             </ListItem>
 
-            <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/protectingYourData', undefined)} target="_blank">
+            <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/protectingYourData', 
+                                                                      ((organisation && organisation.tag) ? organisation.tag : undefined))} target="_blank">
               <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.protectingYourData' })} />
             </ListItem>
           </List>
