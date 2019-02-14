@@ -147,7 +147,7 @@ class ProfileLayout extends React.Component {
                 onClick={() => { window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/hashtags', orgTag, 'recordId=' + currentHit.objectID) }} />
             )}
             <div style={{ marginTop: 16 }}>
-              <Typography variant="h5" style={{ padding: 16 }}>
+              <Typography variant="h5" style={{ padding: 8 }}>
                 <FormattedMessage id={'profile.aboutMe'} />
                 {canEdit && (
                   <IconButton aria-label="Edit" className={classes.editButton}
