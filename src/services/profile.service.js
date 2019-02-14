@@ -83,16 +83,22 @@ class ProfileService {
           break;
         case 'workplace':
         case 'workchat':
-          if(this.mobileAndTabletcheck()) {
-            let linkUrlArray = link.url.split('.');
-            linkUrlArray[0] = linkUrlArray[0] + '.m';
-            link.url = linkUrlArray.join('.');
-          }
+          link.url = this.setWorkplaceLink(link.url);
           break;
         default:
           link.url = link.value;
           break;
       }
+    }
+  }
+
+  setWorkplaceLink(linkUrl) {
+    if(this.mobileAndTabletcheck()) {
+      let linkUrlArray = linkUrl.split('.');
+      linkUrlArray[0] = linkUrlArray[0] + '.m';
+      return linkUrlArray.join('.');
+    } else {
+      return linkUrl;
     }
   }
 
