@@ -6,6 +6,8 @@ import {Button, CircularProgress, Grid, TextField, Typography} from "@material-u
 import GoogleButton from "../../utils/buttons/GoogleButton";
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import commonStore from '../../../stores/common.store';
+import ReactGA from 'react-ga';
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class Register extends React.Component {
   constructor(props) {
@@ -31,9 +33,11 @@ class Register extends React.Component {
     e.preventDefault();
     this.props.authStore.register()
       .then(() => {
+        ReactGA.event({category: 'User',action: 'Register with password'});
         if (this.props.organisationStore.values.orgTag) {
           this.props.authStore.registerToOrg()
             .then(() => {
+              ReactGA.event({category: 'User',action: 'Register to Organisation'});
               this.setState({ registerSuccess: true });
               this.setState({ registerSuccessMessage: this.props.intl.formatMessage({ id: 'signup.success' }) });
             }).catch((err) => {

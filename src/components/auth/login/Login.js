@@ -6,6 +6,8 @@ import {inject, observer} from 'mobx-react';
 import {Button, CircularProgress, Grid, TextField, Typography} from '@material-ui/core';
 import GoogleButton from "../../utils/buttons/GoogleButton";
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
+import ReactGA from 'react-ga';
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class Login extends React.Component {
   constructor(props) {
@@ -32,6 +34,7 @@ class Login extends React.Component {
     this.props.authStore.login()
       .then((response) => {
         if (response === 200) {
+          ReactGA.event({category: 'User',action: 'Login with password'});
           this.setState({ redirectTo: '/' + this.state.locale + (this.props.organisationStore.values.orgTag ? '/' + this.props.organisationStore.values.orgTag : '') });
         } else {
           this.setState({ loginErrors: this.props.intl.formatMessage({ id: 'signin.error.generic' }) });
