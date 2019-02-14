@@ -68,7 +68,7 @@ class Auth extends React.Component {
           SlackService.notifyError( (user.google && user.google.email ? user.google.email : '?') + ' logged in with Google.', '63', 'quentin', 'Auth.js');
           if (googleState && googleState.invitationCode) this.props.authStore.setInvitationCode(googleState.invitationCode);
           if(user.superadmin){
-            this.setState({redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag});
+            this.setState({redirectTo: '/' + this.state.locale + (this.props.organisationStore.values.organisation.tag ? '/'+this.props.organisationStore.values.organisation.tag : '')});
             return;
           }
           this.props.authStore.registerToOrg()
