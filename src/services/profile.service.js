@@ -103,6 +103,7 @@ class ProfileService {
       return linkUrl;
     }
   }
+  
 
   mobileAndTabletcheck() {
     var check = false;
