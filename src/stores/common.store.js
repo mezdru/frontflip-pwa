@@ -101,11 +101,13 @@ class CommonStore {
       this.accessToken = tokens.access_token;
       this.setCookie('accessToken', this.accessToken, expDate);
 
-      let expDate2 = new Date();
-      expDate2.setFullYear(expDate2.getFullYear() + 1);
-
-      this.refreshToken = tokens.refresh_token;
-      this.setCookie('refreshToken', this.refreshToken, expDate2);
+      if(tokens.refresh_token && (tokens.refresh_token !== 'undefined')) {
+        let expDate2 = new Date();
+        expDate2.setFullYear(expDate2.getFullYear() + 1);
+  
+        this.refreshToken = tokens.refresh_token;
+        this.setCookie('refreshToken', this.refreshToken, expDate2);
+      }
     }
     this.init();
   }
