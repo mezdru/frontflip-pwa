@@ -9,6 +9,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import EmailService from '../services/email.service';
 import SearchPage from "../pages/SearchPage";
 import SlackService from '../services/slack.service';
+import ReactGA from 'react-ga';
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class MainRouteOrganisationRedirect extends React.Component {
 
