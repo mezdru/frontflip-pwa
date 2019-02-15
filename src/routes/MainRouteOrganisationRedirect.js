@@ -29,6 +29,7 @@ class MainRouteOrganisationRedirect extends React.Component {
         this.manageAccessRight().then(() => {
           this.setState({ renderComponent: true });
         }).catch((err) => {
+          ReactGA.event({category: 'Error',action: 'Redirect to error layout', value: 500});
           SlackService.notifyError(err, '32', 'quentin', 'MainRouteOrganisationRedirect.js');
           this.setState({redirectTo: '/' + this.state.locale + '/error/500/routes'});
         });
@@ -40,6 +41,7 @@ class MainRouteOrganisationRedirect extends React.Component {
     this.manageAccessRight().then(() => {
       this.setState({ renderComponent: true });
     }).catch((err) => {
+      ReactGA.event({category: 'Error',action: 'Redirect to error layout', value: 500});
       SlackService.notifyError(err, '42', 'quentin', 'MainRouteOrganisationRedirect.js');
       this.setState({redirectTo: '/' + this.state.locale + '/error/500/routes'});
     });
@@ -117,6 +119,7 @@ class MainRouteOrganisationRedirect extends React.Component {
                       .catch((err) => {
                         SlackService.notifyError('Someone try to access : ' + this.props.match.params.organisationTag + ' and got 404.', 
                                                   '110', 'quentin', 'MainRouteOrganisationRedirect.js');
+                        ReactGA.event({category: 'Error',action: 'Redirect to error layout', value: 404});
                         this.setState({redirectTo: '/' + this.state.locale + '/error/404/organisation'});
                       });
       }

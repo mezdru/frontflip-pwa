@@ -99,6 +99,7 @@ class SearchPage extends React.Component {
   }
 
   handleDisplayProfile(e, hit) {
+    ReactGA.event({category: 'User',action: 'Display profile'});
     this.setState({resultsType: 'profile', displayedHit: hit});
   }
 
