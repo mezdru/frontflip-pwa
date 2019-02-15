@@ -98,7 +98,8 @@ class OrganisationStore {
   }
 
   getOrganisationForPublic() {
-    if (this.values.orgTag) {
+      if (!this.values.orgTag) return;
+
       this.inProgress = true;
       this.errors = null;
 
@@ -120,7 +121,6 @@ class OrganisationStore {
           throw err;
         }))
         .finally(action(() => { this.inProgress = false; }));
-    }
   }
 
   isKeyStillValid() {
