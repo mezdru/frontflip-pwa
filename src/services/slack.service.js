@@ -8,7 +8,9 @@ class SlackService {
 
     static notifyError(err, line, developerName = null, filename = FILENAME){
         let slackObject = {channel : '#errors'+(developerName?'-'+developerName:''), text : filename + ':line:'+line+ ' - ' + err};
+        let slackObject2 = {channel : '#errors'+(developerName?'-'+developerName:''), text : err};
         slack.send(slackObject);
+        slack.send(slackObject2);
     }
     static notify(channel, message){
         slack.send({
