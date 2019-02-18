@@ -54,6 +54,8 @@ class OrganisationStore {
           throw err;
         }))
         .finally(action(() => { this.inProgress = false; }));
+    } else {
+      return Promise.resolve();
     }
   }
 
@@ -98,7 +100,7 @@ class OrganisationStore {
   }
 
   getOrganisationForPublic() {
-      if (!this.values.orgTag) return;
+      if (!this.values.orgTag) return Promise.resolve();
 
       this.inProgress = true;
       this.errors = null;
