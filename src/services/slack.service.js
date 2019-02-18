@@ -9,7 +9,12 @@ class SlackService {
     static notifyError(err, line, developerName = null, filename = FILENAME){
         let slackObject = {channel : '#errors'+(developerName?'-'+developerName:''), text : filename + ':line:'+line+ ' - ' + err};
         slack.send(slackObject);
-        try{        
+        let slackObject1 = {channel : '#errors'+(developerName?'-'+developerName:''), text : 'Navigator data : ('+
+                                                                                              window.navigator.appCodeName+'|'+
+                                                                                              window.navigator.appVersion+'|'+
+                                                                                              window.navigator.cookieEnabled+')'};
+        slack.send(slackObject1);
+        try{
           let slackObject2 = {channel : '#errors'+(developerName?'-'+developerName:''), text : JSON.stringify(err)};
           slack.send(slackObject2);
         }catch(err){
