@@ -8,9 +8,14 @@ class SlackService {
 
     static notifyError(err, line, developerName = null, filename = FILENAME){
         let slackObject = {channel : '#errors'+(developerName?'-'+developerName:''), text : filename + ':line:'+line+ ' - ' + err};
-        let slackObject2 = {channel : '#errors'+(developerName?'-'+developerName:''), text : err};
         slack.send(slackObject);
-        slack.send(slackObject2);
+        try{        
+          let slackObject2 = {channel : '#errors'+(developerName?'-'+developerName:''), text : JSON.stringify(err)};
+          slack.send(slackObject2);
+        }catch(err){
+          let slackObject3 = {channel : '#errors'+(developerName?'-'+developerName:''), text : "Can't parse the err object with json stringify."};
+          slack.send(slackObject3);
+        }
     }
     static notify(channel, message){
         slack.send({
