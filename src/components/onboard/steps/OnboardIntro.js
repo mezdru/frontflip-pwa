@@ -10,15 +10,17 @@ class OnboardIntro extends React.Component {
   }
 
   render() {
+    const {record} = this.props.recordStore.values;
 
     return (
       <div>
+        This is intro component
       </div>
     );
   }
 }
 
-export default inject('commonStore')(
+export default inject('commonStore', 'recordStore')(
   observer(
     withStyles(null)(OnboardIntro)
   )

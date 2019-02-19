@@ -10,15 +10,17 @@ class OnboardFeaturedWings extends React.Component {
   }
 
   render() {
+    const {record} = this.props.recordStore.values;
 
     return (
       <div>
+        This is featured component
       </div>
     );
   }
 }
 
-export default inject('commonStore')(
+export default inject('commonStore', 'recordStore')(
   observer(
     withStyles(null)(OnboardFeaturedWings)
   )

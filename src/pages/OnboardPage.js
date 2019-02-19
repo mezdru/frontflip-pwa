@@ -41,6 +41,8 @@ class OnboardPage extends React.Component {
           <Header/>
           <main>
             <OnboardWelcome handleEnterToOnboard={this.handleEnterToOnboard} />
+            This is your record : <br/>
+            {JSON.stringify(record)}
           </main>
         </div>
       );

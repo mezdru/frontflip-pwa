@@ -10,17 +10,18 @@ class OnboardWelcome extends React.Component {
   }
 
   render() {
+    const {organisation} = this.props.organisationStore.values;
 
     return (
       <div>
-        Welcome !
-        <Button onClick={this.props.handleEnterToOnboard} >onboard !</Button>
+        Welcome to the Wingzy of {organisation.name}!<br/>
+        <Button onClick={this.props.handleEnterToOnboard} color="primary" >Onboard !</Button>
       </div>
     );
   }
 }
 
-export default inject('commonStore')(
+export default inject('commonStore', 'organisationStore')(
   observer(
     withStyles(null)(OnboardWelcome)
   )
