@@ -9,6 +9,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import EmailService from '../services/email.service';
 import SearchPage from "../pages/SearchPage";
 import SlackService from '../services/slack.service';
+import ReactGA from 'react-ga';
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class MainRouteOrganisationRedirect extends React.Component {
 
@@ -29,6 +31,7 @@ class MainRouteOrganisationRedirect extends React.Component {
         this.manageAccessRight().then(() => {
           this.setState({ renderComponent: true });
         }).catch((err) => {
+          ReactGA.event({category: 'Error',action: 'Redirect to error layout', value: 500});
           SlackService.notifyError(err, '32', 'quentin', 'MainRouteOrganisationRedirect.js');
           this.setState({redirectTo: '/' + this.state.locale + '/error/500/routes'});
         });
@@ -40,6 +43,7 @@ class MainRouteOrganisationRedirect extends React.Component {
     this.manageAccessRight().then(() => {
       this.setState({ renderComponent: true });
     }).catch((err) => {
+      ReactGA.event({category: 'Error',action: 'Redirect to error layout', value: 500});
       SlackService.notifyError(err, '42', 'quentin', 'MainRouteOrganisationRedirect.js');
       this.setState({redirectTo: '/' + this.state.locale + '/error/500/routes'});
     });
@@ -76,9 +80,11 @@ class MainRouteOrganisationRedirect extends React.Component {
         }).catch(() => {return;})
       } else {
         window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
+        await this.wait(3000);
       }
     } else {
       window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
+      await this.wait(3000);
     }
   }
 
@@ -89,15 +95,16 @@ class MainRouteOrganisationRedirect extends React.Component {
    */
   async redirectUserAuthWithAccess(organisation, isNewOrg) {
     let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
-    if (!currentOrgAndRecord && !this.props.userStore.values.currentUser.superadmin) {
-      window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
+    if ( (!currentOrgAndRecord && !this.props.userStore.values.currentUser.superadmin) || (currentOrgAndRecord && !currentOrgAndRecord.welcomed)) {
+      window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', organisation.tag, 'first=true');
+      await this.wait(3000);
     } else if (currentOrgAndRecord) {
       this.props.recordStore.setRecordId(currentOrgAndRecord.record);
       await this.props.recordStore.getRecord()
         .then(() => {
           if (isNewOrg) this.setState({ redirectTo: '/' + this.state.locale + '/' + organisation.tag });
         }).catch(() => {
-          window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
+          window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', organisation.tag, 'first=true');
         });
     }
   }
@@ -114,6 +121,7 @@ class MainRouteOrganisationRedirect extends React.Component {
                       .catch((err) => {
                         SlackService.notifyError('Someone try to access : ' + this.props.match.params.organisationTag + ' and got 404.', 
                                                   '110', 'quentin', 'MainRouteOrganisationRedirect.js');
+                        ReactGA.event({category: 'Error',action: 'Redirect to error layout', value: 404});
                         this.setState({redirectTo: '/' + this.state.locale + '/error/404/organisation'});
                       });
       }
@@ -135,6 +143,10 @@ class MainRouteOrganisationRedirect extends React.Component {
     } else if (this.props.authStore.isAuth()) {
       await this.redirectUserAuthWithoutAccess();
     }
+  }
+
+  async wait(ms) {
+    return new Promise((r, j)=>setTimeout(r, ms));
   }
 
   resetRedirectTo() {
@@ -160,6 +172,7 @@ class MainRouteOrganisationRedirect extends React.Component {
           <Switch>
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={PasswordForgot} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={PasswordReset} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/create/:token/:hash/:email" component={PasswordReset} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={AuthPage} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={() => { return <AuthPage initialTab={1} /> }} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
@@ -176,9 +189,15 @@ class MainRouteOrganisationRedirect extends React.Component {
           <Switch>
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={PasswordForgot} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={PasswordReset} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/create/:token/:hash/:email" component={PasswordReset} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={AuthPage} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={() => { return <AuthPage initialTab={1} /> }} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
+
+            {/* Main route with orgTag */}
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag" component={SearchPage} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag" component={SearchPage} />
+
             <Redirect to={'/' + locale + (orgTag ? '/' + orgTag : '') + '/signin' + window.location.search} />
           </Switch>
         </div>

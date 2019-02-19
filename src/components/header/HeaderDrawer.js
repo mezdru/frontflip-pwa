@@ -41,7 +41,7 @@ class App extends Component {
   }
 
   render() {
-    const { classes, auth, open, intl } = this.props;
+    const { classes, auth, open, intl, theme } = this.props;
     const { record } = this.props.recordStore.values;
     const { organisation } = this.props.organisationStore.values;
     const { currentUser } = this.props.userStore.values;
@@ -67,7 +67,7 @@ class App extends Component {
 
         <div className={'leftMenu'}>
 
-          {(auth && organisation._id) && (
+          {(auth && (organisation && organisation._id)) && (
             <div>
               {record._id && (
                 <div>
@@ -104,8 +104,16 @@ class App extends Component {
                   <ListItemText primary={organisation.name || organisation.tag}
                     primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold' } }} />
                 </ListItem>
+
+                {(organisation.canInvite) && (
+                  <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/invite', organisation.tag)} >
+                    <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.invite'})} 
+                                  primaryTypographyProps={{style: { fontWeight: 'bold', color: theme.palette.primary.main } }} />
+                  </ListItem>
+                )}
+
                 {(currentUser.superadmin || (currentOrgAndRecord && currentOrgAndRecord.admin)) && (
-                  <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/organisation', organisation.tag)}>
+                  <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/organisation', organisation.tag)} target="_blank">
                     <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.organisationAdmin' })} />
                   </ListItem>
                 )}
@@ -117,36 +125,42 @@ class App extends Component {
                   } />
                 </ListItem>
 
-                <ListItem button>
+                <ListItem button component="a" href={'mailto:premium@wingzy.io'} target="_blank" >
                   <ListItemText primary={
                     (organisation.premium ? intl.formatMessage({ id: 'menu.drawer.contactUsPremium' }) : intl.formatMessage({ id: 'menu.drawer.contactUs' }))
                   } />
                 </ListItem>
                 <Divider />
-                <ListItem>
-                  <ListItemText primary={intl.formatMessage({id: 'menu.drawer.listOrgTitle'})}
-                    primaryTypographyProps={{noWrap: true, style: { fontWeight: 'bold' } }} />
-                </ListItem>
-                <OrganisationsList />
+                {(currentUser.orgsAndRecords && (currentUser.orgsAndRecords.length > 1) ) && (
+                  <div>
+                    <ListItem>
+                      <ListItemText primary={intl.formatMessage({id: 'menu.drawer.listOrgTitle'})}
+                        primaryTypographyProps={{noWrap: true, style: { fontWeight: 'bold' } }} />
+                    </ListItem>
+                    <OrganisationsList />
+                  </div>
+                )}
+
 
               </List>
               <Divider />
             </div>
           )}
           <List className={'leftSubmenu'}>
-            <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/', undefined)}>
+            <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/', undefined)} target="_blank">
               <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.whyWingzy' })} />
             </ListItem>
 
-            <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/pricing', undefined)}>
+            <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/pricing', undefined)} target="_blank">
               <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.pricing' })} />
             </ListItem>
 
-            <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/terms', undefined)}>
+            <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/terms', undefined)} target="_blank">
               <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.terms' })} />
             </ListItem>
 
-            <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/protectingYourData', undefined)}>
+            <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/protectingYourData', 
+                                                                      ((organisation && organisation.tag) ? organisation.tag : undefined))} target="_blank">
               <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.protectingYourData' })} />
             </ListItem>
           </List>

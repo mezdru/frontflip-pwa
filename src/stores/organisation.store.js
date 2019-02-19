@@ -54,6 +54,8 @@ class OrganisationStore {
           throw err;
         }))
         .finally(action(() => { this.inProgress = false; }));
+    } else {
+      return Promise.resolve();
     }
   }
 
@@ -98,7 +100,8 @@ class OrganisationStore {
   }
 
   getOrganisationForPublic() {
-    if (this.values.orgTag) {
+      if (!this.values.orgTag) return Promise.resolve();
+
       this.inProgress = true;
       this.errors = null;
 
@@ -106,14 +109,20 @@ class OrganisationStore {
         .then(data => {
           this.setOrganisation(data.organisation);
           this.setFullOrgFetch(false);
-          return this.values.organisation;
+          if(this.values.organisation.public) {
+            return this.getAlgoliaKey(true).then(() => {
+              return this.values.organisation;
+            });
+          } else {
+            return this.values.organisation;
+          }
+
         })
         .catch(action((err) => {
           this.errors = err.response && err.response.body && err.response.body.errors;
           throw err;
         }))
         .finally(action(() => { this.inProgress = false; }));
-    }
   }
 
   isKeyStillValid() {

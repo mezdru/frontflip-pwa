@@ -32,6 +32,7 @@ class MainRouteOrganisation extends React.Component {
           {/* All routes without orgTag */}
           <Route exact path="/:locale(en|fr|en-UK)/password/forgot" component={PasswordForgot} />
           <Route exact path="/:locale(en|fr|en-UK)/password/reset/:token/:hash" component={PasswordReset} />
+          <Route exact path="/:locale(en|fr|en-UK)/password/create/:token/:hash/:email" component={PasswordReset} />
           <Route path="/:locale(en|fr|en-UK)/signup" component={() => { return <AuthPage initialTab={1} /> }} />
           <Route path="/:locale(en|fr|en-UK)/signin" component={AuthPage} />
           <Route exact path="/:locale(en|fr|en-UK)/error/:errorCode/:errorType" component={ErrorPage} />

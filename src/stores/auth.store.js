@@ -13,11 +13,16 @@ class AuthStore {
     email: '',
     password: '',
     orgTag: '',
-    invitationCode: ''
+    invitationCode: '',
+    temporaryToken: null,
   };
 
   setEmail(email) {
     this.values.email = email;
+  }
+
+  setTemporaryToken(tToken) {
+    this.values.temporaryToken = tToken;
   }
 
   setPassword(password) {
@@ -37,6 +42,7 @@ class AuthStore {
     this.values.password = '';
     this.values.orgTag = '';
     this.values.invitationCode = '';
+    this.values.temporaryToken = null;
   }
 
   isAuth() {
@@ -59,6 +65,29 @@ class AuthStore {
       .then((response) => {
         if (response && response.access_token) {
           SlackService.notifyError(this.values.email + ' logged in with email and password.', '61', 'quentin', 'auth.store.js');
+          commonStore.setAuthTokens(response);
+          return userStore.getCurrentUser()
+            .then(() => { return 200; });
+        }
+        else return 403;
+      })
+      .catch(action((err) => {
+        this.errors = err.response && err.response.body && err.response.body.errors;
+        throw err;
+      }))
+      .finally(action(() => { this.inProgress = false; }));
+  }
+
+  googleCallbackLogin() {
+    if(!this.values.temporaryToken) return Promise.reject();
+
+    this.inProgress = true;
+    this.errors = null;
+
+    return agent.Auth.googleCallbackLogin(this.values.temporaryToken)
+      .then((response) => {
+        if (response && response.access_token) {
+          SlackService.notifyError(this.values.email + ' google callback login successful.', '90', 'quentin', 'auth.store.js');
           commonStore.setAuthTokens(response);
           return userStore.getCurrentUser()
             .then(() => { return 200; });

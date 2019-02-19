@@ -11,6 +11,8 @@ import Login from './login/Login';
 import Register from './register/Register';
 import UrlService from '../../services/url.service';
 import SlackService from '../../services/slack.service';
+import ReactGA from 'react-ga';
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 const queryString = require('query-string');
 
@@ -43,46 +45,51 @@ class Auth extends React.Component {
     this.state = {
       value: this.props.initialTab,
       queryParams: queryString.parse(window.location.search),
+      displayLoader: false,
       redirectTo: null,
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
     };
     this.handleGoogleAuth = this.handleGoogleAuth.bind(this);
+    this.handleGoogleCallback = this.handleGoogleCallback.bind(this);
   };
   
   componentDidMount() {
+    ReactGA.pageview(window.location.pathname);
     if (this.props.authStore.values.invitationCode) this.setState({ value: 1 });
     observe(this.props.authStore.values, 'invitationCode', (change) => {
       this.setState({ value: 1 });
     });
 
     // HANDLE GOOGLE AUTH CALLBACK
-    if (this.state.queryParams && this.state.queryParams.refresh_token && this.state.queryParams.access_token) {
+    this.handleGoogleCallback(this.state.queryParams)
+    .then(() => {
       let googleState = (this.state.queryParams.state ? JSON.parse(this.state.queryParams.state) : null);
-      this.props.commonStore.setAuthTokens(this.state.queryParams);
       this.props.userStore.getCurrentUser()
         .then((user) => {
-          SlackService.notifyError( (user.google && user.google.email ? user.google.email : '?') + ' logged in with Google.', '63', 'quentin', 'Auth.js');
+          ReactGA.event({category: 'User',action: 'Login with Google'});
           if (googleState && googleState.invitationCode) this.props.authStore.setInvitationCode(googleState.invitationCode);
+          if(user.superadmin){
+            this.setState({redirectTo: '/' + this.state.locale + (this.props.organisationStore.values.organisation.tag ? '/'+this.props.organisationStore.values.organisation.tag : '')});
+            return;
+          }
           this.props.authStore.registerToOrg()
-            .then((data) => {
-              let organisation = data.organisation;
-              let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
-              if (currentOrgAndRecord) this.props.recordStore.setRecordId(currentOrgAndRecord.record);
-              this.props.recordStore.getRecord()
-                .then(() => {
-                  this.setState({ redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag });
-                }).catch(() => {
-                  window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag);
-                });
-            }).catch((err) => {
-              // window.location.href = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + window.location.host + '/' + this.state.locale;
-              this.setState({redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag});
-            });
-        }).catch((err) => {
-          this.setState({redirectTo: '/' + this.state.locale});
-          // window.location.href = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + window.location.host + '/' + this.state.locale;
-        });
-    }
+          .then((data) => {
+            let organisation = data.organisation;
+            let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
+            if (currentOrgAndRecord) this.props.recordStore.setRecordId(currentOrgAndRecord.record);
+            this.props.recordStore.getRecord()
+              .then(() => this.setState({ redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag }))
+              .catch(() => window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag));
+          }).catch((err) => this.setState({redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag}));
+        }).catch((err) => this.setState({redirectTo: '/' + this.state.locale}));
+    }).catch((err) => {return;});
+
+  }
+
+  async handleGoogleCallback(query) {
+    if(!query || !query.token) return Promise.reject('No token');
+    this.props.authStore.setTemporaryToken(query.token);
+    return this.props.authStore.googleCallbackLogin();
   }
 
   handleChange = (event, value) => {
@@ -98,7 +105,9 @@ class Auth extends React.Component {
     if (this.props.organisationStore.values.orgTag) state.orgTag = this.props.organisationStore.values.orgTag
     if (this.props.organisationStore.values.organisation.tag) state.orgTag = this.props.organisationStore.values.organisation.tag;
     if (this.props.authStore.values.invitationCode) state.invitationCode = this.props.authStore.values.invitationCode;
-    window.location.href = 'https://' + process.env.REACT_APP_API_ROOT_AUTH + '/google?state=' + JSON.stringify(state);
+    window.location.href = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + 
+                            process.env.REACT_APP_API_ROOT_AUTH + 
+                            '/google?state=' + JSON.stringify(state);
   }
 
   render() {

@@ -121,9 +121,18 @@ const Auth = {
       {
         username: email,
         password: password,
-        client_id: 'frontflip',
-        client_secret: 'abcd1234',
+        client_id: process.env.REACT_APP_CLIENT_ID,
+        client_secret: process.env.REACT_APP_CLIENT_SECRET,
         grant_type: 'password'
+      }
+    ),
+  googleCallbackLogin: (token) => 
+    requests.post(
+      API_ROOT_AUTH + '/locale/exchange',
+      {
+        token: token,
+        client_id: process.env.REACT_APP_CLIENT_ID,
+        client_secret: process.env.REACT_APP_CLIENT_SECRET
       }
     ),
   register: (email, password) =>

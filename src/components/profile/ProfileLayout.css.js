@@ -59,6 +59,7 @@ export const styles = theme => ({
   button: {
     color: theme.palette.secondary.contrastText,
     wordBreak: 'break-all',
+    padding: '8px 24px',
   },
   buttonIcon: {
     color: theme.palette.primary.main
@@ -96,7 +97,10 @@ export const styles = theme => ({
     position: 'absolute',
     margin: 16,
     background: 'white',
-    color: theme.palette.primary.main
+    color: theme.palette.primary.main,
+    '&:hover': {
+      backgroundColor: 'rgba(0, 0, 0, 0.08)',
+    }
   },
   returnButtonSize: {
     fontSize: 24,
@@ -123,6 +127,6 @@ export const styles = theme => ({
     marginLeft: 24,
   },
   aboutMe: {
-    padding: 16,
+    padding: 8,
   }
 });

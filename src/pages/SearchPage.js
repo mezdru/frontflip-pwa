@@ -13,6 +13,8 @@ import Banner from '../components/utils/banner/Banner';
 import SearchSuggestions from '../components/algolia/SearchSuggestions';
 import SearchResults from '../components/algolia/SearchResults';
 import Card from '../components/card/CardProfile';
+import ReactGA from 'react-ga';
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class SearchPage extends React.Component {
   constructor(props) {
@@ -38,6 +40,8 @@ class SearchPage extends React.Component {
   }
 
   componentDidMount() {
+    ReactGA.pageview(window.location.pathname);
+    this.props.history.listen((location, action) => ReactGA.pageview(window.location.pathname));
     if(this.props.commonStore.algoliaKey)
       this.setState({algoliaClient: algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.props.commonStore.algoliaKey)}, () => {
         this.setState({algoliaIndex: this.state.algoliaClient.initIndex('world')});
@@ -70,6 +74,7 @@ class SearchPage extends React.Component {
 
   updateFilters(selectedOptions) {
     if(!selectedOptions) return;
+    ReactGA.event({category: 'Search',action: 'Perform search'});
     this.setState({shouldDisplayHitResults: false});
     let newFilters = 'type:person';
     let newQuery = '';
@@ -94,8 +99,8 @@ class SearchPage extends React.Component {
   }
 
   handleDisplayProfile(e, hit) {
-    if (e) e.preventDefault();
-    this.setState({ displayedHit: hit, resultsType: 'profile'});
+    ReactGA.event({category: 'User',action: 'Display profile'});
+    this.setState({resultsType: 'profile', displayedHit: hit});
   }
 
   handleReturnToSearch = () => this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true});
@@ -109,7 +114,7 @@ class SearchPage extends React.Component {
     const orgTag = this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag;
 
     let resultsType = ((profileTag && !shouldUpdateUrl) ? 'profile' : null) || this.state.resultsType;
-    let displayedHit = ((profileTag && !shouldUpdateUrl) ? { tag: profileTag } : null) || this.state.displayedHit;
+    let displayedHit = ((profileTag && !shouldUpdateUrl) ? (this.state.displayedHit || { tag: profileTag }) : null) || this.state.displayedHit;
     let rootUrl = '/' + locale + (orgTag ? '/' + orgTag : '');
     let searchBarWidth = this.getSearchBarWidth();
     let redirectTo;
@@ -125,7 +130,7 @@ class SearchPage extends React.Component {
       <div>
         <Header handleDisplayProfile={this.handleDisplayProfile}/>
         <main>
-          {(shouldUpdateUrl && resultsType === 'person' && (window.location.pathname !== rootUrl)) && (<Redirect push to={rootUrl} />)}
+          {(shouldUpdateUrl && resultsType === 'person' && (window.location.pathname !== rootUrl)) && (<Redirect to={rootUrl} />)}
           <Grid container direction={'column'} alignItems={'center'}>
             
             <div  style={{  width: ((((isWidthDown('sm', this.props.width)))) ? '75%' : searchBarWidth),

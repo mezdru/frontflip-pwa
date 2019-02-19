@@ -40,13 +40,14 @@ class ProfileLayout extends React.Component {
 
   componentDidMount() {
     if(!this.props.hit) return;
+    if(!this.props.authStore.isAuth()) return;
     this.props.recordStore.setRecordTag(this.props.hit.tag);
     this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
     this.props.recordStore.getRecordByTag()
       .then((record) => {
         record.objectID = record._id;
         this.setState({ record: record, canEdit: this.canEdit(record) });
-      })
+      }).catch(() => {return;})
   };
 
   handleReturnToSearch(e, element) {
@@ -77,10 +78,10 @@ class ProfileLayout extends React.Component {
       
       <Grid container className={(displayIn ? className : classes.profileContainerHide)} >
         {(window.location.pathname !== rootUrl + '/' + hit.tag) && (
-          <Redirect push to={rootUrl + '/' + hit.tag} />
+          <Redirect to={rootUrl + '/' + hit.tag} />
         )}
         <Grid container item alignItems={"stretch"} >
-          <Banner>
+          <Banner source={(currentHit && currentHit.cover && currentHit.cover.url) ? currentHit.cover.url : null} >
             <IconButton aria-label="Edit" className={classes.returnButton} onClick={this.handleReturnToSearch}>
               <Clear fontSize="large" className={classes.returnButtonSize} />
             </IconButton>
@@ -146,7 +147,7 @@ class ProfileLayout extends React.Component {
                 onClick={() => { window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/hashtags', orgTag, 'recordId=' + currentHit.objectID) }} />
             )}
             <div style={{ marginTop: 16 }}>
-              <Typography variant="h5" style={{ padding: 16 }}>
+              <Typography variant="h5" style={{ padding: 8 }}>
                 <FormattedMessage id={'profile.aboutMe'} />
                 {canEdit && (
                   <IconButton aria-label="Edit" className={classes.editButton}
