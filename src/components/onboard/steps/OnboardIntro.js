@@ -10,16 +10,9 @@ class OnboardIntro extends React.Component {
     };
   }
 
-  handleNameChange = (e) => {
+  handleChange = (e, field) => {
     let record = this.props.recordStore.values.record;
-    record.name = e.target.value;
-    this.props.recordStore.setRecord(record);
-    this.forceUpdate(); // why component do not update auto like Login fields ?
-  }
-
-  handleIntroChange = (e) => {
-    let record = this.props.recordStore.values.record;
-    record.intro = e.target.value;
+    record[field] = e.target.value;
     this.props.recordStore.setRecord(record);
     this.forceUpdate(); // why component do not update auto like Login fields ?
   }
@@ -36,7 +29,7 @@ class OnboardIntro extends React.Component {
           fullWidth
           variant={"outlined"}
           value={record.name}
-          onChange={this.handleNameChange}
+          onChange={(e) => this.handleChange(e, 'name')}
           onBlur={this.props.handleSave}
           required
         />
@@ -46,7 +39,7 @@ class OnboardIntro extends React.Component {
           fullWidth
           variant={"outlined"}
           value={record.intro}
-          onChange={this.handleIntroChange}
+          onChange={(e) => this.handleChange(e, 'intro')}
           onBlur={this.props.handleSave}
           required
         />
