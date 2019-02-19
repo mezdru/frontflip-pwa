@@ -1,8 +1,8 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core';
+import { withStyles, Button } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 
-class OnboardStepper extends React.Component {
+class OnboardWelcome extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,7 +13,8 @@ class OnboardStepper extends React.Component {
 
     return (
       <div>
-        Stepper !
+        Welcome !
+        <Button onClick={this.props.handleEnterToOnboard} >onboard !</Button>
       </div>
     );
   }
@@ -21,6 +22,6 @@ class OnboardStepper extends React.Component {
 
 export default inject('commonStore')(
   observer(
-    withStyles(null)(OnboardStepper)
+    withStyles(null)(OnboardWelcome)
   )
 );

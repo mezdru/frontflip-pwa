@@ -1,5 +1,6 @@
 import { observable, action, decorate } from "mobx";
 import agent from '../agent';
+import userStore from './user.store';
 
 class RecordStore {
   inProgress = false;
@@ -60,6 +61,23 @@ class RecordStore {
       .then(data => {
         this.values.otherRecord = (data ? data.record : {});
         return this.values.otherRecord;
+      })
+      .catch(action((err) => {
+        this.errors = err.response && err.response.body && err.response.body.errors;
+        throw err;
+      }))
+      .finally(action(() => { this.inProgress = false; }));
+  }
+
+  getRecordByUser() {
+    if (!userStore.values.currentUser._id || !this.values.orgId) return Promise.reject(new Error('Bad parameters'));
+    this.inProgress = true;
+    this.errors = null;
+
+    return agent.Record.getByUser(userStore.values.currentUser._id, this.values.orgId)
+      .then(data => {
+        this.values.record = (data ? data.record : null);
+        return this.values.record;
       })
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.errors;
