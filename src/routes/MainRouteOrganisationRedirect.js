@@ -10,6 +10,7 @@ import EmailService from '../services/email.service';
 import SearchPage from "../pages/SearchPage";
 import SlackService from '../services/slack.service';
 import ReactGA from 'react-ga';
+import OnboardPage from "../pages/OnboardPage";
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class MainRouteOrganisationRedirect extends React.Component {
@@ -178,6 +179,7 @@ class MainRouteOrganisationRedirect extends React.Component {
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
 
             {/* Main route with orgTag */}
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/onboard/onboard" component={OnboardPage} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={SearchPage} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={SearchPage} />
           </Switch>
