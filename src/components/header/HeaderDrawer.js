@@ -69,7 +69,7 @@ class App extends Component {
 
           {(auth && (organisation && organisation._id)) && (
             <div>
-              {record._id && (
+              {record && record._id && (
                 <div>
                   <List className={'leftSubmenu'}>
                     <ListItem >

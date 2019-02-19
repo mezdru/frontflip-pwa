@@ -17,13 +17,9 @@ class OnboardStepper extends React.Component {
     super(props);
     this.state = {
       activeStep: 0,
-      steps: ['intro','contacts','wings','featured', 'featured', 'featured']
+      steps: ['intro','contacts','wings','featured', 'featured', 'featured'],
+      canNext: true
     };
-  }
-
-  componentDidMount() {
-    // let arrayOfSteps = ['intro','contacts','wings','featured', 'featured', 'featured']
-    // this.setState({steps: arrayOfSteps})
   }
 
   handleNext = () => {
@@ -53,7 +49,7 @@ class OnboardStepper extends React.Component {
 
   render() {
     const {theme, classes} = this.props;
-    const {activeStep, steps} = this.state;
+    const {activeStep, steps, canNext} = this.state;
     let StepComponent = this.getStepComponent(steps, activeStep);
 
     return (
@@ -65,7 +61,7 @@ class OnboardStepper extends React.Component {
           activeStep={this.state.activeStep}
           className={classes.root}
           nextButton={
-            <Button size="small" onClick={this.handleNext} disabled={activeStep === (steps.length - 1)}>
+            <Button size="small" onClick={this.handleNext} disabled={(activeStep === (steps.length - 1)) || !canNext}>
               Next
               {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
             </Button>

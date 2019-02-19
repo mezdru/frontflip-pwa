@@ -1,6 +1,7 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
+import { observe } from 'mobx';
 import Header from '../components/header/Header';
 import OnboardWelcome from '../components/onboard/OnboardWelcome';
 import OnboardStepper from '../components/onboard/OnboardStepper';
@@ -17,6 +18,9 @@ class OnboardPage extends React.Component {
   }
 
   componentDidMount() {
+    observe(this.props. recordStore.values, 'record', (change) => {
+      this.forceUpdate();
+    });
     this.getRecordForUser().then().catch(err => console.log(err));
   }
 
