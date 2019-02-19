@@ -47,6 +47,11 @@ class OnboardStepper extends React.Component {
     }
   }
 
+  handleSave = () => {
+    this.props.recordStore.setRecordId(this.props.recordStore.values.record._id);
+    this.props.recordStore.updateRecord();
+  }
+
   render() {
     const {theme, classes} = this.props;
     const {activeStep, steps, canNext} = this.state;
@@ -74,13 +79,13 @@ class OnboardStepper extends React.Component {
           }
         />
         <Typography variant="h1">{steps[activeStep]}</Typography>
-        <StepComponent />
+        <StepComponent handleSave={this.handleSave} />
       </div>
     );
   }
 }
 
-export default inject('commonStore')(
+export default inject('commonStore', 'recordStore')(
   observer(
     withStyles(null, {withTheme: true})(OnboardStepper)
   )
