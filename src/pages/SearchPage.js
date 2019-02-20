@@ -31,12 +31,6 @@ class SearchPage extends React.Component {
       shouldUpdateUrl: false,
       shouldDisplayHitResults: true,
     };
-
-    this.updateFilters = this.updateFilters.bind(this);
-    this.addToFilters = this.addToFilters.bind(this);
-    this.getSearchBarWidth = this.getSearchBarWidth.bind(this);
-    this.handleDisplayProfile = this.handleDisplayProfile.bind(this);
-    this.handleReturnToSearch = this.handleReturnToSearch.bind(this);
   }
 
   componentDidMount() {
@@ -60,7 +54,7 @@ class SearchPage extends React.Component {
     });
   }
 
-  addToFilters(e, element, shouldAwaitToUpdateLayout) {
+  addToFilters = (e, element, shouldAwaitToUpdateLayout) => {
     e.preventDefault();
     this.setState({ newFilter: { label: element.name, value: element.tag } });
     if (this.state.resultsType === 'profile') {
@@ -72,7 +66,7 @@ class SearchPage extends React.Component {
     }
   }
 
-  updateFilters(selectedOptions) {
+  updateFilters = (selectedOptions) => {
     if(!selectedOptions) return;
     ReactGA.event({category: 'Search',action: 'Perform search'});
     this.setState({shouldDisplayHitResults: false});
@@ -90,7 +84,7 @@ class SearchPage extends React.Component {
     });
   }
 
-  getSearchBarWidth() {
+  getSearchBarWidth = () => {
     if (isWidthUp('lg', this.props.width)) return (4 / 12) * 100 + '%';
     else if (isWidthUp('md', this.props.width)) return (6 / 12) * 100 + '%';
     else if (isWidthUp('sm', this.props.width)) return (8 / 12) * 100 + '%';
@@ -98,7 +92,7 @@ class SearchPage extends React.Component {
     return null;
   }
 
-  handleDisplayProfile(e, hit) {
+  handleDisplayProfile = (e, hit) => {
     ReactGA.event({category: 'User',action: 'Display profile'});
     this.setState({resultsType: 'profile', displayedHit: hit});
   }

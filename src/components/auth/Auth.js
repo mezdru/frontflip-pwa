@@ -10,7 +10,6 @@ import SwipeableViews from 'react-swipeable-views';
 import Login from './login/Login';
 import Register from './register/Register';
 import UrlService from '../../services/url.service';
-import SlackService from '../../services/slack.service';
 import ReactGA from 'react-ga';
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
@@ -49,8 +48,6 @@ class Auth extends React.Component {
       redirectTo: null,
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
     };
-    this.handleGoogleAuth = this.handleGoogleAuth.bind(this);
-    this.handleGoogleCallback = this.handleGoogleCallback.bind(this);
   };
   
   componentDidMount() {
@@ -86,7 +83,7 @@ class Auth extends React.Component {
 
   }
 
-  async handleGoogleCallback(query) {
+  handleGoogleCallback = async (query) => {
     if(!query || !query.token) return Promise.reject('No token');
     this.props.authStore.setTemporaryToken(query.token);
     return this.props.authStore.googleCallbackLogin();
@@ -100,7 +97,7 @@ class Auth extends React.Component {
     this.setState({ value: index });
   };
 
-  handleGoogleAuth() {
+  handleGoogleAuth = () => {
     let state = {};
     if (this.props.organisationStore.values.orgTag) state.orgTag = this.props.organisationStore.values.orgTag
     if (this.props.organisationStore.values.organisation.tag) state.orgTag = this.props.organisationStore.values.organisation.tag;

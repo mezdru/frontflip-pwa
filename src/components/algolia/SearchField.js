@@ -17,14 +17,6 @@ class SearchField extends React.Component {
       placeholder: this.props.intl.formatMessage({ id: 'algolia.search' }),
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
     };
-
-    this.getOptions = this.getOptions.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.noOptionsMessage = this.noOptionsMessage.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.createOptionMessage = this.createOptionMessage.bind(this);
-    this.handleCreateOption = this.handleCreateOption.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
   }
 
   // Used to fetch an event: User click on a Wing, so we should add it to the search filters
@@ -42,7 +34,7 @@ class SearchField extends React.Component {
 
   // Format an array of options so that they all have a label and a value
   // i18n of options is performed here
-  prepareLabels(array) {
+  prepareLabels = (array) => {
     let arrayOfLabel = [];
     array.forEach(hit => {
       let displayedName;
@@ -71,7 +63,7 @@ class SearchField extends React.Component {
     return arrayOfLabel;
   }
 
-  getTextLabel(hit) {
+  getTextLabel = (hit) => {
     if(!hit) return '';
     return (hit.name_translated ? 
       (hit.name_translated[this.state.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag);
@@ -81,7 +73,7 @@ class SearchField extends React.Component {
   getOptionLabel = (option) => ProfileService.htmlDecode(option.labelText || option.label);
 
   // when option is selected
-  handleChange(selectedOption) {
+  handleChange = (selectedOption) => {
     this.scrollToBottom();
 
     this.props.commonStore.setSearchFilters(selectedOption);
@@ -108,18 +100,18 @@ class SearchField extends React.Component {
     }, 100);    
   }
 
-  refineWithSelectedOptions(selectedOption) {
+  refineWithSelectedOptions = (selectedOption) => {
     let optionsString = '';
     if (selectedOption && selectedOption.length > 0) selectedOption.forEach(option => { optionsString += option.label + ' '; });
     this.updateOptions(optionsString);
   }
 
-  async getOptions(inputValue) {
+  getOptions = async (inputValue) => {
     let algoliaResponse = await this.updateOptions(inputValue);
     return this.prepareLabels(algoliaResponse.hits);
   }
 
-  async updateOptions(inputValue) {
+  updateOptions = async (inputValue) => {
     return await this.props.index.search(
       {
         query: inputValue,
@@ -133,28 +125,28 @@ class SearchField extends React.Component {
   }
 
   // Handle input change (any change)
-  handleInputChange(inputValue) {
+  handleInputChange = (inputValue) => {
     if ((!inputValue || inputValue === '') && (!this.state.selectedOption || this.state.selectedOption.length === 0)){
       this.updateOptions(inputValue);
     }
     return inputValue;
   }
 
-  handleCreateOption(option) {
+  handleCreateOption = (option) => {
     let arrayOfOption = this.state.selectedOption || [];
     option = option.trim();
     arrayOfOption.push({ label: option, value: option });
     return this.handleChange(arrayOfOption);
   }
 
-  noOptionsMessage(inputValue) {
+  noOptionsMessage = (inputValue) => {
     if (inputValue.inputValue) return this.props.intl.formatMessage({ id: 'algolia.noOptions' }, { input: inputValue.inputValue });
     return this.props.intl.formatMessage({ id: 'algolia.typeSomething' });
   }
 
   createOptionMessage = (inputValue) => this.props.intl.formatMessage({ id: 'algolia.createOption' }, { input: inputValue });
 
-  handleSearchClick(props) {
+  handleSearchClick = (props) => {
     if(props.selectProps.inputValue.trim() !== '') {
       this.handleCreateOption(props.selectProps.inputValue);
     }
@@ -179,7 +171,7 @@ class SearchField extends React.Component {
     }
   }
 
-  onKeyDown(event, props) {
+  onKeyDown = (event) => {
     switch (event.keyCode) {
         case 13: // ENTER
             event.preventDefault();

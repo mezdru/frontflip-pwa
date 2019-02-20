@@ -26,12 +26,9 @@ class ProfileLayout extends React.Component {
       record: null,
       displayIn: true,
     }
-
-    this.canEdit = this.canEdit.bind(this);
-    this.handleReturnToSearch = this.handleReturnToSearch.bind(this);
   }
 
-  canEdit(workingRecord) {
+  canEdit = (workingRecord) => {
     if (!(this.props.userStore.values.currentUser && this.props.userStore.values.currentUser._id)) return false;
     if (this.props.userStore.values.currentUser.superadmin) return true;
     else if (this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.record === workingRecord.objectID)) return true;
@@ -50,7 +47,7 @@ class ProfileLayout extends React.Component {
       }).catch(() => {return;})
   };
 
-  handleReturnToSearch(e, element) {
+  handleReturnToSearch = (e, element) => {
     this.setState({displayIn: false}, () => {
       if(!element) {
         setTimeout(function() {this.props.handleReturnToSearch();}.bind(this), 600);
