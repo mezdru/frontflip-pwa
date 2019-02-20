@@ -1,10 +1,13 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { observe } from 'mobx';
-import Header from '../components/header/Header';
 import OnboardWelcome from '../components/onboard/OnboardWelcome';
 import OnboardStepper from '../components/onboard/OnboardStepper';
+import { withStyles } from '@material-ui/core';
+import MobileStepper from '@material-ui/core/MobileStepper';
+import Button from '@material-ui/core/Button';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 
 class OnboardPage extends React.Component {
   constructor(props) {
@@ -35,11 +38,29 @@ class OnboardPage extends React.Component {
   render() {
     const {record} = this.props.recordStore.values;
     const {inOnboarding} = this.state;
+    const {theme} = this.props;
 
     if(!inOnboarding) {
       return (
         <div>
-          <Header/>
+          <MobileStepper
+          variant="dots"
+          steps={3}
+          position="static"
+          activeStep={null}
+          nextButton={
+            <Button size="small" onClick={this.handleNext} disabled >
+              Next
+              {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+            </Button>
+          }
+          backButton={
+            <Button size="small" onClick={this.handleBack} disabled >
+              {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+              Back
+            </Button>
+          }
+        />
           <main>
             <OnboardWelcome handleEnterToOnboard={this.handleEnterToOnboard} />
             This is your record : <br/>
@@ -61,6 +82,6 @@ class OnboardPage extends React.Component {
 
 export default inject('commonStore', 'organisationStore', 'recordStore', 'userStore')(
   observer(
-    withStyles(null)(OnboardPage)
+    withStyles(null, {withTheme: true})(OnboardPage)
   )
 );

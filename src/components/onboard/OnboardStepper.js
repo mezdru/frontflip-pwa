@@ -9,8 +9,6 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import OnboardIntro from './steps/OnboardIntro';
 import OnboardContacts from './steps/OnboardContacts';
 import OnboardWings from './steps/OnboardWings';
-import OnboardFeaturedWings from './steps/OnboardFeaturedWings';
-
 
 class OnboardStepper extends React.Component {
   constructor(props) {
@@ -40,10 +38,8 @@ class OnboardStepper extends React.Component {
         return OnboardIntro;
       case 'contacts':
         return OnboardContacts;
-      case 'wings':
+      default:
         return OnboardWings;
-      case 'featured':
-        return OnboardFeaturedWings;
     }
   }
 
