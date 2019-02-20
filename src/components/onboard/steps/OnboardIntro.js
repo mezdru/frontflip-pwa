@@ -2,6 +2,7 @@ import React from 'react'
 import { withStyles } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { TextField } from '@material-ui/core'
+import PictureField from '../../utils/fields/PictureField';
 
 class OnboardIntro extends React.Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class OnboardIntro extends React.Component {
     return (
       <div>
         This is intro component
+        <PictureField handleSave={this.props.handleSave} />
         <TextField
           label="Name"
           type="text"
