@@ -23,7 +23,6 @@ class MainRouteOrganisationRedirect extends React.Component {
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
       renderComponent: false
     };
-    this.manageAccessRight = this.manageAccessRight.bind(this);
   }
 
   componentWillReceiveProps(props) {
@@ -113,7 +112,7 @@ class MainRouteOrganisationRedirect extends React.Component {
   /**
    * @description Manage access right of the user and redirect him if needed.
    */
-  async manageAccessRight() {
+  manageAccessRight = async () => {
     if (this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
       let organisation = this.props.organisationStore.values.organisation;
       if (!(this.props.organisationStore.values.orgTag === this.props.match.params.organisationTag)) {

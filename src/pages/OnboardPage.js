@@ -12,9 +12,6 @@ class OnboardPage extends React.Component {
     this.state = {
       inOnboarding: false
     };
-
-    this.getRecordForUser = this.getRecordForUser.bind(this);
-    this.handleEnterToOnboard = this.handleEnterToOnboard.bind(this);
   }
 
   componentDidMount() {
@@ -24,14 +21,14 @@ class OnboardPage extends React.Component {
     this.getRecordForUser().then().catch(err => console.log(err));
   }
 
-  getRecordForUser() {
+  getRecordForUser = () => {
     if(!this.props.recordStore.values.orgId) {
       this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
     }
     return this.props.recordStore.getRecordByUser();
   }
 
-  handleEnterToOnboard() {
+  handleEnterToOnboard = () => {
     this.setState({inOnboarding: true});
   }
 

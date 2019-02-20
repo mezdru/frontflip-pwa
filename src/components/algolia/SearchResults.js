@@ -12,17 +12,13 @@ class SearchResults extends React.Component {
       hideShowMore: false,
       hitsAlreadyDisplayed: 0,
     };
-
-    this.fetchHits = this.fetchHits.bind(this);
-    this.handleShowMore = this.handleShowMore.bind(this);
-    this.endTask = this.endTask.bind(this);
   }
 
   componentDidMount() {
     this.fetchHits(this.props.filters, this.props.query, null, null);
   }
 
-  fetchHits(filters, query, facetFilters, page) {
+  fetchHits = (filters, query, facetFilters, page) => {
     this.props.index.search({
       page : page || 0,
       query: query || '',
@@ -51,11 +47,11 @@ class SearchResults extends React.Component {
     });
   }
 
-  endTask() {
+  endTask = () => {
     this.setState({loadInProgress: false});
   }
 
-  handleShowMore() {
+  handleShowMore = () => {
     this.setState({page: this.state.page+1, loadInProgress: true}, () => {
       this.fetchHits(this.props.filter, this.props.query, null, this.state.page);
     });
