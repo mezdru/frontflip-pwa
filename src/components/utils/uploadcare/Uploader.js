@@ -28,19 +28,19 @@ class Uploader extends Component {
   }
 
   componentWillUnmount() {
-    if (this.dialog) {
-      this.dialog.reject()
-    }
-    if (this.files) {
-      uploadcare.jQuery.when.apply(null, this.files).cancel()
-    }
+    // if (this.dialog) {
+    //   this.dialog.reject()
+    // }
+    // if (this.files) {
+    //   uploadcare.jQuery.when.apply(null, this.files).cancel()
+    // }
 
-    const widgetElement = uploadcare.jQuery(this.uploader).next('.uploadcare--widget')
-    const widget = widgetElement.data('uploadcareWidget')
+    // const widgetElement = uploadcare.jQuery(this.uploader).next('.uploadcare--widget')
+    // const widget = widgetElement.data('uploadcareWidget')
 
-    if (widget && widget.inputElement === this.uploader) {
-      widgetElement.remove()
-    }
+    // if (widget && widget.inputElement === this.uploader) {
+    //   widgetElement.remove()
+    // }
   }
 
   getInputAttributes() {

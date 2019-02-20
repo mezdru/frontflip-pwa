@@ -11,12 +11,14 @@ class PictureField extends React.Component {
   }
 
   handleChange = (file) => {
-    let record = this.props.recordStore.values.record;
-    record.picture = {
-      url: file.cdnUrl
-    };
-    this.props.recordStore.setRecord(record);
-    //this.forceUpdate(); // why component do not update auto like Login fields ?
+    if(!file) {
+      let record = this.props.recordStore.values.record;
+      record.picture = {
+        url: null
+      };
+      this.props.recordStore.setRecord(record);
+    }
+    this.props.handleSave();
   }
 
   handleUploadComplete = (file) => {
@@ -46,15 +48,8 @@ class PictureField extends React.Component {
             data-tabs='file camera url'
             data-crop="180x180 upscale" 
              data-image-shrink="1280x1280"
-            onChange={(file) => {
-              console.log('File changed: ', file)
-
-              if (file) {
-                file.progress(info => console.log('File progress: ', info.progress))
-                file.done(info => console.log('File uploaded: ', info))
-              }
-            }}
-            value={pictureUrl}
+            onChange={this.handleChange}
+            value={pictureUrl || (record.picture ? record.picture.url : null)}
             onUploadComplete={this.handleUploadComplete} 
             data-images-only />
 
