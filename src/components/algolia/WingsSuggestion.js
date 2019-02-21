@@ -5,6 +5,7 @@ import classNames from 'classnames';
 
 import Wings from '../utils/wing/Wing';
 import ProfileService from '../../services/profile.service';
+import AlgoliaService from '../../services/algolia.service';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
 
 const styles = theme => ({
@@ -42,32 +43,81 @@ class WingsSuggestions extends React.Component {
     this.state = {
       suggestions: [],
       bank: [],
+      algoliaService: new AlgoliaService(this.props.commonStore.algoliaKey)
     };
   }
 
   componentDidMount() {
     this.loadBank(null)
     .then(() => {
-      this.updateSuggestions(null);
+      this.initAllSuggestions();
     });
   }
 
-  updateSuggestions = (filters) => {
-    return new Promise((resolve, reject) => {
-      this.loadMostCommonSuggestions(filters)
+  initAllSuggestions = async () => {
+    await this.fetchSuggestions(null, false, 10);
+    await this.fetchSuggestions(null, true, 20);
+    this.populateSuggestion();
+    let query = this.formatHashtagsQuery();
+    if(query)
+      this.loadBank(query)
       .then(() => {
         this.populateSuggestion();
-        let query = this.formatHashtagsQuery();
-        if(query)
-          this.loadBank(query)
-          .then(() => {
-            this.populateSuggestion();
-            resolve();
-          });
-        else
-          resolve();
       });
+  }
+
+  fetchSuggestions = (lastSelection, privateOnly, nbHitToAdd) => {
+    return this.state.algoliaService.fetchFacetValues(lastSelection, privateOnly)
+    .then(content => {
+      let newSuggestions = [];
+      let suggestions = this.state.suggestions;
+      content.facetHits = this.cleanAlgoliaSuggestions(content.facetHits);
+
+      for(let i = 0; i < nbHitToAdd; i++) {
+        if(content.facetHits.length === 0) break;
+
+        let index = (i === 0 ? 0 : Math.floor(Math.random() * Math.floor(content.facetHits.length)));
+        let suggestionToAdd = content.facetHits.splice(index, 1)[0];
+        let knownIndex = suggestions.findIndex(hashtag => hashtag && (hashtag.tag === suggestionToAdd.value));
+
+        if( knownIndex > -1 && i > 0){
+          i--;
+          continue;
+        } else if(i === 0 && knownIndex > -1) {
+          suggestions.splice(0,0,suggestions.splice(knownIndex,1)[0]);
+          continue;
+        }
+
+        suggestionToAdd.tag = suggestionToAdd.value;
+        newSuggestions.push(suggestionToAdd);
+      }
+      this.setState({suggestions: suggestions.concat(newSuggestions)});
+    }).catch((e) => {console.log(e)});
+  }
+
+  cleanAlgoliaSuggestions = (suggestions) => {
+    let suggestionsToReturn = suggestions;
+    suggestions.forEach(suggestion => {
+      if(this.props.recordStore.values.record.hashtags.findIndex(hashtag => hashtag.tag === suggestion.value) > -1) {
+        let index = suggestionsToReturn.findIndex(sugInRet => sugInRet.value === suggestion.value);
+        if(index > -1) suggestionsToReturn.splice(index, 1);
+      }
     });
+    return suggestionsToReturn;
+  } 
+
+  updateSuggestions = async (filters) => {
+    await this.fetchSuggestions(null, false, 1);
+    await this.fetchSuggestions(null, true, 2);
+    await this.fetchSuggestions(filters, false, 2);
+    await this.fetchSuggestions(filters, true, 2);
+    this.populateSuggestion();
+    let query = this.formatHashtagsQuery();
+    if(query)
+      this.loadBank(query)
+      .then(() => {
+        this.populateSuggestion();
+      });
   }
 
   getData = (tag) => this.state.bank.find(bankElt => bankElt.tag === tag);
@@ -78,30 +128,6 @@ class WingsSuggestions extends React.Component {
       suggestions[i] = this.getData(suggestion.tag) || suggestion;
     });
     this.setState({suggestions: suggestions});
-  }
-
-  loadMostCommonSuggestions = (lastSelection) => {
-    return new Promise((resolve, reject) => {
-      this.props.index.searchForFacetValues({
-        facetName: 'hashtags.tag',
-        query: '',
-        facetQuery: '',
-        filters: '',
-        facetFilters: (lastSelection ? ['hashtags.tag:'+lastSelection.tag] : []),
-      }, (err, res) => {
-        if(!err) {
-          let suggestions = this.state.suggestions;
-          res.facetHits.forEach(suggestion => {
-            suggestion.tag = suggestion.value;
-            if(!suggestions.some(hashtag => hashtag.tag === suggestion.tag)) {
-              suggestions.push(suggestion);
-            }
-          });
-          
-          this.setState({suggestions: suggestions}, resolve());
-        }
-      });
-    });
   }
 
   loadBank = (filters) => {
