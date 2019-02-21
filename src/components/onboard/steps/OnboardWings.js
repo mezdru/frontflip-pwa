@@ -13,6 +13,7 @@ class OnboardWings extends React.Component {
     this.state = {
       algoliaClient: null,
       algoliaIndex: null,
+      lastSelection: null,
     };
   }
 
@@ -44,23 +45,32 @@ class OnboardWings extends React.Component {
       record.hashtags.push(hashtagRecord);
       this.props.recordStore.setRecord(record);
       this.props.handleSave();
-    });
+    }).catch(() => {});
+  }
+
+  handleRemoveWing = (e, tag) => {
+    e.preventDefault();
+    let record = this.props.recordStore.values.record;
+    let newHashtags = record.hashtags.filter(hashtag => hashtag.tag !== tag);
+    record.hashtags = newHashtags;
+    this.props.recordStore.setRecord(record);
+    this.props.handleSave();
   }
 
   render() {
     const {record} = this.props.recordStore.values;
     const {algoliaIndex} = this.state;
 
-    console.log(record);
-
     if(!algoliaIndex) return null;
 
     return (
       <div>
-        This is wings component
-        <SearchField index={algoliaIndex} />
-        <WingsSuggestion index={algoliaIndex} addToFilters={this.handleAddWing} filters={''} query={''} />
-        <UserWings />
+        <div style={{background: '#f2f2f2', boxShadow: ''}}>
+          This is wings component
+          <SearchField index={algoliaIndex} />
+          <WingsSuggestion index={algoliaIndex} handleAddWing={this.handleAddWing} />
+        </div>
+        <UserWings handleRemoveWing={this.handleRemoveWing} />
       </div>
     );
   }

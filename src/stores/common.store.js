@@ -5,12 +5,10 @@ const cookies = new Cookies();
 
 class CommonStore {
 
-  appName = 'Frontflip';
   accessToken;
   refreshToken;
   algoliaKey;
   algoliaKeyOrganisation;
-  appLoaded = false;
   locale = 'en-UK';
   searchFilters = [];
 
@@ -41,21 +39,20 @@ class CommonStore {
     }
   }
 
-  getAccessToken() {
-    return this.getCookie('accessToken');
-  }
-  getRefreshToken() {
-    return this.getCookie('refreshToken');
+  getLocalStorage(name, isObject) {
+    if(isObject) return JSON.parse(localStorage.getItem(name));
+    else return localStorage.getItem(name);
   }
 
-  setSearchFilters(searchFilters) {
-    let search = JSON.stringify(searchFilters);
-    this.setCookie('searchFilters', search);
+  setLocalStorage(name, value, isObject) {
+    if(isObject) localStorage.setItem(name, JSON.stringify(value));
+    else localStorage.setItem(name, value);
   }
-  getSearchFilters() {
-    let cookie = this.getCookie('searchFilters');
-    return cookie;
-  }
+
+  getAccessToken = () => this.getCookie('accessToken');
+  getRefreshToken = () => this.getCookie('refreshToken');
+  setSearchFilters = (searchFilters) => this.setCookie('searchFilters', JSON.stringify(searchFilters));
+  getSearchFilters = () => this.getCookie('searchFilters');
 
   setCookie(name, value, expires) {
     if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
@@ -66,9 +63,7 @@ class CommonStore {
     this.init();
   }
 
-  getCookie(name) {
-    return cookies.get(name);
-  }
+  getCookie = (name) => cookies.get(name);
 
   removeCookie(name) {
     let options = {};
@@ -119,11 +114,6 @@ class CommonStore {
     this.setCookie('algoliaKeyOrganisation', orgTag, expDate);
     this.init();
   }
-
-  setAppLoaded() {
-    this.appLoaded = true;
-  }
-
 }
 
 decorate(CommonStore, {
@@ -132,12 +122,10 @@ decorate(CommonStore, {
   refreshToken: observable,
   algoliaKey: observable,
   algoliaKeyOrganisation: observable,
-  appLoaded: observable,
   searchFilters: observable,
   locale: observable,
   setToken: action,
   setAlgoliaKey: action,
-  setAppLoaded: action,
   getCookie: action,
   setCookie: action,
   removeCookie: action,
