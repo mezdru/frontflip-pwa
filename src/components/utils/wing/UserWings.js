@@ -21,7 +21,6 @@ class UserWings extends React.Component {
 
   render() {
     const {record} = this.props.recordStore.values;
-    console.log(record.hashtags.length);
     return (
       <div>
         {record.hashtags && record.hashtags.map((hashtag, i) => {

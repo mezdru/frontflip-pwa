@@ -3,9 +3,9 @@ import { withStyles } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { observe } from 'mobx';
 import SearchField from '../../algolia/SearchField';
-import SearchSuggestions from '../../algolia/SearchSuggestions';
 import algoliasearch  from 'algoliasearch';
 import UserWings from '../../utils/wing/UserWings';
+import WingsSuggestion from '../../algolia/WingsSuggestion';
 
 class OnboardWings extends React.Component {
   constructor(props) {
@@ -59,7 +59,7 @@ class OnboardWings extends React.Component {
       <div>
         This is wings component
         <SearchField index={algoliaIndex} />
-        <SearchSuggestions index={algoliaIndex} addToFilters={this.handleAddWing} filters={''} query={''} />
+        <WingsSuggestion index={algoliaIndex} addToFilters={this.handleAddWing} filters={''} query={''} />
         <UserWings />
       </div>
     );

@@ -15,7 +15,7 @@ class OnboardStepper extends React.Component {
     super(props);
     this.state = {
       activeStep: 0,
-      steps: ['intro','contacts','wings','featured', 'featured', 'featured'],
+      steps: ['intro','contacts','wings'],
       canNext: true
     };
   }
