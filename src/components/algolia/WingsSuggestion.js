@@ -182,7 +182,7 @@ class WingsSuggestions extends React.Component {
       if(valueContainer){
         valueContainer.scrollTo(valueContainer.scrollWidth, 0);
       } 
-    }, 500);    
+    }, 500);
   }
 
   renderWing = (classes, hit, i) => {
