@@ -10,16 +10,12 @@ import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.pn
 const styles = theme => ({
   suggestionsContainer: {
     textAlign: 'left',
-    //maxHeight: 112, // 48 * 2 + 8 + 8
     overflow: 'hidden',
     margin: '8px 0px',
     marginLeft: '-8px',
     overflowX: 'scroll',
-    boxShadow: '0px 5px 5px 0px rgba(0,0,0,0.3)',
   },
   suggestionList: {
-    // display: 'flex',
-    // flexDirection: 'column',
     whiteSpace: 'nowrap',
     padding: 0,
     listStyleType: 'none',
@@ -38,16 +34,6 @@ const styles = theme => ({
     from: { opacity: 0 },
     to: { opacity: 1 }
   },
-  suggestionCount: {
-    color: 'rgb(190,190,190)',
-    borderRadius: '50%',
-    width: 32,
-    height:32,
-    textAlign: 'center',
-    lineHeight: '32px'
-  },
-  suggestionLabel: {
-  }
 });
 
 class WingsSuggestions extends React.Component {
@@ -56,17 +42,30 @@ class WingsSuggestions extends React.Component {
     this.state = {
       suggestions: [],
       bank: [],
-      renderComponent: false,
     };
   }
 
   componentDidMount() {
     this.loadBank(null)
     .then(() => {
-      this.loadMostCommonSuggestions(null)
+      this.updateSuggestions(null);
+    });
+  }
+
+  updateSuggestions = (filters) => {
+    return new Promise((resolve, reject) => {
+      this.loadMostCommonSuggestions(filters)
       .then(() => {
         this.populateSuggestion();
-        this.setState({renderComponent: true});
+        let query = this.formatHashtagsQuery();
+        if(query)
+          this.loadBank(query)
+          .then(() => {
+            this.populateSuggestion();
+            resolve();
+          });
+        else
+          resolve();
       });
     });
   }
@@ -112,7 +111,7 @@ class WingsSuggestions extends React.Component {
       } else {
         this.props.index.search({
           filters: (filters ? 'type:hashtag AND ' + filters : 'type:hashtag'),
-          hitsPerPage: 100
+          hitsPerPage: 10
         }, (err, content) => {
           this.addToLocalStorage(content.hits);
           this.setState({bank: content.hits}, resolve());
@@ -133,12 +132,17 @@ class WingsSuggestions extends React.Component {
   loadFamilySuggestions = async (lastSelection) => {
   }
 
-  handleSelectSuggestion = (e, element) => {
-    this.loadMostCommonSuggestions(element)
-    .then(() => {
-      this.populateSuggestion();
-      this.scrollToRight();
+  formatHashtagsQuery = () => {
+    let query = '';
+    this.state.suggestions.forEach(suggestion => {
+      if(!suggestion.objectID)
+        query += (query !== '' ? ' OR' : '') + ' tag:'+suggestion.tag;
     });
+    return query;
+  }
+
+  handleSelectSuggestion = (e, element) => {
+    this.updateSuggestions(element);
     this.props.handleAddWing(e, element);
   }
 
@@ -167,9 +171,7 @@ class WingsSuggestions extends React.Component {
 
   render() {
     const {classes} = this.props;
-    const {suggestions, renderComponent} = this.state;
-
-    if(!renderComponent) return null;
+    const {suggestions} = this.state;
 
     return (
       <div className={classes.suggestionsContainer} >
