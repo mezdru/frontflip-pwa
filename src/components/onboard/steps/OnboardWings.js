@@ -39,7 +39,7 @@ class OnboardWings extends React.Component {
   handleAddWing = (e, element) => {
     e.preventDefault();
     this.props.recordStore.setRecordTag(element.tag.replace('#', '%23'));
-    this.props.recordStore.getRecordByTag()
+    return this.props.recordStore.getRecordByTag()
     .then(hashtagRecord => {
       let record = this.props.recordStore.values.record;
       record.hashtags.push(hashtagRecord);

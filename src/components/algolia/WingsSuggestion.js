@@ -138,8 +138,7 @@ class WingsSuggestions extends React.Component {
   }
 
   handleSelectSuggestion = (e, element) => {
-    this.updateSuggestions(element);
-    this.props.handleAddWing(e, element);
+    this.props.handleAddWing(e, element).then(this.updateSuggestions(element));
   }
 
   shouldDisplaySuggestion = (tag) => (!this.props.recordStore.values.record.hashtags.some(hashtag => hashtag.tag === tag));
