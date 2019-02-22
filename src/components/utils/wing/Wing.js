@@ -30,7 +30,9 @@ const Wing = ({ src, label, ...props }) => {
         label={label}
         color={"secondary"}
         className={classNames(props.classes[props.className])}
-        onClick={props.onClick}>
+        onClick={props.onClick}
+        onDelete={props.onDelete}
+        >
       </Chip>
     )
   } else {
@@ -39,7 +41,8 @@ const Wing = ({ src, label, ...props }) => {
         label={label}
         color={"secondary"}
         className={classNames(props.classes[props.className])}
-        onClick={props.onClick}>
+        onClick={props.onClick}
+        onDelete={props.onDelete} >
       </Chip>
     )
   }
