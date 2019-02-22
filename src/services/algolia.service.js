@@ -52,8 +52,7 @@ class AlgoliaService {
         filters: (filters ? 'type:hashtag AND ' + filters : 'type:hashtag'),
         hitsPerPage: 50
       }, (err, content) => {
-        this.addToLocalStorage(content.hits);
-        resolve();
+        this.addToLocalStorage(content.hits).then(resolve());
       });
     });
   }
@@ -62,12 +61,15 @@ class AlgoliaService {
    * @description Add or update local bank and remove duplicate entries
    */
   addToLocalStorage(hits) {
-    let currentBank = commonStore.getLocalStorage('wingsBank', true) || [];
-    hits.forEach(hit => {
-      if(!currentBank.some(bankElt => bankElt.tag === hit.tag))
-        currentBank.push(hit);
+    return new Promise((resolve, reject) => {
+      let currentBank = commonStore.getLocalStorage('wingsBank', true) || [];
+      hits.forEach(hit => {
+        if(!currentBank.some(bankElt => bankElt.tag === hit.tag))
+          currentBank.push(hit);
+      });
+      commonStore.setLocalStorage('wingsBank', currentBank, true)
+      .then(resolve());
     });
-    commonStore.setLocalStorage('wingsBank', currentBank, true);
   }
 
 

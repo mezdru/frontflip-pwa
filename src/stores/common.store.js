@@ -45,8 +45,10 @@ class CommonStore {
   }
 
   setLocalStorage(name, value, isObject) {
-    if(isObject) localStorage.setItem(name, JSON.stringify(value));
-    else localStorage.setItem(name, value);
+    return Promise.resolve().then(function () {
+      if(isObject) localStorage.setItem(name, JSON.stringify(value));
+      else localStorage.setItem(name, value);
+    });
   }
 
   getAccessToken = () => this.getCookie('accessToken');
