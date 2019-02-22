@@ -122,10 +122,10 @@ class ProfileService {
   }
 
   getPicturePath(picture) {
-    if (picture && picture.path) return null;
-    else if (picture && picture.emoji) return this.getEmojiUrl(picture.emoji);
+    if (picture && picture.emoji) return this.getEmojiUrl(picture.emoji);
     else if (picture && picture.url) return picture.url;
     else if (picture && picture.uri) return picture.uri;
+    else if (picture && picture.path) return null;
     else return null;
   }
 
