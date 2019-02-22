@@ -8,9 +8,9 @@
       "type": "image/x-icon"
     },
     {
-      "src": "wingzy.png",
+      "src": "wingzy.jpg",
       "sizes":"144x144",
-      "type":"image/png"
+      "type":"image/jpg"
     }
   ],
   "start_url": ".",
