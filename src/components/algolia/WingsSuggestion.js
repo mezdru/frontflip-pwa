@@ -156,23 +156,24 @@ class WingsSuggestions extends React.Component {
     );
   }
 
+  renderWingsList = (classes, suggestions, isEven) => {
+    return (
+      <ul className={classNames(classes.suggestionList, "scrollX")}>
+      {suggestions && suggestions.map((hit, i) => {
+        return (hit && this.shouldDisplaySuggestion(hit.tag) && i%2 === (isEven ? 0 : 1)) ? this.renderWing(classes, hit, i) : null;
+      })}
+    </ul>
+    );
+  }
+
   render() {
     const {classes} = this.props;
     const {suggestions} = this.state;
 
     return (
       <div className={classes.suggestionsContainer} >
-        <ul className={classNames(classes.suggestionList, "scrollX")}>
-          {suggestions && suggestions.map((hit, i) => {
-            return (hit && this.shouldDisplaySuggestion(hit.tag) && i%2 === 0) ? this.renderWing(classes, hit, i) : null;
-          })}
-        </ul>
-
-        <ul className={classNames(classes.suggestionList, "scrollX")}>
-          {suggestions.map((hit, i) => {
-            return (hit && this.shouldDisplaySuggestion(hit.tag) && i%2 === 1) ? this.renderWing(classes, hit, i) : null;
-          })}
-        </ul>
+        {this.renderWingsList(classes, suggestions, true)}
+        {this.renderWingsList(classes, suggestions, false)}
       </div>
     );
   }
