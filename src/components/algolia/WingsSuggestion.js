@@ -1,5 +1,5 @@
 import React from 'react'
-import { withStyles, Chip } from '@material-ui/core';
+import { withStyles } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import classNames from 'classnames';
 
@@ -7,71 +7,48 @@ import Wings from '../utils/wing/Wing';
 import ProfileService from '../../services/profile.service';
 import AlgoliaService from '../../services/algolia.service';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
-
-const styles = theme => ({
-  suggestionsContainer: {
-    textAlign: 'left',
-    overflow: 'hidden',
-    margin: '8px 0px',
-    marginLeft: '-8px',
-    overflowX: 'scroll',
-  },
-  suggestionList: {
-    whiteSpace: 'nowrap',
-    padding: 0,
-    listStyleType: 'none',
-    '& li ': {
-      display: 'inline-block',
-    }
-  },
-  suggestion: {
-    margin: 8,
-    color: theme.palette.secondary.dark,
-    opacity: 0,
-    animation: 'easeIn .6s',
-    animationFillMode: 'forwards',
-  },
-  '@keyframes easeIn': {
-    from: { opacity: 0 },
-    to: { opacity: 1 }
-  },
-});
+import {styles} from './WingsSuggestion.css';
 
 class WingsSuggestions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       suggestions: [],
-      bank: [],
-      algoliaService: new AlgoliaService(this.props.commonStore.algoliaKey)
+      bank: []
     };
   }
 
   componentDidMount() {
-    this.loadBank(null)
+    this.syncBank(null)
     .then(() => {
-      this.initAllSuggestions();
+      this.initSuggestions();
     });
   }
 
-  initAllSuggestions = async () => {
+  /**
+   * @description Init Wings suggestions with most common Wings
+   */
+  initSuggestions = async () => {
     await this.fetchSuggestions(null, false, 10);
     await this.fetchSuggestions(null, true, 20);
-    this.populateSuggestion();
+    this.populateSuggestionsData();
     let query = this.formatHashtagsQuery();
     if(query)
-      this.loadBank(query)
+      this.syncBank(query)
       .then(() => {
-        this.populateSuggestion();
+        this.populateSuggestionsData();
       });
   }
 
+  /**
+   * @description Fetch suggestions and add them to suggestions list thanks to Algolia
+   */
   fetchSuggestions = (lastSelection, privateOnly, nbHitToAdd) => {
-    return this.state.algoliaService.fetchFacetValues(lastSelection, privateOnly)
+    return AlgoliaService.fetchFacetValues(lastSelection, privateOnly)
     .then(content => {
       let newSuggestions = [];
       let suggestions = this.state.suggestions;
-      content.facetHits = this.cleanAlgoliaSuggestions(content.facetHits);
+      content.facetHits = this.removeUserWings(content.facetHits);
 
       for(let i = 0; i < nbHitToAdd; i++) {
         if(content.facetHits.length === 0) break;
@@ -84,6 +61,7 @@ class WingsSuggestions extends React.Component {
           i--;
           continue;
         } else if(i === 0 && knownIndex > -1) {
+          // elt known index is an important suggestion, we put it at the start of the array
           suggestions.splice(0,0,suggestions.splice(knownIndex,1)[0]);
           continue;
         }
@@ -95,7 +73,10 @@ class WingsSuggestions extends React.Component {
     }).catch((e) => {console.log(e)});
   }
 
-  cleanAlgoliaSuggestions = (suggestions) => {
+  /**
+   * @description Remove user Wings for Wings suggestions
+   */
+  removeUserWings = (suggestions) => {
     let suggestionsToReturn = suggestions;
     suggestions.forEach(suggestion => {
       if(this.props.recordStore.values.record.hashtags.findIndex(hashtag => hashtag.tag === suggestion.value) > -1) {
@@ -106,23 +87,32 @@ class WingsSuggestions extends React.Component {
     return suggestionsToReturn;
   } 
 
+  /**
+   * @description Fetch and add new suggestions after user choose a Wing
+   */
   updateSuggestions = async (filters) => {
     await this.fetchSuggestions(null, false, 1);
     await this.fetchSuggestions(null, true, 2);
     await this.fetchSuggestions(filters, false, 2);
     await this.fetchSuggestions(filters, true, 2);
-    this.populateSuggestion();
+    this.populateSuggestionsData();
     let query = this.formatHashtagsQuery();
     if(query)
-      this.loadBank(query)
+      this.syncBank(query)
       .then(() => {
-        this.populateSuggestion();
+        this.populateSuggestionsData();
       });
   }
 
+  /**
+   * @description Get complete Wing data by tag thanks to current Wings bank
+   */
   getData = (tag) => this.state.bank.find(bankElt => bankElt.tag === tag);
 
-  populateSuggestion = () => {
+  /**
+   * @description Populate all suggestions data thanks to current Wings bank
+   */
+  populateSuggestionsData = () => {
     let suggestions = this.state.suggestions;
     this.state.suggestions.map((suggestion, i) => {
       suggestions[i] = this.getData(suggestion.tag) || suggestion;
@@ -130,34 +120,14 @@ class WingsSuggestions extends React.Component {
     this.setState({suggestions: suggestions});
   }
 
-  loadBank = (filters) => {
-    return new Promise((resolve, reject) => {
-      if(!filters && this.props.commonStore.getLocalStorage('wingsBank', true)) {
-        this.setState({bank : this.props.commonStore.getLocalStorage('wingsBank', true)}, resolve());
-      } else {
-        this.props.index.search({
-          filters: (filters ? 'type:hashtag AND ' + filters : 'type:hashtag'),
-          hitsPerPage: 10
-        }, (err, content) => {
-          this.addToLocalStorage(content.hits);
-          this.setState({bank: content.hits}, resolve());
-        });
-      }
-    });
-  }
+  /**
+   * @description Sync wings bank with current state bank
+   */
+  syncBank = (filters) => AlgoliaService.loadBank(filters).then(this.setState({bank : this.props.commonStore.getLocalStorage('wingsBank', true)}));
 
-  addToLocalStorage = (hits) => {
-    let currentBank = this.props.commonStore.getLocalStorage('wingsBank', true) || [];
-    hits.forEach(hit => {
-      if(!currentBank.some(bankElt => bankElt.tag === hit.tag))
-        currentBank.push(hit);
-    });
-    this.props.commonStore.setLocalStorage('wingsBank', currentBank, true);
-  }
-
-  loadFamilySuggestions = async (lastSelection) => {
-  }
-
+  /**
+   * @description Format query to fetch missing Wings data with Algolia
+   */
   formatHashtagsQuery = () => {
     let query = '';
     this.state.suggestions.forEach(suggestion => {
@@ -175,15 +145,6 @@ class WingsSuggestions extends React.Component {
   shouldDisplaySuggestion = (tag) => (!this.props.recordStore.values.record.hashtags.some(hashtag => hashtag.tag === tag));
 
   getDisplayedName = (hit) => (hit.name_translated ? (hit.name_translated[this.state.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag);
-
-  scrollToRight() {
-    setTimeout(() => {
-      let valueContainer = document.querySelector('.scrollX');
-      if(valueContainer){
-        valueContainer.scrollTo(valueContainer.scrollWidth, 0);
-      } 
-    }, 500);
-  }
 
   renderWing = (classes, hit, i) => {
     return (
