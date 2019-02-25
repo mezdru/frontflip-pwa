@@ -43,6 +43,17 @@ class OnboardStepper extends React.Component {
     }
   }
 
+  getStepLabel(steps, activeStep) {
+    switch (steps[activeStep]) {
+      case 'intro':
+        return 'Who are you ?';
+      case 'contacts':
+        return 'What are your contact info ?';
+      default:
+        return 'Hey, complete the form please.';
+    }
+  }
+
   handleSave = () => {
     this.props.recordStore.setRecordId(this.props.recordStore.values.record._id);
     this.props.recordStore.updateRecord();
@@ -54,7 +65,7 @@ class OnboardStepper extends React.Component {
     let StepComponent = this.getStepComponent(steps, activeStep);
 
     return (
-      <div>
+      <div style={{background: '#f2f2f2', height:'100vh'}}>
         <MobileStepper
           variant="dots"
           steps={steps.length}
@@ -74,8 +85,8 @@ class OnboardStepper extends React.Component {
             </Button>
           }
         />
-        <Typography variant="h1">{steps[activeStep]}</Typography>
-        <StepComponent handleSave={this.handleSave} />
+        <Typography variant="h2" style={{textAlign: 'center'}} >{this.getStepLabel(steps, activeStep)}</Typography>
+        <StepComponent handleSave={this.handleSave}/>
       </div>
     );
   }
