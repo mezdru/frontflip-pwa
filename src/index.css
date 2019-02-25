@@ -53,3 +53,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
   monospace;
 }
+
+/* Do not allow x overflow */
+main {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
