@@ -141,7 +141,11 @@ class App extends Component {
                   </div>
                 )}
 
-
+                {currentUser.superadmin && (
+                  <ListItem button component={Link} to={'/' + locale + '/' + organisation.tag + '/onboard/onboard/onboard'}>
+                    <ListItemText primary={"Onboard"} />
+                  </ListItem>
+                )}
               </List>
               <Divider />
             </div>
