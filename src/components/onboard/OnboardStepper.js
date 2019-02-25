@@ -50,7 +50,7 @@ class OnboardStepper extends React.Component {
       case 'contacts':
         return 'What are your contact info ?';
       default:
-        return 'Hey, complete the form please.';
+        return '';
     }
   }
 

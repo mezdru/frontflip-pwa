@@ -1,5 +1,5 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core';
+import { withStyles, Typography } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { observe } from 'mobx';
 import Wings from './Wing';
@@ -23,6 +23,7 @@ class UserWings extends React.Component {
     const {record} = this.props.recordStore.values;
     return (
       <div>
+        <Typography variant="h3" style={{textAlign: 'center'}} >Your {record.hashtags.length} Wings</Typography>
         {record.hashtags && record.hashtags.map((hashtag, i) => {
           let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name)
           return (

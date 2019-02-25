@@ -1,11 +1,17 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core';
+import { withStyles, Grid } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { observe } from 'mobx';
 import SearchField from '../../algolia/SearchField';
 import algoliasearch  from 'algoliasearch';
 import UserWings from '../../utils/wing/UserWings';
 import WingsSuggestion from '../../algolia/WingsSuggestion';
+
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 class OnboardWings extends React.Component {
   constructor(props) {
@@ -64,14 +70,37 @@ class OnboardWings extends React.Component {
     if(!algoliaIndex) return null;
 
     return (
-      <div>
-        <div style={{background: '#f2f2f2', boxShadow: ''}}>
-          This is wings component
-          <SearchField index={algoliaIndex} />
-          <WingsSuggestion index={algoliaIndex} handleAddWing={this.handleAddWing} />
-        </div>
-        <UserWings handleRemoveWing={this.handleRemoveWing} />
-      </div>
+        <Grid container direction="column" style={{minHeight: 'calc(100% - 72px)', background: 'white'}}>
+          <Grid item style={{background: '#f2f2f2'}}> 
+            <ExpansionPanel style={{background: 'transparent'}}>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon color="primary" />}>
+                <Typography variant="h3" >Choose your Wings !</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <Grid container direction="column" justify="center" >
+                {/* Here search part or first wings part */}
+                  <Grid item xs={12} >
+                    <SearchField index={algoliaIndex} />
+                  </Grid>
+                  <Grid item xs={12} >
+                    <WingsSuggestion index={algoliaIndex} handleAddWing={this.handleAddWing} />
+                  </Grid>
+                </Grid>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          </Grid>
+
+          <Grid item>
+            <Grid container>
+              <Grid item xs={12} style={{padding:16}}>
+                <UserWings handleRemoveWing={this.handleRemoveWing} />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+
+
+
     );
   }
 }
