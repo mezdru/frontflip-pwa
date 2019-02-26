@@ -117,11 +117,12 @@ export const styles = theme => ({
       marginTop: 0,
     },
     animationName: 'popOut',
-    animationDuration: '.6s'
+    animationDuration: '.6s',
+    animationFillMode: 'forwards',
   },
   '@keyframes popOut': {
-    from: { top: 0 },
-    to: { top: '100vh' }
+    from: { top: 0, display: 'block' },
+    to: { top: '100vh', display: 'none' }
   },
   name: {
     marginLeft: 24,
