@@ -57,6 +57,7 @@ export const customStyles = {
     },
     padding: '2px 16px',
     minHeight: 48,
+    maxHeight: 48,
     fontSize: 16
   }),
   menu: base => ({
