@@ -1,6 +1,7 @@
 import commonStore from '../stores/common.store';
 import algoliasearch  from 'algoliasearch';
 import organisationStore from '../stores/organisation.store';
+import {observe} from 'mobx';
 
 class AlgoliaService {
 
@@ -12,8 +13,15 @@ class AlgoliaService {
   constructor(algoliaKey) {
     if(!algoliaKey) return;
     this.algoliaKey = algoliaKey;
-    this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, algoliaKey);
+    this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.algoliaKey);
     this.index = this.client.initIndex(this.indexName);
+
+    observe(commonStore, 'algoliaKey', (change) => {
+      this.client.clearCache();
+      this.algoliaKey = commonStore.algoliaKey;
+      this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.algoliaKey);
+      this.index = this.client.initIndex(this.indexName);
+    });
   }
 
   setAlgoliaKey(algoliaKey) {
@@ -22,15 +30,15 @@ class AlgoliaService {
     this.index = this.client.initIndex(this.indexName);
   }
 
-  fetchFacetValues(lastSelection, privateOnly) {
+  fetchFacetValues(lastSelection, privateOnly, filters, query) {
     return new Promise((resolve, reject) => {
       this.index.searchForFacetValues({
         facetName: 'hashtags.tag',
-        query: '',
+        query: query || '',
         facetQuery: '',
-        filters: '',
+        filters: (filters ? filters : ''),
         hitsPerPage: 40,
-        facetFilters: this.makeFacetFilters(lastSelection, privateOnly),
+        facetFilters: ( (lastSelection && privateOnly !== null) ? this.makeFacetFilters(lastSelection, privateOnly) : ''),
       }, (err, res) => {
         if(err) return reject(err);
         return resolve(res);
@@ -69,6 +77,40 @@ class AlgoliaService {
       });
       commonStore.setLocalStorage('wingsBank', currentBank, true)
       .then(resolve());
+    });
+  }
+
+  fetchOptions(inputValue){
+    return new Promise((resolve, reject) => {
+      this.index.search({
+          query: inputValue,
+          attributesToRetrieve: ['type','name', 'name_translated', 'tag','picture'],
+          restrictSearchableAttributes: ['name', 'name_translated', 'tag'],
+          highlightPreTag: '<span>',
+          highlightPostTag: '</span>',
+          hitsPerPage: 5
+        }, (err, content) => resolve(content));
+    });
+  }
+
+
+  fetchHits(filters, query, facetFilters, page) {
+    return new Promise((resolve, reject) => {
+      this.index.search({
+        page : page || 0,
+        query: query || '',
+        facetFilters: facetFilters || '',
+        filters: filters || 'type:person',
+        hitsPerPage: 20,
+        attributesToSnippet: [
+          "intro:"+15,
+          "description:"+15
+        ],
+      }, (err, content) => {
+        if(err) return reject(err);
+        if(!content) return reject();
+        return resolve(content)
+      });
     });
   }
 

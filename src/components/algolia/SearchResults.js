@@ -1,6 +1,7 @@
 import React from 'react'
 import { Grid, Button, CircularProgress } from '@material-ui/core';
 import {FormattedMessage} from 'react-intl';
+import AlgoliaService from '../../services/algolia.service';
 
 class SearchResults extends React.Component {
   constructor(props) {
@@ -19,32 +20,13 @@ class SearchResults extends React.Component {
   }
 
   fetchHits = (filters, query, facetFilters, page) => {
-    this.props.index.search({
-      page : page || 0,
-      query: query || '',
-      facetFilters: facetFilters || '',
-      filters: filters || 'type:person',
-      hitsPerPage: 20,
-      attributesToSnippet: [
-        "intro:"+15,
-        "description:"+15
-      ],
-    }, (err, content) => {
-      if (err) this.setState({hits: []});
-      this.setState({hitsAlreadyDisplayed: Math.min((content.hitsPerPage * (content.page)), content.nbHits)})
-      if(!content) return;
+    AlgoliaService.fetchHits(filters, query, facetFilters, page)
+    .then((content) => {
+      this.setState({hitsAlreadyDisplayed: Math.min((content.hitsPerPage * (content.page)), content.nbHits)});
       if(content.page === (content.nbPages-1)) this.setState({hideShowMore: true});
-
-      if(page) {
-        this.setState({hits: this.state.hits.concat(content.hits)}, () => {
-          this.endTask();
-        });
-      } else {
-        this.setState({hits: content.hits}, () => {
-          this.endTask();
-        });
-      }
-    });
+      if(page) this.setState({hits: this.state.hits.concat(content.hits)}, this.endTask());
+      else this.setState({hits: content.hits}, this.endTask());
+    }).catch(this.setState({hits: []}));
   }
 
   endTask = () => {

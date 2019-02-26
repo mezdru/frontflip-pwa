@@ -44,7 +44,7 @@ class WingsSuggestions extends React.Component {
    * @description Fetch suggestions and add them to suggestions list thanks to Algolia
    */
   fetchSuggestions = (lastSelection, privateOnly, nbHitToAdd) => {
-    return AlgoliaService.fetchFacetValues(lastSelection, privateOnly)
+    return AlgoliaService.fetchFacetValues(lastSelection, privateOnly, null, null)
     .then(content => {
       let newSuggestions = [];
       let suggestions = this.state.suggestions;

@@ -1,9 +1,7 @@
 import React from 'react'
 import { withStyles, Grid } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
-import { observe } from 'mobx';
 import SearchField from '../../algolia/SearchField';
-import algoliasearch  from 'algoliasearch';
 import UserWings from '../../utils/wing/UserWings';
 import WingsSuggestion from '../../algolia/WingsSuggestion';
 
@@ -17,29 +15,8 @@ class OnboardWings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      algoliaClient: null,
-      algoliaIndex: null,
       lastSelection: null,
     };
-  }
-
-  componentDidMount() {
-    if(this.props.commonStore.algoliaKey)
-      this.setState({algoliaClient: algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.props.commonStore.algoliaKey)}, () => {
-        this.setState({algoliaIndex: this.state.algoliaClient.initIndex('world')});
-      });
-    else if (this.props.organisationStore.values.organisation._id) 
-      this.props.organisationStore.getAlgoliaKey();
-
-    observe(this.props.commonStore, 'algoliaKey', (change) => {
-      if(this.props.commonStore.algoliaKey)
-        this.setState({algoliaClient: algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.props.commonStore.algoliaKey)}, () => {
-          this.setState({algoliaIndex: this.state.algoliaClient.initIndex('world')});
-        });
-      else {
-        this.setState({algoliaClient: null});
-      }
-    });
   }
 
   handleAddWing = (e, element) => {
@@ -65,9 +42,6 @@ class OnboardWings extends React.Component {
 
   render() {
     const {record} = this.props.recordStore.values;
-    const {algoliaIndex} = this.state;
-
-    if(!algoliaIndex) return null;
 
     return (
         <Grid container direction="column" style={{minHeight: 'calc(100% - 72px)', background: 'white'}}>
@@ -80,10 +54,10 @@ class OnboardWings extends React.Component {
                 <Grid container direction="column" justify="center" >
                 {/* Here search part or first wings part */}
                   <Grid item xs={12} >
-                    <SearchField index={algoliaIndex} />
+                    <SearchField/>
                   </Grid>
                   <Grid item xs={12} >
-                    <WingsSuggestion index={algoliaIndex} handleAddWing={this.handleAddWing} />
+                    <WingsSuggestion handleAddWing={this.handleAddWing} />
                   </Grid>
                 </Grid>
               </ExpansionPanelDetails>
