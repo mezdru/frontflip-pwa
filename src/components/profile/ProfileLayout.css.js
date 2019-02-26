@@ -120,10 +120,7 @@ export const styles = theme => ({
     animationDuration: '.6s',
     animationFillMode: 'forwards',
   },
-  '@keyframes popOut': {
-    from: { top: 0, display: 'block' },
-    to: { top: '100vh', display: 'none' }
-  },
+
   name: {
     marginLeft: 24,
   },
