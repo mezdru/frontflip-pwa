@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { withTheme } from '@material-ui/core';
 import ProfileService from '../../services/profile.service';
 import {Option, customStyles, MultiValueContainer, DropdownIndicator} from './SearchFieldElements';
+import AlgoliaService from '../../services/algolia.service';
 
 class SearchField extends React.Component {
   constructor(props) {
@@ -112,16 +113,7 @@ class SearchField extends React.Component {
   }
 
   updateOptions = async (inputValue) => {
-    return await this.props.index.search(
-      {
-        query: inputValue,
-        attributesToRetrieve: ['type','name', 'name_translated', 'tag','picture'],
-        restrictSearchableAttributes: ['name', 'name_translated', 'tag'],
-        highlightPreTag: '<span>',
-        highlightPostTag: '</span>',
-        hitsPerPage: 5
-      }
-    );
+    return await AlgoliaService.fetchOptions(inputValue);
   }
 
   // Handle input change (any change)

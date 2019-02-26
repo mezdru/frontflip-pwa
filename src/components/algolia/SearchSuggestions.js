@@ -1,5 +1,6 @@
 import React from 'react'
 import { withStyles, Chip } from '@material-ui/core';
+import AlgoliaService from '../../services/algolia.service';
 
 const styles = theme => ({
   suggestionsContainer: {
@@ -64,17 +65,9 @@ class SearchSuggestions extends React.Component {
   }
 
   fetchSuggestions(filters, query) {
-    return this.props.index.searchForFacetValues({
-      facetName: 'hashtags.tag',
-      facetQuery: '',
-      query: query || '',
-      facetFilters: filters.split(' AND '),
-      filters: filters || '',
-    }, (err, res) => {
-      if(!err) {
-        this.setState({facetHits: res.facetHits});
-      }
-    });
+    AlgoliaService.fetchFacetValues(null, false, filters, query)
+    .then((res) => this.setState({facetHits: res.facetHits}))
+    .catch();
   }
 
   shouldDisplaySuggestion(tag) {

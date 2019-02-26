@@ -3,9 +3,7 @@ import { Grid, withStyles } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import Header from '../components/header/Header';
 import { Redirect } from "react-router-dom";
-import algoliasearch  from 'algoliasearch';
 import SearchField from '../components/algolia/SearchField';
-import { observe } from 'mobx';
 import withWidth, { isWidthUp, isWidthDown } from '@material-ui/core/withWidth';
 import { styles } from './SearchPage.css';
 import ProfileLayout from "../components/profile/ProfileLayout";
@@ -21,8 +19,6 @@ class SearchPage extends React.Component {
     super(props);
     this.state = {
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
-      algoliaClient: null,
-      algoliaIndex: null,
       filters: 'type:person',
       query: '',
       newFilter: {},
@@ -36,22 +32,6 @@ class SearchPage extends React.Component {
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
     this.props.history.listen((location, action) => ReactGA.pageview(window.location.pathname));
-    if(this.props.commonStore.algoliaKey)
-      this.setState({algoliaClient: algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.props.commonStore.algoliaKey)}, () => {
-        this.setState({algoliaIndex: this.state.algoliaClient.initIndex('world')});
-      });
-    else if (this.props.organisationStore.values.organisation._id) 
-      this.props.organisationStore.getAlgoliaKey();
-
-    observe(this.props.commonStore, 'algoliaKey', (change) => {
-      if(this.props.commonStore.algoliaKey)
-        this.setState({algoliaClient: algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.props.commonStore.algoliaKey)}, () => {
-          this.setState({algoliaIndex: this.state.algoliaClient.initIndex('world')});
-        });
-      else {
-        this.setState({algoliaClient: null});
-      }
-    });
   }
 
   addToFilters = (e, element, shouldAwaitToUpdateLayout) => {
@@ -100,7 +80,7 @@ class SearchPage extends React.Component {
   handleReturnToSearch = () => this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true});
 
   render() {
-    const { algoliaIndex, shouldDisplayHitResults, filters, newFilter, shouldUpdateUrl, query } = this.state;
+    const { shouldDisplayHitResults, filters, newFilter, shouldUpdateUrl, query } = this.state;
     const { classes } = this.props;
 
     let profileTag = (this.props.match.params ? this.props.match.params.profileTag : null);
@@ -118,7 +98,6 @@ class SearchPage extends React.Component {
     if (redirectTo) {
       return (<Redirect to={redirectTo} />);
     }
-    if(!algoliaIndex) return null;
 
     return (
       <div>
@@ -130,14 +109,14 @@ class SearchPage extends React.Component {
             <div  style={{  width: ((((isWidthDown('sm', this.props.width)))) ? '75%' : searchBarWidth),
                             marginRight: ((((isWidthDown('sm', this.props.width)))) ? 16 : '') }} 
                   className={classes.searchBar} > 
-              <SearchField index={algoliaIndex} updateFilters={this.updateFilters} newFilter={newFilter}/>
+              <SearchField updateFilters={this.updateFilters} newFilter={newFilter}/>
             </div>
 
             <Grid container item alignItems={"stretch"} >
                   <Banner style={{filter: 'brightness(90%)'}}>
                     <div style={{ width: searchBarWidth }} className={classes.suggestionsContainer}>
                       {shouldDisplayHitResults && (
-                        <SearchSuggestions  index={algoliaIndex} addToFilters={this.addToFilters} filters={filters} query={query} />
+                        <SearchSuggestions  addToFilters={this.addToFilters} filters={filters} query={query} />
                       )}
                     </div>
                   </Banner>
@@ -146,7 +125,7 @@ class SearchPage extends React.Component {
             {shouldDisplayHitResults && (
               <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
                 <SearchResults addToFilters={this.addToFilters} handleDisplayProfile={this.handleDisplayProfile} 
-                                      classes={classes} HitComponent={Card} index={algoliaIndex} filters={filters} query={query}/>
+                                      classes={classes} HitComponent={Card} filters={filters} query={query}/>
               </Grid>
             )}
 
