@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import PropTypes from 'prop-types';
-import { Divider, Drawer, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, ListItemAvatar } from '@material-ui/core';
+import { Divider, SwipeableDrawer, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, ListItemAvatar } from '@material-ui/core';
 import { ChevronLeft as ChevronLeftIcon } from '@material-ui/icons';
 import './header.css';
 import AvailabilityToggle from '../availabilityToggle/AvailabilityToggle';
@@ -50,15 +50,22 @@ class App extends Component {
       currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id) : null);
 
     return (
-      <Drawer
+      <SwipeableDrawer
         className={classes.drawer}
-        variant="persistent"
         anchor="left"
         open={open}
+        onOpen={console.log('bj')}
+        onClose={this.props.handleDrawerClose}
         classes={{
           paper: classes.drawerPaper,
         }}
       >
+          <div
+            tabIndex={0}
+            role="button"
+            onClick={this.handleDrawerClose}
+            onKeyDown={this.handleDrawerClose}
+          >
         <div className={classes.drawerHeader}>
           <IconButton onClick={this.props.handleDrawerClose} className={classes.drawerIconButton} >
             <ChevronLeftIcon className={classes.drawerIcon} />
@@ -179,7 +186,8 @@ class App extends Component {
             </div>
           )}
         </div>
-      </Drawer>
+        </div>
+      </SwipeableDrawer>
     )
   }
 }
