@@ -31,8 +31,8 @@ export const styles = theme => ({
     to: { top: 0 }
   },
   '@keyframes popOut': {
-    from: { top: 0 },
-    to: { top: '100vh' }
+    from: { top: 0, opacity: 1 },
+    to: { top: '100vh', opacity: 0 }
   },
   '@keyframes fadeIn': {
     from: { opacity: 0 },
