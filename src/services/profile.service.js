@@ -97,7 +97,7 @@ class ProfileService {
   setWorkplaceLink(linkUrl) {
     if(this.mobileAndTabletcheck()) {
       let linkUrlArray = linkUrl.split('.');
-      linkUrlArray[0] = linkUrlArray[0] + '.m';
+      linkUrlArray[0] = "https://workplace";
       return linkUrlArray.join('.');
     } else {
       return linkUrl;
