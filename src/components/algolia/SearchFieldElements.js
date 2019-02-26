@@ -55,8 +55,8 @@ export const customStyles = {
       borderColor: state.isFocused ? "#dd362e" : "#dd362e",
       boxSizing: 'border-box'
     },
-    padding: '3px 16px',
-    minHeight: 54,
+    padding: '2px 16px',
+    minHeight: 48,
     fontSize: 16
   }),
   menu: base => ({
