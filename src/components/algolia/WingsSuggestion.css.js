@@ -7,12 +7,7 @@ export const styles = theme => ({
     overflowX: 'scroll',
   },
   suggestionList: {
-    whiteSpace: 'nowrap',
-    padding: 0,
-    listStyleType: 'none',
-    '& li ': {
-      display: 'inline-block',
-    }
+    gridAutoFlow: 'column dense',
   },
   suggestion: {
     margin: 8,

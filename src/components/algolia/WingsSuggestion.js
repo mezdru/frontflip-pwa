@@ -147,21 +147,22 @@ class WingsSuggestions extends React.Component {
 
   renderWing = (classes, hit, i) => {
     return (
-      <li key={i} className={classes.suggestion} style={{animationDelay: (i*0.05) +'s'}}>
+      <div key={i} className={classNames(classes.suggestion, 'board-item')} style={{animationDelay: (i*0.05) +'s'}}>
         <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
           label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
+          className={'board-item-content'}
           onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag })} />
-      </li>
+      </div>
     );
   }
 
   renderWingsList = (classes, suggestions, isEven) => {
     return (
-      <ul className={classNames(classes.suggestionList, "scrollX")}>
+      <div className={classNames(classes.suggestionList, "scrollX", "board-column-content")} data-id="suggestions">
       {suggestions && suggestions.map((hit, i) => {
         return (hit && this.shouldDisplaySuggestion(hit.tag) && i%2 === (isEven ? 0 : 1)) ? this.renderWing(classes, hit, i) : null;
       })}
-    </ul>
+    </div>
     );
   }
 
