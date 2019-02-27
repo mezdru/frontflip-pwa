@@ -11,6 +11,7 @@
     "mobx-react": "^5.4.2",
     "query-string": "^6.2.0",
     "react": "^16.6.3",
+    "react-beautiful-dnd": "^10.0.4",
     "react-dom": "^16.6.3",
     "react-ga": "^2.5.7",
     "react-https-redirect": "^1.0.11",

@@ -9,6 +9,8 @@ import AlgoliaService from '../../services/algolia.service';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
 import {styles} from './WingsSuggestion.css';
 
+import {Droppable, Draggable} from 'react-beautiful-dnd';
+
 class WingsSuggestions extends React.Component {
   constructor(props) {
     super(props);
@@ -147,17 +149,30 @@ class WingsSuggestions extends React.Component {
 
   renderWing = (classes, hit, i) => {
     return (
-      <li key={i} className={classes.suggestion} style={{animationDelay: (i*0.05) +'s'}}>
-        <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
-          label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
-          onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag })} />
-      </li>
+      <Draggable draggableId={hit.tag} index={i} key={i}>
+      {(provided, snapshot) => (
+        <li className={classes.suggestion} style={{animationDelay: (i*0.05) +'s'}}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+          // isDragging={snapshot.isDragging}
+        >
+          <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
+            label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
+            onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag })} />
+        </li>
+      )}
+      </Draggable>
     );
   }
 
-  renderWingsList = (classes, suggestions, isEven) => {
+  renderWingsList = (classes, suggestions, isEven, provided, snapshot) => {
     return (
-      <ul className={classNames(classes.suggestionList, "scrollX")}>
+      <ul className={classNames(classes.suggestionList, "scrollX")}
+        ref={provided.innerRef}
+        {...provided.droppableProps}
+        // isDraggingOver={snapshot.isDraggingOver}
+      >
       {suggestions && suggestions.map((hit, i) => {
         return (hit && this.shouldDisplaySuggestion(hit.tag) && i%2 === (isEven ? 0 : 1)) ? this.renderWing(classes, hit, i) : null;
       })}
@@ -171,8 +186,26 @@ class WingsSuggestions extends React.Component {
 
     return (
       <div className={classes.suggestionsContainer} >
-        {this.renderWingsList(classes, suggestions, true)}
-        {this.renderWingsList(classes, suggestions, false)}
+
+        <Droppable
+          droppableId={'suggestions-1'}
+          type="WING"
+          direction="horizontal"
+        >
+          {(provided, snapshot) => (
+            this.renderWingsList(classes, suggestions, true, provided, snapshot)
+          )}
+        </Droppable>
+
+        <Droppable
+          droppableId={'suggestions-2'}
+          type="WING"
+          direction="horizontal"
+        >
+          {(provided, snapshot) => (
+            this.renderWingsList(classes, suggestions, false, provided, snapshot)
+          )}
+        </Droppable>
       </div>
     );
   }

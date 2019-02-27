@@ -5,6 +5,7 @@ export const styles = theme => ({
     margin: '8px 0px',
     marginLeft: '-8px',
     overflowX: 'scroll',
+    width: '100%'
   },
   suggestionList: {
     whiteSpace: 'nowrap',
