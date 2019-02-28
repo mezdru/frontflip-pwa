@@ -65,12 +65,13 @@ class OnboardWings extends React.Component {
           });
         })
         .on("layoutStart", function() {
-          console.log("start");
+          // console.log("start");
           let order = grid
             .getItems()
             .map(item => item.getElement().getAttribute("data-id"));
 
           let gridId = grid.getElement().getAttribute("data-id");
+          let elementId;
 
           if (gridId === 'userwings') {
             this.asyncForEach(order, async (orderId, i, array) => {
@@ -79,22 +80,27 @@ class OnboardWings extends React.Component {
                 await this.props.recordStore.getRecordByTag()
                 .then((record => {
                   order[i] = record._id;
-                  console.log(order);
+                  // console.log(order);
+                  elementId = i;
                 })).catch();
               }
             }).then(() => {
               let record = this.props.recordStore.values.record;
               record.hashtags = order;
               this.props.recordStore.setRecord(record);
-              this.props.handleSave();
+              this.props.handleSave()
+              .then(()=> {
+                // console.log(elementId);
+                // console.log('element id : ' + order[elementId]);
+                //grid.remove(elementId, {removeElements: true});
+                // grid.synchronize();
+              });
             });
           }
 
-          console.log(grid.getElement().getAttribute("data-id"));
-          console.log(order);
+          // console.log(grid.getElement().getAttribute("data-id"));
+          // console.log(order);
         }.bind(this));
-        console.log(this.state);
-
       columnGrids.push(grid);
     });
   }

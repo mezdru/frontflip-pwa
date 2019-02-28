@@ -10,20 +10,22 @@ class UserWings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      record: this.props.recordStore.values.record,
+      wingsCount: this.props.recordStore.values.record.hashtags.length
     };
   }
 
   componentDidMount() {
-    // observe(this.props.recordStore.values, 'record', (change) => {
-    //   this.forceUpdate(() => {this.props.initMuuri()});
-    // });
+    observe(this.props.recordStore.values, 'record', (change) => {
+      this.setState({wingsCount: this.props.recordStore.values.record.hashtags.length});
+    });
   }
 
   render() {
-    const {record} = this.props.recordStore.values;
+    const {record, wingsCount} = this.state;
     return (
       <div>
-        <Typography variant="h3" style={{textAlign: 'center'}} >Your Wings</Typography>
+        <Typography variant="h3" style={{textAlign: 'center'}} >Your {wingsCount} Wings</Typography>
         <div className="board-column-content" data-id="userwings">
           {record.hashtags && record.hashtags.map((hashtag, i) => {
             let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name)

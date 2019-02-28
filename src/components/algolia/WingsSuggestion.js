@@ -161,7 +161,7 @@ class WingsSuggestions extends React.Component {
           {suggestions && suggestions.map((hit, i) => {
             if(!hit || !this.shouldDisplaySuggestion(hit.tag)) return null;
             return(
-              <div key={i} className={'board-item'} style={{animationDelay: (i*0.05) +'s'}} data-id={hit.tag}>
+              <div key={i} className={classNames('board-item')} style={{animationDelay: (i*0.05) +'s'}} data-id={hit.tag}>
                 <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
                   label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
                   className={'board-item-content'} />

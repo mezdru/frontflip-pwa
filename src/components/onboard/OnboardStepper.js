@@ -14,7 +14,7 @@ class OnboardStepper extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeStep: 0,
+      activeStep: 2,
       steps: ['intro','contacts','wings'],
       canNext: true
     };
@@ -54,9 +54,9 @@ class OnboardStepper extends React.Component {
     }
   }
 
-  handleSave = () => {
+  handleSave = async () => {
     this.props.recordStore.setRecordId(this.props.recordStore.values.record._id);
-    this.props.recordStore.updateRecord();
+    await this.props.recordStore.updateRecord();
   }
 
   render() {
