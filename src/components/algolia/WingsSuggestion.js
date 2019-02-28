@@ -14,14 +14,16 @@ class WingsSuggestions extends React.Component {
     super(props);
     this.state = {
       suggestions: [],
-      bank: []
+      bank: [],
+      renderComponent: false,
     };
   }
 
   componentDidMount() {
     this.syncBank(null)
     .then(() => {
-      this.initSuggestions();
+      this.initSuggestions()
+      .then(() => {this.setState({renderComponent: true})})
     });
   }
 
@@ -145,35 +147,28 @@ class WingsSuggestions extends React.Component {
 
   getDisplayedName = (hit) => (hit.name_translated ? (hit.name_translated[this.state.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag);
 
-  renderWing = (classes, hit, i) => {
-    return (
-      <div key={i} className={classNames(classes.suggestion, 'board-item')} style={{animationDelay: (i*0.05) +'s'}}>
-        <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
-          label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
-          className={'board-item-content'}
-          onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag })} />
-      </div>
-    );
-  }
-
-  renderWingsList = (classes, suggestions, isEven) => {
-    return (
-      <div className={classNames(classes.suggestionList, "scrollX", "board-column-content")} data-id="suggestions">
-      {suggestions && suggestions.map((hit, i) => {
-        return (hit && this.shouldDisplaySuggestion(hit.tag) && i%2 === (isEven ? 0 : 1)) ? this.renderWing(classes, hit, i) : null;
-      })}
-    </div>
-    );
-  }
-
   render() {
     const {classes} = this.props;
-    const {suggestions} = this.state;
+    const {suggestions, renderComponent} = this.state;
+
+    if(!renderComponent) return null;
+
+    this.props.initMuuri();
 
     return (
       <div className={classes.suggestionsContainer} >
-        {this.renderWingsList(classes, suggestions, true)}
-        {this.renderWingsList(classes, suggestions, false)}
+        <div className={classNames("scrollX", "board-column-content")} data-id="suggestions">
+          {suggestions && suggestions.map((hit, i) => {
+            if(!hit || !this.shouldDisplaySuggestion(hit.tag)) return null;
+            return(
+              <div key={i} className={'board-item'} style={{animationDelay: (i*0.05) +'s'}} data-id={hit.tag}>
+                <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
+                  label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
+                  className={'board-item-content'} />
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }

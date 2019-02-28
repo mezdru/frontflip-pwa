@@ -17,6 +17,7 @@ class RecordStore {
     this.values.orgId = orgId;
   }
   setRecordTag(recordTag) {
+    recordTag = recordTag.replace('#', '%23');
     this.values.recordTag = recordTag;
   }
   setRecordId(recordId) {

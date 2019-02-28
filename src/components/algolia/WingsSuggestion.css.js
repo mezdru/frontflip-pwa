@@ -1,6 +1,6 @@
 export const styles = theme => ({
   suggestionsContainer: {
-    textAlign: 'left',
+    // textAlign: 'left',
     overflow: 'hidden',
     margin: '8px 0px',
     marginLeft: '-8px',
@@ -8,6 +8,7 @@ export const styles = theme => ({
   },
   suggestionList: {
     gridAutoFlow: 'column dense',
+    width: '100%',
   },
   suggestion: {
     margin: 8,
@@ -15,6 +16,7 @@ export const styles = theme => ({
     opacity: 0,
     animation: 'easeIn .6s',
     animationFillMode: 'forwards',
+    display: 'block',
   },
   '@keyframes easeIn': {
     from: { opacity: 0 },
