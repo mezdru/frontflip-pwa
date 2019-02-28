@@ -11,19 +11,23 @@ import '../style.css';
 import Muuri from 'muuri';
 require('hammerjs');
 
+let columnGrids = [];
+
 class OnboardWings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       lastSelection: null,
+      userWings: this.props.recordStore.values.record.hashtags,
     };
+    columnGrids = [];
   }
 
   initMuuri = async () => {
     var itemContainers = [].slice.call(
       document.querySelectorAll(".board-column-content")
     );
-    var columnGrids = [];
+    console.log(itemContainers);
 
     // Define the column grids so we can drag those
     // items around.
@@ -36,13 +40,13 @@ class OnboardWings extends React.Component {
         dragEnabled: true,
         dragSort: function() {
           return columnGrids;
-        },
+        }.bind(this),
         dragSortInterval: 0,
         dragContainer: document.body,
         dragReleaseDuration: 400,
         dragReleaseEasing: "ease"
       })
-        .on("dragStart", function(item) {
+        .on("dragStart",(item) => {
           // Let's set fixed widht/height to the dragged item
           // so that it does not stretch unwillingly when
           // it's appended to the document body for the
@@ -50,7 +54,7 @@ class OnboardWings extends React.Component {
           item.getElement().style.width = item.getWidth() + "px";
           item.getElement().style.height = item.getHeight() + "px";
         })
-        .on("dragReleaseEnd", function(item) {
+        .on("dragReleaseEnd", (item) => {
           // Let's remove the fixed width/height from the
           // dragged item now that it is back in a grid
           // column and can freely adjust to it's
@@ -64,7 +68,7 @@ class OnboardWings extends React.Component {
             grid.refreshItems();
           });
         })
-        .on("layoutStart", function() {
+        .on("layoutStart", () => {
           // console.log("start");
           let order = grid
             .getItems()
@@ -75,7 +79,7 @@ class OnboardWings extends React.Component {
 
           if (gridId === 'userwings') {
             this.asyncForEach(order, async (orderId, i, array) => {
-              if (orderId.charAt(0) === '#') {
+              if (orderId && orderId.charAt(0) === '#') {
                 this.props.recordStore.setRecordTag(orderId);
                 await this.props.recordStore.getRecordByTag()
                 .then((record => {
@@ -89,20 +93,29 @@ class OnboardWings extends React.Component {
               record.hashtags = order;
               this.props.recordStore.setRecord(record);
               this.props.handleSave()
-              .then(()=> {
+              .then((recordUpdated)=> {
+                console.log(JSON.stringify(recordUpdated.hashtags));
+                console.log(grid.getItems())
+                this.setState({userWings: recordUpdated.hashtags});
+                console.log(columnGrids)
+                grid.refreshItems().layout();
                 // console.log(elementId);
                 // console.log('element id : ' + order[elementId]);
                 //grid.remove(elementId, {removeElements: true});
-                // grid.synchronize();
               });
             });
           }
 
           // console.log(grid.getElement().getAttribute("data-id"));
           // console.log(order);
-        }.bind(this));
-      columnGrids.push(grid);
+        });
+
+        console.log(columnGrids);
+        columnGrids.push(grid);
+        console.log(columnGrids.length);
     });
+    console.log(columnGrids.length);
+
   }
 
   asyncForEach = async (array, callback) => {
@@ -134,6 +147,7 @@ class OnboardWings extends React.Component {
 
   render() {
     const {record} = this.props.recordStore.values;
+    const {userWings} = this.state;
 
     return (
         <Grid container direction="column" style={{minHeight: 'calc(100% - 72px)', background: 'white'}}>
@@ -153,7 +167,7 @@ class OnboardWings extends React.Component {
           <Grid item>
             <Grid container>
               <Grid item xs={12} style={{padding:16}}>
-                <UserWings handleRemoveWing={this.handleRemoveWing} initMuuri={this.initMuuri} />
+                <UserWings handleRemoveWing={this.handleRemoveWing} initMuuri={this.initMuuri} wings={userWings} />
               </Grid>
             </Grid>
           </Grid>
