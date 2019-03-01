@@ -34,6 +34,10 @@ class SearchField extends React.Component {
   }
   componentDidMount() {
     AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
+
+    observe(this.props.commonStore, 'algoliaKey', (change) => {
+      AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
+    });
   }
 
   // Format an array of options so that they all have a label and a value

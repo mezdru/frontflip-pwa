@@ -54,6 +54,11 @@ class SearchSuggestions extends React.Component {
     AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
     this._ismounted = true;
     this.fetchSuggestions(this.props.filters, this.props.query);
+
+    observe(this.props.commonStore, 'algoliaKey', (change) => {
+      AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
+      this.fetchSuggestions(this.props.filters, this.props.query);
+    });
   }
 
   componentWillUnmount() {

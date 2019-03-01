@@ -19,6 +19,11 @@ class SearchResults extends React.Component {
   componentDidMount() {
     AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
     this.fetchHits(this.props.filters, this.props.query, null, null);
+
+    observe(this.props.commonStore, 'algoliaKey', (change) => {
+      AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
+      this.fetchHits(this.props.filters, this.props.query, null, null);
+    });
   }
 
   fetchHits = (filters, query, facetFilters, page) => {
