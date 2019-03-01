@@ -73,9 +73,12 @@ class OnboardWings extends React.Component {
               .then((record => {
                 order[i] = record._id;
                 elementId = i;
-              })).catch();
+              })).catch(() => {
+                order = order.filter(elt => elt.charAt(0) !== '#');
+              });
             }
           }).then(() => {
+            grid.refreshItems().layout()
             let record = this.props.recordStore.values.record;
             record.hashtags = order;
             this.props.recordStore.setRecord(record);
@@ -84,8 +87,8 @@ class OnboardWings extends React.Component {
               grid.synchronize();
               grid.refreshItems();
               grid.refreshSortData();
-              grid.refreshItems().layout()
-            });
+              //grid.refreshItems().layout()
+            }).catch();
           });
         }
           // Let's remove the fixed width/height from the

@@ -8,6 +8,7 @@ import ProfileService from '../../services/profile.service';
 import AlgoliaService from '../../services/algolia.service';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
 import {styles} from './WingsSuggestion.css';
+import { observe } from 'mobx';
 
 class WingsSuggestions extends React.Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class WingsSuggestions extends React.Component {
   }
 
   componentDidMount() {
+    AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
     this.syncBank(null)
     .then(() => {
       this.initSuggestions()

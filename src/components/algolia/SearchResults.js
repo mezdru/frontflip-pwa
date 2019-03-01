@@ -2,6 +2,7 @@ import React from 'react'
 import { Grid, Button, CircularProgress } from '@material-ui/core';
 import {FormattedMessage} from 'react-intl';
 import AlgoliaService from '../../services/algolia.service';
+import { inject, observer } from 'mobx-react';
 
 class SearchResults extends React.Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class SearchResults extends React.Component {
   }
 
   componentDidMount() {
+    AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
     this.fetchHits(this.props.filters, this.props.query, null, null);
   }
 
@@ -74,4 +76,6 @@ class SearchResults extends React.Component {
   }
 }
 
-export default SearchResults;
+export default inject('commonStore')(
+  observer(SearchResults)
+);
