@@ -111,7 +111,7 @@ class RecordStore {
     this.errors = null;
 
     return agent.Record.put(this.values.orgId, this.values.recordId, this.values.record)
-      .then(data => { this.values.record = (data ? data.record : {}); })
+      .then(data => { this.values.record = (data ? data.record : {}); return this.values.record;})
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.errors;
         throw err;

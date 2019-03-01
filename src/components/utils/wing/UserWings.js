@@ -15,22 +15,26 @@ class UserWings extends React.Component {
     };
   }
 
-  componentDidMount() {
-    observe(this.props.recordStore.values, 'record', (change) => {
-      this.setState({wingsCount: this.props.recordStore.values.record.hashtags.length});
-    });
+  shouldComponentUpdate() {
+    return false;
   }
 
   render() {
-    const {record, wingsCount} = this.state;
+    const {record} = this.state;
+
+    if(!record) return null;
+    
+
     return (
       <div>
-        <Typography variant="h3" style={{textAlign: 'center'}} >Your {wingsCount} Wings</Typography>
+        <Typography variant="h3" style={{textAlign: 'center'}} >Your {record.hashtags.length} Wings</Typography>
         <div className="board-column-content" data-id="userwings">
-          {record.hashtags && record.hashtags.map((hashtag, i) => {
+          {record && record.hashtags.map((hashtag, i) => {
+            if(!hashtag) return null;
+            console.log('tag: ' + hashtag.tag);
             let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name)
             return (
-                <div className="board-item" data-id={hashtag._id} key={i}>
+                <div className="board-item" data-id={(hashtag ? hashtag._id : hashtag.tag)} key={i}>
                   <Wings  src={ProfileService.getPicturePath(hashtag.picture) || defaultHashtagPicture}
                     label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
                     className={'board-item-content'} />
