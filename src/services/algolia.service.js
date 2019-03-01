@@ -25,6 +25,7 @@ class AlgoliaService {
   }
 
   setAlgoliaKey(algoliaKey) {
+    if(!algoliaKey) return;
     this.algoliaKey = algoliaKey;
     this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, algoliaKey);
     this.index = this.client.initIndex(this.indexName);

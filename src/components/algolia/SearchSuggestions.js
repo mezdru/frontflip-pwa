@@ -2,6 +2,7 @@ import React from 'react'
 import { withStyles, Chip } from '@material-ui/core';
 import AlgoliaService from '../../services/algolia.service';
 import { inject, observer } from 'mobx-react';
+import { observe } from 'mobx';
 
 const styles = theme => ({
   suggestionsContainer: {
@@ -54,6 +55,11 @@ class SearchSuggestions extends React.Component {
     AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
     this._ismounted = true;
     this.fetchSuggestions(this.props.filters, this.props.query);
+
+    observe(this.props.commonStore, 'algoliaKey', (change) => {
+      AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
+      this.fetchSuggestions(this.props.filters, this.props.query);
+    });
   }
 
   componentWillUnmount() {

@@ -2,13 +2,12 @@ import React from 'react'
 import { withStyles } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import classNames from 'classnames';
-
+import { observe } from 'mobx';
 import Wings from '../utils/wing/Wing';
 import ProfileService from '../../services/profile.service';
 import AlgoliaService from '../../services/algolia.service';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
 import {styles} from './WingsSuggestion.css';
-import { observe } from 'mobx';
 
 class WingsSuggestions extends React.Component {
   constructor(props) {
@@ -26,6 +25,15 @@ class WingsSuggestions extends React.Component {
     .then(() => {
       this.initSuggestions()
       .then(() => {this.setState({renderComponent: true})})
+    });
+
+    observe(this.props.commonStore, 'algoliaKey', (change) => {
+      AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
+      this.syncBank(null)
+      .then(() => {
+        this.initSuggestions()
+        .then(() => {this.setState({renderComponent: true})})
+      });
     });
   }
 
