@@ -3,6 +3,7 @@ import { Grid, Button, CircularProgress } from '@material-ui/core';
 import {FormattedMessage} from 'react-intl';
 import AlgoliaService from '../../services/algolia.service';
 import { inject, observer } from 'mobx-react';
+import { observe } from 'mobx';
 
 class SearchResults extends React.Component {
   constructor(props) {

@@ -8,6 +8,7 @@ import { withTheme } from '@material-ui/core';
 import ProfileService from '../../services/profile.service';
 import {Option, customStyles, MultiValueContainer, DropdownIndicator} from './SearchFieldElements';
 import AlgoliaService from '../../services/algolia.service';
+import { observe } from 'mobx';
 
 class SearchField extends React.Component {
   constructor(props) {

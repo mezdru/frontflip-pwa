@@ -2,6 +2,7 @@ import React from 'react'
 import { withStyles, Chip } from '@material-ui/core';
 import AlgoliaService from '../../services/algolia.service';
 import { inject, observer } from 'mobx-react';
+import { observe } from 'mobx';
 
 const styles = theme => ({
   suggestionsContainer: {

@@ -2,7 +2,7 @@ import React from 'react'
 import { withStyles } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import classNames from 'classnames';
-
+import { observe } from 'mobx';
 import Wings from '../utils/wing/Wing';
 import ProfileService from '../../services/profile.service';
 import AlgoliaService from '../../services/algolia.service';
