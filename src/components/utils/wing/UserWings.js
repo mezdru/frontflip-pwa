@@ -11,7 +11,6 @@ class UserWings extends React.Component {
     super(props);
     this.state = {
       record: this.props.recordStore.values.record,
-      wingsCount: this.props.recordStore.values.record.hashtags.length
     };
   }
 
