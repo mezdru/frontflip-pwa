@@ -15,51 +15,26 @@ class UserWings extends React.Component {
     };
   }
 
-  componentDidMount() {
-    // observe(this.props.recordStore.values, 'record', (change) => {
-    //   console.log('force update and init')
-    //   console.log(JSON.stringify(change.oldValue.hashtags.length));
-    //   console.log(JSON.stringify(change.newValue.hashtags.length));
-    //   console.log(change.object)
-    //   if(change.oldValue.hashtags.length !== change.newValue.hashtags.length)
-    //     this.forceUpdate(() => this.props.initMuuri());
-    // });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    // console.log('updated')
-    // console.log('prev state : ' + JSON.stringify(prevState.wingsCount));
-    // console.log('current state : ' + JSON.stringify(this.state.wingsCount));
-    // // if(prevState.wingsCount !== this.state.wingsCount) {
-
-    // //   this.props.initMuuri();
-    // // }
-    // if(prevState.record.hashtags.length !== this.state.record.hashtags.length) {
-    //   console.log('new record with different hashtags')
-    // }
-    // this.props.initMuuri();
-  }
-
   shouldComponentUpdate() {
     return false;
   }
 
   render() {
-    const {wings} = this.props;
+    const {record} = this.state;
 
-    if(!wings) return null;
-    console.log('nb wings : ' + wings.length);
+    if(!record) return null;
     
 
     return (
       <div>
-        <Typography variant="h3" style={{textAlign: 'center'}} >Your {wings.length} Wings</Typography>
+        <Typography variant="h3" style={{textAlign: 'center'}} >Your {record.hashtags.length} Wings</Typography>
         <div className="board-column-content" data-id="userwings">
-          {wings && wings.map((hashtag, i) => {
+          {record && record.hashtags.map((hashtag, i) => {
             if(!hashtag) return null;
+            console.log('tag: ' + hashtag.tag);
             let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name)
             return (
-                <div className="board-item" data-id={(hashtag ? hashtag._id : null)} key={i}>
+                <div className="board-item" data-id={(hashtag ? hashtag._id : hashtag.tag)} key={i}>
                   <Wings  src={ProfileService.getPicturePath(hashtag.picture) || defaultHashtagPicture}
                     label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
                     className={'board-item-content'} />

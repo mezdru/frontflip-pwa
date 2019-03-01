@@ -24,10 +24,11 @@ class OnboardWings extends React.Component {
   }
 
   initMuuri = async () => {
+    let columnGrids = [];
+
     var itemContainers = [].slice.call(
       document.querySelectorAll(".board-column-content")
     );
-    console.log(itemContainers);
 
     // Define the column grids so we can drag those
     // items around.
@@ -38,11 +39,12 @@ class OnboardWings extends React.Component {
         layoutDuration: 400,
         layoutEasing: "ease",
         dragEnabled: true,
-        dragSort: function() {
+        dragSort: function(item) {
           return columnGrids;
-        }.bind(this),
+        },
         dragSortInterval: 0,
-        dragContainer: document.body,
+        dragSortPredicate: true,
+        dragContainer: document.getElementById('root'),
         dragReleaseDuration: 400,
         dragReleaseEasing: "ease"
       })
@@ -55,6 +57,37 @@ class OnboardWings extends React.Component {
           item.getElement().style.height = item.getHeight() + "px";
         })
         .on("dragReleaseEnd", (item) => {
+
+          let order = grid
+          .getItems()
+          .map(item => item.getElement().getAttribute("data-id"));
+
+        let gridId = grid.getElement().getAttribute("data-id");
+        let elementId;
+
+        if (gridId === 'userwings') {
+          this.asyncForEach(order, async (orderId, i, array) => {
+            if (orderId && orderId.charAt(0) === '#') {
+              this.props.recordStore.setRecordTag(orderId);
+              await this.props.recordStore.getRecordByTag()
+              .then((record => {
+                order[i] = record._id;
+                elementId = i;
+              })).catch();
+            }
+          }).then(() => {
+            let record = this.props.recordStore.values.record;
+            record.hashtags = order;
+            this.props.recordStore.setRecord(record);
+            this.props.handleSave()
+            .then((recordUpdated)=> {
+              grid.synchronize();
+              grid.refreshItems();
+              grid.refreshSortData();
+              grid.refreshItems().layout()
+            });
+          });
+        }
           // Let's remove the fixed width/height from the
           // dragged item now that it is back in a grid
           // column and can freely adjust to it's
@@ -64,58 +97,14 @@ class OnboardWings extends React.Component {
           // Just in case, let's refresh the dimensions of all items
           // in case dragging the item caused some other items to
           // be different size.
-          columnGrids.forEach(function(grid) {
-            grid.refreshItems();
-          });
-        })
-        .on("layoutStart", () => {
-          // console.log("start");
-          let order = grid
-            .getItems()
-            .map(item => item.getElement().getAttribute("data-id"));
-
-          let gridId = grid.getElement().getAttribute("data-id");
-          let elementId;
-
-          if (gridId === 'userwings') {
-            this.asyncForEach(order, async (orderId, i, array) => {
-              if (orderId && orderId.charAt(0) === '#') {
-                this.props.recordStore.setRecordTag(orderId);
-                await this.props.recordStore.getRecordByTag()
-                .then((record => {
-                  order[i] = record._id;
-                  // console.log(order);
-                  elementId = i;
-                })).catch();
-              }
-            }).then(() => {
-              let record = this.props.recordStore.values.record;
-              record.hashtags = order;
-              this.props.recordStore.setRecord(record);
-              this.props.handleSave()
-              .then((recordUpdated)=> {
-                console.log(JSON.stringify(recordUpdated.hashtags));
-                console.log(grid.getItems())
-                this.setState({userWings: recordUpdated.hashtags});
-                console.log(columnGrids)
-                grid.refreshItems().layout();
-                // console.log(elementId);
-                // console.log('element id : ' + order[elementId]);
-                //grid.remove(elementId, {removeElements: true});
-              });
-            });
-          }
-
-          // console.log(grid.getElement().getAttribute("data-id"));
-          // console.log(order);
+          // columnGrids.forEach(function(grid) {
+          //   grid.refreshItems();
+          // });
         });
 
-        console.log(columnGrids);
-        columnGrids.push(grid);
-        console.log(columnGrids.length);
+        if(! columnGrids.some(grd => grd.getElement().getAttribute("data-id")  === grid.getElement().getAttribute("data-id")))
+          columnGrids.push(grid);
     });
-    console.log(columnGrids.length);
-
   }
 
   asyncForEach = async (array, callback) => {
@@ -167,7 +156,7 @@ class OnboardWings extends React.Component {
           <Grid item>
             <Grid container>
               <Grid item xs={12} style={{padding:16}}>
-                <UserWings handleRemoveWing={this.handleRemoveWing} initMuuri={this.initMuuri} wings={userWings} />
+                <UserWings handleRemoveWing={this.handleRemoveWing} initMuuri={this.initMuuri} />
               </Grid>
             </Grid>
           </Grid>
