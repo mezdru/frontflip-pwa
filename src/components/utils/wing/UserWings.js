@@ -30,7 +30,6 @@ class UserWings extends React.Component {
         <div className="board-column-content" data-id="userwings">
           {record && record.hashtags.map((hashtag, i) => {
             if(!hashtag) return null;
-            console.log('tag: ' + hashtag.tag);
             let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name)
             return (
                 <div className="board-item" data-id={(hashtag ? hashtag._id : hashtag.tag)} key={i}>
