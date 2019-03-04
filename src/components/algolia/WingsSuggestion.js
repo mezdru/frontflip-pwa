@@ -8,6 +8,7 @@ import ProfileService from '../../services/profile.service';
 import AlgoliaService from '../../services/algolia.service';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
 import {styles} from './WingsSuggestion.css';
+import DragNDropService from '../../services/dragndrop.service';
 
 class WingsSuggestions extends React.Component {
   constructor(props) {
@@ -25,7 +26,8 @@ class WingsSuggestions extends React.Component {
     .then(() => {
       this.initSuggestions()
       .then(() => {this.setState({renderComponent: true}, () => {
-        this.props.initMuuri();
+        // this.props.initMuuri();
+        DragNDropService.init(this.onDragReleaseEnd);
       })})
     });
 
@@ -38,6 +40,74 @@ class WingsSuggestions extends React.Component {
       });
     });
   }
+
+  componentWillReceiveProps(nextProps) {
+    if(!nextProps.lastSelection) return;
+    console.log('receive props')
+    console.log(nextProps);
+    console.log(JSON.stringify(nextProps.lastSelection));
+    if ( !this.props.lastSelection || (this.props.lastSelection.tag !== nextProps.lastSelection.tag)) {
+      console.log('receive props')
+      let newSuggestions = this.state.suggestions.filter(sug => sug.tag !== nextProps.lastSelection.tag);
+      console.log(newSuggestions)
+      this.setState({suggestions: newSuggestions}, () => {
+        console.log('up sug')
+        this.updateSuggestions(nextProps.lastSelection);
+
+      });
+    }
+  }
+
+  asyncForEach = async (array, callback) => {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index], index, array);
+    }
+  }
+
+  onDragReleaseEnd = (grid, item) => {
+    let order = grid
+    .getItems()
+    .map(item => item.getElement().getAttribute("data-id"));
+
+    let gridId = grid.getElement().getAttribute("data-id");
+    let elementId;
+
+    if (gridId === 'userwings') {
+      
+      this.asyncForEach(order, async (orderId, i, array) => {
+        if (orderId && orderId.charAt(0) === '#') {
+
+          // update element to replace tag by record id
+          this.props.recordStore.setRecordTag(orderId);
+          await this.props.recordStore.getRecordByTag()
+          .then((record => {
+            order[i] = record._id;
+            elementId = i;
+            this.updateSuggestions(record);
+          })).catch((e) => {
+            console.log(e);
+            order = order.filter(elt => elt.charAt(0) !== '#');
+          });
+        }
+      }).then(() => {
+        let record = this.props.recordStore.values.record;
+        record.hashtags = order;
+        this.props.recordStore.setRecord(record);
+        this.props.handleSave()
+        .then((recordUpdated)=> {
+        }).catch();
+      });
+    } else grid.refreshItems().layout();
+    item.getElement().style.width = "";
+    item.getElement().style.height = "";
+
+  }
+
+
+  // shouldComponentUpdate() {
+  //   return false;
+  // }
+
 
   /**
    * @description Init Wings suggestions with most common Wings
@@ -83,7 +153,13 @@ class WingsSuggestions extends React.Component {
         suggestionToAdd.tag = suggestionToAdd.value;
         newSuggestions.push(suggestionToAdd);
       }
-      this.setState({suggestions: suggestions.concat(newSuggestions)});
+      try {
+        let newSug = suggestions.concat(newSuggestions);
+        this.state.suggestions = newSug;
+
+      }catch(e) {
+
+      }
     }).catch((e) => {console.log(e)});
   }
 
@@ -93,9 +169,13 @@ class WingsSuggestions extends React.Component {
   removeUserWings = (suggestions) => {
     let suggestionsToReturn = suggestions;
     suggestions.forEach(suggestion => {
-      if(this.props.recordStore.values.record.hashtags.findIndex(hashtag => hashtag.tag === suggestion.value) > -1) {
-        let index = suggestionsToReturn.findIndex(sugInRet => sugInRet.value === suggestion.value);
-        if(index > -1) suggestionsToReturn.splice(index, 1);
+      try{
+        if(this.props.recordStore.values.record.hashtags.findIndex(hashtag => hashtag.tag === suggestion.value) > -1) {
+          let index = suggestionsToReturn.findIndex(sugInRet => sugInRet.value === suggestion.value);
+          if(index > -1) suggestionsToReturn.splice(index, 1);
+        }
+      }catch(e) {
+        return;
       }
     });
     return suggestionsToReturn;
@@ -136,13 +216,13 @@ class WingsSuggestions extends React.Component {
     this.state.suggestions.map((suggestion, i) => {
       suggestions[i] = this.getData(suggestion.tag) || suggestion;
     });
-    this.setState({suggestions: suggestions});
+    this.state.suggestions =  suggestions;
   }
 
   /**
    * @description Sync wings bank with current state bank
    */
-  syncBank = (filters) => AlgoliaService.loadBank(filters).then(this.setState({bank : this.props.commonStore.getLocalStorage('wingsBank', true)}));
+  syncBank = (filters) => AlgoliaService.loadBank(filters).then(this.state.bank = this.props.commonStore.getLocalStorage('wingsBank', true));
 
   /**
    * @description Format query to fetch missing Wings data with Algolia
@@ -175,13 +255,19 @@ class WingsSuggestions extends React.Component {
         <div className={classNames("scrollX", "board-column-content")} data-id="suggestions">
           {suggestions && suggestions.map((hit, i) => {
             if(!hit || !this.shouldDisplaySuggestion(hit.tag)) return null;
-            return(
-              <div key={i} className={classNames('board-item')} style={{animationDelay: (i*0.05) +'s'}} data-id={hit.tag}>
-                <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
-                  label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
-                  className={'board-item-content'} />
-              </div>
-            );
+            try{
+              return(
+                <div key={i} className={classNames('board-item')} style={{animationDelay: (i*0.05) +'s'}} data-id={hit.tag}>
+                  <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
+                    label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
+                    className={'board-item-content'} />
+                </div>
+              );
+            }catch(e) {
+              console.log(e);
+              return null;
+            }
+
           })}
         </div>
       </div>
