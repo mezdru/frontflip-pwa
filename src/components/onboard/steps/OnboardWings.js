@@ -24,6 +24,7 @@ class OnboardWings extends React.Component {
   }
 
   initMuuri = async () => {
+    // console.log('init muuri')
     let columnGrids = [];
 
     var itemContainers = [].slice.call(
@@ -57,6 +58,15 @@ class OnboardWings extends React.Component {
           item.getElement().style.height = item.getHeight() + "px";
         })
         .on("dragReleaseEnd", (item) => {
+          grid.synchronize();
+          // grid.refreshItems().layout();
+          grid.refreshSortData();
+          // grid.layout(function(items) {
+          //   console.log(items);
+          // });
+
+
+          // console.log(item.getElement().getAttribute("data-id"));
 
           let order = grid
           .getItems()
@@ -66,8 +76,11 @@ class OnboardWings extends React.Component {
         let elementId;
 
         if (gridId === 'userwings') {
+          
           this.asyncForEach(order, async (orderId, i, array) => {
             if (orderId && orderId.charAt(0) === '#') {
+
+              // update element to replace tag by record id
               this.props.recordStore.setRecordTag(orderId);
               await this.props.recordStore.getRecordByTag()
               .then((record => {
@@ -76,17 +89,20 @@ class OnboardWings extends React.Component {
               })).catch(() => {
                 order = order.filter(elt => elt.charAt(0) !== '#');
               });
+
+              // in that case, user drag and drop a suggestion from suggestions to his Wings
+              // we should add some suggestions
+
             }
           }).then(() => {
-            grid.refreshItems().layout()
             let record = this.props.recordStore.values.record;
             record.hashtags = order;
             this.props.recordStore.setRecord(record);
             this.props.handleSave()
             .then((recordUpdated)=> {
-              grid.synchronize();
-              grid.refreshItems();
-              grid.refreshSortData();
+              // grid.synchronize();
+              // grid.refreshItems();
+              // grid.refreshSortData();
               //grid.refreshItems().layout()
             }).catch();
           });
@@ -107,7 +123,14 @@ class OnboardWings extends React.Component {
 
         if(! columnGrids.some(grd => grd.getElement().getAttribute("data-id")  === grid.getElement().getAttribute("data-id")))
           columnGrids.push(grid);
+        else {
+          // console.log('this is grid : ');
+          // console.log(grid);
+          grid.destroy(true);
+        }
     });
+    // console.log('column grids : ');
+    // console.log(columnGrids);
   }
 
   asyncForEach = async (array, callback) => {
