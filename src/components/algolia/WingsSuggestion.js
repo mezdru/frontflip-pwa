@@ -24,7 +24,9 @@ class WingsSuggestions extends React.Component {
     this.syncBank(null)
     .then(() => {
       this.initSuggestions()
-      .then(() => {this.setState({renderComponent: true})})
+      .then(() => {this.setState({renderComponent: true}, () => {
+        this.props.initMuuri();
+      })})
     });
 
     observe(this.props.commonStore, 'algoliaKey', (change) => {
@@ -167,8 +169,6 @@ class WingsSuggestions extends React.Component {
     const {suggestions, renderComponent} = this.state;
 
     if(!renderComponent) return null;
-
-    this.props.initMuuri();
 
     return (
       <div className={classes.suggestionsContainer} >
