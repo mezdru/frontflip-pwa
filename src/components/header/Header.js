@@ -121,7 +121,7 @@ class App extends Component {
           handleProfileMenuOpen={this.handleProfileMenuOpen} />
         {renderMenu}
         {renderMobileMenu}
-        <HeaderDrawer handlerDrawerOpen={this.handleDrawerOpen}
+        <HeaderDrawer handleDrawerOpen={this.handleDrawerOpen}
           handleDrawerClose={this.handleDrawerClose}
           handleProfileMenuOpen={this.handleProfileMenuOpen}
           open={open} auth={auth} anchorEl={anchorEl} 

@@ -54,7 +54,7 @@ class App extends Component {
         className={classes.drawer}
         anchor="left"
         open={open}
-        onOpen={null}
+        onOpen={this.props.handleDrawerOpen}
         onClose={this.props.handleDrawerClose}
         classes={{
           paper: classes.drawerPaper,
