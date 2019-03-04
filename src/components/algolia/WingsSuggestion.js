@@ -119,7 +119,12 @@ class WingsSuggestions extends React.Component {
   /**
    * @description Get complete Wing data by tag thanks to current Wings bank
    */
-  getData = (tag) => this.state.bank.find(bankElt => bankElt.tag === tag);
+  getData = (tag) => {
+    if (this.state.bank)
+      this.state.bank.find(bankElt => bankElt.tag === tag);
+    else 
+      return null;
+  }
 
   /**
    * @description Populate all suggestions data thanks to current Wings bank
