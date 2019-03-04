@@ -11,10 +11,20 @@
       "src": "wingzy.png",
       "sizes":"144x144",
       "type":"image/png"
-    }
+    },
+      {
+    "src": "wingzy_192.png",
+    "type": "image/png",
+    "sizes": "192x192"
+  },
+  {
+    "src": "wingzy_512.png",
+    "type": "image/png",
+    "sizes": "512x512"
+  }
   ],
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#DD362E",
-  "background_color": "#ffffff"
+  "background_color": "#DD362E"
 }
