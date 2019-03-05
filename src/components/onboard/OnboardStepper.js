@@ -63,17 +63,16 @@ class OnboardStepper extends React.Component {
     const {theme, classes} = this.props;
     const {activeStep, steps, canNext} = this.state;
     let StepComponent = this.getStepComponent(steps, activeStep);
-
     return (
       <div style={{background: '#f2f2f2', height:'100vh'}}>
         <MobileStepper
           variant="dots"
           steps={steps.length}
           position="static"
-          activeStep={this.state.activeStep}
+          activeStep={Math.min(activeStep, steps.length -1 )}
           className={classes.root}
           nextButton={
-            <Button size="small" onClick={this.handleNext} disabled={(activeStep === (steps.length - 1)) || !canNext}>
+            <Button size="small" onClick={this.handleNext} disabled={!canNext}>
               Next
               {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
             </Button>
@@ -86,7 +85,7 @@ class OnboardStepper extends React.Component {
           }
         />
         <Typography variant="h2" style={{textAlign: 'center'}} >{this.getStepLabel(steps, activeStep)}</Typography>
-        <StepComponent handleSave={this.handleSave}/>
+        <StepComponent handleSave={this.handleSave} activeStep={activeStep} />
       </div>
     );
   }
