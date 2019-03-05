@@ -83,6 +83,7 @@ class WingsSuggestions extends React.Component {
           suggestionToAdd.tag = suggestionToAdd.value;
           suggestionToAdd.new = true;
           newSuggestions.push(suggestionToAdd);
+          newSuggestions.push(suggestionToAdd);
         }
         let newSug = suggestions.concat(newSuggestions);
         this.setState({ suggestions: newSug });
@@ -170,6 +171,26 @@ class WingsSuggestions extends React.Component {
 
   getDisplayedName = (hit) => (hit.name_translated ? (hit.name_translated[this.state.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag);
 
+  renderWing = (classes, hit, i) => {
+    return (
+      <li key={i} className={classes.suggestion} style={{animationDelay: (i*0.05) +'s'}}>
+        <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
+          label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
+          onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag })} />
+      </li>
+    );
+  }
+
+  renderWingsList = (suggestions, classes, isEven) => {
+    return (
+      <ul className={classNames(classes.suggestionList, "scrollX")}>
+      {suggestions && suggestions.map((hit, i) => {
+        return (hit && this.shouldDisplaySuggestion(hit.tag) && i%2 === (isEven ? 0 : 1)) ? this.renderWing(classes, hit, i) : null;
+      })}
+    </ul>
+    );
+  }
+
   render() {
     const { classes } = this.props;
     const { suggestions, renderComponent } = this.state;
@@ -178,19 +199,8 @@ class WingsSuggestions extends React.Component {
 
     return (
       <div className={classes.suggestionsContainer} >
-        <div className={classNames("scrollX", classes.suggestionList)}>
-          {suggestions && suggestions.map((hit, i) => {
-            if (!hit || !this.shouldDisplaySuggestion(hit.tag)) return null;
-            return (
-              <div key={i} className={classNames(classes.suggestion)} style={{ animationDelay: (i * 0.05) + 's' }} data-id={hit.tag}>
-                <Wings src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
-                  label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
-                  className={''}
-                  onClick={(e) => { this.handleSelectSuggestion(e, { tag: hit.tag }) }} />
-              </div>
-            );
-          })}
-        </div>
+        {this.renderWingsList(suggestions, classes, true)}
+        {this.renderWingsList(suggestions, classes, false)}
       </div>
     );
   }

@@ -27,6 +27,7 @@ class OnboardWings extends React.Component {
   }
 
   handleRemoveWing = (e, tag) => {
+    console.log(tag);
     e.preventDefault();
     let record = this.props.recordStore.values.record;
     let newHashtags = record.hashtags.filter(hashtag => hashtag.tag !== tag);
@@ -38,7 +39,7 @@ class OnboardWings extends React.Component {
   render() {
 
     return (
-        <Grid container direction="column" style={{minHeight: 'calc(100% - 72px)', background: 'white'}}>
+        <Grid container style={{minHeight: 'calc(100% - 72px)', background: 'white'}}>
           <Grid item style={{background: '#f2f2f2'}}> 
                 <Typography variant="h3" >Choose your Wings !</Typography>
                 <Grid container >
