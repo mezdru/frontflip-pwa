@@ -15,6 +15,7 @@ class OnboardWelcome extends React.Component {
     return (
       <div>
         Welcome to the Wingzy of {organisation.name}!<br/>
+        If you see that message, update is ok.
         <Button onClick={this.props.handleEnterToOnboard} color="primary" >Onboard !</Button>
       </div>
     );
