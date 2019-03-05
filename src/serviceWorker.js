@@ -53,9 +53,9 @@ export function register(config) {
       }
     });
 
-    window.addEventListener('message', (event) => {
+    self.addEventListener('message', (event) => {
       if (event.data.action === 'skipWaiting') {
-        this.skipWaiting();
+        self.skipWaiting();
       }
     });
 
@@ -85,7 +85,7 @@ function registerValidSW(swUrl, config) {
               // content until all client tabs are closed.
 
               // show notification
-              let notification = document.getElementById('notification ');
+              let notification = document.getElementById('notification');
               notification.className = 'show';
 
               console.log(
