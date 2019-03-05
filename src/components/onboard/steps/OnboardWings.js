@@ -39,8 +39,8 @@ class OnboardWings extends React.Component {
   render() {
 
     return (
-        <Grid container style={{minHeight: 'calc(100% - 72px)', background: 'white'}}>
-          <Grid item style={{background: '#f2f2f2'}}> 
+        <Grid container direction="column" style={{minHeight: 'calc(100% - 72px)', background: 'white'}}>
+          <Grid item style={{background: '#f2f2f2', maxWidth: '100%'}}> 
                 <Typography variant="h3" >Choose your Wings !</Typography>
                 <Grid container >
                 {/* Here search part or first wings part */}
