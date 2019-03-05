@@ -41,7 +41,7 @@ class AlgoliaService {
   }
 
   fetchFacetValues(lastSelection, privateOnly, filters, query) {
-    if(!index) return Promise.resolve();
+    if(!this.index) return Promise.resolve();
     return new Promise((resolve, reject) => {
       this.index.searchForFacetValues({
         facetName: 'hashtags.tag',
@@ -65,7 +65,7 @@ class AlgoliaService {
   }
 
   loadBank(filters) {
-    if(!index) return Promise.resolve();
+    if(!this.index) return Promise.resolve();
     return new Promise((resolve, reject) => {
       if(!filters && commonStore.getLocalStorage('wingsBank', true)) resolve();
       this.index.search({
@@ -93,7 +93,7 @@ class AlgoliaService {
   }
 
   fetchOptions(inputValue){
-    if(!index) return Promise.resolve();
+    if(!this.index) return Promise.resolve();
     return new Promise((resolve, reject) => {
       this.index.search({
           query: inputValue,
@@ -108,7 +108,7 @@ class AlgoliaService {
 
 
   fetchHits(filters, query, facetFilters, page) {
-    if(!index) return Promise.resolve();
+    if(!this.index) return Promise.resolve();
     return new Promise((resolve, reject) => {
       this.index.search({
         page : page || 0,
