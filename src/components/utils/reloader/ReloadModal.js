@@ -11,16 +11,22 @@ const animation = keyframes`
 `;
 
 const Modal = styled.div`
-  z-index: 100;
-  width: 100%;
-  height: 3em;
-  line-height: 3em;
+  z-index: 99999;
+  box-sizing: border-box;
+  width: calc(100% - 32px);
   position: fixed;
-  top: 0;
-  background: #f44292;
-  color: white;
+  bottom: 0;
+  margin: 16px;
+  padding: 16px;
+  background: rgb(50,50,50);
+  color: rgb(200,200,200);
   cursor: pointer;
   animation: ${animation} 1s linear;
+  text-align:center;
+  & a {
+    color: white;
+    font-weight: 600;
+  }
 `;
 
 export default class ReloadModal extends Component {
@@ -28,7 +34,7 @@ export default class ReloadModal extends Component {
   constructor() {
     super();
     this.state = {
-      show: false
+      show: true
     };
   }
 
@@ -51,7 +57,7 @@ export default class ReloadModal extends Component {
     // <Modal> is common fixed component.
     return (
       <Modal onClick={this.onClick}>
-        <span> New Content Available!please reload </span>
+        <span> New Content Available. <a>REFRESH</a> </span>
       </Modal>
     );
   }
