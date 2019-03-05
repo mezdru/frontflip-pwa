@@ -10,16 +10,17 @@ class UserWings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      record: this.props.recordStore.values.record,
     };
   }
 
-  shouldComponentUpdate() {
-    return false;
+  componentDidMount() {
+    observe(this.props.recordStore.values, 'record', (change) => {
+      this.forceUpdate();
+    });
   }
 
   render() {
-    const {record} = this.state;
+    const {record} = this.props.recordStore.values;
 
     if(!record) return null;
     
@@ -27,15 +28,16 @@ class UserWings extends React.Component {
     return (
       <div>
         <Typography variant="h3" style={{textAlign: 'center'}} >Your {record.hashtags.length} Wings</Typography>
-        <div className="board-column-content" data-id="userwings">
+        <div className="" data-id="userwings">
           {record && record.hashtags.map((hashtag, i) => {
             if(!hashtag) return null;
             let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name)
             return (
-                <div className="board-item" data-id={(hashtag ? hashtag._id : hashtag.tag)} key={i}>
+                <div className="" data-id={(hashtag ? hashtag._id : hashtag.tag)} key={i}>
                   <Wings  src={ProfileService.getPicturePath(hashtag.picture) || defaultHashtagPicture}
                     label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
-                    className={'board-item-content'} />
+                    className={''} 
+                    onDelete={this.props.handleRemoveWing} />
                 </div>
             )
           })}

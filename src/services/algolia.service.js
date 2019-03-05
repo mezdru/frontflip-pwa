@@ -39,7 +39,7 @@ class AlgoliaService {
         facetQuery: '',
         filters: (filters ? filters : ''),
         hitsPerPage: 40,
-        facetFilters: ( (lastSelection && privateOnly !== null) ? this.makeFacetFilters(lastSelection, privateOnly) : ''),
+        facetFilters:( (lastSelection && privateOnly !== null) ? this.makeFacetFilters(lastSelection, privateOnly) : ''),
       }, (err, res) => {
         if(err) return reject(err);
         return resolve(res);

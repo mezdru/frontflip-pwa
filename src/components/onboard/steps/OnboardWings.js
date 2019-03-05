@@ -4,23 +4,14 @@ import { inject, observer } from "mobx-react";
 import SearchField from '../../algolia/SearchField';
 import UserWings from '../../utils/wing/UserWings';
 import WingsSuggestion from '../../algolia/WingsSuggestion';
-
 import Typography from '@material-ui/core/Typography';
 
-import '../style.css';
-// import Muuri from 'muuri';
-// require('hammerjs');
-
-let columnGrids = [];
 
 class OnboardWings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      lastSelection: null,
-      userWings: this.props.recordStore.values.record.hashtags,
     };
-    columnGrids = [];
   }
 
   handleAddWing = (e, element) => {
@@ -45,8 +36,6 @@ class OnboardWings extends React.Component {
   }
 
   render() {
-    const {record} = this.props.recordStore.values;
-    const {userWings, lastSelection, gridSuggestions} = this.state;
 
     return (
         <Grid container direction="column" style={{minHeight: 'calc(100% - 72px)', background: 'white'}}>
@@ -58,7 +47,7 @@ class OnboardWings extends React.Component {
                     <SearchField/>
                   </Grid>
                   <Grid item xs={12} >
-                    <WingsSuggestion handleAddWing={this.handleAddWing} handleSave={this.props.handleSave} lastSelection={lastSelection} />
+                    <WingsSuggestion handleAddWing={this.handleAddWing} handleSave={this.props.handleSave} />
                   </Grid>
                 </Grid>
           </Grid>
@@ -66,7 +55,7 @@ class OnboardWings extends React.Component {
           <Grid item>
             <Grid container>
               <Grid item xs={12} style={{padding:16}}>
-                <UserWings handleRemoveWing={this.handleRemoveWing} initMuuri={this.initMuuri} />
+                <UserWings handleRemoveWing={this.handleRemoveWing} />
               </Grid>
             </Grid>
           </Grid>
