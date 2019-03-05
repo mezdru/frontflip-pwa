@@ -50,11 +50,11 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  <div id="notification">A new version of this app is available. <a id="reload">REFRESH</a></div>
+  <!-- <div id="notification">A new version of this app is available. <a id="reload">REFRESH</a></div>
   <script>
     // The click event on the pop up notification
-    document.getElementById('reload').addEventListener('click', function () {
-      newWorker.postMessage({ action: 'skipWaiting' });
+    window.document.getElementById('reload').addEventListener('click', function () {
+      navigator.serviceWorker.controller.postMessage({ action: 'skipWaiting' });
     });
   </script>
   <style>
@@ -70,7 +70,7 @@
       background: rgb(50, 50, 50);
       color: rgb(200, 200, 200);
       box-sizing: border-box;
-      display: none;
+      display: block;
       text-align: center;
       overflow: hidden;
       box-shadow: 0 0 10px 1px grey;
@@ -86,6 +86,6 @@
     .show {
       display: block !important;
     }
-  </style>
+  </style> -->
 </body>
 </html>

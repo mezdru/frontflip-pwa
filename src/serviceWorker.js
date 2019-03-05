@@ -52,19 +52,6 @@ export function register(config) {
         registerValidSW(swUrl, config);
       }
     });
-
-    window.addEventListener('message', (event) => {
-      if (event.data.action === 'skipWaiting') {
-        window.skipWaiting();
-      }
-    });
-
-    let refreshing;
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (refreshing) return;
-      window.location.reload();
-      refreshing = true;
-    });
   }
 }
 
@@ -85,8 +72,8 @@ function registerValidSW(swUrl, config) {
               // content until all client tabs are closed.
 
               // show notification
-              let notification = document.getElementById('notification');
-              notification.className = 'show';
+              const event = new Event("newContentAvailable");
+              window.dispatchEvent(event);
 
               console.log(
                 'New content is available and will be used when all ' +
