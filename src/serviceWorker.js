@@ -52,6 +52,19 @@ export function register(config) {
         registerValidSW(swUrl, config);
       }
     });
+
+    window.addEventListener('message', (event) => {
+      if (event.data.action === 'skipWaiting') {
+        this.skipWaiting();
+      }
+    });
+
+    let refreshing;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshing) return;
+      window.location.reload();
+      refreshing = true;
+    });
   }
 }
 
@@ -70,6 +83,11 @@ function registerValidSW(swUrl, config) {
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
+
+              // show notification
+              let notification = document.getElementById('notification ');
+              notification.className = 'show';
+
               console.log(
                 'New content is available and will be used when all ' +
                 'tabs for this page are closed. See http://bit.ly/CRA-PWA.'
