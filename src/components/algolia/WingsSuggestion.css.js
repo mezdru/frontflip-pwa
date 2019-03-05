@@ -1,6 +1,6 @@
 export const styles = theme => ({
   suggestionsContainer: {
-    // textAlign: 'left',
+    textAlign: 'left',
     overflow: 'hidden',
     margin: '8px 0px',
     marginLeft: '-8px',
@@ -9,6 +9,7 @@ export const styles = theme => ({
   suggestionList: {
     gridAutoFlow: 'column dense',
     width: '100%',
+    height: 200
   },
   suggestion: {
     margin: 8,

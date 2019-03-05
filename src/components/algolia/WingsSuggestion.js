@@ -7,7 +7,7 @@ import Wings from '../utils/wing/Wing';
 import ProfileService from '../../services/profile.service';
 import AlgoliaService from '../../services/algolia.service';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
-import {styles} from './WingsSuggestion.css';
+import { styles } from './WingsSuggestion.css';
 import DragNDropService from '../../services/dragndrop.service';
 
 class WingsSuggestions extends React.Component {
@@ -23,18 +23,18 @@ class WingsSuggestions extends React.Component {
   componentDidMount() {
     AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
     this.syncBank(null)
-    .then(() => {
-      this.initSuggestions()
-      .then(() => {this.setState({renderComponent: true})})
-    });
+      .then(() => {
+        this.initSuggestions()
+          .then(() => { this.setState({ renderComponent: true }) })
+      });
 
     observe(this.props.commonStore, 'algoliaKey', (change) => {
       AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
       this.syncBank(null)
-      .then(() => {
-        this.initSuggestions()
-        .then(() => {this.setState({renderComponent: true})})
-      });
+        .then(() => {
+          this.initSuggestions()
+            .then(() => { this.setState({ renderComponent: true }) })
+        });
     });
   }
 
@@ -47,11 +47,11 @@ class WingsSuggestions extends React.Component {
     await this.fetchSuggestions(null, true, 20);
     this.populateSuggestionsData();
     let query = this.formatHashtagsQuery();
-    if(query)
+    if (query)
       this.syncBank(query)
-      .then(() => {
-        this.populateSuggestionsData();
-      });
+        .then(() => {
+          this.populateSuggestionsData();
+        });
   }
 
   /**
@@ -59,34 +59,34 @@ class WingsSuggestions extends React.Component {
    */
   fetchSuggestions = (lastSelection, privateOnly, nbHitToAdd) => {
     return AlgoliaService.fetchFacetValues(lastSelection, privateOnly, 'type:person', null)
-    .then(content => {
-      let newSuggestions = [];
-      let suggestions = this.state.suggestions;
-      content.facetHits = this.removeUserWings(content.facetHits);
+      .then(content => {
+        let newSuggestions = [];
+        let suggestions = this.state.suggestions;
+        content.facetHits = this.removeUserWings(content.facetHits);
 
-      for(let i = 0; i < nbHitToAdd; i++) {
-        if(content.facetHits.length === 0) break;
+        for (let i = 0; i < nbHitToAdd; i++) {
+          if (content.facetHits.length === 0) break;
 
-        let index = (i === 0 ? 0 : Math.floor(Math.random() * Math.floor(content.facetHits.length)));
-        let suggestionToAdd = content.facetHits.splice(index, 1)[0];
-        let knownIndex = suggestions.findIndex(hashtag => hashtag && (hashtag.tag === suggestionToAdd.value));
+          let index = (i === 0 ? 0 : Math.floor(Math.random() * Math.floor(content.facetHits.length)));
+          let suggestionToAdd = content.facetHits.splice(index, 1)[0];
+          let knownIndex = suggestions.findIndex(hashtag => hashtag && (hashtag.tag === suggestionToAdd.value));
 
-        if( knownIndex > -1 && i > 0){
-          i--;
-          continue;
-        } else if(i === 0 && knownIndex > -1) {
-          // elt known index is an important suggestion, we put it at the start of the array
-          suggestions.splice(0,0,suggestions.splice(knownIndex,1)[0]);
-          continue;
+          if (knownIndex > -1 && i > 0) {
+            i--;
+            continue;
+          } else if (i === 0 && knownIndex > -1) {
+            // elt known index is an important suggestion, we put it at the start of the array
+            suggestions.splice(0, 0, suggestions.splice(knownIndex, 1)[0]);
+            continue;
+          }
+
+          suggestionToAdd.tag = suggestionToAdd.value;
+          suggestionToAdd.new = true;
+          newSuggestions.push(suggestionToAdd);
         }
-
-        suggestionToAdd.tag = suggestionToAdd.value;
-        suggestionToAdd.new = true;
-        newSuggestions.push(suggestionToAdd);
-      }
-      let newSug = suggestions.concat(newSuggestions);
-      this.setState({suggestions: newSug});
-    }).catch((e) => {console.log(e)});
+        let newSug = suggestions.concat(newSuggestions);
+        this.setState({ suggestions: newSug });
+      }).catch((e) => { console.log(e) });
   }
 
   /**
@@ -95,17 +95,17 @@ class WingsSuggestions extends React.Component {
   removeUserWings = (suggestions) => {
     let suggestionsToReturn = suggestions;
     suggestions.forEach(suggestion => {
-      try{
-        if(this.props.recordStore.values.record.hashtags.findIndex(hashtag => hashtag.tag === suggestion.value) > -1) {
+      try {
+        if (this.props.recordStore.values.record.hashtags.findIndex(hashtag => hashtag.tag === suggestion.value) > -1) {
           let index = suggestionsToReturn.findIndex(sugInRet => sugInRet.value === suggestion.value);
-          if(index > -1) suggestionsToReturn.splice(index, 1);
+          if (index > -1) suggestionsToReturn.splice(index, 1);
         }
-      }catch(e) {
+      } catch (e) {
         return;
       }
     });
     return suggestionsToReturn;
-  } 
+  }
 
   /**
    * @description Fetch and add new suggestions after user choose a Wing
@@ -117,11 +117,11 @@ class WingsSuggestions extends React.Component {
     await this.fetchSuggestions(filters, true, 2);
     this.populateSuggestionsData();
     let query = this.formatHashtagsQuery();
-    if(query)
+    if (query)
       this.syncBank(query)
-      .then(() => {
-        this.populateSuggestionsData();
-      });
+        .then(() => {
+          this.populateSuggestionsData();
+        });
   }
 
   /**
@@ -130,7 +130,7 @@ class WingsSuggestions extends React.Component {
   getData = (tag) => {
     if (this.state.bank)
       this.state.bank.find(bankElt => bankElt.tag === tag);
-    else 
+    else
       return null;
   }
 
@@ -142,7 +142,7 @@ class WingsSuggestions extends React.Component {
     this.state.suggestions.map((suggestion, i) => {
       suggestions[i] = this.getData(suggestion.tag) || suggestion;
     });
-    this.state.suggestions =  suggestions;
+    this.state.suggestions = suggestions;
   }
 
   /**
@@ -156,8 +156,8 @@ class WingsSuggestions extends React.Component {
   formatHashtagsQuery = () => {
     let query = '';
     this.state.suggestions.forEach(suggestion => {
-      if(!suggestion.objectID)
-        query += (query !== '' ? ' OR' : '') + ' tag:'+suggestion.tag;
+      if (!suggestion.objectID)
+        query += (query !== '' ? ' OR' : '') + ' tag:' + suggestion.tag;
     });
     return query;
   }
@@ -171,30 +171,24 @@ class WingsSuggestions extends React.Component {
   getDisplayedName = (hit) => (hit.name_translated ? (hit.name_translated[this.state.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag);
 
   render() {
-    const {classes} = this.props;
-    const {suggestions, renderComponent} = this.state;
+    const { classes } = this.props;
+    const { suggestions, renderComponent } = this.state;
 
-    if(!renderComponent) return null;
+    if (!renderComponent) return null;
 
     return (
       <div className={classes.suggestionsContainer} >
-        <div className={classNames("scrollX", "board-column-content")} data-id="suggestions" id="suggestions">
+        <div className={classNames("scrollX", classes.suggestionList)}>
           {suggestions && suggestions.map((hit, i) => {
-            if(!hit || !this.shouldDisplaySuggestion(hit.tag)) return null;
-            try{
-              return(
-                <div key={i} className={classNames('board-item')} style={{animationDelay: (i*0.05) +'s'}} data-id={hit.tag}>
-                  <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
-                    label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
-                    className={'board-item-content'} 
-                    onClick={(e) => {this.handleSelectSuggestion(e, {tag: hit.tag})}} />
-                </div>
-              );
-            }catch(e) {
-              console.log(e);
-              return null;
-            }
-
+            if (!hit || !this.shouldDisplaySuggestion(hit.tag)) return null;
+            return (
+              <div key={i} className={classNames(classes.suggestion)} style={{ animationDelay: (i * 0.05) + 's' }} data-id={hit.tag}>
+                <Wings src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
+                  label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
+                  className={''}
+                  onClick={(e) => { this.handleSelectSuggestion(e, { tag: hit.tag }) }} />
+              </div>
+            );
           })}
         </div>
       </div>
