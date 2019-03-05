@@ -156,7 +156,7 @@ class MainRouteOrganisationRedirect extends React.Component {
   render() {
     const { redirectTo, renderComponent } = this.state;
     const { locale } = this.props.commonStore;
-    const { orgTag } = this.props.organisationStore.values;
+    const { orgTag, organisation } = this.props.organisationStore.values;
     let isAuth = this.props.authStore.isAuth();
 
     if (redirectTo) {
@@ -196,8 +196,12 @@ class MainRouteOrganisationRedirect extends React.Component {
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
 
             {/* Main route with orgTag */}
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag" component={SearchPage} />
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag" component={SearchPage} />
+            {organisation && organisation.public && (
+              <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag" component={SearchPage} />
+            )}
+            {organisation && organisation.public && (
+              <Route exact path="/:locale(en|fr|en-UK)/:organisationTag" component={SearchPage} />
+            )}
 
             <Redirect to={'/' + locale + (orgTag ? '/' + orgTag : '') + '/signin' + window.location.search} />
           </Switch>

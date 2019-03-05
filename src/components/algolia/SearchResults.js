@@ -30,6 +30,7 @@ class SearchResults extends React.Component {
   fetchHits = (filters, query, facetFilters, page) => {
     AlgoliaService.fetchHits(filters, query, facetFilters, page)
     .then((content) => {
+      if(!content) return;
       this.setState({hitsAlreadyDisplayed: Math.min((content.hitsPerPage * (content.page)), content.nbHits)});
       if(content.page === (content.nbPages-1)) this.setState({hideShowMore: true});
       if(page) this.setState({hits: this.state.hits.concat(content.hits)}, this.endTask());
