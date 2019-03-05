@@ -92,11 +92,12 @@ class AlgoliaService {
     });
   }
 
-  fetchOptions(inputValue){
+  fetchOptions(inputValue, hashtagOnly){
     if(!this.index) return Promise.resolve();
     return new Promise((resolve, reject) => {
       this.index.search({
           query: inputValue,
+          filters: (hashtagOnly ? 'type:hashtag' : ''),
           attributesToRetrieve: ['type','name', 'name_translated', 'tag','picture'],
           restrictSearchableAttributes: ['name', 'name_translated', 'tag'],
           highlightPreTag: '<span>',

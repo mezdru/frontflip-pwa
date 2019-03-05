@@ -9,6 +9,9 @@ import ProfileService from '../../services/profile.service';
 import {Option, customStyles, MultiValueContainer, DropdownIndicator} from './SearchFieldElements';
 import AlgoliaService from '../../services/algolia.service';
 import { observe } from 'mobx';
+import {Search} from '@material-ui/icons';
+import { components } from 'react-select';
+import theme from '../../theme';
 
 class SearchField extends React.Component {
   constructor(props) {
@@ -84,15 +87,20 @@ class SearchField extends React.Component {
   // when option is selected
   handleChange = (selectedOption) => {
     this.scrollToBottom();
+    
+    if(this.props.hashtagOnly) {
+      this.setState({inputValue: '', selectedOption: null}, () => {if(selectedOption) this.props.handleAddWing(null, {tag: selectedOption.value})});
+    } else {
+      this.props.commonStore.setSearchFilters(selectedOption);
+      this.setState({
+        selectedOption: selectedOption,
+        inputValue: ''
+      }, () => {
+        this.refineWithSelectedOptions(selectedOption);
+        this.props.updateFilters(selectedOption);
+      });
+    }
 
-    this.props.commonStore.setSearchFilters(selectedOption);
-    this.setState({
-      selectedOption: selectedOption,
-      inputValue: ''
-    }, () => {
-      this.refineWithSelectedOptions(selectedOption);
-      this.props.updateFilters(selectedOption);
-    });
   }
 
   async scrollToBottom() {
@@ -121,7 +129,7 @@ class SearchField extends React.Component {
   }
 
   updateOptions = async (inputValue) => {
-    return await AlgoliaService.fetchOptions(inputValue);
+    return await AlgoliaService.fetchOptions(inputValue, this.props.hashtagOnly);
   }
 
   // Handle input change (any change)
@@ -186,6 +194,14 @@ class SearchField extends React.Component {
     const { defaultOptions} = this.props;
     const { selectedOption, placeholder, inputValue } = this.state;
 
+    const DropdownIndicator = (props) => {
+      return (
+        <components.DropdownIndicator {...props}>
+          <Search onClick={() => {this.handleSearchClick(props)}} style={{color: theme.palette.primary.main}} />
+        </components.DropdownIndicator>
+      );
+    };
+
     return (
       <AsyncCreatable
         formatCreateLabel={this.createOptionMessage}
@@ -202,7 +218,7 @@ class SearchField extends React.Component {
         onInputChange={this.handleInputChange}
         onCreateOption={this.handleCreateOption}
         components={{ MultiValueContainer, DropdownIndicator, Option }}
-        isMulti
+        isMulti={!this.props.hashtagOnly}
         onSelectResetsInput={true}
         onBlurResetsInput={true}
         onCloseResetsInput={false}
