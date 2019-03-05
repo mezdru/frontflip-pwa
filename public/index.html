@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <link rel="icon" type="image/png" href="%PUBLIC_URL%/wingzy.png"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
-    <!--
+
+<head>
+  <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="%PUBLIC_URL%/wingzy.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+  <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <!--
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+  <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -19,26 +20,27 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-    <script src="https://unpkg.com/muuri@0.6.3/dist/muuri.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+  <script src="https://unpkg.com/muuri@0.6.3/dist/muuri.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
 
-    <title>Wingzy</title>
-    <script>
-      UPLOADCARE_PUBLIC_KEY = 'e9514d0994782ba32406'; 
-      UPLOADCARE_IMAGES_ONLY = true;
-      UPLOADCARE_PREVIEW_STEP = true;
-      UPLOADCARE_CLEARABLE = true;
-    </script>
-  </head>
-  <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <div id="root"></div>
-    <!--
+  <title>Wingzy</title>
+  <script>
+    UPLOADCARE_PUBLIC_KEY = 'e9514d0994782ba32406';
+    UPLOADCARE_IMAGES_ONLY = true;
+    UPLOADCARE_PREVIEW_STEP = true;
+    UPLOADCARE_CLEARABLE = true;
+  </script>
+</head>
+
+<body>
+  <noscript>
+    You need to enable JavaScript to run this app.
+  </noscript>
+  <div id="root"></div>
+  <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
@@ -48,25 +50,25 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-    <div id="notification">A new version of this app is available. <a id="reload">REFRESH</a></div>
-    <script>
-      // The click event on the pop up notification
-      document.getElementById('reload').addEventListener('click', function(){
-        newWorker.postMessage({ action: 'skipWaiting' });
-      });
-    </script>
-  </body>
-
+  <div id="notification">A new version of this app is available. <a id="reload">REFRESH</a></div>
+  <script>
+    // The click event on the pop up notification
+    document.getElementById('reload').addEventListener('click', function () {
+      newWorker.postMessage({ action: 'skipWaiting' });
+    });
+  </script>
   <style>
     /* New version available */
     #notification {
       position: fixed;
       bottom: 0;
       padding: 16px 32px;
-      left:16px; right:16px; margin: auto;
+      left: 16px;
+      right: 16px;
+      margin: auto;
       margin-bottom: 16px;
-      background: rgb(50,50,50);
-      color: rgb(200,200,200);
+      background: rgb(50, 50, 50);
+      color: rgb(200, 200, 200);
       box-sizing: border-box;
       display: none;
       text-align: center;
@@ -74,14 +76,16 @@
       box-shadow: 0 0 10px 1px grey;
       z-index: 99999;
     }
+
     #notification a {
       color: white;
       font-weight: 600;
       cursor: pointer;
     }
 
-    .show{
+    .show {
       display: block !important;
     }
   </style>
+</body>
 </html>
