@@ -18,9 +18,18 @@ class AlgoliaService {
 
     observe(commonStore, 'algoliaKey', (change) => {
       this.client.clearCache();
-      this.algoliaKey = commonStore.algoliaKey;
-      this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.algoliaKey);
-      this.index = this.client.initIndex(this.indexName);
+      if(!commonStore.algoliaKey) {
+        organisationStore.getAlgoliaKey(true)
+        .then(algoliaKey => {
+          this.algoliaKey = algoliaKey;
+          this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.algoliaKey);
+          this.index = this.client.initIndex(this.indexName);
+        }).catch();
+      } else {
+        this.algoliaKey = commonStore.algoliaKey;
+        this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.algoliaKey);
+        this.index = this.client.initIndex(this.indexName);
+      }
     });
   }
 
@@ -41,7 +50,7 @@ class AlgoliaService {
         hitsPerPage: 40,
         facetFilters:( (lastSelection && privateOnly !== null) ? this.makeFacetFilters(lastSelection, privateOnly) : ''),
       }, (err, res) => {
-        if(err) return reject(err);
+        if(err) return resolve(res);
         return resolve(res);
       });
     });
@@ -108,8 +117,8 @@ class AlgoliaService {
           "description:"+15
         ],
       }, (err, content) => {
-        if(err) return reject(err);
-        if(!content) return reject();
+        if(err) return resolve(content);
+        if(!content) return resolve(null);
         return resolve(content)
       });
     });
