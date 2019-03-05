@@ -10,7 +10,6 @@ class UserWings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      record: this.props.recordStore.values.record,
     };
   }
 
@@ -19,7 +18,7 @@ class UserWings extends React.Component {
   }
 
   render() {
-    const {record} = this.state;
+    const {record} = this.props.recordStore.values;
 
     if(!record) return null;
     
@@ -35,7 +34,8 @@ class UserWings extends React.Component {
                 <div className="board-item" data-id={(hashtag ? hashtag._id : hashtag.tag)} key={i}>
                   <Wings  src={ProfileService.getPicturePath(hashtag.picture) || defaultHashtagPicture}
                     label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
-                    className={'board-item-content'} />
+                    className={'board-item-content'} 
+                    onDelete={this.props.handleRemoveWing} />
                 </div>
             )
           })}

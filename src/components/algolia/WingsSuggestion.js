@@ -25,10 +25,7 @@ class WingsSuggestions extends React.Component {
     this.syncBank(null)
     .then(() => {
       this.initSuggestions()
-      .then(() => {this.setState({renderComponent: true}, () => {
-        // this.props.initMuuri();
-        DragNDropService.init(this.onDragReleaseEnd);
-      })})
+      .then(() => {this.setState({renderComponent: true})})
     });
 
     observe(this.props.commonStore, 'algoliaKey', (change) => {
@@ -40,73 +37,6 @@ class WingsSuggestions extends React.Component {
       });
     });
   }
-
-  componentWillReceiveProps(nextProps) {
-    if(!nextProps.lastSelection) return;
-    console.log('receive props')
-    console.log(nextProps);
-    console.log(JSON.stringify(nextProps.lastSelection));
-    if ( !this.props.lastSelection || (this.props.lastSelection.tag !== nextProps.lastSelection.tag)) {
-      console.log('receive props')
-      let newSuggestions = this.state.suggestions.filter(sug => sug.tag !== nextProps.lastSelection.tag);
-      console.log(newSuggestions)
-      this.setState({suggestions: newSuggestions}, () => {
-        console.log('up sug')
-        this.updateSuggestions(nextProps.lastSelection);
-
-      });
-    }
-  }
-
-  asyncForEach = async (array, callback) => {
-    for (let index = 0; index < array.length; index++) {
-      await callback(array[index], index, array);
-    }
-  }
-
-  onDragReleaseEnd = (grid, item) => {
-    let order = grid
-    .getItems()
-    .map(item => item.getElement().getAttribute("data-id"));
-
-    let gridId = grid.getElement().getAttribute("data-id");
-    let elementId;
-
-    if (gridId === 'userwings') {
-      
-      this.asyncForEach(order, async (orderId, i, array) => {
-        if (orderId && orderId.charAt(0) === '#') {
-
-          // update element to replace tag by record id
-          this.props.recordStore.setRecordTag(orderId);
-          await this.props.recordStore.getRecordByTag()
-          .then((record => {
-            order[i] = record._id;
-            elementId = i;
-            this.updateSuggestions(record);
-          })).catch((e) => {
-            console.log(e);
-            order = order.filter(elt => elt.charAt(0) !== '#');
-          });
-        }
-      }).then(() => {
-        let record = this.props.recordStore.values.record;
-        record.hashtags = order;
-        this.props.recordStore.setRecord(record);
-        this.props.handleSave()
-        .then((recordUpdated)=> {
-        }).catch();
-      });
-    } else grid.refreshItems().layout();
-    item.getElement().style.width = "";
-    item.getElement().style.height = "";
-
-  }
-
-
-  // shouldComponentUpdate() {
-  //   return false;
-  // }
 
 
   /**
@@ -128,7 +58,7 @@ class WingsSuggestions extends React.Component {
    * @description Fetch suggestions and add them to suggestions list thanks to Algolia
    */
   fetchSuggestions = (lastSelection, privateOnly, nbHitToAdd) => {
-    return AlgoliaService.fetchFacetValues(lastSelection, privateOnly, null, null)
+    return AlgoliaService.fetchFacetValues(lastSelection, privateOnly, 'type:person', null)
     .then(content => {
       let newSuggestions = [];
       let suggestions = this.state.suggestions;
@@ -151,15 +81,11 @@ class WingsSuggestions extends React.Component {
         }
 
         suggestionToAdd.tag = suggestionToAdd.value;
+        suggestionToAdd.new = true;
         newSuggestions.push(suggestionToAdd);
       }
-      try {
-        let newSug = suggestions.concat(newSuggestions);
-        this.state.suggestions = newSug;
-
-      }catch(e) {
-
-      }
+      let newSug = suggestions.concat(newSuggestions);
+      this.setState({suggestions: newSug});
     }).catch((e) => {console.log(e)});
   }
 
@@ -252,7 +178,7 @@ class WingsSuggestions extends React.Component {
 
     return (
       <div className={classes.suggestionsContainer} >
-        <div className={classNames("scrollX", "board-column-content")} data-id="suggestions">
+        <div className={classNames("scrollX", "board-column-content")} data-id="suggestions" id="suggestions">
           {suggestions && suggestions.map((hit, i) => {
             if(!hit || !this.shouldDisplaySuggestion(hit.tag)) return null;
             try{
@@ -260,7 +186,8 @@ class WingsSuggestions extends React.Component {
                 <div key={i} className={classNames('board-item')} style={{animationDelay: (i*0.05) +'s'}} data-id={hit.tag}>
                   <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
                     label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
-                    className={'board-item-content'} />
+                    className={'board-item-content'} 
+                    onClick={(e) => {this.handleSelectSuggestion(e, {tag: hit.tag})}} />
                 </div>
               );
             }catch(e) {
