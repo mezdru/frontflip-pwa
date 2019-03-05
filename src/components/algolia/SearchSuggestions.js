@@ -74,7 +74,10 @@ class SearchSuggestions extends React.Component {
 
   fetchSuggestions(filters, query) {
     AlgoliaService.fetchFacetValues(null, false, filters, query)
-    .then((res) => this.setState({facetHits: res.facetHits}))
+    .then((res) => {
+      if(!res) return;
+      this.setState({facetHits: res.facetHits});
+    })
     .catch();
   }
 
