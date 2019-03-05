@@ -34,7 +34,7 @@ export default class ReloadModal extends Component {
   constructor() {
     super();
     this.state = {
-      show: true
+      show: false
     };
   }
 
