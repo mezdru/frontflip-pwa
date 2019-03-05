@@ -27,7 +27,6 @@ class OnboardWings extends React.Component {
   }
 
   handleRemoveWing = (e, tag) => {
-    console.log(tag);
     e.preventDefault();
     let record = this.props.recordStore.values.record;
     let newHashtags = record.hashtags.filter(hashtag => hashtag.tag !== tag);

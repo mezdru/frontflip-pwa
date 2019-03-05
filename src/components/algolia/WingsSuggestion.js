@@ -83,7 +83,6 @@ class WingsSuggestions extends React.Component {
           suggestionToAdd.tag = suggestionToAdd.value;
           suggestionToAdd.new = true;
           newSuggestions.push(suggestionToAdd);
-          newSuggestions.push(suggestionToAdd);
         }
         let newSug = suggestions.concat(newSuggestions);
         this.setState({ suggestions: newSug });
