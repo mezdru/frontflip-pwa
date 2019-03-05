@@ -5,12 +5,14 @@ import SearchField from '../../algolia/SearchField';
 import UserWings from '../../utils/wing/UserWings';
 import WingsSuggestion from '../../algolia/WingsSuggestion';
 import Typography from '@material-ui/core/Typography';
+import OnboardFirstWings from './OnboardFirstWings';
 
 
 class OnboardWings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeStepOne: this.props.activeStep
     };
   }
 
@@ -35,20 +37,37 @@ class OnboardWings extends React.Component {
     this.props.handleSave();
   }
 
+  renderByStep = () => {
+    if (this.state.activeStepOne === this.props.activeStep) {
+      return (
+        <Grid item xs={12}>
+          <OnboardFirstWings handleAddWing={this.handleAddWing} />
+        </Grid>
+      );
+    } else {
+      return (
+        <div>
+          <Grid item xs={12} >
+            <SearchField/>
+          </Grid>
+          <Grid item xs={12} >
+            <WingsSuggestion handleAddWing={this.handleAddWing} handleSave={this.props.handleSave} />
+          </Grid>
+        </div>
+      );
+    }
+  }
+
   render() {
+    const {activeStepOne} = this.state;
+    const {activeStep} = this.props;
 
     return (
         <Grid container direction="column" style={{minHeight: 'calc(100% - 72px)', background: 'white'}}>
           <Grid item style={{background: '#f2f2f2', maxWidth: '100%'}}> 
                 <Typography variant="h3" >Choose your Wings !</Typography>
                 <Grid container >
-                {/* Here search part or first wings part */}
-                  <Grid item xs={12} >
-                    <SearchField/>
-                  </Grid>
-                  <Grid item xs={12} >
-                    <WingsSuggestion handleAddWing={this.handleAddWing} handleSave={this.props.handleSave} />
-                  </Grid>
+                  {this.renderByStep()}
                 </Grid>
           </Grid>
 
