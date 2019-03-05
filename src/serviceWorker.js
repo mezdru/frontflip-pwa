@@ -53,9 +53,9 @@ export function register(config) {
       }
     });
 
-    self.addEventListener('message', (event) => {
+    window.addEventListener('message', (event) => {
       if (event.data.action === 'skipWaiting') {
-        self.skipWaiting();
+        window.skipWaiting();
       }
     });
 
