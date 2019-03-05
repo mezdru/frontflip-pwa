@@ -48,5 +48,40 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <div id="notification">A new version of this app is available. <a id="reload">REFRESH</a></div>
+    <script>
+      // The click event on the pop up notification
+      document.getElementById('reload').addEventListener('click', function(){
+        newWorker.postMessage({ action: 'skipWaiting' });
+      });
+    </script>
   </body>
+
+  <style>
+    /* New version available */
+    #notification {
+      position: fixed;
+      bottom: 0;
+      padding: 16px 32px;
+      left:16px; right:16px; margin: auto;
+      margin-bottom: 16px;
+      background: rgb(50,50,50);
+      color: rgb(200,200,200);
+      box-sizing: border-box;
+      display: none;
+      text-align: center;
+      overflow: hidden;
+      box-shadow: 0 0 10px 1px grey;
+      z-index: 99999;
+    }
+    #notification a {
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .show{
+      display: block !important;
+    }
+  </style>
 </html>
