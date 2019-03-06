@@ -17,7 +17,7 @@ class OnboardWings extends React.Component {
   }
 
   handleAddWing = (e, element) => {
-    e.preventDefault();
+    if  (e) e.preventDefault();
     this.props.recordStore.setRecordTag(element.tag);
     return this.props.recordStore.getRecordByTag()
     .then(hashtagRecord => {
@@ -40,20 +40,22 @@ class OnboardWings extends React.Component {
   renderByStep = () => {
     if (this.state.activeStepOne === this.props.activeStep) {
       return (
-        <Grid item xs={12}>
-          <OnboardFirstWings handleAddWing={this.handleAddWing} />
+        <Grid container >
+          <Grid item xs={12}>
+            <OnboardFirstWings handleAddWing={this.handleAddWing} />
+          </Grid>
         </Grid>
       );
     } else {
       return (
-        <div>
+        <Grid container >
           <Grid item xs={12} >
-            <SearchField/>
+            <SearchField hashtagOnly handleAddWing={this.handleAddWing} />
           </Grid>
           <Grid item xs={12} >
             <WingsSuggestion handleAddWing={this.handleAddWing} handleSave={this.props.handleSave} />
           </Grid>
-        </div>
+        </Grid>
       );
     }
   }
@@ -66,9 +68,7 @@ class OnboardWings extends React.Component {
         <Grid container direction="column" style={{minHeight: 'calc(100% - 72px)', background: 'white'}}>
           <Grid item style={{background: '#f2f2f2', maxWidth: '100%'}}> 
                 <Typography variant="h3" >Choose your Wings !</Typography>
-                <Grid container >
                   {this.renderByStep()}
-                </Grid>
           </Grid>
 
           <Grid item>

@@ -1,23 +1,12 @@
 import React from 'react';
-import { components } from 'react-select';
 import './SearchField.css';
 import { Chip } from '@material-ui/core';
-import {Search} from '@material-ui/icons';
 import ProfileService from '../../services/profile.service';
 import defaultPicture from '../../resources/images/placeholder_person.png';
-import theme from '../../theme';
 
 export const MultiValueContainer = (props) => {
   return (
     <Chip label={props.children} color="secondary" onClick={props.onClick} className={'editableChip'} />
-  );
-};
-
-export const DropdownIndicator = (props) => {
-  return (
-    <components.DropdownIndicator {...props}>
-      <Search onClick={() => {this.handleSearchClick(props)}} style={{color: theme.palette.primary.main}} />
-    </components.DropdownIndicator>
   );
 };
 
