@@ -9,6 +9,7 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import OnboardIntro from './steps/OnboardIntro';
 import OnboardContacts from './steps/OnboardContacts';
 import OnboardWings from './steps/OnboardWings';
+import OnboardFirstWings from './steps/OnboardFirstWings';
 
 
 class OnboardStepper extends React.Component {
@@ -16,7 +17,7 @@ class OnboardStepper extends React.Component {
     super(props);
     this.state = {
       activeStep: 2,
-      steps: ['intro','contacts','wings'],
+      steps: ['intro','contacts', 'firstWings', 'wings'],
       canNext: true
     };
   }
@@ -39,6 +40,8 @@ class OnboardStepper extends React.Component {
         return OnboardIntro;
       case 'contacts':
         return OnboardContacts;
+      // case 'firstWings':
+      //   return OnboardFirstWings;
       default:
         return OnboardWings;
     }
@@ -50,6 +53,8 @@ class OnboardStepper extends React.Component {
         return 'Who are you ?';
       case 'contacts':
         return 'What are your contact info ?';
+      // case 'firstWings':
+      //   return 'Choose your first Wings:';
       default:
         return '';
     }

@@ -22,7 +22,7 @@ class OnboardPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inOnboarding: false
+      inOnboarding: true
     };
   }
 
