@@ -1,6 +1,7 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
+import { observe } from 'mobx';
 import AlgoliaService from '../../../services/algolia.service.js';
 
 const styles = theme => ({
@@ -59,7 +60,12 @@ class OnboardFirstWings extends React.Component {
   }
 
   fetchFirstWings = () => {
-    
+    AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:#Wings', null, null, null)
+    .then(content => {
+      if(content) {
+        this.setState({firstWings: content.hits});
+      }
+    })
   }
 
   handleAddWing = (e, tag) => {
@@ -79,7 +85,7 @@ class OnboardFirstWings extends React.Component {
           return (
             <li onClick={(e) => { this.handleAddWing(e, hashtag.tag) }} className={classes.firstWing} key={i} >
               <div>
-                <img src={hashtag.picture.src} alt="Wing picture" />
+                <img src={hashtag.picture.url} alt="Wing picture" />
                 <div>
                   <span>
                     {hashtag.name}
