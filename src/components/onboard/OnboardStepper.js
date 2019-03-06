@@ -1,5 +1,5 @@
 import React from 'react'
-import { withStyles, Typography } from '@material-ui/core';
+import { withStyles, Typography, Grid } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import MobileStepper from '@material-ui/core/MobileStepper';
 import Button from '@material-ui/core/Button';
@@ -9,6 +9,7 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import OnboardIntro from './steps/OnboardIntro';
 import OnboardContacts from './steps/OnboardContacts';
 import OnboardWings from './steps/OnboardWings';
+
 
 class OnboardStepper extends React.Component {
   constructor(props) {
@@ -64,7 +65,7 @@ class OnboardStepper extends React.Component {
     const {activeStep, steps, canNext} = this.state;
     let StepComponent = this.getStepComponent(steps, activeStep);
     return (
-      <div style={{background: '#f2f2f2', height:'100vh'}}>
+      <Grid style={{background: '#f2f2f2', height:'100vh'}} item>
         <MobileStepper
           variant="dots"
           steps={steps.length}
@@ -86,7 +87,7 @@ class OnboardStepper extends React.Component {
         />
         <Typography variant="h2" style={{textAlign: 'center'}} >{this.getStepLabel(steps, activeStep)}</Typography>
         <StepComponent handleSave={this.handleSave} activeStep={activeStep} />
-      </div>
+      </Grid>
     );
   }
 }
