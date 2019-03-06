@@ -91,12 +91,16 @@ class RecordStore {
   /**
    * @description Post new record
    */
-  postRecord() {
+  postRecord(record) {
     this.inProgress = true;
     this.errors = null;
 
-    return agent.Record.post(this.values.orgId, this.values.record)
-      .then(data => { this.values.record = (data ? data.record : {}); })
+    return agent.Record.post(this.values.orgId, record || this.values.record)
+      .then(data => {
+        if(!record)
+          this.values.record = data.record;
+        return data.record; 
+      })
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.errors;
         throw err;

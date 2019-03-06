@@ -89,7 +89,7 @@ class SearchField extends React.Component {
     this.scrollToBottom();
     
     if(this.props.hashtagOnly) {
-      this.setState({inputValue: '', selectedOption: null}, () => {if(selectedOption) this.props.handleAddWing(null, {tag: selectedOption.value})});
+      this.setState({inputValue: '', selectedOption: null}, () => {if(selectedOption) this.props.handleAddWing(null, {tag: selectedOption.value || selectedOption.tag})});
     } else {
       this.props.commonStore.setSearchFilters(selectedOption);
       this.setState({
@@ -141,10 +141,22 @@ class SearchField extends React.Component {
   }
 
   handleCreateOption = (option) => {
-    let arrayOfOption = this.state.selectedOption || [];
-    option = option.trim();
-    arrayOfOption.push({ label: option, value: option });
-    return this.handleChange(arrayOfOption);
+    if (!this.props.hashtagOnly) {
+      let arrayOfOption = this.state.selectedOption || [];
+      option = option.trim();
+      arrayOfOption.push({ label: option, value: option });
+      return this.handleChange(arrayOfOption);
+    } else {
+      let newRecord = {
+        name: option,
+        type: 'hastag'
+      }
+      return this.props.recordStore.postRecord(newRecord)
+      .then(recordSaved => {
+        console.log(recordSaved);
+        return this.handleChange(recordSaved);
+      }).catch((e) => console.log(e));
+    }
   }
 
   noOptionsMessage = (inputValue) => {
@@ -232,7 +244,7 @@ class SearchField extends React.Component {
   }
 }
 
-export default inject('commonStore')(
+export default inject('commonStore', 'recordStore')(
   observer(
     injectIntl(withTheme()(SearchField))
   )
