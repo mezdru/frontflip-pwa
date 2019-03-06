@@ -37,6 +37,18 @@ class OnboardWings extends React.Component {
     this.props.handleSave();
   }
 
+  renderTitleByStep = () => {
+    if (this.state.activeStepOne === this.props.activeStep) {
+      return (
+        <Typography variant="h4" style={{textAlign: 'center'}} >To start, choose your first Wings:</Typography>
+      );
+    } else {
+      return (
+        <Typography variant="h4" style={{textAlign: 'center'}} >Choose your Wings:</Typography>
+      );
+    }
+  }
+
   renderByStep = () => {
     if (this.state.activeStepOne === this.props.activeStep) {
       return (
@@ -67,17 +79,20 @@ class OnboardWings extends React.Component {
     return (
         <Grid container direction="column" style={{minHeight: 'calc(100% - 72px)', background: 'white'}}>
           <Grid item style={{background: '#f2f2f2', maxWidth: '100%'}}> 
-                <Typography variant="h3" >Choose your Wings !</Typography>
+                  {this.renderTitleByStep()}
                   {this.renderByStep()}
           </Grid>
 
-          <Grid item>
-            <Grid container>
-              <Grid item xs={12} style={{padding:16}}>
-                <UserWings handleRemoveWing={this.handleRemoveWing} />
+          {!(this.state.activeStepOne === this.props.activeStep) && (
+            <Grid item>
+              <Grid container>
+                <Grid item xs={12} style={{padding:16}}>
+                  <UserWings handleRemoveWing={this.handleRemoveWing} />
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
+          )}
+
         </Grid>
     );
   }

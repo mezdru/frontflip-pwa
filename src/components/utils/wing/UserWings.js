@@ -27,7 +27,7 @@ class UserWings extends React.Component {
 
     return (
       <div>
-        <Typography variant="h3" style={{textAlign: 'center'}} >Your {record.hashtags.length} Wings</Typography>
+        <Typography variant="h4" style={{textAlign: 'center'}} >Your {record.hashtags.length} Wings:</Typography>
         <div className="" data-id="userwings">
           {record && record.hashtags.map((hashtag, i) => {
             if(!hashtag) return null;
