@@ -41,7 +41,6 @@ class AlgoliaService {
   }
 
   fetchFacetValues(lastSelection, privateOnly, filters, query) {
-    console.log(filters);
     if(!this.index) return Promise.resolve();
     return new Promise((resolve, reject) => {
       this.index.searchForFacetValues({
@@ -73,7 +72,7 @@ class AlgoliaService {
         filters: (filters ? 'type:hashtag AND ' + filters : 'type:hashtag'),
         hitsPerPage: 50
       }, (err, content) => {
-        this.addToLocalStorage(content.hits).then(resolve());
+        this.addToLocalStorage(content.hits).then(() => {resolve()});
       });
     });
   }
@@ -85,11 +84,12 @@ class AlgoliaService {
     return new Promise((resolve, reject) => {
       let currentBank = commonStore.getLocalStorage('wingsBank', true) || [];
       hits.forEach(hit => {
-        if(!currentBank.some(bankElt => bankElt.tag === hit.tag))
-          currentBank.push(hit);
+        let index = currentBank.findIndex(elt => elt.tag === hit.Tag);
+        if(index === -1) currentBank.push(hit);
+        else currentBank[index] = hit;
       });
       commonStore.setLocalStorage('wingsBank', currentBank, true)
-      .then(resolve());
+      .then(() => {resolve()});
     });
   }
 

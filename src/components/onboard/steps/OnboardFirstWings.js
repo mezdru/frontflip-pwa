@@ -103,7 +103,6 @@ class OnboardFirstWings extends React.Component {
     const { record } = this.props.recordStore.values;
     const {classes, theme} = this.props;
     const { firstWings, firstWingsSelected } = this.state;
-    console.log(this.state);
 
     return (
       <ul className={classes.firstWingsList} >
