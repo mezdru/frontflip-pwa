@@ -2,21 +2,22 @@ export const styles = theme => ({
   suggestionsContainer: {
     textAlign: 'left',
     overflow: 'hidden',
-    margin: '8px 0px',
-    marginLeft: '-8px',
-    overflowX: 'scroll',
+    overflowX: 'auto',
     width: '100%',
+    paddingBottom: 16,
+    marginTop: 8,
   },
   suggestionList: {
     whiteSpace: 'nowrap',
     padding: 0,
+    margin:0,
+    height: 52,
     listStyleType: 'none',
     '& li ': {
       display: 'inline-block',
     }
   },
   suggestion: {
-    margin: 8,
     color: theme.palette.secondary.dark,
     opacity: 0,
     animation: 'easeIn .6s',

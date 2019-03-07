@@ -50,7 +50,7 @@ class OnboardWings extends React.Component {
   }
 
   renderByStep = () => {
-    if (this.state.activeStepOne === this.props.activeStep) {
+    if (this.state.activeStepOne === this.props.activeStep && false) {
       return (
         <Grid container >
           <Grid item xs={12}>
@@ -60,8 +60,11 @@ class OnboardWings extends React.Component {
       );
     } else {
       return (
-        <Grid container >
-          <Grid item xs={12} >
+        <Grid container item xs={12} sm={8} md={6} lg={4}>
+          <Grid item xs={12}>
+            {this.renderTitleByStep()}
+          </Grid>
+          <Grid item xs={12} style={{marginTop: 16}}>
             <SearchField hashtagOnly handleAddWing={this.handleAddWing} />
           </Grid>
           <Grid item xs={12} >
@@ -78,15 +81,14 @@ class OnboardWings extends React.Component {
 
     return (
         <Grid container direction="column" style={{minHeight: 'calc(100% - 72px)', background: 'white'}}>
-          <Grid item style={{background: '#f2f2f2', maxWidth: '100%'}}> 
-                  {this.renderTitleByStep()}
+          <Grid item style={{background: '#f2f2f2', maxWidth: '100%'}} justify="center" direction="row" container> 
                   {this.renderByStep()}
           </Grid>
 
-          {!(this.state.activeStepOne === this.props.activeStep) && (
-            <Grid item>
-              <Grid container>
-                <Grid item xs={12} style={{padding:16}}>
+          {!(this.state.activeStepOne === this.props.activeStep && false) && (
+            <Grid item justify="center" direction="row" container style={{marginTop: 16}}>
+              <Grid container  item xs={12} sm={8} md={6} lg={4}>
+                <Grid item xs={12}>
                   <UserWings handleRemoveWing={this.handleRemoveWing} />
                 </Grid>
               </Grid>
