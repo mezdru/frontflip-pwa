@@ -38,26 +38,50 @@ class WingsSuggestions extends React.Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({suggestions: []}, () => {
+      this.syncBank(null)
+      .then(() => {
+        this.initSuggestions(nextProps.wingsFamily)
+          .then(() => {})
+      });
+    });
+  }
+
 
   /**
    * @description Init Wings suggestions with most common Wings
    */
-  initSuggestions = async () => {
-    await this.fetchSuggestions(null, false, 10);
-    await this.fetchSuggestions(null, true, 20);
-    this.populateSuggestionsData();
-    let query = this.formatHashtagsQuery();
-    if (query)
-      this.syncBank(query)
-        .then(() => {
-          this.populateSuggestionsData();
-        });
+  initSuggestions = async (wingsFamily) => {
+    if(!wingsFamily) {
+      await this.fetchSuggestions(null, false, 10);
+      await this.fetchSuggestions(null, true, 20);
+      this.populateSuggestionsData();
+      let query = this.formatHashtagsQuery();
+      if (query)
+        this.syncBank(query)
+          .then(() => {
+            this.populateSuggestionsData();
+          });
+    } else {
+      await this.fetchWingsFamily(wingsFamily);
+    }
+
+  }
+
+  fetchWingsFamily = (wingsFamily) => {
+    return AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:'+wingsFamily, null, null, null)
+    .then(content => {
+      if(content) {
+        this.setState({suggestions: content.hits});
+      }
+    }).catch();
   }
 
   /**
    * @description Fetch suggestions and add them to suggestions list thanks to Algolia
    */
-  fetchSuggestions = (lastSelection, privateOnly, nbHitToAdd) => {
+  fetchSuggestions = (lastSelection, privateOnly, nbHitToAdd, filter) => {
     return AlgoliaService.fetchFacetValues(lastSelection, privateOnly, 'type:person', null)
       .then(content => {
         let newSuggestions = [];
@@ -84,7 +108,7 @@ class WingsSuggestions extends React.Component {
           suggestionToAdd.new = true;
           newSuggestions.push(suggestionToAdd);
         }
-        let newSug = suggestions.concat(newSuggestions);
+        let newSug = suggestions ? suggestions.concat(newSuggestions) : newSuggestions;
         this.setState({ suggestions: newSug });
       }).catch((e) => { console.log(e) });
   }
@@ -111,6 +135,7 @@ class WingsSuggestions extends React.Component {
    * @description Fetch and add new suggestions after user choose a Wing
    */
   updateSuggestions = async (filters) => {
+    if(this.props.wingsFamily) return;
     await this.fetchSuggestions(null, false, 1);
     await this.fetchSuggestions(null, true, 2);
     await this.fetchSuggestions(filters, false, 2);

@@ -38,9 +38,13 @@ class OnboardWings extends React.Component {
   }
 
   renderTitleByStep = () => {
-    if (this.state.activeStepOne === this.props.activeStep) {
+    if (this.isFirstWings()) {
       return (
         <Typography variant="h4" style={{textAlign: 'center'}} >To start, choose your first Wings:</Typography>
+      );
+    } else if (this.isFeaturedWings()) {
+      return (
+        <Typography variant="h4" style={{textAlign: 'center'}} >Choose your Wings for the family {this.props.activeStepLabel}:</Typography>
       );
     } else {
       return (
@@ -50,7 +54,7 @@ class OnboardWings extends React.Component {
   }
 
   renderByStep = () => {
-    if (this.state.activeStepOne === this.props.activeStep && false) {
+    if (this.isFirstWings()) {
       return (
         <Grid container >
           <Grid item xs={12}>
@@ -65,19 +69,24 @@ class OnboardWings extends React.Component {
             {this.renderTitleByStep()}
           </Grid>
           <Grid item xs={12} style={{marginTop: 16}}>
-            <SearchField hashtagOnly handleAddWing={this.handleAddWing} />
+            <SearchField  hashtagOnly handleAddWing={this.handleAddWing} 
+                          wingsFamily={this.isFeaturedWings() ? this.props.activeStepLabel : null} />
           </Grid>
           <Grid item xs={12} >
-            <WingsSuggestion handleAddWing={this.handleAddWing} handleSave={this.props.handleSave} />
+            <WingsSuggestion  handleAddWing={this.handleAddWing} handleSave={this.props.handleSave} 
+                              wingsFamily={this.isFeaturedWings() ? this.props.activeStepLabel : null} />
           </Grid>
         </Grid>
       );
     }
   }
 
+  isFirstWings = () => (this.props.activeStepLabel === 'firstWings');
+  isFeaturedWings = () => (this.props.activeStepLabel && this.props.activeStepLabel.charAt(0) === '#');
+
   render() {
     const {activeStepOne} = this.state;
-    const {activeStep} = this.props;
+    const {activeStep, activeStepLabel} = this.props;
 
     return (
         <Grid container direction="column" style={{minHeight: 'calc(100% - 72px)', background: 'white'}}>
@@ -85,11 +94,11 @@ class OnboardWings extends React.Component {
                   {this.renderByStep()}
           </Grid>
 
-          {!(this.state.activeStepOne === this.props.activeStep && false) && (
+          {!this.isFirstWings() && (
             <Grid item justify="center" direction="row" container style={{marginTop: 16}}>
               <Grid container  item xs={12} sm={8} md={6} lg={4}>
                 <Grid item xs={12}>
-                  <UserWings handleRemoveWing={this.handleRemoveWing} />
+                  <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? activeStepLabel : null} />
                 </Grid>
               </Grid>
             </Grid>

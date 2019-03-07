@@ -26,6 +26,7 @@ class SearchField extends React.Component {
 
   // Used to fetch an event: User click on a Wing, so we should add it to the search filters
   componentWillReceiveProps(nextProps) {
+    if(this.props.hashtagOnly) return;
     if (nextProps.newFilter.value && nextProps.newFilter.label) {
       if (this.state.selectedOption && !this.state.selectedOption.some(val => val.value === nextProps.newFilter.value)) {
         let newSelectedOption = this.state.selectedOption;
@@ -129,7 +130,7 @@ class SearchField extends React.Component {
   }
 
   updateOptions = async (inputValue) => {
-    return await AlgoliaService.fetchOptions(inputValue, this.props.hashtagOnly);
+    return await AlgoliaService.fetchOptions(inputValue, this.props.hashtagOnly, this.props.wingsFamily);
   }
 
   // Handle input change (any change)
@@ -140,7 +141,7 @@ class SearchField extends React.Component {
     return inputValue;
   }
 
-  handleCreateOption = (option) => {
+  handleCreateOption = async (option) => {
     if (!this.props.hashtagOnly) {
       let arrayOfOption = this.state.selectedOption || [];
       option = option.trim();
@@ -149,11 +150,16 @@ class SearchField extends React.Component {
     } else {
       let newRecord = {
         name: option,
-        type: 'hastag'
+        type: 'hashtag'
+      }
+      if(this.props.wingsFamily){
+        let wingsFamilyRecord;
+        this.props.recordStore.setRecordTag(this.props.wingsFamily);
+        wingsFamilyRecord = await this.props.recordStore.getRecordByTag();
+        newRecord.hashtags = [wingsFamilyRecord];
       }
       return this.props.recordStore.postRecord(newRecord)
       .then(recordSaved => {
-        console.log(recordSaved);
         return this.handleChange(recordSaved);
       }).catch((e) => console.log(e));
     }
