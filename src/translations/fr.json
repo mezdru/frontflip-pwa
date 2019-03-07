@@ -59,5 +59,8 @@
     "errorPage.emailNotValidated": "Votre adresse mail n'a pas encore été validée. Nous vous avons renvoyé un mail de confirmation à l'adresse : <strong>{email}</strong>",
     "errorPage.organisationNotFound": "Nous ne connaissons pas l'organisation (<strong>{orgTag}</strong>) que vous recherchez. <a href='{newOrgLink}'>Cliquez ici pour créer le Wingzy de {orgTag}</a>",
     "errorPage.unhandledError": "Une erreur inconnue s'est produite. Si le problème persiste, veuillez nous contacter.",
-    "search.showMore": "Voir plus"
+    "search.showMore": "Voir plus",
+    "delete profile": "Supprimer le profil",
+    "profile.editIntro": "Editer l'intro",
+    "profile.editAboutMe": "Editer à propos de moi"
 }

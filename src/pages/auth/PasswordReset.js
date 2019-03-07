@@ -41,10 +41,22 @@ const styles = (theme) => ({
     paddingBottom:16,
     [theme.breakpoints.down(400)]: {
       padding: 5,
-    } 
+    }
   },
   form: {
     width: '100%',
+  },
+  term: {
+    [theme.breakpoints.down('md')]: {
+      justifyContent: 'end',
+      padding: '8px 16px',
+    }
+  },
+  protectingData: {
+    [theme.breakpoints.down('md')]: {
+      justifyContent: 'flex-end',
+      padding: '8px 16px',
+    }
   }
 });
 
@@ -133,7 +145,7 @@ class PasswordReset extends React.Component {
                   </Grid>
                   <Typography variant="h6" className={classes.intro}><FormattedHTMLMessage id="password.create.intro" values={{userEmail: values.email}}/></Typography>
                 </div>
-               )}
+              )}
               {passwordErrors && (
                 <Grid item>
                   <SnackbarCustom variant='warning' message={passwordErrors}/>
@@ -167,25 +179,25 @@ class PasswordReset extends React.Component {
                   )
                 }
                 {!inProgress && (
-                    <Button fullWidth={true} type="submit" color="primary">
-                      {!userEmail && (
-                        <FormattedMessage id="password.new.create"/>
-                      )}
-                      {userEmail && (
-                        <FormattedMessage id="password.create.next"/>
-                      )}
-                    </Button>
+                  <Button fullWidth={true} type="submit" color="primary">
+                    {!userEmail && (
+                      <FormattedMessage id="password.new.create"/>
+                    )}
+                    {userEmail && (
+                      <FormattedMessage id="password.create.next"/>
+                    )}
+                  </Button>
                 )}
               </Grid>
-              <Grid item container direction="row" justify="space-around" alignItems="center">
-                <Grid item>
-                  <Button variant="text" component="a" target="_blank" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/terms', undefined)}>
+              <Grid item container direction="row" justify={'space-between'}>
+                <Grid item lg={6}>
+                  <Button  className={classes.term} variant="text" fullWidth={true} component="a" target="_blank" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/terms', undefined)}>
                     <FormattedMessage id="menu.drawer.terms" />
                   </Button>
                 </Grid>
-                <Grid item>
-                  <Button variant="text" component="a" target="_blank" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/protectingYourData', undefined)}>
-                    <FormattedMessage id="menu.drawer.protectingYourData" />
+                <Grid item lg={6}>
+                  <Button className={classes.protectingData} variant="text" fullWidth={true}  component="a" target="_blank" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/protectingYourData', undefined)}>
+                    <FormattedMessage id="menu.drawer.protectingYourData" style={{justifyContent: 'flex-end!important'}}/>
                   </Button>
                 </Grid>
               </Grid>
