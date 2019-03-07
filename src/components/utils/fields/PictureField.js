@@ -19,16 +19,8 @@ const styles = theme => ({
     width:300,
     height:300,
     border: '8px solid white',
+    background: 'white',
     zIndex: 2,
-  },
-  pictureAlt: {
-    position: 'absolute',
-    top:'50%',
-    transform:'translateY(-50%)',
-    left:0,
-    right:0,
-    margin:'auto',
-    width: 250
   },
 });
 
@@ -78,15 +70,10 @@ class PictureField extends React.Component {
       <div>
 
           <div className={classes.pictureContainer}>
-            {loading && (
+            { (loading && !pictureUrl) && (
               <CircularProgress color='primary' className={classes.picture} size={300} />
             )}
-            {!loading && (
-              <p className={classes.pictureAlt} >
-                Please wait for your picture preview.
-              </p>
-            )}
-            {!loading && (
+            {(!loading || pictureUrl) && (
               <img src={pictureUrl || defaultPicture} alt="" className={classes.picture} />
             )}
           </div>
