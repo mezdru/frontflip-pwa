@@ -41,6 +41,7 @@ class AlgoliaService {
   }
 
   fetchFacetValues(lastSelection, privateOnly, filters, query) {
+    console.log(filters);
     if(!this.index) return Promise.resolve();
     return new Promise((resolve, reject) => {
       this.index.searchForFacetValues({

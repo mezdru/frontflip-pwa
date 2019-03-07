@@ -26,6 +26,7 @@ class SearchField extends React.Component {
 
   // Used to fetch an event: User click on a Wing, so we should add it to the search filters
   componentWillReceiveProps(nextProps) {
+    if(this.props.hashtagOnly) return;
     if (nextProps.newFilter.value && nextProps.newFilter.label) {
       if (this.state.selectedOption && !this.state.selectedOption.some(val => val.value === nextProps.newFilter.value)) {
         let newSelectedOption = this.state.selectedOption;

@@ -9,7 +9,6 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import OnboardIntro from './steps/OnboardIntro';
 import OnboardContacts from './steps/OnboardContacts';
 import OnboardWings from './steps/OnboardWings';
-import OnboardFirstWings from './steps/OnboardFirstWings';
 
 
 class OnboardStepper extends React.Component {
@@ -17,7 +16,7 @@ class OnboardStepper extends React.Component {
     super(props);
     this.state = {
       activeStep: 2,
-      steps: ['intro','contacts', 'firstWings', 'wings'],
+      steps: ['intro','contacts', 'firstWings', 'wings', '#Php'],
       canNext: true
     };
   }
@@ -91,7 +90,7 @@ class OnboardStepper extends React.Component {
           }
         />
         <Typography variant="h2" style={{textAlign: 'center'}} >{this.getStepLabel(steps, activeStep)}</Typography>
-        <StepComponent handleSave={this.handleSave} activeStep={activeStep} />
+        <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[activeStep]} />
       </Grid>
     );
   }

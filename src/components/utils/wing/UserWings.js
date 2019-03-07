@@ -19,18 +19,22 @@ class UserWings extends React.Component {
     });
   }
 
+  shoudlRenderWing = (hashtag) => {
+    if(!hashtag) return false;
+    return true;
+  } 
+
   render() {
     const {record} = this.props.recordStore.values;
 
     if(!record) return null;
-    
 
     return (
       <div>
         <Typography variant="h4" style={{textAlign: 'center'}} >Your {record.hashtags.length} Wings:</Typography>
         <div className="" data-id="userwings">
           {record && record.hashtags.map((hashtag, i) => {
-            if(!hashtag) return null;
+            if(!this.shoudlRenderWing(hashtag)) return null;
             let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name)
             return (
                 <div className="" key={i} style={{display: 'inline-block'}} >
