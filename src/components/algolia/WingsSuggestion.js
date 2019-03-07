@@ -154,7 +154,7 @@ class WingsSuggestions extends React.Component {
    */
   getData = (tag) => {
     if (this.state.bank)
-      this.state.bank.find(bankElt => bankElt.tag === tag);
+      return this.state.bank.find(bankElt => bankElt.tag === tag);
     else
       return null;
   }
@@ -167,13 +167,13 @@ class WingsSuggestions extends React.Component {
     this.state.suggestions.map((suggestion, i) => {
       suggestions[i] = this.getData(suggestion.tag) || suggestion;
     });
-    this.state.suggestions = suggestions;
+    this.setState({suggestions: suggestions});
   }
 
   /**
    * @description Sync wings bank with current state bank
    */
-  syncBank = (filters) => AlgoliaService.loadBank(filters).then(this.state.bank = this.props.commonStore.getLocalStorage('wingsBank', true));
+  syncBank = (filters) => AlgoliaService.loadBank(filters).then(() => {this.setState({bank: this.props.commonStore.getLocalStorage('wingsBank', true)})});
 
   /**
    * @description Format query to fetch missing Wings data with Algolia
