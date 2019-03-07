@@ -54,8 +54,8 @@ class WingsSuggestions extends React.Component {
    */
   initSuggestions = async (wingsFamily) => {
     if(!wingsFamily) {
-      await this.fetchSuggestions(null, false, 10);
-      await this.fetchSuggestions(null, true, 20);
+      await this.fetchSuggestions(null, false, 5);
+      await this.fetchSuggestions(null, true, 10);
       this.populateSuggestionsData();
       let query = this.formatHashtagsQuery();
       if (query)
