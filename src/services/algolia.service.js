@@ -93,12 +93,12 @@ class AlgoliaService {
     });
   }
 
-  fetchOptions(inputValue, hashtagOnly){
+  fetchOptions(inputValue, hashtagOnly, wingsFamily){
     if(!this.index) return Promise.resolve();
     return new Promise((resolve, reject) => {
       this.index.search({
           query: inputValue,
-          filters: (hashtagOnly ? 'type:hashtag' : ''),
+          filters: this.makeOptionsFilters(hashtagOnly, wingsFamily),
           attributesToRetrieve: ['type','name', 'name_translated', 'tag','picture'],
           restrictSearchableAttributes: ['name', 'name_translated', 'tag'],
           highlightPreTag: '<span>',
@@ -106,6 +106,13 @@ class AlgoliaService {
           hitsPerPage: 5
         }, (err, content) => resolve(content));
     });
+  }
+
+  makeOptionsFilters(hashtagOnly, wingsFamily) {
+    let filter = '';
+    if(hashtagOnly) filter += 'type:hashtag';
+    if(wingsFamily) filter += ' AND hashtags.tag:'+wingsFamily;
+    return filter;
   }
 
 
