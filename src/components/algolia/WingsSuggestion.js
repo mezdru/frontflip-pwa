@@ -8,7 +8,6 @@ import ProfileService from '../../services/profile.service';
 import AlgoliaService from '../../services/algolia.service';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
 import { styles } from './WingsSuggestion.css';
-import DragNDropService from '../../services/dragndrop.service';
 
 class WingsSuggestions extends React.Component {
   constructor(props) {
@@ -222,9 +221,13 @@ class WingsSuggestions extends React.Component {
     if (!renderComponent) return null;
 
     return (
-      <div className={classes.suggestionsContainer} >
-        {this.renderWingsList(suggestions, classes, true)}
-        {this.renderWingsList(suggestions, classes, false)}
+      <div style={{position: 'relative'}}>
+        <div className={classes.transparentGradientBoxLeft}></div>
+        <div className={classes.suggestionsContainer} >
+          {this.renderWingsList(suggestions, classes, true)}
+          {this.renderWingsList(suggestions, classes, false)}
+        </div>
+        <div className={classes.transparentGradientBoxRight}></div>
       </div>
     );
   }

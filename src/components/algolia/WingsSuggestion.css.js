@@ -1,5 +1,6 @@
 export const styles = theme => ({
   suggestionsContainer: {
+    position: 'relative',
     textAlign: 'left',
     overflow: 'hidden',
     overflowX: 'auto',
@@ -13,6 +14,8 @@ export const styles = theme => ({
     margin:0,
     height: 52,
     listStyleType: 'none',
+    paddingLeft: 8,
+    paddingRight: 8,
     '& li ': {
       display: 'inline-block',
     }
@@ -27,4 +30,22 @@ export const styles = theme => ({
     from: { opacity: 0 },
     to: { opacity: 1 }
   },
+  transparentGradientBoxRight: {
+    position: 'absolute',
+    right:0,
+    top:0,
+    width: 16,
+    height: '100%',
+    backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0), #F2F2F2)',
+    zIndex: 2,
+  },
+  transparentGradientBoxLeft: {
+    position: 'absolute',
+    left:0,
+    top:0,
+    width: 16,
+    height: '100%',
+    backgroundImage: 'linear-gradient(to right, #F2F2F2, rgba(0,0,0,0))',
+    zIndex: 2,
+  }
 });

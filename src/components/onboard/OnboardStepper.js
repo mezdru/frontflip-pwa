@@ -69,26 +69,29 @@ class OnboardStepper extends React.Component {
     const {activeStep, steps, canNext} = this.state;
     let StepComponent = this.getStepComponent(steps, activeStep);
     return (
-      <Grid style={{background: '#f2f2f2', height:'100vh'}} item>
-        <MobileStepper
-          variant="dots"
-          steps={steps.length}
-          position="static"
-          activeStep={Math.min(activeStep, steps.length -1 )}
-          className={classes.root}
-          nextButton={
-            <Button size="small" onClick={this.handleNext} disabled={!canNext}>
-              Next
-              {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-            </Button>
-          }
-          backButton={
-            <Button size="small" onClick={this.handleBack} disabled={activeStep === 0}>
-              {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-              Back
-            </Button>
-          }
-        />
+      <Grid style={{background: '#f2f2f2', height:'100vh'}} item container direction="row" justify="center">
+        <Grid item container direction="column" justify="center" alignContent="center" xs={12} sm={6} lg={4} >
+          <MobileStepper
+            variant="dots"
+            steps={steps.length}
+            position="static"
+            activeStep={Math.min(activeStep, steps.length -1 )}
+            style={{width: '100%'}}
+            className={classes.root}
+            nextButton={
+              <Button size="small" onClick={this.handleNext} disabled={!canNext}>
+                Next
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+              </Button>
+            }
+            backButton={
+              <Button size="small" onClick={this.handleBack} disabled={activeStep === 0}>
+                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                Back
+              </Button>
+            }
+          />
+        </Grid>
         <Typography variant="h2" style={{textAlign: 'center'}} >{this.getStepLabel(steps, activeStep)}</Typography>
         <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[activeStep]} />
       </Grid>

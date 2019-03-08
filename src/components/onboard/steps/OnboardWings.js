@@ -40,7 +40,7 @@ class OnboardWings extends React.Component {
   renderTitleByStep = () => {
     if (this.isFirstWings()) {
       return (
-        <Typography variant="h4" style={{textAlign: 'center'}} >To start, choose your first Wings:</Typography>
+        <Typography variant="h4" style={{textAlign: 'center'}} >Choose your first Wings:</Typography>
       );
     } else if (this.isFeaturedWings()) {
       return (
@@ -56,7 +56,10 @@ class OnboardWings extends React.Component {
   renderByStep = () => {
     if (this.isFirstWings()) {
       return (
-        <Grid container >
+        <Grid container item xs={12} sm={8} md={6} lg={4} style={{height:243}} >
+          <Grid item xs={12}>
+            {this.renderTitleByStep()}
+          </Grid>
           <Grid item xs={12}>
             <OnboardFirstWings handleAddWing={this.handleAddWing} />
           </Grid>
@@ -64,11 +67,11 @@ class OnboardWings extends React.Component {
       );
     } else {
       return (
-        <Grid container item xs={12} sm={8} md={6} lg={4}>
+        <Grid container item xs={12} sm={8} md={6} lg={4} style={{height:243}}>
           <Grid item xs={12}>
             {this.renderTitleByStep()}
           </Grid>
-          <Grid item xs={12} style={{marginTop: 16}}>
+          <Grid item xs={12} style={{padding: 16, paddingBottom: 0}}>
             <SearchField  hashtagOnly handleAddWing={this.handleAddWing} 
                           wingsFamily={this.isFeaturedWings() ? this.props.activeStepLabel : null} />
           </Grid>
@@ -91,18 +94,16 @@ class OnboardWings extends React.Component {
     return (
         <Grid container direction="column" style={{minHeight: 'calc(100% - 72px)', background: 'white'}}>
           <Grid item style={{background: '#f2f2f2', maxWidth: '100%'}} justify="center" direction="row" container> 
-                  {this.renderByStep()}
+            {this.renderByStep()}
           </Grid>
 
-          {!this.isFirstWings() && (
-            <Grid item justify="center" direction="row" container style={{marginTop: 16}}>
-              <Grid container  item xs={12} sm={8} md={6} lg={4}>
-                <Grid item xs={12}>
-                  <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? activeStepLabel : null} />
-                </Grid>
+          <Grid item justify="center" direction="row" container style={{marginTop: 16}}>
+            <Grid container  item xs={12} sm={8} md={6} lg={4}>
+              <Grid item xs={12}>
+                <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? activeStepLabel : null} />
               </Grid>
             </Grid>
-          )}
+          </Grid>
 
         </Grid>
     );
