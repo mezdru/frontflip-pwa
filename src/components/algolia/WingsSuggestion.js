@@ -8,7 +8,7 @@ import ProfileService from '../../services/profile.service';
 import AlgoliaService from '../../services/algolia.service';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
 import { styles } from './WingsSuggestion.css';
-import { KeyboardArrowRight, KeyboardArrowLeft } from '@material-ui/icons';
+import { ArrowLeft, ArrowRight } from '@material-ui/icons';
 
 let interval;
 let interval2;
@@ -248,10 +248,10 @@ class WingsSuggestions extends React.Component {
       <div style={{position: 'relative'}}>
         <Hidden smDown>
           <Button className={classNames(classes.scrollLeft, classes.scrollButton)} onMouseDown={this.scrollLeft} onMouseUp={this.scrollStop} variant="outlined">
-            <KeyboardArrowLeft fontSize="large" />
+            <ArrowLeft fontSize="inherit" />
           </Button>
           <Button className={classNames(classes.scrollRight, classes.scrollButton)} onMouseDown={this.scrollRight} onMouseUp={this.scrollStop} variant="outlined">
-            <KeyboardArrowRight fontSize="large" />
+            <ArrowRight fontSize="inherit" />
           </Button>
         </Hidden>
 
