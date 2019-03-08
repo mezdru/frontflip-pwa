@@ -32,7 +32,7 @@ class UserWings extends React.Component {
     return (
       <div>
         <Typography variant="h4" style={{textAlign: 'center'}} >Your {record.hashtags.length} Wings:</Typography>
-        <div className="" data-id="userwings">
+        <div className="" style={{padding: 8, paddingTop: 0}} >
           {record && record.hashtags.map((hashtag, i) => {
             if(!this.shoudlRenderWing(hashtag)) return null;
             let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name)

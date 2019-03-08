@@ -22,7 +22,6 @@ class OnboardIntro extends React.Component {
     const {record} = this.props.recordStore.values;
 
     return (
-      // <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
         <Grid container item xs={12} sm={6} lg={4} direction="column" spacing={16}>
           <Grid item>
             <PictureField handleSave={this.props.handleSave} />
@@ -56,7 +55,6 @@ class OnboardIntro extends React.Component {
             />
           </Grid>
         </Grid>
-      // </Grid>
     );
   }
 }
