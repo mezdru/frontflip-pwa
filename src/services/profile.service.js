@@ -126,7 +126,13 @@ class ProfileService {
     else if (picture && picture.url) return picture.url;
     else if (picture && picture.uri) return picture.uri;
     else if (picture && picture.path) return null;
-    else return null;
+    else return this.getRandomEmoji();
+  }
+
+  getRandomEmoji() {
+    let arrayOfEmoji = ['📓','📔','📒','📕','📗','📘','📙'];
+    let randomIndex = Math.floor(Math.random() * Math.floor(arrayOfEmoji.length - 1));
+    return this.getEmojiUrl(arrayOfEmoji[randomIndex]);
   }
 
   getEmojiUrl(emoji) {
