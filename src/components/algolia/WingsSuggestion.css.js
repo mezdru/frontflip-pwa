@@ -47,5 +47,18 @@ export const styles = theme => ({
     height: '100%',
     backgroundImage: 'linear-gradient(to right, #F2F2F2, rgba(0,0,0,0))',
     zIndex: 2,
+  },
+  scrollLeft: {
+    left: -80,
+  },
+  scrollRight: {
+    right: -80,
+  },
+  scrollButton: {
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    border: 'none',
+    color: theme.palette.secondary.main,
   }
 });

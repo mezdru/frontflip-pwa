@@ -1,5 +1,5 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core';
+import { withStyles, Button } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import classNames from 'classnames';
 import { observe } from 'mobx';
@@ -8,6 +8,10 @@ import ProfileService from '../../services/profile.service';
 import AlgoliaService from '../../services/algolia.service';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
 import { styles } from './WingsSuggestion.css';
+import { KeyboardArrowRight, KeyboardArrowLeft } from '@material-ui/icons';
+
+let interval;
+let interval2;
 
 class WingsSuggestions extends React.Component {
   constructor(props) {
@@ -199,7 +203,8 @@ class WingsSuggestions extends React.Component {
       <li key={i} className={classes.suggestion} style={{animationDelay: (i*0.05) +'s'}}>
         <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
           label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
-          onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag })} />
+          onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag })}
+          className={'suggestionWing'} />
       </li>
     );
   }
@@ -214,6 +219,25 @@ class WingsSuggestions extends React.Component {
     );
   }
 
+
+
+  scrollRight = () => {
+    interval = window.setInterval(function() {
+      window.document.getElementsByClassName('scrollable')[0].scrollLeft += 2;
+    }, 5);
+  }
+
+  scrollLeft = () => {
+    interval2 = window.setInterval(function() {
+      window.document.getElementsByClassName('scrollable')[0].scrollLeft -= 2;
+    }, 5);
+  }
+
+  scrollStop =() => {
+    clearInterval(interval);
+    clearInterval(interval2);
+  }
+
   render() {
     const { classes } = this.props;
     const { suggestions, renderComponent } = this.state;
@@ -222,8 +246,15 @@ class WingsSuggestions extends React.Component {
 
     return (
       <div style={{position: 'relative'}}>
+        <Button className={classNames(classes.scrollLeft, classes.scrollButton)} onMouseDown={this.scrollLeft} onMouseUp={this.scrollStop} variant="outlined">
+          <KeyboardArrowLeft fontSize="large" />
+        </Button>
+        <Button className={classNames(classes.scrollRight, classes.scrollButton)} onMouseDown={this.scrollRight} onMouseUp={this.scrollStop} variant="outlined">
+          <KeyboardArrowRight fontSize="large" />
+        </Button>
+
         <div className={classes.transparentGradientBoxLeft}></div>
-        <div className={classes.suggestionsContainer} >
+        <div className={classNames(classes.suggestionsContainer, 'scrollable')} >
           {this.renderWingsList(suggestions, classes, true)}
           {this.renderWingsList(suggestions, classes, false)}
         </div>

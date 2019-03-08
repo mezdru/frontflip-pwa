@@ -79,13 +79,13 @@ class OnboardStepper extends React.Component {
             style={{width: '100%'}}
             className={classes.root}
             nextButton={
-              <Button size="small" onClick={this.handleNext} disabled={!canNext}>
+              <Button size="small" onClick={this.handleNext} disabled={!canNext} style={{background: 'none', boxShadow: 'none'}} >
                 Next
                 {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
               </Button>
             }
             backButton={
-              <Button size="small" onClick={this.handleBack} disabled={activeStep === 0}>
+              <Button size="small" onClick={this.handleBack} disabled={activeStep === 0} style={{background: 'none', boxShadow: 'none'}}>
                 {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
                 Back
               </Button>
