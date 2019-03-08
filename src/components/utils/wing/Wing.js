@@ -19,6 +19,10 @@ const styles = theme => ({
     '&:hover': {
       backgroundColor: theme.palette.primary.dark
     }
+  },
+  suggestionWing: {
+    backgroundColor: 'white',
+    color: theme.palette.secondary.main,
   }
 });
 
