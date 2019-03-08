@@ -47,7 +47,7 @@ export default createMuiTheme({
     },
     MuiTypography: {
       root: {
-        overflow: 'hidden',
+        // overflow: 'hidden',
       },
       h6: {
         display: 'block',
