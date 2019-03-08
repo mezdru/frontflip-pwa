@@ -1,5 +1,5 @@
 import React from 'react'
-import { withStyles, Button } from '@material-ui/core';
+import { withStyles, Button, Hidden } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import classNames from 'classnames';
 import { observe } from 'mobx';
@@ -246,12 +246,14 @@ class WingsSuggestions extends React.Component {
 
     return (
       <div style={{position: 'relative'}}>
-        <Button className={classNames(classes.scrollLeft, classes.scrollButton)} onMouseDown={this.scrollLeft} onMouseUp={this.scrollStop} variant="outlined">
-          <KeyboardArrowLeft fontSize="large" />
-        </Button>
-        <Button className={classNames(classes.scrollRight, classes.scrollButton)} onMouseDown={this.scrollRight} onMouseUp={this.scrollStop} variant="outlined">
-          <KeyboardArrowRight fontSize="large" />
-        </Button>
+        <Hidden smDown>
+          <Button className={classNames(classes.scrollLeft, classes.scrollButton)} onMouseDown={this.scrollLeft} onMouseUp={this.scrollStop} variant="outlined">
+            <KeyboardArrowLeft fontSize="large" />
+          </Button>
+          <Button className={classNames(classes.scrollRight, classes.scrollButton)} onMouseDown={this.scrollRight} onMouseUp={this.scrollStop} variant="outlined">
+            <KeyboardArrowRight fontSize="large" />
+          </Button>
+        </Hidden>
 
         <div className={classes.transparentGradientBoxLeft}></div>
         <div className={classNames(classes.suggestionsContainer, 'scrollable')} >
