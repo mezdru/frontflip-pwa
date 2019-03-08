@@ -51,10 +51,10 @@ export const styles = theme => ({
     zIndex: 2,
   },
   scrollLeft: {
-    left: -72,
+    left: -64,
   },
   scrollRight: {
-    right: -72,
+    right: -64,
   },
   scrollButton: {
     position: 'absolute',

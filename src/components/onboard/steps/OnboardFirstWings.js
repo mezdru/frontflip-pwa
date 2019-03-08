@@ -58,10 +58,10 @@ const styles = theme => ({
     }
   },
   scrollLeft: {
-    left: -72,
+    left: -64,
   },
   scrollRight: {
-    right: -72,
+    right: -64,
   },
   scrollButton: {
     position: 'absolute',

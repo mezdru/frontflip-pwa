@@ -23,6 +23,10 @@ const styles = theme => ({
   suggestionWing: {
     backgroundColor: 'white',
     color: theme.palette.secondary.main,
+    '&:hover': {
+      backgroundColor: 'rgba(0,0,0,.08)',
+      color: theme.palette.secondary.main,
+    }
   }
 });
 
