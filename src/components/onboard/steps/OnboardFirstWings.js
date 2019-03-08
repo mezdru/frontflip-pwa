@@ -1,8 +1,13 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core';
+import { withStyles, Hidden, Button } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
+import classNames from 'classnames';
 import { observe } from 'mobx';
 import AlgoliaService from '../../../services/algolia.service.js';
+import { ArrowLeft, ArrowRight } from '@material-ui/icons';
+
+let interval;
+let interval2;
 
 const styles = theme => ({
   firstWingsList: {
@@ -15,6 +20,8 @@ const styles = theme => ({
     width: 'calc(100% - 16px)',
     whiteSpace: 'nowrap',
     overflowX: 'auto',
+    scrollbarWidth: 'thin',
+    scrollbarColor:  'rgba(0, 0, 0, 0.26) transparent',
   },
   firstWing: {
     textAlign: 'center',
@@ -49,6 +56,24 @@ const styles = theme => ({
       zIndex: 2,
       fontWeight: '600',
     }
+  },
+  scrollLeft: {
+    left: -72,
+  },
+  scrollRight: {
+    right: -72,
+  },
+  scrollButton: {
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    border: 'none',
+    color: 'rgba(0, 0, 0, 0.26)',
+    fontSize: 45,
+    padding: 0,
+    overflow: 'hidden',
+    minWidth: 0,
+    width: 56,
   }
 });
 
@@ -101,30 +126,57 @@ class OnboardFirstWings extends React.Component {
 
   shouldDisplaySuggestion = (tag) => (!this.props.recordStore.values.record.hashtags.some(hashtag => hashtag.tag === tag));
 
+  scrollRight = () => {
+    interval = window.setInterval(function() {
+      window.document.getElementsByClassName('scrollable')[0].scrollLeft += 2;
+    }, 5);
+  }
+
+  scrollLeft = () => {
+    interval2 = window.setInterval(function() {
+      window.document.getElementsByClassName('scrollable')[0].scrollLeft -= 2;
+    }, 5);
+  }
+
+  scrollStop =() => {
+    clearInterval(interval);
+    clearInterval(interval2);
+  }
+
   render() {
     const { record } = this.props.recordStore.values;
     const {classes, theme} = this.props;
     const { firstWings, firstWingsSelected } = this.state;
 
     return (
-      <ul className={classes.firstWingsList} >
-        {firstWings.length > 0 && firstWings.map((hashtag, i) => {
-          if(!this.shouldDisplaySuggestion(hashtag.tag)) return null;
-          return (
-            <li onClick={(e) => { this.handleAddWing(e, hashtag.tag, i) }} className={classes.firstWing} key={i} 
-              style={this.getFirstWingsStyle(i, theme)} >
-              <div>
-                <img src={hashtag.picture.url} alt="Wing picture" />
+      <div style={{position: 'relative'}}>
+        <Hidden smDown>
+          <Button className={classNames(classes.scrollLeft, classes.scrollButton)} onMouseDown={this.scrollLeft} onMouseUp={this.scrollStop} variant="outlined">
+            <ArrowLeft fontSize="inherit" />
+          </Button>
+          <Button className={classNames(classes.scrollRight, classes.scrollButton)} onMouseDown={this.scrollRight} onMouseUp={this.scrollStop} variant="outlined">
+            <ArrowRight fontSize="inherit" />
+          </Button>
+        </Hidden>
+        <ul className={classNames(classes.firstWingsList, 'scrollable')} >
+          {firstWings.length > 0 && firstWings.map((hashtag, i) => {
+            if(!this.shouldDisplaySuggestion(hashtag.tag)) return null;
+            return (
+              <li onClick={(e) => { this.handleAddWing(e, hashtag.tag, i) }} className={classes.firstWing} key={i} 
+                style={this.getFirstWingsStyle(i, theme)} >
                 <div>
-                  <span>
-                    {hashtag.name}
-                  </span>
+                  <img src={hashtag.picture.url} alt="Wing picture" />
+                  <div>
+                    <span>
+                      {hashtag.name}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     );
   }
 }

@@ -7,6 +7,8 @@ export const styles = theme => ({
     width: '100%',
     paddingBottom: 16,
     marginTop: 8,
+    scrollbarWidth: 'thin',
+    scrollbarColor:  'rgba(0, 0, 0, 0.26) transparent',
   },
   suggestionList: {
     whiteSpace: 'nowrap',
@@ -49,16 +51,21 @@ export const styles = theme => ({
     zIndex: 2,
   },
   scrollLeft: {
-    left: -80,
+    left: -72,
   },
   scrollRight: {
-    right: -80,
+    right: -72,
   },
   scrollButton: {
     position: 'absolute',
     top: '50%',
     transform: 'translateY(-50%)',
     border: 'none',
-    color: theme.palette.secondary.main,
+    color: 'rgba(0, 0, 0, 0.26)',
+    fontSize: 45,
+    padding: 0,
+    overflow: 'hidden',
+    minWidth: 0,
+    width: 56,
   }
 });

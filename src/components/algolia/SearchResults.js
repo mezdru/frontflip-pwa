@@ -62,7 +62,7 @@ class SearchResults extends React.Component {
               <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
                 <HitComponent hit={hit} addToFilters={addToFilters} handleDisplayProfile={handleDisplayProfile} />
               </Grid>
-            </li> 
+            </li>
           );
         })}
         {!hideShowMore && (
