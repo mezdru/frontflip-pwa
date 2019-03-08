@@ -201,7 +201,7 @@ class WingsSuggestions extends React.Component {
   renderWing = (classes, hit, i) => {
     return (
       <li key={i} className={classes.suggestion} style={{animationDelay: (i*0.05) +'s'}}>
-        <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
+        <Wings  src={ProfileService.getPicturePath(hit.picture, 'hashtag') || defaultHashtagPicture}
           label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
           onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag })}
           className={'suggestionWing'} />

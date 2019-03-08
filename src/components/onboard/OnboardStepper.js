@@ -69,8 +69,9 @@ class OnboardStepper extends React.Component {
     const {activeStep, steps, canNext} = this.state;
     let StepComponent = this.getStepComponent(steps, activeStep);
     return (
-      <Grid style={{background: '#f2f2f2', height:'100vh'}} item container direction="row" justify="center">
-        <Grid item container direction="column" justify="center" alignContent="center" xs={12} sm={6} lg={4} >
+      <Grid style={{height:'100vh'}} item>
+      <div style={{width:'100%', background: '#f2f2f2'}}>
+      <Grid item xs={12} sm={8} md={6} lg={4} style={{position: 'relative', left:0, right:0, margin:'auto'}} >
           <MobileStepper
             variant="dots"
             steps={steps.length}
@@ -92,8 +93,11 @@ class OnboardStepper extends React.Component {
             }
           />
         </Grid>
-        <Typography variant="h2" style={{textAlign: 'center'}} >{this.getStepLabel(steps, activeStep)}</Typography>
+      </div>
+
+        <Grid item>
         <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[activeStep]} />
+        </Grid>
       </Grid>
     );
   }

@@ -121,12 +121,13 @@ class ProfileService {
     return check;
   }
 
-  getPicturePath(picture) {
+  getPicturePath(picture, type) {
     if (picture && picture.emoji) return this.getEmojiUrl(picture.emoji);
     else if (picture && picture.url) return picture.url;
     else if (picture && picture.uri) return picture.uri;
     else if (picture && picture.path) return null;
-    else return this.getRandomEmoji();
+    else if (type === 'hashtag') return this.getRandomEmoji();
+    else return null;
   }
 
   getRandomEmoji() {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
-import { TextField, Grid } from '@material-ui/core'
+import { TextField, Grid, Typography } from '@material-ui/core'
 import PictureField from '../../utils/fields/PictureField';
 
 class OnboardIntro extends React.Component {
@@ -19,10 +19,14 @@ class OnboardIntro extends React.Component {
   }
 
   render() {
-    const {record} = this.props.recordStore.values;
+    const { record } = this.props.recordStore.values;
 
     return (
-        <Grid container item xs={12} sm={6} lg={4} direction="column" spacing={16}>
+      <Grid container style={{ height: 'calc(100vh - 72px)', background: '#F2F2F2' }} direction="column">
+        <Grid container item xs={12} sm={8} md={6} lg={4} spacing={16} direction="column" style={{flexBasis: '100%'}} >
+          <Grid item>
+            <Typography variant="h4" style={{textAlign: 'center'}} >Who are you?</Typography>
+          </Grid>
           <Grid item>
             <PictureField handleSave={this.props.handleSave} />
           </Grid>
@@ -55,6 +59,7 @@ class OnboardIntro extends React.Component {
             />
           </Grid>
         </Grid>
+      </Grid>
     );
   }
 }

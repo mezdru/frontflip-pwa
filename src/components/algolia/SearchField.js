@@ -71,7 +71,7 @@ class SearchField extends React.Component {
           displayedName = hit.name || hit.tag;
         }
       }
-      arrayOfLabel.push({ label: displayedName, value: hit.tag, labelText: displayedNameText, picturePath: ProfileService.getPicturePath(hit.picture) });
+      arrayOfLabel.push({ label: displayedName, value: hit.tag, labelText: displayedNameText, picturePath: ProfileService.getPicturePath(hit.picture, 'hashtag') });
     });
     return arrayOfLabel;
   }
