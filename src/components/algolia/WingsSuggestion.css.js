@@ -6,7 +6,7 @@ export const styles = theme => ({
     overflowX: 'auto',
     width: '100%',
     paddingBottom: 16,
-    marginTop: 8,
+    marginTop: -6,
     scrollbarWidth: 'thin',
     scrollbarColor:  'rgba(0, 0, 0, 0.26) transparent',
   },

@@ -1,5 +1,5 @@
 import React from 'react'
-import { withStyles, Button, Hidden } from '@material-ui/core';
+import { withStyles, Button, Hidden, Typography } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import classNames from 'classnames';
 import { observe } from 'mobx';
@@ -247,7 +247,10 @@ class WingsSuggestions extends React.Component {
     if (!renderComponent) return null;
 
     return (
-      <div style={{position: 'relative'}}>
+      <div>
+        <Typography variant="h6" style={{padding: 16}} >Wings suggestions:</Typography>
+
+        <div style={{position:'relative'}}>
         <Hidden smDown>
           <Button className={classNames(classes.scrollLeft, classes.scrollButton)} onMouseDown={this.scrollLeft} onMouseUp={this.scrollStop} variant="outlined">
             <ArrowLeft fontSize="inherit" />
@@ -256,13 +259,13 @@ class WingsSuggestions extends React.Component {
             <ArrowRight fontSize="inherit" />
           </Button>
         </Hidden>
-
         <div className={classes.transparentGradientBoxLeft}></div>
         <div className={classNames(classes.suggestionsContainer, 'scrollable')} >
           {this.renderWingsList(suggestions, classes, true)}
           {this.renderWingsList(suggestions, classes, false)}
         </div>
         <div className={classes.transparentGradientBoxRight}></div>
+      </div>
       </div>
     );
   }

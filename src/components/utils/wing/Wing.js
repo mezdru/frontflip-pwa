@@ -27,6 +27,9 @@ const styles = theme => ({
       backgroundColor: 'rgba(0,0,0,.08)',
       color: theme.palette.secondary.main,
     }
+  },
+  removable: {
+    paddingRight: 0,
   }
 });
 
@@ -37,7 +40,7 @@ const Wing = ({ src, label, ...props }) => {
         avatar={<Avatar className={props.classes.wingImg} src={src} />}
         label={label}
         color={"secondary"}
-        className={classNames(props.classes[props.className])}
+        className={classNames(props.classes[props.className], (props.onDelete ? props.classes.removable : null) )}
         onClick={props.onClick}
         onDelete={props.onDelete}
         >
@@ -48,7 +51,7 @@ const Wing = ({ src, label, ...props }) => {
       <Chip
         label={label}
         color={"secondary"}
-        className={classNames(props.classes[props.className])}
+        className={classNames(props.classes[props.className], (props.onDelete ? props.classes.removable : null))}
         onClick={props.onClick}
         onDelete={props.onDelete} >
       </Chip>
