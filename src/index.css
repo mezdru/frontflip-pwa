@@ -49,6 +49,12 @@ a {
     min-height: 100%;
 }
 
+div[role="tooltip"]{
+    z-index: 9999;
+    width: 30%;
+    align-items: center;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
   monospace;

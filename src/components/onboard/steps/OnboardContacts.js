@@ -8,7 +8,7 @@ import AddContactField from '../../utils/fields/AddContactField';
 class OnboardContacts extends React.Component {
   constructor(props) {
     super(props);
-    this.setInfo();
+    this.setDefaultLinks();
   }
   
   handleChange = (e, field) => {
@@ -18,7 +18,7 @@ class OnboardContacts extends React.Component {
     this.forceUpdate(); // why component do not update auto like Login fields ?
   }
   
-  deleteInfo = (infoToBeDeleted) => {
+  deleteLink = (infoToBeDeleted) => {
     this.props.recordStore.values.record.links = this.props.recordStore.values.record.links.filter(item => {
       return item._id !== infoToBeDeleted
     })
@@ -29,11 +29,11 @@ class OnboardContacts extends React.Component {
     return (this.props.recordStore.values.record.links.find(link => link.type === typeWanted));
   }
   
-  setInfo = () => {
+  setDefaultLinks = () => {
     let types = ['linkedin', 'email', 'phone']
     for (let type of types) {
       if (!this.getLinkByType(type)) {
-        this.props.recordStore.values.record.links.push({"_id":"new_"+(new Date()).getMilliseconds(),"type":type,"value":""})
+        this.props.recordStore.values.record.links.push({"_id": "new_" + (new Date()).getMilliseconds(), "type": type, "value": ""})
       }
     }
   };
@@ -41,43 +41,41 @@ class OnboardContacts extends React.Component {
   render() {
     const data = this.props.recordStore.values.record.links;
     
-    console.log('data: ' + JSON.stringify(this.props.recordStore.values.record.links))
-    
     return (
       <Grid container item xs={12} sm={6} lg={4} direction="column" spacing={16}>
+        {data.map((info, i) => {
+          return (
+            <Grid container item key={i}>
+              <TextField
+                label={info.type}
+                fullWidth
+                type="text"
+                variant={"outlined"}
+                value={info.value}
+                onChange={(e) => this.handleChange(e, 'intro')}
+                onBlur={this.props.handleSave}
+                placeholder={info.type}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      {info.type === 'email' ? <i className="fa fa-envelope"/> : <i className={`fa fa-${info.type}`}/>}
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <IconButton position="end" onClick={() => {
+                      this.deleteLink(info._id)
+                    }}>
+                      <Clear fontSize="default"/>
+                    </IconButton>
+                  )
+                }}
+              />
+            </Grid>
+          )
+        })}
         <Grid item>
           <AddContactField style={{position: 'relative'}} parent={this}/>
         </Grid>
-        {data.map((info, i) => {
-            return (
-              <Grid item key={i}>
-                <TextField
-                  label={info.type}
-                  type="text"
-                  fullWidth
-                  variant={"outlined"}
-                  value={info.value}
-                  onChange={(e) => this.handleChange(e, 'intro')}
-                  onBlur={this.props.handleSave}
-                  placeholder={info.type}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        {info.type === 'email' ? <i className="fa fa-envelope"/> : <i className={`fa fa-${info.type}`}/>}
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <IconButton position="end" onClick={() => {
-                        this.deleteInfo(info._id)
-                      }}>
-                        <Clear fontSize="default"/>
-                      </IconButton>
-                    )
-                  }}
-                />
-              </Grid>
-            )
-        })}
       </Grid>
     );
   }
