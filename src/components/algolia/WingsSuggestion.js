@@ -84,7 +84,7 @@ class WingsSuggestions extends React.Component {
   /**
    * @description Fetch suggestions and add them to suggestions list thanks to Algolia
    */
-  fetchSuggestions = (lastSelection, privateOnly, nbHitToAdd, filter) => {
+  fetchSuggestions = (lastSelection, privateOnly, nbHitToAdd, startIndex) => {
     return AlgoliaService.fetchFacetValues(lastSelection, privateOnly, 'type:person', null)
       .then(content => {
         let newSuggestions = [];
@@ -101,7 +101,7 @@ class WingsSuggestions extends React.Component {
           if (knownIndex > -1 && i > 0) {
             i--;
             continue;
-          } else if (i === 0 && knownIndex > -1) {
+          } else if (i === 0 && knownIndex > -1 && !startIndex) {
             // elt known index is an important suggestion, we put it at the start of the array
             suggestions.splice(0, 0, suggestions.splice(knownIndex, 1)[0]);
             continue;
@@ -109,10 +109,10 @@ class WingsSuggestions extends React.Component {
 
           suggestionToAdd.tag = suggestionToAdd.value;
           suggestionToAdd.new = true;
-          newSuggestions.push(suggestionToAdd);
+          if(!startIndex) suggestions.push(suggestionToAdd);
+          else suggestions.splice(startIndex, 0, suggestionToAdd);
         }
-        let newSug = suggestions ? suggestions.concat(newSuggestions) : newSuggestions;
-        this.setState({ suggestions: newSug });
+        this.setState({ suggestions: suggestions });
       }).catch((e) => { console.log(e) });
   }
 
@@ -136,13 +136,15 @@ class WingsSuggestions extends React.Component {
 
   /**
    * @description Fetch and add new suggestions after user choose a Wing
+   * @param filters Record object selected
+   * @param index Index of the object in the suggestions displayed list
    */
-  updateSuggestions = async (filters) => {
+  updateSuggestions = async (filters, index) => {
     if(this.props.wingsFamily) return;
-    await this.fetchSuggestions(null, false, 1);
-    await this.fetchSuggestions(null, true, 2);
-    await this.fetchSuggestions(filters, false, 2);
-    await this.fetchSuggestions(filters, true, 2);
+    await this.fetchSuggestions(null, false, 1, index);
+    await this.fetchSuggestions(null, true, 2, index);
+    await this.fetchSuggestions(filters, false, 2, index);
+    await this.fetchSuggestions(filters, true, 2, index);
     this.populateSuggestionsData();
     let query = this.formatHashtagsQuery();
     if (query)
@@ -190,8 +192,8 @@ class WingsSuggestions extends React.Component {
     return query;
   }
 
-  handleSelectSuggestion = (e, element) => {
-    this.props.handleAddWing(e, element).then(this.updateSuggestions(element));
+  handleSelectSuggestion = (e, element, index) => {
+    this.props.handleAddWing(e, element).then(this.updateSuggestions(element, index));
   }
 
   shouldDisplaySuggestion = (tag) => (!this.props.recordStore.values.record.hashtags.some(hashtag => hashtag.tag === tag));
@@ -203,7 +205,7 @@ class WingsSuggestions extends React.Component {
       <li key={i} className={classes.suggestion} style={{animationDelay: (i*0.05) +'s'}}>
         <Wings  src={ProfileService.getPicturePath(hit.picture, 'hashtag') || defaultHashtagPicture}
           label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
-          onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag })}
+          onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag }, i)}
           className={'suggestionWing'} />
       </li>
     );
