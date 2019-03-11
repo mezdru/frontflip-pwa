@@ -101,7 +101,7 @@ class OnboardStepper extends React.Component {
         </Grid>
       </div>
 
-        <Grid item>
+        <Grid item style={{height: 'calc(100vh - 72px)'}}>
         <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[activeStep]} />
         </Grid>
       </Grid>
