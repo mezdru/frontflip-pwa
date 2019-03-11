@@ -92,14 +92,16 @@ class OnboardWings extends React.Component {
     const {activeStep, activeStepLabel} = this.props;
 
     return (
-        <Grid container direction="column" style={{minHeight: 'calc(100% - 72px)', background: 'white'}}>
-          <Grid item style={{background: '#f2f2f2', maxWidth: '100%'}} justify="center" direction="row" container> 
+        <Grid container direction="column" style={{height: '100%', background: 'white'}}>
+          <Grid item style={{background: '#f2f2f2', maxWidth: '100%', 
+            boxShadow: '0px 2px 3px 0px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 2px 1px -1px rgba(0,0,0,0.12)' }} 
+            justify="center" direction="row" container> 
             {this.renderByStep()}
           </Grid>
 
-          <Grid item justify="center" direction="row" container style={{marginTop: 16}}>
+          <Grid item justify="center" direction="row" container style={{paddingTop: 16, height: 'calc(100% - 280px)', overflowY: 'auto'}}>
             <Grid container  item xs={12} sm={8} md={6} lg={4}>
-              <Grid item xs={12}>
+              <Grid item xs={12} >
                 <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? activeStepLabel : null} />
               </Grid>
             </Grid>
