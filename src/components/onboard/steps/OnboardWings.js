@@ -24,7 +24,7 @@ class OnboardWings extends React.Component {
       let record = this.props.recordStore.values.record;
       record.hashtags.push(hashtagRecord);
       this.props.recordStore.setRecord(record);
-      this.props.handleSave();
+      this.props.handleSave(['hashtags']);
     }).catch(() => {});
   }
 
@@ -34,7 +34,7 @@ class OnboardWings extends React.Component {
     let newHashtags = record.hashtags.filter(hashtag => hashtag.tag !== tag);
     record.hashtags = newHashtags;
     this.props.recordStore.setRecord(record);
-    this.props.handleSave();
+    this.props.handleSave(['hashtags']);
   }
 
   renderTitleByStep = () => {

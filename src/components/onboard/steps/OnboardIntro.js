@@ -38,7 +38,7 @@ class OnboardIntro extends React.Component {
               variant={"outlined"}
               value={record.name}
               onChange={(e) => this.handleChange(e, 'name')}
-              onBlur={this.props.handleSave}
+              onBlur={(e) => {this.props.handleSave(['name'])}}
               error={record.name.length > 64}
               helperText={(record.name.length > 64) ? '64 characters max' : ''}
               required
@@ -52,7 +52,7 @@ class OnboardIntro extends React.Component {
               variant={"outlined"}
               value={record.intro}
               onChange={(e) => this.handleChange(e, 'intro')}
-              onBlur={this.props.handleSave}
+              onBlur={(e) => this.props.handleSave(['intro'])}
               error={record.intro.length > 256}
               helperText={(record.intro.length > 256) ? '256 characters max' : ''}
               required
