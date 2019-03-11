@@ -54,7 +54,7 @@ class PictureField extends React.Component {
     };
     this.props.recordStore.setRecord(record);
     this.setState({pictureUrl: file.cdnUrl, loading: false});
-    this.props.handleSave();
+    this.props.handleSave(['picture']);
   }
 
   handleResetPicture = (e) => {

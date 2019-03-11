@@ -33,7 +33,8 @@ class OnboardContacts extends React.Component {
     let types = ['linkedin', 'email', 'phone']
     for (let type of types) {
       if (!this.getLinkByType(type)) {
-        this.props.recordStore.values.record.links.push({"_id": "new_" + (new Date()).getMilliseconds(), "type": type, "value": ""})
+        this.props.recordStore.values.record.links.push({"type": type, "value": ""});
+        this.props.handleSave(['links']);
       }
     }
   };
@@ -53,7 +54,7 @@ class OnboardContacts extends React.Component {
                 variant={"outlined"}
                 value={info.value}
                 onChange={(e) => this.handleChange(e, 'intro')}
-                onBlur={this.props.handleSave}
+                onBlur={(e) => this.props.handleSave(['links'])}
                 placeholder={info.type}
                 InputProps={{
                   startAdornment: (

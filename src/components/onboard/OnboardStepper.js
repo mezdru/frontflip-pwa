@@ -59,9 +59,9 @@ class OnboardStepper extends React.Component {
     }
   }
 
-  handleSave = async () => {
+  handleSave = async (arrayOfLabels) => {
     this.props.recordStore.setRecordId(this.props.recordStore.values.record._id);
-    return await this.props.recordStore.updateRecord().then((record) => record);
+    return await this.props.recordStore.updateRecord(arrayOfLabels).then((record) => record);
   }
 
   render() {

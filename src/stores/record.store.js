@@ -111,17 +111,31 @@ class RecordStore {
   /**
    * @description Update record
    */
-  updateRecord() {
+  updateRecord(arrayOfFields) {
     this.inProgress = true;
     this.errors = null;
 
-    return agent.Record.put(this.values.orgId, this.values.recordId, this.values.record)
+    let recordToUpdate = this.buildRecordToUpdate(arrayOfFields);
+
+    return agent.Record.put(this.values.orgId, this.values.recordId, recordToUpdate)
       .then(data => { this.values.record = (data ? data.record : {}); return this.values.record;})
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.errors;
         throw err;
       }))
       .finally(action(() => { this.inProgress = false; }));
+  }
+
+  buildRecordToUpdate(arrayOfFields) {
+    let recordToUpdate = {};
+    if (!arrayOfFields) {
+      recordToUpdate = this.values.record;
+    } else {
+      arrayOfFields.forEach(field => {
+        recordToUpdate[field] = this.values.record[field];
+      });
+    }
+    return recordToUpdate;
   }
 
   /**
