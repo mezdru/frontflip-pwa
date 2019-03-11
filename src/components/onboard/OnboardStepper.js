@@ -10,6 +10,8 @@ import OnboardIntro from './steps/OnboardIntro';
 import OnboardContacts from './steps/OnboardContacts';
 import OnboardWings from './steps/OnboardWings';
 
+import { withSnackbar } from 'notistack';
+
 
 class OnboardStepper extends React.Component {
   constructor(props) {
@@ -61,7 +63,11 @@ class OnboardStepper extends React.Component {
 
   handleSave = async (arrayOfLabels) => {
     this.props.recordStore.setRecordId(this.props.recordStore.values.record._id);
-    return await this.props.recordStore.updateRecord(arrayOfLabels).then((record) => record);
+    return await this.props.recordStore.updateRecord(arrayOfLabels).then((record) => {
+      this.props.enqueueSnackbar('Your data has been saved successfully', {variant: 'success'});
+    }).catch((e) => {
+      this.props.enqueueSnackbar('Your data can\'t be saved, please check the errors', {variant: 'warning'});
+    });
   }
 
   render() {
@@ -105,6 +111,8 @@ class OnboardStepper extends React.Component {
 
 export default inject('commonStore', 'recordStore')(
   observer(
-    withStyles(null, {withTheme: true})(OnboardStepper)
+    withSnackbar(
+      withStyles(null, {withTheme: true})(OnboardStepper)
+    )
   )
 );
