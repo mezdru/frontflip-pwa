@@ -9,7 +9,7 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <SnackbarProvider maxSnack={3}>
+        <SnackbarProvider maxSnack={1}>
           <MainRoute />
         </SnackbarProvider>
       </BrowserRouter>

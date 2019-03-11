@@ -20,6 +20,9 @@ export const styles = theme => ({
     paddingRight: 8,
     '& li ': {
       display: 'inline-block',
+    },
+    '& li:focus': {
+      transform: 'scale(3)',
     }
   },
   suggestion: {

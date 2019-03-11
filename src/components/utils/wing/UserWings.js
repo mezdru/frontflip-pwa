@@ -38,9 +38,9 @@ class UserWings extends React.Component {
             let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name)
             return (
                 <div className="" key={i} style={{display: 'inline-block'}} >
-                  <Wings  src={ProfileService.getPicturePath(hashtag.picture, 'hashtag') || defaultHashtagPicture}
+                  <Wings  src={ProfileService.getPicturePath(hashtag.picture) || defaultHashtagPicture}
                     label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
-                    className={''} 
+                    className={'wingAdded'} 
                     onDelete={(e) => {this.props.handleRemoveWing(e, hashtag.tag)}} />
                 </div>
             )

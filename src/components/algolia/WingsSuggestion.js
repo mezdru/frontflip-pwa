@@ -98,7 +98,7 @@ class WingsSuggestions extends React.Component {
           let suggestionToAdd = content.facetHits.splice(index, 1)[0];
           let knownIndex = suggestions.findIndex(hashtag => hashtag && (hashtag.tag === suggestionToAdd.value));
 
-          if (knownIndex > -1 && i > 0) {
+          if (knownIndex > -1 && (i > 0 || startIndex)) {
             i--;
             continue;
           } else if (i === 0 && knownIndex > -1 && !startIndex) {
@@ -203,7 +203,7 @@ class WingsSuggestions extends React.Component {
   renderWing = (classes, hit, i) => {
     return (
       <li key={i} className={classes.suggestion} style={{animationDelay: (i*0.05) +'s'}}>
-        <Wings  src={ProfileService.getPicturePath(hit.picture, 'hashtag') || defaultHashtagPicture}
+        <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
           label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
           onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag }, i)}
           className={'suggestionWing'} />

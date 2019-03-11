@@ -30,7 +30,17 @@ const styles = theme => ({
   },
   removable: {
     paddingRight: 0,
-  }
+  },
+  wingAdded: {
+    animationFillMode: 'forwards',
+    animation: 'newWing 1s',
+  },
+  '@keyframes newWing': {
+    from: { backgroundColor: 'white', marginTop: 16},
+    '50%': {marginTop: 4},
+    '75%': {marginTop: 0},
+    to: { backgroundColor: theme.palette.secondary.main, marginTop: 16 }
+  },
 });
 
 const Wing = ({ src, label, ...props }) => {
