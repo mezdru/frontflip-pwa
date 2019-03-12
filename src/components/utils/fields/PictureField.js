@@ -33,7 +33,12 @@ class PictureField extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this._ismounted = true;
+  }
+
   handleChange = (file) => {
+    if(!this._ismounted) return;
     if(!file) {
       let record = this.props.recordStore.values.record;
       record.picture = {
@@ -47,7 +52,12 @@ class PictureField extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this._ismounted = false;
+  }
+
   handleUploadComplete = (file) => {
+    if(!this._ismounted) return;
     let record = this.props.recordStore.values.record;
     record.picture = {
       url: file.cdnUrl

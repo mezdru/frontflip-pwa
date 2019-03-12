@@ -11,13 +11,19 @@ class UserWings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      observer: ()=> {}
     };
   }
 
   componentDidMount() {
-    observe(this.props.recordStore.values, 'record', (change) => {
+    this.setState({observer: observe(this.props.recordStore.values, 'record', (change) => {
       this.forceUpdate();
-    });
+    }) });
+  }
+
+  componentWillUnmount() {
+    // destroy observe
+    this.state.observer();
   }
 
   shoudlRenderWing = (hashtag) => {

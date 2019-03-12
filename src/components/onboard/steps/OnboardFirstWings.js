@@ -85,6 +85,7 @@ class OnboardFirstWings extends React.Component {
     this.state = {
       firstWings: [],
       firstWingsSelected: [],
+      observer: ()=>{}
     };
   }
 
@@ -92,10 +93,14 @@ class OnboardFirstWings extends React.Component {
     AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
     this.fetchFirstWings();
 
-    observe(this.props.commonStore, 'algoliaKey', (change) => {
+    this.setState({observer: observe(this.props.commonStore, 'algoliaKey', (change) => {
       AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
       this.fetchFirstWings();
-    });
+    })});
+  }
+
+  componentWillUnmount() {
+    this.state.observer();
   }
 
   fetchFirstWings = () => {

@@ -158,6 +158,7 @@ class CardProfile extends React.Component {
           <CardActions disableActionSpacing>
             <Grid item container>
               {hit.links && hit.links.map((link, i) => {
+                if(!link.value || link.value === '') return null;
                 if(link.class !== 'extraLink'){
                   return (
                     <Grid item key={link._id} className={classes.contact}>
