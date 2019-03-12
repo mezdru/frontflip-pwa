@@ -11,7 +11,9 @@ import OnboardContacts from './steps/OnboardContacts';
 import OnboardWings from './steps/OnboardWings';
 
 import { withSnackbar } from 'notistack';
+import LoaderFeedback from '../utils/buttons/LoaderFeedback';
 
+let timeoutArray = [];
 
 class OnboardStepper extends React.Component {
   constructor(props) {
@@ -64,7 +66,12 @@ class OnboardStepper extends React.Component {
   handleSave = async (arrayOfLabels) => {
     this.props.recordStore.setRecordId(this.props.recordStore.values.record._id);
     return await this.props.recordStore.updateRecord(arrayOfLabels).then((record) => {
-      this.props.enqueueSnackbar('Your data has been saved successfully', {variant: 'success'});
+      //this.props.enqueueSnackbar('Your data has been saved successfully', {variant: 'success'});
+      timeoutArray.forEach(tm => {clearTimeout(tm)});
+      timeoutArray = [];
+      this.setState({showFeedback: true}, () => {
+        timeoutArray.push(setTimeout(() => {this.setState({showFeedback: false})}, 2000));
+      })
     }).catch((e) => {
       this.props.enqueueSnackbar('Your data can\'t be saved, please check the errors', {variant: 'warning'});
     });
@@ -72,7 +79,7 @@ class OnboardStepper extends React.Component {
 
   render() {
     const {theme, classes} = this.props;
-    const {activeStep, steps, canNext} = this.state;
+    const {activeStep, steps, canNext, showFeedback} = this.state;
     let StepComponent = this.getStepComponent(steps, activeStep);
     return (
       <Grid style={{height:'100vh'}} item>
@@ -104,6 +111,22 @@ class OnboardStepper extends React.Component {
         <Grid item style={{height: 'calc(100vh - 72px)'}}>
         <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[activeStep]} />
         </Grid>
+
+        {showFeedback && (
+          <LoaderFeedback 
+          value={Date.now()}
+          style={{
+            position:'fixed',
+            bottom: 16,
+            zIndex: 999,
+            left:0, 
+            right:0,
+            margin: 'auto',
+            width: 60,
+            textAlign: 'center',
+          }} />
+        )}
+
       </Grid>
     );
   }
