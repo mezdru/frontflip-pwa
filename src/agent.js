@@ -38,6 +38,9 @@ const requests = {
       .then(() =>
         superagent
           .del((process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${url}`)
+          .timeout({
+            response: 30000,
+          })
           .use(tokenPlugin)
           .end(handleErrors)
           .then(responseBody)
@@ -49,6 +52,9 @@ const requests = {
       .then(() =>
         superagent
           .get((process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${url}`)
+          .timeout({
+            response: 30000,
+          })
           .use(tokenPlugin)
           .end(handleErrors)
           .then(responseBody)
@@ -60,6 +66,9 @@ const requests = {
       .then(() =>
         superagent
           .put((process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${url}`, body)
+          .timeout({
+            response: 30000,
+          })
           .use(tokenPlugin)
           .end(handleErrors)
           .then(responseBody)
@@ -71,6 +80,9 @@ const requests = {
       .then(() =>
         superagent
           .post((process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${url}`, body)
+          .timeout({
+            response: 30000,
+          })
           .use(tokenPlugin)
           .end(handleErrors)
           .then(responseBody)
@@ -93,6 +105,9 @@ let validateToken = () => {
           refresh_token: commonStore.getRefreshToken()
         }
       )
+        .timeout({
+          response: 30000,
+        })
         .end(handleErrors)
         .then((response) => {
           commonStore.setAuthTokens(JSON.parse(response.text));
@@ -126,7 +141,7 @@ const Auth = {
         grant_type: 'password'
       }
     ),
-  googleCallbackLogin: (token) => 
+  googleCallbackLogin: (token) =>
     requests.post(
       API_ROOT_AUTH + '/locale/exchange',
       {
