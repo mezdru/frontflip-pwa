@@ -7,8 +7,9 @@ import Wings from '../utils/wing/Wing';
 import ProfileService from '../../services/profile.service';
 import AlgoliaService from '../../services/algolia.service';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
-import { styles } from './WingsSuggestion.css';
+import { styles } from './WingsSuggestion.css.js';
 import { ArrowLeft, ArrowRight } from '@material-ui/icons';
+import './WingsSuggestion.css';
 
 let interval;
 let interval2;
@@ -20,6 +21,7 @@ class WingsSuggestions extends React.Component {
       suggestions: [],
       bank: [],
       renderComponent: false,
+      shouldUpdate: false,
     };
   }
 
@@ -51,6 +53,15 @@ class WingsSuggestions extends React.Component {
     });
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log(nextState);
+    if ( (nextState.shouldUpdate || (!this.state.renderComponent && nextState.renderComponent)) && !nextState.animationInProgress ) {
+      this.setState({shouldUpdate: false});
+      return true;
+    }
+    return false;
+  }
+
 
   /**
    * @description Init Wings suggestions with most common Wings
@@ -65,7 +76,9 @@ class WingsSuggestions extends React.Component {
         this.syncBank(query)
           .then(() => {
             this.populateSuggestionsData();
+            this.setState({shouldUpdate: true});
           });
+      else this.setState({shouldUpdate: true});
     } else {
       await this.fetchWingsFamily(wingsFamily);
     }
@@ -98,7 +111,7 @@ class WingsSuggestions extends React.Component {
           let suggestionToAdd = content.facetHits.splice(index, 1)[0];
           let knownIndex = suggestions.findIndex(hashtag => hashtag && (hashtag.tag === suggestionToAdd.value));
 
-          if (knownIndex > -1 && i > 0) {
+          if (knownIndex > -1 && (i > 0 || startIndex)) {
             i--;
             continue;
           } else if (i === 0 && knownIndex > -1 && !startIndex) {
@@ -151,7 +164,9 @@ class WingsSuggestions extends React.Component {
       this.syncBank(query)
         .then(() => {
           this.populateSuggestionsData();
+          this.setState({shouldUpdate: true});
         });
+    else this.setState({shouldUpdate: true});
   }
 
   /**
@@ -193,6 +208,11 @@ class WingsSuggestions extends React.Component {
   }
 
   handleSelectSuggestion = (e, element, index) => {
+    e.currentTarget.style.opacity = 0;
+    e.currentTarget.style.background = this.props.theme.palette.secondary.dark;
+    this.setState({animationInProgress: true}, () => {
+      setTimeout(() => {this.setState({animationInProgress: false})}, 300);
+    })
     this.props.handleAddWing(e, element).then(this.updateSuggestions(element, index));
   }
 
@@ -203,7 +223,7 @@ class WingsSuggestions extends React.Component {
   renderWing = (classes, hit, i) => {
     return (
       <li key={i} className={classes.suggestion} style={{animationDelay: (i*0.05) +'s'}}>
-        <Wings  src={ProfileService.getPicturePath(hit.picture, 'hashtag') || defaultHashtagPicture}
+        <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
           label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
           onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag }, i)}
           className={'suggestionWing'} />
@@ -273,6 +293,6 @@ class WingsSuggestions extends React.Component {
 
 export default inject('commonStore', 'recordStore', 'organisationStore')(
   observer(
-    withStyles(styles)(WingsSuggestions)
+    withStyles(styles, {withTheme: true})(WingsSuggestions)
   )
 );
