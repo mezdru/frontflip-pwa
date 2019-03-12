@@ -22,15 +22,20 @@ class OnboardPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inOnboarding: true
+      inOnboarding: true,
+      observer: ()=>{}
     };
   }
 
   componentDidMount() {
-    observe(this.props. recordStore.values, 'record', (change) => {
+    this.setState({observer: observe(this.props. recordStore.values, 'record', (change) => {
       this.forceUpdate();
-    });
+    })});
     this.getRecordForUser().then().catch(err => console.log(err));
+  }
+
+  componentWillUnmount() {
+    this.state.observer();
   }
 
   getRecordForUser = () => {

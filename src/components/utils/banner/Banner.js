@@ -32,7 +32,8 @@ class Banner extends React.Component {
     super(props);
     this.state = {
       type: this.props.type || 'organisation',
-      source: null
+      source: null,
+      observer: ()=>{}
     }
   }
 
@@ -44,11 +45,15 @@ class Banner extends React.Component {
             this.props.organisationStore.values.organisation.cover.url : defaultBanner)
       });
 
-      observe(this.props.organisationStore.values, 'organisation', (change) => {
+      this.setState({observer: observe(this.props.organisationStore.values, 'organisation', (change) => {
         let org = this.props.organisationStore.values.organisation;
         this.setState({ source: (org.cover && org.cover.url ? org.cover.url : defaultBanner) });
-      });
+      })});
     }
+  }
+
+  componentWillUnmount() {
+    this.state.observer();
   }
 
   render() {

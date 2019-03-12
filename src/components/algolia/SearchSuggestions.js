@@ -45,7 +45,8 @@ class SearchSuggestions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      facetHits: []
+      facetHits: [],
+      observer: () => {}
     };
 
     this.fetchSuggestions = this.fetchSuggestions.bind(this);
@@ -56,13 +57,14 @@ class SearchSuggestions extends React.Component {
     this._ismounted = true;
     this.fetchSuggestions(this.props.filters, this.props.query);
 
-    observe(this.props.commonStore, 'algoliaKey', (change) => {
+    this.setState({observer: observe(this.props.commonStore, 'algoliaKey', (change) => {
       AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
       this.fetchSuggestions(this.props.filters, this.props.query);
-    });
+    })});
   }
 
   componentWillUnmount() {
+    this.state.observer();
     this._ismounted = false;
   }
 

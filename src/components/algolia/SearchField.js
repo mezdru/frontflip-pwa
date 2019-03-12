@@ -21,6 +21,7 @@ class SearchField extends React.Component {
       selectedOption: this.props.defaultValue,
       placeholder: this.props.intl.formatMessage({ id: 'algolia.search' }),
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
+      observer: () => {}
     };
   }
 
@@ -40,9 +41,13 @@ class SearchField extends React.Component {
   componentDidMount() {
     AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
 
-    observe(this.props.commonStore, 'algoliaKey', (change) => {
+    this.setState({observer: observe(this.props.commonStore, 'algoliaKey', (change) => {
       AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-    });
+    })});
+  }
+
+  componentWillUnmount() {
+    this.state.observer();
   }
 
   // Format an array of options so that they all have a label and a value

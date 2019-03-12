@@ -46,16 +46,17 @@ class Auth extends React.Component {
       queryParams: queryString.parse(window.location.search),
       displayLoader: false,
       redirectTo: null,
-      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
+      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
+      observer: ()=> {}
     };
   };
   
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
     if (this.props.authStore.values.invitationCode) this.setState({ value: 1 });
-    observe(this.props.authStore.values, 'invitationCode', (change) => {
+    this.setState({observer: observe(this.props.authStore.values, 'invitationCode', (change) => {
       this.setState({ value: 1 });
-    });
+    })});
 
     // HANDLE GOOGLE AUTH CALLBACK
     this.handleGoogleCallback(this.state.queryParams)
@@ -81,6 +82,10 @@ class Auth extends React.Component {
         }).catch((err) => this.setState({redirectTo: '/' + this.state.locale}));
     }).catch((err) => {return;});
 
+  }
+
+  componentWillUnmount() {
+    this.state.observer();
   }
 
   handleGoogleCallback = async (query) => {

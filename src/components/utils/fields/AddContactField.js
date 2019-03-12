@@ -23,10 +23,8 @@ class AddContactField extends React.Component {
   }
   
   addLink= (typeOfField) => {
-    this.props.recordStore.values.record.links.push({"type":typeOfField,"value":""})
-    this.props.parent.forceUpdate();
-    this.forceUpdate();
-    // console.log(JSON.stringify(this.props.recordStore.values.record.links))
+    this.props.addLink({type: typeOfField, value: ''});
+    this.setState({open: false});
   }
   
   handleToggle = () => {

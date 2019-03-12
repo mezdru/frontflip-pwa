@@ -22,6 +22,7 @@ class WingsSuggestions extends React.Component {
       bank: [],
       renderComponent: false,
       shouldUpdate: false,
+      observer: ()=> {}
     };
   }
 
@@ -33,14 +34,18 @@ class WingsSuggestions extends React.Component {
           .then(() => { this.setState({ renderComponent: true }) })
       });
 
-    observe(this.props.commonStore, 'algoliaKey', (change) => {
+    this.setState({observer: observe(this.props.commonStore, 'algoliaKey', (change) => {
       AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
       this.syncBank(null)
         .then(() => {
           this.initSuggestions()
             .then(() => { this.setState({ renderComponent: true }) })
         });
-    });
+    })});
+  }
+
+  componentWillUnmount() {
+    this.state.observer();
   }
 
   componentWillReceiveProps(nextProps) {
