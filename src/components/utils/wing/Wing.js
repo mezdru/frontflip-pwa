@@ -38,7 +38,7 @@ const Wing = ({ src, label, ...props }) => {
   if (src) {
     return (
       <Chip
-        avatar={<Avatar className={props.classes.wingImg} src={src} />}
+        avatar={<Avatar className={props.classes.wingImg} src={src} alt="wings-img"/>}
         label={label}
         color={"secondary"}
         className={classNames(props.classes[props.className], (props.onDelete ? props.classes.removable : null) )}
