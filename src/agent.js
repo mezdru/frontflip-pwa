@@ -5,7 +5,6 @@ import commonStore from './stores/common.store';
 import UrlService from './services/url.service';
 
 const superagent = superagentPromise(_superagent, global.Promise);
-//const API_ROOT_AUTH = 'https://auth-wingzy-staging.herokuapp.com';
 const locale = ((process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') ? (commonStore.getCookie('locale') || commonStore.locale) : 'en-UK');
 const API_ROOT_AUTH = process.env.REACT_APP_API_ROOT_AUTH;
 const API_ROOT = process.env.REACT_APP_API_ROOT + '/' + locale;
