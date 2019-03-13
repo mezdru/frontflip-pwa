@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {Grid, withStyles, Typography, IconButton, CardActions, CardContent, CardHeader, Card, Tooltip} from '@material-ui/core';
 import withWidth from '@material-ui/core/withWidth';
 import {inject, observer} from 'mobx-react';
+
 import '../../resources/stylesheets/font-awesome.min.css';
 import Logo from '../../components/utils/logo/Logo';
 import Availability from '../availabilityToggle/Availability';
@@ -121,6 +122,18 @@ class CardProfile extends React.Component {
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
     }
   }
+
+  getLogoSize = () => {
+    switch (this.props.width) {
+      case 'xs': 
+        if(window.innerWidth < 400) {
+          return '124x124';
+        } else {
+          return '146x146';
+        }
+      default: return '170x170';
+    }
+  }
   
   render() {
     const {classes, hit, addToFilters, handleDisplayProfile} = this.props;
@@ -134,7 +147,7 @@ class CardProfile extends React.Component {
           <CardHeader
             avatar={
               <Grid item container>
-                <Logo type={'person'} className={classes.logo} src={ProfileService.getPicturePath(hit.picture) || defaultPicture}/>
+                <Logo type={'person'} className={classes.logo} src={ProfileService.getPicturePath(hit.picture, 'person', this.getLogoSize()) || defaultPicture}/>
                 { ((hit.personAvailability) && (hit.personAvailability !== 'unspecified') )? <Grid item className={classes.dispo}>
                   <Availability available={`${classes[hit.personAvailability]}`}/>
                 </Grid> : ''}
