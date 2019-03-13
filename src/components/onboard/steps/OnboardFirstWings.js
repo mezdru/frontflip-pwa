@@ -29,6 +29,10 @@ const styles = theme => ({
     display: 'inline-block',
     width: 169,
     height: 169,
+    [theme.breakpoints.down('sm')]: {
+      width: 130,
+      height: 130,
+    },
     overflow: 'hidden',
     padding: 16,
     margin: 8,
@@ -41,6 +45,11 @@ const styles = theme => ({
       width: 145,
       height: 145,
       borderRadius: 75,
+      [theme.breakpoints.down('sm')]: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+      },
       outline: 'none',
     },
     '& div': {
