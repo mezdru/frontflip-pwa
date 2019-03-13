@@ -1,5 +1,5 @@
 import React from 'react'
-import { withStyles, Button, CircularProgress } from '@material-ui/core';
+import { withStyles, CircularProgress } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { injectIntl } from 'react-intl';
 

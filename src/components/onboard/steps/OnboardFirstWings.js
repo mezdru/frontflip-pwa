@@ -151,9 +151,8 @@ class OnboardFirstWings extends React.Component {
   }
 
   render() {
-    const { record } = this.props.recordStore.values;
     const {classes, theme} = this.props;
-    const { firstWings, firstWingsSelected } = this.state;
+    const { firstWings } = this.state;
 
     return (
       <div style={{position: 'relative'}}>
@@ -172,7 +171,7 @@ class OnboardFirstWings extends React.Component {
               <li onClick={(e) => { this.handleAddWing(e, hashtag.tag, i) }} className={classes.firstWing} key={i} 
                 style={this.getFirstWingsStyle(i, theme)} >
                 <div>
-                  <img src={hashtag.picture.url} alt="Wing picture" />
+                  <img src={hashtag.picture.url} alt="Soft Wing" />
                   <div>
                     <span>
                       {hashtag.name}

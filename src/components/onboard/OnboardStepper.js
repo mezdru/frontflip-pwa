@@ -1,5 +1,5 @@
 import React from 'react'
-import { withStyles, Typography, Grid } from '@material-ui/core';
+import { withStyles, Grid } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import MobileStepper from '@material-ui/core/MobileStepper';
 import Button from '@material-ui/core/Button';
