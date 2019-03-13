@@ -1,5 +1,5 @@
 import React from 'react'
-import { withStyles, Button, CircularProgress } from '@material-ui/core';
+import { withStyles, CircularProgress } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { injectIntl } from 'react-intl';
 
@@ -12,12 +12,19 @@ const styles = theme => ({
     position: 'relative',
     margin: '8px 16px',
     textAlign: 'center',
+    [theme.breakpoints.down('sm')] : {
+      margin: 8,
+    },
   },
   picture: {
     position: 'relative',
     borderRadius: '50%',
     width:300,
     height:300,
+    [theme.breakpoints.down('sm')] : {
+      width: 180,
+      height: 180,
+    },
     border: '8px solid white',
     background: 'white',
     zIndex: 2,
@@ -79,7 +86,7 @@ class PictureField extends React.Component {
     return (
       <div>
 
-          <div className={classes.pictureContainer}>
+          <div className={classes.pictureContainer} style={this.props.style} >
             { (loading && !pictureUrl) && (
               <CircularProgress color='primary' className={classes.picture} size={300} />
             )}

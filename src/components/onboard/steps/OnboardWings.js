@@ -88,8 +88,7 @@ class OnboardWings extends React.Component {
   isFeaturedWings = () => (this.props.activeStepLabel && this.props.activeStepLabel.charAt(0) === '#');
 
   render() {
-    const {activeStepOne} = this.state;
-    const {activeStep, activeStepLabel} = this.props;
+    const {activeStepLabel} = this.props;
 
     return (
         <Grid container direction="column" style={{height: '100%', background: 'white'}}>

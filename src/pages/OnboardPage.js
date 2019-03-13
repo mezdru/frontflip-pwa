@@ -28,7 +28,7 @@ class OnboardPage extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({observer: observe(this.props. recordStore.values, 'record', (change) => {
+    this.setState({observer: observe(this.props.recordStore.values, 'record', (change) => {
       this.forceUpdate();
     })});
     this.getRecordForUser().then().catch(err => console.log(err));
@@ -52,7 +52,7 @@ class OnboardPage extends React.Component {
   render() {
     const {record} = this.props.recordStore.values;
     const {inOnboarding} = this.state;
-    const {theme, classes} = this.props;
+    const {classes} = this.props;
 
     if(!inOnboarding) {
       return (

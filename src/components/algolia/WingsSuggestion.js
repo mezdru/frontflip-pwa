@@ -105,7 +105,6 @@ class WingsSuggestions extends React.Component {
   fetchSuggestions = (lastSelection, privateOnly, nbHitToAdd, startIndex) => {
     return AlgoliaService.fetchFacetValues(lastSelection, privateOnly, 'type:person', null)
       .then(content => {
-        let newSuggestions = [];
         let suggestions = this.state.suggestions;
         content.facetHits = this.removeUserWings(content.facetHits);
 
@@ -189,6 +188,7 @@ class WingsSuggestions extends React.Component {
    */
   populateSuggestionsData = () => {
     let suggestions = this.state.suggestions;
+    // eslint-disable-next-line
     this.state.suggestions.map((suggestion, i) => {
       suggestions[i] = this.getData(suggestion.tag) || suggestion;
     });

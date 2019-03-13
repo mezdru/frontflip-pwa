@@ -179,7 +179,7 @@ class CardProfile extends React.Component {
                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
                 return (
                         <Wings  src={ProfileService.getPicturePath(hashtag.picture, 'hashtag') || defaultHashtagPicture} key={i}
-                        label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
+                        label={ProfileService.htmlDecode(displayedName)}
                         onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
                         className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
                 )

@@ -3,7 +3,6 @@ import {inject, observer} from "mobx-react";
 import {withStyles, Grid, TextField, InputAdornment, IconButton} from '@material-ui/core';
 import {Clear} from '@material-ui/icons';
 import AddContactField from '../../utils/fields/AddContactField';
-import { observe } from 'mobx';
 
 
 class OnboardContacts extends React.Component {

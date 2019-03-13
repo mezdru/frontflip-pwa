@@ -29,6 +29,10 @@ const styles = theme => ({
     display: 'inline-block',
     width: 169,
     height: 169,
+    [theme.breakpoints.down('sm')]: {
+      width: 130,
+      height: 130,
+    },
     overflow: 'hidden',
     padding: 16,
     margin: 8,
@@ -41,6 +45,11 @@ const styles = theme => ({
       width: 145,
       height: 145,
       borderRadius: 75,
+      [theme.breakpoints.down('sm')]: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+      },
       outline: 'none',
     },
     '& div': {
@@ -151,9 +160,8 @@ class OnboardFirstWings extends React.Component {
   }
 
   render() {
-    const { record } = this.props.recordStore.values;
     const {classes, theme} = this.props;
-    const { firstWings, firstWingsSelected } = this.state;
+    const { firstWings } = this.state;
 
     return (
       <div style={{position: 'relative'}}>
@@ -172,7 +180,7 @@ class OnboardFirstWings extends React.Component {
               <li onClick={(e) => { this.handleAddWing(e, hashtag.tag, i) }} className={classes.firstWing} key={i} 
                 style={this.getFirstWingsStyle(i, theme)} >
                 <div>
-                  <img src={hashtag.picture.url} alt="Wing picture" />
+                  <img src={hashtag.picture.url} alt="Soft Wing" />
                   <div>
                     <span>
                       {hashtag.name}
