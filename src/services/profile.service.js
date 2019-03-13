@@ -122,6 +122,12 @@ class ProfileService {
     return check;
   }
 
+  getPicturePath(picture, type, size) {
+    let url = this.getPicturePath(picture, type);
+    url = this.resizePicture(url, size);
+    return url;
+  }
+
   getPicturePath(picture, type) {
     if (picture && picture.emoji) return this.getEmojiUrl(picture.emoji);
     else if (picture && picture.url) return picture.url;
@@ -129,6 +135,18 @@ class ProfileService {
     else if (picture && picture.path) return null;
     else if (type === 'hashtag') return this.getRandomEmoji();
     else return null;
+  }
+
+  resizePicture(pictureUrl, size) {
+    if(!pictureUrl || !size) return pictureUrl;
+    let urlSplited = pictureUrl.split('/resize/');
+    if(urlSplited.length === 2 ) {
+      urlSplited[1] = '/' +size + '/';
+      return urlSplited.join('/resize/');
+    } else {
+      return pictureUrl;
+    }
+
   }
 
   getRandomEmoji() {

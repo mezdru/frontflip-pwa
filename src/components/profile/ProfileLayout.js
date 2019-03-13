@@ -96,7 +96,7 @@ class ProfileLayout extends React.Component {
         </Grid>
         <Grid item xs={12} sm={6} lg={3} className={classes.generalPart}>
           <Grid item>
-            <Logo type={'person'} className={classes.logo} src={ProfileService.getPicturePath(currentHit.picture) || defaultPicture}/>
+            <Logo type={'person'} className={classes.logo} src={ProfileService.getPicturePath(currentHit.picture, 'person', '170x170') || defaultPicture}/>
             <div className={classes.subheader}>
               <Typography variant="h4" className={classes.name}>
                 {ProfileService.htmlDecode(currentHit.name) || currentHit.tag}
