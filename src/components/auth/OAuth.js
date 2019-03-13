@@ -5,6 +5,7 @@ import {inject, observer} from 'mobx-react';
 import {withTheme, withStyles} from '@material-ui/core/styles';
 
 import GoogleButton from '../utils/buttons/GoogleButton';
+import { CircularProgress } from '@material-ui/core';
 
 const socket = io(
   (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') +
@@ -70,8 +71,16 @@ class OAuth extends Component {
   }
 
   render() {    
+    const {disabled} = this.state;
     return (
-      <GoogleButton fullWidth={true} onClick={this.startAuth} />
+      <div style={{textAlign: 'center'}}>
+      {!disabled && (
+        <GoogleButton fullWidth={true} onClick={this.startAuth} />
+      )}
+      {disabled && (
+        <CircularProgress />
+      )}
+      </div>
     )
   }
 }
