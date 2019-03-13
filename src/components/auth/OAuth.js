@@ -13,7 +13,6 @@ const socket = io(
 class OAuth extends Component {
   
   state = {
-    user: {},
     disabled: '',
   }  
 
@@ -23,7 +22,6 @@ class OAuth extends Component {
     socket.once(provider, user => {
       if(this.popup) this.popup.close()
       this.props.manageGoogleCb(user.temporaryToken, JSON.parse(user.state));
-      this.setState({user})
     })
   }
 
@@ -53,8 +51,6 @@ class OAuth extends Component {
     const url = (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') +
     `${process.env.REACT_APP_API_ROOT_AUTH}/${provider}?socketId=${socket.id}&state=${JSON.stringify(this.makeState())}`
 
-    console.log(url)
-
     return window.open(url, '',       
       `toolbar=no, location=no, directories=no, status=no, menubar=no, 
       scrollbars=no, resizable=no, copyhistory=no, width=${width}, 
@@ -71,13 +67,9 @@ class OAuth extends Component {
   }
 
   closeCard = () => {
-    this.setState({user: {}})
   }
 
-  render() {
-    const { provider } = this.props
-    const { disabled } = this.state
-    
+  render() {    
     return (
       <GoogleButton fullWidth={true} onClick={this.startAuth} />
     )
