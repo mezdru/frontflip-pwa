@@ -9,7 +9,8 @@ class Logo extends React.Component {
     super(props);
     this.state = {
       type: this.props.type || 'organisation',
-      source: null
+      source: null,
+      observer: ()=>{},
     }
   }
 
@@ -21,11 +22,15 @@ class Logo extends React.Component {
             this.props.organisationStore.values.organisation.logo.url : defaultLogo)
       });
 
-      observe(this.props.organisationStore.values, 'organisation', (change) => {
+      this.setState({observer: observe(this.props.organisationStore.values, 'organisation', (change) => {
         let org = this.props.organisationStore.values.organisation;
         this.setState({ source: (org.logo && org.logo.url ? org.logo.url : defaultLogo) });
-      });
+      })});
     }
+  }
+
+  componentWillUnmount() {
+    this.state.observer();
   }
 
   render() {

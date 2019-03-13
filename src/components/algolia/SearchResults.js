@@ -14,6 +14,7 @@ class SearchResults extends React.Component {
       loadInProgress: true,
       hideShowMore: false,
       hitsAlreadyDisplayed: 0,
+      observer: () => {}
     };
   }
 
@@ -21,10 +22,14 @@ class SearchResults extends React.Component {
     AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
     this.fetchHits(this.props.filters, this.props.query, null, null);
 
-    observe(this.props.commonStore, 'algoliaKey', (change) => {
+    this.setState({observer : observe(this.props.commonStore, 'algoliaKey', (change) => {
       AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
       this.fetchHits(this.props.filters, this.props.query, null, null);
-    });
+    })});
+  }
+
+  componentWillUnmount() {
+    this.state.observer();
   }
 
   fetchHits = (filters, query, facetFilters, page) => {

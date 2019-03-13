@@ -22,6 +22,7 @@ class WingsSuggestions extends React.Component {
       bank: [],
       renderComponent: false,
       shouldUpdate: false,
+      observer: ()=> {}
     };
   }
 
@@ -33,14 +34,18 @@ class WingsSuggestions extends React.Component {
           .then(() => { this.setState({ renderComponent: true }) })
       });
 
-    observe(this.props.commonStore, 'algoliaKey', (change) => {
+    this.setState({observer: observe(this.props.commonStore, 'algoliaKey', (change) => {
       AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
       this.syncBank(null)
         .then(() => {
           this.initSuggestions()
             .then(() => { this.setState({ renderComponent: true }) })
         });
-    });
+    })});
+  }
+
+  componentWillUnmount() {
+    this.state.observer();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -100,7 +105,6 @@ class WingsSuggestions extends React.Component {
   fetchSuggestions = (lastSelection, privateOnly, nbHitToAdd, startIndex) => {
     return AlgoliaService.fetchFacetValues(lastSelection, privateOnly, 'type:person', null)
       .then(content => {
-        let newSuggestions = [];
         let suggestions = this.state.suggestions;
         content.facetHits = this.removeUserWings(content.facetHits);
 
@@ -184,6 +188,7 @@ class WingsSuggestions extends React.Component {
    */
   populateSuggestionsData = () => {
     let suggestions = this.state.suggestions;
+    // eslint-disable-next-line
     this.state.suggestions.map((suggestion, i) => {
       suggestions[i] = this.getData(suggestion.tag) || suggestion;
     });

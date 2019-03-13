@@ -6,7 +6,7 @@ import './SearchField.css';
 import classNames from 'classnames';
 import { withTheme } from '@material-ui/core';
 import ProfileService from '../../services/profile.service';
-import {Option, customStyles, MultiValueContainer, DropdownIndicator} from './SearchFieldElements';
+import {Option, customStyles, MultiValueContainer} from './SearchFieldElements';
 import AlgoliaService from '../../services/algolia.service';
 import { observe } from 'mobx';
 import {Search} from '@material-ui/icons';
@@ -19,8 +19,9 @@ class SearchField extends React.Component {
     this.state = {
       inputValue: '',
       selectedOption: this.props.defaultValue,
-      placeholder: this.props.intl.formatMessage({ id: 'algolia.search' }),
+      placeholder: this.props.intl.formatMessage({ id: (this.props.hashtagOnly ? 'algolia.onboard' : 'algolia.search') }),
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
+      observer: () => {}
     };
   }
 
@@ -40,9 +41,13 @@ class SearchField extends React.Component {
   componentDidMount() {
     AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
 
-    observe(this.props.commonStore, 'algoliaKey', (change) => {
+    this.setState({observer: observe(this.props.commonStore, 'algoliaKey', (change) => {
       AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-    });
+    })});
+  }
+
+  componentWillUnmount() {
+    this.state.observer();
   }
 
   // Format an array of options so that they all have a label and a value
@@ -170,7 +175,12 @@ class SearchField extends React.Component {
     return this.props.intl.formatMessage({ id: 'algolia.typeSomething' });
   }
 
-  createOptionMessage = (inputValue) => this.props.intl.formatMessage({ id: 'algolia.createOption' }, { input: inputValue });
+  createOptionMessage = (inputValue) => {
+    if(this.props.hashtagOnly) 
+      this.props.intl.formatMessage({ id: 'algolia.createWing' }, { input: inputValue });
+    else
+      this.props.intl.formatMessage({ id: 'algolia.createOption' }, { input: inputValue });
+  }
 
   handleSearchClick = (props) => {
     if(props.selectProps.inputValue.trim() !== '') {

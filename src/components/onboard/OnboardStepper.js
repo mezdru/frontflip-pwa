@@ -1,10 +1,11 @@
 import React from 'react'
-import { withStyles, Typography, Grid } from '@material-ui/core';
+import { withStyles, Grid } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import MobileStepper from '@material-ui/core/MobileStepper';
 import Button from '@material-ui/core/Button';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import { Redirect } from 'react-router-dom';
 
 import OnboardIntro from './steps/OnboardIntro';
 import OnboardContacts from './steps/OnboardContacts';
@@ -26,9 +27,14 @@ class OnboardStepper extends React.Component {
   }
 
   handleNext = () => {
-    this.setState(state => ({
-      activeStep: state.activeStep + 1,
-    }));
+    if((this.state.activeStep === (this.state.steps.length - 1))) {
+      // click on finish
+      this.setState({redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag });
+    } else {
+      this.setState(state => ({
+        activeStep: state.activeStep + 1,
+      }));
+    }
   };
 
   handleBack = () => {
@@ -79,22 +85,26 @@ class OnboardStepper extends React.Component {
 
   render() {
     const {theme, classes} = this.props;
-    const {activeStep, steps, canNext, showFeedback} = this.state;
+    const {activeStep, steps, canNext, showFeedback, redirectTo} = this.state;
     let StepComponent = this.getStepComponent(steps, activeStep);
+
+    if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect to={redirectTo} />);
+
     return (
       <Grid style={{height:'100vh'}} item>
       <div style={{width:'100%', background: '#f2f2f2'}}>
       <Grid item xs={12} sm={8} md={6} lg={4} style={{position: 'relative', left:0, right:0, margin:'auto'}} >
           <MobileStepper
             variant="dots"
-            steps={steps.length}
+            steps={3}
             position="static"
-            activeStep={Math.min(activeStep, steps.length -1 )}
+            activeStep={Math.min(activeStep, 2 )}
             style={{width: '100%'}}
             className={classes.root}
             nextButton={
               <Button size="small" onClick={this.handleNext} disabled={!canNext} style={{background: 'none', boxShadow: 'none'}} >
-                Next
+                {(activeStep === (steps.length - 1)) && ('Finish')}
+                {!(activeStep === (steps.length - 1)) && ('Next')}
                 {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
               </Button>
             }
@@ -132,7 +142,7 @@ class OnboardStepper extends React.Component {
   }
 }
 
-export default inject('commonStore', 'recordStore')(
+export default inject('commonStore', 'recordStore', 'organisationStore')(
   observer(
     withSnackbar(
       withStyles(null, {withTheme: true})(OnboardStepper)

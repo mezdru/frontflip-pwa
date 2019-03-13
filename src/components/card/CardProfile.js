@@ -158,11 +158,12 @@ class CardProfile extends React.Component {
           <CardActions disableActionSpacing>
             <Grid item container>
               {hit.links && hit.links.map((link, i) => {
+                if(!link.value || link.value === '') return null;
                 if(link.class !== 'extraLink'){
                   return (
                     <Grid item key={link._id} className={classes.contact}>
                       <Tooltip title={ProfileService.htmlDecode(link.display) || ProfileService.htmlDecode(link.value) || ProfileService.htmlDecode(link.url)}>
-                        <IconButton href={link.url} target="_blank" className={classes.contactButton + " fa fa-" + link.icon}/>
+                        <IconButton href={link.url} rel="noopener" target="_blank" className={classes.contactButton + " fa fa-" + link.icon}/>
                       </Tooltip>
                     </Grid>
                   )
@@ -178,7 +179,7 @@ class CardProfile extends React.Component {
                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
                 return (
                         <Wings  src={ProfileService.getPicturePath(hashtag.picture, 'hashtag') || defaultHashtagPicture} key={i}
-                        label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
+                        label={ProfileService.htmlDecode(displayedName)}
                         onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
                         className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
                 )

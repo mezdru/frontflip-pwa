@@ -107,9 +107,10 @@ class ProfileLayout extends React.Component {
             </div>
           </Grid>
           {currentHit.links.map((link, i) => {
+            if(!link.value || link.value === '') return null;
             return (
               <Grid item key={link._id} xs={12} style={{position: 'relative'}}>
-                <Button variant="text" className={classes.button} key={link._id} href={link.url} target="_blank">
+                <Button variant="text" className={classes.button} key={link._id} href={link.url} rel="noopener" target="_blank">
                   <div className={classNames(classes.contactIcon, "fa fa-" + link.icon)}></div>
                   {ProfileService.htmlDecode(link.display) || ProfileService.htmlDecode(link.value) || ProfileService.htmlDecode(link.url)}
                 </Button>
