@@ -147,7 +147,7 @@ class CardProfile extends React.Component {
           <CardHeader
             avatar={
               <Grid item container>
-                <Logo type={'person'} className={classes.logo} src={ProfileService.getPicturePath(hit.picture, 'person', this.getLogoSize()) || defaultPicture}/>
+                <Logo type={'person'} className={classes.logo} src={ProfileService.getPicturePathResized(hit.picture, 'person', this.getLogoSize()) || defaultPicture}/>
                 { ((hit.personAvailability) && (hit.personAvailability !== 'unspecified') )? <Grid item className={classes.dispo}>
                   <Availability available={`${classes[hit.personAvailability]}`}/>
                 </Grid> : ''}

@@ -13,6 +13,7 @@ const styles = theme => ({
   firstWingsList: {
     listStyleType: 'none',
     padding: 8,
+    paddingTop: 0,
     position: 'relative',
     left:0,
     right:0,
@@ -94,7 +95,8 @@ class OnboardFirstWings extends React.Component {
     this.state = {
       firstWings: [],
       firstWingsSelected: [],
-      observer: ()=>{}
+      observer: ()=>{},
+      scrollableClass: Math.floor(Math.random() * 99999)
     };
   }
 
@@ -144,14 +146,14 @@ class OnboardFirstWings extends React.Component {
 
   scrollRight = () => {
     interval = window.setInterval(function() {
-      window.document.getElementsByClassName('scrollable')[0].scrollLeft += 2;
-    }, 5);
+      window.document.getElementsByClassName(this.state.scrollableClass)[0].scrollLeft += 2;
+    }.bind(this), 5);
   }
 
   scrollLeft = () => {
     interval2 = window.setInterval(function() {
-      window.document.getElementsByClassName('scrollable')[0].scrollLeft -= 2;
-    }, 5);
+      window.document.getElementsByClassName(this.state.scrollableClass)[0].scrollLeft -= 2;
+    }.bind(this), 5);
   }
 
   scrollStop =() => {
@@ -161,7 +163,7 @@ class OnboardFirstWings extends React.Component {
 
   render() {
     const {classes, theme} = this.props;
-    const { firstWings } = this.state;
+    const { firstWings, scrollableClass } = this.state;
 
     return (
       <div style={{position: 'relative'}}>
@@ -173,7 +175,7 @@ class OnboardFirstWings extends React.Component {
             <ArrowRight fontSize="inherit" />
           </Button>
         </Hidden>
-        <ul className={classNames(classes.firstWingsList, 'scrollable')} >
+        <ul className={classNames(classes.firstWingsList, ''+scrollableClass)} >
           {firstWings.length > 0 && firstWings.map((hashtag, i) => {
             if(!this.shouldDisplaySuggestion(hashtag.tag)) return null;
             return (

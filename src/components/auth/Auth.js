@@ -126,7 +126,7 @@ class Auth extends React.Component {
             onChange={this.handleChange}
             indicatorColor="primary"
             textColor="primary"
-            fullWidth={true}
+            variant="fullWidth"
           >
             <Tab label={intl.formatMessage({id: 'Sign In'})} className={classes.leftTabs}/>
             <Tab label={intl.formatMessage({id: 'Sign Up'})} className={classes.rightTabs}/>

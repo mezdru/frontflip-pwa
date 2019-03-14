@@ -40,15 +40,15 @@ class OnboardWings extends React.Component {
   renderTitleByStep = () => {
     if (this.isFirstWings()) {
       return (
-        <Typography variant="h4" style={{textAlign: 'center'}} >Choose your first Wings</Typography>
+        <Typography variant="h4" style={{textAlign: 'center', padding: 16}} >Choose your first Wings</Typography>
       );
     } else if (this.isFeaturedWings()) {
       return (
-        <Typography variant="h4" style={{textAlign: 'center'}} >{this.getFeaturedWings() ? this.getFeaturedWings().intro : 'Choose your Wings'}</Typography>
+        <Typography variant="h4" style={{textAlign: 'center', padding: 16}} >{this.getFeaturedWings() ? this.getFeaturedWings().intro : 'Choose your Wings'}</Typography>
       );
     } else {
       return (
-        <Typography variant="h4" style={{textAlign: 'center'}} >Choose your Wings</Typography>
+        <Typography variant="h4" style={{textAlign: 'center', padding: 16}} >Choose your Wings</Typography>
       );
     }
   }
@@ -56,7 +56,7 @@ class OnboardWings extends React.Component {
   renderByStep = () => {
     if (this.isFirstWings()) {
       return (
-        <Grid container item xs={12} sm={8} md={6} lg={4} style={{height:280}} >
+        <Grid container item xs={12} sm={8} md={6} lg={4} >
           <Grid item xs={12}>
             {this.renderTitleByStep()}
           </Grid>
@@ -67,11 +67,11 @@ class OnboardWings extends React.Component {
       );
     } else {
       return (
-        <Grid container item xs={12} sm={8} md={6} lg={4} style={{height: 280}}>
+        <Grid container item xs={12} sm={8} md={6} lg={4} >
           <Grid item xs={12}>
             {this.renderTitleByStep()}
           </Grid>
-          <Grid item xs={12} style={{padding: 16, paddingBottom: 0}}>
+          <Grid item xs={12} style={{padding: 16, paddingBottom: 0, paddingTop:0}}>
             <SearchField  hashtagOnly handleAddWing={this.handleAddWing} 
                           wingsFamily={this.isFeaturedWings() ? this.props.activeStepLabel : null} />
           </Grid>
@@ -99,7 +99,7 @@ class OnboardWings extends React.Component {
             {this.renderByStep()}
           </Grid>
 
-          <Grid item justify="center" direction="row" container style={{paddingTop: 16, height: 'calc(100% - 280px)', overflowY: 'auto'}}>
+          <Grid item justify="center" direction="row" container style={{paddingTop: 16, flexGrow: 1, overflowY: 'auto'}}>
             <Grid container  item xs={12} sm={8} md={6} lg={4}>
               <Grid item xs={12} >
                 <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? this.getFeaturedWings() : null} />

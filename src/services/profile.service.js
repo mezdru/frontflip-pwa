@@ -129,7 +129,7 @@ class ProfileService {
     return check;
   }
   
-  getPicturePath(picture, type, size) {
+  getPicturePathResized(picture, type, size) {
     let url = this.getPicturePath(picture, type);
     url = this.resizePicture(url, size);
     return url;

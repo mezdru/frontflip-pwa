@@ -17,9 +17,7 @@ const styles = {
   },
   buttonSuccess: {
     backgroundColor: green[500],
-    '&:hover': {
-      backgroundColor: green[700],
-    },
+    color: 'white',
   },
 };
 
@@ -53,7 +51,7 @@ class LoaderFeedback extends React.Component {
 
     return (
       <div {...this.props}>
-        <Fab color="primary" className={buttonClassname}>
+        <Fab color="inherit" className={buttonClassname}>
           {success ? <CheckIcon /> : <SaveIcon />}
         </Fab>
         {loading && <CircularProgress size={68} className={classes.fabProgress} />}
