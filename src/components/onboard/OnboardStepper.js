@@ -20,10 +20,25 @@ class OnboardStepper extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeStep: 2,
-      steps: ['intro','contacts', 'firstWings', 'wings', '#Php'],
+      activeStep: 0,
+      steps: this.makeSteps(),
       canNext: true
     };
+  }
+
+  /**
+   * @description Make steps array thanks to organisation data
+   */
+  makeSteps = () => {
+    var steps = ['intro','contacts', 'firstWings', 'wings'];
+    if(this.props.organisationStore.values.organisation && this.props.organisationStore.values.organisation.featuredWingsFamily) {
+      var locale = this.props.commonStore.locale;
+      var familySteps = this.props.organisationStore.values.organisation.featuredWingsFamily.map(
+        fam => (fam.name_translated ? fam.name_translated[locale] || fam.name_translated['en-UK'] || fam.name : fam.name)
+      );
+      steps = steps.concat(familySteps);
+    }
+    return steps;
   }
 
   handleNext = () => {
