@@ -5,7 +5,6 @@ import {inject, observer} from 'mobx-react';
 import {withTheme, withStyles} from '@material-ui/core/styles';
 
 import GoogleButton from '../utils/buttons/GoogleButton';
-import SlackService from '../../services/slack.service';
 import { CircularProgress } from '@material-ui/core';
 
 const socket = io(
@@ -22,7 +21,6 @@ class OAuth extends Component {
     const { provider } = this.props
 
     socket.once(provider, user => {
-      SlackService.notifyError('Socket response fetch with socket id: '+socket.id + ' ||| ' + JSON.stringify(user), 49, 'quentin', 'oauth.js');
       if(this.popup) this.popup.close()
       this.props.manageGoogleCb(user.temporaryToken, JSON.parse(user.state));
     })
@@ -30,8 +28,6 @@ class OAuth extends Component {
 
   checkPopup() {
     const check = setInterval(() => {
-      SlackService.notifyError('Check popup with socket id: '+socket.id, 49, 'quentin', 'oauth.js');
-
       const { popup } = this
       if (!popup || popup.closed || popup.closed === undefined) {
         clearInterval(check)
@@ -49,7 +45,6 @@ class OAuth extends Component {
   }
 
   openPopup() {
-    SlackService.notifyError('Open popup with socket id: '+socket.id, 49, 'quentin', 'oauth.js');
     const { provider} = this.props
     const width = 600, height = 600
     const left = (window.innerWidth / 2) - (width / 2)
