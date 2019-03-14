@@ -40,15 +40,15 @@ class OnboardWings extends React.Component {
   renderTitleByStep = () => {
     if (this.isFirstWings()) {
       return (
-        <Typography variant="h4" style={{textAlign: 'center'}} >Choose your first Wings:</Typography>
+        <Typography variant="h4" style={{textAlign: 'center'}} >Choose your first Wings</Typography>
       );
     } else if (this.isFeaturedWings()) {
       return (
-        <Typography variant="h4" style={{textAlign: 'center'}} >Choose your Wings for the family {this.props.activeStepLabel}:</Typography>
+        <Typography variant="h4" style={{textAlign: 'center'}} >{this.getFeaturedWings() ? this.getFeaturedWings().intro : 'Choose your Wings'}</Typography>
       );
     } else {
       return (
-        <Typography variant="h4" style={{textAlign: 'center'}} >Choose your Wings:</Typography>
+        <Typography variant="h4" style={{textAlign: 'center'}} >Choose your Wings</Typography>
       );
     }
   }
@@ -86,6 +86,7 @@ class OnboardWings extends React.Component {
 
   isFirstWings = () => (this.props.activeStepLabel === 'firstWings');
   isFeaturedWings = () => (this.props.activeStepLabel && this.props.activeStepLabel.charAt(0) === '#');
+  getFeaturedWings = () => this.props.organisationStore.values.organisation.featuredWingsFamily.filter(fam => fam.tag === this.props.activeStepLabel)[0];
 
   render() {
     const {activeStepLabel} = this.props;
@@ -101,7 +102,7 @@ class OnboardWings extends React.Component {
           <Grid item justify="center" direction="row" container style={{paddingTop: 16, height: 'calc(100% - 280px)', overflowY: 'auto'}}>
             <Grid container  item xs={12} sm={8} md={6} lg={4}>
               <Grid item xs={12} >
-                <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? activeStepLabel : null} />
+                <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? this.getFeaturedWings() : null} />
               </Grid>
             </Grid>
           </Grid>

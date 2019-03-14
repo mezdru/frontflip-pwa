@@ -22,7 +22,7 @@ class OnboardPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inOnboarding: true,
+      inOnboarding: false,
       observer: ()=>{}
     };
   }
@@ -56,24 +56,7 @@ class OnboardPage extends React.Component {
 
     if(!inOnboarding) {
       return (
-        <div>
-          <main>
-          <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
-            <Grid container item alignItems={"stretch"}>
-              <Banner />
-            </Grid>
-            <Grid item container justify={"center"}>
-              <Logo type={'organisation'} alt="org-logo" className={classes.logo} />
-            </Grid>
-            <Grid container item xs={12} sm={6} lg={4} alignContent={"center"} justify='center'>
-            <OnboardWelcome handleEnterToOnboard={this.handleEnterToOnboard} />
-            This is your record : <br/>
-            {JSON.stringify(record)}
-          </Grid>
-          </Grid>
-            
-          </main>
-        </div>
+        <OnboardWelcome handleEnterToOnboard={this.handleEnterToOnboard} />
       );
     } else {
       return (

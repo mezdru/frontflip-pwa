@@ -20,10 +20,24 @@ class OnboardStepper extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeStep: 2,
-      steps: ['intro','contacts', 'firstWings', 'wings', '#Php'],
+      activeStep: 0,
+      steps: this.makeSteps(),
       canNext: true
     };
+  }
+
+  /**
+   * @description Make steps array thanks to organisation data
+   */
+  makeSteps = () => {
+    var steps = ['intro','contacts', 'firstWings', 'wings'];
+    if(this.props.organisationStore.values.organisation && this.props.organisationStore.values.organisation.featuredWingsFamily) {
+      var familySteps = this.props.organisationStore.values.organisation.featuredWingsFamily.map(
+        fam => fam.tag
+      );
+      steps = steps.concat(familySteps);
+    }
+    return steps;
   }
 
   handleNext = () => {
@@ -99,7 +113,7 @@ class OnboardStepper extends React.Component {
             steps={3}
             position="static"
             activeStep={Math.min(activeStep, 2 )}
-            style={{width: '100%'}}
+            style={{maxWidth: '100%'}}
             className={classes.root}
             nextButton={
               <Button size="small" onClick={this.handleNext} disabled={!canNext} style={{background: 'none', boxShadow: 'none'}} >

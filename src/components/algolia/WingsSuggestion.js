@@ -59,7 +59,6 @@ class WingsSuggestions extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log(nextState);
     if ( (nextState.shouldUpdate || (!this.state.renderComponent && nextState.renderComponent)) && !nextState.animationInProgress ) {
       this.setState({shouldUpdate: false});
       return true;
@@ -94,7 +93,7 @@ class WingsSuggestions extends React.Component {
     return AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:'+wingsFamily, null, null, null)
     .then(content => {
       if(content) {
-        this.setState({suggestions: content.hits});
+        this.setState({suggestions: content.hits, shouldUpdate: true}, () => {console.log(this.state)});
       }
     }).catch();
   }
