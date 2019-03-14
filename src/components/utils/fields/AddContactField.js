@@ -9,8 +9,12 @@ const styles = {
     zIndex: 1,
   },
   paper: {
-    marginTop: 8,
-    marginRight: 16,
+    width:'inherit',
+    marginTop: 16,
+    marginLeft: 10,
+  },
+  icon: {
+    fontSize: 24,
   }
 };
 
@@ -22,7 +26,7 @@ class AddContactField extends React.Component {
     }
   }
   
-  addLink= (typeOfField) => {
+  addLink = (typeOfField) => {
     this.props.addLink({type: typeOfField, value: ''});
     this.setState({open: false});
   }
@@ -38,13 +42,27 @@ class AddContactField extends React.Component {
     this.setState({open: false});
   };
   
+  getIcon = name => {
+    switch (name) {
+      case 'email':
+        return name = 'envelope-o';
+      case 'workplace':
+        return name = 'user';
+      case 'workchat':
+        return name = 'comment';
+      default:
+        return name
+    }
+  }
+  
+  
   render() {
     const {classes} = this.props;
     const {open} = this.state;
-    let linkName = ['email','phone','linkedin','twitter','facebook','github','link']
+    let linkName = ['email', 'phone', 'linkedin', 'twitter', 'facebook', 'github', 'link', 'workplace', 'workchat']
     
     return (
-      <div className={classes.root}>
+      <Grid container item className={classes.root} direction={'column'}>
         <Button
           fullWidth
           buttonRef={node => {
@@ -64,24 +82,26 @@ class AddContactField extends React.Component {
               id="menu-list-grow"
               style={{transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom'}}
             >
-              <Paper className={classes.paper}>
-                <ClickAwayListener onClickAway={this.handleClose}>
-                  <Grid container style={{color: 'red'}} justify={'space-between'}>
-                    {linkName.map((name, i) => {
-                      return(
-                        <Grid item key={i}>
-                          <IconButton onClick={() => this.addLink(name)}>
-                            <i className={`fa fa-${name}`}/>
-                          </IconButton>
-                        </Grid>
-                      )
-                    })}
-                  </Grid>
-                </ClickAwayListener>
-              </Paper>
+              <Grid item container xs={12} sm={8} md={6} lg={4} justify={'center'}>
+                <Paper className={classes.paper}>
+                  <ClickAwayListener onClickAway={this.handleClose}>
+                    <Grid container justify={'center'} alignItems={'center'} spacing={8}>
+                      {linkName.map((name, i) => {
+                        return (
+                          <Grid item key={i}>
+                            <IconButton onClick={() => this.addLink(name)}>
+                              <i className={classes.icon + " fa fa-" + this.getIcon(name)}/>
+                            </IconButton>
+                          </Grid>
+                        )
+                      })}
+                    </Grid>
+                  </ClickAwayListener>
+                </Paper>
+              </Grid>
             </Grow>)}
         </Popper>
-      </div>
+      </Grid>
     )
   }
 }

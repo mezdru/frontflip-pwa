@@ -193,6 +193,9 @@ export default createMuiTheme({
       },
       input: {
         borderRadius: 30,
+      },
+      adornedEnd: {
+        paddingRight: 8,
       }
     },
     //List
@@ -222,6 +225,7 @@ export default createMuiTheme({
       }
     },
   },
+  
   // Props
     props: {
       MuiButton: {
