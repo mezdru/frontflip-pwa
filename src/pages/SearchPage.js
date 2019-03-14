@@ -99,6 +99,7 @@ class SearchPage extends React.Component {
       return (<Redirect to={redirectTo} />);
     }
 
+    
     return (
       <div>
         <Header handleDisplayProfile={this.handleDisplayProfile}/>
