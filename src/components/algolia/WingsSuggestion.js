@@ -22,7 +22,8 @@ class WingsSuggestions extends React.Component {
       bank: [],
       renderComponent: false,
       shouldUpdate: false,
-      observer: ()=> {}
+      observer: ()=> {},
+      scrollableClass: Math.floor(Math.random() * 99999)
     };
   }
 
@@ -93,7 +94,7 @@ class WingsSuggestions extends React.Component {
     return AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:'+wingsFamily, null, null, null)
     .then(content => {
       if(content) {
-        this.setState({suggestions: content.hits, shouldUpdate: true}, () => {console.log(this.state)});
+        this.setState({suggestions: content.hits, shouldUpdate: true});
       }
     }).catch();
   }
@@ -245,18 +246,16 @@ class WingsSuggestions extends React.Component {
     );
   }
 
-
-
   scrollRight = () => {
     interval = window.setInterval(function() {
-      window.document.getElementsByClassName('scrollable')[0].scrollLeft += 2;
-    }, 5);
+      window.document.getElementsByClassName(this.state.scrollableClass)[0].scrollLeft += 2;
+    }.bind(this), 5);
   }
 
   scrollLeft = () => {
     interval2 = window.setInterval(function() {
-      window.document.getElementsByClassName('scrollable')[0].scrollLeft -= 2;
-    }, 5);
+      window.document.getElementsByClassName(this.state.scrollableClass)[0].scrollLeft -= 2;
+    }.bind(this), 5);
   }
 
   scrollStop =() => {
@@ -266,8 +265,7 @@ class WingsSuggestions extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { suggestions } = this.state;
-    console.log(this.state.bank.length);
+    const { suggestions, scrollableClass } = this.state;
     return (
       <div>
         <Typography variant="subtitle2" style={{padding: 16}} >Wings suggestions:</Typography>
@@ -282,7 +280,7 @@ class WingsSuggestions extends React.Component {
           </Button>
         </Hidden>
         <div className={classes.transparentGradientBoxLeft}></div>
-        <div className={classNames(classes.suggestionsContainer, 'scrollable')} >
+        <div className={classNames(classes.suggestionsContainer, ''+scrollableClass)} >
           {this.renderWingsList(suggestions, classes, true)}
           {this.renderWingsList(suggestions, classes, false)}
         </div>
