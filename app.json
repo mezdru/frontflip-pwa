@@ -1,0 +1,43 @@
+{
+  "name": "backflip",
+  "scripts": {
+  },
+  "env": {
+    "NODE_ENV": {
+      "required": true
+    },
+    "REACT_APP_API_ROOT_AUTH": {
+      "required": true
+    },
+    "REACT_APP_API_ROOT": {
+      "required": true
+    },
+    "REACT_APP_HOST_BACKFLIP": {
+      "required": true
+    },
+    "REACT_APP_ALGOLIA_APPLICATION_ID": {
+      "required": true
+    },
+    "REACT_APP_ALGOLIA_INDEX": {
+      "required": true
+    },
+    "REACT_APP_CLIENT_ID": {
+      "required": true
+    },
+    "REACT_APP_CLIENT_SECRET": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/mars/create-react-app-buildpack.git#v8.0.0"
+    }
+  ]
+}
