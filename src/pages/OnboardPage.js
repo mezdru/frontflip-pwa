@@ -25,6 +25,10 @@ class OnboardPage extends React.Component {
       inOnboarding: false,
       observer: ()=>{}
     };
+
+    // clear wings bank
+    this.props.commonStore.setLocalStorage('wingsBank', [], true);
+
   }
 
   componentDidMount() {

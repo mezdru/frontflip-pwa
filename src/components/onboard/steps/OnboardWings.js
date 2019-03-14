@@ -99,7 +99,7 @@ class OnboardWings extends React.Component {
             {this.renderByStep()}
           </Grid>
 
-          <Grid item justify="center" direction="row" container style={{paddingTop: 16, height: 'calc(100% - 280px)', overflowY: 'auto'}}>
+          <Grid item justify="center" direction="row" container style={{paddingTop: 16, flexGrow: 1, overflowY: 'auto'}}>
             <Grid container  item xs={12} sm={8} md={6} lg={4}>
               <Grid item xs={12} >
                 <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? this.getFeaturedWings() : null} />

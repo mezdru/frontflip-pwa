@@ -267,12 +267,12 @@ class WingsSuggestions extends React.Component {
   render() {
     const { classes } = this.props;
     const { suggestions } = this.state;
-
+    console.log(this.state.bank.length);
     return (
       <div>
         <Typography variant="subtitle2" style={{padding: 16}} >Wings suggestions:</Typography>
 
-        <div style={{position:'relative', height: 120}}>
+        <div style={{position:'relative', height: 126}}>
         <Hidden smDown>
           <Button className={classNames(classes.scrollLeft, classes.scrollButton)} onMouseDown={this.scrollLeft} onMouseUp={this.scrollStop} variant="outlined">
             <ArrowLeft fontSize="inherit" />
