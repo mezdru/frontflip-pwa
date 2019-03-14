@@ -2,11 +2,11 @@ import React from 'react';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import {Link, Redirect} from 'react-router-dom';
 import {inject, observer} from 'mobx-react';
+
 import {Button, CircularProgress, Grid, TextField, Typography} from '@material-ui/core';
-import ReactGA from 'react-ga';
-
+import GoogleButton from "../../utils/buttons/GoogleButton";
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
-
+import ReactGA from 'react-ga';
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class Login extends React.Component {
@@ -62,7 +62,6 @@ class Login extends React.Component {
     const { values, inProgress } = this.props.authStore;
     const { orgTag } = this.props.organisationStore.values;
     let { loginErrors, locale, redirectTo, isAuth } = this.state;
-    const {children} = this.props;
     let intl = this.props.intl;
 
     if (redirectTo) return <Redirect push to={redirectTo} />;
@@ -77,7 +76,7 @@ class Login extends React.Component {
               </Grid>
             )}
             <Grid item>
-              {children}
+              <GoogleButton fullWidth={true} onClick={this.props.handleGoogleAuth} />
             </Grid>
             <Grid item>
               <Typography style={{

@@ -1,12 +1,12 @@
 import React from 'react';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import {inject, observer} from 'mobx-react';
-import {Button, CircularProgress, Grid, TextField, Typography} from "@material-ui/core";
-import ReactGA from 'react-ga';
 
+import {Button, CircularProgress, Grid, TextField, Typography} from "@material-ui/core";
+import GoogleButton from "../../utils/buttons/GoogleButton";
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import commonStore from '../../../stores/common.store';
-
+import ReactGA from 'react-ga';
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class Register extends React.Component {
@@ -74,7 +74,6 @@ class Register extends React.Component {
   render() {
     const { values, inProgress } = this.props.authStore;
     let { registerErrors, registerSuccess, registerSuccessMessage } = this.state;
-    const {children} = this.props;
     let intl = this.props.intl;
 
     if (registerSuccess) {
@@ -95,7 +94,7 @@ class Register extends React.Component {
               </Grid>
             )}
             <Grid item>
-              {children}
+              <GoogleButton fullWidth={true} onClick={this.props.handleGoogleAuth} />
             </Grid>
             <Grid item>
               <Typography style={{

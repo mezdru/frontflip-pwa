@@ -11,7 +11,6 @@ import Login from './login/Login';
 import Register from './register/Register';
 import UrlService from '../../services/url.service';
 import ReactGA from 'react-ga';
-import OAuth from './OAuth';
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 const queryString = require('query-string');
@@ -58,43 +57,40 @@ class Auth extends React.Component {
     this.setState({observer: observe(this.props.authStore.values, 'invitationCode', (change) => {
       this.setState({ value: 1 });
     })});
+
+    // HANDLE GOOGLE AUTH CALLBACK
+    this.handleGoogleCallback(this.state.queryParams)
+    .then(() => {
+      let googleState = (this.state.queryParams.state ? JSON.parse(this.state.queryParams.state) : null);
+      this.props.userStore.getCurrentUser()
+        .then((user) => {
+          ReactGA.event({category: 'User',action: 'Login with Google'});
+          if (googleState && googleState.invitationCode) this.props.authStore.setInvitationCode(googleState.invitationCode);
+          if(user.superadmin){
+            this.setState({redirectTo: '/' + this.state.locale + (this.props.organisationStore.values.organisation.tag ? '/'+this.props.organisationStore.values.organisation.tag : '')});
+            return;
+          }
+          this.props.authStore.registerToOrg()
+          .then((data) => {
+            let organisation = data.organisation;
+            let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
+            if (currentOrgAndRecord) this.props.recordStore.setRecordId(currentOrgAndRecord.record);
+            this.props.recordStore.getRecord()
+              .then(() => this.setState({ redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag }))
+              .catch(() => window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag));
+          }).catch((err) => this.setState({redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag}));
+        }).catch((err) => this.setState({redirectTo: '/' + this.state.locale}));
+    }).catch((err) => {return;});
+
   }
 
   componentWillUnmount() {
     this.state.observer();
   }
 
-  performGoogleCallbackAuth = (token, googleState) => {
-    if(this.state.performInProgress) return;
-    else 
-      this.setState({performInProgress: true}, () => {
-        this.handleGoogleCallback(token)
-        .then(() => {
-          this.props.userStore.getCurrentUser()
-            .then((user) => {
-              ReactGA.event({category: 'User',action: 'Login with Google'});
-              if (googleState && googleState.invitationCode) this.props.authStore.setInvitationCode(googleState.invitationCode);
-              if(user.superadmin){
-                this.setState({redirectTo: '/' + this.state.locale + (this.props.organisationStore.values.organisation.tag ? '/'+this.props.organisationStore.values.organisation.tag : '')});
-                return;
-              }
-              this.props.authStore.registerToOrg()
-              .then((data) => {
-                let organisation = data.organisation;
-                let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
-                if (currentOrgAndRecord) this.props.recordStore.setRecordId(currentOrgAndRecord.record);
-                this.props.recordStore.getRecord()
-                  .then(() => this.setState({ redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag }))
-                  .catch(() => window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag));
-              }).catch((err) => this.setState({redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag}));
-            }).catch((err) => this.setState({redirectTo: '/' + this.state.locale}));
-        }).catch((err) => {return;});
-      });
-  }
-
-  handleGoogleCallback = async (token) => {
-    if(!token) return Promise.reject('No token');
-    this.props.authStore.setTemporaryToken(token);
+  handleGoogleCallback = async (query) => {
+    if(!query || !query.token) return Promise.reject('No token');
+    this.props.authStore.setTemporaryToken(query.token);
     return this.props.authStore.googleCallbackLogin();
   }
 
@@ -106,12 +102,21 @@ class Auth extends React.Component {
     this.setState({ value: index });
   };
 
+  handleGoogleAuth = () => {
+    let state = {};
+    if (this.props.organisationStore.values.orgTag) state.orgTag = this.props.organisationStore.values.orgTag
+    if (this.props.organisationStore.values.organisation.tag) state.orgTag = this.props.organisationStore.values.organisation.tag;
+    if (this.props.authStore.values.invitationCode) state.invitationCode = this.props.authStore.values.invitationCode;
+    window.location.href = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + 
+                            process.env.REACT_APP_API_ROOT_AUTH + 
+                            '/google?state=' + JSON.stringify(state);
+  }
+
   render() {
     const {classes, theme} = this.props;
     const {redirectTo} = this.state;
     let intl = this.props.intl;
     if (redirectTo) return (<Redirect push to={redirectTo} />);
-    const OAuthComponent = ({...props}) => (<OAuth provider={['google']} manageGoogleCb={this.performGoogleCallbackAuth} />);
 
     return (
       <Grid container spacing={16}>
@@ -121,7 +126,7 @@ class Auth extends React.Component {
             onChange={this.handleChange}
             indicatorColor="primary"
             textColor="primary"
-            variant={'fullWidth'}
+            fullWidth={true}
           >
             <Tab label={intl.formatMessage({id: 'Sign In'})} className={classes.leftTabs}/>
             <Tab label={intl.formatMessage({id: 'Sign Up'})} className={classes.rightTabs}/>
@@ -133,8 +138,8 @@ class Auth extends React.Component {
             index={this.state.value}
             onChangeIndex={this.handleChangeIndex}
           >
-            <Login handleGoogleAuth={this.handleGoogleAuth}><OAuthComponent /></Login>
-            <Register handleGoogleAuth={this.handleGoogleAuth}><OAuthComponent /></Register>
+            <Login handleGoogleAuth={this.handleGoogleAuth} />
+            <Register handleGoogleAuth={this.handleGoogleAuth} />
           </SwipeableViews>
         </Grid>
       </Grid>
