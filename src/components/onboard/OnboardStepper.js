@@ -32,9 +32,8 @@ class OnboardStepper extends React.Component {
   makeSteps = () => {
     var steps = ['intro','contacts', 'firstWings', 'wings'];
     if(this.props.organisationStore.values.organisation && this.props.organisationStore.values.organisation.featuredWingsFamily) {
-      var locale = this.props.commonStore.locale;
       var familySteps = this.props.organisationStore.values.organisation.featuredWingsFamily.map(
-        fam => (fam.name_translated ? fam.name_translated[locale] || fam.name_translated['en-UK'] || fam.name : fam.name)
+        fam => fam.tag
       );
       steps = steps.concat(familySteps);
     }
@@ -114,7 +113,7 @@ class OnboardStepper extends React.Component {
             steps={3}
             position="static"
             activeStep={Math.min(activeStep, 2 )}
-            style={{width: '100%'}}
+            style={{maxWidth: '100%'}}
             className={classes.root}
             nextButton={
               <Button size="small" onClick={this.handleNext} disabled={!canNext} style={{background: 'none', boxShadow: 'none'}} >

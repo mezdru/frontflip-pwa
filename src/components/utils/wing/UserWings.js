@@ -40,7 +40,7 @@ class UserWings extends React.Component {
       <div>
         <Typography variant="h4" style={{textAlign: 'center'}} >Your {record.hashtags.length} Wings:</Typography>
         <div className="" style={{padding: 8, paddingTop: 10}} >
-          {record && record.hashtags.map((hashtag, i) => {
+          {record && record.hashtags && record.hashtags.length > 0 && record.hashtags.map((hashtag, i) => {
             if(!this.shoudlRenderWing(hashtag)) return null;
             let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name)
             return (
@@ -52,6 +52,13 @@ class UserWings extends React.Component {
                 </div>
             )
           })}
+          {record && record.hashtags && record.hashtags.length === 0 && (
+            <Typography variant="h6">
+              Les Wings sont vos compétences, talents et hobbies. frf ref er fre f
+              bla rkgo rkgokepkg krtg ktkg pktkgtkrgktrgkrtkg krtgtrg rt gtr gr tggrg 
+              grgrtg rfrfjjjjjjjjjj jjjjjjjjj jjjjjjjjjjjj jjjjjjjjjjjjjjjjjjjjjjjjj
+            </Typography>
+          )}
         </div>
       </div>
     );
