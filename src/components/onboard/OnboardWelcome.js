@@ -53,6 +53,31 @@ const styles = (theme) => ({
       justifyContent: 'flex-end',
       padding: '8px 16px',
     }
+  },
+  banner: {
+    position: 'absolute',
+    top: 64,
+    width: '100%',
+    textAlign: 'center',
+    left: 0,
+    height: 166,
+    lineHeight: 166,
+    [theme.breakpoints.up('md')]: {
+      height: 350,
+      lineHeight: '350px',
+    }, 
+    background: 'radial-gradient(rgba(50,50,50,.4), rgba(50,50,50,.1))',
+    backgroundRepeat: 'no-repeat',
+    '& h2': {
+      position:'absolute',
+      top: '50%',
+      left:0,
+      right:0,
+      margin: 'auto',
+      transform: 'translateY(-50%)',
+      color: 'white',
+      fontWeight: 600,
+    }
   }
 });
 
@@ -73,7 +98,10 @@ class OnboardWelcome extends React.Component {
         <Header/>
       </Grid>
       <Grid container item alignItems={"stretch"}>
-        <Banner/>
+        <Banner />
+        <div className={classes.banner}>
+        <Typography variant="h2" >Welcome to the Wings of {organisation.name}</Typography>
+        </div>
       </Grid>
       <Grid container item justify={"center"}>
         <Logo type={"organisation"} alt="org-logo" className={classes.logo}/>
@@ -81,7 +109,7 @@ class OnboardWelcome extends React.Component {
       <Grid container item justify={"center"} className={classes.container}>
         <form onSubmit={this.handleSubmitForm} className={classes.form}>
           <Grid item container direction={'column'} xs={12} sm={6} lg={4} spacing={16}>
-            <Typography variant="h2" className={classes.intro}>Welcome to the Wings of {organisation.name}</Typography>
+            {/* <Typography variant="h2" className={classes.intro}>Welcome to the Wings of {organisation.name}</Typography> */}
             <Grid item>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit 
