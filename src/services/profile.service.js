@@ -129,7 +129,8 @@ class ProfileService {
     return check;
   }
   
-  getPicturePath(picture, type, size) {
+  getPicturePathResized(picture, type, size) {
+    console.log('here')
     let url = this.getPicturePath(picture, type);
     url = this.resizePicture(url, size);
     return url;
@@ -145,6 +146,7 @@ class ProfileService {
   }
   
   resizePicture(pictureUrl, size) {
+    console.log('here2')
     if (!pictureUrl || !size) return pictureUrl;
     let urlSplited = pictureUrl.split('/resize/');
     if (urlSplited.length === 2) {

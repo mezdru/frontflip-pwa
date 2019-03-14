@@ -13,6 +13,7 @@ const styles = theme => ({
   firstWingsList: {
     listStyleType: 'none',
     padding: 8,
+    paddingTop: 0,
     position: 'relative',
     left:0,
     right:0,

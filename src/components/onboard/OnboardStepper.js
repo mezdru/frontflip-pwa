@@ -18,6 +18,20 @@ import SwipeableViews from 'react-swipeable-views';
 
 let timeoutArray = [];
 
+const styles = theme => ({
+  stepperButton: {
+    background: 'none', 
+    boxShadow: 'none',
+    padding: '8px 16px',
+    '&:hover' : {
+      background: 'rgba(0, 0, 0, 0.08)',
+    },
+    '&:first-child()': {
+      width: 40,
+    }
+  }
+});
+
 class OnboardStepper extends React.Component {
   constructor(props) {
     super(props);
@@ -99,7 +113,7 @@ class OnboardStepper extends React.Component {
 
     return (
       <Grid style={{ height: '100vh' }} item>
-        <div style={{ width: '100%', background: '#f2f2f2' }}>
+        <div style={{ width: '100%', background: '#f2f2f2', borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }}>
           <Grid item xs={12} sm={8} md={6} lg={4} style={{ position: 'relative', left: 0, right: 0, margin: 'auto' }} >
             <MobileStepper
               variant="dots"
@@ -109,14 +123,14 @@ class OnboardStepper extends React.Component {
               style={{ maxWidth: '100%' }}
               className={classes.root}
               nextButton={
-                <Button size="small" onClick={this.handleNext} disabled={!canNext} style={{ background: 'none', boxShadow: 'none' }} >
+                <Button size="small" onClick={this.handleNext} disabled={!canNext} className={classes.stepperButton} >
                   {(activeStep === (steps.length - 1)) && ('Finish')}
                   {!(activeStep === (steps.length - 1)) && ('Next')}
                   {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
                 </Button>
               }
               backButton={
-                <Button size="small" onClick={this.handleBack} disabled={activeStep === 0} style={{ background: 'none', boxShadow: 'none' }}>
+                <Button size="small" onClick={this.handleBack} disabled={activeStep === 0} className={classes.stepperButton} >
                   {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
                   Back
               </Button>
@@ -162,7 +176,7 @@ class OnboardStepper extends React.Component {
 export default inject('commonStore', 'recordStore', 'organisationStore')(
   observer(
     withSnackbar(
-      withStyles(null, { withTheme: true })(OnboardStepper)
+      withStyles(styles, { withTheme: true })(OnboardStepper)
     )
   )
 );
