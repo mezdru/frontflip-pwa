@@ -6,6 +6,7 @@ import UserWings from '../../utils/wing/UserWings';
 import WingsSuggestion from '../../algolia/WingsSuggestion';
 import Typography from '@material-ui/core/Typography';
 import OnboardFirstWings from './OnboardFirstWings';
+import {FormattedMessage} from "react-intl";
 
 
 class OnboardWings extends React.Component {
@@ -40,15 +41,17 @@ class OnboardWings extends React.Component {
   renderTitleByStep = () => {
     if (this.isFirstWings()) {
       return (
-        <Typography variant="h4" style={{textAlign: 'center', padding: 16}} >Choose your first Wings</Typography>
+        <Typography variant="h4" style={{textAlign: 'center'}} >
+          <FormattedMessage id={'onboard.chooseYourFirstWings'}/>
+        </Typography>
       );
     } else if (this.isFeaturedWings()) {
       return (
-        <Typography variant="h4" style={{textAlign: 'center', padding: 16}} >{this.getFeaturedWings() ? this.getFeaturedWings().intro : 'Choose your Wings'}</Typography>
+        <Typography variant="h4" style={{textAlign: 'center'}} >{this.getFeaturedWings() ? this.getFeaturedWings().intro :<FormattedMessage id={'onboard.chooseYourWings'}/>}</Typography>
       );
     } else {
       return (
-        <Typography variant="h4" style={{textAlign: 'center', padding: 16}} >Choose your Wings</Typography>
+        <Typography variant="h4" style={{textAlign: 'center'}} ><FormattedMessage id={'onboard.chooseYourWings'}/></Typography>
       );
     }
   }
@@ -106,7 +109,6 @@ class OnboardWings extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-
         </Grid>
     );
   }

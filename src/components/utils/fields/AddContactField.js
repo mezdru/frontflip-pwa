@@ -1,22 +1,35 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
-import {Grid, Grow, Paper, Popper, ClickAwayListener, Button, IconButton, withStyles} from '@material-ui/core'
+import {FormattedMessage} from 'react-intl';
+import {Grid, Grow, Paper, Popper, ClickAwayListener, Button, IconButton, withStyles, Typography} from '@material-ui/core'
 import {Add} from "@material-ui/icons";
 
-const styles = {
+const styles = theme => ({
   root: {
     display: 'flex',
     zIndex: 1,
   },
+  button: {
+    color: 'white',
+    backgroundColor: theme.palette.secondary.main
+  },
   paper: {
-    width:'inherit',
-    marginTop: 16,
+    borderRadius: 30,
+    width: 'inherit',
     marginLeft: 10,
   },
-  icon: {
+  contactButton: {
     fontSize: 24,
-  }
-};
+    width: 30,
+    height: 30,
+    '&::before': {
+      position:'absolute',
+      left:0,
+      right:0,
+      margin:'auto',
+    }
+  },
+});
 
 class AddContactField extends React.Component {
   constructor(props) {
@@ -30,7 +43,7 @@ class AddContactField extends React.Component {
     this.props.addLink({type: typeOfField, value: ''});
     this.setState({open: false});
   }
-  
+
   handleToggle = () => {
     this.setState(state => ({open: !state.open}));
   };
@@ -64,6 +77,7 @@ class AddContactField extends React.Component {
     return (
       <Grid container item className={classes.root} direction={'column'}>
         <Button
+          className={classes.button}
           fullWidth
           buttonRef={node => {
             this.anchorEl = node;
@@ -73,7 +87,7 @@ class AddContactField extends React.Component {
           onClick={this.handleToggle}
         >
           <Add fontSize="default"/>
-          ADD MORE
+          <FormattedMessage id={'onboard.addMoreContact'}/>
         </Button>
         <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
           {({TransitionProps, placement}) => (
@@ -90,7 +104,7 @@ class AddContactField extends React.Component {
                         return (
                           <Grid item key={i}>
                             <IconButton onClick={() => this.addLink(name)}>
-                              <i className={classes.icon + " fa fa-" + this.getIcon(name)}/>
+                              <i className={classes.contactButton + " fa fa-" + this.getIcon(name)}/>
                             </IconButton>
                           </Grid>
                         )

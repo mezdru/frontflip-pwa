@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { TextField, Grid, Typography } from '@material-ui/core'
 import PictureField from '../../utils/fields/PictureField';
+import {FormattedMessage} from "react-intl";
 
 class OnboardIntro extends React.Component {
   constructor(props) {
@@ -25,7 +26,9 @@ class OnboardIntro extends React.Component {
       <Grid container style={{ height: 'calc(100vh - 72px)', background: '#F2F2F2' }} direction="column">
         <Grid container item xs={12} sm={8} md={6} lg={4} spacing={16} direction="column" style={{flexBasis: '100%'}} >
           <Grid item>
-            <Typography variant="h4" style={{textAlign: 'center'}} >Who are you?</Typography>
+            <Typography variant="h4" style={{textAlign: 'center'}} >
+              <FormattedMessage id={'onboard.whoAreYou'}/>
+            </Typography>
           </Grid>
           <Grid item>
             <PictureField handleSave={this.props.handleSave} />

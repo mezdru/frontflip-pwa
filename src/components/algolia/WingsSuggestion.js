@@ -10,6 +10,7 @@ import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.pn
 import { styles } from './WingsSuggestion.css.js';
 import { ArrowLeft, ArrowRight } from '@material-ui/icons';
 import './WingsSuggestion.css';
+import {FormattedMessage} from "react-intl";
 
 let interval;
 let interval2;
@@ -268,7 +269,7 @@ class WingsSuggestions extends React.Component {
     const { suggestions, scrollableClass } = this.state;
     return (
       <div>
-        <Typography variant="subtitle2" style={{padding: 16}} >Wings suggestions:</Typography>
+        <Typography variant="h6" style={{padding: 16}} ><FormattedMessage id={'wingsSuggestions'}/></Typography>
 
         <div style={{position:'relative', height: 126}}>
         <Hidden smDown>

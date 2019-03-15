@@ -15,12 +15,13 @@ import { withSnackbar } from 'notistack';
 import LoaderFeedback from '../utils/buttons/LoaderFeedback';
 
 import SwipeableViews from 'react-swipeable-views';
+import {FormattedMessage} from "react-intl";
 
 let timeoutArray = [];
 
 const styles = theme => ({
   stepperButton: {
-    background: 'none', 
+    background: 'none',
     boxShadow: 'none',
     padding: '8px 16px',
     '&:hover' : {
@@ -124,16 +125,16 @@ class OnboardStepper extends React.Component {
               className={classes.root}
               nextButton={
                 <Button size="small" onClick={this.handleNext} disabled={!canNext} className={classes.stepperButton} >
-                  {(activeStep === (steps.length - 1)) && ('Finish')}
-                  {!(activeStep === (steps.length - 1)) && ('Next')}
+                  {(activeStep === (steps.length - 1)) && (<FormattedMessage id={'onboard.stepperFinish'}/>)}
+                  {!(activeStep === (steps.length - 1)) && (<FormattedMessage id={'onboard.stepperNext'}/>)}
                   {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
                 </Button>
               }
               backButton={
                 <Button size="small" onClick={this.handleBack} disabled={activeStep === 0} className={classes.stepperButton} >
                   {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-                  Back
-              </Button>
+                  <FormattedMessage id={'onboard.stepperBack'}/>
+                </Button>
               }
             />
           </Grid>

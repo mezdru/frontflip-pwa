@@ -64,5 +64,16 @@
     "search.showMore": "Show more",
     "delete profile": "Delete profile",
     "profile.editIntro": "Edit the intro",
-    "profile.editAboutMe": "Edit about me"
+    "profile.editAboutMe": "Edit about me",
+    "onboard.whoAreYou": "Who are You ?",
+    "onboard.yourContact": "Contact",
+    "onboard.addMoreContact": "Add more",
+    "onboard.chooseYourFirstWings": "Choose your first wings",
+    "onboard.chooseYourWings": "Choose your wings",
+    "onboard.stepperBack": "Back",
+    "onboard.stepperNext": "Next",
+    "onboard.stepperFinish": "Finish",
+    "onboard.welcome": "Welcome to the Wingzy of ",
+    "onboard.start": "Let's start !",
+    "wingsSuggestions": "Wings suggestions"
 }

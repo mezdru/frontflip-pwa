@@ -4,6 +4,7 @@ import {withStyles, Grid, TextField, InputAdornment, IconButton, Typography} fro
 import {Clear} from '@material-ui/icons';
 import AddContactField from '../../utils/fields/AddContactField';
 import ProfileService from "../../../services/profile.service";
+import {FormattedMessage} from "react-intl";
 
 
 class OnboardContacts extends React.Component {
@@ -62,12 +63,14 @@ class OnboardContacts extends React.Component {
     ProfileService.transformLinks(this.props.recordStore.values.record);
     
     return (
-      <Grid container style={{height: 'calc(100vh - 72px)', background: '#F2F2F2'}} direction="column">
-        <Grid container item xs={12} sm={8} md={6} lg={4} spacing={16} direction="column" style={{flexBasis: '100%'}}>
-          <Grid item>
-            <Typography variant="h4" style={{textAlign: 'center'}}>Your contact</Typography>
+      <Grid container style={{height: 'calc(100vh - 72px)', background: '#F2F2F2'}} direction="column" alignItems={'center'}>
+        <Grid container item xs={12} sm={8} md={6} lg={4} direction="column" justify={'center'}>
+          <Grid item alignItems={'center'}>
+            <Typography variant="h4" style={{textAlign: 'center'}}>
+              <FormattedMessage id={'onboard.yourContact'}/>
+            </Typography>
           </Grid>
-          <Grid container spacing={16}>
+          <Grid container item spacing={16}>
             {links && links.map((link, i) => {
               return (
                 <Grid container item key={i}>

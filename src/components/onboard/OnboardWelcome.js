@@ -2,7 +2,7 @@ import React from 'react'
 import {FormattedMessage} from 'react-intl';
 import {inject, observer} from 'mobx-react';
 
-import {Button, Grid, TextField, Typography, withStyles} from "@material-ui/core";
+import {Button, Grid, Typography, withStyles} from "@material-ui/core";
 import Banner from '../../components/utils/banner/Banner';
 import Header from '../../components/header/Header';
 import Logo from '../../components/utils/logo/Logo';
@@ -100,7 +100,7 @@ class OnboardWelcome extends React.Component {
       <Grid container item alignItems={"stretch"}>
         <Banner />
         <div className={classes.banner}>
-        <Typography variant="h2" >Welcome to the Wings of {organisation.name}</Typography>
+        <Typography variant="h2" ><FormattedMessage id={'onboard.welcome'}/> {organisation.name}</Typography>
         </div>
       </Grid>
       <Grid container item justify={"center"}>
@@ -117,7 +117,7 @@ class OnboardWelcome extends React.Component {
             mollit anim id est laborum
             </Grid>
             <Grid item>
-              <Button onClick={this.props.handleEnterToOnboard} fullWidth color="primary" >Onboard</Button>
+              <Button onClick={this.props.handleEnterToOnboard} fullWidth color="primary" ><FormattedMessage id={'onboard.start'}/></Button>
             </Grid>
             <Grid item container direction="row" justify={'space-between'}>
               <Grid item lg={6}>
