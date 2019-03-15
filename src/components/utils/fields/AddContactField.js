@@ -15,8 +15,8 @@ const styles = theme => ({
   },
   paper: {
     borderRadius: 30,
-    width: 'inherit',
-    marginLeft: 10,
+    width: '100%',
+    boxSizing: 'border-box',
   },
   contactButton: {
     fontSize: 24,
@@ -29,6 +29,14 @@ const styles = theme => ({
       margin:'auto',
     }
   },
+  btnPopup: {
+    '&:first-child()': {
+      position: 'absolute',
+      left:0,
+      right:0,
+      margin: 'auto',
+    }
+  }
 });
 
 class AddContactField extends React.Component {
@@ -89,14 +97,15 @@ class AddContactField extends React.Component {
           <Add fontSize="default"/>
           <FormattedMessage id={'onboard.addMoreContact'}/>
         </Button>
+        
         <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
           {({TransitionProps, placement}) => (
             <Grow
               {...TransitionProps}
               id="menu-list-grow"
-              style={{transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom'}}
+              style={{position:'abdsolute',left:0,right:0,margin:'auto'}}
             >
-              <Grid item container xs={12} sm={8} md={6} lg={4} justify={'center'}>
+              <Grid item container xs={12} sm={8} md={6} lg={4} direction="column">
                 <Paper className={classes.paper}>
                   <ClickAwayListener onClickAway={this.handleClose}>
                     <Grid container justify={'center'} alignItems={'center'} spacing={8}>

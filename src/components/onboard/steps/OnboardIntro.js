@@ -24,9 +24,9 @@ class OnboardIntro extends React.Component {
 
     return (
       <Grid container style={{ height: 'calc(100vh - 72px)', background: '#F2F2F2' }} direction="column">
-        <Grid container item xs={12} sm={8} md={6} lg={4} spacing={16} direction="column" style={{flexBasis: '100%'}} >
+        <Grid container item xs={12} sm={8} md={6} lg={4} spacing={16} direction="column" style={{flexBasis: '100%', width: '100%'}} >
           <Grid item>
-            <Typography variant="h4" style={{textAlign: 'center'}} >
+            <Typography variant="h4" style={{textAlign: 'center', padding: 8}} >
               <FormattedMessage id={'onboard.whoAreYou'}/>
             </Typography>
           </Grid>

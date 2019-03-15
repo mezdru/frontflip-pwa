@@ -114,7 +114,7 @@ class OnboardStepper extends React.Component {
 
     return (
       <Grid style={{ height: '100vh' }} item>
-        <div style={{ width: '100%', background: '#f2f2f2', borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }}>
+        <div style={{ width: '100%', background: '#f2f2f2', borderBottom: '1px solid rgba(0, 0, 0, 0.12)'}}>
           <Grid item xs={12} sm={8} md={6} lg={4} style={{ position: 'relative', left: 0, right: 0, margin: 'auto' }} >
             <MobileStepper
               variant="dots"
