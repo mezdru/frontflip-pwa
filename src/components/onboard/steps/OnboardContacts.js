@@ -63,7 +63,7 @@ class OnboardContacts extends React.Component {
     ProfileService.transformLinks(this.props.recordStore.values.record);
     
     return (
-      <Grid container style={{height: 'calc(100vh - 72px)', background: '#F2F2F2'}} direction="column">
+      <Grid container style={{height: 'calc(100vh - 73px)', background: '#F2F2F2'}} direction="column">
         <Grid container item xs={12} sm={8} md={6} lg={4} direction="column" spacing={16} style={{flexBasis: '100%', width: '100%'}}>
           <Grid item>
             <Typography variant="h4" style={{textAlign: 'center', padding: 8}}>

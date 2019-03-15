@@ -96,6 +96,7 @@ class PictureField extends React.Component {
           </div>
 
           <Uploader
+            style={{maxWidth: '100%'}}
             id='file'
             name='file'
             data-tabs='file camera url'
