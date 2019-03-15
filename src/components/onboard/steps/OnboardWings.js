@@ -41,17 +41,17 @@ class OnboardWings extends React.Component {
   renderTitleByStep = () => {
     if (this.isFirstWings()) {
       return (
-        <Typography variant="h4" style={{textAlign: 'center'}} >
+        <Typography variant="h4" style={{textAlign: 'center', padding: 8}} >
           <FormattedMessage id={'onboard.chooseYourFirstWings'}/>
         </Typography>
       );
     } else if (this.isFeaturedWings()) {
       return (
-        <Typography variant="h4" style={{textAlign: 'center'}} >{this.getFeaturedWings() ? this.getFeaturedWings().intro :<FormattedMessage id={'onboard.chooseYourWings'}/>}</Typography>
+        <Typography variant="h4" style={{textAlign: 'center', padding: 8}} >{this.getFeaturedWings() ? this.getFeaturedWings().intro :<FormattedMessage id={'onboard.chooseYourWings'}/>}</Typography>
       );
     } else {
       return (
-        <Typography variant="h4" style={{textAlign: 'center'}} ><FormattedMessage id={'onboard.chooseYourWings'}/></Typography>
+        <Typography variant="h4" style={{textAlign: 'center', padding: 8}} ><FormattedMessage id={'onboard.chooseYourWings'}/></Typography>
       );
     }
   }
@@ -60,7 +60,7 @@ class OnboardWings extends React.Component {
     if (this.isFirstWings()) {
       return (
         <Grid container item xs={12} sm={8} md={6} lg={4} >
-          <Grid item xs={12}>
+          <Grid item>
             {this.renderTitleByStep()}
           </Grid>
           <Grid item xs={12}>
@@ -96,7 +96,7 @@ class OnboardWings extends React.Component {
 
     return (
         <Grid container direction="column" style={{height: '100%', background: 'white'}}>
-          <Grid item style={{background: '#f2f2f2', maxWidth: '100%', 
+          <Grid item style={{background: '#f2f2f2', maxWidth: '100%',
             boxShadow: '0px 2px 3px 0px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 2px 1px -1px rgba(0,0,0,0.12)' }} 
             justify="center" direction="row" container> 
             {this.renderByStep()}
