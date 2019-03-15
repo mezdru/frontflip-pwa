@@ -144,6 +144,7 @@ class OnboardStepper extends React.Component {
           index={activeStep}
           onChangeIndex={this.handleStepChange}
           style={{height: 'calc(100vh - 73px)'}}
+          disabled={true}
         >
 
           {steps.length > 0 && steps.map((stepLabel, stepIndex) => {
