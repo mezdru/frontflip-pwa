@@ -141,10 +141,8 @@ class OnboardStepper extends React.Component {
         </div>
 
         <SwipeableViews
-          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
           index={activeStep}
           onChangeIndex={this.handleStepChange}
-          enableMouseEvents
           style={{height: 'calc(100vh - 73px)'}}
         >
 
