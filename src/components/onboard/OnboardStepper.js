@@ -145,10 +145,11 @@ class OnboardStepper extends React.Component {
           index={activeStep}
           onChangeIndex={this.handleStepChange}
           enableMouseEvents
+          style={{height: 'calc(100vh - 73px)'}}
         >
 
           {steps.length > 0 && steps.map((stepLabel, stepIndex) => {
-            return (<Grid item style={{ height: 'calc(100vh - 72px)' }} key={stepIndex} >
+            return (<Grid item style={{ height: '100%' }} key={stepIndex} >
               <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[activeStep]} />
             </Grid>)
           })}

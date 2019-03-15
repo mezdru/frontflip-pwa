@@ -269,7 +269,7 @@ class WingsSuggestions extends React.Component {
     const { suggestions, scrollableClass } = this.state;
     return (
       <div>
-        <Typography variant="h6" style={{padding: 16}} ><FormattedMessage id={'wingsSuggestions'}/></Typography>
+        <Typography variant="subtitle2" style={{padding: 16}} ><FormattedMessage id={'wingsSuggestions'}/></Typography>
 
         <div style={{position:'relative', height: 126}}>
         <Hidden smDown>

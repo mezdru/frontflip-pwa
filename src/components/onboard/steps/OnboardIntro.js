@@ -23,17 +23,17 @@ class OnboardIntro extends React.Component {
     const { record } = this.props.recordStore.values;
 
     return (
-      <Grid container style={{ height: 'calc(100vh - 72px)', background: '#F2F2F2' }} direction="column">
+      <Grid container style={{ height: 'calc(100vh - 73px)', background: '#F2F2F2' }} direction="column">
         <Grid container item xs={12} sm={8} md={6} lg={4} spacing={16} direction="column" style={{flexBasis: '100%', width: '100%'}} >
-          <Grid item>
+          <Grid item style={{maxWidth: '100%'}}>
             <Typography variant="h4" style={{textAlign: 'center', padding: 8}} >
               <FormattedMessage id={'onboard.whoAreYou'}/>
             </Typography>
           </Grid>
-          <Grid item>
+          <Grid item style={{maxWidth: '100%'}}>
             <PictureField handleSave={this.props.handleSave} />
           </Grid>
-          <Grid item>
+          <Grid item style={{maxWidth: '100%'}}>
             <TextField
               label="First and last name"
               type="text"
@@ -47,7 +47,7 @@ class OnboardIntro extends React.Component {
               required
             />
           </Grid>
-          <Grid item>
+          <Grid item style={{maxWidth: '100%'}}>
             <TextField
               label="Role at {org name}"
               type="text"

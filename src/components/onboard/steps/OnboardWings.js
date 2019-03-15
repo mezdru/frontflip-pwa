@@ -60,7 +60,7 @@ class OnboardWings extends React.Component {
     if (this.isFirstWings()) {
       return (
         <Grid container item xs={12} sm={8} md={6} lg={4} >
-          <Grid item>
+          <Grid item xs={12} style={{padding: 8}}>
             {this.renderTitleByStep()}
           </Grid>
           <Grid item xs={12}>
@@ -71,7 +71,7 @@ class OnboardWings extends React.Component {
     } else {
       return (
         <Grid container item xs={12} sm={8} md={6} lg={4} >
-          <Grid item xs={12}>
+          <Grid item xs={12} style={{padding: 8}}>
             {this.renderTitleByStep()}
           </Grid>
           <Grid item xs={12} style={{padding: 16, paddingBottom: 0, paddingTop:0}}>
@@ -95,14 +95,14 @@ class OnboardWings extends React.Component {
     const {activeStepLabel} = this.props;
 
     return (
-        <Grid container direction="column" style={{height: '100%', background: 'white'}}>
-          <Grid item style={{background: '#f2f2f2', maxWidth: '100%',
+        <Grid container direction="column" style={{height: 'calc(100vh - 73px)', background: 'white', overflow: 'hidden'}}>
+          <Grid item style={{background: '#f2f2f2', maxWidth: '100%', height: '285px', overflow: 'hidden',
             boxShadow: '0px 2px 3px 0px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 2px 1px -1px rgba(0,0,0,0.12)' }} 
             justify="center" direction="row" container> 
             {this.renderByStep()}
           </Grid>
 
-          <Grid item justify="center" direction="row" container style={{paddingTop: 16, flexGrow: 1, overflowY: 'auto'}}>
+          <Grid item justify="center" direction="row" container style={{paddingTop: 16, height: 'calc(100% - 285px)', overflowY: 'auto'}}>
             <Grid container  item xs={12} sm={8} md={6} lg={4}>
               <Grid item xs={12} >
                 <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? this.getFeaturedWings() : null} />
