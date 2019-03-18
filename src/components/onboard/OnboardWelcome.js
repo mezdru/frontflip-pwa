@@ -27,6 +27,7 @@ const styles = (theme) => ({
   },
   intro: {
     textAlign: 'center',
+    padding: 8,
     [theme.breakpoints.down(400)]: {
       padding: 5,
     }
