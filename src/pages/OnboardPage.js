@@ -3,9 +3,7 @@ import { inject, observer } from "mobx-react";
 import { observe } from 'mobx';
 import OnboardWelcome from '../components/onboard/OnboardWelcome';
 import OnboardStepper from '../components/onboard/OnboardStepper';
-import { withStyles, Grid } from '@material-ui/core';
-import Banner from '../components/utils/banner/Banner';
-import Logo from '../components/utils/logo/Logo';
+import { withStyles } from '@material-ui/core';
 
 const styles = {
   logo: {
@@ -23,12 +21,12 @@ class OnboardPage extends React.Component {
     super(props);
     this.state = {
       inOnboarding: false,
-      observer: ()=>{}
+      observer: ()=>{},
+      stepNumber: 0,
     };
 
     // clear wings bank
     this.props.commonStore.setLocalStorage('wingsBank', [], true);
-
   }
 
   componentDidMount() {
@@ -36,10 +34,35 @@ class OnboardPage extends React.Component {
       this.forceUpdate();
     })});
     this.getRecordForUser().then().catch(err => console.log(err));
+    if (this.props.match && this.props.match.params && this.props.match.params.step) {
+      this.populateStep(this.props.match.params.step);
+    }
   }
 
   componentWillUnmount() {
     this.state.observer();
+  }
+
+  populateStep = (stepLabel) => {
+    switch (stepLabel) {
+      case 'intro':
+        this.setState({inOnboarding: true});
+        break;
+      case 'contacts':
+        this.setState({stepNumber: 1, inOnboarding: true});
+        break;
+      case 'firstWings':
+        this.setState({stepNumber: 2, inOnboarding: true});
+        break;
+      case 'wings':
+        this.setState({stepNumber: 3, inOnboarding: true});
+        break;
+      default:
+        if(stepLabel && (stepLabel.replace('%23', '#')).charAt(0) === '#') {
+          this.setState({stepNumber: 3, inOnboarding: true});
+        }
+        break;
+    }
   }
 
   getRecordForUser = () => {
@@ -55,7 +78,7 @@ class OnboardPage extends React.Component {
 
   render() {
     const {record} = this.props.recordStore.values;
-    const {inOnboarding} = this.state;
+    const {inOnboarding, stepNumber} = this.state;
     const {classes} = this.props;
 
     if(!inOnboarding) {
@@ -66,7 +89,7 @@ class OnboardPage extends React.Component {
       return (
         <div>
           <main>
-            <OnboardStepper />
+            <OnboardStepper initStep={stepNumber} />
           </main>
         </div>
       );
