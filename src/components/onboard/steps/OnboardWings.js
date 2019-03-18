@@ -96,7 +96,7 @@ class OnboardWings extends React.Component {
 
     return (
         <Grid container direction="column" style={{height: 'calc(100vh - 73px)', background: 'white', overflow: 'hidden'}}>
-          <Grid item style={{background: '#f2f2f2', maxWidth: '100%', minHeight: '285px', overflow: 'hidden',
+          <Grid item style={{background: '#f2f2f2', maxWidth: '100%', minHeight: '285px',
             boxShadow: '0px 2px 3px 0px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 2px 1px -1px rgba(0,0,0,0.12)' }} 
             justify="center" direction="row" container> 
             {this.renderByStep()}

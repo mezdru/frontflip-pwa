@@ -177,9 +177,9 @@ class SearchField extends React.Component {
 
   createOptionMessage = (inputValue) => {
     if(this.props.hashtagOnly) 
-      this.props.intl.formatMessage({ id: 'algolia.createWing' }, { input: inputValue });
+      return this.props.intl.formatMessage({ id: 'algolia.createWing' }, { input: inputValue });
     else
-      this.props.intl.formatMessage({ id: 'algolia.createOption' }, { input: inputValue });
+      return this.props.intl.formatMessage({ id: 'algolia.createOption' }, { input: inputValue });
   }
 
   handleSearchClick = (props) => {
