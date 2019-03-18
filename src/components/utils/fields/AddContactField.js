@@ -15,8 +15,9 @@ const styles = theme => ({
   },
   paper: {
     borderRadius: 30,
-    width: '100%',
+    width: 'calc(100% - 16px)',
     boxSizing: 'border-box',
+    marginLeft: 13,
   },
   contactButton: {
     fontSize: 24,
