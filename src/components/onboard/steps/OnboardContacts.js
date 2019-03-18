@@ -7,6 +7,18 @@ import ProfileService from "../../../services/profile.service";
 import {FormattedMessage} from "react-intl";
 
 
+const styles = theme => ({
+  link: {
+    animation: 'linkPop ease 1s',
+    animationFillMode: 'forwards',
+  },
+  '@keyframes linkPop': {
+    from: { width: 0},
+    to: { width: '100%' }
+  },
+});
+
+
 class OnboardContacts extends React.Component {
   constructor(props) {
     super(props);
@@ -60,6 +72,7 @@ class OnboardContacts extends React.Component {
   
   render() {
     const {links} = this.state;
+    const {classes} = this.props;
     ProfileService.transformLinks(this.props.recordStore.values.record);
     
     return (
@@ -74,10 +87,10 @@ class OnboardContacts extends React.Component {
               return (
                 <Grid item key={i}>
                   <TextField
-                    style={{width: '100%'}}
+                    className={classes.link}
                     label={link.type}
                     type="text"
-                    variant={"outlined"}
+                    variant="outlined"
                     value={link.value}
                     onChange={(e) => this.handleLinksChange(e, link, i)}
                     onBlur={() => this.props.handleSave(['links'])}
@@ -111,6 +124,6 @@ class OnboardContacts extends React.Component {
 
 export default inject('commonStore', 'recordStore')(
   observer(
-    withStyles(null)(OnboardContacts)
+    withStyles(styles)(OnboardContacts)
   )
 );
