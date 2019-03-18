@@ -23,7 +23,7 @@ const styles = theme => ({
   suggestionWing: {
     backgroundColor: 'white',
     color: theme.palette.secondary.main,
-    transition: 'all .3s ease-out',
+    transition: 'all 1s ease-out',
     '&:hover': {
       backgroundColor: 'rgba(0,0,0,.08)',
       color: theme.palette.secondary.main,

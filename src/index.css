@@ -60,6 +60,23 @@ main {
   overflow-x: hidden;
 }
 
+@keyframes suggestionOut {
+  from {
+    padding: 6px 12px;
+    font-size: 0.8125rem;
+    overflow: auto;
+    width: 100%;
+    display: block;
+  }
+  to {
+    padding: 0;
+    font-size: 0rem;
+    overflow: hidden;
+    width: 0%;
+    display: none;
+  }
+}
+
 
 @media screen and (max-width: 400px) {
   html{
