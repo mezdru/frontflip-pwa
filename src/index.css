@@ -49,13 +49,6 @@ a {
     min-height: 100%;
 }
 
-div[role="tooltip"]{
-    z-index: 9999;
-    align-items: center;
-    width: 100%;
-    text-align: -webkit-center;
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
   monospace;
@@ -70,6 +63,6 @@ main {
 
 @media screen and (max-width: 400px) {
   html{
-    font-size: 12px
+    font-size: 13px
   }
 }

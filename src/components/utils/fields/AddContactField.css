@@ -1,0 +1,6 @@
+div[role="tooltip"]{
+  z-index: 9999;
+  align-items: center;
+  width: 100%;
+  text-align: -webkit-center;
+}

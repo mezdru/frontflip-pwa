@@ -4,6 +4,8 @@ import {FormattedMessage} from 'react-intl';
 import {Grid, Grow, Paper, Popper, ClickAwayListener, Button, IconButton, withStyles, Typography} from '@material-ui/core'
 import {Add} from "@material-ui/icons";
 
+import './AddContactField.css';
+
 const styles = theme => ({
   root: {
     display: 'flex',
