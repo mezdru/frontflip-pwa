@@ -2,14 +2,14 @@ import {createMuiTheme} from '@material-ui/core/styles';
 
 export const palette = {
   primary: {
-    light: '#EFA3A0',
-    main: '#DD362E',
-    dark: '#A12B22',
+    main: '#cccfe5',
+    dark: '#2b2d3c',
+    hover: '#aaacbe',
     contrastText: '#fff',
   },
   secondary: {
     light: '#DDE9EB',
-    main: '#A3C4C9',
+    main: '#FF0018',
     dark: '#789094',
     contrastText: '#0D0221',
   },
@@ -117,19 +117,21 @@ export default createMuiTheme({
         }
       },
       colorPrimary: {
+        color: palette.primary.dark,
         backgroundColor: palette.primary.main,
         '&:hover': {
-          backgroundColor: palette.primary.dark,
+          // color: 'white',
+          backgroundColor: palette.primary.hover +' !important'
         },
       },
       colorSecondary: {
         color: 'white',
-        backgroundColor: palette.secondary.main,
+        backgroundColor: palette.primary.dark,
         '&:hover': {
-          color: 'white',
-          backgroundColor: palette.secondary.dark
+          // color: 'white',
+          backgroundColor: palette.primary.hover +' !important'
         },
-      }
+      },
     },
     //Cards
     MuiCard: {
