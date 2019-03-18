@@ -256,11 +256,15 @@ class WingsSuggestions extends React.Component {
     var initialScrollLeft = elt.scrollLeft
     var suggestionInterval = window.setInterval(function() {
       if(initialScrollLeft > scrollLeft) {
+        var scroll1 = elt.scrollLeft;
         elt.scrollLeft -= 2;
-        if((elt.scrollLeft <= scrollLeft) || (elt.scrollLeft === elt.scrollWidth)) clearInterval(suggestionInterval);
+        var scroll2 = elt.scrollLeft;
+        if((elt.scrollLeft <= scrollLeft) || (elt.scrollLeft === elt.scrollWidth) || scroll1 === scroll2) clearInterval(suggestionInterval);
       } else {
+        var scroll1 = elt.scrollLeft;
         elt.scrollLeft += 2;
-        if((elt.scrollLeft >= scrollLeft) || (elt.scrollLeft === elt.scrollWidth)) clearInterval(suggestionInterval);
+        var scroll2 = elt.scrollLeft;
+        if((elt.scrollLeft >= scrollLeft) || (elt.scrollLeft === elt.scrollWidth) || scroll2 === scroll1) clearInterval(suggestionInterval);
       }
     }.bind(this), 5);
   }
