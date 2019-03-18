@@ -215,7 +215,6 @@ class WingsSuggestions extends React.Component {
 
   handleSelectSuggestion = (e, element, index) => {
     var elt = e.currentTarget;
-    console.log(elt.offsetLeft);
     elt.style.opacity = 0;
     elt.style.background = this.props.theme.palette.secondary.dark;
     this.setState({animationInProgress: true}, () => {

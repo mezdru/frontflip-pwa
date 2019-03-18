@@ -76,16 +76,16 @@ class OnboardContacts extends React.Component {
     ProfileService.transformLinks(this.props.recordStore.values.record);
     
     return (
-      <Grid container style={{minHeight: 'calc(100vh - 73px)', background: '#F2F2F2'}} direction="column">
-        <Grid container item xs={12} sm={8} md={6} lg={4} direction="column" spacing={16} style={{flexBasis: '100%', width: '100%'}}>
-          <Grid item>
+      <Grid container style={{minHeight: 'calc(100vh - 73px)', background: '#F2F2F2'}} direction="column" alignItems="center">
+        <Grid item xs={12} sm={8} md={6} lg={4} style={{width: '100%'}}>
+          <Grid item style={{padding: 8}}>
             <Typography variant="h4" style={{textAlign: 'center', padding: 8}}>
               <FormattedMessage id={'onboard.yourContact'}/>
             </Typography>
           </Grid>
             {links && links.map((link, i) => {
               return (
-                <Grid item key={i}>
+                <Grid item key={i} style={{padding: 8}}>
                   <TextField
                     className={classes.link}
                     label={link.type}
@@ -113,7 +113,7 @@ class OnboardContacts extends React.Component {
                 </Grid>
               )
             })}
-            <Grid item style={{width: '100%'}}>
+            <Grid item style={{width: '100%', padding: 8}}>
               <AddContactField parent={this} handleSave={this.props.handleSave} addLink={this.addLink}/>
             </Grid>
         </Grid>
