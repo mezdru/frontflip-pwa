@@ -58,7 +58,9 @@ class OnboardPage extends React.Component {
         this.setState({stepNumber: 3, inOnboarding: true});
         break;
       default:
-        // default step
+        if(stepLabel && (stepLabel.replace('%23', '#')).charAt(0) === '#') {
+          this.setState({stepNumber: 3, inOnboarding: true});
+        }
         break;
     }
   }
