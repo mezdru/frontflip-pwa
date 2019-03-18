@@ -2,7 +2,7 @@ import React from 'react'
 import {FormattedMessage} from 'react-intl';
 import {inject, observer} from 'mobx-react';
 
-import {Button, Grid, Typography, withStyles} from "@material-ui/core";
+import {Button, Grid, Typography, withStyles, Hidden} from "@material-ui/core";
 import Banner from '../../components/utils/banner/Banner';
 import Header from '../../components/header/Header';
 import Logo from '../../components/utils/logo/Logo';
@@ -99,9 +99,11 @@ class OnboardWelcome extends React.Component {
       </Grid>
       <Grid container item alignItems={"stretch"}>
         <Banner />
-        <div className={classes.banner}>
-        <Typography variant="h2" ><FormattedMessage id={'onboard.welcome'}/> {organisation.name}</Typography>
-        </div>
+        <Hidden smDown>
+          <div className={classes.banner}>
+            <Typography variant="h2" ><FormattedMessage id={'onboard.welcome'}/> {organisation.name}</Typography>
+          </div>
+        </Hidden>
       </Grid>
       <Grid container item justify={"center"}>
         <Logo type={"organisation"} alt="org-logo" className={classes.logo}/>
@@ -109,7 +111,9 @@ class OnboardWelcome extends React.Component {
       <Grid container item justify={"center"} className={classes.container}>
         <form onSubmit={this.handleSubmitForm} className={classes.form}>
           <Grid item container direction={'column'} xs={12} sm={6} lg={4} spacing={16}>
-            {/* <Typography variant="h2" className={classes.intro}>Welcome to the Wings of {organisation.name}</Typography> */}
+            <Hidden mdUp>
+              <Typography variant="h2" className={classes.intro}>Welcome to the Wings of {organisation.name}</Typography>
+            </Hidden>
             <Grid item>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit 
