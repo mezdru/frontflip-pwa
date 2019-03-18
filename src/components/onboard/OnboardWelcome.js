@@ -123,7 +123,7 @@ class OnboardWelcome extends React.Component {
             <Grid item>
               <Button onClick={this.props.handleEnterToOnboard} fullWidth color="primary" ><FormattedMessage id={'onboard.start'}/></Button>
             </Grid>
-            <Grid item container direction="row" justify={'space-between'}>
+            <Grid item container direction="row" justify='space-around' >
               <Grid item lg={6}>
                 <Button  className={classes.term} variant="text" fullWidth={true} component="a" target="_blank" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/terms', undefined)}>
                   <FormattedMessage id="menu.drawer.terms" />
