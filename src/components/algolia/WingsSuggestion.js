@@ -214,12 +214,17 @@ class WingsSuggestions extends React.Component {
   }
 
   handleSelectSuggestion = (e, element, index) => {
-    e.currentTarget.style.opacity = 0;
-    e.currentTarget.style.background = this.props.theme.palette.secondary.dark;
+    var elt = e.currentTarget;
+    console.log(elt.offsetLeft);
+    elt.style.opacity = 0;
+    elt.style.background = this.props.theme.palette.secondary.dark;
     this.setState({animationInProgress: true}, () => {
-      setTimeout(() => {this.setState({animationInProgress: false})}, 300);
+      setTimeout(() => {this.setState({animationInProgress: false}, () => {
+        this.scrollToSuggestion(elt.offsetLeft);
+        this.props.handleAddWing(e, element).then(this.updateSuggestions(element, index))
+      })}, 300);
     })
-    this.props.handleAddWing(e, element).then(this.updateSuggestions(element, index));
+    
   }
 
   shouldDisplaySuggestion = (tag) => (!this.props.recordStore.values.record.hashtags.some(hashtag => hashtag.tag === tag));
@@ -245,6 +250,20 @@ class WingsSuggestions extends React.Component {
       })}
     </ul>
     );
+  }
+
+  scrollToSuggestion = (scrollLeft) => {
+    var elt = window.document.getElementsByClassName(this.state.scrollableClass)[0];
+    var initialScrollLeft = elt.scrollLeft
+    var suggestionInterval = window.setInterval(function() {
+      if(initialScrollLeft > scrollLeft) {
+        elt.scrollLeft -= 2;
+        if(elt.scrollLeft <= scrollLeft) clearInterval(suggestionInterval);
+      } else {
+        elt.scrollLeft += 2;
+        if(elt.scrollLeft >= scrollLeft) clearInterval(suggestionInterval);
+      }
+    }.bind(this), 5);
   }
 
   scrollRight = () => {
