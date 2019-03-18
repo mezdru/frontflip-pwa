@@ -12,7 +12,7 @@ const styles = theme => ({
     position: 'relative',
     margin: '8px 16px',
     textAlign: 'center',
-    [theme.breakpoints.down('sm')] : {
+    [theme.breakpoints.down('xs')] : {
       margin: 8,
     },
   },
@@ -21,7 +21,7 @@ const styles = theme => ({
     borderRadius: '50%',
     width:300,
     height:300,
-    [theme.breakpoints.down('sm')] : {
+    [theme.breakpoints.down('xs')] : {
       width: 180,
       height: 180,
     },
