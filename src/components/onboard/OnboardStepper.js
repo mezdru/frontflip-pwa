@@ -37,7 +37,7 @@ class OnboardStepper extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeStep: 0,
+      activeStep: this.props.initStep || 0,
       steps: this.makeSteps(),
       canNext: true
     };
@@ -107,13 +107,18 @@ class OnboardStepper extends React.Component {
 
   render() {
     const { theme, classes } = this.props;
+    const { organisation, orgTag } = this.props.organisationStore.values;
+    const {locale} = this.props.commonStore;
     const { activeStep, steps, canNext, showFeedback, redirectTo } = this.state;
     let StepComponent = this.getStepComponent(steps, activeStep);
+    let wantedUrl = '/' + locale + '/' + (organisation.tag || orgTag) + '/onboard/' + steps[activeStep];
 
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect to={redirectTo} />);
-
     return (
       <Grid style={{ height: '100vh' }} item>
+        { (window.location.pathname !== wantedUrl) && (
+          <Redirect to={wantedUrl} />
+        )}
         <div style={{ width: '100%', background: '#f2f2f2', borderBottom: '1px solid rgba(0, 0, 0, 0.12)'}}>
           <Grid item xs={12} sm={8} md={6} lg={4} style={{ position: 'relative', left: 0, right: 0, margin: 'auto' }} >
             <MobileStepper
