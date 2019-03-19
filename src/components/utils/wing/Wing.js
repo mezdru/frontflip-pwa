@@ -12,7 +12,8 @@ const styles = theme => ({
     overflow: 'visible',
   },
   highlighted: {
-    backgroundColor: theme.palette.primary.main
+    backgroundColor: theme.palette.primary.dark,
+    color: 'white',
   },
   button: {
     backgroundColor: theme.palette.primary.main,
@@ -22,11 +23,11 @@ const styles = theme => ({
   },
   suggestionWing: {
     backgroundColor: 'white',
-    color: theme.palette.secondary.main,
+    color: theme.palette.primary.dark,
     transition: 'all 1s ease-out',
     '&:hover': {
       backgroundColor: 'rgba(0,0,0,.08)',
-      color: theme.palette.secondary.main,
+      color: theme.palette.primary.dark,
     }
   },
   removable: {
@@ -50,7 +51,7 @@ const Wing = ({ src, label, ...props }) => {
       <Chip
         avatar={<Avatar className={props.classes.wingImg} src={src} alt="wings-img"/>}
         label={label}
-        color={"secondary"}
+        color={"primary"}
         className={classNames(props.classes[props.className], (props.onDelete ? props.classes.removable : null) )}
         onClick={props.onClick}
         onDelete={props.onDelete}
@@ -61,7 +62,7 @@ const Wing = ({ src, label, ...props }) => {
     return (
       <Chip
         label={label}
-        color={"secondary"}
+        color={"primary"}
         className={classNames(props.classes[props.className], (props.onDelete ? props.classes.removable : null))}
         onClick={props.onClick}
         onDelete={props.onDelete} >
