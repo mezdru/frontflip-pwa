@@ -33,6 +33,7 @@ class WingsSuggestions extends React.Component {
     .then(()=> {
       SuggestionsService.makeInitialSuggestions()
       .then(()=> {
+
         this.setState({suggestions: SuggestionsService.getCurrentSuggestions(), renderComponent: true});
       })
     });
@@ -53,14 +54,13 @@ class WingsSuggestions extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.wingsFamily) {
+    if(nextProps.wingsFamily || (this.props.wingsFamily && !nextProps.wingsFamily)) {
       this.setState({suggestions: []}, () => {
-        SuggestionsService.currentSuggestions = [];
         SuggestionsService.syncBank(null)
         .then(() => {
           SuggestionsService.makeInitialSuggestions(nextProps.wingsFamily)
           .then(() => {
-            this.setState({suggestions: SuggestionsService.getCurrentSuggestions(), shouldUpdate: true});
+            this.setState({suggestions: SuggestionsService.getCurrentSuggestions(), shouldUpdate: true}, () => {this.forceUpdate()});
           })
         })
       });
@@ -178,6 +178,7 @@ class WingsSuggestions extends React.Component {
   render() {
     const { classes } = this.props;
     const { suggestions, scrollableClass } = this.state;
+
     return (
       <div>
         <Typography variant="subtitle2" style={{padding: 16}} ><FormattedMessage id={'wingsSuggestions'}/></Typography>

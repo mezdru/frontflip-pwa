@@ -23,7 +23,7 @@ class SuggestionsService {
   }
 
   makeInitialSuggestions = async (wingsFamily) => {
-    if(this.workInProgress) return;
+    // if(this.workInProgress) return Promise.resolve();
     this.workInProgress = true;
     this.currentSuggestions = [];
     if (!wingsFamily) {
@@ -35,9 +35,13 @@ class SuggestionsService {
         this.syncBank(query)
           .then(() => {
             this.populateSuggestionsData();
+
             this.workInProgress = false;
-          });
-      else this.workInProgress = false;
+          }).catch(e => {console.log(e)})
+          
+      else {
+
+        this.workInProgress = false;}
     } else {
       await this.fetchWingsFamily(wingsFamily);
       this.workInProgress = false;
