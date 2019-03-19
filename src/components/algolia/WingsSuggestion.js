@@ -78,10 +78,9 @@ class WingsSuggestions extends React.Component {
     SuggestionsService.updateSuggestions(element, index);
 
     var elt = e.currentTarget;
-    elt.style.background = this.props.theme.palette.secondary.main;
-    elt.style.animationDelay = '0.3s';
-    elt.style.animation = 'suggestionOut 1s ease-out';
-    elt.style.animationFillMode = 'forwards';
+    elt.style.transition = 'none';
+    elt.style.setProperty('background', this.props.theme.palette.secondary.main, 'important');
+    elt.style.animation = 'suggestionOut 250ms ease-out 100ms 1 forwards';
 
     var offsetToScroll = elt.offsetLeft;
     this.setState({animationInProgress: true}, () => {
@@ -94,7 +93,7 @@ class WingsSuggestions extends React.Component {
             this.setState({suggestions: SuggestionsService.getCurrentSuggestions()});
         });
         })
-      }, 1100);
+      }, 350);
     })
     
   }

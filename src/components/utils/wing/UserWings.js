@@ -10,7 +10,7 @@ import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
 
 const styles = theme => ({
   animated: {
-    transition: 'background ease-in 1s',
+    transition: 'background 250ms ease-in',
     background: theme.palette.secondary.main,
   }
 });
@@ -28,10 +28,10 @@ class UserWings extends React.Component {
   componentDidMount() {
     this.setState({observer: observe(this.props.recordStore.values, 'record', (change) => {
       if(change.newValue.hashtags.length > this.state.currentHashtagsLength) {
-        this.setState({newTag: change.newValue.hashtags[change.newValue.hashtags.length - 1].tag, currentHashtagsLength: change.newValue.hashtags.length}, () => {
-          this.forceUpdate();
-        });
-      } else this.forceUpdate();
+        this.setState({newTag: change.newValue.hashtags[change.newValue.hashtags.length - 1].tag, currentHashtagsLength: change.newValue.hashtags.length});
+      } else {
+        this.setState({newTag: null, currentHashtagsLength: change.newValue.hashtags.length});
+      }
     }) });
   }
 
