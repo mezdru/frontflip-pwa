@@ -4,6 +4,7 @@ import { inject, observer } from "mobx-react";
 import { TextField, Grid, Typography } from '@material-ui/core'
 import PictureField from '../../utils/fields/PictureField';
 import {FormattedMessage} from "react-intl";
+import { injectIntl } from 'react-intl';
 
 class OnboardIntro extends React.Component {
   constructor(props) {
@@ -35,7 +36,7 @@ class OnboardIntro extends React.Component {
           </Grid>
           <Grid item style={{maxWidth: '100%'}}>
             <TextField
-              label="First and last name"
+              label={this.props.intl.formatMessage({ id: 'onboard.intro.name' }, {organisationName: this.props.organisationStore.values.organisation.name})}
               type="text"
               fullWidth
               variant={"outlined"}
@@ -49,7 +50,7 @@ class OnboardIntro extends React.Component {
           </Grid>
           <Grid item style={{maxWidth: '100%'}}>
             <TextField
-              label="Role at {org name}"
+              label={this.props.intl.formatMessage({ id: 'onboard.intro.intro' }, {organisationName: this.props.organisationStore.values.organisation.name})}
               type="text"
               fullWidth
               variant={"outlined"}
@@ -67,8 +68,8 @@ class OnboardIntro extends React.Component {
   }
 }
 
-export default inject('commonStore', 'recordStore')(
+export default inject('commonStore', 'recordStore', 'organisationStore')(
   observer(
-    withStyles(null)(OnboardIntro)
+    injectIntl(withStyles(null)(OnboardIntro))
   )
 );

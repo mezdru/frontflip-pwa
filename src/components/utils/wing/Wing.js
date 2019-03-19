@@ -24,7 +24,7 @@ const styles = theme => ({
   suggestionWing: {
     backgroundColor: 'white',
     color: theme.palette.primary.dark,
-    transition: 'all .3s ease-out',
+    transition: 'all 1s ease-out',
     '&:hover': {
       backgroundColor: 'rgba(0,0,0,.08)',
       color: theme.palette.primary.dark,
@@ -32,7 +32,17 @@ const styles = theme => ({
   },
   removable: {
     paddingRight: 0,
-  }
+  },
+  animated: {
+    background: theme.palette.primary.main,
+    animationDelay: '0.1s',
+    animation: 'backgroundChange 1s ease',
+    animationFillMode: 'forwards',
+  },
+  '@keyframes backgroundChange': {
+    from: { background: theme.palette.primary.main },
+    to: { background: theme.palette.secondary.main }
+  },
 });
 
 const Wing = ({ src, label, ...props }) => {
