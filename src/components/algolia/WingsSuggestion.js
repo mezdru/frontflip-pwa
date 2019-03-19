@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { observe } from 'mobx';
 import Wings from '../utils/wing/Wing';
 import ProfileService from '../../services/profile.service';
-import AlgoliaService from '../../services/algolia.service';
+import SuggestionsService from '../../services/suggestions.service';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
 import { styles } from './WingsSuggestion.css.js';
 import { ArrowLeft, ArrowRight } from '@material-ui/icons';
@@ -29,20 +29,22 @@ class WingsSuggestions extends React.Component {
   }
 
   componentDidMount() {
-    AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-    this.syncBank(null)
-      .then(() => {
-        this.initSuggestions()
-          .then(() => { this.setState({ renderComponent: true }) })
-      });
+    SuggestionsService.init(this.props.algoliaKey)
+    .then(()=> {
+      SuggestionsService.makeInitialSuggestions()
+      .then(()=> {
+        this.setState({suggestions: SuggestionsService.getCurrentSuggestions(), renderComponent: true});
+      })
+    });
 
     this.setState({observer: observe(this.props.commonStore, 'algoliaKey', (change) => {
-      AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-      this.syncBank(null)
-        .then(() => {
-          this.initSuggestions()
-            .then(() => { this.setState({ renderComponent: true }) })
-        });
+      SuggestionsService.init(this.props.algoliaKey)
+      .then(()=> {
+        SuggestionsService.makeInitialSuggestions()
+        .then(()=> {
+          this.setState({suggestions: SuggestionsService.getCurrentSuggestions(), renderComponent: true});
+        })
+      });
     })});
   }
 
@@ -52,11 +54,14 @@ class WingsSuggestions extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({suggestions: []}, () => {
-      this.syncBank(null)
+      SuggestionsService.currentSuggestions = [];
+      SuggestionsService.syncBank(null)
       .then(() => {
-        this.initSuggestions(nextProps.wingsFamily)
-          .then(() => {})
-      });
+        SuggestionsService.makeInitialSuggestions(nextProps.wingsFamily)
+        .then(() => {
+          this.setState({suggestions: SuggestionsService.getCurrentSuggestions(), shouldUpdate: true});
+        })
+      })
     });
   }
 
@@ -68,162 +73,45 @@ class WingsSuggestions extends React.Component {
     return false;
   }
 
-
-  /**
-   * @description Init Wings suggestions with most common Wings
-   */
-  initSuggestions = async (wingsFamily) => {
-    if(!wingsFamily) {
-      await this.fetchSuggestions(null, false, 5);
-      await this.fetchSuggestions(null, true, 10);
-      this.populateSuggestionsData();
-      let query = this.formatHashtagsQuery();
-      if (query)
-        this.syncBank(query)
-          .then(() => {
-            this.populateSuggestionsData();
-            this.setState({shouldUpdate: true});
-          });
-      else this.setState({shouldUpdate: true});
-    } else {
-      await this.fetchWingsFamily(wingsFamily);
-    }
-
-  }
-
-  fetchWingsFamily = (wingsFamily) => {
-    return AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:'+wingsFamily, null, null, null)
-    .then(content => {
-      if(content) {
-        this.setState({suggestions: content.hits, shouldUpdate: true});
-      }
-    }).catch();
-  }
-
-  /**
-   * @description Fetch suggestions and add them to suggestions list thanks to Algolia
-   */
-  fetchSuggestions = (lastSelection, privateOnly, nbHitToAdd, startIndex) => {
-    return AlgoliaService.fetchFacetValues(lastSelection, privateOnly, 'type:person', null)
-      .then(content => {
-        let suggestions = this.state.suggestions;
-        content.facetHits = this.removeUserWings(content.facetHits);
-
-        for (let i = 0; i < nbHitToAdd; i++) {
-          if (content.facetHits.length === 0) break;
-
-          let index = (i === 0 ? 0 : Math.floor(Math.random() * Math.floor(content.facetHits.length)));
-          let suggestionToAdd = content.facetHits.splice(index, 1)[0];
-          let knownIndex = suggestions.findIndex(hashtag => hashtag && (hashtag.tag === suggestionToAdd.value));
-
-          if (knownIndex > -1 && (i > 0 || startIndex)) {
-            i--;
-            continue;
-          } else if (i === 0 && knownIndex > -1 && !startIndex) {
-            // elt known index is an important suggestion, we put it at the start of the array
-            suggestions.splice(0, 0, suggestions.splice(knownIndex, 1)[0]);
-            continue;
-          }
-
-          suggestionToAdd.tag = suggestionToAdd.value;
-          suggestionToAdd.new = true;
-          if(!startIndex) suggestions.push(suggestionToAdd);
-          else suggestions.splice(startIndex, 0, suggestionToAdd);
-        }
-        this.setState({ suggestions: suggestions });
-      }).catch((e) => { console.log(e) });
-  }
-
-  /**
-   * @description Remove user Wings for Wings suggestions
-   */
-  removeUserWings = (suggestions) => {
-    let suggestionsToReturn = suggestions;
-    suggestions.forEach(suggestion => {
-      try {
-        if (this.props.recordStore.values.record.hashtags.findIndex(hashtag => hashtag.tag === suggestion.value) > -1) {
-          let index = suggestionsToReturn.findIndex(sugInRet => sugInRet.value === suggestion.value);
-          if (index > -1) suggestionsToReturn.splice(index, 1);
-        }
-      } catch (e) {
-        return;
-      }
-    });
-    return suggestionsToReturn;
-  }
-
-  /**
-   * @description Fetch and add new suggestions after user choose a Wing
-   * @param filters Record object selected
-   * @param index Index of the object in the suggestions displayed list
-   */
-  updateSuggestions = async (filters, index) => {
-    if(this.props.wingsFamily) return;
-    await this.fetchSuggestions(null, false, 1, index);
-    await this.fetchSuggestions(null, true, 2, index);
-    await this.fetchSuggestions(filters, false, 2, index);
-    await this.fetchSuggestions(filters, true, 2, index);
-    this.populateSuggestionsData();
-    let query = this.formatHashtagsQuery();
-    if (query)
-      this.syncBank(query)
-        .then(() => {
-          this.populateSuggestionsData();
-          this.setState({shouldUpdate: true});
-        });
-    else this.setState({shouldUpdate: true});
-  }
-
-  /**
-   * @description Get complete Wing data by tag thanks to current Wings bank
-   */
-  getData = (tag) => {
-    if (this.state.bank)
-      return this.state.bank.find(bankElt => bankElt.tag === tag);
-    else
-      return null;
-  }
-
-  /**
-   * @description Populate all suggestions data thanks to current Wings bank
-   */
-  populateSuggestionsData = () => {
-    let suggestions = this.state.suggestions;
-    // eslint-disable-next-line
-    this.state.suggestions.map((suggestion, i) => {
-      suggestions[i] = this.getData(suggestion.tag) || suggestion;
-    });
-    this.setState({suggestions: suggestions});
-  }
-
-  /**
-   * @description Sync wings bank with current state bank
-   */
-  syncBank = (filters) => AlgoliaService.loadBank(filters).then(() => {this.setState({bank: this.props.commonStore.getLocalStorage('wingsBank', true)})});
-
-  /**
-   * @description Format query to fetch missing Wings data with Algolia
-   */
-  formatHashtagsQuery = () => {
-    let query = '';
-    this.state.suggestions.forEach(suggestion => {
-      if (!suggestion.objectID)
-        query += (query !== '' ? ' OR' : '') + ' tag:' + suggestion.tag;
-    });
-    return query;
-  }
-
   handleSelectSuggestion = (e, element, index) => {
+    this.props.handleAddWing(e, element);
+    SuggestionsService.updateSuggestions(element, index);
+
     var elt = e.currentTarget;
-    elt.style.opacity = 0;
-    elt.style.background = this.props.theme.palette.secondary.dark;
+    elt.style.background = this.props.theme.palette.secondary.main;
+    elt.style.animationDelay = '0.3s';
+    elt.style.animation = 'suggestionOut 1s ease-out';
+    elt.style.animationFillMode = 'forwards';
+
+    var offsetToScroll = elt.offsetLeft;
     this.setState({animationInProgress: true}, () => {
       setTimeout(() => {this.setState({animationInProgress: false}, () => {
-        this.scrollToSuggestion(elt.offsetLeft);
-        this.props.handleAddWing(e, element).then(this.updateSuggestions(element, index))
-      })}, 300);
+        var liElt = elt.parentNode;
+        this.reduceElt(liElt)
+        .then(() => {
+          // liElt.remove();
+          this.scrollToSuggestion(offsetToScroll);
+            this.setState({suggestions: SuggestionsService.getCurrentSuggestions()});
+        });
+        })
+      }, 1100);
     })
     
+  }
+
+  reduceElt = async (elt) => {
+    var initWidth = elt.offsetWidth;
+    return new Promise((resolve, reject) => {
+      var currentInterval = setInterval(() => {
+        initWidth = Math.max(0, initWidth-2);
+        elt.style.width = initWidth +'px' ;
+        if(elt.style.width === 0+'px'){
+          clearInterval(currentInterval);
+          resolve();
+        }
+      }, 5);
+    });
+
   }
 
   shouldDisplaySuggestion = (tag) => (!this.props.recordStore.values.record.hashtags.some(hashtag => hashtag.tag === tag));
@@ -232,7 +120,7 @@ class WingsSuggestions extends React.Component {
 
   renderWing = (classes, hit, i) => {
     return (
-      <li key={i} className={classes.suggestion} style={{animationDelay: (i*0.05) +'s'}}>
+      <li key={i} className={classes.suggestion} style={{animationDelay: (i*0.05) +'s'}} id={hit.tag}>
         <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
           label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
           onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag }, i)}
@@ -257,12 +145,12 @@ class WingsSuggestions extends React.Component {
     var suggestionInterval = window.setInterval(function() {
       if(initialScrollLeft > scrollLeft) {
         var scroll1 = elt.scrollLeft;
-        elt.scrollLeft -= 2;
+        elt.scrollLeft -= 4;
         var scroll2 = elt.scrollLeft;
         if((elt.scrollLeft <= scrollLeft) || (elt.scrollLeft === elt.scrollWidth) || scroll1 === scroll2) clearInterval(suggestionInterval);
       } else {
         var scroll1 = elt.scrollLeft;
-        elt.scrollLeft += 2;
+        elt.scrollLeft += 4;
         var scroll2 = elt.scrollLeft;
         if((elt.scrollLeft >= scrollLeft) || (elt.scrollLeft === elt.scrollWidth) || scroll2 === scroll1) clearInterval(suggestionInterval);
       }
