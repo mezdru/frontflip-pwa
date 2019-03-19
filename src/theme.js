@@ -83,6 +83,9 @@ export default createMuiTheme({
         transition: 'all 250ms',
         padding: '8px 24px',
       },
+      disabled: {
+        color:palette.primary.hover + '!important'
+      },
       text: {
         color: "darkgrey",
         '&:hover': {
@@ -225,6 +228,14 @@ export default createMuiTheme({
         padding: '0px!important', // nous permet d'avoir nos espacement de 16px à chaques view
       }
     },
+    MuiMobileStepper: {
+      dot: {
+        backgroundColor: palette.primary.main
+      },
+      dotActive: {
+        backgroundColor: palette.secondary.main
+      }
+    }
   },
   
   // Props
