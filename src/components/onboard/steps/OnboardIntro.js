@@ -6,6 +6,9 @@ import PictureField from '../../utils/fields/PictureField';
 import {FormattedMessage} from "react-intl";
 import { injectIntl } from 'react-intl';
 
+const Entities = require('html-entities').XmlEntities;
+const entities = new Entities();
+
 class OnboardIntro extends React.Component {
   constructor(props) {
     super(props);
@@ -22,6 +25,9 @@ class OnboardIntro extends React.Component {
 
   render() {
     const { record } = this.props.recordStore.values;
+
+    record.intro = entities.decode(record.intro);
+    record.name = entities.decode(record.name);
 
     return (
       <Grid container style={{ height: 'calc(100vh - 73px)', background: '#F2F2F2' }} direction="column">

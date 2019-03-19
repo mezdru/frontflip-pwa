@@ -65,7 +65,7 @@ class OnboardFirstWings extends React.Component {
   getFirstWingsStyle = (index, theme) => {
     let style = {};
     style.background = (this.state.firstWingsSelected[index] ? theme.palette.secondary.dark : 'white');
-    style.color = (this.state.firstWingsSelected[index] ? 'white' : theme.palette.secondary.main);
+    style.color = (this.state.firstWingsSelected[index] ? 'white' : theme.palette.primary.main);
     style.display = (this.state.firstWingsSelected[index] ? 'none' : 'inline-block');
     return style;
   }

@@ -116,6 +116,7 @@ class RecordStore {
     this.errors = null;
 
     let recordToUpdate = this.buildRecordToUpdate(arrayOfFields);
+    console.log(recordToUpdate.name)
 
     return agent.Record.put(this.values.orgId, this.values.recordId, recordToUpdate)
       .then(data => { this.values.record = (data ? data.record : {}); return this.values.record;})

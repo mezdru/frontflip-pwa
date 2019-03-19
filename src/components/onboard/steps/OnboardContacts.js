@@ -6,6 +6,8 @@ import AddContactField from '../../utils/fields/AddContactField';
 import ProfileService from "../../../services/profile.service";
 import {FormattedMessage} from "react-intl";
 
+const Entities = require('html-entities').XmlEntities;
+const entities = new Entities();
 
 const styles = theme => ({
   link: {
@@ -67,7 +69,7 @@ class OnboardContacts extends React.Component {
       case 'email':
         return type = 'email';
       case 'phone':
-        return type = 'number';
+        return type = 'tel';
       default:
         return type = 'text';
     }
@@ -109,6 +111,7 @@ class OnboardContacts extends React.Component {
             </Typography>
           </Grid>
             {links && links.map((link, i) => {
+              link.value = entities.decode(link.value);
               return (
                 <Grid item key={i} style={{padding: 8}}>
                   <TextField
