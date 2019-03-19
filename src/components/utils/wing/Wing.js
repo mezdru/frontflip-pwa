@@ -31,7 +31,17 @@ const styles = theme => ({
   },
   removable: {
     paddingRight: 0,
-  }
+  },
+  animated: {
+    background: theme.palette.primary.main,
+    animationDelay: '.1s',
+    animation: 'backgroundChange 1s ease',
+    animationFillMode: 'forwards',
+  },
+  '@keyframes backgroundChange': {
+    from: { background: theme.palette.primary.main },
+    to: { background: theme.palette.secondary.main }
+  },
 });
 
 const Wing = ({ src, label, ...props }) => {

@@ -54,11 +54,14 @@ class WingsSuggestions extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({suggestions: []}, () => {
-      this.syncBank(null)
+      SuggestionsService.currentSuggestions = [];
+      SuggestionsService.syncBank(null)
       .then(() => {
-        this.initSuggestions(nextProps.wingsFamily)
-          .then(() => {})
-      });
+        SuggestionsService.makeInitialSuggestions(nextProps.wingsFamily)
+        .then(() => {
+          this.setState({suggestions: SuggestionsService.getCurrentSuggestions(), shouldUpdate: true});
+        })
+      })
     });
   }
 
@@ -74,26 +77,42 @@ class WingsSuggestions extends React.Component {
     SuggestionsService.updateSuggestions(element, index);
 
     var elt = e.currentTarget;
-    // elt.style.opacity = 0;
-    // elt.style.padding = 0;
-    // elt.style.width = 0;
-    // elt.style.fontSize = '0rem';
-    // elt.style.overflow = 'hidden';
     elt.style.background = this.props.theme.palette.secondary.main;
     elt.style.animationDelay = '0.3s';
     elt.style.animation = 'suggestionOut 1s ease-out';
     elt.style.animationFillMode = 'forwards';
 
+    var offsetToScroll = elt.offsetLeft;
+
     this.setState({animationInProgress: true}, () => {
       setTimeout(() => {this.setState({animationInProgress: false}, () => {
-        this.scrollToSuggestion(elt.offsetLeft);
-        this.props.handleAddWing(e, element).then(() => {
-          this.setState({suggestions: SuggestionsService.getCurrentSuggestions()});
-          })
+        var liElt = elt.parentNode;
+        this.props.handleAddWing(e, element);
+        this.reduceElt(liElt)
+        .then(() => {
+          // liElt.remove();
+          this.scrollToSuggestion(offsetToScroll);
+            this.setState({suggestions: SuggestionsService.getCurrentSuggestions()});
+        });
         })
-      }, 1000);
+      }, 1100);
     })
     
+  }
+
+  reduceElt = async (elt) => {
+    var initWidth = elt.offsetWidth;
+    return new Promise((resolve, reject) => {
+      var currentInterval = setInterval(() => {
+        initWidth = Math.max(0, initWidth-2);
+        elt.style.width = initWidth +'px' ;
+        if(elt.style.width === 0+'px'){
+          clearInterval(currentInterval);
+          resolve();
+        }
+      }, 5);
+    });
+
   }
 
   shouldDisplaySuggestion = (tag) => (!this.props.recordStore.values.record.hashtags.some(hashtag => hashtag.tag === tag));
