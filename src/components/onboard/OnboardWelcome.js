@@ -119,7 +119,7 @@ class OnboardWelcome extends React.Component {
               <FormattedHTMLMessage id="onboard.welcome.text" values={{organisationName: organisation.name}} />
             </Grid>
             <Grid item>
-              <Button onClick={this.props.handleEnterToOnboard} fullWidth color="primary" ><FormattedMessage id={'onboard.start'}/></Button>
+              <Button onClick={this.props.handleEnterToOnboard} fullWidth color="secondary" ><FormattedMessage id={'onboard.start'}/></Button>
             </Grid>
             <Grid item container direction="row" justify='space-around' >
               <Grid item lg={6}>

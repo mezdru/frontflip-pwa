@@ -16,7 +16,7 @@ const styles = theme => ({
     margin: 8,
     paddingRight: 0,
     background: 'white',
-    color: theme.palette.secondary.dark,
+    color: theme.palette.primary.dark,
     '&:hover': {
       background: 'rgb(220,220,220)'
     },

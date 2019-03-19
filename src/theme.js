@@ -1,17 +1,16 @@
 import {createMuiTheme} from '@material-ui/core/styles';
 
 export const palette = {
+  secondary: {
+    light: '#EFA3A0',
+    main: '#FF0018',
+    dark: '#BA0012',
+  },
   primary: {
     main: '#cccfe5',
     dark: '#2b2d3c',
     hover: '#aaacbe',
     contrastText: '#fff',
-  },
-  secondary: {
-    light: '#DDE9EB',
-    main: '#FF0018',
-    dark: '#789094',
-    contrastText: '#0D0221',
   },
   background: {
     default: '#f2f2f2',
@@ -54,15 +53,15 @@ export default createMuiTheme({
         padding: 8,
       },
       h5: {
-        color: palette.secondary.contrastText,
+        color: 'white',
         fontWeight: '700',
       },
       h4: {
-        color: palette.secondary.contrastText,
+        color: 'white',
         fontWeight: '400',
       },
       body1: {
-        color: palette.secondary.contrastText,
+        color: 'white',
         fontWeight: '400',
       },
       body2: {
@@ -120,8 +119,7 @@ export default createMuiTheme({
         color: palette.primary.dark,
         backgroundColor: palette.primary.main,
         '&:hover': {
-          // color: 'white',
-          backgroundColor: palette.primary.hover +' !important'
+          backgroundColor: palette.primary.hover +' !important',
         },
       },
       colorSecondary: {
@@ -140,6 +138,7 @@ export default createMuiTheme({
         borderRadius: 20,
         margin: 15,
         marginLeft: 0,
+        boxShadow: '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)',
       }
     },
     MuiCardActions: {
@@ -158,7 +157,7 @@ export default createMuiTheme({
     MuiCardHeader: {
       root: {
         width: '100%',
-        backgroundColor: palette.secondary.light,
+        backgroundColor: palette.primary.dark,
       },
       content: {
         display: 'inline-grid',
@@ -219,7 +218,7 @@ export default createMuiTheme({
         fontSize: '0.875rem!important',
         fontWeight: '600',
         '&:hover': {
-          color: palette.primary.main
+          color: palette.secondary.main
         },
       },
       labelContainer: {

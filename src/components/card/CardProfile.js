@@ -122,7 +122,7 @@ class CardProfile extends React.Component {
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
     }
   }
-
+  
   getLogoSize = () => {
     switch (this.props.width) {
       case 'xs': 

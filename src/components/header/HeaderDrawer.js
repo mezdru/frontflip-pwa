@@ -84,7 +84,7 @@ class App extends Component {
                         <Logo type={'person'} src={this.getPicturePath(record.picture) || defaultPicture} alt={record.name || record.tag} />
                       </ListItemAvatar>
                       <ListItemText primary={record.name || record.tag}
-                        primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold' } }} />
+                        primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold', color:'white' } }} />
                     </ListItem>
 
                     <ListItem button component={Link} to={'/' + locale + '/' + organisation.tag + '/' + record.tag} onClick={(e) => {this.props.handleDisplayProfile(e, {tag: record.tag})}}>
@@ -109,13 +109,13 @@ class App extends Component {
                     <Logo type={'organisation'} alt={organisation.name} />
                   </ListItemAvatar>
                   <ListItemText primary={organisation.name || organisation.tag}
-                    primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold' } }} />
+                    primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold', color:'white' } }} />
                 </ListItem>
 
                 {(organisation.canInvite) && (
                   <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/invite', organisation.tag)} >
                     <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.invite'})} 
-                                  primaryTypographyProps={{style: { fontWeight: 'bold', color: theme.palette.primary.main } }} />
+                                  primaryTypographyProps={{style: { fontWeight: 'bold', color: theme.palette.primary.main, textTransform: 'uppercase' } }} />
                   </ListItem>
                 )}
 

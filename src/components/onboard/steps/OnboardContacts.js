@@ -62,6 +62,29 @@ class OnboardContacts extends React.Component {
     return (this.props.recordStore.values.record.links.find(link => link.type === typeWanted));
   }
   
+  setTypeInput = (type) => {
+    switch (type) {
+      case 'email':
+        return type = 'email';
+      case 'phone':
+        return type = 'number';
+      default:
+        return type = 'text';
+    }
+  }
+  
+  setTypePattern = (pattern) => {
+    switch (pattern) {
+      case 'email':
+        return pattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$";
+      case 'phone':
+        return pattern = '/^(\\([0-9]{10}\\)/';
+      default:
+        return pattern = 'text';
+    }
+  }
+  
+  
   setDefaultLinks = () => {
     let types = ['email', 'phone', 'linkedin'];
     let links = this.state.links;
@@ -81,7 +104,7 @@ class OnboardContacts extends React.Component {
       <Grid container style={{minHeight: 'calc(100vh - 73px)', background: '#F2F2F2'}} direction="column" alignItems="center">
         <Grid item xs={12} sm={8} md={6} lg={4} style={{width: '100%'}}>
           <Grid item style={{padding: 8}}>
-            <Typography variant="h4" style={{textAlign: 'center', padding: 8}}>
+            <Typography variant="h4" style={{textAlign: 'center', padding: 8, color:'#2B2D3C'}}>
               <FormattedMessage id={'onboard.yourContact'}/>
             </Typography>
           </Grid>
@@ -91,13 +114,16 @@ class OnboardContacts extends React.Component {
                   <TextField
                     className={( (newLinkIndex && i === newLinkIndex) ?  classes.link : classes.defaultLink)}
                     label={link.type}
-                    type="text"
-                    variant="outlined"
+                    type={this.setTypeInput(link.type)}
+                    
+                    pattern={this.setTypePattern(link.type)}
+                    variant={"outlined"}
                     value={link.value}
                     onChange={(e) => this.handleLinksChange(e, link, i)}
                     onBlur={() => this.props.handleSave(['links'])}
                     placeholder={link.type}
                     InputProps={{
+                      pattern:this.setTypePattern(link.type),
                       startAdornment: (
                         <InputAdornment position="start" style={{fontSize: 24}}>
                           <i className={"fa fa-" + link.icon}/>

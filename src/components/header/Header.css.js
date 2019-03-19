@@ -5,7 +5,7 @@ export const styles = theme => ({
     display: 'flex',
     width: '100%',
     textAlign: 'center',
-    backgroundColor: '#fff'
+    backgroundColor: theme.palette.primary.dark
   },
   menuLink: {
     minWidth: '130px',
@@ -61,6 +61,7 @@ export const styles = theme => ({
     flexShrink: 0,
   },
   drawerPaper: {
+    backgroundColor: theme.palette.primary.dark,
     width: drawerWidth,
     padding: '0 !important',
   },
@@ -75,7 +76,7 @@ export const styles = theme => ({
     margin: '8px 16px',
     },
   drawerIcon: {
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
     fontSize: 40,
    },
   content: {

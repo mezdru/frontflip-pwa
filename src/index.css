@@ -31,13 +31,13 @@ body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #DDE9EB;
+    background: #CCCFE5;
     border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #789094;
+    background: #2B2D3C;
     opacity: 0;
 }
 

@@ -18,7 +18,7 @@ const styles = theme => ({
     minWidth: 40,
     height: 40,
     backgroundColor: 'white',
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
     boxShadow: 'none',
   },
   paper: {

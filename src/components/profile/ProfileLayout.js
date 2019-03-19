@@ -101,7 +101,7 @@ class ProfileLayout extends React.Component {
               <Typography variant="h4" className={classes.name}>
                 {ProfileService.htmlDecode(currentHit.name) || currentHit.tag}
               </Typography>
-              <Typography variant="subheading" className={classes.name}>
+              <Typography variant="body1" className={classes.name}>
                 {ProfileService.htmlDecode(currentHit.intro || '')}
               </Typography>
             </div>
@@ -119,9 +119,9 @@ class ProfileLayout extends React.Component {
           })}
           {canEdit && (
             <Grid item xs={12} style={{position: 'relative'}}>
-              <Button variant="text" className={classes.button} style={{color: theme.palette.primary.main, fontWeight: 'bold'}}
+              <Button variant="text" className={classes.button} style={{color: theme.palette.secondary.main, fontWeight: 'bold'}}
                       href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/links', orgTag, 'recordId=' + currentHit.objectID)}>
-                <div href={''} className={classNames(classes.contactIcon, "fa fa-plus")} style={{color: theme.palette.primary.main}}></div>
+                <div href={''} className={classNames(classes.contactIcon, "fa fa-plus")} style={{color: theme.palette.secondary.main}}></div>
                 <FormattedMessage id="profile.addContacts"/>
               </Button>
             </Grid>

@@ -12,7 +12,7 @@ export const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       minHeight: 'calc(100vh - 350px)'
     },
-    background: theme.palette.secondary.light,
+    background: theme.palette.primary.dark,
     padding: 16
   },
   hashtagsPart: {
@@ -27,7 +27,7 @@ export const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       minHeight: 'calc(100vh - 350px)'
     },
-    padding:  16,
+    padding: 16,
   },
   logoContainer: {
     position: 'relative',
@@ -57,12 +57,16 @@ export const styles = theme => ({
     marginBottom: 16,
   },
   button: {
-    color: theme.palette.secondary.contrastText,
+    color: 'white',
     wordBreak: 'break-all',
     padding: '8px 24px',
-  },
+    '&:hover': {
+      color: 'white'
+    }
+  }
+  ,
   buttonIcon: {
-    color: theme.palette.primary.main
+    color: theme.palette.secondary.main
   },
   wings: {
     display: 'inline-block',
@@ -77,7 +81,7 @@ export const styles = theme => ({
     height: 'min-content',
   },
   editButton: {
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
     marginLeft: 16
   },
   updateCoverButton: {
@@ -97,7 +101,7 @@ export const styles = theme => ({
     position: 'absolute',
     margin: 16,
     background: 'white',
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
     '&:hover': {
       backgroundColor: 'rgba(0, 0, 0, 0.08)',
     }
@@ -108,7 +112,7 @@ export const styles = theme => ({
   profileContainerHide: {
     position: 'fixed',
     top: 0,
-    zIndex:99999,
+    zIndex: 99999,
     backgroundColor: 'white',
     width: '100%',
     '& ul': {
@@ -120,7 +124,7 @@ export const styles = theme => ({
     animationDuration: '.6s',
     animationFillMode: 'forwards',
   },
-
+  
   name: {
     marginLeft: 24,
   },
