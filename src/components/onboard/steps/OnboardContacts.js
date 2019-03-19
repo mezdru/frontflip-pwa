@@ -16,6 +16,9 @@ const styles = theme => ({
     from: { width: 0},
     to: { width: '100%' }
   },
+  defaultLink: {
+    width: '100%',
+  }
 });
 
 
@@ -23,7 +26,8 @@ class OnboardContacts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      links: this.props.recordStore.values.record.links || []
+      links: this.props.recordStore.values.record.links || [],
+      newLinkIndex: null,
     }
   }
   
@@ -44,7 +48,6 @@ class OnboardContacts extends React.Component {
     this.props.recordStore.values.record.links = this.props.recordStore.values.record.links.filter(item => {
       return item._id !== infoToBeDeleted
     })
-    console.log('id: ' + infoToBeDeleted)
     
     this.setState({links: this.props.recordStore.values.record.links});
     this.props.handleSave(['links']);
@@ -52,7 +55,7 @@ class OnboardContacts extends React.Component {
   
   addLink = (link) => {
     this.props.recordStore.values.record.links.push(link);
-    this.setState({links: this.props.recordStore.values.record.links});
+    this.setState({links: this.props.recordStore.values.record.links, newLinkIndex: this.props.recordStore.values.record.links.length-1});
   }
   
   getLinkByType = (typeWanted) => {
@@ -71,10 +74,9 @@ class OnboardContacts extends React.Component {
   };
   
   render() {
-    const {links} = this.state;
+    const {links, newLinkIndex} = this.state;
     const {classes} = this.props;
     ProfileService.transformLinks(this.props.recordStore.values.record);
-    
     return (
       <Grid container style={{minHeight: 'calc(100vh - 73px)', background: '#F2F2F2'}} direction="column" alignItems="center">
         <Grid item xs={12} sm={8} md={6} lg={4} style={{width: '100%'}}>
@@ -87,7 +89,7 @@ class OnboardContacts extends React.Component {
               return (
                 <Grid item key={i} style={{padding: 8}}>
                   <TextField
-                    className={classes.link}
+                    className={( (newLinkIndex && i === newLinkIndex) ?  classes.link : classes.defaultLink)}
                     label={link.type}
                     type="text"
                     variant="outlined"
