@@ -34,7 +34,7 @@ const styles = theme => ({
   },
   animated: {
     background: theme.palette.primary.main,
-    animationDelay: '.1s',
+    animationDelay: '0.1s',
     animation: 'backgroundChange 1s ease',
     animationFillMode: 'forwards',
   },

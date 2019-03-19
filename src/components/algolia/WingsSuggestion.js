@@ -74,6 +74,7 @@ class WingsSuggestions extends React.Component {
   }
 
   handleSelectSuggestion = (e, element, index) => {
+    this.props.handleAddWing(e, element);
     SuggestionsService.updateSuggestions(element, index);
 
     var elt = e.currentTarget;
@@ -83,11 +84,9 @@ class WingsSuggestions extends React.Component {
     elt.style.animationFillMode = 'forwards';
 
     var offsetToScroll = elt.offsetLeft;
-
     this.setState({animationInProgress: true}, () => {
       setTimeout(() => {this.setState({animationInProgress: false}, () => {
         var liElt = elt.parentNode;
-        this.props.handleAddWing(e, element);
         this.reduceElt(liElt)
         .then(() => {
           // liElt.remove();
