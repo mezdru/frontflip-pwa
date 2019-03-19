@@ -6,6 +6,7 @@ import { observe } from 'mobx';
 import Wings from './Wing';
 import ProfileService from '../../../services/profile.service';
 import defaultHashtagPicture from '../../../resources/images/placeholder_hashtag.png';
+import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
 
 const styles = theme => ({
   animated: {
@@ -59,7 +60,7 @@ class UserWings extends React.Component {
 
     return (
       <div>
-        <Typography variant="h4" style={{textAlign: 'center'}} >Your {record.hashtags.length} Wings:</Typography>
+        <Typography variant="h4" style={{textAlign: 'center'}} ><FormattedMessage id="onboard.userWings" values={{wingsCount: record.hashtags.length}} /></Typography>
         <div className="" style={{padding: 8, paddingTop: 10}} >
           {record && record.hashtags && record.hashtags.length > 0 && record.hashtags.map((hashtag, i) => {
             if(!this.shoudlRenderWing(hashtag)) return null;
@@ -89,9 +90,7 @@ class UserWings extends React.Component {
           })}
           {record && record.hashtags && record.hashtags.length === 0 && (
             <Typography variant="h6">
-              Les Wings sont vos compétences, talents et hobbies. frf ref er fre f
-              bla rkgo rkgokepkg krtg ktkg pktkgtkrgktrgkrtkg krtgtrg rt gtr gr tggrg 
-              grgrtg rfrfjjjjjjjjjj jjjjjjjjj jjjjjjjjjjjj jjjjjjjjjjjjjjjjjjjjjjjjj
+              <FormattedHTMLMessage id="onboard.noWings" />
             </Typography>
           )}
         </div>
