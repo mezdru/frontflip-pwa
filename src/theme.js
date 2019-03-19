@@ -230,9 +230,11 @@ export default createMuiTheme({
     },
     MuiMobileStepper: {
       dot: {
-        backgroundColor: palette.primary.main
+        backgroundColor: palette.primary.main,
+        margin: 8,
       },
       dotActive: {
+        transform: 'scale(1.8)',
         backgroundColor: palette.secondary.main
       }
     }
