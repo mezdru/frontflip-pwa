@@ -64,7 +64,7 @@ main {
   from {
     /* padding: 6px 12px; */
     /* font-size: 0.8125rem; */
-    overflow: auto;
+    /* overflow: auto; */
     /* width: 100%; */
     opacity: 1;
     margin-left: 8px;
@@ -73,7 +73,7 @@ main {
   to {
     /* padding: 0; */
     /* font-size: 0rem; */
-    overflow: hidden;
+    /* overflow: hidden; */
     /* width: 0%; */
     margin-left: 0px;
     margin-right: 0px;
