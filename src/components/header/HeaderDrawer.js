@@ -14,6 +14,9 @@ import UrlService from '../../services/url.service';
 import { Link, withRouter } from 'react-router-dom';
 import OrganisationsList from '../utils/orgsList/OrganisationsList';
 
+const Entities = require('html-entities').XmlEntities;
+const entities = new Entities();
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -48,6 +51,9 @@ class App extends Component {
     const { locale } = this.state;
     const currentOrgAndRecord = ((currentUser && currentUser.orgsAndRecords) ?
       currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id) : null);
+
+    record.name = entities.decode(record.name)
+    organisation.name = entities.decode(organisation.name)
 
     return (
       <SwipeableDrawer

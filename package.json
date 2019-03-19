@@ -8,6 +8,7 @@
     "algoliasearch": "^3.32.0",
     "core-js": "^2.6.5",
     "hammerjs": "^2.0.8",
+    "html-entities": "^1.2.1",
     "mobx": "^5.9.0",
     "mobx-react": "^5.4.3",
     "muuri": "^0.7.1",
