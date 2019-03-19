@@ -53,16 +53,18 @@ class WingsSuggestions extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({suggestions: []}, () => {
-      SuggestionsService.currentSuggestions = [];
-      SuggestionsService.syncBank(null)
-      .then(() => {
-        SuggestionsService.makeInitialSuggestions(nextProps.wingsFamily)
+    if(nextProps.wingsFamily) {
+      this.setState({suggestions: []}, () => {
+        SuggestionsService.currentSuggestions = [];
+        SuggestionsService.syncBank(null)
         .then(() => {
-          this.setState({suggestions: SuggestionsService.getCurrentSuggestions(), shouldUpdate: true});
+          SuggestionsService.makeInitialSuggestions(nextProps.wingsFamily)
+          .then(() => {
+            this.setState({suggestions: SuggestionsService.getCurrentSuggestions(), shouldUpdate: true});
+          })
         })
-      })
-    });
+      });
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
