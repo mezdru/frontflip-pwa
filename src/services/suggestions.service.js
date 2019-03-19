@@ -5,6 +5,7 @@ class SuggestionsService {
 
   currentSuggestions = [];
   bank = [];
+  workInProgress = false;
 
   init = async (algoliaKey) => {
     await AlgoliaService.setAlgoliaKey(algoliaKey);
@@ -22,6 +23,9 @@ class SuggestionsService {
   }
 
   makeInitialSuggestions = async (wingsFamily) => {
+    if(this.workInProgress) return;
+    this.workInProgress = true;
+    this.currentSuggestions = [];
     if (!wingsFamily) {
       await this.fetchSuggestions(null, false, 5);
       await this.fetchSuggestions(null, true, 10);
@@ -31,9 +35,12 @@ class SuggestionsService {
         this.syncBank(query)
           .then(() => {
             this.populateSuggestionsData();
+            this.workInProgress = false;
           });
+      else this.workInProgress = false;
     } else {
       await this.fetchWingsFamily(wingsFamily);
+      this.workInProgress = false;
     }
   }
 
@@ -54,7 +61,6 @@ class SuggestionsService {
       .then(content => {
         let suggestions = this.currentSuggestions;
         content.facetHits = this.removeUserWings(content.facetHits);
-
         for (let i = 0; i < nbHitToAdd; i++) {
           if (content.facetHits.length === 0) break;
 

@@ -53,16 +53,19 @@ class WingsSuggestions extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({suggestions: []}, () => {
-      SuggestionsService.currentSuggestions = [];
-      SuggestionsService.syncBank(null)
-      .then(() => {
-        SuggestionsService.makeInitialSuggestions(nextProps.wingsFamily)
+    console.log('wings family:'+nextProps.wingsFamily)
+    if(nextProps.wingsFamily) {
+      this.setState({suggestions: []}, () => {
+        SuggestionsService.currentSuggestions = [];
+        SuggestionsService.syncBank(null)
         .then(() => {
-          this.setState({suggestions: SuggestionsService.getCurrentSuggestions(), shouldUpdate: true});
+          SuggestionsService.makeInitialSuggestions(nextProps.wingsFamily)
+          .then(() => {
+            this.setState({suggestions: SuggestionsService.getCurrentSuggestions(), shouldUpdate: true});
+          })
         })
-      })
-    });
+      });
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -74,6 +77,7 @@ class WingsSuggestions extends React.Component {
   }
 
   handleSelectSuggestion = (e, element, index) => {
+    console.log('handle select ')
     this.props.handleAddWing(e, element);
     SuggestionsService.updateSuggestions(element, index);
 
