@@ -53,7 +53,6 @@ class WingsSuggestions extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('wings family:'+nextProps.wingsFamily)
     if(nextProps.wingsFamily) {
       this.setState({suggestions: []}, () => {
         SuggestionsService.currentSuggestions = [];
@@ -77,7 +76,6 @@ class WingsSuggestions extends React.Component {
   }
 
   handleSelectSuggestion = (e, element, index) => {
-    console.log('handle select ')
     this.props.handleAddWing(e, element);
     SuggestionsService.updateSuggestions(element, index);
 
