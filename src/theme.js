@@ -234,7 +234,7 @@ export default createMuiTheme({
         margin: 8,
       },
       dotActive: {
-        transform: 'scale(1.8)',
+        transform: 'scale(1.5)',
         backgroundColor: palette.secondary.main
       }
     }

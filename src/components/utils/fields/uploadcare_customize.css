@@ -7,7 +7,7 @@
 .uploadcare--widget__button {
   border-radius: 30px;
   padding: 8px 24px;
-  background: #A4C5CC;
+  background: #FF0018;
   text-transform: uppercase;
   cursor: pointer;
   width: 316px;
@@ -26,7 +26,7 @@
 }
 
 .uploadcare--widget__button:hover, .uploadcare--widget__button:focus {
-  background: #789094;
+  background: #BA0012;
   border: none;
   outline: none;
   font-size: 0.75rem;
