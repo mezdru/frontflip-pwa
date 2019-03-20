@@ -67,7 +67,8 @@ class AlgoliaService {
   loadBank(filters) {
     if(!this.index) return Promise.resolve();
     return new Promise((resolve, reject) => {
-      if(!filters && commonStore.getLocalStorage('wingsBank', true)) resolve();
+      let currentBank = commonStore.getLocalStorage('wingsBank', true);
+      if(!filters && currentBank && currentBank.length > 0) resolve();
       this.index.search({
         filters: (filters ? 'type:hashtag AND ' + filters : 'type:hashtag'),
         hitsPerPage: 50
