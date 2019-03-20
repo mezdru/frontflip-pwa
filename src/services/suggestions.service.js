@@ -11,7 +11,7 @@ class SuggestionsService {
   constructor(){
     this._currentSuggestions = [];
     this._bank = [];
-    this._workInProgress = 0;
+    this._workInProgress = false;
     this._user = [];
   }
 
@@ -38,8 +38,7 @@ class SuggestionsService {
   makeInitialSuggestions = async (wingsFamily, id) => {
     if(this._user.length < 5) this._user.push(id);
     let index = this._user.indexOf(id)
-    if( (index === 1) || (index === 2) || (index === 3) || (index === 5))  return;
-    // this._currentSuggestions = [];
+    // console.log(id)
     if (!wingsFamily) {
       await this.fetchSuggestions(null, false, 5);
       await this.fetchSuggestions(null, true, 10);
@@ -50,15 +49,11 @@ class SuggestionsService {
           .then(() => {
             this.populateSuggestionsData();
 
-            this._workInProgress = false;
           }).catch(e => {console.log(e)})
           
-      else {
-
-        this._workInProgress = false;}
+      else {}
     } else {
       await this.fetchWingsFamily(wingsFamily);
-      this._workInProgress = false;
     }
   }
 
