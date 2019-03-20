@@ -103,10 +103,10 @@ class OnboardContacts extends React.Component {
     const {classes} = this.props;
     ProfileService.transformLinks(this.props.recordStore.values.record);
     return (
-      <Grid container style={{minHeight: 'calc(100vh - 73px)', background: '#F2F2F2'}} direction="column" alignItems="center">
+      <Grid container style={{minHeight: 'calc(100vh - 73px)', background: this.props.theme.palette.primary.main}} direction="column" alignItems="center">
         <Grid item xs={12} sm={8} md={6} lg={4} style={{width: '100%'}}>
           <Grid item style={{padding: 8}}>
-            <Typography variant="h4" style={{textAlign: 'center', padding: 8, color:'#2B2D3C'}}>
+            <Typography variant="h4" style={{textAlign: 'center', padding: 8, color:this.props.theme.palette.primary.dark}}>
               <FormattedMessage id={'onboard.yourContact'}/>
             </Typography>
           </Grid>
@@ -155,6 +155,6 @@ class OnboardContacts extends React.Component {
 
 export default inject('commonStore', 'recordStore')(
   observer(
-    withStyles(styles)(OnboardContacts)
+    withStyles(styles, {withTheme: true})(OnboardContacts)
   )
 );
