@@ -15,7 +15,10 @@ import { withSnackbar } from 'notistack';
 import LoaderFeedback from '../utils/buttons/LoaderFeedback';
 
 import SwipeableViews from 'react-swipeable-views';
+import { virtualize, bindKeyboard } from 'react-swipeable-views-utils';
 import {FormattedMessage} from "react-intl";
+
+const VirtualizeSwipeableViews = bindKeyboard(virtualize(SwipeableViews));
 
 let timeoutArray = [];
 
@@ -149,20 +152,35 @@ class OnboardStepper extends React.Component {
           </Grid>
         </div>
 
-        <SwipeableViews
+        <VirtualizeSwipeableViews
           index={activeStep}
           onChangeIndex={this.handleStepChange}
           style={{height: 'calc(100vh - 73px)'}}
           disabled={true}
-        >
+          slideRenderer={(params) => {
+            const { index, key } = params;
 
+            return(
+              <Grid item style={{ height: '100%' }} key={index} >
+                <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[index]} 
+                              SuggestionsService={this.props.SuggestionsService} />
+              </Grid>
+            )
+            // steps.map((stepLabel, stepIndex) => {
+            //   return (<Grid item style={{ height: '100%' }} key={stepIndex} >
+            //     <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[activeStep]} 
+            //                   SuggestionsService={this.props.SuggestionsService} />
+            //   </Grid>)
+          }}
+        >
+{/* 
           {steps.length > 0 && steps.map((stepLabel, stepIndex) => {
             return (<Grid item style={{ height: '100%' }} key={stepIndex} >
               <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[activeStep]} 
                             SuggestionsService={this.props.SuggestionsService} />
             </Grid>)
-          })}
-        </SwipeableViews>
+          })} */}
+        </VirtualizeSwipeableViews>
 
         {showFeedback && (
           <LoaderFeedback

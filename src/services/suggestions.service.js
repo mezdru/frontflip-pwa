@@ -35,10 +35,10 @@ class SuggestionsService {
     return this._currentSuggestions;
   }
 
-  makeInitialSuggestions = async (wingsFamily, id) => {
+  makeInitialSuggestions = async (wingsFamily, id) => {    
     if(this._user.length < 5) this._user.push(id);
     let index = this._user.indexOf(id)
-    // console.log(id)
+    console.log(id)
     if (!wingsFamily) {
       await this.fetchSuggestions(null, false, 5);
       await this.fetchSuggestions(null, true, 10);
@@ -48,9 +48,7 @@ class SuggestionsService {
         this.syncBank(query)
           .then(() => {
             this.populateSuggestionsData();
-
           }).catch(e => {console.log(e)})
-          
       else {}
     } else {
       await this.fetchWingsFamily(wingsFamily);
