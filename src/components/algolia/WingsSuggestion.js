@@ -23,16 +23,17 @@ class WingsSuggestions extends React.Component {
       renderComponent: false,
       shouldUpdate: false,
       observer: ()=> {},
-      scrollableClass: Math.floor(Math.random() * 99999)
+      scrollableClass: Math.floor(Math.random() * 99999),
+      onlyViewport: true
     };
   }
 
   componentDidMount() {
+    if(!this.isInViewport()) return;
     this.props.SuggestionsService.init(this.props.algoliaKey, this.state.scrollableClass)
     .then(()=> {
       this.props.SuggestionsService.makeInitialSuggestions(null, this.state.scrollableClass)
       .then(()=> {
-
         this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), renderComponent: true});
       })
     });
@@ -53,14 +54,17 @@ class WingsSuggestions extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if(nextProps.wingsFamily && !this.isInViewport() && this.state.onlyViewport) return;
     if(nextProps.wingsFamily || (this.props.wingsFamily && !nextProps.wingsFamily)) {
-      this.setState({suggestions: []}, () => {
+      this.setState({suggestions: [], onlyViewport: false}, () => {
         this.props.SuggestionsService.syncBank(null)
         .then(() => {
+          //if(this.isInViewport()) {
           this.props.SuggestionsService.makeInitialSuggestions(nextProps.wingsFamily, this.state.scrollableClass)
           .then(() => {
-            this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), shouldUpdate: true}, () => {this.forceUpdate()});
+            this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), shouldUpdate: true}, () => {});
           })
+       // }
         })
       });
     }
@@ -190,16 +194,25 @@ class WingsSuggestions extends React.Component {
     clearInterval(interval2);
   }
 
+  /**
+   * Check if an element is in viewport
+   *
+   * @param {number} [offset]
+   * @returns {boolean}
+   */
+  isInViewport = (offset = 0) => {
+    if (!this.elementNode) return false;
+    const left = this.elementNode.getBoundingClientRect().left;
+    return (left + offset) >= 0 && (left - offset) <= window.innerWidth;
+  }
+
+
   render() {
     const { classes } = this.props;
     const { suggestions, scrollableClass } = this.state;
-    // console.log('---')
-    // console.log(this.state.scrollableClass);
-    // console.log('suggestions: ' + suggestions.length)
-    // console.log('|||')
 
     return (
-      <div>
+      <div ref={(el) => {this.elementNode = el}}>
         <Typography variant="subtitle2" style={{padding: 16}} ><FormattedMessage id={'wingsSuggestions'}/></Typography>
 
         <div style={{position:'relative', height: 126}}>
