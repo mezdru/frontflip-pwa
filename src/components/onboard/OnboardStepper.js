@@ -158,7 +158,8 @@ class OnboardStepper extends React.Component {
 
           {steps.length > 0 && steps.map((stepLabel, stepIndex) => {
             return (<Grid item style={{ height: '100%' }} key={stepIndex} >
-              <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[activeStep]} />
+              <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[activeStep]} 
+                             SuggestionsService={this.props.SuggestionsService} />
             </Grid>)
           })}
         </SwipeableViews>

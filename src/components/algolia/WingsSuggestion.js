@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import { observe } from 'mobx';
 import Wings from '../utils/wing/Wing';
 import ProfileService from '../../services/profile.service';
-import SuggestionsService from '../../services/suggestions.service';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
 import { styles } from './WingsSuggestion.css.js';
 import { ArrowLeft, ArrowRight } from '@material-ui/icons';
@@ -29,21 +28,21 @@ class WingsSuggestions extends React.Component {
   }
 
   componentDidMount() {
-    SuggestionsService.init(this.props.algoliaKey)
+    this.props.SuggestionsService.init(this.props.algoliaKey, this.state.scrollableClass)
     .then(()=> {
-      SuggestionsService.makeInitialSuggestions()
+      this.props.SuggestionsService.makeInitialSuggestions(null, this.state.scrollableClass)
       .then(()=> {
 
-        this.setState({suggestions: SuggestionsService.getCurrentSuggestions(), renderComponent: true});
+        this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), renderComponent: true});
       })
     });
 
     this.setState({observer: observe(this.props.commonStore, 'algoliaKey', (change) => {
-      SuggestionsService.init(this.props.algoliaKey)
+      this.props.SuggestionsService.init(this.props.algoliaKey)
       .then(()=> {
-        SuggestionsService.makeInitialSuggestions()
+        this.props.SuggestionsService.makeInitialSuggestions()
         .then(()=> {
-          this.setState({suggestions: SuggestionsService.getCurrentSuggestions(), renderComponent: true});
+          this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), renderComponent: true});
         })
       });
     })});
@@ -56,28 +55,28 @@ class WingsSuggestions extends React.Component {
   componentWillReceiveProps(nextProps) {
     if(nextProps.wingsFamily || (this.props.wingsFamily && !nextProps.wingsFamily)) {
       this.setState({suggestions: []}, () => {
-        SuggestionsService.syncBank(null)
+        this.props.SuggestionsService.syncBank(null)
         .then(() => {
-          SuggestionsService.makeInitialSuggestions(nextProps.wingsFamily)
+          this.props.SuggestionsService.makeInitialSuggestions(nextProps.wingsFamily, this.state.scrollableClass)
           .then(() => {
-            this.setState({suggestions: SuggestionsService.getCurrentSuggestions(), shouldUpdate: true}, () => {this.forceUpdate()});
+            this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), shouldUpdate: true}, () => {this.forceUpdate()});
           })
         })
       });
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if ( (nextState.shouldUpdate || (!this.state.renderComponent && nextState.renderComponent)) && !nextState.animationInProgress ) {
-      this.setState({shouldUpdate: false});
-      return true;
-    }
-    return false;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if ( (nextState.shouldUpdate || (!this.state.renderComponent && nextState.renderComponent)) && !nextState.animationInProgress ) {
+  //     this.setState({shouldUpdate: false});
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   handleSelectSuggestion = (e, element, index) => {
     this.props.handleAddWing(e, element);
-    SuggestionsService.updateSuggestions(element, index);
+    this.props.SuggestionsService.updateSuggestions(element, index);
 
     var elt = e.currentTarget;
     elt.style.setProperty('background', this.props.theme.palette.secondary.main, 'important');
@@ -92,7 +91,7 @@ class WingsSuggestions extends React.Component {
         .then(() => {
           // liElt.remove();
           // this.scrollToSuggestion(offsetToScroll);
-          this.setState({suggestions: SuggestionsService.getCurrentSuggestions()});
+          this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions()});
         });
         })
       }, 450);
@@ -194,6 +193,10 @@ class WingsSuggestions extends React.Component {
   render() {
     const { classes } = this.props;
     const { suggestions, scrollableClass } = this.state;
+    // console.log('---')
+    // console.log(this.state.scrollableClass);
+    // console.log('suggestions: ' + suggestions.length)
+    // console.log('|||')
 
     return (
       <div>

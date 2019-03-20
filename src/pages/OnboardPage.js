@@ -4,6 +4,7 @@ import { observe } from 'mobx';
 import OnboardWelcome from '../components/onboard/OnboardWelcome';
 import OnboardStepper from '../components/onboard/OnboardStepper';
 import { withStyles } from '@material-ui/core';
+import SuggestionsService from '../services/suggestions.service';
 
 const styles = {
   logo: {
@@ -89,7 +90,7 @@ class OnboardPage extends React.Component {
       return (
         <div>
           <main>
-            <OnboardStepper initStep={stepNumber} />
+            <OnboardStepper initStep={stepNumber} SuggestionsService={SuggestionsService} />
           </main>
         </div>
       );

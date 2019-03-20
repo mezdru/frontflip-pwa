@@ -80,7 +80,8 @@ class OnboardWings extends React.Component {
           </Grid>
           <Grid item xs={12} >
             <WingsSuggestion  handleAddWing={this.handleAddWing} handleSave={this.props.handleSave} 
-                              wingsFamily={this.isFeaturedWings() ? this.props.activeStepLabel : null} />
+                              wingsFamily={this.isFeaturedWings() ? this.props.activeStepLabel : null} 
+                              SuggestionsService={this.props.SuggestionsService} stepLabel={this.props.activeStepLabel} />
           </Grid>
         </Grid>
       );

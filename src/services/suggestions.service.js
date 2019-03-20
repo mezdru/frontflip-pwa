@@ -1,31 +1,45 @@
 import commonStore from '../stores/common.store';
 import AlgoliaService from './algolia.service';
 
+/**
+ * @warning The system of "this_user" is here because 5 WingsSuggestions component are created.
+ *          The displayed one for "Wings" part of onboard is the first one (user index 0)
+ *          The displayed one for "Featured Wings 1" is the index 4.
+ */
 class SuggestionsService {
 
-  currentSuggestions = [];
-  bank = [];
-  workInProgress = false;
+  constructor(){
+    this._currentSuggestions = [];
+    this._bank = [];
+    this._workInProgress = 0;
+    this._user = [];
+  }
 
-  init = async (algoliaKey) => {
+  updateBank(bank) {
+    this._bank = bank;
+  }
+
+  async init(algoliaKey){
     await AlgoliaService.setAlgoliaKey(algoliaKey);
-    this.bank = await this.syncBank(null);
+    var newBank = await this.syncBank(null);
+    this.updateBank(newBank);
   }
 
   /**
  * @description Sync wings bank with current state bank
  */
-  syncBank = (filters) => AlgoliaService.loadBank(filters).then(() => { return commonStore.getLocalStorage('wingsBank', true) });
+  syncBank = async (filters) => AlgoliaService.loadBank(filters).then(() => { return commonStore.getLocalStorage('wingsBank', true) });
 
 
   getCurrentSuggestions = () => {
-    return this.currentSuggestions;
+    return this._currentSuggestions;
   }
 
-  makeInitialSuggestions = async (wingsFamily) => {
-    // if(this.workInProgress) return Promise.resolve();
-    this.workInProgress = true;
-    this.currentSuggestions = [];
+  makeInitialSuggestions = async (wingsFamily, id) => {
+    if(this._user.length < 5) this._user.push(id);
+    let index = this._user.indexOf(id)
+    if( (index === 1) || (index === 2) || (index === 3) || (index === 5))  return;
+    // this._currentSuggestions = [];
     if (!wingsFamily) {
       await this.fetchSuggestions(null, false, 5);
       await this.fetchSuggestions(null, true, 10);
@@ -36,15 +50,15 @@ class SuggestionsService {
           .then(() => {
             this.populateSuggestionsData();
 
-            this.workInProgress = false;
+            this._workInProgress = false;
           }).catch(e => {console.log(e)})
           
       else {
 
-        this.workInProgress = false;}
+        this._workInProgress = false;}
     } else {
       await this.fetchWingsFamily(wingsFamily);
-      this.workInProgress = false;
+      this._workInProgress = false;
     }
   }
 
@@ -52,7 +66,7 @@ class SuggestionsService {
     return AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:' + wingsFamily, null, null, null)
       .then(content => {
         if (content) {
-          this.currentSuggestions = content.hits;
+          this._currentSuggestions = content.hits;
         }
       }).catch();
   }
@@ -63,7 +77,7 @@ class SuggestionsService {
   fetchSuggestions = (lastSelection, privateOnly, nbHitToAdd, startIndex) => {
     return AlgoliaService.fetchFacetValues(lastSelection, privateOnly, 'type:person', null)
       .then(content => {
-        let suggestions = this.currentSuggestions;
+        let suggestions = this._currentSuggestions;
         content.facetHits = this.removeUserWings(content.facetHits);
         for (let i = 0; i < nbHitToAdd; i++) {
           if (content.facetHits.length === 0) break;
@@ -86,7 +100,7 @@ class SuggestionsService {
           if (!startIndex) suggestions.push(suggestionToAdd);
           else suggestions.splice(startIndex, 0, suggestionToAdd);
         }
-        this.currentSuggestions = suggestions;
+        this._currentSuggestions = suggestions;
       }).catch((e) => { console.log(e) });
   }
 
@@ -141,12 +155,12 @@ class SuggestionsService {
    * @description Populate all suggestions data thanks to current Wings bank
    */
   populateSuggestionsData = () => {
-    let suggestions = this.currentSuggestions;
+    let suggestions = this._currentSuggestions;
     // eslint-disable-next-line
-    this.currentSuggestions.map((suggestion, i) => {
+    this._currentSuggestions.map((suggestion, i) => {
       suggestions[i] = this.getData(suggestion.tag) || suggestion;
     });
-    this.currentSuggestions = suggestions;
+    this._currentSuggestions = suggestions;
   }
 
   /**
@@ -154,7 +168,7 @@ class SuggestionsService {
  */
   formatHashtagsQuery = () => {
     let query = '';
-    this.currentSuggestions.forEach(suggestion => {
+    this._currentSuggestions.forEach(suggestion => {
       if (!suggestion.objectID)
         query += (query !== '' ? ' OR' : '') + ' tag:' + suggestion.tag;
     });
