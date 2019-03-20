@@ -80,24 +80,37 @@ class WingsSuggestions extends React.Component {
     SuggestionsService.updateSuggestions(element, index);
 
     var elt = e.currentTarget;
-    elt.style.transition = 'none';
     elt.style.setProperty('background', this.props.theme.palette.secondary.main, 'important');
-    elt.style.animation = 'suggestionOut 250ms ease-out 100ms 1 forwards';
+    elt.style.setProperty('color', 'white');
+    elt.style.animation = 'suggestionOut 450ms ease-out 0ms 1 forwards';
 
-    var offsetToScroll = elt.offsetLeft;
+    //var offsetToScroll = elt.offsetLeft;
     this.setState({animationInProgress: true}, () => {
       setTimeout(() => {this.setState({animationInProgress: false}, () => {
         var liElt = elt.parentNode;
         this.reduceElt(liElt)
         .then(() => {
           // liElt.remove();
-          this.scrollToSuggestion(offsetToScroll);
-            this.setState({suggestions: SuggestionsService.getCurrentSuggestions()});
+          // this.scrollToSuggestion(offsetToScroll);
+          this.setState({suggestions: SuggestionsService.getCurrentSuggestions()});
         });
         })
-      }, 350);
+      }, 450);
     })
-    
+  }
+
+  handleMouseDown = (e) => {
+    var elt = e.currentTarget;
+    elt.style.transition = 'none';
+    elt.style.setProperty('background', this.props.theme.palette.secondary.main, 'important');
+    elt.style.setProperty('color', 'white');
+  }
+
+  handleMouseUp = (e) => {
+    var elt = e.currentTarget;
+    elt.style.transition = 'none';
+    elt.style.setProperty('background', '');
+    elt.style.setProperty('color', this.props.theme.palette.primary.dark);
   }
 
   reduceElt = async (elt) => {
@@ -110,7 +123,7 @@ class WingsSuggestions extends React.Component {
           clearInterval(currentInterval);
           resolve();
         }
-      }, 5);
+      }, 3);
     });
 
   }
@@ -125,6 +138,9 @@ class WingsSuggestions extends React.Component {
         <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
           label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
           onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag }, i)}
+          onMouseDown={(e) => this.handleMouseDown(e)}
+          onMouseUp={(e) => this.handleMouseUp(e)}
+          onBlur={(e) => this.handleMouseUp(e)}
           className={'suggestionWing'} />
       </li>
     );

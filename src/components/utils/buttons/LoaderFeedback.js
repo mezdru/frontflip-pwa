@@ -18,6 +18,9 @@ const styles = {
   buttonSuccess: {
     backgroundColor: green[500],
     color: 'white',
+    '&:hover': {
+      backgroundColor: green[500],
+    }
   },
 };
 

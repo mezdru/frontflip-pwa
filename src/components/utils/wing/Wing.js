@@ -35,13 +35,13 @@ const styles = theme => ({
   },
   animated: {
     background: theme.palette.secondary.main,
-    animationDelay: '0.1s',
-    animation: 'backgroundChange 1s ease',
-    animationFillMode: 'forwards',
+    color: 'white',
+    opacity: 0,
+    animation: 'appear 450ms ease-in 0ms 1 forwards',
   },
-  '@keyframes backgroundChange': {
-    from: { background: theme.palette.secondary.main },
-    to: { background: theme.palette.primary.main }
+  '@keyframes appear': {
+    from: { background: theme.palette.secondary.main, color: 'white', opacity: 0 },
+    to: { background: theme.palette.primary.main, color: theme.palette.primary.dark, opacity: 1 }
   },
 });
 
@@ -55,6 +55,9 @@ const Wing = ({ src, label, ...props }) => {
         className={classNames(props.classes[props.className], (props.onDelete ? props.classes.removable : null) )}
         onClick={props.onClick}
         onDelete={props.onDelete}
+        onMouseDown={props.onMouseDown}
+        onMouseUp={props.onMouseUp}
+        onBlur={props.onBlur}
         >
       </Chip>
     )

@@ -30,10 +30,10 @@ class OnboardIntro extends React.Component {
     record.name = entities.decode(record.name);
 
     return (
-      <Grid container style={{ height: 'calc(100vh - 73px)', background: '#F2F2F2' }} direction="column">
+      <Grid container style={{ height: 'calc(100vh - 73px)', background: this.props.theme.palette.primary.main }} direction="column">
         <Grid container item xs={12} sm={8} md={6} lg={4} spacing={16} direction="column" style={{flexBasis: '100%', width: '100%'}} >
           <Grid item style={{maxWidth: '100%'}}>
-            <Typography variant="h4" style={{textAlign: 'center', padding: 8, color:'#2B2D3C'}} >
+            <Typography variant="h4" style={{textAlign: 'center', padding: 8, color:this.props.theme.palette.primary.dark}} >
               <FormattedMessage id={'onboard.whoAreYou'}/>
             </Typography>
           </Grid>
@@ -76,6 +76,6 @@ class OnboardIntro extends React.Component {
 
 export default inject('commonStore', 'recordStore', 'organisationStore')(
   observer(
-    injectIntl(withStyles(null)(OnboardIntro))
+    injectIntl(withStyles(null, {withTheme: true})(OnboardIntro))
   )
 );
