@@ -73,6 +73,7 @@ export const styles = theme => ({
   },
     drawerIconButton: {
     padding: 0,
+    background: 'white',
     margin: '8px 16px',
     },
   drawerIcon: {
