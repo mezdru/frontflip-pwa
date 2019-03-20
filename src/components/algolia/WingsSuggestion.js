@@ -26,13 +26,14 @@ class WingsSuggestions extends React.Component {
       scrollableClass: Math.floor(Math.random() * 99999),
       onlyViewport: true
     };
+    console.log('constructor:'+this.state.scrollableClass)
   }
 
   componentDidMount() {
-    if(!this.isInViewport()) return;
+    // if(!this.isInViewport()) return;
     this.props.SuggestionsService.init(this.props.algoliaKey, this.state.scrollableClass)
     .then(()=> {
-      this.props.SuggestionsService.makeInitialSuggestions(null, this.state.scrollableClass)
+      this.props.SuggestionsService.makeInitialSuggestions(this.props.wingsFamily, this.state.scrollableClass)
       .then(()=> {
         this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), renderComponent: true});
       })
@@ -53,22 +54,22 @@ class WingsSuggestions extends React.Component {
     this.state.observer();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.wingsFamily && !this.isInViewport() && this.state.onlyViewport) return;
-    if(nextProps.wingsFamily || (this.props.wingsFamily && !nextProps.wingsFamily)) {
-      this.setState({suggestions: [], onlyViewport: false}, () => {
-        this.props.SuggestionsService.syncBank(null)
-        .then(() => {
-          //if(this.isInViewport()) {
-          this.props.SuggestionsService.makeInitialSuggestions(nextProps.wingsFamily, this.state.scrollableClass)
-          .then(() => {
-            this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), shouldUpdate: true}, () => {});
-          })
-       // }
-        })
-      });
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if(nextProps.wingsFamily && !this.isInViewport() && this.state.onlyViewport) return;
+  //   if(nextProps.wingsFamily || (this.props.wingsFamily && !nextProps.wingsFamily)) {
+  //     this.setState({suggestions: [], onlyViewport: false}, () => {
+  //       this.props.SuggestionsService.syncBank(null)
+  //       .then(() => {
+  //         //if(this.isInViewport()) {
+  //         this.props.SuggestionsService.makeInitialSuggestions(nextProps.wingsFamily, this.state.scrollableClass)
+  //         .then(() => {
+  //           this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), shouldUpdate: true}, () => {});
+  //         })
+  //      // }
+  //       })
+  //     });
+  //   }
+  // }
 
   // shouldComponentUpdate(nextProps, nextState) {
   //   if ( (nextState.shouldUpdate || (!this.state.renderComponent && nextState.renderComponent)) && !nextState.animationInProgress ) {
