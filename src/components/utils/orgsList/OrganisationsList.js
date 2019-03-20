@@ -33,7 +33,7 @@ const style = theme => ({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     marginTop: 8,
-    color: 'black'
+    color: 'white'
   },
 });
 

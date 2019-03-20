@@ -15,14 +15,9 @@ class SuggestionsService {
     this._user = [];
   }
 
-  updateBank(bank) {
-    this._bank = bank;
-  }
-
   async init(algoliaKey){
     await AlgoliaService.setAlgoliaKey(algoliaKey);
-    var newBank = await this.syncBank(null);
-    this.updateBank(newBank);
+    this._bank = await this.syncBank(null);
   }
 
   /**
@@ -35,10 +30,9 @@ class SuggestionsService {
     return this._currentSuggestions;
   }
 
-  makeInitialSuggestions = async (wingsFamily, id) => {    
+  makeInitialSuggestions = async (wingsFamily, id) => { 
     if(this._user.length < 5) this._user.push(id);
     let index = this._user.indexOf(id)
-    console.log(id)
     if (!wingsFamily) {
       await this.fetchSuggestions(null, false, 5);
       await this.fetchSuggestions(null, true, 10);
@@ -46,7 +40,8 @@ class SuggestionsService {
       let query = this.formatHashtagsQuery();
       if (query)
         this.syncBank(query)
-          .then(() => {
+          .then((bank) => {
+            this._bank = bank;
             this.populateSuggestionsData();
           }).catch(e => {console.log(e)})
       else {}
@@ -129,7 +124,8 @@ class SuggestionsService {
     let query = this.formatHashtagsQuery();
     if (query)
       await this.syncBank(query)
-        .then(() => {
+        .then((bank) => {
+          this._bank = bank;
           this.populateSuggestionsData();
         });
   }
@@ -138,8 +134,8 @@ class SuggestionsService {
    * @description Get complete Wing data by tag thanks to current Wings bank
    */
   getData = (tag) => {
-    if (this.bank)
-      return this.bank.find(bankElt => bankElt.tag === tag);
+    if (this._bank)
+      return this._bank.find(bankElt => bankElt.tag === tag);
     else
       return null;
   }

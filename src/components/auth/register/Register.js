@@ -130,12 +130,12 @@ class Register extends React.Component {
             <Grid item container justify={'center'}>
               {
                 inProgress && (
-                  <CircularProgress color="primary" />
+                  <CircularProgress color="secondary" />
                 )
               }
               {
                 !inProgress && (
-                  <Button fullWidth={true} type="submit" color="primary"><FormattedMessage id="Sign Up"/></Button>
+                  <Button fullWidth={true} type="submit" color="secondary"><FormattedMessage id="Sign Up"/></Button>
                 )
               }
             </Grid>

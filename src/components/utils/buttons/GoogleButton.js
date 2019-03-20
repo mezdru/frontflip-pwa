@@ -3,13 +3,16 @@ import { Button, withStyles } from '@material-ui/core';
 import googleLogo from '../../../resources/images/g.svg';
 import { FormattedMessage } from 'react-intl';
 
-const styles = {
+const styles = theme => ({
   root: {
     '&:not(:hover)': {
       backgroundColor: "white"
     },
+    '&:hover': {
+      backgroundColor: '#d5d5d5'
+    }
   }
-};
+});
 
 const GoogleButton = ({ ...props }) =>
   <Button {...props} className={props.classes.root}>

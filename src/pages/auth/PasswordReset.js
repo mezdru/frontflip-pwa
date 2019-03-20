@@ -175,11 +175,11 @@ class PasswordReset extends React.Component {
               <Grid item>
                 {
                   inProgress && (
-                    <CircularProgress color="primary"/>
+                    <CircularProgress color="secondary"/>
                   )
                 }
                 {!inProgress && (
-                  <Button fullWidth={true} type="submit" color="primary">
+                  <Button fullWidth={true} type="submit" color="secondary">
                     {!userEmail && (
                       <FormattedMessage id="password.new.create"/>
                     )}

@@ -17,8 +17,9 @@ const styles = theme => ({
   },
   button: {
     backgroundColor: theme.palette.secondary.main,
+    color: 'white',
     '&:hover': {
-      backgroundColor: theme.palette.secondary.dark
+      backgroundColor: theme.palette.secondary.dark + ' !important'
     }
   },
   suggestionWing: {

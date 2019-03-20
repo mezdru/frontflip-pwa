@@ -26,7 +26,6 @@ class WingsSuggestions extends React.Component {
       scrollableClass: Math.floor(Math.random() * 99999),
       onlyViewport: true
     };
-    console.log('constructor:'+this.state.scrollableClass)
   }
 
   componentDidMount() {
