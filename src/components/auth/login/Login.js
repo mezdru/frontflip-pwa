@@ -112,12 +112,12 @@ class Login extends React.Component {
             <Grid item container justify={'center'}>
               {
                 inProgress && (
-                  <CircularProgress color="primary" />
+                  <CircularProgress color="secondary" />
                 )
               }
               {
                 !inProgress && (
-                  <Button fullWidth={true} color="primary" type="submit"><FormattedMessage id="Sign In" /></Button>
+                  <Button fullWidth={true} color="secondary" type="submit"><FormattedMessage id="Sign In" /></Button>
                 )
               }
             </Grid>

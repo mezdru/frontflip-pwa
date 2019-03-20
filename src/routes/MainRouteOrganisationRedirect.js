@@ -210,7 +210,7 @@ class MainRouteOrganisationRedirect extends React.Component {
     } else {
       return (
         <div style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', textAlign: 'center', width: '100%' }}>
-          <CircularProgress color='primary' />
+          <CircularProgress color='secondary' />
         </div>
       );
     }

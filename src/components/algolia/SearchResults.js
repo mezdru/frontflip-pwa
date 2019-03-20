@@ -74,7 +74,7 @@ class SearchResults extends React.Component {
           <li>
             <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} container justify={"center"} alignContent={"center"}>
               {loadInProgress && (
-                <CircularProgress color="primary" />
+                <CircularProgress color="secondary" />
               )}
               {!loadInProgress && (
                 <Button onClick={this.handleShowMore}><FormattedMessage id="search.showMore" /></Button>
