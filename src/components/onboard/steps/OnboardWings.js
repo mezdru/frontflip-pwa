@@ -20,6 +20,7 @@ class OnboardWings extends React.Component {
   handleAddWing = (e, element) => {
     if  (e) e.preventDefault();
     this.props.recordStore.setRecordTag(element.tag);
+    if(this.props.recordStore.values.record.hashtags.find(elt => elt.tag === element.tag)) return Promise.resolve();
     return this.props.recordStore.getRecordByTag()
     .then(hashtagRecord => {
       let record = this.props.recordStore.values.record;
