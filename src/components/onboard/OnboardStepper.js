@@ -50,6 +50,10 @@ class OnboardStepper extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.initializeSuggestions(this.state.steps[this.state.activeStep]);
+  }
+
   /**
    * @description Make steps array thanks to organisation data
    */
@@ -64,21 +68,40 @@ class OnboardStepper extends React.Component {
     return steps;
   }
 
+  initializeSuggestions = (currentStep) => {
+    if(currentStep === 'wings' || currentStep.charAt(0) === '#') {
+      this.props.SuggestionsService.init(this.props.algoliaKey)
+      .then(()=> {
+        this.props.SuggestionsService.makeInitialSuggestions((currentStep.charAt(0) === '#' ? currentStep : null))
+      });
+    }
+  }
+
   handleNext = () => {
+    this.initializeSuggestions(this.state.steps[this.state.activeStep+1]);
+
+
+    
     if ((this.state.activeStep === (this.state.steps.length - 1))) {
       // click on finish
-      this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag });
+      this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag }, ()=> {this.forceUpdate()});
     } else {
       this.setState(state => ({
         activeStep: state.activeStep + 1,
-      }));
+      }), () => {this.forceUpdate()});
     }
   };
 
+  shouldComponentUpdate() {
+    return false;
+  }
+
   handleBack = () => {
+    this.initializeSuggestions(this.state.steps[this.state.activeStep-1])
+
     this.setState(state => ({
       activeStep: state.activeStep - 1,
-    }));
+    }), () => {this.forceUpdate()});
   };
 
   getStepComponent(steps, activeStep) {
@@ -159,7 +182,6 @@ class OnboardStepper extends React.Component {
           disabled={true}
           slideRenderer={(params) => {
             const { index, key } = params;
-
             return(
               <Grid item style={{ height: '100%' }} key={index} >
                 <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[index]} 
