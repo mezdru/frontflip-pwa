@@ -25,7 +25,7 @@ export const styles = theme => ({
   suggestion: {
     color: theme.palette.secondary.dark,
     opacity: 0,
-    animation: 'easeIn .6s',
+    animation: ' 0.6s ease-in easeIn',
     animationFillMode: 'forwards',
   },
   '@keyframes easeIn': {
