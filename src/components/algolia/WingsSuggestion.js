@@ -57,7 +57,7 @@ class WingsSuggestions extends React.Component {
     elt.style.setProperty('color', 'white');
     elt.style.animation = 'suggestionOut 450ms ease-out 0ms 1 forwards';
 
-    this.setState({animationInProgress: true, offsetSuggestionsIndex: this.state.suggestions.length}, () => {
+    this.setState({animationInProgress: true, offsetSuggestionsIndex: this.state.suggestions.length-1}, () => {
       setTimeout(() => {this.setState({animationInProgress: false}, () => {
         var liElt = elt.parentNode;
         this.reduceElt(liElt)
@@ -105,7 +105,7 @@ class WingsSuggestions extends React.Component {
 
   renderWing = (classes, hit, i) => {
     return (
-      <li key={i} className={classes.suggestion} style={{animationDelay: ((i-this.state.offsetSuggestionsIndex.offset)*0.05) +'s'}} id={hit.tag}>
+      <li key={i} className={classes.suggestion} style={{animationDelay: ((i-this.state.offsetSuggestionsIndex)*0.05) +'s'}} id={hit.tag}>
         <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
           label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
           onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag }, i)}
@@ -193,8 +193,8 @@ class WingsSuggestions extends React.Component {
         </Hidden>
         <div className={classes.transparentGradientBoxLeft}></div>
         <div className={classNames(classes.suggestionsContainer, ''+scrollableClass)} >
-          {this.renderWingsList(suggestions, classes, true)}
           {this.renderWingsList(suggestions, classes, false)}
+          {this.renderWingsList(suggestions, classes, true)}
         </div>
         <div className={classes.transparentGradientBoxRight}></div>
       </div>
