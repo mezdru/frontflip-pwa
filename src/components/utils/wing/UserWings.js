@@ -69,7 +69,7 @@ class UserWings extends React.Component {
             if(!this.shouldAnimateWing(hashtag)) {
               return (
                 <div className="" key={i} style={{display: 'inline-block'}} >
-                  <Wings  src={ProfileService.getPicturePath(hashtag.picture) || defaultHashtagPicture}
+                  <Wings  src={ProfileService.getPicturePath(hashtag.picture)}
                     label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
                     className={''} 
                     onDelete={(e) => {this.props.handleRemoveWing(e, hashtag.tag)}} />
@@ -78,7 +78,7 @@ class UserWings extends React.Component {
             } else {
               return (
                 <div className="" key={i} style={{display: 'inline-block'}} >
-                  <Wings  src={ProfileService.getPicturePath(hashtag.picture) || defaultHashtagPicture}
+                  <Wings  src={ProfileService.getPicturePath(hashtag.picture)}
                     label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
                     className={'animated'} 
                     style={{background: theme.palette.primary.main}}

@@ -110,7 +110,7 @@ class OnboardWings extends React.Component {
     const {activeStepLabel} = this.props;
     return (
         <Grid container direction="column" style={{height: 'calc(100vh - 73px)', background: 'white', overflow: 'hidden'}}>
-          <Grid item style={{background: this.props.theme.palette.primary.main, maxWidth: '100%', minHeight: '285px',
+          <Grid item style={{background: this.props.theme.palette.primary.main, maxWidth: '100%', position: 'relative', zIndex: 2,
             boxShadow: '0px 2px 3px 0px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 2px 1px -1px rgba(0,0,0,0.12)' }} 
             justify="center" direction="row" container> 
             {this.renderByStep()}
