@@ -31,7 +31,6 @@ class OnboardContacts extends React.Component {
       links: this.props.recordStore.values.record.links || [],
       newLinkIndex: null,
     }
-    console.log('construct contacts')
 
   }
   

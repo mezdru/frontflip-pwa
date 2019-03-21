@@ -14,7 +14,6 @@ class OnboardIntro extends React.Component {
     super(props);
     this.state = {
     };
-    console.log('construct intro')
   }
 
   handleChange = (e, field) => {
