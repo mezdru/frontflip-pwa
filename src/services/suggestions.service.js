@@ -31,8 +31,7 @@ class SuggestionsService {
   }
 
   makeInitialSuggestions = async (wingsFamily, id) => { 
-    if(this._user.length < 5) this._user.push(id);
-    let index = this._user.indexOf(id)
+    this._currentSuggestions = [];
     if (!wingsFamily) {
       await this.fetchSuggestions(null, false, 5);
       await this.fetchSuggestions(null, true, 10);
