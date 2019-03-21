@@ -24,7 +24,8 @@ class WingsSuggestions extends React.Component {
       shouldUpdate: false,
       observer: ()=> {},
       scrollableClass: Math.floor(Math.random() * 99999),
-      onlyViewport: true
+      onlyViewport: true,
+      offsetSuggestionsIndex: 0,
     };
   }
 
@@ -70,13 +71,13 @@ class WingsSuggestions extends React.Component {
   //   }
   // }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   if ( (nextState.shouldUpdate || (!this.state.renderComponent && nextState.renderComponent)) && !nextState.animationInProgress ) {
-  //     this.setState({shouldUpdate: false});
-  //     return true;
-  //   }
-  //   return false;
-  // }
+  shouldComponentUpdate(nextProps, nextState) {
+    if ( (nextState.shouldUpdate || (!this.state.renderComponent && nextState.renderComponent)) && !nextState.animationInProgress ) {
+      this.setState({shouldUpdate: false});
+      return true;
+    }
+    return false;
+  }
 
   handleSelectSuggestion = (e, element, index) => {
     this.props.handleAddWing(e, element);
@@ -88,7 +89,7 @@ class WingsSuggestions extends React.Component {
     elt.style.animation = 'suggestionOut 450ms ease-out 0ms 1 forwards';
 
     //var offsetToScroll = elt.offsetLeft;
-    this.setState({animationInProgress: true}, () => {
+    this.setState({animationInProgress: true, offsetSuggestionsIndex: this.state.suggestions.length}, () => {
       setTimeout(() => {this.setState({animationInProgress: false}, () => {
         var liElt = elt.parentNode;
         this.reduceElt(liElt)
@@ -122,11 +123,11 @@ class WingsSuggestions extends React.Component {
       var currentInterval = setInterval(() => {
         initWidth = Math.max(0, initWidth-2);
         elt.style.width = initWidth +'px' ;
-        if(elt.style.width === 0+'px'){
+        if(elt.style.width === 0+'px' || !elt.style.width){
           clearInterval(currentInterval);
           resolve();
         }
-      }, 3);
+      }, 5);
     });
 
   }
@@ -137,7 +138,7 @@ class WingsSuggestions extends React.Component {
 
   renderWing = (classes, hit, i) => {
     return (
-      <li key={i} className={classes.suggestion} style={{animationDelay: (i*0.05) +'s'}} id={hit.tag}>
+      <li key={i} className={classes.suggestion} style={{animationDelay: ((i-this.state.offsetSuggestionsIndex.offset)*0.05) +'s'}} id={hit.tag}>
         <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
           label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
           onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag }, i)}
