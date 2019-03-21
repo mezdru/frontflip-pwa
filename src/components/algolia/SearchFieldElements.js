@@ -38,10 +38,10 @@ export const customStyles = {
     ...base,
     borderRadius: '30px',
     boxSizing: 'border-box',
-    border: state.isFocused ? "2px solid #dd362e" : "1px solid #dd362e",
+    border: state.isFocused ? "2px solid #FF0018" : "1px solid #FF0018",
     boxShadow: state.isFocused ? null : null,
     "&:hover": {
-      borderColor: state.isFocused ? "#dd362e" : "#dd362e",
+      borderColor: state.isFocused ? "#FF0018" : "#FF0018",
       boxSizing: 'border-box'
     },
     padding: '2px 16px',
