@@ -186,12 +186,12 @@ class CardProfile extends React.Component {
     switch (this.props.width) {
       case 'xs':
         if (window.innerWidth < 400) {
-          return '124x124';
+          return '190x190';
         } else {
-          return '146x146';
+          return '190x190';
         }
       default:
-        return '170x170';
+        return '240x240';
     }
   }
   
