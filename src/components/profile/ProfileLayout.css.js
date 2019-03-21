@@ -98,7 +98,8 @@ export const styles = theme => ({
     fontSize: 24
   },
   returnButton: {
-    position: 'absolute',
+    position: 'fixed',
+    zIndex: 9999,
     margin: 16,
     background: 'white',
     color: theme.palette.secondary.main,
