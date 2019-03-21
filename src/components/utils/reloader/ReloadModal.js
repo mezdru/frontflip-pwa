@@ -57,7 +57,7 @@ export default class ReloadModal extends Component {
     // <Modal> is common fixed component.
     return (
       <Modal onClick={this.onClick}>
-        <span> New Content Available. <a>REFRESH</a> </span>
+        <span> New Content Available. Restart to update.</span>
       </Modal>
     );
   }
