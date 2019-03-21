@@ -69,7 +69,7 @@ class OnboardStepper extends React.Component {
   }
 
   initializeSuggestions = (currentStep) => {
-    if(currentStep === 'wings' || currentStep.charAt(0) === '#') {
+    if(currentStep && (currentStep === 'wings' || currentStep.charAt(0) === '#')) {
       this.props.SuggestionsService.init(this.props.algoliaKey)
       .then(()=> {
         this.props.SuggestionsService.makeInitialSuggestions((currentStep.charAt(0) === '#' ? currentStep : null))
