@@ -84,9 +84,10 @@ class UserWings extends React.Component {
                     style={{background: theme.palette.primary.main}}
                     onDelete={(e) => {this.props.handleRemoveWing(e, hashtag.tag)}} />
                 </div>
+                
               )
             }
-
+            
           })}
           {record && record.hashtags && record.hashtags.length === 0 && (
             <Typography variant="h6">
