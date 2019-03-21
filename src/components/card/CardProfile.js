@@ -20,19 +20,6 @@ const styles = theme => ({
     marginBottom: -38,
     marginLeft: -62,
     backgroundColor: 'white',
-    // [theme.breakpoints.down(320)]: {
-    //   width: 179,
-    //   height: 160,
-    //   marginTop: -37,
-    //   marginLeft: -52,
-    // },
-    // [theme.breakpoints.down(400)]: {
-    //   width: 190,
-    //   height: 180,
-    //   marginTop: -42,
-    //   marginBottom: -75,
-    //   marginLeft: -51,
-    // },
     [theme.breakpoints.down('xs')]: {
       width: 190,
       height: 190,
@@ -48,8 +35,6 @@ const styles = theme => ({
       fontWeight: '600',
       paddingLeft: 2,
       paddingRight: 2,
-      // paddingLeft: 8,
-      // paddingRight: 8,
     },
     display: 'block',
   },
@@ -71,12 +56,12 @@ const styles = theme => ({
     position: 'relative',
     marginTop: '22px!important',
     marginBottom: 4,
-    // [theme.breakpoints.down(400)]: {
-    //   marginTop: '14px!important',
-    // },
     [theme.breakpoints.down('xs')]: {
       marginTop: '18px!important',
     }
+  },
+  wingsContainer: {
+    minHeight: 30
   },
   fullWidth: {
     width: '100%'
@@ -99,19 +84,11 @@ const styles = theme => ({
     minHeight: 40,
     backgroundColor: theme.palette.primary.dark,
     boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
-    // [theme.breakpoints.down(400)]: {
-    //   marginLeft: 75,
-    //   paddingLeft: 63
-    // },
     [theme.breakpoints.down('xs')]: {
       minHeight: 35,
       marginLeft: 75,
       paddingLeft: 66,
     },
-    // [theme.breakpoints.down(320)]: {
-    //   marginLeft: 20,
-    //   paddingLeft: 107,
-    // },
   },
   contactButton: {
     width: 37,
@@ -128,24 +105,13 @@ const styles = theme => ({
     }
   },
   dispo: {
-    position: 'relative',
+    position: 'absolute',
     [theme.breakpoints.down('xs')]: {
-      marginLeft: -42,
+      marginLeft: 104,
       marginTop: 133,
     },
-    // [theme.breakpoints.down(400)]: {
-    //   marginLeft: -40,
-    //   marginTop: 100,
-    //   marginBottom: -50,
-    // },
-    // [theme.breakpoints.down(320)]: {
-    //   marginTop: 75,
-    //   marginLeft: -40,
-    //   marginBottom: -50,
-    // },
-    marginLeft: -51,
-    marginTop: 174,
-    // marginBottom: -14,
+    marginLeft: 132,
+    marginTop: 172,
   },
   available: {
     backgroundColor: 'green',
@@ -160,14 +126,6 @@ const styles = theme => ({
     borderRadius: '50%',
     border: '8px solid white',
     backgroundSize: '200px auto',
-    // [theme.breakpoints.down(320)]: {
-    //   backgroundSize: '84%',
-    //   backgroundPositionX: '106%',
-    //   backgroundPositionY:'182%',
-    // },
-    // [theme.breakpoints.down(400)]: {
-    //   backgroundSize: '87%'
-    // },
     [theme.breakpoints.down('xs')]: {
       backgroundSize: '150px auto',
     }
@@ -248,7 +206,7 @@ class CardProfile extends React.Component {
             </Grid>
           </CardActions>
         </Grid>
-        <Grid container item style={{minHeight: 30}}>
+        <Grid container item className={classes.wingsContainer}>
           <CardContent>
             <Grid container className={classes.wings}>
               {hit.hashtags && hit.hashtags.map((hashtag, i) => {
