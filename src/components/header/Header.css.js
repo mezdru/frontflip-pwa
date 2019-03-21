@@ -108,5 +108,8 @@ export const styles = theme => ({
   },
   toolbar: {
     padding: 0
+  },
+  divider: {
+    backgroundColor: 'rgba(255,255,255,.12)',
   }
 });

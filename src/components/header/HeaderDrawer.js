@@ -105,7 +105,7 @@ class App extends Component {
                     </ListItem>
 
                   </List>
-                  <Divider />
+                  <Divider className={classes.divider} />
                 </div>
               )}
 
@@ -143,7 +143,7 @@ class App extends Component {
                     (organisation.premium ? intl.formatMessage({ id: 'menu.drawer.contactUsPremium' }) : intl.formatMessage({ id: 'menu.drawer.contactUs' }))
                   } />
                 </ListItem>
-                <Divider />
+                <Divider className={classes.divider} />
                 {(currentUser.orgsAndRecords && (currentUser.orgsAndRecords.length > 1) ) && (
                   <div>
                     <ListItem>
@@ -160,7 +160,7 @@ class App extends Component {
                   </ListItem>
                 )}
               </List>
-              <Divider />
+              <Divider className={classes.divider} />
             </div>
           )}
           <List className={'leftSubmenu'}>
@@ -181,7 +181,7 @@ class App extends Component {
               <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.protectingYourData' })} />
             </ListItem>
           </List>
-          <Divider />
+          <Divider className={classes.divider} />
           {auth && (
             <div>
               <List className={'leftSubmenu'}>
