@@ -18,7 +18,7 @@ class WingsSuggestions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      suggestions: [],
+      suggestions: this.props.SuggestionsService.getCurrentSuggestions(),
       bank: [],
       renderComponent: false,
       shouldUpdate: false,
@@ -30,46 +30,15 @@ class WingsSuggestions extends React.Component {
   }
 
   componentDidMount() {
-    // if(!this.isInViewport()) return;
-    this.props.SuggestionsService.init(this.props.algoliaKey, this.state.scrollableClass)
-    .then(()=> {
-      this.props.SuggestionsService.makeInitialSuggestions(this.props.wingsFamily, this.state.scrollableClass)
-      .then(()=> {
-        this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), renderComponent: true});
-      })
-    });
 
-    this.setState({observer: observe(this.props.commonStore, 'algoliaKey', (change) => {
-      this.props.SuggestionsService.init(this.props.algoliaKey)
-      .then(()=> {
-        this.props.SuggestionsService.makeInitialSuggestions()
-        .then(()=> {
-          this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), renderComponent: true});
-        })
-      });
-    })});
+    observe(this.props.SuggestionsService, '_randomNumber', (change) => {
+      this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), shouldUpdate: true});
+    });
   }
 
   componentWillUnmount() {
     this.state.observer();
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   if(nextProps.wingsFamily && !this.isInViewport() && this.state.onlyViewport) return;
-  //   if(nextProps.wingsFamily || (this.props.wingsFamily && !nextProps.wingsFamily)) {
-  //     this.setState({suggestions: [], onlyViewport: false}, () => {
-  //       this.props.SuggestionsService.syncBank(null)
-  //       .then(() => {
-  //         //if(this.isInViewport()) {
-  //         this.props.SuggestionsService.makeInitialSuggestions(nextProps.wingsFamily, this.state.scrollableClass)
-  //         .then(() => {
-  //           this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), shouldUpdate: true}, () => {});
-  //         })
-  //      // }
-  //       })
-  //     });
-  //   }
-  // }
 
   shouldComponentUpdate(nextProps, nextState) {
     if ( (nextState.shouldUpdate || (!this.state.renderComponent && nextState.renderComponent)) && !nextState.animationInProgress ) {
@@ -88,13 +57,11 @@ class WingsSuggestions extends React.Component {
     elt.style.setProperty('color', 'white');
     elt.style.animation = 'suggestionOut 450ms ease-out 0ms 1 forwards';
 
-    //var offsetToScroll = elt.offsetLeft;
     this.setState({animationInProgress: true, offsetSuggestionsIndex: this.state.suggestions.length}, () => {
       setTimeout(() => {this.setState({animationInProgress: false}, () => {
         var liElt = elt.parentNode;
         this.reduceElt(liElt)
         .then(() => {
-          // liElt.remove();
           // this.scrollToSuggestion(offsetToScroll);
           this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions()});
         });

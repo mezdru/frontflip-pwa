@@ -1,5 +1,7 @@
 import commonStore from '../stores/common.store';
 import AlgoliaService from './algolia.service';
+import { observable, action, decorate } from 'mobx';
+
 
 /**
  * @warning The system of "this_user" is here because 5 WingsSuggestions component are created.
@@ -13,6 +15,7 @@ class SuggestionsService {
     this._bank = [];
     this._workInProgress = false;
     this._user = [];
+    this._randomNumber = 0;
   }
 
   async init(algoliaKey){
@@ -42,10 +45,14 @@ class SuggestionsService {
           .then((bank) => {
             this._bank = bank;
             this.populateSuggestionsData();
+            this._randomNumber = Math.floor(Math.random() * 99999);
           }).catch(e => {console.log(e)})
-      else {}
+      else {
+        this._randomNumber = Math.floor(Math.random() * 99999);
+      }
     } else {
       await this.fetchWingsFamily(wingsFamily);
+      this._randomNumber = Math.floor(Math.random() * 99999);
     }
   }
 
@@ -88,6 +95,7 @@ class SuggestionsService {
           else suggestions.splice(startIndex, 0, suggestionToAdd);
         }
         this._currentSuggestions = suggestions;
+
       }).catch((e) => { console.log(e) });
   }
 
@@ -164,5 +172,9 @@ class SuggestionsService {
   }
 
 }
+
+decorate(SuggestionsService, {
+  _randomNumber: observable
+});
 
 export default new SuggestionsService();
