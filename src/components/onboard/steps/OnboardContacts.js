@@ -86,6 +86,10 @@ class OnboardContacts extends React.Component {
     }
   }
   
+  capitalize = (string) =>
+  {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
   
   setDefaultLinks = () => {
     let types = ['email', 'phone', 'linkedin'];
@@ -116,15 +120,14 @@ class OnboardContacts extends React.Component {
                 <Grid item key={i} style={{padding: 8}}>
                   <TextField
                     className={( (newLinkIndex && i === newLinkIndex) ?  classes.link : classes.defaultLink)}
-                    label={link.type}
+                    label={this.capitalize(link.type)}
                     type={this.setTypeInput(link.type)}
-                    
                     pattern={this.setTypePattern(link.type)}
                     variant={"outlined"}
                     value={link.value}
                     onChange={(e) => this.handleLinksChange(e, link, i)}
                     onBlur={() => this.props.handleSave(['links'])}
-                    placeholder={link.type}
+                    placeholder={this.capitalize(link.type)}
                     InputProps={{
                       pattern:this.setTypePattern(link.type),
                       startAdornment: (
