@@ -5,36 +5,40 @@ import withWidth from '@material-ui/core/withWidth';
 import {inject, observer} from 'mobx-react';
 
 import '../../resources/stylesheets/font-awesome.min.css';
-import Logo from '../../components/utils/logo/Logo';
 import Availability from '../availabilityToggle/Availability';
 import Wings from '../utils/wing/Wing';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
 import ProfileService from '../../services/profile.service';
+
 ProfileService.setExtraLinkLimit(5);
 
 
 const styles = theme => ({
   logo: {
-    width: 170,
-    height: 170,
-    marginBottom: -82,
+    width: 240,
+    height: 240,
+    marginBottom: -38,
+    marginLeft: -62,
     backgroundColor: 'white',
+    // [theme.breakpoints.down(320)]: {
+    //   width: 179,
+    //   height: 160,
+    //   marginTop: -37,
+    //   marginLeft: -52,
+    // },
+    // [theme.breakpoints.down(400)]: {
+    //   width: 190,
+    //   height: 180,
+    //   marginTop: -42,
+    //   marginBottom: -75,
+    //   marginLeft: -51,
+    // },
     [theme.breakpoints.down('xs')]: {
-      width: 146,
-      height: 146,
-      marginBottom: -68,
-    },
-    [theme.breakpoints.down(400)]: {
-      width: 124,
-      height: 124,
-      marginBottom: -60,
-    },
-    '& img': {
-      width: '100%',
-      height: '100%',
-      borderRadius: '50%',
-      border: '8px solid white'
+      width: 190,
+      height: 190,
+      marginLeft: -49,
+      marginBottom: -25,
     },
   },
   name: {
@@ -56,17 +60,24 @@ const styles = theme => ({
     overflow: 'hidden',
   },
   titleSmallestView: {
+    marginLeft: -2,
     [theme.breakpoints.down('xs')]: {
       fontSize: '1.2rem!important',
+      marginLeft: -6,
     },
   },
   wings: {
     display: 'inline-block',
     color: 'white',
     position: 'relative',
-    [theme.breakpoints.up('sm')]: {
-      marginTop: '16px!important',
-    },
+    marginTop: '22px!important',
+    marginBottom: 4,
+    // [theme.breakpoints.down(400)]: {
+    //   marginTop: '14px!important',
+    // },
+    [theme.breakpoints.down('xs')]: {
+      marginTop: '18px!important',
+    }
   },
   fullWidth: {
     width: '100%'
@@ -74,37 +85,66 @@ const styles = theme => ({
   cardHeader: {
     cursor: 'pointer',
     maxHeight: 138,
+    [theme.breakpoints.down('xs')]: {
+      maxHeight: 100,
+    }
   },
   contact: {
-    [theme.breakpoints.up(400)]: {
-      margin: 4,
+    [theme.breakpoints.up('xs')]: {
+      margin: 2,
     }
+  },
+  contactField: {
+    marginLeft: 100,
+    paddingLeft: 76,
+    backgroundColor: theme.palette.primary.dark,
+    boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
+    // [theme.breakpoints.down(400)]: {
+    //   marginLeft: 75,
+    //   paddingLeft: 63
+    // },
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: 75,
+      paddingLeft: 66,
+    },
+    // [theme.breakpoints.down(320)]: {
+    //   marginLeft: 20,
+    //   paddingLeft: 107,
+    // },
   },
   contactButton: {
     width: 37,
     height: 37,
+    [theme.breakpoints.down('xs')]: {
+      width: 30,
+      height: 30,
+    },
     '&::before': {
-      position:'absolute',
-      left:0,
-      right:0,
-      margin:'auto',
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      margin: 'auto',
     }
   },
   dispo: {
     position: 'relative',
     [theme.breakpoints.down('xs')]: {
       marginLeft: -42,
-      marginTop: 106,
-      marginBottom: -50,
+      marginTop: 133,
     },
-    [theme.breakpoints.down(400)]: {
-      marginLeft: -36,
-      marginTop: 90,
-      marginBottom: -50,
-    },
-    marginLeft: -42,
-    marginTop: 125,
-    marginBottom: -120,
+    // [theme.breakpoints.down(400)]: {
+    //   marginLeft: -40,
+    //   marginTop: 100,
+    //   marginBottom: -50,
+    // },
+    // [theme.breakpoints.down(320)]: {
+    //   marginTop: 75,
+    //   marginLeft: -40,
+    //   marginBottom: -50,
+    // },
+    marginLeft: -51,
+    marginTop: 174,
+    // marginBottom: -14,
   },
   available: {
     backgroundColor: 'green',
@@ -112,7 +152,26 @@ const styles = theme => ({
   unavailable: {
     backgroundColor: 'red',
   },
-});
+  backgroundLogo: {
+    backgroundRepeat: 'no-repeat',
+    backgroundPositionX: 'right',
+    backgroundPositionY: 'bottom',
+    borderRadius: '50%',
+    border: '8px solid white',
+    backgroundSize: '200px auto',
+    // [theme.breakpoints.down(320)]: {
+    //   backgroundSize: '84%',
+    //   backgroundPositionX: '106%',
+    //   backgroundPositionY:'182%',
+    // },
+    // [theme.breakpoints.down(400)]: {
+    //   backgroundSize: '87%'
+    // },
+    [theme.breakpoints.down('xs')]: {
+      backgroundSize: '150px auto',
+    }
+  }
+})
 
 class CardProfile extends React.Component {
   constructor(props) {
@@ -125,13 +184,14 @@ class CardProfile extends React.Component {
   
   getLogoSize = () => {
     switch (this.props.width) {
-      case 'xs': 
-        if(window.innerWidth < 400) {
+      case 'xs':
+        if (window.innerWidth < 400) {
           return '124x124';
         } else {
           return '146x146';
         }
-      default: return '170x170';
+      default:
+        return '170x170';
     }
   }
   
@@ -147,32 +207,32 @@ class CardProfile extends React.Component {
           <CardHeader
             avatar={
               <Grid item container>
-                <Logo type={'person'} className={classes.logo} src={ProfileService.getPicturePathResized(hit.picture, 'person', this.getLogoSize()) || defaultPicture}/>
-                { ((hit.personAvailability) && (hit.personAvailability !== 'unspecified') )? <Grid item className={classes.dispo}>
+                <Grid item style={{backgroundImage: `url(${ProfileService.getPicturePathResized(hit.picture, 'person ', this.getLogoSize()) || defaultPicture})`}} className={`${classes.logo} ${classes.backgroundLogo}`}/>
+                {((hit.personAvailability) && (hit.personAvailability !== 'unspecified')) ? <Grid item className={classes.dispo}>
                   <Availability available={`${classes[hit.personAvailability]}`}/>
                 </Grid> : ''}
               </Grid>
             }
             title={
               <Typography variant="h4" className={`${classes.name} ${classes.titleSmallestView}`} gutterBottom>
-                                <span dangerouslySetInnerHTML={{__html: ProfileService.htmlDecode(( (hit._highlightResult && hit._highlightResult.name) ? hit._highlightResult.name.value : null) || hit.name) || hit.tag}}></span>
+                <span dangerouslySetInnerHTML={{__html: ProfileService.htmlDecode(((hit._highlightResult && hit._highlightResult.name) ? hit._highlightResult.name.value : null) || hit.name) || hit.tag}}></span>
               </Typography>
             }
             subheader={
               <Typography variant="body1" className={`${classes.name} ${classes.intro}`} gutterBottom>
-                                <span dangerouslySetInnerHTML={{__html: ProfileService.htmlDecode(( (hit._snippetResult && hit._snippetResult.intro) ? hit._snippetResult.intro.value : null) || hit.intro || '')}}></span>
+                <span dangerouslySetInnerHTML={{__html: ProfileService.htmlDecode(((hit._snippetResult && hit._snippetResult.intro) ? hit._snippetResult.intro.value : null) || hit.intro || '')}}></span>
               </Typography>
             }
             onClick={(e) => handleDisplayProfile(e, hit)}
             className={classes.cardHeader}
           />
         </Grid>
-        <Grid item container justify={'flex-end'}>
+        <Grid item container className={classes.contactField}>
           <CardActions disableActionSpacing>
             <Grid item container>
               {hit.links && hit.links.map((link, i) => {
-                if(!link.value || link.value === '') return null;
-                if(link.class !== 'extraLink'){
+                if (!link.value || link.value === '') return null;
+                if (link.class !== 'extraLink') {
                   return (
                     <Grid item key={link._id} className={classes.contact}>
                       <Tooltip title={ProfileService.htmlDecode(link.display) || ProfileService.htmlDecode(link.value) || ProfileService.htmlDecode(link.url)}>
@@ -180,7 +240,9 @@ class CardProfile extends React.Component {
                       </Tooltip>
                     </Grid>
                   )
-                } else { return null; }
+                } else {
+                  return null;
+                }
               })}
             </Grid>
           </CardActions>
@@ -191,10 +253,10 @@ class CardProfile extends React.Component {
               {hit.hashtags && hit.hashtags.map((hashtag, i) => {
                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
                 return (
-                        <Wings  src={ProfileService.getPicturePath(hashtag.picture, 'hashtag') || defaultHashtagPicture} key={i}
-                        label={ProfileService.htmlDecode(displayedName)}
-                        onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
-                        className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
+                  <Wings src={ProfileService.getPicturePath(hashtag.picture, 'hashtag') || defaultHashtagPicture} key={i}
+                         label={ProfileService.htmlDecode(displayedName)}
+                         onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
+                         className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
                 )
               })}
             </Grid>
@@ -206,11 +268,11 @@ class CardProfile extends React.Component {
 }
 
 CardProfile.propTypes = {
-    classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
 };
 
 export default inject('commonStore')(
-    observer(
-        withWidth()(withStyles(styles)(CardProfile))
-    )
+  observer(
+    withWidth()(withStyles(styles)(CardProfile))
+  )
 );

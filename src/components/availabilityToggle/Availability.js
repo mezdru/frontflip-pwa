@@ -2,7 +2,7 @@ import React from 'react';
 import { withStyles} from '@material-ui/core';
 
 
-const styles = {
+const styles = theme => ({
   dispo: {
     width: 35,
     height: 35,
@@ -10,8 +10,12 @@ const styles = {
     borderRadius: 30,
     backgroundColor: '#C2CACF',
     zIndex: 9000,
+    [theme.breakpoints.down('xs')]: {
+      width: 30,
+      height: 30,
+    }
   }
-};
+});
 
 class Availability extends React.Component {
   render() {

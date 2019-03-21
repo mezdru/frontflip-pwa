@@ -143,10 +143,14 @@ export default createMuiTheme({
     MuiCard: {
       root: {
         padding: 0,
-        borderRadius: 20,
+        borderRadius: 10,
         margin: 15,
         marginLeft: 0,
-        boxShadow: '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)',
+        boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
+        transition: 'all 0.3s cubic-bezier(.25,.8,.25,1)',
+        '&:hover': {
+          boxShadow: '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
+        }
       }
     },
     MuiCardActions: {
