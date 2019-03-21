@@ -88,7 +88,8 @@ export default createMuiTheme({
       },
       contained: {
         '&:hover': {
-          backgroundColor: palette.secondary.dark
+          backgroundColor: palette.secondary.dark,
+          color: 'white',
         }
       },
       text: {

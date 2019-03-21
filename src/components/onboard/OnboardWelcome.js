@@ -113,7 +113,7 @@ class OnboardWelcome extends React.Component {
         <form onSubmit={this.handleSubmitForm} className={classes.form}>
           <Grid item container direction={'column'} xs={12} sm={6} lg={4} spacing={16}>
             <Hidden mdUp>
-              <Typography variant="h2" className={classes.intro}>Welcome to the Wings of {organisation.name}</Typography>
+            <Typography variant="h2" style={{textAlign: 'center'}} ><FormattedMessage id={'onboard.welcome'}/> {organisation.name}</Typography>
             </Hidden>
             <Grid item>
               <FormattedHTMLMessage id="onboard.welcome.text" values={{organisationName: organisation.name}} />
