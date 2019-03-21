@@ -33,6 +33,9 @@ const styles = theme => ({
   },
   removable: {
     paddingRight: 0,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.main + ' !important',
+    }
   },
   animated: {
     background: theme.palette.secondary.main,
@@ -69,7 +72,10 @@ const Wing = ({ src, label, ...props }) => {
         color={"primary"}
         className={classNames(props.classes[props.className], (props.onDelete ? props.classes.removable : null))}
         onClick={props.onClick}
-        onDelete={props.onDelete} >
+        onDelete={props.onDelete}
+        onMouseDown={props.onMouseDown}
+        onMouseUp={props.onMouseUp}
+        onBlur={props.onBlur}>
       </Chip>
     )
   }

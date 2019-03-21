@@ -106,7 +106,7 @@ class WingsSuggestions extends React.Component {
   renderWing = (classes, hit, i) => {
     return (
       <li key={i} className={classes.suggestion} style={{animationDelay: ((i-this.state.offsetSuggestionsIndex)*0.05) +'s'}} id={hit.tag}>
-        <Wings  src={ProfileService.getPicturePath(hit.picture) || defaultHashtagPicture}
+        <Wings  src={ProfileService.getPicturePath(hit.picture)}
           label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
           onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag }, i)}
           onMouseDown={(e) => this.handleMouseDown(e)}
@@ -180,7 +180,9 @@ class WingsSuggestions extends React.Component {
     const { suggestions, scrollableClass } = this.state;
     return (
       <div ref={(el) => {this.elementNode = el}}>
-        <Typography variant="subtitle2" style={{padding: 16}} ><FormattedMessage id={'wingsSuggestions'}/></Typography>
+        <Hidden xsDown>
+          <Typography variant="subtitle2" style={{padding: 16, paddingBottom:0}} ><FormattedMessage id={'wingsSuggestions'}/></Typography>
+        </Hidden>
 
         <div style={{position:'relative', height: 126}}>
         <Hidden smDown>
@@ -191,12 +193,16 @@ class WingsSuggestions extends React.Component {
             <ArrowRight fontSize="inherit" />
           </Button>
         </Hidden>
-        <div className={classes.transparentGradientBoxLeft}></div>
+    
+        <Hidden xsDown>
+          <div className={classes.transparentGradientBoxLeft}></div>
+          <div className={classes.transparentGradientBoxRight}></div>
+        </Hidden>
+
         <div className={classNames(classes.suggestionsContainer, ''+scrollableClass)} >
           {this.renderWingsList(suggestions, classes, false)}
           {this.renderWingsList(suggestions, classes, true)}
         </div>
-        <div className={classes.transparentGradientBoxRight}></div>
       </div>
       </div>
     );
