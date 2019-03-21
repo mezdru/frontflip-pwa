@@ -17,6 +17,19 @@ class OnboardWings extends React.Component {
     };
   }
 
+  scrollToBottom = (id) => {
+    console.log('-------')
+    console.log('scroll!')
+    try{
+    var elt = document.getElementById(id);
+    console.log(elt.scrollTop);
+    console.log(elt.scrollHeight)
+    elt.scrollTop = elt.scrollHeight;
+    }catch(e) {
+      console.log(e)
+    }
+  }
+
   handleAddWing = (e, element) => {
     if  (e) e.preventDefault();
     this.props.recordStore.setRecordTag(element.tag);
@@ -103,10 +116,11 @@ class OnboardWings extends React.Component {
             {this.renderByStep()}
           </Grid>
 
-          <Grid item justify="center" direction="row" container style={{paddingTop: 16, height: 'calc(100% - 320px)', overflowY: 'auto'}}>
+          <Grid item justify="center" direction="row" container style={{paddingTop: 16, height: 'calc(100% - 320px)', overflowY: 'auto'}} id="userWings">
             <Grid container  item xs={12} sm={8} md={6} lg={4}>
               <Grid item xs={12} >
-                <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? this.getFeaturedWings() : null} />
+                <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? this.getFeaturedWings() : null}
+                            scrollToBottom={this.scrollToBottom} />
               </Grid>
             </Grid>
           </Grid>
