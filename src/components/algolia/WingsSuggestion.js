@@ -63,7 +63,7 @@ class WingsSuggestions extends React.Component {
         this.reduceElt(liElt)
         .then(() => {
           // this.scrollToSuggestion(offsetToScroll);
-          this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions()});
+          this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), shouldUpdate: true});
         });
         })
       }, 450);
@@ -178,7 +178,6 @@ class WingsSuggestions extends React.Component {
   render() {
     const { classes } = this.props;
     const { suggestions, scrollableClass } = this.state;
-
     return (
       <div ref={(el) => {this.elementNode = el}}>
         <Typography variant="subtitle2" style={{padding: 16}} ><FormattedMessage id={'wingsSuggestions'}/></Typography>
