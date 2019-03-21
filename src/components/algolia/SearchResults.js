@@ -35,19 +35,21 @@ class SearchResults extends React.Component {
   fetchHits = (filters, query, facetFilters, page) => {
     AlgoliaService.fetchHits(filters, query, facetFilters, page)
     .then((content) => {
+
       if(!content) return;
       this.setState({hitsAlreadyDisplayed: Math.min((content.hitsPerPage * (content.page)), content.nbHits)});
       if(content.page === (content.nbPages-1)) this.setState({hideShowMore: true});
       if(page) this.setState({hits: this.state.hits.concat(content.hits)}, this.endTask());
       else this.setState({hits: content.hits}, this.endTask());
-    }).catch(this.setState({hits: []}));
+
+    }).catch((e) => {this.setState({hits: []})});
   }
 
   endTask = () => {
     this.setState({loadInProgress: false});
   }
 
-  handleShowMore = () => {
+  handleShowMore = (e) => {
     this.setState({page: this.state.page+1, loadInProgress: true}, () => {
       this.fetchHits(this.props.filter, this.props.query, null, this.state.page);
     });
@@ -57,7 +59,6 @@ class SearchResults extends React.Component {
   render() {
     const {hits, loadInProgress, hideShowMore, hitsAlreadyDisplayed} = this.state;
     const {addToFilters, handleDisplayProfile, classes, HitComponent} = this.props;
-
     return (
       <div className={classes.hitList} >
       <ul>
@@ -77,7 +78,7 @@ class SearchResults extends React.Component {
                 <CircularProgress color="secondary" />
               )}
               {!loadInProgress && (
-                <Button onClick={this.handleShowMore}><FormattedMessage id="search.showMore" /></Button>
+                <Button onClick={(e) => this.handleShowMore(e)}><FormattedMessage id="search.showMore" /></Button>
               )}
             </Grid>
           </li>
