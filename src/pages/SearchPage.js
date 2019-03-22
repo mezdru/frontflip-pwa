@@ -12,6 +12,7 @@ import SearchSuggestions from '../components/algolia/SearchSuggestions';
 import SearchResults from '../components/algolia/SearchResults';
 import Card from '../components/card/CardProfile';
 import ReactGA from 'react-ga';
+import OnboardCongratulation from '../components/onboard/steps/OnboardCongratulation';
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class SearchPage extends React.Component {
@@ -79,6 +80,13 @@ class SearchPage extends React.Component {
 
   handleReturnToSearch = () => this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true});
 
+  shouldSetRootUrl = (rootUrl) => {
+    return (  this.state.shouldUpdateUrl &&
+              this.state.resultsType === 'person' &&
+              (window.location.pathname !== rootUrl) &&
+              (window.location.pathname !== rootUrl + '/congrats'));
+  }
+
   render() {
     const { shouldDisplayHitResults, filters, newFilter, shouldUpdateUrl, query } = this.state;
     const { classes } = this.props;
@@ -91,20 +99,25 @@ class SearchPage extends React.Component {
     let displayedHit = ((profileTag && !shouldUpdateUrl) ? (this.state.displayedHit || { tag: profileTag }) : null) || this.state.displayedHit;
     let rootUrl = '/' + locale + (orgTag ? '/' + orgTag : '');
     let searchBarWidth = this.getSearchBarWidth();
-    let redirectTo;
+    let redirectTo, showCongratulation;
 
 
     if (profileTag && profileTag.charAt(0) !== '@') redirectTo = '/' + locale + '/' + orgTag;
+    if(profileTag === 'congrats') {
+      profileTag = null;
+      redirectTo = null;
+      resultsType = 'person';
+      showCongratulation = true;
+    }
     if (redirectTo) {
       return (<Redirect to={redirectTo} />);
     }
-
     
     return (
       <div>
         <Header handleDisplayProfile={this.handleDisplayProfile}/>
         <main>
-          {(shouldUpdateUrl && resultsType === 'person' && (window.location.pathname !== rootUrl)) && (<Redirect to={rootUrl} />)}
+          {this.shouldSetRootUrl(rootUrl) && (<Redirect to={rootUrl} />)}
           <Grid container direction={'column'} alignItems={'center'}>
             
             <div  style={{  width: ((((isWidthDown('sm', this.props.width)))) ? '75%' : searchBarWidth),
@@ -136,6 +149,10 @@ class SearchPage extends React.Component {
             )}
 
           </Grid>
+
+          {showCongratulation && (
+            <OnboardCongratulation isOpen={showCongratulation} />
+          )}
         </main>
       </div>
     );
