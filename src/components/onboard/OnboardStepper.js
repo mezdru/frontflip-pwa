@@ -84,7 +84,7 @@ class OnboardStepper extends React.Component {
     
     if ((this.state.activeStep === (this.state.steps.length - 1))) {
       // click on finish
-      this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag }, ()=> {this.forceUpdate()});
+      this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag + '/congrats' }, ()=> {this.forceUpdate()});
     } else {
       this.setState(state => ({
         activeStep: state.activeStep + 1,
@@ -143,7 +143,7 @@ class OnboardStepper extends React.Component {
     let StepComponent = this.getStepComponent(steps, activeStep);
     let wantedUrl = '/' + locale + '/' + (organisation.tag || orgTag) + '/onboard/' + steps[activeStep].replace('#', '%23');
 
-    if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect to={redirectTo} />);
+    if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
     return (
       <Grid style={{ height: '100vh' }} item>
         { (window.location.pathname !== wantedUrl) && (

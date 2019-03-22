@@ -193,7 +193,12 @@ export default createMuiTheme({
     },
     MuiPaper: {
       root: {
-        padding: '16px'
+        padding: '16px',
+      }
+    },
+    MuiDialog: {
+      paper: {
+        margin: 16
       }
     },
     //Inputs

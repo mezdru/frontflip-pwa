@@ -180,7 +180,7 @@ class MainRouteOrganisationRedirect extends React.Component {
             {/* Main route with orgTag */}
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step?" component={OnboardPage} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={SearchPage} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={SearchPage} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/:action?" component={SearchPage} />
           </Switch>
         </div>
       );
