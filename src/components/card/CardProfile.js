@@ -64,10 +64,10 @@ const styles = theme => ({
     minHeight: 30
   },
   fullWidth: {
-    width: '100%'
+    width: '100%',
+    cursor: 'pointer'
   },
   cardHeader: {
-    cursor: 'pointer',
     maxHeight: 138,
     [theme.breakpoints.down('xs')]: {
       maxHeight: 100,
@@ -80,14 +80,13 @@ const styles = theme => ({
   },
   contactField: {
     marginLeft: 100,
-    paddingLeft: 76,
+    paddingLeft: 82,
     minHeight: 40,
     backgroundColor: theme.palette.primary.dark,
-    boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
     [theme.breakpoints.down('xs')]: {
       minHeight: 35,
       marginLeft: 75,
-      paddingLeft: 66,
+      paddingLeft: 72,
     },
   },
   contactButton: {
@@ -102,6 +101,9 @@ const styles = theme => ({
       left: 0,
       right: 0,
       margin: 'auto',
+    },
+    '&:hover': {
+      backgroundColor: '#41424F',
     }
   },
   dispo: {
@@ -157,7 +159,7 @@ class CardProfile extends React.Component {
     ProfileService.orderHashtags(hit);
     
     return (
-      <Card className={classes.fullWidth} key={hit.objectID}>
+      <Card className={classes.fullWidth} key={hit.objectID} onClick={(e) => handleDisplayProfile(e, hit)}>
         <Grid item container>
           <CardHeader
             avatar={
@@ -178,7 +180,6 @@ class CardProfile extends React.Component {
                 <span dangerouslySetInnerHTML={{__html: ProfileService.htmlDecode(((hit._snippetResult && hit._snippetResult.intro) ? hit._snippetResult.intro.value : null) || hit.intro || '')}}></span>
               </Typography>
             }
-            onClick={(e) => handleDisplayProfile(e, hit)}
             className={classes.cardHeader}
           />
         </Grid>
