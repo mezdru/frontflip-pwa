@@ -44,9 +44,16 @@ class PromptIOsInstall extends Component {
   constructor() {
     super();
     this.state = {
-      canDisplayPopup: (this.isIOs() && !this.isInStandaloneMode())
+      canDisplayPopup: false
     };
   }
+
+  componentDidMount() {
+    if(this.isIOs() && !this.isInStandaloneMode()) {
+      setTimeout(() => { this.setState({canDisplayPopup: true})}, 10000);
+    }
+  }
+
 
   isIOs = () => {
     const userAgent = window.navigator.userAgent.toLowerCase();
