@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { inject, observer } from "mobx-react";
 import { withStyles } from '@material-ui/core';
 import AddToHomescreenIOs from '../../../resources/icons/addToHomescreenIOs.png'
-import { FormattedHTMLMessage, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 const styles = theme => ({
   popupContainer: {
@@ -61,12 +61,11 @@ class PromptIOsInstall extends Component {
     const {canDisplayPopup} = this.state;
     const {classes} = this.props;
 
-    //if(!canDisplayPopup) return null;
+    if(!canDisplayPopup) return null;
 
     return (
       <div className={classes.popupContainer}>
         <FormattedMessage id="pwa.install.ios" values={{img: <img className={classes.shareIcon} src={AddToHomescreenIOs} alt='Share button' />}} />
-        {/* // Install this app on your iPhone! Tap <img className={classes.shareIcon} src={AddToHomescreenIOs} alt="Share button" /> and then Add to homescreen. */}
         <div className={classes.triangle}></div>
       </div>
     );
