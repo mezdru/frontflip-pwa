@@ -32,7 +32,7 @@ const styles = theme => ({
     padding: '8px 16px',
     color:'white',
     '&:hover' : {
-      background: 'rgba(0, 0, 0, 0.08)',
+      background: 'rgba(255, 255, 255, 0.12)',
     },
     '&:first-child()': {
       width: 40,
