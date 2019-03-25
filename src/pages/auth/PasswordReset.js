@@ -37,6 +37,7 @@ const styles = (theme) => ({
   },
   title: {
     textAlign: 'center',
+    color: 'unset',
     paddingTop: 16,
     paddingBottom:16,
     [theme.breakpoints.down(400)]: {
@@ -136,7 +137,7 @@ class PasswordReset extends React.Component {
                   <Grid item>
                     <Typography variant="h4" className={classes.title}>
                       {this.props.organisationStore.values.orgTag && (
-                        <FormattedHTMLMessage id="password.create.title.orgTag" values={{orgTag: this.props.organisationStore.values.orgTag}} />
+                        <FormattedHTMLMessage id="password.create.title.orgTag" values={{orgTag: this.props.organisationStore.values.orgTag}}/>
                       )}
                       {!this.props.organisationStore.values.orgTag && (
                         <FormattedHTMLMessage id="password.create.title.noOrgTag" />
