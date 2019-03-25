@@ -13,6 +13,7 @@ import SearchResults from '../components/algolia/SearchResults';
 import Card from '../components/card/CardProfile';
 import ReactGA from 'react-ga';
 import OnboardCongratulation from '../components/onboard/steps/OnboardCongratulation';
+import PromptIOsInstall from '../components/utils/prompt/PromptIOsInstall';
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class SearchPage extends React.Component {
@@ -155,6 +156,7 @@ class SearchPage extends React.Component {
             <OnboardCongratulation isOpen={showCongratulation} />
           )}
         </main>
+        <PromptIOsInstall />
       </div>
     );
   }
