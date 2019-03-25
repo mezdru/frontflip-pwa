@@ -154,6 +154,14 @@ export default createMuiTheme({
         }
       }
     },
+    MuiFab: {
+      root: {
+        transition: 'filter 0.3s cubic-bezier(.25,.8,.25,1)',
+        '&:hover': {
+          filter: 'brightness(88%)'
+        }
+      }
+    },
     MuiCardActions: {
       root: {
         padding: '0 8px!important',

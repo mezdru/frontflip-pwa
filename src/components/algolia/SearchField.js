@@ -109,16 +109,17 @@ class SearchField extends React.Component {
 
   }
 
+  // rename scrollToRight
   async scrollToBottom() {
     setTimeout(() => {
       let valueContainer = document.querySelector('.autocomplete-search div div:nth-child(1)');
       if(valueContainer){
-        valueContainer.scrollTop = valueContainer.scrollHeight;
-        if(valueContainer.scrollHeight > 42) {
-          valueContainer.style.marginBottom = '8px';
-        } else {
-          valueContainer.style.marginBottom = '';
-        }
+        valueContainer.scrollLeft = valueContainer.scrollWidth;
+        // if(valueContainer.scrollHeight > 42) {
+        //   valueContainer.style.marginBottom = '8px';
+        // } else {
+        //   valueContainer.style.marginBottom = '';
+        // }
       } 
     }, 100);    
   }

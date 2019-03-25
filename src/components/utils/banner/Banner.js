@@ -7,22 +7,22 @@ import { withStyles } from '@material-ui/core';
 const styles = theme => ({
   root: {
     width: '100%',
-    height: 166,
+    height: 222,
     [theme.breakpoints.up('md')]: {
-      height: 350,
+      height: 416,
     },
   },
   rootBanner: {
     position: 'absolute',
     width: '100%',
-    height: 166,
+    height: 222,
     boxShadow: '0 8px 20px -12px darkgrey',
     backgroundColor: 'white',
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',
     [theme.breakpoints.up('md')]: {
-      height: 350,
+      height: 416,
     },
   }
 });

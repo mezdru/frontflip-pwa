@@ -5,7 +5,7 @@ export const styles = theme => ({
     display: 'flex',
     width: '100%',
     textAlign: 'center',
-    backgroundColor: theme.palette.primary.dark
+    position: 'absolute',
   },
   menuLink: {
     minWidth: '130px',
@@ -42,7 +42,8 @@ export const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    background: 'white',
+    background: 'transparent',
+    boxShadow: 'none',
     zIndex: '999'
   },
   appBarShift: {
@@ -111,5 +112,15 @@ export const styles = theme => ({
   },
   divider: {
     backgroundColor: 'rgba(255,255,255,.12)',
+  },
+  menuButton: {
+    paddding: 0, 
+    cursor: 'pointer', 
+    height: 48,
+    width: 48, 
+    backgroundColor: 'white',
+    '&:hover': {
+      backgroundColor: 'white',
+    }
   }
 });
