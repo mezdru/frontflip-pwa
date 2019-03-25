@@ -84,5 +84,5 @@
     "onboard.end.cta": "Recherchez dans {organisationName}",
     "onboard.end.text": "Votre profil est dans l'annuaire des talents de {organisationName}.",
     "onboard.end.title": "Génial",
-    "pwa.install.ios": "Installez cette app sur votre iPhone ! Cliquez sur {img} puis Sur l'écran d'accueil."
+    "pwa.install.ios": "Installez cette app sur votre iPhone ! Cliquez sur {img} puis 'Sur l'écran d'accueil'."
 }

@@ -84,5 +84,5 @@
     "onboard.end.cta": "Search in {organisationName}",
     "onboard.end.text": "Your profile is now in the talent directory of {organisationName}",
     "onboard.end.title": "Awesome",
-    "pwa.install.ios": "Install this app on your iPhone! Tap {img} and then Add to homescreen."
+    "pwa.install.ios": "Install this app on your iPhone! Tap {img} and then 'Add to homescreen'."
 }
