@@ -159,9 +159,10 @@ class CardProfile extends React.Component {
     ProfileService.orderHashtags(hit);
     
     return (
-      <Card className={classes.fullWidth} key={hit.objectID} onClick={(e) => handleDisplayProfile(e, hit)}>
+      <Card className={classes.fullWidth} key={hit.objectID} >
         <Grid item container>
           <CardHeader
+            onClick={(e) => handleDisplayProfile(e, hit)}
             avatar={
               <Grid item container>
                 <Grid item style={{backgroundImage: `url(${ProfileService.getPicturePathResized(hit.picture, 'person ', this.getLogoSize()) || defaultPicture})`}} className={`${classes.logo} ${classes.backgroundLogo}`}/>
