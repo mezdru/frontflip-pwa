@@ -3,6 +3,7 @@ import { inject, observer } from "mobx-react";
 import { withStyles } from '@material-ui/core';
 import AddToHomescreenIOs from '../../../resources/icons/addToHomescreenIOs.png'
 import { FormattedMessage } from 'react-intl';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 const styles = theme => ({
   popupContainer: {
@@ -54,7 +55,8 @@ class PromptIOsInstall extends Component {
 
   isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
 
-  componentDidMount() {
+  handleClickAway = () => {
+    this.setState({canDisplayPopup: false});
   }
 
   render() {
@@ -64,10 +66,12 @@ class PromptIOsInstall extends Component {
     if(!canDisplayPopup) return null;
 
     return (
-      <div className={classes.popupContainer}>
-        <FormattedMessage id="pwa.install.ios" values={{img: <img className={classes.shareIcon} src={AddToHomescreenIOs} alt='Share button' />}} />
-        <div className={classes.triangle}></div>
-      </div>
+      <ClickAwayListener onClickAway={this.handleClickAway}>
+        <div className={classes.popupContainer}>
+          <FormattedMessage id="pwa.install.ios" values={{img: <img className={classes.shareIcon} src={AddToHomescreenIOs} alt='Share button' />}} />
+          <div className={classes.triangle}></div>
+        </div>
+      </ClickAwayListener>
     );
   }
 }
