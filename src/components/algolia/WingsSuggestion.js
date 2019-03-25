@@ -96,7 +96,6 @@ class WingsSuggestions extends React.Component {
         }
       }, 5);
     });
-
   }
 
   shouldDisplaySuggestion = (tag) => (!this.props.recordStore.values.record.hashtags.some(hashtag => hashtag.tag === tag));

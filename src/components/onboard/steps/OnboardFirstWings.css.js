@@ -21,7 +21,7 @@ export const styles = theme => ({
     height: 159,
     [theme.breakpoints.down('sm')]: {
       width: 130,
-      height: 159,
+      height: 130,
     },
     overflow: 'hidden',
     padding: 16,
