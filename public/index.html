@@ -81,6 +81,68 @@
     UPLOADCARE_IMAGES_ONLY = true;
     UPLOADCARE_PREVIEW_STEP = true;
     UPLOADCARE_CLEARABLE = true;
+
+    try{
+      var locale = window.location.pathname.split('/')[1];
+
+      switch (locale) {
+        case 'fr':
+          UPLOADCARE_LOCALE_TRANSLATIONS = {
+            buttons: {
+              cancel: 'Annuler',
+              remove: 'Supprimer',
+              choose: {
+                images: {
+                  one: 'Choisissez votre photo'
+                }
+              }
+            },
+            dialog: {
+              tabs: {
+                file: {
+                button: 'Choisissez un fichier',
+                drag: 'Glissez-déposez un fichier',
+                or: 'ou'
+              },
+              url: {
+                title: 'Photo provenant d\'un site Web',
+                line1: 'Indiquez le lien vers la photo',
+                line2: '',
+                input: 'Collez votre lien ici...',
+                button: 'Chargez la photo'
+              },
+              camera: {
+                title: 'Photo provenant de la caméra',
+                capture: 'Prendre une photo',
+                pleaseAllow: {
+                  title: 'Veuillez accorder l\'accès à votre caméra.',
+                  text: 'Nous vous avons demandé l\'accès à votre caméra.<br>'+
+                        'Pour prendre une photo avec votre caméra, vous devez nous accorder cet accès'
+                }
+              },
+              preview: {
+                change: 'Annuler',
+                crop: {
+                  title: 'Rognez et ajoutez cette photo',
+                  done: 'Terminer',
+                },
+                image: {
+                  cancel: 'Annuler'
+                },
+              }
+              },
+            }
+          };
+          break;
+        case ['en', 'en-UK']:
+          break;
+        default:
+          break;
+      }
+    }catch(e) {
+
+    }
+
   </script>
 </head>
 
