@@ -48,7 +48,7 @@ export const styles = theme => ({
   },
   appBarShift: {
     width: '100%',
-    marginLeft: drawerWidth,
+    marginLeft: 0,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
