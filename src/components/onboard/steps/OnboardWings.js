@@ -8,6 +8,16 @@ import Typography from '@material-ui/core/Typography';
 import OnboardFirstWings from './OnboardFirstWings';
 import {FormattedMessage} from "react-intl";
 
+const styles = theme => ({
+  userWingsPosition: {
+    paddingTop: 16, 
+    height: 'calc(100% - 320px)', 
+    [theme.breakpoints.down('sm')]: {
+      height: 'calc(100% - 280px)',
+    },
+    overflowY: 'auto'
+  }
+});
 
 class OnboardWings extends React.Component {
   constructor(props) {
@@ -107,7 +117,7 @@ class OnboardWings extends React.Component {
   getFeaturedWings = () => this.props.organisationStore.values.organisation.featuredWingsFamily.filter(fam => fam.tag === this.props.activeStepLabel)[0];
 
   render() {
-    const {activeStepLabel} = this.props;
+    const {activeStepLabel, theme, classes} = this.props;
     return (
         <Grid container direction="column" style={{height: 'calc(100vh - 73px)', background: 'white', overflow: 'hidden'}}>
           <Grid item style={{background: this.props.theme.palette.primary.main, maxWidth: '100%', position: 'relative', zIndex: 2,
@@ -116,7 +126,7 @@ class OnboardWings extends React.Component {
             {this.renderByStep()}
           </Grid>
 
-          <Grid item justify="center" direction="row" container style={{paddingTop: 16, height: 'calc(100% - 280px)', overflowY: 'auto'}} id="userWings">
+          <Grid item justify="center" direction="row" container className={classes.userWingsPosition} id="userWings">
             <Grid container  item xs={12} sm={8} md={6} lg={4}>
               <Grid item xs={12} >
                 <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? this.getFeaturedWings() : null}
@@ -131,6 +141,6 @@ class OnboardWings extends React.Component {
 
 export default inject('commonStore', 'recordStore', 'organisationStore')(
   observer(
-    withStyles(null, {withTheme: true})(OnboardWings)
+    withStyles(styles, {withTheme: true})(OnboardWings)
   )
 );
