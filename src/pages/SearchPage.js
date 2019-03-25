@@ -139,7 +139,6 @@ class SearchPage extends React.Component {
 
             {shouldDisplayHitResults && (
               <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
-                <div style={{position:'relative', height: 56}} ></div>
                 <SearchResults addToFilters={this.addToFilters} handleDisplayProfile={this.handleDisplayProfile} 
                                       classes={classes} HitComponent={Card} filters={filters} query={query}/>
               </Grid>
