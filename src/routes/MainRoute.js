@@ -4,7 +4,6 @@ import MainRouteOrganisation from './MainRouteOrganisation';
 import { inject, observer } from 'mobx-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ReloadModal from '../components/utils/reloader/ReloadModal';
-import PromptIOsInstall from "../components/utils/prompt/PromptIOsInstall";
 
 class MainRoute extends React.Component {
 
@@ -42,7 +41,6 @@ class MainRoute extends React.Component {
       return (
         <div>
           <ReloadModal />
-          <PromptIOsInstall />
           <Switch>
             <Route path="/:locale(en|fr|en-UK)" component={MainRouteOrganisation} />
             <Redirect from="*" to={"/" + (locale ? locale : 'en') + endUrl} />
