@@ -69,7 +69,8 @@ export const customStyles = {
     marginLeft: 8,
   }),
   multiValue: base => ({
-    ...base
+    ...base,
+    display: 'inline-block',
   }),
   placeholder: base => ({
     ...base,
@@ -79,9 +80,15 @@ export const customStyles = {
     ...provided,
     padding: '0 !important',
     margin: 0,
-    marginLeft: -8,
+    marginLeft: 0,
+    overflowY: 'hidden',
     overflow: 'auto',
+    wordWrap: 'white-space',
+    WebkitFlexWrap: 'unset !important',
+    flexWrap: 'unset !important',
+    MsFlexWrap: 'unset !important',
     maxHeight: 42,
+    scrollbarWidth: 'thin',
     '&:last-child': {
       marginBottom: 8,
     },

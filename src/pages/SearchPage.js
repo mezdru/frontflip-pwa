@@ -128,6 +128,7 @@ class SearchPage extends React.Component {
 
             <Grid container item alignItems={"stretch"} >
                   <Banner style={{filter: 'brightness(90%)'}}>
+                    <div style={{position:'relative', height: 56}} ></div>
                     <div style={{ width: searchBarWidth }} className={classes.suggestionsContainer}>
                       {shouldDisplayHitResults && (
                         <SearchSuggestions  addToFilters={this.addToFilters} filters={filters} query={query} />
@@ -138,6 +139,7 @@ class SearchPage extends React.Component {
 
             {shouldDisplayHitResults && (
               <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
+                <div style={{position:'relative', height: 56}} ></div>
                 <SearchResults addToFilters={this.addToFilters} handleDisplayProfile={this.handleDisplayProfile} 
                                       classes={classes} HitComponent={Card} filters={filters} query={query}/>
               </Grid>

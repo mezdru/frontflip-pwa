@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withStyles } from "@material-ui/core";
+import { withStyles, Fab } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -17,7 +17,7 @@ class HeaderToolBar extends Component {
 
     return (
       <Toolbar className={classes.toolbar}>
-        {auth && (
+        {/* {auth && (
           <IconButton
             color="inherit"
             aria-label="Open drawer"
@@ -26,18 +26,11 @@ class HeaderToolBar extends Component {
           >
             <MenuIcon className={classes.menuButton} />
           </IconButton>
-        )}
+        )} */}
 
-        <Typography className={classes.title} variant="h6" color="inherit" noWrap style={{ paddding: 0 }}>
-          <a href={(process.env.NODE_ENV === 'production' ? 'https://' : 'http://') + process.env.REACT_APP_HOST_BACKFLIP}>
-            {auth && (
-              <Logo />
-            )}
-            {!auth && (
-              <img src={logoNoAuth} alt={"Wingzy"} height="40px" />
-            )}
-          </a>
-        </Typography>
+        <Fab variant="extended" className={classes.menuButton}
+                    onClick={this.props.handleDrawerOpen} 
+                    children={<Logo />} ></Fab>
 
         {!auth && (
           <HeaderLinks auth={auth} anchorEl={anchorEl}

@@ -13,12 +13,9 @@ const styles = (theme) => ({
     width: 110,
     height: 110,
     boxShadow: '0 5px 15px -1px darkgrey, 0 0 0 5px transparent',
-    bottom: 60,
     zIndex: 2,
-    marginBottom: -50,
-    [theme.breakpoints.down('xs')]: {
-      marginBottom: -56,
-    }
+    transform: 'translateY(-50%)',
+    marginBottom: -47,
   },
   container: {
     [theme.breakpoints.down('xs')]: {
@@ -57,15 +54,15 @@ const styles = (theme) => ({
   },
   banner: {
     position: 'absolute',
-    top: 64,
+    top: 0,
     width: '100%',
     textAlign: 'center',
     left: 0,
-    height: 166,
-    lineHeight: 166,
+    height: 222,
+    lineHeight: 222,
     [theme.breakpoints.up('md')]: {
-      height: 350,
-      lineHeight: '350px',
+      height: 416,
+      lineHeight: 416,
     }, 
     background: 'radial-gradient(rgba(50,50,50,.4), rgba(50,50,50,.1))',
     backgroundRepeat: 'no-repeat',
