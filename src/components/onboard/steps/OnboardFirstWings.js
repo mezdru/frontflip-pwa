@@ -16,10 +16,10 @@ class OnboardFirstWings extends React.Component {
     super(props);
     this.state = {
       firstWings: [],
-      firstWingsSelected: [],
       observer: ()=>{},
       recordObserver:  ()=>{},
-      scrollableClass: Math.floor(Math.random() * 99999)
+      scrollableClass: Math.floor(Math.random() * 99999),
+      animationInProgress: false,
     };
   }
 
@@ -45,28 +45,34 @@ class OnboardFirstWings extends React.Component {
   fetchFirstWings = () => {
     AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:#Wings', null, null, null)
     .then(content => {
-      if(content) {
-        this.setState({firstWings: content.hits, firstWingsSelected: new Array(content.hits.length)});
-      }
+      if(content && !this.state.animationInProgress) this.setState({firstWings: content.hits});
     })
   }
 
   handleAddWing = (e, tag, i) => {
-    this.updateSelectedWings(i, this.state.firstWingsSelected[i]);
-    this.props.handleAddWing(e, {tag: tag});
-  }
+    let elt = e.currentTarget;
 
-  updateSelectedWings = (i, selected) => {
-    let state = this.state.firstWingsSelected;
-    state[i] = !selected;
-    this.setState({firstWingsSelected: state});
+    this.setState({animationInProgress: true}, () => {
+      elt.style.setProperty('background', this.props.theme.palette.secondary.main, 'important');
+      elt.style.setProperty('color', 'white');
+      elt.style.animation = 'suggestionOut 450ms ease-out 0ms 1 forwards';
+      this.props.handleAddWing(e, {tag: tag});
+  
+      setTimeout(() => {
+        this.reduceElt(elt)
+        .then(() => {
+          this.setState({animationInProgress: false});
+        })
+      }, 450)
+    })
+
   }
 
   getFirstWingsStyle = (index, theme) => {
     let style = {};
-    style.background = (this.state.firstWingsSelected[index] ? theme.palette.secondary.dark : 'white');
-    style.color = (this.state.firstWingsSelected[index] ? 'white' : theme.palette.primary.main);
-    style.display = (this.state.firstWingsSelected[index] ? 'none' : 'inline-block');
+    style.background = 'white';
+    style.color = theme.palette.primary.main;
+    style.display = 'inline-block';
     return style;
   }
 
@@ -89,6 +95,34 @@ class OnboardFirstWings extends React.Component {
     clearInterval(interval2);
   }
 
+  handleMouseDown = (e) => {
+    var elt = e.currentTarget;
+    elt.style.transition = 'none';
+    elt.style.setProperty('background', this.props.theme.palette.secondary.main, 'important');
+    elt.style.setProperty('color', 'white');
+  }
+
+  handleMouseUp = (e) => {
+    var elt = e.currentTarget;
+    elt.style.transition = 'none';
+    elt.style.setProperty('background', '');
+    elt.style.setProperty('color', this.props.theme.palette.primary.dark);
+  }
+
+  reduceElt = async (elt) => {
+    var initWidth = elt.offsetWidth;
+    return new Promise((resolve, reject) => {
+      var currentInterval = setInterval(() => {
+        initWidth = Math.max(0, initWidth-2);
+        elt.style.width = initWidth +'px' ;
+        if(elt.style.width === 0+'px' || !elt.style.width){
+          clearInterval(currentInterval);
+          resolve();
+        }
+      }, 5);
+    });
+  }
+
   render() {
     const {classes, theme} = this.props;
     const { firstWings, scrollableClass } = this.state;
@@ -108,7 +142,10 @@ class OnboardFirstWings extends React.Component {
             if(!this.shouldDisplaySuggestion(hashtag.tag)) return null;
             return (
               <li onClick={(e) => { this.handleAddWing(e, hashtag.tag, i) }} className={classes.firstWing} key={i} 
-                style={this.getFirstWingsStyle(i, theme)} >
+                style={this.getFirstWingsStyle(i, theme)} 
+                onMouseUp={(e) => this.handleMouseUp(e)}
+                onMouseDown={(e) => this.handleMouseDown(e)}
+                >
                 <div>
                   <img src={hashtag.picture.url} alt="Soft Wing" />
                   <div>
