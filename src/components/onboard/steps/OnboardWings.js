@@ -23,20 +23,17 @@ class OnboardWings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeStepOne: this.props.activeStep
+      activeStepOne: this.props.activeStep,
+      scrollableClass: Math.floor(Math.random() * 99999)
     };
   }
 
-  scrollToBottom = (id) => {
-    console.log('-------')
-    console.log('scroll!')
+  scrollUserWingsToBottom = () => {
     try{
-    var elt = document.getElementById(id);
-    console.log(elt.scrollTop);
-    console.log(elt.scrollHeight)
-    elt.scrollTop = elt.scrollHeight;
+    var elt = document.getElementById(this.state.scrollableClass);
+    elt.scrollTop = elt.scrollHeight;    
     }catch(e) {
-      console.log(e)
+      // log
     }
   }
 
@@ -126,11 +123,11 @@ class OnboardWings extends React.Component {
             {this.renderByStep()}
           </Grid>
 
-          <Grid item justify="center" direction="row" container className={classes.userWingsPosition} id="userWings">
+          <Grid item justify="center" direction="row" container className={classes.userWingsPosition} id={this.state.scrollableClass}>
             <Grid container  item xs={12} sm={8} md={6} lg={4}>
               <Grid item xs={12} >
                 <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? this.getFeaturedWings() : null}
-                            scrollToBottom={this.scrollToBottom} />
+                            scrollUserWingsToBottom={this.scrollUserWingsToBottom} />
               </Grid>
             </Grid>
           </Grid>

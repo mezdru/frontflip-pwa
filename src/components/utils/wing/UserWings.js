@@ -21,13 +21,15 @@ class UserWings extends React.Component {
     this.state = {
       observer: ()=> {},
       newTag: null,
-      currentHashtagsLength: this.props.recordStore.values.record.hashtags.length
+      currentHashtagsLength: this.props.recordStore.values.record.hashtags.length,
     };
   }
 
   componentDidMount() {
+    setTimeout(() => this.props.scrollUserWingsToBottom(), 100);
     this.setState({observer: observe(this.props.recordStore.values, 'record', (change) => {
       if(change.newValue.hashtags.length > this.state.currentHashtagsLength) {
+        setTimeout(() => this.props.scrollUserWingsToBottom(), 100);
         this.setState({newTag: change.newValue.hashtags[change.newValue.hashtags.length - 1].tag, currentHashtagsLength: change.newValue.hashtags.length});
       } else {
         this.setState({newTag: null, currentHashtagsLength: change.newValue.hashtags.length});
@@ -61,7 +63,7 @@ class UserWings extends React.Component {
     return (
       <div>
         <Typography variant="h4" style={{textAlign: 'center', color:theme.palette.primary.dark}} ><FormattedMessage id="onboard.userWings" values={{wingsCount: record.hashtags.length}} /></Typography>
-        <div className="" style={{padding: 8, paddingTop: 10}} >
+        <div className="" style={{padding: 8, paddingTop: 10}}>
           {record && record.hashtags && record.hashtags.length > 0 && record.hashtags.map((hashtag, i) => {
             if(!this.shoudlRenderWing(hashtag)) return null;
             let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name)
@@ -84,7 +86,6 @@ class UserWings extends React.Component {
                     style={{background: theme.palette.primary.main}}
                     onDelete={(e) => {this.props.handleRemoveWing(e, hashtag.tag)}} />
                 </div>
-                
               )
             }
             

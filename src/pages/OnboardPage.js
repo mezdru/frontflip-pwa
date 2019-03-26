@@ -5,6 +5,8 @@ import OnboardWelcome from '../components/onboard/OnboardWelcome';
 import OnboardStepper from '../components/onboard/OnboardStepper';
 import { withStyles } from '@material-ui/core';
 import SuggestionsService from '../services/suggestions.service';
+import ReactGA from 'react-ga';
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 const styles = {
   logo: {
@@ -31,6 +33,8 @@ class OnboardPage extends React.Component {
   }
 
   componentDidMount() {
+    this.props.history.listen((location, action) => ReactGA.pageview(window.location.pathname));
+
     this.setState({observer: observe(this.props.recordStore.values, 'record', (change) => {
       this.forceUpdate();
     })});

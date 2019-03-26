@@ -88,7 +88,7 @@ class WingsSuggestions extends React.Component {
     var initWidth = elt.offsetWidth;
     return new Promise((resolve, reject) => {
       var currentInterval = setInterval(() => {
-        initWidth = Math.max(0, initWidth-2);
+        initWidth = Math.max(0, initWidth-4);
         elt.style.width = initWidth +'px' ;
         if(elt.style.width === 0+'px' || !elt.style.width){
           clearInterval(currentInterval);
