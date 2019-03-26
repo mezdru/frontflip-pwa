@@ -97,15 +97,7 @@ class OnboardStepper extends React.Component {
   };
 
   welcomeUser = () => {
-    let user = this.props.userStore.values.currentUser;
-    let currentOrgAndRecordIndex = user.orgsAndRecords.findIndex(orgAndRecord => orgAndRecord.organisation === this.props.organisationStore.values.organisation._id);
-    
-    if(currentOrgAndRecordIndex === -1) return;
-
-    user.orgsAndRecords[currentOrgAndRecordIndex].welcomed = true;
-    this.props.userStore.setCurrentUser(user);
-    this.props.userStore.updateCurrentUser();
-
+    this.props.userStore.welcomeCurrentUser(this.props.organisationStore.values.organisation._id);
   }
 
   shouldComponentUpdate() {

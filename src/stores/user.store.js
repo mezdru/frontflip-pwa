@@ -32,11 +32,11 @@ class UserStore {
       .finally(action(() => { this.inProgress = false; }));
   }
 
-  updateCurrentUser() {
+  welcomeCurrentUser(orgId) {
     this.inProgress = true;
     this.errors = null;
 
-    return agent.User.updateCurrent(this.values.currentUser)
+    return agent.User.welcomeUser(this.values.currentUser._id, orgId)
       .then(data => {
         this.values.currentUser = (data ? data.user : {});
         this.syncRecord();
