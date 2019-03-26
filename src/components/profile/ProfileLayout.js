@@ -60,10 +60,14 @@ class ProfileLayout extends React.Component {
       }
     });
   }
+
+  handleRedirectToEditWings = () => {
+    this.setState({redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag + '/onboard/wings/edit'});
+  }
   
   render() {
     const {hit, className, classes, theme} = this.props;
-    const {canEdit, record, displayIn} = this.state;
+    const {canEdit, record, displayIn, redirectTo} = this.state;
     const {locale} = this.props.commonStore;
     const orgTag = this.props.organisationStore.values.organisation.tag;
     let rootUrl = '/' + locale + (orgTag ? '/' + orgTag : '');
@@ -72,7 +76,8 @@ class ProfileLayout extends React.Component {
     ProfileService.transformLinks(currentHit);
     ProfileService.makeHightlighted(currentHit);
     ProfileService.orderHashtags(currentHit);
-    
+
+    if(redirectTo) return (<Redirect to={redirectTo} />);
     if (!currentHit) return (<div></div>);
     
     return (
@@ -87,7 +92,7 @@ class ProfileLayout extends React.Component {
             </IconButton>
             {canEdit && (
               <MenuButton urlUpdateCover={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/cover/id/' + currentHit.objectID, orgTag)}
-                          urlEditIntro={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', orgTag, 'recordId=' + currentHit.objectID)}
+                          urlEditIntro={'/' + locale + '/' + orgTag + '/onboard/intro/edit'}
                           urlEditAboutMe={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/about/id/' + currentHit.objectID, orgTag)}
                           urlDeleteProfile={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/record/delete/' + currentHit.objectID, orgTag)}
               />
@@ -120,7 +125,7 @@ class ProfileLayout extends React.Component {
           {canEdit && (
             <Grid item xs={12} style={{position: 'relative'}}>
               <Button variant="text" className={classes.button} style={{color: theme.palette.secondary.main, fontWeight: 'bold'}}
-                      href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/links', orgTag, 'recordId=' + currentHit.objectID)}>
+                      href={'/' + locale + '/' + orgTag + '/onboard/contacts/edit'}>
                 <div href={''} className={classNames(classes.contactIcon, "fa fa-plus")} style={{color: theme.palette.secondary.main}}></div>
                 <FormattedMessage id="profile.addContacts"/>
               </Button>
@@ -140,9 +145,7 @@ class ProfileLayout extends React.Component {
             })}
             {canEdit && (
               <Wings label={this.props.intl.formatMessage({id: 'profile.addWings'})} className={'button'}
-                     onClick={() => {
-                       window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/hashtags', orgTag, 'recordId=' + currentHit.objectID)
-                     }}/>
+                     onClick={() => {this.handleRedirectToEditWings()}}/>
             )}
             <div style={{marginTop: 16}}>
               <Typography variant="h5" style={{padding: 8}}>
