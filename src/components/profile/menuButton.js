@@ -77,13 +77,13 @@ class MenuButton extends React.Component {
               <Paper className={classes.paper}>
                 <ClickAwayListener onClickAway={this.handleClose}>
                   <MenuList>
-                    <MenuItem button component="a" href={urlUpdateCover} target="_blank">
+                    <MenuItem button component="a" href={urlUpdateCover}>
                       <FormattedMessage id="profile.updateCover"/>
                     </MenuItem>
-                    <MenuItem button component="a" href={urlEditIntro} target="_blank">
+                    <MenuItem button component="a" href={urlEditIntro}>
                       <FormattedMessage id="profile.editIntro"/>
                     </MenuItem>
-                    <MenuItem button component="a" href={urlEditAboutMe} target="_blank">
+                    <MenuItem button component="a" href={urlEditAboutMe}>
                       <FormattedMessage id="profile.editAboutMe"/>
                     </MenuItem>
                     <MenuItem button component="a" onClick={this.deleteAlert} href={urlDeleteProfile}>

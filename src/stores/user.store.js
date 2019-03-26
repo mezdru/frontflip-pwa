@@ -11,11 +11,32 @@ class UserStore {
     currentUser: {}
   };
 
+  setCurrentUser(user) {
+    this.values.currentUser = user;
+  }
+
   getCurrentUser() {
     this.inProgress = true;
     this.errors = null;
 
     return agent.User.getCurrent()
+      .then(data => {
+        this.values.currentUser = (data ? data.user : {});
+        this.syncRecord();
+        return this.values.currentUser;
+      })
+      .catch(action((err) => {
+        this.errors = err.response && err.response.body && err.response.body.errors;
+        throw err;
+      }))
+      .finally(action(() => { this.inProgress = false; }));
+  }
+
+  updateCurrentUser() {
+    this.inProgress = true;
+    this.errors = null;
+
+    return agent.User.updateCurrent(this.values.currentUser)
       .then(data => {
         this.values.currentUser = (data ? data.user : {});
         this.syncRecord();

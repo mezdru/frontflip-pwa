@@ -78,12 +78,16 @@ class OnboardStepper extends React.Component {
   }
 
   handleNext = () => {
+    if(this.props.edit) return this.setState({redirectTo: 
+                        '/' + this.props.commonStore.locale + 
+                        '/' + this.props.organisationStore.values.orgTag + 
+                        '/' + this.props.recordStore.values.record.tag }, () => {this.forceUpdate()});
+
     this.initializeSuggestions(this.state.steps[this.state.activeStep+1]);
-
-
     
     if ((this.state.activeStep === (this.state.steps.length - 1))) {
       // click on finish
+      this.welcomeUser();
       this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag + '/congrats' }, ()=> {this.forceUpdate()});
     } else {
       this.setState(state => ({
@@ -92,11 +96,28 @@ class OnboardStepper extends React.Component {
     }
   };
 
+  welcomeUser = () => {
+    let user = this.props.userStore.values.currentUser;
+    let currentOrgAndRecordIndex = user.orgsAndRecords.findIndex(orgAndRecord => orgAndRecord.organisation === this.props.organisationStore.values.organisation._id);
+    
+    if(currentOrgAndRecordIndex === -1) return;
+
+    user.orgsAndRecords[currentOrgAndRecordIndex].welcomed = true;
+    this.props.userStore.setCurrentUser(user);
+    this.props.userStore.updateCurrentUser();
+
+  }
+
   shouldComponentUpdate() {
     return false;
   }
 
   handleBack = () => {
+    if(this.props.edit) return this.setState({redirectTo: 
+      '/' + this.props.commonStore.locale + 
+      '/' + this.props.organisationStore.values.orgTag + 
+      '/' + this.props.recordStore.values.record.tag }, () => {this.forceUpdate()});
+
     this.initializeSuggestions(this.state.steps[this.state.activeStep-1])
 
     this.setState(state => ({
@@ -136,8 +157,14 @@ class OnboardStepper extends React.Component {
     this.setState({ activeStep });
   };
 
+  getNextButtonText = () => {
+    if(this.props.edit) return <FormattedMessage id={'onboard.edit.save'}/>
+    else if (this.state.activeStep === (this.state.steps.length -1)) return <FormattedMessage id={'onboard.stepperFinish'}/>
+    else return <FormattedMessage id={'onboard.stepperNext'}/>
+  }
+
   render() {
-    const { theme, classes } = this.props;
+    const { theme, classes, edit } = this.props;
     const { organisation, orgTag } = this.props.organisationStore.values;
     const {locale} = this.props.commonStore;
     const { activeStep, steps, canNext, showFeedback, redirectTo } = this.state;
@@ -147,7 +174,7 @@ class OnboardStepper extends React.Component {
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
     return (
       <Grid style={{ height: '100vh' }} item>
-        { (window.location.pathname !== wantedUrl) && (
+        { ( (window.location.pathname !== wantedUrl) && (window.location.pathname !== wantedUrl + '/edit') ) && (
           <Redirect to={wantedUrl} />
         )}
         <div style={{ width: '100%', background: '#2B2D3C', borderBottom: '1px solid rgba(0, 0, 0, 0.12)'}}>
@@ -156,13 +183,12 @@ class OnboardStepper extends React.Component {
               variant="dots"
               steps={3}
               position="static"
-              activeStep={Math.min(activeStep, 2)}
+              activeStep={(edit ? -1 : Math.min(activeStep, 2))}
               style={{ maxWidth: '100%' }}
               className={classes.root}
               nextButton={
                 <Button size="small" onClick={this.handleNext} disabled={!canNext} className={classes.stepperButton} >
-                  {(activeStep === (steps.length - 1)) && (<FormattedMessage id={'onboard.stepperFinish'}/>)}
-                  {!(activeStep === (steps.length - 1)) && (<FormattedMessage id={'onboard.stepperNext'}/>)}
+                  {this.getNextButtonText()}
                   {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
                 </Button>
               }
@@ -189,20 +215,8 @@ class OnboardStepper extends React.Component {
                               SuggestionsService={this.props.SuggestionsService} />
               </Grid>
             )
-            // steps.map((stepLabel, stepIndex) => {
-            //   return (<Grid item style={{ height: '100%' }} key={stepIndex} >
-            //     <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[activeStep]} 
-            //                   SuggestionsService={this.props.SuggestionsService} />
-            //   </Grid>)
           }}
         >
-{/* 
-          {steps.length > 0 && steps.map((stepLabel, stepIndex) => {
-            return (<Grid item style={{ height: '100%' }} key={stepIndex} >
-              <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[activeStep]} 
-                            SuggestionsService={this.props.SuggestionsService} />
-            </Grid>)
-          })} */}
         </VirtualizeSwipeableViews>
 
         {showFeedback && (
@@ -225,7 +239,7 @@ class OnboardStepper extends React.Component {
   }
 }
 
-export default inject('commonStore', 'recordStore', 'organisationStore')(
+export default inject('commonStore', 'recordStore', 'organisationStore', 'userStore')(
   observer(
     withSnackbar(
       withStyles(styles, { withTheme: true })(OnboardStepper)

@@ -26,6 +26,7 @@ class OnboardPage extends React.Component {
       inOnboarding: false,
       observer: ()=>{},
       stepNumber: 0,
+      editMode: this.props.edit || false,
     };
 
     // clear wings bank
@@ -83,7 +84,7 @@ class OnboardPage extends React.Component {
 
   render() {
     const {record} = this.props.recordStore.values;
-    const {inOnboarding, stepNumber} = this.state;
+    const {inOnboarding, stepNumber, editMode} = this.state;
     const {classes} = this.props;
 
     if(!inOnboarding) {
@@ -94,7 +95,7 @@ class OnboardPage extends React.Component {
       return (
         <div>
           <main>
-            <OnboardStepper initStep={stepNumber} SuggestionsService={SuggestionsService} />
+            <OnboardStepper initStep={stepNumber} SuggestionsService={SuggestionsService} edit={editMode} />
           </main>
         </div>
       );
