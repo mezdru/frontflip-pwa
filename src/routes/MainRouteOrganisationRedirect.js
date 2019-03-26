@@ -79,10 +79,12 @@ class MainRouteOrganisationRedirect extends React.Component {
           this.redirectUserAuthWithAccess(organisation, true);
         }).catch(() => {return;})
       } else {
+        // Redirect to "create new Wingzy"
         window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
         await this.wait(3000);
       }
     } else {
+      // Redirect to "create new Wingzy"
       window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
       await this.wait(3000);
     }
@@ -96,15 +98,18 @@ class MainRouteOrganisationRedirect extends React.Component {
   async redirectUserAuthWithAccess(organisation, isNewOrg) {
     let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
     if ( (!currentOrgAndRecord && !this.props.userStore.values.currentUser.superadmin) || (currentOrgAndRecord && !currentOrgAndRecord.welcomed)) {
-      window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', organisation.tag, 'first=true');
-      await this.wait(3000);
+      // user need to onboard in organisation
+      this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/onboard'});
+      //window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', organisation.tag, 'first=true');
+      //await this.wait(3000);
     } else if (currentOrgAndRecord) {
       this.props.recordStore.setRecordId(currentOrgAndRecord.record);
       await this.props.recordStore.getRecord()
         .then(() => {
           if (isNewOrg) this.setState({ redirectTo: '/' + this.state.locale + '/' + organisation.tag });
         }).catch(() => {
-          window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', organisation.tag, 'first=true');
+          this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/onboard'});
+          //window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', organisation.tag, 'first=true');
         });
     }
   }
