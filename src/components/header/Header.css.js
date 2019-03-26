@@ -76,6 +76,11 @@ export const styles = theme => ({
     padding: 0,
     background: 'white',
     margin: '8px 16px',
+    opacity: 0.7,
+    '&:hover': {
+      backgroundColor: 'white',
+      opacity: 1,
+    }
   },
   drawerIcon: {
     color: theme.palette.secondary.main,
