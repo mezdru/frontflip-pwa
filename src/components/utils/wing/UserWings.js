@@ -5,12 +5,11 @@ import { observe } from 'mobx';
 
 import Wings from './Wing';
 import ProfileService from '../../../services/profile.service';
-import defaultHashtagPicture from '../../../resources/images/placeholder_hashtag.png';
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
 
 const styles = theme => ({
   animated: {
-    transition: 'background 250ms ease-in',
+    transition: 'background 450ms ease-in',
     background: theme.palette.secondary.main,
   }
 });

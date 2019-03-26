@@ -100,7 +100,8 @@ class OnboardStepper extends React.Component {
     this.props.userStore.welcomeCurrentUser(this.props.organisationStore.values.organisation._id);
   }
 
-  shouldComponentUpdate() {
+  shouldComponentUpdate(nextState) {
+    if(this.state.showFeedback !== nextState.showFeedback) return true;
     return false;
   }
 

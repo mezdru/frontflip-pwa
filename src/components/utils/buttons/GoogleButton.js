@@ -9,7 +9,8 @@ const styles = theme => ({
       backgroundColor: "white"
     },
     '&:hover': {
-      backgroundColor: '#d5d5d5'
+      backgroundColor: '#d5d5d5',
+      color: 'black',
     }
   }
 });
