@@ -168,12 +168,9 @@ const User = {
     requests.get(
       API_ROOT + '/api/users/current'
     ),
-  updateCurrent: (user) =>
+  welcomeUser: (userId, organisationId) =>
     requests.put(
-      API_ROOT + '/api/users/',
-      {
-        user: user
-      }
+      API_ROOT + '/api/users/welcome/'+ userId +'/organisation/' + organisationId
     ),
   update: (userId, user) =>
     requests.put(
