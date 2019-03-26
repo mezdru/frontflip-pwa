@@ -87,6 +87,7 @@ class OnboardStepper extends React.Component {
     
     if ((this.state.activeStep === (this.state.steps.length - 1))) {
       // click on finish
+      this.welcomeUser();
       this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag + '/congrats' }, ()=> {this.forceUpdate()});
     } else {
       this.setState(state => ({
@@ -94,6 +95,18 @@ class OnboardStepper extends React.Component {
       }), () => {this.forceUpdate()});
     }
   };
+
+  welcomeUser = () => {
+    let user = this.props.userStore.values.currentUser;
+    let currentOrgAndRecordIndex = user.orgsAndRecords.findIndex(orgAndRecord => orgAndRecord.organisation === this.props.organisationStore.values.organisation._id);
+    
+    if(currentOrgAndRecordIndex === -1) return;
+
+    user.orgsAndRecords[currentOrgAndRecordIndex].welcomed = true;
+    this.props.userStore.setCurrentUser(user);
+    this.props.userStore.updateCurrentUser();
+
+  }
 
   shouldComponentUpdate() {
     return false;
@@ -226,7 +239,7 @@ class OnboardStepper extends React.Component {
   }
 }
 
-export default inject('commonStore', 'recordStore', 'organisationStore')(
+export default inject('commonStore', 'recordStore', 'organisationStore', 'userStore')(
   observer(
     withSnackbar(
       withStyles(styles, { withTheme: true })(OnboardStepper)
