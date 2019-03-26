@@ -5,6 +5,7 @@ import {Clear} from '@material-ui/icons';
 import AddContactField from '../../utils/fields/AddContactField';
 import ProfileService from "../../../services/profile.service";
 import {FormattedMessage} from "react-intl";
+import { observe } from 'mobx';
 
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
@@ -36,6 +37,10 @@ class OnboardContacts extends React.Component {
   
   componentDidMount() {
     this.setDefaultLinks();
+
+    observe(this.props.recordStore.values, 'record', (change) => {
+      this.forceUpdate();
+    })
   }
   
   handleLinksChange = (e, link, index) => {
