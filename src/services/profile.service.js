@@ -140,7 +140,6 @@ class ProfileService {
     else if (picture && picture.url) return picture.url;
     else if (picture && picture.uri) return picture.uri;
     else if (picture && picture.path) return null;
-    else if (type === 'hashtag') return this.getRandomEmoji();
     else return null;
   }
   
