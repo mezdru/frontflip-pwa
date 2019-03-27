@@ -14,6 +14,7 @@ import Card from '../components/card/CardProfile';
 import ReactGA from 'react-ga';
 import OnboardCongratulation from '../components/onboard/steps/OnboardCongratulation';
 import PromptIOsInstall from '../components/utils/prompt/PromptIOsInstall';
+import AddWingPopup from '../components/utils/addWing/AddWingPopup';
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class SearchPage extends React.Component {
@@ -88,6 +89,12 @@ class SearchPage extends React.Component {
               (window.location.pathname !== rootUrl + '/congrats'));
   }
 
+  handleWingToAdd = () => {
+    let wing =  this.props.commonStore.getCookie('wingToAdd');
+    this.props.commonStore.removeCookie('wingToAdd');
+    return wing;
+  }
+
   render() {
     const { shouldDisplayHitResults, filters, newFilter, shouldUpdateUrl, query } = this.state;
     const { classes } = this.props;
@@ -113,6 +120,8 @@ class SearchPage extends React.Component {
     if (redirectTo) {
       return (<Redirect to={redirectTo} />);
     }
+
+    let wingToAdd = this.handleWingToAdd();
     
     return (
       <div>
@@ -154,6 +163,10 @@ class SearchPage extends React.Component {
 
           {showCongratulation && (
             <OnboardCongratulation isOpen={showCongratulation} />
+          )}
+
+          {wingToAdd && (
+            <AddWingPopup wingToAdd={wingToAdd} isOpen={true} />
           )}
         </main>
         <PromptIOsInstall />

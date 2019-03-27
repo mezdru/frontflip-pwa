@@ -39,7 +39,24 @@ class MainRouteOrganisationRedirect extends React.Component {
     }
   }
 
+  persistWingToAdd = () => {
+    try {
+      console.log('persist wing ' + this.props.match.params.hashtag)
+      let wingTag = '#' + this.props.match.params.hashtag;
+      this.props.commonStore.setCookie('wingToAdd', wingTag);
+    }catch(e) {
+      // error
+      console.log(e);
+    }
+  }
+
   componentDidMount() {
+
+    // if there is a wings to add, we should save it
+    if(this.props.addWings) {
+      this.persistWingToAdd();
+    }
+
     this.manageAccessRight().then(() => {
       this.setState({ renderComponent: true });
     }).catch((err) => {
