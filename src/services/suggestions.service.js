@@ -16,6 +16,11 @@ class SuggestionsService {
     this._workInProgress = false;
     this._user = [];
     this._randomNumber = 0;
+
+    this._newSuggestions = {
+      even: [],
+      odd: [],
+    };
   }
 
   async init(algoliaKey){
@@ -174,7 +179,8 @@ class SuggestionsService {
 }
 
 decorate(SuggestionsService, {
-  _randomNumber: observable
+  _randomNumber: observable,
+  _newSuggestions: observable
 });
 
 export default new SuggestionsService();

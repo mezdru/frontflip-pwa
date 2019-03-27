@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import { observe } from 'mobx';
 import Wings from '../utils/wing/Wing';
 import ProfileService from '../../services/profile.service';
-import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
 import { styles } from './WingsSuggestion.css.js';
 import { ArrowLeft, ArrowRight } from '@material-ui/icons';
 import './WingsSuggestion.css';
