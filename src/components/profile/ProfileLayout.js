@@ -118,6 +118,7 @@ class ProfileLayout extends React.Component {
           </Grid>
           {currentHit.links.map((link, i) => {
             if(!link.value || link.value === '') return null;
+            if(link.type === 'workchat') return null; // hide workchat
             return (
               <Grid item key={link._id} xs={12} style={{position: 'relative'}}>
                 <Button variant="text" className={classes.button} key={link._id} href={link.url} rel="noopener" target="_blank">
