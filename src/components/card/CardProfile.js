@@ -189,6 +189,7 @@ class CardProfile extends React.Component {
             <Grid item container>
               {hit.links && hit.links.map((link, i) => {
                 if (!link.value || link.value === '') return null;
+                if(link.type === 'workchat') return null; // hide workchat
                 if (link.class !== 'extraLink') {
                   return (
                     <Grid item key={link._id} className={classes.contact}>

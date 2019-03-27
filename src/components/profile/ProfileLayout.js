@@ -91,10 +91,15 @@ class ProfileLayout extends React.Component {
               <Clear fontSize="large" className={classes.returnButtonSize}/>
             </IconButton>
             {canEdit && (
+              // <MenuButton urlUpdateCover={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/cover/id/' + currentHit.objectID, orgTag)}
+              //             urlEditIntro={'/' + locale + '/' + orgTag + '/onboard/intro/edit'}
+              //             urlEditAboutMe={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/about/id/' + currentHit.objectID, orgTag)}
+              //             urlDeleteProfile={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/record/delete/' + currentHit.objectID, orgTag)}
+              // />
               <MenuButton urlUpdateCover={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/cover/id/' + currentHit.objectID, orgTag)}
-                          urlEditIntro={'/' + locale + '/' + orgTag + '/onboard/intro/edit'}
-                          urlEditAboutMe={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/about/id/' + currentHit.objectID, orgTag)}
-                          urlDeleteProfile={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/record/delete/' + currentHit.objectID, orgTag)}
+              urlEditIntro={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', orgTag, 'recordId=' + currentHit.objectID)}
+              urlEditAboutMe={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/about/id/' + currentHit.objectID, orgTag)}
+              urlDeleteProfile={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/record/delete/' + currentHit.objectID, orgTag)}
               />
             )}
           </Banner>
@@ -113,6 +118,7 @@ class ProfileLayout extends React.Component {
           </Grid>
           {currentHit.links.map((link, i) => {
             if(!link.value || link.value === '') return null;
+            if(link.type === 'workchat') return null; // hide workchat
             return (
               <Grid item key={link._id} xs={12} style={{position: 'relative'}}>
                 <Button variant="text" className={classes.button} key={link._id} href={link.url} rel="noopener" target="_blank">
@@ -123,9 +129,16 @@ class ProfileLayout extends React.Component {
             )
           })}
           {canEdit && (
+            // <Grid item xs={12} style={{position: 'relative'}}>
+            //   <Button variant="text" className={classes.button} style={{color: theme.palette.secondary.main, fontWeight: 'bold'}}
+            //           href={'/' + locale + '/' + orgTag + '/onboard/contacts/edit'}>
+            //     <div href={''} className={classNames(classes.contactIcon, "fa fa-plus")} style={{color: theme.palette.secondary.main}}></div>
+            //     <FormattedMessage id="profile.addContacts"/>
+            //   </Button>
+            // </Grid>
             <Grid item xs={12} style={{position: 'relative'}}>
               <Button variant="text" className={classes.button} style={{color: theme.palette.secondary.main, fontWeight: 'bold'}}
-                      href={'/' + locale + '/' + orgTag + '/onboard/contacts/edit'}>
+                      href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/links', orgTag, 'recordId=' + currentHit.objectID)}>
                 <div href={''} className={classNames(classes.contactIcon, "fa fa-plus")} style={{color: theme.palette.secondary.main}}></div>
                 <FormattedMessage id="profile.addContacts"/>
               </Button>
@@ -144,8 +157,12 @@ class ProfileLayout extends React.Component {
               )
             })}
             {canEdit && (
+              // <Wings label={this.props.intl.formatMessage({id: 'profile.addWings'})} className={'button'}
+              //        onClick={() => {this.handleRedirectToEditWings()}}/>
               <Wings label={this.props.intl.formatMessage({id: 'profile.addWings'})} className={'button'}
-                     onClick={() => {this.handleRedirectToEditWings()}}/>
+              onClick={() => {
+                window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/hashtags', orgTag, 'recordId=' + currentHit.objectID)
+              }}/>
             )}
             <div style={{marginTop: 16}}>
               <Typography variant="h5" style={{padding: 8}}>
