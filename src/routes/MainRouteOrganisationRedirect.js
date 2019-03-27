@@ -23,6 +23,13 @@ class MainRouteOrganisationRedirect extends React.Component {
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
       renderComponent: false
     };
+
+    // if there is a wings to add, we should save it
+    if(this.props.hashtagsFilter && this.props.match.params) {
+      console.log(this.props.match.params)
+      console.log(this.props.hashtagsFilter)
+      this.persistWingToAdd((this.props.match.params.action === 'add'));
+    }
   }
 
   componentWillReceiveProps(props) {
@@ -39,11 +46,12 @@ class MainRouteOrganisationRedirect extends React.Component {
     }
   }
 
-  persistWingToAdd = () => {
+  persistWingToAdd = (isAction) => {
     try {
-      console.log('persist wing ' + this.props.match.params.hashtag)
-      let wingTag = '#' + this.props.match.params.hashtag;
-      this.props.commonStore.setCookie('wingToAdd', wingTag);
+      let hashtags = this.props.match.params.hashtags;
+      console.log(hashtags)
+      if(hashtags && hashtags.charAt(0) !== '@') this.props.commonStore.setCookie('hashtagsFilter', hashtags);
+      if(isAction) this.props.commonStore.setCookie('actionInQueue', this.props.match.params.action);
     }catch(e) {
       // error
       console.log(e);
@@ -51,12 +59,6 @@ class MainRouteOrganisationRedirect extends React.Component {
   }
 
   componentDidMount() {
-
-    // if there is a wings to add, we should save it
-    if(this.props.addWings) {
-      this.persistWingToAdd();
-    }
-
     this.manageAccessRight().then(() => {
       this.setState({ renderComponent: true });
     }).catch((err) => {

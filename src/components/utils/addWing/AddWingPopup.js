@@ -62,31 +62,43 @@ class AddWingPopup extends React.Component {
     this.setState({open: nextProps.isOpen})
   }
 
-  handleOnboardEnd = () => {
-      this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag });
+  handleClose = () => {
+      this.setState({open: false});
   }
 
-  handleAddWing = () => {
-    let record = this.props.recordStore.values.record;
-    if(! record.hashtags.find(hashtag => hashtag.tag === this.props.wingToAdd)) {
-      this.props.recordStore.setRecordTag(this.props.wingToAdd);
-      this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
-      this.props.recordStore.getRecordByTag()
-      .then(hashtagToAdd => {
-        record.hashtags.push(hashtagToAdd);
-        this.props.recordStore.updateRecord(['hashtags'])
-        .then(() => {
-          this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag + '/' + this.props.recordStore.values.record.tag });
-        })
-      }).catch((e) => {})
-    } else {
-      this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag + '/' + this.props.recordStore.values.record.tag });
+  recordHasHashtag = (tag) => {
+    let resp =  (this.props.recordStore.values.record.hashtags.find(hashtag => hashtag.tag === tag) ? true: false);
+    console.log(resp)
+    return resp;
+  }
+
+  async asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index], index, array);
     }
+  }
+
+  handleAddWing = async () => {
+    let record = this.props.recordStore.values.record;
+    this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
+
+    await this.asyncForEach(this.props.wingsToAdd, async (wing) => {
+      if(!this.recordHasHashtag('#' + wing)) {
+        this.props.recordStore.setRecordTag('#' + wing);
+        await this.props.recordStore.getRecordByTag()
+        .then((hashtagToAdd => {
+          record.hashtags.push(hashtagToAdd);
+        })).catch(e => {});
+      }
+    });
+
+    await this.props.recordStore.updateRecord(['hashtags']);
+    this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag + '/' + this.props.recordStore.values.record.tag });
   }
 
   render() {
     const {redirectTo} = this.state;
-    const {classes, wingToAdd} = this.props;
+    const {classes, wingsToAdd} = this.props;
 
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect to={redirectTo} />);
 
@@ -98,7 +110,7 @@ class AddWingPopup extends React.Component {
           keepMounted
           fullWidth
           maxWidth={'sm'}
-          onClose={this.handleOnboardEnd}
+          onClose={this.handleClose}
           className={classes.root}
           aria-labelledby="alert-dialog-slide-title"
           aria-describedby="alert-dialog-slide-description"
@@ -119,10 +131,10 @@ class AddWingPopup extends React.Component {
           </DialogContent>
           <DialogActions className={classes.actions}>
             <Button onClick={this.handleAddWing} color="secondary">
-              Add {wingToAdd}
+              Add {wingsToAdd}
             </Button>
-            <Button onClick={this.handleOnboardEnd} color="secondary">
-              Search {wingToAdd}
+            <Button onClick={this.handleClose} color="secondary">
+              Search {wingsToAdd}
             </Button>
           </DialogActions>
         </Dialog>

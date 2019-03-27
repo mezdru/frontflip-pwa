@@ -29,16 +29,28 @@ class SearchPage extends React.Component {
       resultsType: this.props.resultsType || 'person',
       shouldUpdateUrl: false,
       shouldDisplayHitResults: true,
+      hashtagsFilter: this.getHashtagsFilter(),
+      actionInQueue: this.getActionInQueue()
     };
   }
 
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
     this.props.history.listen((location, action) => ReactGA.pageview(window.location.pathname));
+
+    if(this.state.hashtagsFilter.length > 0) this.addHashtagsToSearch(this.state.hashtagsFilter);
+  }
+
+  addHashtagsToSearch = async (hashtags) => {
+    console.log('add ...')
+    let newFilters = [];
+    hashtags.forEach(hashtag => {
+      newFilters.push({label: hashtag, value: '#' + hashtag});
+      setTimeout(()=> {this.setState({newFilter: {label: hashtag, value: '#' + hashtag}}) }, 50*newFilters.length);
+    });
   }
 
   addToFilters = (e, element, shouldAwaitToUpdateLayout) => {
-    e.preventDefault();
     this.setState({ newFilter: { label: element.name, value: element.tag } });
     if (this.state.resultsType === 'profile') {
       if(shouldAwaitToUpdateLayout) {
@@ -89,14 +101,24 @@ class SearchPage extends React.Component {
               (window.location.pathname !== rootUrl + '/congrats'));
   }
 
-  handleWingToAdd = () => {
-    let wing =  this.props.commonStore.getCookie('wingToAdd');
-    this.props.commonStore.removeCookie('wingToAdd');
-    return wing;
+  getHashtagsFilter = () => {
+    let wings =  this.props.commonStore.getCookie('hashtagsFilter');
+    this.props.commonStore.removeCookie('hashtagsFilter');
+    if(wings) {
+      return wings.split(',');
+    } else {
+      return [];
+    }
+  }
+
+  getActionInQueue = () => {
+    let action = this.props.commonStore.getCookie('actionInQueue');
+    this.props.commonStore.removeCookie('actionInQueue');
+    return action
   }
 
   render() {
-    const { shouldDisplayHitResults, filters, newFilter, shouldUpdateUrl, query } = this.state;
+    const { shouldDisplayHitResults, filters, newFilter, shouldUpdateUrl, query, hashtagsFilter, actionInQueue } = this.state;
     const { classes } = this.props;
 
     let profileTag = (this.props.match.params ? this.props.match.params.profileTag : null);
@@ -109,8 +131,8 @@ class SearchPage extends React.Component {
     let searchBarWidth = this.getSearchBarWidth();
     let redirectTo, showCongratulation;
 
-
-    if (profileTag && profileTag.charAt(0) !== '@') redirectTo = '/' + locale + '/' + orgTag;
+    console.log(profileTag)
+    //if (profileTag && profileTag.charAt(0) !== '@') redirectTo = '/' + locale + '/' + orgTag;
     if(profileTag === 'congrats') {
       profileTag = null;
       redirectTo = null;
@@ -121,8 +143,6 @@ class SearchPage extends React.Component {
       return (<Redirect to={redirectTo} />);
     }
 
-    let wingToAdd = this.handleWingToAdd();
-    
     return (
       <div>
         <Header handleDisplayProfile={this.handleDisplayProfile}/>
@@ -165,8 +185,8 @@ class SearchPage extends React.Component {
             <OnboardCongratulation isOpen={showCongratulation} />
           )}
 
-          {wingToAdd && (
-            <AddWingPopup wingToAdd={wingToAdd} isOpen={true} />
+          {hashtagsFilter.length > 0 && (actionInQueue === 'add') && (
+            <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} />
           )}
         </main>
         <PromptIOsInstall />
