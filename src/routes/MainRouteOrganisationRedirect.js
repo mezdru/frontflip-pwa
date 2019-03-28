@@ -25,7 +25,7 @@ class MainRouteOrganisationRedirect extends React.Component {
     };
 
     // if there is a wings to add, we should save it
-    if(this.props.hashtagsFilter && this.props.match.params) {
+    if(this.props.hashtagsFilter && this.props.match.params && this.props.match.params.action) {
       this.persistWingToAdd((this.props.match.params.action));
     }
   }
