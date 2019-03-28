@@ -8,7 +8,6 @@ import {Clear} from '@material-ui/icons';
 import '../../resources/stylesheets/font-awesome.min.css';
 import './ContactsColors.css';
 import {styles} from './ProfileLayout.css';
-import defaultHashtagPicture from '../../resources/images/placeholder_hashtag.png';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import Banner from '../../components/utils/banner/Banner';
 import Logo from '../../components/utils/logo/Logo';
@@ -70,7 +69,7 @@ class ProfileLayout extends React.Component {
     const {canEdit, record, displayIn, redirectTo} = this.state;
     const {locale} = this.props.commonStore;
     const orgTag = this.props.organisationStore.values.organisation.tag;
-    let rootUrl = '/' + locale + (orgTag ? '/' + orgTag : '');
+    let rootUrl = '/' + locale + '/' + orgTag;
     
     const currentHit = record || hit;
     ProfileService.transformLinks(currentHit);
@@ -79,7 +78,7 @@ class ProfileLayout extends React.Component {
 
     if(redirectTo) return (<Redirect to={redirectTo} />);
     if (!currentHit) return (<div></div>);
-    
+
     return (
       <Grid container className={(displayIn ? className : classes.profileContainerHide)}>
         {(window.location.pathname !== rootUrl + '/' + hit.tag) && (

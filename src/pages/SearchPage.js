@@ -37,12 +37,10 @@ class SearchPage extends React.Component {
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
     this.props.history.listen((location, action) => ReactGA.pageview(window.location.pathname));
-
     if(this.state.hashtagsFilter.length > 0) this.addHashtagsToSearch(this.state.hashtagsFilter);
   }
 
   addHashtagsToSearch = async (hashtags) => {
-    console.log('add ...')
     let newFilters = [];
     hashtags.forEach(hashtag => {
       newFilters.push({label: hashtag, value: '#' + hashtag});
@@ -121,17 +119,16 @@ class SearchPage extends React.Component {
     const { shouldDisplayHitResults, filters, newFilter, shouldUpdateUrl, query, hashtagsFilter, actionInQueue } = this.state;
     const { classes } = this.props;
 
-    let profileTag = (this.props.match.params ? this.props.match.params.profileTag : null);
+    let profileTag = (this.props.match.params ? this.props.match.params.profileTag : null) || ( (actionInQueue && actionInQueue.charAt(0) === '@') ? actionInQueue : null);
     const { locale } = this.props.commonStore;
     const orgTag = this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag;
 
-    let resultsType = ((profileTag && !shouldUpdateUrl) ? 'profile' : null) || this.state.resultsType;
+    let resultsType = ((profileTag && (profileTag.charAt(0) === '@') && !shouldUpdateUrl) ? 'profile' : null) || this.state.resultsType;
     let displayedHit = ((profileTag && !shouldUpdateUrl) ? (this.state.displayedHit || { tag: profileTag }) : null) || this.state.displayedHit;
-    let rootUrl = '/' + locale + (orgTag ? '/' + orgTag : '');
+    let rootUrl = '/' + locale + '/' + orgTag ;
     let searchBarWidth = this.getSearchBarWidth();
     let redirectTo, showCongratulation;
 
-    console.log(profileTag)
     //if (profileTag && profileTag.charAt(0) !== '@') redirectTo = '/' + locale + '/' + orgTag;
     if(profileTag === 'congrats') {
       profileTag = null;

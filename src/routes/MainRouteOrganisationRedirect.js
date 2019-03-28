@@ -26,9 +26,7 @@ class MainRouteOrganisationRedirect extends React.Component {
 
     // if there is a wings to add, we should save it
     if(this.props.hashtagsFilter && this.props.match.params) {
-      console.log(this.props.match.params)
-      console.log(this.props.hashtagsFilter)
-      this.persistWingToAdd((this.props.match.params.action === 'add'));
+      this.persistWingToAdd((this.props.match.params.action));
     }
   }
 
@@ -49,12 +47,10 @@ class MainRouteOrganisationRedirect extends React.Component {
   persistWingToAdd = (isAction) => {
     try {
       let hashtags = this.props.match.params.hashtags;
-      console.log(hashtags)
       if(hashtags && hashtags.charAt(0) !== '@') this.props.commonStore.setCookie('hashtagsFilter', hashtags);
       if(isAction) this.props.commonStore.setCookie('actionInQueue', this.props.match.params.action);
     }catch(e) {
       // error
-      console.log(e);
     }
   }
 
@@ -189,6 +185,9 @@ class MainRouteOrganisationRedirect extends React.Component {
         return (<Redirect to={redirectTo} />);
       }
     }
+
+    if(this.props.hashtagsFilter)
+      return <Redirect to={'/' + locale + '/' + orgTag} />;
 
     if (renderComponent && isAuth) {
       return (
