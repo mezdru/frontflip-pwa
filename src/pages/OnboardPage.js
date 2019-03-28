@@ -4,7 +4,7 @@ import { observe } from 'mobx';
 import OnboardWelcome from '../components/onboard/OnboardWelcome';
 import OnboardStepper from '../components/onboard/OnboardStepper';
 import { withStyles } from '@material-ui/core';
-import SuggestionsService from '../services/suggestions.service';
+import SuggestionsController from '../services/suggestionsController.service';
 import ReactGA from 'react-ga';
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
@@ -95,7 +95,7 @@ class OnboardPage extends React.Component {
       return (
         <div>
           <main>
-            <OnboardStepper initStep={stepNumber} SuggestionsService={SuggestionsService} edit={editMode} />
+            <OnboardStepper initStep={stepNumber} SuggestionsController={SuggestionsController} edit={editMode} />
           </main>
         </div>
       );

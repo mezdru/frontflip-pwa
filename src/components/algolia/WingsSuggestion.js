@@ -17,7 +17,7 @@ class WingsSuggestions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      suggestions: this.props.SuggestionsService.getCurrentSuggestions(),
+      suggestions: this.props.SuggestionsController.getCurrentSuggestions(),
       bank: [],
       renderComponent: false,
       shouldUpdate: false,
@@ -30,9 +30,9 @@ class WingsSuggestions extends React.Component {
 
   componentDidMount() {
 
-    observe(this.props.SuggestionsService, '_randomNumber', (change) => {
-      this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), shouldUpdate: true});
-    });
+    // observe(this.props.SuggestionsService, '_randomNumber', (change) => {
+    //   this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), shouldUpdate: true});
+    // });
   }
 
   componentWillUnmount() {
@@ -49,7 +49,8 @@ class WingsSuggestions extends React.Component {
 
   handleSelectSuggestion = (e, element, index) => {
     this.props.handleAddWing(e, element);
-    this.props.SuggestionsService.updateSuggestions(element, index);
+    //this.props.SuggestionsService.updateSuggestions(element, index);
+    this.props.SuggestionsController.makeNewSuggestions(element);
 
     var elt = e.currentTarget;
     elt.style.setProperty('background', this.props.theme.palette.secondary.main, 'important');
