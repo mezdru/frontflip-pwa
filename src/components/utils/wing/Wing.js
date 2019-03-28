@@ -43,6 +43,12 @@ const styles = theme => ({
     opacity: 0,
     animation: 'appear 450ms ease-in 0ms 1 forwards',
   },
+  bigWing: {
+    transform: 'scale(1.3)',
+    marginTop: 32,
+    marginLeft: 32,
+    marginRight: 32
+  },
   '@keyframes appear': {
     from: { background: theme.palette.secondary.main, color: 'white', opacity: 0 },
     to: { background: theme.palette.primary.main, color: theme.palette.primary.dark, opacity: 1 }
