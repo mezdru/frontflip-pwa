@@ -185,6 +185,7 @@ class WingsSuggestions extends React.Component {
   render() {
     const { classes } = this.props;
     const { suggestions, scrollableClass } = this.state;
+
     return (
       <div ref={(el) => {this.elementNode = el}}>
         <Hidden xsDown>

@@ -79,15 +79,8 @@ class SuggestionsService {
         for (let i = 0; i < nbHitToAdd; i++) {
           if (content.facetHits.length === 0) break;
 
-          let index = i;
-          let suggestionToAdd = content.facetHits.splice(index, 1)[0];
+          let suggestionToAdd = content.facetHits.splice(i, 1)[0];
           if(!suggestionToAdd) continue;
-          let knownIndex = suggestions.findIndex(hashtag => hashtag && (hashtag.tag === suggestionToAdd.value));
-
-          if (knownIndex > -1) {
-            i--;
-            continue;
-          }
 
           suggestionToAdd.tag = suggestionToAdd.value;
           suggestionToAdd.new = true;
@@ -95,7 +88,10 @@ class SuggestionsService {
             // console.log('>>>>>>>>> ADD >>>>>>>>>> '  + suggestionToAdd.tag)
             suggestions.push(suggestionToAdd);
             this._newSuggestions.push(suggestionToAdd);
-          } else i--;
+          } else if (suggestionToAdd && !this.isInUserWings(suggestionToAdd.tag)) {
+            this._newSuggestions.push(suggestionToAdd);
+          }
+          else i--;
         }
         this._currentSuggestions = suggestions;
 
@@ -135,13 +131,13 @@ class SuggestionsService {
     await this.fetchSuggestions(null, true, 2, index);
     await this.fetchSuggestions(filters, false, 2, index);
     await this.fetchSuggestions(filters, true, 2, index);
-    this.populateSuggestionsData();
+    this.populateSuggestionsData(true);
     let query = this.formatHashtagsQuery();
     if (query)
       await this.syncBank(query)
         .then((bank) => {
           this._bank = bank;
-          this.populateSuggestionsData();
+          this.populateSuggestionsData(true);
         });
   }
 
@@ -158,13 +154,22 @@ class SuggestionsService {
   /**
    * @description Populate all suggestions data thanks to current Wings bank
    */
-  populateSuggestionsData = () => {
-    let suggestions = this._currentSuggestions;
-    // eslint-disable-next-line
-    this._currentSuggestions.map((suggestion, i) => {
-      suggestions[i] = this.getData(suggestion.tag) || suggestion;
-    });
-    this._currentSuggestions = suggestions;
+  populateSuggestionsData = (isNewSuggestions) => {
+    if(!isNewSuggestions) {
+      let suggestions = this._currentSuggestions;
+      // eslint-disable-next-line
+      this._currentSuggestions.map((suggestion, i) => {
+        suggestions[i] = this.getData(suggestion.tag) || suggestion;
+      });
+      this._currentSuggestions = suggestions;
+    } else {
+      let suggestions = this._newSuggestions;
+      // eslint-disable-next-line
+      this._newSuggestions.map((suggestion, i) => {
+        suggestions[i] = this.getData(suggestion.tag) || suggestion;
+      });
+      this._newSuggestions = suggestions;
+    }
   }
 
   /**

@@ -55,14 +55,35 @@ class SuggestionsControllerService {
 
   makeNewSuggestions = async (element, index) => {
     let indexRemoved = this._currentSuggestions.all.findIndex(suggestion => suggestion.tag === element.tag);
-    this._currentSuggestions.all.splice(indexRemoved, 1);
+    if(indexRemoved !== -1){
+      this._currentSuggestions.all.splice(indexRemoved, 1); 
+      if(this._currentSuggestions.even[index] && this._currentSuggestions.even[index].tag === element.tag)
+        this._currentSuggestions.even.splice(index, 1);
+      if(this._currentSuggestions.odd[index] && this._currentSuggestions.odd[index].tag === element.tag)
+        this._currentSuggestions.odd.splice(index, 1);
+    }
     await SuggestionsService.updateSuggestions(element, indexRemoved)
     .then(() => {
       this._newSuggestions.all = SuggestionsService._newSuggestions;
+      if(this._newSuggestions.all.length === 0){
+        return;
+      }
       this.makeNewSuggestionsList();
+
+      let counter = 0;
       this._newSuggestions.all.map( (newS, i) => {
-        if(this._currentSuggestions.all.findIndex(sug => (sug.tag === newS.tag)) === -1)
-          this._currentSuggestions.all.splice(indexRemoved + i, 0, newS);
+        let indexInCurrent = this._currentSuggestions.all.findIndex(sug => (sug.tag === newS.tag))
+        if(indexInCurrent === -1){
+          this._currentSuggestions.all.splice(indexRemoved + counter, 0, newS);
+          counter++;
+        }else if( indexInCurrent > indexRemoved){
+          // if indexInCurrent > indexRemoved => move the suggestions
+          // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>> move suggestion')
+          // console.log(newS.tag + ' from ' + indexInCurrent + ' to ' + (indexRemoved));
+          this._currentSuggestions.all.splice(indexInCurrent, 1);
+          this._currentSuggestions.all.splice(indexRemoved, 0, newS);
+          counter++;
+        }
       });
       // this._currentSuggestions.all.splice(index,0,this._newSuggestions.all);
       this.makeInitialSuggestionsList();
