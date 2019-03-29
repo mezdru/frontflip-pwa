@@ -8,10 +8,6 @@ import ProfileService from '../../../services/profile.service';
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
 
 const styles = theme => ({
-  animated: {
-    transition: 'background 450ms ease-in',
-    background: theme.palette.secondary.main,
-  }
 });
 
 class UserWings extends React.Component {

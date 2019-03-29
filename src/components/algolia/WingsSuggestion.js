@@ -53,12 +53,32 @@ class WingsSuggestions extends React.Component {
   handleSelectSuggestion = (e, element, index) => {
     this.props.handleAddWing(e, element);
     //this.props.SuggestionsService.updateSuggestions(element, index);
-    this.props.suggestionsController.makeNewSuggestions(element, index)
-    .then(() => {
-      this.setState({suggestions: this.props.suggestionsController.getCurrentSuggestions(), shouldUpdate: true});
-    })
+    let elt = e.currentTarget.parentNode;
+    let eltChild = e.currentTarget;
+    eltChild.classList.add(this.props.classes.suggestionSelected);
 
-    var elt = e.currentTarget.parentNode;
+    this.setState({animationInProgress: true}, () => {
+      setTimeout(() => {
+        elt.classList.add(this.props.classes.animateOut);
+      }, 50)
+
+      setTimeout(() => {
+        console.log(eltChild.classList)
+        console.log(elt.classList)
+        eltChild.classList.remove(this.props.classes.suggestionSelected)
+        //elt.classList.remove(this.props.classes.animateOut);
+        console.log(eltChild.classList)
+        console.log(elt.classList)
+        eltChild.blur();
+        this.props.suggestionsController.makeNewSuggestions(element, index)
+        .then(() => {
+          this.setState({suggestions: this.props.suggestionsController.getCurrentSuggestions(), shouldUpdate: true, animationInProgress: false}, () => {
+            elt.classList.remove(this.props.classes.animateOut);
+          });
+        })
+      }, 400);
+    });
+
     
 
     // var elt = e.currentTarget;
@@ -113,7 +133,7 @@ class WingsSuggestions extends React.Component {
 
   isNewSuggestions = (tag) => {
     let indexOf = this.props.suggestionsController._newSuggestions.all.findIndex(suggestion => suggestion.tag === tag);
-    console.log('index of ' + tag + ' is ' + indexOf);
+    // console.log('index of ' + tag + ' is ' + indexOf);
     return (indexOf > -1);
   }
 
