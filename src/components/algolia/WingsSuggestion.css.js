@@ -24,13 +24,46 @@ export const styles = theme => ({
   },
   suggestion: {
     color: theme.palette.secondary.dark,
-    opacity: 0,
-    animation: ' 0.6s ease-in easeIn',
+  },
+  suggestionSelected: {
+    backgroundColor: theme.palette.secondary.main + ' !important',
+    color: 'white !important',
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.main + ' !important',
+      color: 'white !important',
+    }
+  },
+  animateIn: {
+    // opacity: 0,
+    transform: 'scale(0)',
+    animation: ' 250ms ease-in easeIn',
     animationFillMode: 'forwards',
   },
+  animateOut: {
+    animation: ' 350ms ease-out easeOut',
+    animationFillMode: 'forwards',
+  },
+  '@keyframes easeOut': {
+    from: {
+      opacity: 1,
+      width: 100,
+      transform: 'scale(1)'
+    },
+    '50%': {
+      opacity: 0.5,
+      width: 50,
+      transform: 'scale(0.30)'
+    },
+    to: {
+      opacity: 0,
+      width: 0,
+      transform: 'scale(0)'
+
+    }
+  },
   '@keyframes easeIn': {
-    from: { opacity: 0 },
-    to: { opacity: 1 }
+    from: { transform: 'scale(0)' },
+    to: { transform: 'scale(1)' }
   },
   transparentGradientBoxRight: {
     position: 'absolute',

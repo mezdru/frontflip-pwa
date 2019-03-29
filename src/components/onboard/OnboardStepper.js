@@ -70,10 +70,7 @@ class OnboardStepper extends React.Component {
 
   initializeSuggestions = (currentStep) => {
     if(currentStep && (currentStep === 'wings' || currentStep.charAt(0) === '#')) {
-      this.props.SuggestionsService.init(this.props.algoliaKey)
-      .then(()=> {
-        this.props.SuggestionsService.makeInitialSuggestions((currentStep.charAt(0) === '#' ? currentStep : null))
-      });
+      this.props.SuggestionsController.initSuggestions(currentStep, this.props.algoliaKey);
     }
   }
 
@@ -202,15 +199,18 @@ class OnboardStepper extends React.Component {
           disabled={true}
           slideRenderer={(params) => {
             const { index, key } = params;
+            let StepComponent = this.getStepComponent(steps, index);
             return(
               <Grid item style={{ height: '100%' }} key={index} >
                 <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[index]} 
-                              SuggestionsService={this.props.SuggestionsService} />
+                              SuggestionsController={this.props.SuggestionsController} />
               </Grid>
             )
           }}
         >
         </VirtualizeSwipeableViews>
+
+
 
         {showFeedback && (
           <LoaderFeedback

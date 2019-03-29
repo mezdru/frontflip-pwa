@@ -12,6 +12,7 @@ import userStore from './stores/user.store';
 import recordStore from './stores/record.store';
 import commonStore from './stores/common.store';
 import organisationStore from './stores/organisation.store';
+import suggestionsController from './services/suggestionsController.service';
 import HttpsRedirect from 'react-https-redirect';
 import { MuiThemeProvider } from "@material-ui/core";
 import theme from "./theme";
@@ -33,7 +34,8 @@ const stores = {
   userStore,
   recordStore,
   commonStore,
-  organisationStore
+  organisationStore,
+  suggestionsController
 };
 
 let locale = commonStore.locale;

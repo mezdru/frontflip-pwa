@@ -40,13 +40,25 @@ const styles = theme => ({
   animated: {
     background: theme.palette.secondary.main,
     color: 'white',
-    opacity: 0,
-    animation: 'appear 450ms ease-in 0ms 1 forwards',
+    transform: 'scale(0)',
+    animation: '450ms ease-in wingEaseIn',
+    animationFillMode: 'forwards',
   },
-  '@keyframes appear': {
-    from: { background: theme.palette.secondary.main, color: 'white', opacity: 0 },
-    to: { background: theme.palette.primary.main, color: theme.palette.primary.dark, opacity: 1 }
-  },
+  '@keyframes wingEaseIn': {
+    from: {
+      background: theme.palette.secondary.main,
+      color: 'white',
+      transform: 'scale(0)',
+    },
+    '75%': {
+      background: theme.palette.secondary.main,
+    },
+    to: {
+      background: theme.palette.primary.main,
+      color: theme.palette.primary.dark,
+      transform: 'scale(1)',
+    }
+  }
 });
 
 const Wing = ({ src, label, ...props }) => {
