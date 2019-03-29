@@ -63,7 +63,6 @@ class SuggestionsControllerService {
       this._newSuggestions.all.map( (newS, i) => {
         if(this._currentSuggestions.all.findIndex(sug => (sug.tag === newS.tag)) === -1)
           this._currentSuggestions.all.splice(indexRemoved + i, 0, newS);
-        else
       });
       // this._currentSuggestions.all.splice(index,0,this._newSuggestions.all);
       this.makeInitialSuggestionsList();
