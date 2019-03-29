@@ -199,6 +199,7 @@ class OnboardStepper extends React.Component {
           disabled={true}
           slideRenderer={(params) => {
             const { index, key } = params;
+            let StepComponent = this.getStepComponent(steps, index);
             return(
               <Grid item style={{ height: '100%' }} key={index} >
                 <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[index]} 
@@ -208,6 +209,8 @@ class OnboardStepper extends React.Component {
           }}
         >
         </VirtualizeSwipeableViews>
+
+
 
         {showFeedback && (
           <LoaderFeedback

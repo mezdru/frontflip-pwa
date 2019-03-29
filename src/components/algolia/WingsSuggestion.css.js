@@ -24,6 +24,8 @@ export const styles = theme => ({
   },
   suggestion: {
     color: theme.palette.secondary.dark,
+  },
+  animateIn: {
     opacity: 0,
     animation: ' 0.6s ease-in easeIn',
     animationFillMode: 'forwards',

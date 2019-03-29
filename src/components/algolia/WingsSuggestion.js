@@ -26,13 +26,16 @@ class WingsSuggestions extends React.Component {
       onlyViewport: true,
       offsetSuggestionsIndex: 0,
     };
+    console.log('construc')
   }
 
   componentDidMount() {
-
-    // observe(this.props.SuggestionsService, '_randomNumber', (change) => {
-    //   this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), shouldUpdate: true});
-    // });
+    console.log('mount')
+    observe(this.props.suggestionsController, '_observeUpdate', (change) => {
+      console.log('update ' + this.state.scrollableClass)
+      console.log('number of suggestions : ' + this.props.suggestionsController._currentSuggestions.all.length)
+      this.setState({suggestions: this.props.suggestionsController._currentSuggestions, shouldUpdate: true});
+    });
   }
 
   componentWillUnmount() {
@@ -50,24 +53,30 @@ class WingsSuggestions extends React.Component {
   handleSelectSuggestion = (e, element, index) => {
     this.props.handleAddWing(e, element);
     //this.props.SuggestionsService.updateSuggestions(element, index);
-    this.props.SuggestionsController.makeNewSuggestions(element);
-
-    var elt = e.currentTarget;
-    elt.style.setProperty('background', this.props.theme.palette.secondary.main, 'important');
-    elt.style.setProperty('color', 'white');
-    elt.style.animation = 'suggestionOut 450ms ease-out 0ms 1 forwards';
-
-    this.setState({animationInProgress: true, offsetSuggestionsIndex: this.state.suggestions.length-1}, () => {
-      setTimeout(() => {this.setState({animationInProgress: false}, () => {
-        var liElt = elt.parentNode;
-        this.reduceElt(liElt)
-        .then(() => {
-          // this.scrollToSuggestion(offsetToScroll);
-          this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), shouldUpdate: true});
-        });
-        })
-      }, 450);
+    this.props.suggestionsController.makeNewSuggestions(element, index)
+    .then(() => {
+      this.setState({suggestions: this.props.suggestionsController.getCurrentSuggestions(), shouldUpdate: true});
     })
+
+    var elt = e.currentTarget.parentNode;
+    
+
+    // var elt = e.currentTarget;
+    // elt.style.setProperty('background', this.props.theme.palette.secondary.main, 'important');
+    // elt.style.setProperty('color', 'white');
+    // elt.style.animation = 'suggestionOut 450ms ease-out 0ms 1 forwards';
+
+    // this.setState({animationInProgress: true, offsetSuggestionsIndex: this.state.suggestions.length-1}, () => {
+      // setTimeout(() => {this.setState({animationInProgress: false}, () => {
+        // var liElt = elt.parentNode;
+        // this.reduceElt(liElt)
+        // .then(() => {
+          // this.scrollToSuggestion(offsetToScroll);
+          // this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), shouldUpdate: true});
+        // });
+        // })
+      // }, 450);
+    // })
   }
 
   handleMouseDown = (e) => {
@@ -102,9 +111,15 @@ class WingsSuggestions extends React.Component {
 
   getDisplayedName = (hit) => (hit.name_translated ? (hit.name_translated[this.state.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag);
 
+  isNewSuggestions = (tag) => {
+    let indexOf = this.props.suggestionsController._newSuggestions.all.findIndex(suggestion => suggestion.tag === tag);
+    console.log('index of ' + tag + ' is ' + indexOf);
+    return (indexOf > -1);
+  }
+
   renderWing = (classes, hit, i) => {
     return (
-      <li key={i} className={classes.suggestion} style={{animationDelay: ((i-this.state.offsetSuggestionsIndex)*0.05) +'s'}} id={hit.tag}>
+      <li key={i} className={classNames(classes.suggestion, (this.isNewSuggestions(hit.tag) ? classes.animateIn : null))} style={{animationDelay: ((i-this.state.offsetSuggestionsIndex)*0.05) +'s'}} id={hit.tag}>
         <Wings  src={ProfileService.getPicturePath(hit.picture)}
           label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
           onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag }, i)}
@@ -117,10 +132,12 @@ class WingsSuggestions extends React.Component {
   }
 
   renderWingsList = (suggestions, classes, isEven) => {
+    let suggestionsDisplayed = (isEven ? suggestions.even : suggestions.odd);
+    //console.log('sugg displayed (even?'+isEven+') : ' + suggestionsDisplayed.length)
     return (
       <ul className={classNames(classes.suggestionList, "scrollX")}>
-      {suggestions && suggestions.map((hit, i) => {
-        return (hit && this.shouldDisplaySuggestion(hit.tag) && i%2 === (isEven ? 0 : 1)) ? this.renderWing(classes, hit, i) : null;
+      {suggestionsDisplayed && suggestionsDisplayed.map((hit, i) => {
+        return hit ? this.renderWing(classes, hit, i) : null;
       })}
     </ul>
     );
@@ -177,6 +194,7 @@ class WingsSuggestions extends React.Component {
   render() {
     const { classes } = this.props;
     const { suggestions, scrollableClass } = this.state;
+    //console.log('render with ' + suggestions.all.length + ' suggestions for ' + scrollableClass);
     return (
       <div ref={(el) => {this.elementNode = el}}>
         <Hidden xsDown>
@@ -199,8 +217,8 @@ class WingsSuggestions extends React.Component {
         </Hidden>
 
         <div className={classNames(classes.suggestionsContainer, ''+scrollableClass)} >
-          {this.renderWingsList(suggestions, classes, false)}
           {this.renderWingsList(suggestions, classes, true)}
+          {this.renderWingsList(suggestions, classes, false)}
         </div>
       </div>
       </div>
@@ -208,7 +226,7 @@ class WingsSuggestions extends React.Component {
   }
 }
 
-export default inject('commonStore', 'recordStore', 'organisationStore')(
+export default inject('commonStore', 'recordStore', 'organisationStore', 'suggestionsController')(
   observer(
     withStyles(styles, {withTheme: true})(WingsSuggestions)
   )
