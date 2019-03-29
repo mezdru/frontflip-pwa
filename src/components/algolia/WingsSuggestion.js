@@ -26,14 +26,10 @@ class WingsSuggestions extends React.Component {
       onlyViewport: true,
       offsetSuggestionsIndex: 0,
     };
-    console.log('construc')
   }
 
   componentDidMount() {
-    console.log('mount')
     observe(this.props.suggestionsController, '_observeUpdate', (change) => {
-      console.log('update ' + this.state.scrollableClass)
-      console.log('number of suggestions : ' + this.props.suggestionsController._currentSuggestions.all.length)
       this.setState({suggestions: this.props.suggestionsController._currentSuggestions, shouldUpdate: true});
     });
   }
@@ -52,7 +48,6 @@ class WingsSuggestions extends React.Component {
 
   handleSelectSuggestion = (e, element, index) => {
     this.props.handleAddWing(e, element);
-    //this.props.SuggestionsService.updateSuggestions(element, index);
     let elt = e.currentTarget.parentNode;
     let eltChild = e.currentTarget;
     eltChild.classList.add(this.props.classes.suggestionSelected);
@@ -63,12 +58,7 @@ class WingsSuggestions extends React.Component {
       }, 50)
 
       setTimeout(() => {
-        console.log(eltChild.classList)
-        console.log(elt.classList)
         eltChild.classList.remove(this.props.classes.suggestionSelected)
-        //elt.classList.remove(this.props.classes.animateOut);
-        console.log(eltChild.classList)
-        console.log(elt.classList)
         eltChild.blur();
         this.props.suggestionsController.makeNewSuggestions(element, index)
         .then(() => {
@@ -76,27 +66,8 @@ class WingsSuggestions extends React.Component {
             elt.classList.remove(this.props.classes.animateOut);
           });
         })
-      }, 400);
+      }, 375);
     });
-
-    
-
-    // var elt = e.currentTarget;
-    // elt.style.setProperty('background', this.props.theme.palette.secondary.main, 'important');
-    // elt.style.setProperty('color', 'white');
-    // elt.style.animation = 'suggestionOut 450ms ease-out 0ms 1 forwards';
-
-    // this.setState({animationInProgress: true, offsetSuggestionsIndex: this.state.suggestions.length-1}, () => {
-      // setTimeout(() => {this.setState({animationInProgress: false}, () => {
-        // var liElt = elt.parentNode;
-        // this.reduceElt(liElt)
-        // .then(() => {
-          // this.scrollToSuggestion(offsetToScroll);
-          // this.setState({suggestions: this.props.SuggestionsService.getCurrentSuggestions(), shouldUpdate: true});
-        // });
-        // })
-      // }, 450);
-    // })
   }
 
   handleMouseDown = (e) => {
@@ -214,7 +185,6 @@ class WingsSuggestions extends React.Component {
   render() {
     const { classes } = this.props;
     const { suggestions, scrollableClass } = this.state;
-    //console.log('render with ' + suggestions.all.length + ' suggestions for ' + scrollableClass);
     return (
       <div ref={(el) => {this.elementNode = el}}>
         <Hidden xsDown>

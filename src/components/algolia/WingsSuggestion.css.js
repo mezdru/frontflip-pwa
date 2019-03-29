@@ -34,7 +34,8 @@ export const styles = theme => ({
     }
   },
   animateIn: {
-    opacity: 0,
+    // opacity: 0,
+    transform: 'scale(0)',
     animation: ' 250ms ease-in easeIn',
     animationFillMode: 'forwards',
   },
@@ -61,8 +62,8 @@ export const styles = theme => ({
     }
   },
   '@keyframes easeIn': {
-    from: { opacity: 0 },
-    to: { opacity: 1 }
+    from: { transform: 'scale(0)' },
+    to: { transform: 'scale(1)' }
   },
   transparentGradientBoxRight: {
     position: 'absolute',
