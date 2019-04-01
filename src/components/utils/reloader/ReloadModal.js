@@ -47,7 +47,7 @@ export default class ReloadModal extends Component {
     });
   }
   onClick = () => {
-    window.location.reload(window.location.href);
+    window.location.reload(true);
   };
 
   render() {
