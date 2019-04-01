@@ -40,7 +40,7 @@ export const styles = theme => ({
     animationFillMode: 'forwards',
   },
   animateOut: {
-    animation: ' 350ms ease-out easeOut',
+    animation: ' 250ms ease-out easeOut',
     animationFillMode: 'forwards',
   },
   '@keyframes easeOut': {
