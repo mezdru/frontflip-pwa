@@ -45,7 +45,7 @@ const styles = theme => ({
     background: theme.palette.secondary.main,
     color: 'white',
     transform: 'scale(0)',
-    animation: '450ms ease-in wingEaseIn',
+    animation: '250ms ease-in wingEaseIn',
     animationFillMode: 'forwards',
   },
   bigWing: {
@@ -60,7 +60,7 @@ const styles = theme => ({
       color: 'white',
       transform: 'scale(0)',
     },
-    '75%': {
+    '85%': {
       background: theme.palette.secondary.main,
     },
     to: {
