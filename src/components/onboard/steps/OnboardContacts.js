@@ -38,11 +38,11 @@ class OnboardContacts extends React.Component {
   componentDidMount() {
     this.setDefaultLinks();
 
-    observe(this.props.recordStore.values, 'record', (change) => {
-      // this.setState({links: this.props.recordStore.values.record.links}, () => {
-        this.forceUpdate();
-      // });
-    })
+    // observe(this.props.recordStore.values, 'record', (change) => {
+    //   this.setState({links: this.props.recordStore.values.record.links}, () => {
+    //     this.forceUpdate();
+    //   });
+    // })
   }
   
   handleLinksChange = (e, link, index) => {
@@ -65,7 +65,9 @@ class OnboardContacts extends React.Component {
   
   addLink = (link) => {
     this.props.recordStore.values.record.links.push(link);
-    this.setState({links: this.props.recordStore.values.record.links, newLinkIndex: this.props.recordStore.values.record.links.length-1});
+    let links = this.state.links;
+    links.push(link);
+    this.setState({links: links, newLinkIndex: this.props.recordStore.values.record.links.length-1});
   }
   
   getLinkByType = (typeWanted) => {
@@ -104,7 +106,9 @@ class OnboardContacts extends React.Component {
     let links = this.state.links;
     for (let type of types) {
       if (!this.getLinkByType(type)) {
-        links.push({"type": type, "value": ""});
+        if(links.findIndex(link => link.type === type) === -1){
+          links.push({"type": type, "value": ""});
+        }
       }
     }
     this.setState({links});
