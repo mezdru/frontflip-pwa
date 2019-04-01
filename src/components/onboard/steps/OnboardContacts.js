@@ -39,7 +39,9 @@ class OnboardContacts extends React.Component {
     this.setDefaultLinks();
 
     observe(this.props.recordStore.values, 'record', (change) => {
-      this.forceUpdate();
+      // this.setState({links: this.props.recordStore.values.record.links}, () => {
+        this.forceUpdate();
+      // });
     })
   }
   
@@ -112,6 +114,7 @@ class OnboardContacts extends React.Component {
     const {links, newLinkIndex} = this.state;
     const {classes} = this.props;
     ProfileService.transformLinks(this.props.recordStore.values.record);
+
     return (
       <Grid container style={{minHeight: 'calc(100vh - 73px)', background: this.props.theme.palette.primary.main}} direction="column" alignItems="center">
         <Grid item xs={12} sm={8} md={6} lg={4} style={{width: '100%'}}>
