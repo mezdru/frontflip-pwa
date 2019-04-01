@@ -41,8 +41,8 @@ class SuggestionsService {
     this._currentSuggestions = [];
     this._newSuggestions = [];
     if (!wingsFamily) {
-      await this.fetchSuggestions(null, false, 5);
-      await this.fetchSuggestions(null, true, 10);
+      await this.fetchSuggestions(null, true, 15);
+      await this.fetchSuggestions(null, false, 10);
       this.populateSuggestionsData();
       let query = this.formatHashtagsQuery();
       if (query)
@@ -127,10 +127,11 @@ class SuggestionsService {
    */
   updateSuggestions = async (filters, index) => {
     this._newSuggestions = [];
-    await this.fetchSuggestions(null, false, 1, index);
+    await this.fetchSuggestions(filters, true, 2, index);
     await this.fetchSuggestions(null, true, 2, index);
     await this.fetchSuggestions(filters, false, 2, index);
-    await this.fetchSuggestions(filters, true, 2, index);
+    await this.fetchSuggestions(null, false, 1, index);
+
     this.populateSuggestionsData(true);
     let query = this.formatHashtagsQuery();
     if (query)

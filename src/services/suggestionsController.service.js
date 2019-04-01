@@ -76,7 +76,7 @@ class SuggestionsControllerService {
         if(indexInCurrent === -1){
           this._currentSuggestions.all.splice(indexRemoved + counter, 0, newS);
           counter++;
-        }else if( indexInCurrent > indexRemoved){
+        }else if( true || indexInCurrent > indexRemoved){
           // if indexInCurrent > indexRemoved => move the suggestions
           // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>> move suggestion')
           // console.log(newS.tag + ' from ' + indexInCurrent + ' to ' + (indexRemoved));
@@ -132,7 +132,7 @@ class SuggestionsControllerService {
   }
 
   logSuggestionsTag = () => {
-    this._currentSuggestions.all.forEach(elt => {
+    this._newSuggestions.all.forEach(elt => {
       console.log(elt.tag);
     })
   }
