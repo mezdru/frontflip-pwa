@@ -7,20 +7,13 @@ const FILENAME = 'slack_helper.js';
 class SlackService {
 
     static notifyError(err, line, developerName = null, filename = FILENAME){
-        let slackObject = {channel : '#errors'+(developerName?'-'+developerName:''), text : filename + ':line:'+line+ ' - ' + err};
-        slack.send(slackObject);
-        let slackObject1 = {channel : '#errors'+(developerName?'-'+developerName:''), text : 'Navigator data : ('+
+        let slackObject = {channel : '#errors'+(developerName?'-'+developerName:''), text : filename + ':line:'+line+ ' - ' + err + 
+                                                                                            '                                      ' +
+                                                                                            '{Navigator data : ('+
                                                                                               window.navigator.appCodeName+'|'+
                                                                                               window.navigator.appVersion+'|'+
-                                                                                              window.navigator.cookieEnabled+')'};
-        slack.send(slackObject1);
-        try{
-          let slackObject2 = {channel : '#errors'+(developerName?'-'+developerName:''), text : JSON.stringify(err)};
-          slack.send(slackObject2);
-        }catch(err){
-          let slackObject3 = {channel : '#errors'+(developerName?'-'+developerName:''), text : "Can't parse the err object with json stringify."};
-          slack.send(slackObject3);
-        }
+                                                                                              window.navigator.cookieEnabled+')}'};
+        slack.send(slackObject);
     }
     static notify(channel, message){
         slack.send({
