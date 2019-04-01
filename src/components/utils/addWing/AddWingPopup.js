@@ -52,9 +52,9 @@ const styles = theme => ({
     }
   },
   actions: {
-    justifyContent: 'center', 
     margin: 0,
     padding: 16,
+    display: 'block'
   },
   buttons: {
     height: 'unset',
@@ -86,13 +86,11 @@ class AddWingPopup extends React.Component {
     this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
 
     await this.asyncForEach(this.props.wingsToAdd, async (wing) => {
-      if(!this.recordHasHashtag('#' + wing)) {
         this.props.recordStore.setRecordTag('#' + wing);
         await this.props.recordStore.getRecordByTag()
         .then((hashtagToAdd => {
           wingsPopulated.push(hashtagToAdd);
         })).catch(e => {console.log(e)});
-      }
     });
 
     this.setState({wingsPopulated: wingsPopulated});
@@ -111,7 +109,13 @@ class AddWingPopup extends React.Component {
 
   handleAddWing = async () => {
     let record = this.props.recordStore.values.record;
-    record.hashtags = record.hashtags.concat(this.state.wingsPopulated);
+    let wingsToAdd = [];
+    this.state.wingsPopulated.forEach(wing => {
+      if(!this.recordHasHashtag(wing.tag)) {
+        wingsToAdd.push(wing);
+      }
+    })
+    record.hashtags = record.hashtags.concat(wingsToAdd);
     await this.props.recordStore.updateRecord(['hashtags']);
     this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag + '/' + this.props.recordStore.values.record.tag });
   }
@@ -137,7 +141,6 @@ class AddWingPopup extends React.Component {
           aria-describedby="alert-dialog-slide-description"
         >
           <DialogContent style={{overflow: 'hidden', padding: 16}} >
-            {/* <img src={PeopleWingsImg} alt="People with Wings" className={classes.picture} /> */}
             <Typography variant="h1" className={classes.title}>
               <FormattedMessage id="onboard.end.title" />
               <Hidden xsDown>
@@ -166,8 +169,8 @@ class AddWingPopup extends React.Component {
                 <Add />
                 <FormattedMessage id="action.addWings.add" />
             </Button>
-            <Hidden xsDown>
-                <br/>
+            <Hidden smUp>
+                <br/><br/>
             </Hidden>
             <Button onClick={this.handleClose} color="secondary" variant="contained"  size="medium" className={classes.buttons}  >
                 <Search />
