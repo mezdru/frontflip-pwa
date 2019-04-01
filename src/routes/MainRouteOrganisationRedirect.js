@@ -21,7 +21,8 @@ class MainRouteOrganisationRedirect extends React.Component {
     this.state = {
       redirectTo: null,
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
-      renderComponent: false
+      renderComponent: false,
+      invitationCode: ((this.props.match.params && this.props.match.params.invitationCode) ? this.props.match.params.invitationCode : null ),
     };
 
     // if there is a wings to add, we should save it
@@ -174,11 +175,10 @@ class MainRouteOrganisationRedirect extends React.Component {
   }
 
   render() {
-    const { redirectTo, renderComponent } = this.state;
+    const { redirectTo, renderComponent, invitationCode } = this.state;
     const { locale } = this.props.commonStore;
     const { orgTag, organisation } = this.props.organisationStore.values;
     let isAuth = this.props.authStore.isAuth();
-
     if (redirectTo) {
       this.resetRedirectTo();
       if (window.location.pathname !== redirectTo) {
@@ -186,10 +186,9 @@ class MainRouteOrganisationRedirect extends React.Component {
       }
     }
 
-    if(this.props.hashtagsFilter && this.props.match.params && this.props.match.params.action &&  (this.props.match.params.action === 'add' || this.props.match.params.action === 'filter' ) )
-      return <Redirect to={'/' + locale + '/' + orgTag} />;
-
     if (renderComponent && isAuth) {
+      if(this.props.hashtagsFilter && this.props.match.params && this.props.match.params.action &&  (this.props.match.params.action === 'add' || this.props.match.params.action === 'filter' ) )
+        return <Redirect to={'/' + locale + '/' + orgTag} />;
       return (
         <div>
           <Switch>
@@ -227,12 +226,10 @@ class MainRouteOrganisationRedirect extends React.Component {
               <Route exact path="/:locale(en|fr|en-UK)/:organisationTag" component={SearchPage} />
             )}
 
-            <Redirect to={'/' + locale + (orgTag ? '/' + orgTag : '') + '/signin' + window.location.search} />
+            <Redirect to={'/' + locale + (orgTag ? '/' + orgTag : '') + '/signin' + (invitationCode ? '/' + invitationCode : '') +  window.location.search} />
           </Switch>
         </div>
       );
-    } else if(false){
-
     } else {
       return (
         <div style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', textAlign: 'center', width: '100%' }}>
