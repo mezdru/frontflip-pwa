@@ -76,7 +76,6 @@ function registerValidSW(swUrl, config) {
               // show notification
               const event = new Event("newContentAvailable");
               window.dispatchEvent(event);
-              window.location.reload(true);
 
               console.log(
                 'New content is available and will be used when all ' +
