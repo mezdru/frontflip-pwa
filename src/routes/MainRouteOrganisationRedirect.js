@@ -25,7 +25,7 @@ class MainRouteOrganisationRedirect extends React.Component {
     };
 
     // if there is a wings to add, we should save it
-    if(this.props.hashtagsFilter && this.props.match.params && this.props.match.params.action) {
+    if(this.props.hashtagsFilter && this.props.match.params && this.props.match.params.action &&  (this.props.match.params.action === 'add' || this.props.match.params.action === 'filter' ) ) {
       this.persistWingToAdd((this.props.match.params.action));
     }
   }
@@ -186,7 +186,7 @@ class MainRouteOrganisationRedirect extends React.Component {
       }
     }
 
-    if(this.props.hashtagsFilter)
+    if(this.props.hashtagsFilter && this.props.match.params && this.props.match.params.action &&  (this.props.match.params.action === 'add' || this.props.match.params.action === 'filter' ) )
       return <Redirect to={'/' + locale + '/' + orgTag} />;
 
     if (renderComponent && isAuth) {
