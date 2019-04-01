@@ -186,6 +186,7 @@ class MainRouteOrganisationRedirect extends React.Component {
       }
     }
 
+    
     if (renderComponent && isAuth) {
       if(this.props.hashtagsFilter && this.props.match.params && this.props.match.params.action &&  (this.props.match.params.action === 'add' || this.props.match.params.action === 'filter' ) )
         return <Redirect to={'/' + locale + '/' + orgTag} />;
