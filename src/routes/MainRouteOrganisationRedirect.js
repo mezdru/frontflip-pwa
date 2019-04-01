@@ -23,6 +23,11 @@ class MainRouteOrganisationRedirect extends React.Component {
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
       renderComponent: false
     };
+
+    // if there is a wings to add, we should save it
+    if(this.props.hashtagsFilter && this.props.match.params && this.props.match.params.action) {
+      this.persistWingToAdd((this.props.match.params.action));
+    }
   }
 
   componentWillReceiveProps(props) {
@@ -36,6 +41,16 @@ class MainRouteOrganisationRedirect extends React.Component {
           this.setState({redirectTo: '/' + this.state.locale + '/error/500/routes'});
         });
       });
+    }
+  }
+
+  persistWingToAdd = (isAction) => {
+    try {
+      let hashtags = this.props.match.params.hashtags;
+      if(hashtags && hashtags.charAt(0) !== '@') this.props.commonStore.setCookie('hashtagsFilter', hashtags);
+      if(isAction) this.props.commonStore.setCookie('actionInQueue', this.props.match.params.action);
+    }catch(e) {
+      // error
     }
   }
 
@@ -170,6 +185,9 @@ class MainRouteOrganisationRedirect extends React.Component {
         return (<Redirect to={redirectTo} />);
       }
     }
+
+    if(this.props.hashtagsFilter)
+      return <Redirect to={'/' + locale + '/' + orgTag} />;
 
     if (renderComponent && isAuth) {
       return (

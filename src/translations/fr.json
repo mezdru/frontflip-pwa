@@ -85,5 +85,8 @@
     "onboard.end.text": "Votre profil est dans l'annuaire des talents de {organisationName}.",
     "onboard.end.title": "Génial",
     "onboard.edit.save": "Sauver",
-    "pwa.install.ios": "Installez cette app sur votre iPhone ! Cliquez sur {img} puis 'Sur l'écran d'accueil'."
+    "pwa.install.ios": "Installez cette app sur votre iPhone ! Cliquez sur {img} puis 'Sur l'écran d'accueil'.",
+    "action.addWings.add": "Ajoutez à votre profil",
+    "action.addWings.search": "Cherchez dans {organisationName}",
+    "action.addWings.text": "Vous avez trouvé {wingsCount} Wings !"
 }

@@ -44,6 +44,12 @@ const styles = theme => ({
     animation: '450ms ease-in wingEaseIn',
     animationFillMode: 'forwards',
   },
+  bigWing: {
+    transform: 'scale(1.3)',
+    marginTop: 32,
+    marginLeft: 32,
+    marginRight: 32
+  },
   '@keyframes wingEaseIn': {
     from: {
       background: theme.palette.secondary.main,

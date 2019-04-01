@@ -14,6 +14,7 @@ import Card from '../components/card/CardProfile';
 import ReactGA from 'react-ga';
 import OnboardCongratulation from '../components/onboard/steps/OnboardCongratulation';
 import PromptIOsInstall from '../components/utils/prompt/PromptIOsInstall';
+import AddWingPopup from '../components/utils/addWing/AddWingPopup';
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class SearchPage extends React.Component {
@@ -28,16 +29,26 @@ class SearchPage extends React.Component {
       resultsType: this.props.resultsType || 'person',
       shouldUpdateUrl: false,
       shouldDisplayHitResults: true,
+      hashtagsFilter: this.getHashtagsFilter(),
+      actionInQueue: this.getActionInQueue()
     };
   }
 
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
     this.props.history.listen((location, action) => ReactGA.pageview(window.location.pathname));
+    if(this.state.hashtagsFilter.length > 0) this.addHashtagsToSearch(this.state.hashtagsFilter);
+  }
+
+  addHashtagsToSearch = async (hashtags) => {
+    let newFilters = [];
+    hashtags.forEach(hashtag => {
+      newFilters.push({label: hashtag, value: '#' + hashtag});
+      setTimeout(()=> {this.setState({newFilter: {label: hashtag, value: '#' + hashtag}}) }, 50*newFilters.length);
+    });
   }
 
   addToFilters = (e, element, shouldAwaitToUpdateLayout) => {
-    e.preventDefault();
     this.setState({ newFilter: { label: element.name, value: element.tag } });
     if (this.state.resultsType === 'profile') {
       if(shouldAwaitToUpdateLayout) {
@@ -88,22 +99,37 @@ class SearchPage extends React.Component {
               (window.location.pathname !== rootUrl + '/congrats'));
   }
 
+  getHashtagsFilter = () => {
+    let wings =  this.props.commonStore.getCookie('hashtagsFilter');
+    this.props.commonStore.removeCookie('hashtagsFilter');
+    if(wings) {
+      return wings.split(',');
+    } else {
+      return [];
+    }
+  }
+
+  getActionInQueue = () => {
+    let action = this.props.commonStore.getCookie('actionInQueue');
+    this.props.commonStore.removeCookie('actionInQueue');
+    return action
+  }
+
   render() {
-    const { shouldDisplayHitResults, filters, newFilter, shouldUpdateUrl, query } = this.state;
+    const { shouldDisplayHitResults, filters, newFilter, shouldUpdateUrl, query, hashtagsFilter, actionInQueue } = this.state;
     const { classes } = this.props;
 
-    let profileTag = (this.props.match.params ? this.props.match.params.profileTag : null);
+    let profileTag = (this.props.match.params ? this.props.match.params.profileTag : null) || ( (actionInQueue && actionInQueue.charAt(0) === '@') ? actionInQueue : null);
     const { locale } = this.props.commonStore;
     const orgTag = this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag;
 
-    let resultsType = ((profileTag && !shouldUpdateUrl) ? 'profile' : null) || this.state.resultsType;
+    let resultsType = ((profileTag && (profileTag.charAt(0) === '@') && !shouldUpdateUrl) ? 'profile' : null) || this.state.resultsType;
     let displayedHit = ((profileTag && !shouldUpdateUrl) ? (this.state.displayedHit || { tag: profileTag }) : null) || this.state.displayedHit;
-    let rootUrl = '/' + locale + (orgTag ? '/' + orgTag : '');
+    let rootUrl = '/' + locale + '/' + orgTag ;
     let searchBarWidth = this.getSearchBarWidth();
     let redirectTo, showCongratulation;
 
-
-    if (profileTag && profileTag.charAt(0) !== '@') redirectTo = '/' + locale + '/' + orgTag;
+    //if (profileTag && profileTag.charAt(0) !== '@') redirectTo = '/' + locale + '/' + orgTag;
     if(profileTag === 'congrats') {
       profileTag = null;
       redirectTo = null;
@@ -113,7 +139,7 @@ class SearchPage extends React.Component {
     if (redirectTo) {
       return (<Redirect to={redirectTo} />);
     }
-    
+
     return (
       <div>
         <Header handleDisplayProfile={this.handleDisplayProfile}/>
@@ -154,6 +180,10 @@ class SearchPage extends React.Component {
 
           {showCongratulation && (
             <OnboardCongratulation isOpen={showCongratulation} />
+          )}
+
+          {hashtagsFilter.length > 0 && (actionInQueue === 'add') && (
+            <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} />
           )}
         </main>
         <PromptIOsInstall />
