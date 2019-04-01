@@ -14,6 +14,7 @@ import { Add, Search } from '@material-ui/icons';
 import Wings from '../wing/Wing';
 import PeopleWingsImg from '../../../resources/images/people_with_wings.png';
 import ProfileService from '../../../services/profile.service';
+import SlackService from '../../../services/slack.service';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -74,7 +75,10 @@ class AddWingPopup extends React.Component {
   }
 
   handleClose = () => {
-      this.setState({open: false});
+    SlackService.notify('#wingzy-events', 'QRCode - Search - '+
+                                          (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '')+
+                                          ' - by '+this.props.recordStore.values.record.name);
+    this.setState({open: false});
   }
 
   componentDidMount() {
@@ -108,7 +112,9 @@ class AddWingPopup extends React.Component {
   }
 
   handleAddWing = async () => {
-    let record = this.props.recordStore.values.record;
+    SlackService.notify('#wingzy-events', 'QRCode - Search - '+
+                                          (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '')+
+                                          ' - by '+this.props.recordStore.values.record.name);    let record = this.props.recordStore.values.record;
     let wingsToAdd = [];
     this.state.wingsPopulated.forEach(wing => {
       if(!this.recordHasHashtag(wing.tag)) {
