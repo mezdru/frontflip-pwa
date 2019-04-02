@@ -10,10 +10,13 @@ import { withStyles, Typography, Hidden } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { FormattedMessage } from 'react-intl';
 import { Add, Search } from '@material-ui/icons';
+import ReactGA from 'react-ga';
 
 import Wings from '../wing/Wing';
 import ProfileService from '../../../services/profile.service';
 import SlackService from '../../../services/slack.service';
+
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -74,6 +77,7 @@ class AddWingPopup extends React.Component {
   }
 
   handleClose = () => {
+    ReactGA.event({category: 'User', action: 'QRCode - Search'});
     SlackService.notify('#wingzy-events', 'QRCode - Search - '+
                                           (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '')+
                                           ' - by '+this.props.recordStore.values.record.name);
@@ -111,6 +115,7 @@ class AddWingPopup extends React.Component {
   }
 
   handleAddWing = async () => {
+    ReactGA.event({category: 'User', action: 'QRCode - Add Wings'});
     SlackService.notify('#wingzy-events', 'QRCode - Search - '+
                                           (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '')+
                                           ' - by '+this.props.recordStore.values.record.name);    let record = this.props.recordStore.values.record;
