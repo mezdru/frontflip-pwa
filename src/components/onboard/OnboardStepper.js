@@ -10,6 +10,7 @@ import { Redirect } from 'react-router-dom';
 import OnboardIntro from './steps/OnboardIntro';
 import OnboardContacts from './steps/OnboardContacts';
 import OnboardWings from './steps/OnboardWings';
+import SlackService from '../../services/slack.service';
 
 import { withSnackbar } from 'notistack';
 import LoaderFeedback from '../utils/buttons/LoaderFeedback';
@@ -88,6 +89,15 @@ class OnboardStepper extends React.Component {
     
     if ((this.state.activeStep === (this.state.steps.length - 1))) {
       // click on finish
+      let user = this.props.userStore.values.currentUser;
+      try {
+        SlackService.notify('#alerts', 'We have a new User! ' +
+                            (user.email ? user.email.value : (user.google? user.google.email : user._id)) +
+                            ' in ' + this.props.organisationStore.values.organisation.tag);
+      }catch(e) {
+        // log
+      }
+
       this.welcomeUser();
       this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag + '/congrats' }, ()=> {this.forceUpdate()});
     } else {
