@@ -60,8 +60,8 @@ class ProfileLayout extends React.Component {
     });
   }
 
-  handleRedirectToEditWings = () => {
-    this.setState({redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag + '/onboard/wings/edit'});
+  handleRedirectToEditWings = (id) => {
+    this.setState({redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag + '/onboard/wings/edit/' + id});
   }
   
   render() {
@@ -91,7 +91,7 @@ class ProfileLayout extends React.Component {
             </IconButton>
             {canEdit && (
               <MenuButton urlUpdateCover={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/cover/id/' + currentHit.objectID, orgTag)}
-                          urlEditIntro={'/' + locale + '/' + orgTag + '/onboard/intro/edit'}
+                          urlEditIntro={'/' + locale + '/' + orgTag + '/onboard/intro/edit/' + currentHit.objectID}
                           urlEditAboutMe={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/about/id/' + currentHit.objectID, orgTag)}
                           urlDeleteProfile={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/record/delete/' + currentHit.objectID, orgTag)}
               />
@@ -130,7 +130,7 @@ class ProfileLayout extends React.Component {
           {canEdit && (
             <Grid item xs={12} style={{position: 'relative'}}>
               <Button variant="text" className={classes.button} style={{color: theme.palette.secondary.main, fontWeight: 'bold'}}
-                      href={'/' + locale + '/' + orgTag + '/onboard/contacts/edit'}>
+                      href={'/' + locale + '/' + orgTag + '/onboard/contacts/edit/' + currentHit.objectID}>
                 <div href={''} className={classNames(classes.contactIcon, "fa fa-plus")} style={{color: theme.palette.secondary.main}}></div>
                 <FormattedMessage id="profile.addContacts"/>
               </Button>
@@ -157,7 +157,7 @@ class ProfileLayout extends React.Component {
             })}
             {canEdit && (
               <Wings label={this.props.intl.formatMessage({id: 'profile.addWings'})} className={'button'}
-                      onClick={() => {this.handleRedirectToEditWings()}}/>
+                      onClick={() => {this.handleRedirectToEditWings(currentHit.objectID)}}/>
               // <Wings label={this.props.intl.formatMessage({id: 'profile.addWings'})} className={'button'}
               // onClick={() => {
               //   window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/hashtags', orgTag, 'recordId=' + currentHit.objectID)

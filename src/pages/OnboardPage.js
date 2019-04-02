@@ -27,6 +27,7 @@ class OnboardPage extends React.Component {
       observer: ()=>{},
       stepNumber: 0,
       editMode: this.props.edit || false,
+      renderComponent: (this.props.edit ? false : true)
     };
 
     // clear wings bank
@@ -39,7 +40,14 @@ class OnboardPage extends React.Component {
     this.setState({observer: observe(this.props.recordStore.values, 'record', (change) => {
       this.forceUpdate();
     })});
-    this.getRecordForUser().then().catch(err => console.log(err));
+    if(this.props.match && this.props.match.params && this.props.match.params.recordId && this.props.edit) {
+      this.props.recordStore.setRecordId(this.props.match.params.recordId);
+      this.props.recordStore.getRecord()
+      .then(() => {this.setState({renderComponent: true})}).catch(err => console.log(err));
+    } else {
+      this.getRecordForUser()
+      .then(() => {this.setState({renderComponent: true})}).catch(err => console.log(err));
+    }
     if (this.props.match && this.props.match.params && this.props.match.params.step) {
       this.populateStep(this.props.match.params.step);
     }
@@ -83,7 +91,9 @@ class OnboardPage extends React.Component {
   }
 
   render() {
-    const {inOnboarding, stepNumber, editMode} = this.state;
+    const {inOnboarding, stepNumber, editMode, renderComponent} = this.state;
+
+    if(!renderComponent) return null;
 
     if(!inOnboarding) {
       return (
