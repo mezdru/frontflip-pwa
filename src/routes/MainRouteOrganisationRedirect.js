@@ -184,8 +184,6 @@ class MainRouteOrganisationRedirect extends React.Component {
         return (<Redirect to={redirectTo} />);
       }
     }
-    console.log(this.props.userStore.values.currentUser.email.value)
-
     
     if (renderComponent && isAuth) {
       if(this.props.hashtagsFilter && this.props.match.params && this.props.match.params.action &&  (this.props.match.params.action === 'add' || this.props.match.params.action === 'filter' ) )
