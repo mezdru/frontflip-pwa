@@ -16,7 +16,7 @@ const styles = theme => ({
     color: 'white',
     '&:hover': {
       backgroundColor: theme.palette.primary.dark  + ' !important',
-      color: 'white'  + ' !important'
+      color: 'white !important'
     }
   },
   button: {

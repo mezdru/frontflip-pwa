@@ -158,7 +158,7 @@ class OnboardStepper extends React.Component {
     const { organisation, orgTag } = this.props.organisationStore.values;
     const {locale} = this.props.commonStore;
     const { activeStep, steps, canNext, showFeedback, redirectTo } = this.state;
-    let StepComponent = this.getStepComponent(steps, activeStep);
+    // let StepComponent = this.getStepComponent(steps, activeStep);
     let wantedUrl = '/' + locale + '/' + (organisation.tag || orgTag) + '/onboard/' + steps[activeStep].replace('#', '%23');
 
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
@@ -198,7 +198,7 @@ class OnboardStepper extends React.Component {
           style={{height: 'calc(100vh - 73px)'}}
           disabled={true}
           slideRenderer={(params) => {
-            const { index, key } = params;
+            const { index } = params;
             let StepComponent = this.getStepComponent(steps, index);
             return(
               <Grid item style={{ height: '100%' }} key={index} >

@@ -12,7 +12,6 @@ import { FormattedMessage } from 'react-intl';
 import { Add, Search } from '@material-ui/icons';
 
 import Wings from '../wing/Wing';
-import PeopleWingsImg from '../../../resources/images/people_with_wings.png';
 import ProfileService from '../../../services/profile.service';
 import SlackService from '../../../services/slack.service';
 
@@ -128,7 +127,7 @@ class AddWingPopup extends React.Component {
 
   render() {
     const {redirectTo, wingsPopulated} = this.state;
-    const {classes, wingsToAdd} = this.props;
+    const {classes} = this.props;
     const {organisation} = this.props.organisationStore.values;
 
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect to={redirectTo} />);

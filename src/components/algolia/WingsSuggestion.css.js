@@ -80,11 +80,17 @@ export const styles = theme => ({
     top:0,
     width: 16,
     height: '100%',
+    // eslint-disable-next-line
     backgroundImage: '-moz-linear-gradient(to right, '+theme.palette.primary.main+', rgba(0,0,0,0))',
+    // eslint-disable-next-line
     backgroundImage: '-webkit-gradient(to right, '+theme.palette.primary.main+', rgba(0,0,0,0))',
+    // eslint-disable-next-line
     backgroundImage: '-webkit-linear-gradient(to right, '+theme.palette.primary.main+', rgba(0,0,0,0))',
+    // eslint-disable-next-line
     backgroundImage: '-o-linear-gradient(to right, '+theme.palette.primary.main+', rgba(0,0,0,0))',
+    // eslint-disable-next-line
     backgroundImage: '-ms-linear-gradient(to right, '+theme.palette.primary.main+', rgba(0,0,0,0))',
+    // eslint-disable-next-line
     backgroundImage: 'linear-gradient(to right, '+theme.palette.primary.main+', rgba(0,0,0,0))',
     zIndex: 2,
   },

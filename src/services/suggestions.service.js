@@ -1,14 +1,8 @@
 import commonStore from '../stores/common.store';
 import recordStore from '../stores/record.store';
 import AlgoliaService from './algolia.service';
-import { observable, action, decorate } from 'mobx';
+import { observable, decorate } from 'mobx';
 
-
-/**
- * @warning The system of "this_user" is here because 5 WingsSuggestions component are created.
- *          The displayed one for "Wings" part of onboard is the first one (user index 0)
- *          The displayed one for "Featured Wings 1" is the index 4.
- */
 class SuggestionsService {
 
   constructor(){

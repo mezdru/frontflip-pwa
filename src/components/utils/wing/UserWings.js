@@ -51,7 +51,7 @@ class UserWings extends React.Component {
 
   render() {
     const {record} = this.props.recordStore.values;
-    const {classes, theme} = this.props;
+    const {theme} = this.props;
 
     if(!record) return null;
 
