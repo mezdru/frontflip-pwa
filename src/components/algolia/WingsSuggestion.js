@@ -25,6 +25,7 @@ class WingsSuggestions extends React.Component {
       scrollableClass: Math.floor(Math.random() * 99999),
       onlyViewport: true,
       offsetSuggestionsIndex: 0,
+      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
     };
   }
 
@@ -124,7 +125,6 @@ class WingsSuggestions extends React.Component {
 
   renderWingsList = (suggestions, classes, isEven) => {
     let suggestionsDisplayed = (isEven ? suggestions.even : suggestions.odd);
-    //console.log('sugg displayed (even?'+isEven+') : ' + suggestionsDisplayed.length)
     return (
       <ul className={classNames(classes.suggestionList, "scrollX")}>
       {suggestionsDisplayed && suggestionsDisplayed.map((hit, i) => {
