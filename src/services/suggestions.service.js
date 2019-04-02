@@ -37,6 +37,10 @@ class SuggestionsService {
     if (!wingsFamily) {
       await this.fetchSuggestions(null, true, 15);
       await this.fetchSuggestions(null, false, 10);
+      if(this._currentSuggestions.length < 10) {
+        await this.fetchPublicHashtags(10);
+      }
+
       this.populateSuggestionsData();
       let query = this.formatHashtagsQuery();
       if (query)
@@ -61,34 +65,42 @@ class SuggestionsService {
       }).catch();
   }
 
+  addHitsToSuggestions = (hits, nbHitToAdd) => {
+    let suggestions = this._currentSuggestions;
+    for (let i = 0; i < nbHitToAdd; i++) {
+
+      let suggestionToAdd = hits.splice(i, 1)[0];
+      if(!suggestionToAdd) continue;
+
+      suggestionToAdd.tag = suggestionToAdd.value || suggestionToAdd.tag;
+      if(suggestionToAdd && !this.isInSuggestions(suggestionToAdd.tag) && !this.isInUserWings(suggestionToAdd.tag)){
+        // console.log('>>>>>>>>> ADD >>>>>>>>>> '  + suggestionToAdd.tag)
+        suggestions.push(suggestionToAdd);
+        this._newSuggestions.push(suggestionToAdd);
+      } else if (suggestionToAdd && !this.isInUserWings(suggestionToAdd.tag)) {
+        this._newSuggestions.push(suggestionToAdd);
+      }
+      else i--;
+    }
+    return suggestions;
+  }
+
+  fetchPublicHashtags = (nbHitToAdd) => {
+    return AlgoliaService.fetchHashtags()
+    .then(content => {
+      if (!content.hits || content.hits.length === 0) return;
+      this._currentSuggestions = this.addHitsToSuggestions(this.removeUserWings(content.hits), nbHitToAdd);
+    }).catch((e) => { console.log(e) });
+  }
+
   /**
    * @description Fetch suggestions and add them to suggestions list thanks to Algolia
    */
   fetchSuggestions = (lastSelection, privateOnly, nbHitToAdd) => {
     return AlgoliaService.fetchFacetValues(lastSelection, privateOnly, 'type:person', null)
       .then(content => {
-        let suggestions = this._currentSuggestions;
-        content.facetHits = this.removeUserWings(content.facetHits);
-
-        for (let i = 0; i < nbHitToAdd; i++) {
-          if (content.facetHits.length === 0) break;
-
-          let suggestionToAdd = content.facetHits.splice(i, 1)[0];
-          if(!suggestionToAdd) continue;
-
-          suggestionToAdd.tag = suggestionToAdd.value;
-          suggestionToAdd.new = true;
-          if(suggestionToAdd && !this.isInSuggestions(suggestionToAdd.tag) && !this.isInUserWings(suggestionToAdd.tag)){
-            // console.log('>>>>>>>>> ADD >>>>>>>>>> '  + suggestionToAdd.tag)
-            suggestions.push(suggestionToAdd);
-            this._newSuggestions.push(suggestionToAdd);
-          } else if (suggestionToAdd && !this.isInUserWings(suggestionToAdd.tag)) {
-            this._newSuggestions.push(suggestionToAdd);
-          }
-          else i--;
-        }
-        this._currentSuggestions = suggestions;
-
+        if (!content.facetHits || content.facetHits.length === 0) return;
+        this._currentSuggestions = this.addHitsToSuggestions(this.removeUserWings(content.facetHits), nbHitToAdd);
       }).catch((e) => { console.log(e) });
   }
 
@@ -125,6 +137,9 @@ class SuggestionsService {
     await this.fetchSuggestions(null, true, 2, index);
     await this.fetchSuggestions(filters, false, 2, index);
     await this.fetchSuggestions(null, false, 1, index);
+    if(this._newSuggestions.length < 3) {
+      await this.fetchPublicHashtags(4);
+    }
 
     this.populateSuggestionsData(true);
     let query = this.formatHashtagsQuery();

@@ -57,6 +57,19 @@ class AlgoliaService {
     });
   }
 
+  fetchHashtags() {
+    if(!this.index) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      this.index.search({
+        facetFilters: ['type:hashtag'],
+        maxFacetHits: 40,
+      }, (err, res) => {
+        if(err) return resolve(res);
+        return resolve(res);
+      });
+    });
+  }
+
   makeFacetFilters(lastSelection, privateOnly) {
     let query = [];
     if(privateOnly) query.push('organisation:'+organisationStore.values.organisation._id);

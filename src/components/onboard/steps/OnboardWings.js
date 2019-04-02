@@ -40,6 +40,7 @@ class OnboardWings extends React.Component {
   handleAddWing = (e, element) => {
     if  (e) e.preventDefault();
     this.props.recordStore.setRecordTag(element.tag);
+    this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
     if(this.props.recordStore.values.record.hashtags.find(elt => elt.tag === element.tag)) return Promise.resolve();
     return this.props.recordStore.getRecordByTag()
     .then(hashtagRecord => {
@@ -47,7 +48,19 @@ class OnboardWings extends React.Component {
       record.hashtags.push(hashtagRecord);
       this.props.recordStore.setRecord(record);
       this.props.handleSave(['hashtags']);
-    }).catch(() => {});
+    }).catch(() => {
+      let newRecord= {
+        tag: element.tag,
+        name: element.name || (element.tag).substr(1)
+      };
+      this.props.recordStore.postRecord(newRecord)
+      .then((hashtagRecord) => {
+        let record = this.props.recordStore.values.record;
+        record.hashtags.push(hashtagRecord);
+        this.props.recordStore.setRecord(record);
+        this.props.handleSave(['hashtags']);
+      }).catch();
+    });
   }
 
   handleRemoveWing = (e, tag) => {
