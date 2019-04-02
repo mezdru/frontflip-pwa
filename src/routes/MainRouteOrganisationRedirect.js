@@ -173,7 +173,6 @@ class MainRouteOrganisationRedirect extends React.Component {
   resetRedirectTo() {
     this.setState({ redirectTo: null });
   }
-
   render() {
     const { redirectTo, renderComponent, invitationCode } = this.state;
     const { locale } = this.props.commonStore;
@@ -185,7 +184,6 @@ class MainRouteOrganisationRedirect extends React.Component {
         return (<Redirect to={redirectTo} />);
       }
     }
-
     
     if (renderComponent && isAuth) {
       if(this.props.hashtagsFilter && this.props.match.params && this.props.match.params.action &&  (this.props.match.params.action === 'add' || this.props.match.params.action === 'filter' ) )
@@ -203,6 +201,8 @@ class MainRouteOrganisationRedirect extends React.Component {
             {/* Main route with orgTag */}
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step?" component={OnboardPage} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit" component={(props) => <OnboardPage edit={true} {...props} />} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit/:recordId" component={(props) => <OnboardPage edit={true} {...props} />} />
+
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={SearchPage} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/:action?" component={SearchPage} />
           </Switch>

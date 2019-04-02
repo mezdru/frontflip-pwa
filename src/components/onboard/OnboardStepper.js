@@ -75,10 +75,14 @@ class OnboardStepper extends React.Component {
   }
 
   handleNext = () => {
-    if(this.props.edit) return this.setState({redirectTo: 
+    if(this.props.edit){ 
+      this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
+      this.props.recordStore.getRecordByUser().then().catch();
+      return this.setState({redirectTo: 
                         '/' + this.props.commonStore.locale + 
                         '/' + this.props.organisationStore.values.orgTag + 
                         '/' + this.props.recordStore.values.record.tag }, () => {this.forceUpdate()});
+    }
 
     this.initializeSuggestions(this.state.steps[this.state.activeStep+1]);
     
@@ -160,11 +164,10 @@ class OnboardStepper extends React.Component {
     const { activeStep, steps, canNext, showFeedback, redirectTo } = this.state;
     // let StepComponent = this.getStepComponent(steps, activeStep);
     let wantedUrl = '/' + locale + '/' + (organisation.tag || orgTag) + '/onboard/' + steps[activeStep].replace('#', '%23');
-
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
     return (
       <Grid style={{ height: '100vh' }} item>
-        { ( (window.location.pathname !== wantedUrl) && (window.location.pathname !== wantedUrl + '/edit') ) && (
+        { ( (window.location.pathname !== wantedUrl) && (window.location.pathname !== wantedUrl + '/edit') && !edit ) && (
           <Redirect to={wantedUrl} />
         )}
         <div style={{ width: '100%', background: '#2B2D3C', borderBottom: '1px solid rgba(0, 0, 0, 0.12)'}}>
