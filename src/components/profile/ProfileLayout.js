@@ -31,6 +31,7 @@ class ProfileLayout extends React.Component {
     if (!(this.props.userStore.values.currentUser && this.props.userStore.values.currentUser._id)) return false;
     if (this.props.userStore.values.currentUser.superadmin) return true;
     else if (this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.record === workingRecord.objectID)) return true;
+    else if (this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === workingRecord.organisation && orgAndRecord.admin)) return true;
     else return false;
   }
   

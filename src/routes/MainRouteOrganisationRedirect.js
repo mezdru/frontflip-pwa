@@ -173,7 +173,6 @@ class MainRouteOrganisationRedirect extends React.Component {
   resetRedirectTo() {
     this.setState({ redirectTo: null });
   }
-
   render() {
     const { redirectTo, renderComponent, invitationCode } = this.state;
     const { locale } = this.props.commonStore;
@@ -185,6 +184,7 @@ class MainRouteOrganisationRedirect extends React.Component {
         return (<Redirect to={redirectTo} />);
       }
     }
+    console.log(this.props.userStore.values.currentUser.email.value)
 
     
     if (renderComponent && isAuth) {
