@@ -37,6 +37,13 @@ class OnboardWings extends React.Component {
     }
   }
 
+  addAndSave = (hashtagRecord) => {
+    let record = this.props.recordStore.values.record;
+    record.hashtags.push(hashtagRecord);
+    this.props.recordStore.setRecord(record);
+    this.props.handleSave(['hashtags']);
+  }
+
   handleAddWing = (e, element) => {
     if  (e) e.preventDefault();
     this.props.recordStore.setRecordTag(element.tag);
@@ -44,10 +51,7 @@ class OnboardWings extends React.Component {
     if(this.props.recordStore.values.record.hashtags.find(elt => elt.tag === element.tag)) return Promise.resolve();
     return this.props.recordStore.getRecordByTag()
     .then(hashtagRecord => {
-      let record = this.props.recordStore.values.record;
-      record.hashtags.push(hashtagRecord);
-      this.props.recordStore.setRecord(record);
-      this.props.handleSave(['hashtags']);
+      this.addAndSave(hashtagRecord);
     }).catch(() => {
       let newRecord= {
         tag: element.tag,
@@ -55,10 +59,7 @@ class OnboardWings extends React.Component {
       };
       this.props.recordStore.postRecord(newRecord)
       .then((hashtagRecord) => {
-        let record = this.props.recordStore.values.record;
-        record.hashtags.push(hashtagRecord);
-        this.props.recordStore.setRecord(record);
-        this.props.handleSave(['hashtags']);
+        this.addAndSave(hashtagRecord);
       }).catch();
     });
   }
