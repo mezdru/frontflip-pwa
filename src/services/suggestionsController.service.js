@@ -48,7 +48,7 @@ class SuggestionsControllerService {
         this._currentSuggestions.all = SuggestionsService.getCurrentSuggestions();
         this.makeInitialSuggestionsList();
         this._observeUpdate = Math.random();
-        this.logData('in init suggestions');
+        // this.logData('in init suggestions');
       });
     });
   }
