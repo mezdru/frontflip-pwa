@@ -83,9 +83,7 @@ class OnboardPage extends React.Component {
   }
 
   render() {
-    const {record} = this.props.recordStore.values;
     const {inOnboarding, stepNumber, editMode} = this.state;
-    const {classes} = this.props;
 
     if(!inOnboarding) {
       return (

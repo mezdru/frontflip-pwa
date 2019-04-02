@@ -5,7 +5,6 @@ import {Clear} from '@material-ui/icons';
 import AddContactField from '../../utils/fields/AddContactField';
 import ProfileService from "../../../services/profile.service";
 import {FormattedMessage} from "react-intl";
-import { observe } from 'mobx';
 
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();

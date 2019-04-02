@@ -114,7 +114,7 @@ class OnboardWings extends React.Component {
   getFeaturedWings = () => this.props.organisationStore.values.organisation.featuredWingsFamily.filter(fam => fam.tag === this.props.activeStepLabel)[0];
 
   render() {
-    const {activeStepLabel, theme, classes} = this.props;
+    const {classes} = this.props;
     return (
         <Grid container direction="column" style={{height: 'calc(100vh - 73px)', background: 'white', overflow: 'hidden'}}>
           <Grid item style={{background: this.props.theme.palette.primary.main, maxWidth: '100%', position: 'relative', zIndex: 2,

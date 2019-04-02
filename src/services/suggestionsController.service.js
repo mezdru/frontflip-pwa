@@ -36,7 +36,7 @@ class SuggestionsControllerService {
       odd: [],
     };
 
-    this.logData('in reset');
+    // this.logData('in reset');
   }
 
   initSuggestions = (wingsFamily, algoliaKey) => {
@@ -48,7 +48,7 @@ class SuggestionsControllerService {
         this._currentSuggestions.all = SuggestionsService.getCurrentSuggestions();
         this.makeInitialSuggestionsList();
         this._observeUpdate = Math.random();
-        this.logData('in init suggestions');
+        // this.logData('in init suggestions');
       });
     });
   }
@@ -71,7 +71,7 @@ class SuggestionsControllerService {
       this.makeNewSuggestionsList();
 
       let counter = 0;
-      this._newSuggestions.all.map( (newS, i) => {
+      this._newSuggestions.all.forEach( (newS) => {
         let indexInCurrent = this._currentSuggestions.all.findIndex(sug => (sug.tag === newS.tag))
         if(indexInCurrent === -1){
           this._currentSuggestions.all.splice(indexRemoved + counter, 0, newS);
@@ -85,16 +85,16 @@ class SuggestionsControllerService {
           counter++;
         }
       });
-      // this._currentSuggestions.all.splice(index,0,this._newSuggestions.all);
       this.makeInitialSuggestionsList();
       this._observeUpdate = Math.random();
-      this.logData('in create new suggestions');
+      // this.logData('in create new suggestions');
     })
   }
 
   makeInitialSuggestionsList = () => {
     this._currentSuggestions.even = [];
     this._currentSuggestions.odd = [];
+    // eslint-disable-next-line
     this._currentSuggestions.all.map((suggestion, i) => {
       if(i%2 === 0) {
         this._currentSuggestions.even.push(suggestion);
@@ -107,6 +107,7 @@ class SuggestionsControllerService {
   makeNewSuggestionsList = () => {
     this._newSuggestions.even = [];
     this._newSuggestions.odd = [];
+    // eslint-disable-next-line
     this._newSuggestions.all.map((suggestion, i) => {
       if(i%2 === 0) {
         this._newSuggestions.even.push(suggestion);
@@ -117,7 +118,6 @@ class SuggestionsControllerService {
   }
 
   logData = (log) => {
-    return;
     console.log('--- --- --- ---')
     if(log) console.log(log);
     console.log('currentSuggestions all : ' + this._currentSuggestions.all.length);

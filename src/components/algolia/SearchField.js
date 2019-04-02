@@ -139,14 +139,6 @@ class SearchField extends React.Component {
     return await AlgoliaService.fetchOptions(inputValue, this.props.hashtagOnly, this.props.wingsFamily);
   }
 
-  // Handle input change (any change)
-  handleInputChange = (inputValue) => {
-    if ((!inputValue || inputValue === '') && (!this.state.selectedOption || this.state.selectedOption.length === 0)){
-      this.updateOptions(inputValue);
-    }
-    return inputValue;
-  }
-
   handleCreateOption = async (option) => {
     if (!this.props.hashtagOnly) {
       let arrayOfOption = this.state.selectedOption || [];
@@ -244,7 +236,6 @@ class SearchField extends React.Component {
         loadOptions={this.getOptions}
         placeholder={placeholder}
         onChange={this.handleChange}
-        onInputChange={this.handleInputChange}
         onCreateOption={this.handleCreateOption}
         components={{ MultiValueContainer, DropdownIndicator, Option }}
         isMulti={!this.props.hashtagOnly}
