@@ -54,12 +54,12 @@ class OnboardContacts extends React.Component {
     this.setState({links});
   }
   
-  deleteLink = (infoToBeDeleted) => {
+  deleteLink = (linkToRemove) => {
     this.props.recordStore.values.record.links = this.props.recordStore.values.record.links.filter(item => {
-      return item._id !== infoToBeDeleted
-    })
+      return !(item.type === linkToRemove.type && item.value === linkToRemove.value);
+    });
     
-    this.setState({links: this.props.recordStore.values.record.links});
+    this.setState({links: this.state.links.filter(item => !(item.type === linkToRemove.type && item.value === linkToRemove.value) )});
     this.props.handleSave(['links']);
   }
   
@@ -67,7 +67,7 @@ class OnboardContacts extends React.Component {
     this.props.recordStore.values.record.links.push(link);
     let links = this.state.links;
     links.push(link);
-    this.setState({links: links, newLinkIndex: this.props.recordStore.values.record.links.length-1});
+    this.setState({links: links, newLinkIndex: links.length-1});
   }
   
   getLinkByType = (typeWanted) => {
@@ -118,7 +118,6 @@ class OnboardContacts extends React.Component {
     const {links, newLinkIndex} = this.state;
     const {classes} = this.props;
     ProfileService.transformLinks(this.props.recordStore.values.record);
-
     return (
       <Grid container style={{minHeight: 'calc(100vh - 73px)', background: this.props.theme.palette.primary.main}} direction="column" alignItems="center">
         <Grid item xs={12} sm={8} md={6} lg={4} style={{width: '100%'}}>
@@ -145,12 +144,12 @@ class OnboardContacts extends React.Component {
                       pattern:this.setTypePattern(link.type),
                       startAdornment: (
                         <InputAdornment position="start" style={{fontSize: 24}}>
-                          <i className={"fa fa-" + link.icon}/>
+                          <i className={"fa fa-" + link.icon || link.type}/>
                         </InputAdornment>
                       ),
                       endAdornment: (
                         <IconButton position="end" onClick={() => {
-                          this.deleteLink(link._id)
+                          this.deleteLink(link)
                         }}>
                           <Clear fontSize="default"/>
                         </IconButton>
