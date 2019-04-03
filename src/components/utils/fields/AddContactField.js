@@ -16,7 +16,7 @@ const styles = theme => ({
   },
   button: {
     color: 'white',
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.secondary.main + '!important'
   },
   paper: {
     borderRadius: 30,
