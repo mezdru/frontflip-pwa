@@ -8,11 +8,10 @@ const styles = theme => ({
   root: {
     display: 'flex',
     zIndex: 1,
-    "& div[role=\"tooltip\"]": {
+    '& div[role="tooltip"]': {
       zIndex: 9999,
       alignItems: 'center',
       width: '100%',
-      textAlign: '-webkit-center',
     },
   },
   button: {
