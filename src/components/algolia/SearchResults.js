@@ -71,18 +71,34 @@ class SearchResults extends React.Component {
   
   handleShowMore = (e) => {
     this.setState({page: this.state.page+1, loadInProgress: true}, () => {
-      this.fetchHits(this.props.filter, this.props.query, null, this.state.page);
+      this.fetchHits(this.props.filters, this.props.query, null, this.state.page);
     });
+  }
+
+  shuffleArray = (array) => {
+    let arrayOut = [];
+    while(array.length !== 0) {
+      let randomIndex = Math.floor(Math.random() * array.length);
+      arrayOut.push(array[randomIndex]);
+      array.splice(randomIndex, 1);
+    }
+    return arrayOut;
   }
   
   
   render() {
     const {hits, loadInProgress, hideShowMore, hitsAlreadyDisplayed, showNoResult} = this.state;
-    const {addToFilters, handleDisplayProfile, classes, HitComponent} = this.props;
+    const {addToFilters, handleDisplayProfile, classes, HitComponent, filters, query} = this.props;
+    let hitsResult = hits;
+    if(filters === 'type:person') {
+      // The search results aren't filtered, we can randomize them.
+      hitsResult = this.shuffleArray(hitsResult);
+    }
+
     return (
       <div className={classes.hitList}>
         <ul>
-          {hits.map((hit, i) => {
+          {hitsResult.map((hit, i) => {
           return(
             <li key={i} style={{WebkitAnimationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s', animationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s'}}>
               <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
