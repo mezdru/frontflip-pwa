@@ -35,7 +35,11 @@ class OnboardPage extends React.Component {
   }
 
   componentDidMount() {
-    this.props.history.listen((location, action) => ReactGA.pageview(window.location.pathname));
+    this.props.history.listen((location, action) => {
+      ReactGA.pageview(window.location.pathname); console.log(location); 
+      // The react router dom params are updated async
+      setTimeout(() => this.populateStep(this.props.match.params.step), 10);
+    });
 
     this.setState({observer: observe(this.props.recordStore.values, 'record', (change) => {
       this.forceUpdate();
@@ -60,7 +64,7 @@ class OnboardPage extends React.Component {
   populateStep = (stepLabel) => {
     switch (stepLabel) {
       case 'intro':
-        this.setState({inOnboarding: true});
+        this.setState({stepNumber: 0, inOnboarding: true});
         break;
       case 'contacts':
         this.setState({stepNumber: 1, inOnboarding: true});
