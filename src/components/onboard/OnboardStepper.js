@@ -184,7 +184,7 @@ class OnboardStepper extends React.Component {
         if(record.links && record.links.length > 0) return true;
         return false;
       case 'firstWings':
-        if(record.hashtags && record.hashtags.length > 1) return true;
+        if(record.hashtags && record.hashtags.length > 0) return true;
         return false;
       case 'wings':
         if(record.hashtags && record.hashtags.length > 9) return true;
