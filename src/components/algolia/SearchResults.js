@@ -90,7 +90,7 @@ class SearchResults extends React.Component {
     const {hits, loadInProgress, hideShowMore, hitsAlreadyDisplayed, showNoResult} = this.state;
     const {addToFilters, handleDisplayProfile, classes, HitComponent, filters, query} = this.props;
     let hitsResult = hits;
-    if(filters === 'type:person') {
+    if( (filters === 'type:person') && !query) {
       // The search results aren't filtered, we can randomize them.
       hitsResult = this.shuffleArray(hitsResult);
     }
