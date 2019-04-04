@@ -88,9 +88,6 @@ class OnboardCongratulation extends React.Component {
             <img src={ColleagueImg} alt="Colleagues" className={classes.picture} />
             <Typography variant="h1" className={classes.title}>
               <FormattedMessage id="onboard.end.title" />
-              <Hidden xsDown>
-                <img src={ProfileService.getEmojiUrl('🎉')} alt="congratulation" className={classes.titleEmoji}/>
-              </Hidden>
             </Typography>
             <DialogContentText id="alert-dialog-slide-description">
               <Typography variant="h6" className={classes.text}>
