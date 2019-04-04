@@ -18,6 +18,7 @@ import LoaderFeedback from '../utils/buttons/LoaderFeedback';
 import SwipeableViews from 'react-swipeable-views';
 import { virtualize, bindKeyboard } from 'react-swipeable-views-utils';
 import {FormattedMessage} from "react-intl";
+import classNames from 'classnames';
 
 const VirtualizeSwipeableViews = bindKeyboard(virtualize(SwipeableViews));
 
@@ -38,6 +39,12 @@ const styles = theme => ({
     '&:first-child()': {
       width: 40,
     }
+  },
+  stepperButtonHighlighted: {
+    background: theme.palette.secondary.main,
+    '&:hover' : {
+      background: theme.palette.secondary.dark,
+    },
   }
 });
 
@@ -167,6 +174,26 @@ class OnboardStepper extends React.Component {
     else return <FormattedMessage id={'onboard.stepperNext'}/>
   }
 
+  shouldNextBeHighlighted = (activeStepLabel) => {
+    let record = this.props.recordStore.values.record;
+    switch (activeStepLabel) {
+      case 'intro':
+        if(record.intro && record.intro.length > 1 && record.name && record.name.length > 1) return true;
+        else return false;
+      case 'contacts':
+        if(record.links && record.links.length > 0) return true;
+        return false;
+      case 'firstWings':
+        if(record.hashtags && record.hashtags.length > 0) return true;
+        return false;
+      case 'wings':
+        if(record.hashtags && record.hashtags.length > 9) return true;
+        return false;
+      default:
+        return false;
+    }
+  }
+
   render() {
     const { theme, classes, edit } = this.props;
     const { organisation, orgTag } = this.props.organisationStore.values;
@@ -190,7 +217,8 @@ class OnboardStepper extends React.Component {
               style={{ maxWidth: '100%' }}
               className={classes.root}
               nextButton={
-                <Button size="small" onClick={this.handleNext} disabled={!canNext} className={classes.stepperButton} >
+                <Button size="small" onClick={this.handleNext} disabled={!canNext} 
+                        className={classNames(classes.stepperButton, (this.shouldNextBeHighlighted(steps[activeStep]) ? classes.stepperButtonHighlighted : null ))   } >
                   {this.getNextButtonText()}
                   {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
                 </Button>
