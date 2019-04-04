@@ -36,7 +36,7 @@ class OnboardPage extends React.Component {
 
   componentDidMount() {
     this.props.history.listen((location, action) => {
-      ReactGA.pageview(window.location.pathname); console.log(location); 
+      ReactGA.pageview(window.location.pathname);
       // The react router dom params are updated async
       setTimeout(() => this.populateStep(this.props.match.params.step), 10);
     });
