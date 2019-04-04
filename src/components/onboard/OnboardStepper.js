@@ -62,6 +62,12 @@ class OnboardStepper extends React.Component {
     this.initializeSuggestions(this.state.steps[this.state.activeStep]);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.initStep !== this.props.initStep) {
+      this.setState({activeStep: nextProps.initStep}, () => {this.forceUpdate()});
+    }
+  }
+
   /**
    * @description Make steps array thanks to organisation data
    */
@@ -205,7 +211,7 @@ class OnboardStepper extends React.Component {
     return (
       <Grid style={{ height: '100vh' }} item>
         { ( (window.location.pathname !== wantedUrl) && (window.location.pathname !== wantedUrl + '/edit') && !edit ) && (
-          <Redirect to={wantedUrl} />
+          <Redirect push to={wantedUrl} />
         )}
         <div style={{ width: '100%', background: '#2B2D3C', borderBottom: '1px solid rgba(0, 0, 0, 0.12)'}}>
           <Grid item xs={12} sm={8} md={6} lg={4} style={{ position: 'relative', left: 0, right: 0, margin: 'auto'}} >
