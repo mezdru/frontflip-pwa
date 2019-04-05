@@ -35,7 +35,7 @@
     "uploadcare-widget": "^3.7.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node server.js",
     "build": "sw-precache --root='build/' --config sw.config.js && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
