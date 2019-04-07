@@ -1,11 +1,12 @@
 import React from 'react'
 import {Grid, Button, CircularProgress, Typography, withStyles} from '@material-ui/core';
 import {FormattedMessage} from 'react-intl';
-import AlgoliaService from '../../services/algolia.service';
 import { inject, observer } from 'mobx-react';
 import { observe } from 'mobx';
 
 import chat from '../../resources/images/chat.png';
+import AlgoliaService from '../../services/algolia.service';
+import { shuffleArray } from '../../services/utils.service';
 
 const styles = theme => ({
   image: {
@@ -74,17 +75,6 @@ class SearchResults extends React.Component {
       this.fetchHits(this.props.filters, this.props.query, null, this.state.page);
     });
   }
-
-  shuffleArray = (array) => {
-    let arrayOut = [];
-    while(array.length !== 0) {
-      let randomIndex = Math.floor(Math.random() * array.length);
-      arrayOut.push(array[randomIndex]);
-      array.splice(randomIndex, 1);
-    }
-    return arrayOut;
-  }
-  
   
   render() {
     const {hits, loadInProgress, hideShowMore, hitsAlreadyDisplayed, showNoResult} = this.state;
@@ -92,7 +82,7 @@ class SearchResults extends React.Component {
     let hitsResult = hits;
     if( (filters === 'type:person') && !query) {
       // The search results aren't filtered, we can randomize them.
-      hitsResult = this.shuffleArray(hitsResult);
+      hitsResult = shuffleArray(hitsResult);
     }
 
     return (
