@@ -105,11 +105,11 @@ class OnboardPage extends React.Component {
       );
     } else {
       return (
-        <div>
+        <React.Fragment>
           <main>
             <OnboardStepper initStep={stepNumber} SuggestionsController={SuggestionsController} edit={editMode} />
           </main>
-        </div>
+        </React.Fragment>
       );
     }
   }

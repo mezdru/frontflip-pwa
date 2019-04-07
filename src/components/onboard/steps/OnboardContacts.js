@@ -9,7 +9,7 @@ import {FormattedMessage} from "react-intl";
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 
-const styles = theme => ({
+const styles = {
   link: {
     animation: 'linkPop ease 1s',
     animationFillMode: 'forwards',
@@ -20,8 +20,21 @@ const styles = theme => ({
   },
   defaultLink: {
     width: '100%',
-  }
-});
+  },
+  root: {
+    display: 'flex',
+    zIndex: 1,
+    width: '100%',
+    padding: 8,
+    position:'relative',
+    transition: 'all 250ms',
+    '& div[role="tooltip"]': {
+      width: '100%',
+      position:'relative!important',
+      transform: 'translate3d(0px, -60px, 0px)!important'
+    },
+  },
+};
 
 
 class OnboardContacts extends React.Component {
@@ -36,7 +49,6 @@ class OnboardContacts extends React.Component {
   
   componentDidMount() {
     this.setDefaultLinks();
-
     // observe(this.props.recordStore.values, 'record', (change) => {
     //   this.setState({links: this.props.recordStore.values.record.links}, () => {
     //     this.forceUpdate();
@@ -68,7 +80,7 @@ class OnboardContacts extends React.Component {
     links.push(link);
     this.setState({links: links, newLinkIndex: links.length-1});
   }
-  
+
   getLinkByType = (typeWanted) => {
     return (this.props.recordStore.values.record.links.find(link => link.type === typeWanted));
   }
@@ -120,11 +132,9 @@ class OnboardContacts extends React.Component {
     return (
       <Grid container style={{minHeight: 'calc(100vh - 73px)', background: this.props.theme.palette.primary.main}} direction="column" alignItems="center">
         <Grid item xs={12} sm={8} md={6} lg={4} style={{width: '100%'}}>
-          <Grid item style={{padding: 8}}>
-            <Typography variant="h4" style={{textAlign: 'center', padding: 8, color:this.props.theme.palette.primary.dark}}>
+            <Typography variant="h4" style={{textAlign: 'center', padding: 16, color:this.props.theme.palette.primary.dark}}>
               <FormattedMessage id={'onboard.yourContact'}/>
             </Typography>
-          </Grid>
             {links && links.map((link, i) => {
               link.value = entities.decode(link.value);
               return (
@@ -158,7 +168,7 @@ class OnboardContacts extends React.Component {
                 </Grid>
               )
             })}
-            <Grid item style={{width: '100%', padding: 8}}>
+            <Grid container item className={classes.root}>
               <AddContactField parent={this} handleSave={this.props.handleSave} addLink={this.addLink} capitalize={this.capitalize}/>
             </Grid>
         </Grid>
