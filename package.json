@@ -21,6 +21,7 @@
     "react-https-redirect": "^1.1.0",
     "react-instantsearch-dom": "^5.4.0",
     "react-intl": "^2.8.0",
+    "react-linkedin-sdk": "^1.0.12",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.8",
     "react-select": "^2.4.2",

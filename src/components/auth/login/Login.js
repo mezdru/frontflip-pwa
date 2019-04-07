@@ -7,6 +7,7 @@ import {Button, CircularProgress, Grid, TextField, Typography} from '@material-u
 import GoogleButton from "../../utils/buttons/GoogleButton";
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import ReactGA from 'react-ga';
+import LinkedinAuth from '../LinkedinAuth';
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class Login extends React.Component {
@@ -77,6 +78,7 @@ class Login extends React.Component {
             )}
             <Grid item>
               <GoogleButton fullWidth={true} onClick={this.props.handleGoogleAuth} id={"Sign in with Google"} />
+              <LinkedinAuth />
             </Grid>
             <Grid item>
               <Typography style={{
