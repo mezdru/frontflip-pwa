@@ -74,8 +74,8 @@ function registerValidSW(swUrl, config) {
               // content until all client tabs are closed.
 
               // show notification
-              const event = new Event("newContentAvailable");
-              window.dispatchEvent(event);
+              // const event = new Event("newContentAvailable");
+              // window.dispatchEvent(event);
 
               console.log(
                 'New content is available and will be used when all ' +

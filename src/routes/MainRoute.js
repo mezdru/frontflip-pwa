@@ -3,7 +3,6 @@ import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import MainRouteOrganisation from './MainRouteOrganisation';
 import { inject, observer } from 'mobx-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import ReloadModal from '../components/utils/reloader/ReloadModal';
 
 class MainRoute extends React.Component {
 
@@ -39,7 +38,6 @@ class MainRoute extends React.Component {
     if (renderComponent) {
       return (
         <div>
-          <ReloadModal />
           <Switch>
             <Route path="/:locale(en|fr|en-UK)" component={MainRouteOrganisation} />
             <Redirect from="*" to={"/" + (locale ? locale : 'en') + endUrl} />
@@ -49,7 +47,6 @@ class MainRoute extends React.Component {
     } else {
       return (
         <div>
-          <ReloadModal/>
           <div style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', textAlign: 'center', width: '100%' }}>
             <CircularProgress color='secondary' />
           </div>
