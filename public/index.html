@@ -157,7 +157,7 @@
   <noscript>
     You need to enable JavaScript to run this app.
   </noscript>
-  <div id="root2">
+  <div id="root">
   </div>
 
   <div id="errorMessage">
@@ -171,7 +171,7 @@
   <script>
     console.log('DOM is loaded.');
     setTimeout(function() {
-      var root = document.getElementById("root2");
+      var root = document.getElementById("root");
       var rootChildren = root.childElementCount; 
       if(rootChildren === 0) {
         // add error
