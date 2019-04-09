@@ -8,7 +8,7 @@ import GoogleButton from "../../utils/buttons/GoogleButton";
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import ReactGA from 'react-ga';
 
-import { version } from '../../package.json'
+import { version } from '../../../../package.json'
 import LogRocket from 'logrocket';
 
 LogRocket.init(process.env.REACT_APP_LOGROCKET, {
