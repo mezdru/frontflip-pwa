@@ -8,7 +8,7 @@ const styles = theme => ({
     display: 'flex',
     borderRadius: 30,
     zIndex: 1,
-    position: 'fixed',
+    position: 'relative',
   },
   button: {
     position: 'fixed',
