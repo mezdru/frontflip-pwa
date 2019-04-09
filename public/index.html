@@ -157,21 +157,21 @@
   <noscript>
     You need to enable JavaScript to run this app.
   </noscript>
-  <div id="root">
+  <div id="root2">
   </div>
 
   <div id="errorMessage">
     <img src="%PUBLIC_URL%/wingzy_512.png" alt="emoji" width="250" height="250" />
     <h1>Welcome to Wingzy!</h1>
-    <p>We are sorry, the app tooks longer than expected to load...</p>
-    <a href="mailto:contact@wingzy.com">If the problem persists, contact us.</a><br/>
+    <p>We are sorry, the application may take too much time loading...</p>
+    <a href="mailto:contact@wingzy.com">If the problem persists, please contact us.</a><br/>
     <img src="https://portal.ehawaii.gov/assets/images/loading.gif" alt="loader gif" width="50" height="50"/>
   </div>
 
   <script>
     console.log('DOM is loaded.');
     setTimeout(function() {
-      var root = document.getElementById("root");
+      var root = document.getElementById("root2");
       var rootChildren = root.childElementCount; 
       if(rootChildren === 0) {
         // add error
