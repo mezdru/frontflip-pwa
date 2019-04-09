@@ -7,6 +7,13 @@ import {Button, CircularProgress, Grid, TextField, Typography} from '@material-u
 import GoogleButton from "../../utils/buttons/GoogleButton";
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import ReactGA from 'react-ga';
+
+import { version } from '../../../../package.json'
+import LogRocket from 'logrocket';
+
+LogRocket.init(process.env.REACT_APP_LOGROCKET, {
+  release: version,
+});
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class Login extends React.Component {
@@ -35,6 +42,7 @@ class Login extends React.Component {
       .then((response) => {
         if (response === 200) {
           ReactGA.event({category: 'User',action: 'Login with password'});
+          LogRocket.log('User login with password.');
           this.setState({ redirectTo: '/' + this.state.locale + (this.props.organisationStore.values.orgTag ? '/' + this.props.organisationStore.values.orgTag : '') });
         } else {
           this.setState({ loginErrors: this.props.intl.formatMessage({ id: 'signin.error.generic' }) });
