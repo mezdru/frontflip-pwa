@@ -2,13 +2,7 @@ import { observable, action, decorate } from 'mobx';
 import agent from '../agent';
 import recordStore from './record.store';
 import organisationStore from './organisation.store';
-
-import { version } from '../../package.json'
 import LogRocket from 'logrocket';
-
-LogRocket.init(process.env.REACT_APP_LOGROCKET, {
-  release: version,
-});
 
 class UserStore {
 

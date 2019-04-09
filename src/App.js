@@ -4,6 +4,18 @@ import MainRoute from './routes/MainRoute';
 import './components/header/header.css';
 import { SnackbarProvider } from 'notistack';
 
+import { version } from '../package.json'
+import LogRocket from 'logrocket';
+import setupLogRocketReact from 'logrocket-react';
+
+if(process.env.NODE_ENV !== 'development') {
+  LogRocket.init(process.env.REACT_APP_LOGROCKET, {
+    release: version,
+  });
+  setupLogRocketReact(LogRocket);
+}
+
+
 class App extends Component {
 
   render() {
