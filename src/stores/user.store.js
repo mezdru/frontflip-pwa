@@ -5,7 +5,7 @@ import organisationStore from './organisation.store';
 
 import { version } from '../../package.json'
 import LogRocket from 'logrocket';
-LogRocket.init('iqwaaj/wingzy');
+LogRocket.init(process.env.REACT_APP_LOGROCKET);
 
 class UserStore {
 
