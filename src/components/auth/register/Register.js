@@ -7,6 +7,8 @@ import GoogleButton from "../../utils/buttons/GoogleButton";
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import commonStore from '../../../stores/common.store';
 import ReactGA from 'react-ga';
+import LogRocket from 'logrocket';
+
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class Register extends React.Component {
@@ -34,6 +36,7 @@ class Register extends React.Component {
     this.props.authStore.register()
       .then(() => {
         ReactGA.event({category: 'User',action: 'Register with password'});
+        LogRocket.info('User register with password.');
         if (this.props.organisationStore.values.orgTag) {
           this.props.authStore.registerToOrg()
             .then(() => {
