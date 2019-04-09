@@ -1,14 +1,14 @@
 import React from 'react'
 import {inject, observer} from "mobx-react";
+import {FormattedMessage} from "react-intl";
+
 import {withStyles, Grid, TextField, InputAdornment, IconButton, Typography} from '@material-ui/core';
 import {Clear} from '@material-ui/icons';
 import AddContactField from '../../utils/fields/AddContactField';
 import ProfileService from "../../../services/profile.service";
-import {FormattedMessage} from "react-intl";
 
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
-
 const styles = {
   link: {
     animation: 'linkPop ease 1s',
@@ -36,7 +36,6 @@ const styles = {
   },
 };
 
-
 class OnboardContacts extends React.Component {
   constructor(props) {
     super(props);
@@ -44,7 +43,6 @@ class OnboardContacts extends React.Component {
       links: this.props.recordStore.values.record.links || [],
       newLinkIndex: null,
     }
-
   }
   
   componentDidMount() {
@@ -69,16 +67,18 @@ class OnboardContacts extends React.Component {
     this.props.recordStore.values.record.links = this.props.recordStore.values.record.links.filter(item => {
       return !(item.type === linkToRemove.type && item.value === linkToRemove.value);
     });
-    
     this.setState({links: this.state.links.filter(item => !(item.type === linkToRemove.type && item.value === linkToRemove.value) )});
     this.props.handleSave(['links']);
   }
   
   addLink = (link) => {
-    this.props.recordStore.values.record.links.push(link);
+    // this.props.recordStore.values.record.links.push(link);
     let links = this.state.links;
-    links.push(link);
-    this.setState({links: links, newLinkIndex: links.length-1});
+    links.push(link)
+    console.log('addLink:' + JSON.stringify(links))
+    let length = (l) => { return l-1}
+    let linkIndex = length(links.length)
+    this.setState({links: links, newLinkIndex: linkIndex});
   }
 
   getLinkByType = (typeWanted) => {
@@ -93,17 +93,6 @@ class OnboardContacts extends React.Component {
         return type = 'tel';
       default:
         return type = 'text';
-    }
-  }
-  
-  setTypePattern = (pattern) => {
-    switch (pattern) {
-      case 'email':
-        return pattern = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$";
-      case 'phone':
-        return pattern = '/^(\\([0-9]{10}\\)/';
-      default:
-        return pattern = 'text';
     }
   }
   
@@ -128,7 +117,7 @@ class OnboardContacts extends React.Component {
   render() {
     const {links, newLinkIndex} = this.state;
     const {classes} = this.props;
-    ProfileService.transformLinks(this.props.recordStore.values.record);
+  
     return (
       <Grid container style={{minHeight: 'calc(100vh - 73px)', background: this.props.theme.palette.primary.main}} direction="column" alignItems="center">
         <Grid item xs={12} sm={8} md={6} lg={4} style={{width: '100%'}}>
@@ -136,6 +125,7 @@ class OnboardContacts extends React.Component {
               <FormattedMessage id={'onboard.yourContact'}/>
             </Typography>
             {links && links.map((link, i) => {
+              ProfileService.makeLinkIcon(link);
               link.value = entities.decode(link.value);
               return (
                 <Grid item key={i} style={{padding: 8}}>
@@ -143,14 +133,12 @@ class OnboardContacts extends React.Component {
                     className={( (newLinkIndex && i === newLinkIndex) ?  classes.link : classes.defaultLink)}
                     label={this.capitalize(link.type)}
                     type={this.setTypeInput(link.type)}
-                    pattern={this.setTypePattern(link.type)}
                     variant={"outlined"}
                     value={link.value}
                     onChange={(e) => this.handleLinksChange(e, link, i)}
                     onBlur={() => this.props.handleSave(['links'])}
                     placeholder={this.capitalize(link.type)}
                     InputProps={{
-                      pattern:this.setTypePattern(link.type),
                       startAdornment: (
                         <InputAdornment position="start" style={{fontSize: 24}}>
                           <i className={"fa fa-" + link.icon || link.type}/>
