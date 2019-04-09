@@ -157,21 +157,21 @@
   <noscript>
     You need to enable JavaScript to run this app.
   </noscript>
-  <div id="root2">
+  <div id="root">
   </div>
 
   <div id="errorMessage">
-    <img src="%PUBLIC_URL%/wingzy_512.png" alt="emoji" width="250" height="250" />
-    <h1>Welcome to Wingzy!</h1>
-    <p>We are sorry, the application may take too much time loading...</p>
-    <a href="mailto:contact@wingzy.com">If the problem persists, please contact us.</a><br/>
+    <img src="https://wingzy.com/wingzy_full_320.png" alt="Wingzy" />
+    <!-- <h1>Wingzy</h1> -->
+    <p>If the app does not work, please clear your cache and reload this page.<br/>
+    <a href="mailto:contact@wingzy.com">Contact us</a> if the problem persists.</p>
     <img src="https://portal.ehawaii.gov/assets/images/loading.gif" alt="loader gif" width="50" height="50"/>
   </div>
 
   <script>
     console.log('DOM is loaded.');
     setTimeout(function() {
-      var root = document.getElementById("root2");
+      var root = document.getElementById("root");
       var rootChildren = root.childElementCount; 
       if(rootChildren === 0) {
         // add error
@@ -192,7 +192,7 @@
       text-align: center;
       display: none;
     }
-    #errorMessage h1, #errorMessage p, #errorMessage img, #errorMessage a {
+    #errorMessage h1, #errorMessage p, #errorMessage img {
       margin: 16px;
     }
   </style>
