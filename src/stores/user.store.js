@@ -3,6 +3,10 @@ import agent from '../agent';
 import recordStore from './record.store';
 import organisationStore from './organisation.store';
 
+import { version } from '../../package.json'
+import LogRocket from 'logrocket';
+LogRocket.init('iqwaaj/wingzy');
+
 class UserStore {
 
   inProgress = false;
@@ -23,6 +27,13 @@ class UserStore {
       .then(data => {
         this.values.currentUser = (data ? data.user : {});
         this.syncRecord();
+
+        // Identify user for LogRocket
+        LogRocket.identify(this.values.currentUser._id, {   
+          env: process.env.NODE_ENV,
+          version: version
+        });
+
         return this.values.currentUser;
       })
       .catch(action((err) => {
