@@ -5,7 +5,10 @@ import organisationStore from './organisation.store';
 
 import { version } from '../../package.json'
 import LogRocket from 'logrocket';
-LogRocket.init(process.env.REACT_APP_LOGROCKET);
+
+LogRocket.init(process.env.REACT_APP_LOGROCKET, {
+  release: version,
+});
 
 class UserStore {
 
@@ -31,7 +34,6 @@ class UserStore {
         // Identify user for LogRocket
         LogRocket.identify(this.values.currentUser._id, {   
           env: process.env.NODE_ENV,
-          version: version
         });
 
         return this.values.currentUser;
