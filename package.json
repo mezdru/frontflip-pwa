@@ -7,6 +7,7 @@
     "@material-ui/icons": "^3.0.2",
     "algoliasearch": "^3.32.0",
     "core-js": "^2.6.5",
+    "env-cmd": "^8.0.2",
     "html-entities": "^1.2.1",
     "logrocket": "^0.6.20",
     "logrocket-react": "^3.0.0",
@@ -33,7 +34,9 @@
     "uploadcare-widget": "^3.7.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "env-cmd .env.dev react-scripts start",
+    "build:staging": "env-cmd .env.staging react-scripts build && workbox generateSW workbox.config.js",
+    "build:production": "env-cmd .env.production react-scripts build && workbox generateSW workbox.config.js",
     "build": "react-scripts build && workbox generateSW workbox.config.js",
     "build-prod": "npm version patch && react-scripts build && workbox generateSW workbox.config.js",
     "test": "react-scripts test",
