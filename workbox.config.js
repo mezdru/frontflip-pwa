@@ -39,11 +39,12 @@ module.exports = {
           cacheName: 'images',
           cacheableResponse: {
             statuses: [0, 200]
-          }
+          },
+          expiration: {
+            maxEntries: 100,
+          },
         },
-        expiration: {
-          maxEntries: 100,
-        },
+
       }
   ]
 };
