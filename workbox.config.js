@@ -31,6 +31,19 @@ module.exports = {
             maxEntries: 50,
           },
         },
+      },
+      {
+        urlPattern: new RegExp('^https://ucarecdn\.com/'),
+        handler: 'CacheFirst',
+        options: {
+          cacheName: 'images',
+          cacheableResponse: {
+            statuses: [0, 200]
+          }
+        },
+        expiration: {
+          maxEntries: 100,
+        },
       }
   ]
 };
