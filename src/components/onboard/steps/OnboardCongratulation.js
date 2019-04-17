@@ -6,12 +6,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Slide from '@material-ui/core/Slide';
 import { Redirect } from 'react-router-dom';
-import { withStyles, Typography, Hidden } from '@material-ui/core';
+import { withStyles, Typography } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { FormattedMessage } from 'react-intl';
 
 import ColleagueImg from '../../../resources/images/colleagues.png';
-import ProfileService from '../../../services/profile.service';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;

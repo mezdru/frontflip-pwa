@@ -1,5 +1,5 @@
 // Example of Constants which can be declared here.
-const someCommonValues = ['common', 'values'];
+// const someCommonValues = ['common', 'values'];
 
 /**
  * @description Randomize the order of elements in an array.
