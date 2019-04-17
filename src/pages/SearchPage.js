@@ -9,15 +9,17 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Header from '../components/header/Header';
 import { styles } from './SearchPage.css';
 import ProfileLayout from "../components/profile/ProfileLayout";
-import OnboardCongratulation from '../components/onboard/steps/OnboardCongratulation';
-import PromptIOsInstall from '../components/utils/prompt/PromptIOsInstall';
-import AddWingPopup from '../components/utils/addWing/AddWingPopup';
 
 const Banner = React.lazy(() => import('../components/utils/banner/Banner'));
 const SearchField = React.lazy(() => import('../components/algolia/SearchField'));
 const SearchSuggestions = React.lazy(() => import('../components/algolia/SearchSuggestions'));
 const SearchResults = React.lazy(() => import('../components/algolia/SearchResults'));
 const Card = React.lazy(() => import('../components/card/CardProfile'));
+
+const AddWingPopup = React.lazy(() => import('../components/utils/addWing/AddWingPopup'));
+const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
+const OnboardCongratulation = React.lazy(() => import('../components/onboard/steps/OnboardCongratulation'));
+
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
@@ -191,18 +193,23 @@ class SearchPage extends React.Component {
               <ProfileLayout hit={displayedHit} addToFilters={this.addToFilters} className={classes.profileContainer}
                 handleReturnToSearch={this.handleReturnToSearch} />
             )}
-
           </Grid>
 
           {showCongratulation && (
-            <OnboardCongratulation isOpen={showCongratulation} />
+            <Suspense fallback={<CircularProgress color='secondary' />}>
+              <OnboardCongratulation isOpen={showCongratulation} />
+            </Suspense>
           )}
 
           {hashtagsFilter.length > 0 && (actionInQueue === 'add') && (
-            <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} />
+            <Suspense fallback={<CircularProgress color='secondary' />}>
+              <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} />
+            </Suspense>
           )}
         </main>
-        <PromptIOsInstall />
+        <Suspense fallback={<div></div>}>
+          <PromptIOsInstall />
+        </Suspense>
       </div>
     );
   }
