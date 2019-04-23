@@ -1,16 +1,21 @@
 import React from "react";
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
-import UrlService from '../services/url.service';
-import AuthPage from '../pages/auth/AuthPage';
-import PasswordForgot from "../pages/auth/PasswordForgot";
-import PasswordReset from "../pages/auth/PasswordReset";
+import ReactGA from 'react-ga';
 import { inject, observer } from 'mobx-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
+
 import EmailService from '../services/email.service';
-import SearchPage from "../pages/SearchPage";
 import SlackService from '../services/slack.service';
-import ReactGA from 'react-ga';
-import OnboardPage from "../pages/OnboardPage";
+import UrlService from '../services/url.service';
+
+const PasswordReset = React.lazy(() => import('../pages/auth/PasswordReset'));
+const PasswordForgot = React.lazy(() => import('../pages/auth/PasswordForgot'));
+const SearchPage = React.lazy(() => import('../pages/SearchPage'));
+const AuthPage = React.lazy(() => import('../pages/auth/AuthPage'));
+const OnboardPage = React.lazy(() => import('../pages/OnboardPage'));
+
+console.debug('Load MainRouteOrganisationRedirect.');
+
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 class MainRouteOrganisationRedirect extends React.Component {
@@ -29,6 +34,14 @@ class MainRouteOrganisationRedirect extends React.Component {
     if(this.props.hashtagsFilter && this.props.match.params && this.props.match.params.action &&  (this.props.match.params.action === 'add' || this.props.match.params.action === 'filter' ) ) {
       this.persistWingToAdd((this.props.match.params.action));
     }
+  }
+
+  WaitingComponent(Component, additionnalProps) {
+    return props => (
+      <React.Suspense fallback={<CircularProgress color='secondary' />}>
+        <Component {...props} {...additionnalProps} />
+      </React.Suspense>
+    );
   }
 
   componentWillReceiveProps(props) {
@@ -191,20 +204,20 @@ class MainRouteOrganisationRedirect extends React.Component {
       return (
         <div>
           <Switch>
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={PasswordForgot} />
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={PasswordReset} />
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/create/:token/:hash/:email" component={PasswordReset} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={AuthPage} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={() => { return <AuthPage initialTab={1} /> }} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={this.WaitingComponent(PasswordForgot)} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={this.WaitingComponent(PasswordReset)} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/create/:token/:hash/:email" component={this.WaitingComponent(PasswordReset)} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={this.WaitingComponent(AuthPage)} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={this.WaitingComponent(AuthPage, {initialTab: 1})} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={this.WaitingComponent(AuthPage)} />
 
             {/* Main route with orgTag */}
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step?" component={OnboardPage} />
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit" component={(props) => <OnboardPage edit={true} {...props} />} />
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit/:recordId" component={(props) => <OnboardPage edit={true} {...props} />} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step?" component={this.WaitingComponent(OnboardPage)} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit" component={this.WaitingComponent(OnboardPage, {edit: true})} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit/:recordId" component={this.WaitingComponent(OnboardPage, {edit: true})} />
 
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={SearchPage} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/:action?" component={SearchPage} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={this.WaitingComponent(SearchPage)} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/:action?" component={this.WaitingComponent(SearchPage)} />
           </Switch>
         </div>
       );
@@ -212,19 +225,19 @@ class MainRouteOrganisationRedirect extends React.Component {
       return (
         <div>
           <Switch>
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={PasswordForgot} />
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={PasswordReset} />
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/create/:token/:hash/:email" component={PasswordReset} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={AuthPage} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={() => { return <AuthPage initialTab={1} /> }} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={this.WaitingComponent(PasswordForgot)} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={this.WaitingComponent(PasswordReset)} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/create/:token/:hash/:email" component={this.WaitingComponent(PasswordReset)} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={this.WaitingComponent(AuthPage)} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={this.WaitingComponent(AuthPage, {initialTab: 1})} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={this.WaitingComponent(AuthPage)} />
 
             {/* Main route with orgTag */}
             {organisation && organisation.public && (
-              <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag" component={SearchPage} />
+              <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag" component={this.WaitingComponent(SearchPage)} />
             )}
             {organisation && organisation.public && (
-              <Route exact path="/:locale(en|fr|en-UK)/:organisationTag" component={SearchPage} />
+              <Route exact path="/:locale(en|fr|en-UK)/:organisationTag" component={this.WaitingComponent(SearchPage)} />
             )}
 
             <Redirect to={'/' + locale + (orgTag ? '/' + orgTag : '') + '/signin' + (invitationCode ? '/' + invitationCode : '') +  window.location.search} />

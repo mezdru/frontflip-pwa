@@ -6,6 +6,9 @@ import OnboardStepper from '../components/onboard/OnboardStepper';
 import { withStyles } from '@material-ui/core';
 import SuggestionsController from '../services/suggestionsController.service';
 import ReactGA from 'react-ga';
+
+console.debug('Load OnboardPage.');
+
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 const styles = {

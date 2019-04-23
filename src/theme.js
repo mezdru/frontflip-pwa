@@ -270,6 +270,14 @@ export default createMuiTheme({
         transform: 'scale(1.5)',
         backgroundColor: palette.secondary.main
       }
+    },
+    MuiCircularProgress: {
+      root: {
+        position: 'absolute',
+        left:0,
+        right:0,
+        margin: 'auto',
+      }
     }
   },
   

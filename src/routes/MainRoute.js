@@ -1,8 +1,11 @@
 import React from "react";
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
-import MainRouteOrganisation from './MainRouteOrganisation';
 import { inject, observer } from 'mobx-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
+
+const MainRouteOrganisation = React.lazy(() => import('./MainRouteOrganisation'));
+
+console.debug('Load MainRoute.');
 
 class MainRoute extends React.Component {
 
@@ -16,6 +19,14 @@ class MainRoute extends React.Component {
 
     // Remove for the moment, this cookie will be usefull to persist filters if needed
     this.props.commonStore.removeCookie('searchFilters');
+  }
+
+  WaitingComponent(Component, additionnalProps) {
+    return props => (
+      <React.Suspense fallback={<CircularProgress color='secondary' />}>
+        <Component {...props} {...additionnalProps} />
+      </React.Suspense>
+    );
   }
 
   componentDidMount() {
@@ -39,7 +50,7 @@ class MainRoute extends React.Component {
       return (
         <div>
           <Switch>
-            <Route path="/:locale(en|fr|en-UK)" component={MainRouteOrganisation} />
+            <Route path="/:locale(en|fr|en-UK)" component={this.WaitingComponent(MainRouteOrganisation)} />
             <Redirect from="*" to={"/" + (locale ? locale : 'en') + endUrl} />
           </Switch>
         </div>
