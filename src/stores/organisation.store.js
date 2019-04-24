@@ -101,6 +101,7 @@ class OrganisationStore {
 
   getOrganisationForPublic() {
       if (!this.values.orgTag) return Promise.resolve();
+      if (this.values.organisation.tag === this.values.orgTag) return Promise.resolve(this.values.organisation);
 
       this.inProgress = true;
       this.errors = null;
