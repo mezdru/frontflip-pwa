@@ -7,6 +7,8 @@ import Banner from '../../components/utils/banner/Banner';
 import Header from '../../components/header/Header';
 import Logo from '../../components/utils/logo/Logo';
 
+console.debug('Loading AuthPage');
+
 const styles = {
   logo: {
     width: '6.6rem',

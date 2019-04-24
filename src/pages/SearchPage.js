@@ -20,6 +20,7 @@ const AddWingPopup = React.lazy(() => import('../components/utils/addWing/AddWin
 const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
 const OnboardCongratulation = React.lazy(() => import('../components/onboard/steps/OnboardCongratulation'));
 
+console.debug('Loading SearchPage');
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 

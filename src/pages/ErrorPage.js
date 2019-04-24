@@ -6,6 +6,9 @@ import { FormattedHTMLMessage } from 'react-intl';
 import ProfileService from '../services/profile.service';
 import UrlService from '../services/url.service';
 import ReactGA from 'react-ga';
+
+console.debug('Loading ErrorPage');
+
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 const styles = theme =>  ({
