@@ -148,7 +148,7 @@ class SearchPage extends React.Component {
     }
 
     return (
-      <div>
+      <React.Fragment>
 
         <Header handleDisplayProfile={this.handleDisplayProfile} />
         <main>
@@ -211,7 +211,7 @@ class SearchPage extends React.Component {
         <Suspense fallback={<div></div>}>
           <PromptIOsInstall />
         </Suspense>
-      </div>
+      </React.Fragment>
     );
   }
 }
