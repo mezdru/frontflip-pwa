@@ -45,6 +45,8 @@ class MainRouteOrganisationRedirect extends React.Component {
   }
 
   componentWillReceiveProps(props) {
+    console.log('router receives props')
+    console.log(props)
     if (props.history.action === 'PUSH' && ( (props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) || (!this.props.organisationStore.values.fullOrgFetch) ) ) {
       this.setState({ renderComponent: false }, () => {
         this.manageAccessRight().then(() => {
@@ -69,6 +71,7 @@ class MainRouteOrganisationRedirect extends React.Component {
   }
 
   componentDidMount() {
+    console.log('redirect did mound')
     this.manageAccessRight().then(() => {
       this.setState({ renderComponent: true });
     }).catch((err) => {
@@ -99,6 +102,7 @@ class MainRouteOrganisationRedirect extends React.Component {
    * @description Redirect user who is auth but hasn't access to current organisation
    */
   async redirectUserAuthWithoutAccess() {
+    console.log('here')
     if (this.props.userStore.values.currentUser.orgsAndRecords && this.props.userStore.values.currentUser.orgsAndRecords.length > 0) {
       let orgId = this.props.userStore.values.currentUser.orgsAndRecords[0].organisation;
       if(orgId) {
@@ -106,14 +110,32 @@ class MainRouteOrganisationRedirect extends React.Component {
         await this.props.organisationStore.getOrganisation()
         .then(organisation => {
           this.redirectUserAuthWithAccess(organisation, true);
-        }).catch(() => {return;})
+        }).catch((err) => {
+            if(err.status === 403 && err.response.body.message === 'Email not validated') {
+              EmailService.confirmLoginEmail(null);
+              this.setState({redirectTo: '/' + this.state.locale + '/error/' + err.status + '/email'});
+            } else {
+              ReactGA.event({category: 'Error',action: 'Redirect to error layout', value: 500});
+              SlackService.notifyError(err, '32', 'quentin', 'MainRouteOrganisationRedirect.js');
+              this.setState({redirectTo: '/' + this.state.locale + '/error/500/routes'});
+            }
+        })
       } else {
-        // Redirect to "create new Wingzy"
-        window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
-        await this.wait(3000);
+        this.redirectToValidateMailOrNewWingzy();
       }
     } else {
-      // Redirect to "create new Wingzy"
+      this.redirectToValidateMailOrNewWingzy();
+    }
+  }
+
+  redirectToValidateMailOrNewWingzy = async () => {
+    if( this.props.userStore.values.currentUser.email && 
+        this.props.userStore.values.currentUser.email.value && 
+        !this.props.userStore.values.currentUser.email.validated) {
+      EmailService.confirmLoginEmail(null);
+      this.setState({redirectTo: '/' + this.state.locale + '/error/403/email'});
+    } else {
+      console.log('will redirect to new presentation')
       window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
       await this.wait(3000);
     }

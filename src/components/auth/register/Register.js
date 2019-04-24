@@ -32,14 +32,18 @@ class Register extends React.Component {
   };
 
   handleSubmitForm = (e) => {
+    console.log('handle submit form')
     e.preventDefault();
     this.props.authStore.register()
       .then(() => {
         ReactGA.event({category: 'User',action: 'Register with password'});
         LogRocket.info('User register with password.');
+        console.log('register with password')
         if (this.props.organisationStore.values.orgTag) {
+          console.log('here3') 
           this.props.authStore.registerToOrg()
             .then(() => {
+              console.log('here4')
               ReactGA.event({category: 'User',action: 'Register to Organisation'});
               this.setState({ registerSuccess: true });
               this.setState({ registerSuccessMessage: this.props.intl.formatMessage({ id: 'signup.success' }) });
@@ -48,10 +52,12 @@ class Register extends React.Component {
               this.setState({ registerSuccessMessage: this.props.intl.formatMessage({ id: 'signup.warning.forbiddenOrg' }, { orgName: this.props.organisationStore.values.organisation.name }) });
             });
         } else {
+          console.log('here5')
           this.setState({ registerSuccessMessage: this.props.intl.formatMessage({ id: 'signup.success' }) });
           this.setState({ registerSuccess: true });
         }
       }).catch((err) => {
+        console.log('here6')
         let errorMessage;
         if (err.status === 422) {
           err.response.body.errors.forEach(error => {
