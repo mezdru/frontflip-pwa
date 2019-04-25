@@ -19,10 +19,9 @@ class UserStore {
   getCurrentUser() {
     this.inProgress = true;
     this.errors = null;
-
     return agent.User.getCurrent()
       .then(data => {
-        this.values.currentUser = (data ? data.user : {});
+        this.setCurrentUser(data.user);
         this.syncRecord();
 
         // Identify user for LogRocket

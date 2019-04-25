@@ -48,7 +48,7 @@ class AuthStore {
   isAuth() {
     if (commonStore.getAccessToken() || commonStore.getRefreshToken()) {
       return true;
-    } else {
+    } else {  
       return false;
     }
   }
@@ -67,9 +67,12 @@ class AuthStore {
           SlackService.notifyError(this.values.email + ' logged in with email and password.', '61', 'quentin', 'auth.store.js');
           commonStore.setAuthTokens(response);
           return userStore.getCurrentUser()
-            .then(() => { return 200; });
+            .then(() => { return 200; })
+            .catch((err) => { console.log(err);})
         }
-        else return 403;
+        else{
+          return 403;
+        }
       })
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.errors;

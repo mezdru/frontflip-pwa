@@ -22,15 +22,23 @@ const styles = {
 };
 
 class AuthPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      initialTabState: 0
+    };
+  }
+
   componentDidMount() {
     if (this.props.match && this.props.match.params && this.props.match.params.invitationCode) {
       this.props.authStore.setInvitationCode(this.props.match.params.invitationCode);
+      this.setState({initialTabState: 1});
     }
   }
   
   render() {
     const {classes, initialTab} = this.props;
-    
+    const {initialTabState} = this.state;
     return (
       <div>
         <Header />
@@ -43,7 +51,7 @@ class AuthPage extends React.Component {
               <Logo type={'organisation'} alt="org-logo" className={classes.logo} />
             </Grid>
             <Grid container item xs={12} sm={6} lg={4}>
-              <Auth initialTab={initialTab || 0} />
+              <Auth initialTab={initialTab || initialTabState} />
             </Grid>
           </Grid>
         </main>
