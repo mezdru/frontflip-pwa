@@ -83,7 +83,7 @@ class Auth extends React.Component {
               .catch(() => window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag));
           }).catch((err) => this.setState({redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag}));
         }).catch((err) => this.setState({redirectTo: '/' + this.state.locale}));
-    }).catch((err) => {console.log(err); return;});
+    }).catch((err) => { return;});
 
   }
 
