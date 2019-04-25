@@ -35,42 +35,68 @@ class Register extends React.Component {
     e.preventDefault();
     this.props.authStore.register()
       .then(() => {
+
         ReactGA.event({category: 'User',action: 'Register with password'});
         LogRocket.info('User register with password.');
+
         if (this.props.organisationStore.values.orgTag) {
+
           this.props.authStore.registerToOrg()
-            .then(() => {
+            .then((data) => {
+
               ReactGA.event({category: 'User',action: 'Register to Organisation'});
               this.setState({ registerSuccess: true });
               this.setState({ registerSuccessMessage: this.props.intl.formatMessage({ id: 'signup.success' }) });
+
             }).catch((err) => {
+
               this.setState({ registerSuccess: true });
               this.setState({ registerSuccessMessage: this.props.intl.formatMessage({ id: 'signup.warning.forbiddenOrg' }, { orgName: this.props.organisationStore.values.organisation.name }) });
+            
             });
         } else {
+
           this.setState({ registerSuccessMessage: this.props.intl.formatMessage({ id: 'signup.success' }) });
           this.setState({ registerSuccess: true });
+
         }
+
       }).catch((err) => {
+
         let errorMessage;
+
         if (err.status === 422) {
+
           err.response.body.errors.forEach(error => {
+
             if (error.param === 'password') {
+
               if (error.type === 'dumb') {
+
                 // (frequency over 100 000 passwords, 3 000 000 000 people use internet, 30 000 = 3 000 000 000 / 100 000)
                 errorMessage = (errorMessage ? errorMessage + '<br/>' : '') + this.props.intl.formatMessage({ id: 'signup.error.dumbPassword' }, { dumbCount: (parseInt(error.msg) * 30000).toLocaleString() });
+              
               } else {
+
                 errorMessage = (errorMessage ? errorMessage + '<br/>' : '') + this.props.intl.formatMessage({ id: 'signup.error.shortPassword' });
               }
+
             } else if (error.param === 'email') {
+
               errorMessage = (errorMessage ? errorMessage + '<br/>' : '') + this.props.intl.formatMessage({ id: 'signup.error.wrongEmail' });
+            
             }
           });
+
         } else if (err.status === 400 && err.response.body.message === 'User already exists.') {
+          
           errorMessage = this.props.intl.formatMessage({ id: 'signup.error.userExists' }, { forgotPasswordLink: '/' + this.state.locale + '/password/forgot' });
+        
         }
+
         if (!errorMessage) errorMessage = this.props.intl.formatMessage({ id: 'signup.error.generic' });
         this.setState({ registerErrors: errorMessage });
+      
       });
   };
 

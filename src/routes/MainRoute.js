@@ -22,6 +22,8 @@ class MainRoute extends React.Component {
     this.getUser();
   }
 
+
+
   async getUser() {
     if (this.props.authStore.isAuth()) {
       await this.props.userStore.getCurrentUser().catch(() => { return; });
@@ -33,6 +35,7 @@ class MainRoute extends React.Component {
     const { renderComponent, locale } = this.state;
     const endUrl = window.location.pathname + window.location.search;
     const { currentUser } = this.props.userStore.values;
+
     if (!currentUser && this.props.authStore.isAuth()) this.getUser();
 
     if (renderComponent) {

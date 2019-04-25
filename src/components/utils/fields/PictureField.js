@@ -41,6 +41,7 @@ class PictureField extends React.Component {
   }
 
   componentDidMount() {
+    console.log('picture field')
     this._ismounted = true;
   }
 

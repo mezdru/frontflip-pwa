@@ -10,9 +10,9 @@ import UrlService from '../services/url.service';
 import EmailService from '../services/email.service';
 import SearchPage from "../pages/SearchPage";
 import SlackService from '../services/slack.service';
+import AuthPage from '../pages/auth/AuthPage';
 
 const OnboardPage = React.lazy(() => import('../pages/OnboardPage'));
-const AuthPage = React.lazy(() => import('../pages/auth/AuthPage'));
 const PasswordForgot = React.lazy(() => import('../pages/auth/PasswordForgot'));
 const PasswordReset = React.lazy(() => import('../pages/auth/PasswordReset'));
 
@@ -27,7 +27,6 @@ class MainRouteOrganisationRedirect extends React.Component {
       redirectTo: null,
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
       renderComponent: false,
-      invitationCode: ((this.props.match.params && this.props.match.params.invitationCode) ? this.props.match.params.invitationCode : null ),
     };
 
     // if there is a wings to add, we should save it
@@ -106,14 +105,32 @@ class MainRouteOrganisationRedirect extends React.Component {
         await this.props.organisationStore.getOrganisation()
         .then(organisation => {
           this.redirectUserAuthWithAccess(organisation, true);
-        }).catch(() => {return;})
+        }).catch((err) => {
+            if(err.status === 403 && err.response.body.message === 'Email not validated') {
+              EmailService.confirmLoginEmail(null);
+              this.setState({redirectTo: '/' + this.state.locale + '/error/' + err.status + '/email'});
+            } else {
+              ReactGA.event({category: 'Error',action: 'Redirect to error layout', value: 500});
+              SlackService.notifyError(err, '32', 'quentin', 'MainRouteOrganisationRedirect.js');
+              this.setState({redirectTo: '/' + this.state.locale + '/error/500/routes'});
+            }
+        })
       } else {
-        // Redirect to "create new Wingzy"
-        window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
-        await this.wait(3000);
+        this.redirectToValidateMailOrNewWingzy();
       }
     } else {
-      // Redirect to "create new Wingzy"
+      this.redirectToValidateMailOrNewWingzy();
+    }
+  }
+
+  redirectToValidateMailOrNewWingzy = async () => {
+    if( this.props.userStore.values.currentUser.email && 
+        this.props.userStore.values.currentUser.email.value && 
+        !this.props.userStore.values.currentUser.email.validated) {
+
+      EmailService.confirmLoginEmail(null);
+      this.setState({redirectTo: '/' + this.state.locale + '/error/403/email'});
+    } else {
       window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
       await this.wait(3000);
     }
@@ -129,8 +146,6 @@ class MainRouteOrganisationRedirect extends React.Component {
     if ( (!currentOrgAndRecord && !this.props.userStore.values.currentUser.superadmin) || (currentOrgAndRecord && !currentOrgAndRecord.welcomed)) {
       // user need to onboard in organisation
       this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/onboard'});
-      //window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', organisation.tag, 'first=true');
-      //await this.wait(3000);
     } else if (currentOrgAndRecord) {
       this.props.recordStore.setRecordId(currentOrgAndRecord.record);
       await this.props.recordStore.getRecord()
@@ -138,7 +153,6 @@ class MainRouteOrganisationRedirect extends React.Component {
           if (isNewOrg) this.setState({ redirectTo: '/' + this.state.locale + '/' + organisation.tag });
         }).catch(() => {
           this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/onboard'});
-          //window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', organisation.tag, 'first=true');
         });
     }
   }
@@ -187,7 +201,7 @@ class MainRouteOrganisationRedirect extends React.Component {
     this.setState({ redirectTo: null });
   }
   render() {
-    const { redirectTo, renderComponent, invitationCode } = this.state;
+    const { redirectTo, renderComponent, routesError, errorCode } = this.state;
     const { locale } = this.props.commonStore;
     const { orgTag, organisation } = this.props.organisationStore.values;
     let isAuth = this.props.authStore.isAuth();
@@ -197,19 +211,21 @@ class MainRouteOrganisationRedirect extends React.Component {
         return (<Redirect to={redirectTo} />);
       }
     }
-    
+
     if (renderComponent && isAuth) {
       if(this.props.hashtagsFilter && this.props.match.params && this.props.match.params.action &&  (this.props.match.params.action === 'add' || this.props.match.params.action === 'filter' ) )
+      {
         return <Redirect to={'/' + locale + '/' + orgTag} />;
+      }
       return (
         <div>
           <Switch>
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={this.WaitingComponent(PasswordForgot)} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={this.WaitingComponent(PasswordReset)} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/create/:token/:hash/:email" component={this.WaitingComponent(PasswordReset)} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={this.WaitingComponent(AuthPage)} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={this.WaitingComponent(AuthPage, {initialTab: 1})} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={this.WaitingComponent(AuthPage)} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={AuthPage} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={(props) => {return <AuthPage initialTab={1} {...props}/>}} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
 
             {/* Main route with orgTag */}
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step?" component={this.WaitingComponent(OnboardPage)} />
@@ -228,9 +244,9 @@ class MainRouteOrganisationRedirect extends React.Component {
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={this.WaitingComponent(PasswordForgot)} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={this.WaitingComponent(PasswordReset)} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/create/:token/:hash/:email" component={this.WaitingComponent(PasswordReset)} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={this.WaitingComponent(AuthPage)} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={this.WaitingComponent(AuthPage, {initialTab: 1})} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={this.WaitingComponent(AuthPage)} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={AuthPage} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={(props) => {return <AuthPage initialTab={1} {...props}/>}} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
 
             {/* Main route with orgTag */}
             {organisation && organisation.public && (
@@ -239,8 +255,7 @@ class MainRouteOrganisationRedirect extends React.Component {
             {organisation && organisation.public && (
               <Route exact path="/:locale(en|fr|en-UK)/:organisationTag" component={SearchPage} />
             )}
-
-            <Redirect to={'/' + locale + (orgTag ? '/' + orgTag : '') + '/signin' + (invitationCode ? '/' + invitationCode : '') +  window.location.search} />
+            <Redirect to={'/' + locale + (orgTag ? '/' + orgTag : '') + '/signin' +  window.location.search} />
           </Switch>
         </div>
       );

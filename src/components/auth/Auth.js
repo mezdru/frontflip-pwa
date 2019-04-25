@@ -50,13 +50,16 @@ class Auth extends React.Component {
       observer: ()=> {}
     };
   };
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.initialTab) {
+      this.setState({value: nextProps.initialTab})
+    }
+  }
   
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
     if (this.props.authStore.values.invitationCode) this.setState({ value: 1 });
-    this.setState({observer: observe(this.props.authStore.values, 'invitationCode', (change) => {
-      this.setState({ value: 1 });
-    })});
 
     // HANDLE GOOGLE AUTH CALLBACK
     this.handleGoogleCallback(this.state.queryParams)
@@ -80,7 +83,7 @@ class Auth extends React.Component {
               .catch(() => window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag));
           }).catch((err) => this.setState({redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag}));
         }).catch((err) => this.setState({redirectTo: '/' + this.state.locale}));
-    }).catch((err) => {return;});
+    }).catch((err) => {console.log(err); return;});
 
   }
 

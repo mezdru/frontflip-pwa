@@ -7,12 +7,7 @@ const FILENAME = 'slack_helper.js';
 class SlackService {
 
     static notifyError(err, line, developerName = null, filename = FILENAME){
-        let slackObject = {channel : '#errors'+(developerName?'-'+developerName:''), text : filename + ':line:'+line+ ' - ' + err + 
-                                                                                            '                                      ' +
-                                                                                            '{Navigator data : ('+
-                                                                                              window.navigator.appCodeName+'|'+
-                                                                                              window.navigator.appVersion+'|'+
-                                                                                              window.navigator.cookieEnabled+')}'};
+        let slackObject = {channel : '#errors'+(developerName?'-'+developerName:''), text : filename + ':line:'+line+ ' - ' + err};
         slack.send(slackObject);
     }
     static notify(channel, message){
