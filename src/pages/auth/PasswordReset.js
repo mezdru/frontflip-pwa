@@ -115,7 +115,6 @@ class PasswordReset extends React.Component {
     const {values, inProgress} = this.props.authStore;
     let {passwordErrors, userEmail, redirectTo} = this.state;
     let {classes, intl} = this.props;
-    
     if(redirectTo) return <Redirect push to={redirectTo}/>;
     
     return (

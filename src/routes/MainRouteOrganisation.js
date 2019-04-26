@@ -5,11 +5,12 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import MainRouteOrganisationRedirect from './MainRouteOrganisationRedirect';
 import AuthPage from '../pages/auth/AuthPage';
+import PasswordReset from '../pages/auth/PasswordReset';
 
 // const AuthPage = React.lazy(() => import('../pages/auth/AuthPage'));
 const ErrorPage = React.lazy(() => import('../pages/ErrorPage'));
 const PasswordForgot = React.lazy(() => import('../pages/auth/PasswordForgot'));
-const PasswordReset = React.lazy(() => import('../pages/auth/PasswordReset'));
+// const PasswordReset = React.lazy(() => import('../pages/auth/PasswordReset'));
 
 class MainRouteOrganisation extends React.Component {
 
@@ -44,8 +45,8 @@ class MainRouteOrganisation extends React.Component {
         <Switch>
           {/* All routes without orgTag */}
           <Route exact path="/:locale(en|fr|en-UK)/password/forgot" component={this.WaitingComponent(PasswordForgot)} />
-          <Route exact path="/:locale(en|fr|en-UK)/password/reset/:token/:hash" component={this.WaitingComponent(PasswordReset)} />
-          <Route exact path="/:locale(en|fr|en-UK)/password/create/:token/:hash/:email" component={this.WaitingComponent(PasswordReset)} />
+          <Route exact path="/:locale(en|fr|en-UK)/password/reset/:token/:hash" component={(PasswordReset)} />
+          <Route exact path="/:locale(en|fr|en-UK)/password/create/:token/:hash/:email" component={(PasswordReset)} />
           <Route path="/:locale(en|fr|en-UK)/signup" component={(props) => {return <AuthPage initialTab={1} {...props}/>}} />
           <Route path="/:locale(en|fr|en-UK)/signin" component={AuthPage} />
           <Route exact path="/:locale(en|fr|en-UK)/error/:errorCode/:errorType" component={this.WaitingComponent(ErrorPage)} />
