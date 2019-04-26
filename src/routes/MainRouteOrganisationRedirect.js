@@ -11,10 +11,11 @@ import EmailService from '../services/email.service';
 import SearchPage from "../pages/SearchPage";
 import SlackService from '../services/slack.service';
 import AuthPage from '../pages/auth/AuthPage';
+import PasswordReset from '../pages/auth/PasswordReset';
 
 const OnboardPage = React.lazy(() => import('../pages/OnboardPage'));
 const PasswordForgot = React.lazy(() => import('../pages/auth/PasswordForgot'));
-const PasswordReset = React.lazy(() => import('../pages/auth/PasswordReset'));
+// const PasswordReset = React.lazy(() => import('../pages/auth/PasswordReset'));
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
@@ -221,8 +222,8 @@ class MainRouteOrganisationRedirect extends React.Component {
         <div>
           <Switch>
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={this.WaitingComponent(PasswordForgot)} />
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={this.WaitingComponent(PasswordReset)} />
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/create/:token/:hash/:email" component={this.WaitingComponent(PasswordReset)} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={(PasswordReset)} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/create/:token/:hash/:email" component={(PasswordReset)} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={AuthPage} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={(props) => {return <AuthPage initialTab={1} {...props}/>}} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
@@ -242,8 +243,8 @@ class MainRouteOrganisationRedirect extends React.Component {
         <div>
           <Switch>
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={this.WaitingComponent(PasswordForgot)} />
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={this.WaitingComponent(PasswordReset)} />
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/create/:token/:hash/:email" component={this.WaitingComponent(PasswordReset)} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={(PasswordReset)} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/create/:token/:hash/:email" component={(PasswordReset)} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={AuthPage} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={(props) => {return <AuthPage initialTab={1} {...props}/>}} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
