@@ -9,6 +9,12 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Header from '../components/header/Header';
 import { styles } from './SearchPage.css';
 import ProfileLayout from "../components/profile/ProfileLayout";
+import BannerResizable from '../components/utils/banner/BannerResizable';
+
+
+import { StickyContainer, Sticky } from 'react-sticky';
+
+
 
 const Banner = React.lazy(() => import('../components/utils/banner/Banner'));
 const SearchField = React.lazy(() => import('../components/algolia/SearchField'));
@@ -19,6 +25,11 @@ const Card = React.lazy(() => import('../components/card/CardProfile'));
 const AddWingPopup = React.lazy(() => import('../components/utils/addWing/AddWingPopup'));
 const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
 const OnboardCongratulation = React.lazy(() => import('../components/onboard/steps/OnboardCongratulation'));
+
+
+
+
+
 
 console.debug('Loading SearchPage');
 
@@ -155,30 +166,27 @@ class SearchPage extends React.Component {
           {this.shouldSetRootUrl(rootUrl) && (<Redirect to={rootUrl} />)}
           <Grid container direction={'column'} alignItems={'center'}>
 
-            <div style={{
-              width: ((((isWidthDown('sm', this.props.width)))) ? '75%' : searchBarWidth),
-              marginRight: ((((isWidthDown('sm', this.props.width)))) ? 16 : '')
-            }}
-              className={classes.searchBar} >
               <Suspense fallback={<CircularProgress color='secondary' />}>
-                <SearchField updateFilters={this.updateFilters} newFilter={newFilter} />
-
-              </Suspense>
-            </div>
-
-            <Grid container item alignItems={"stretch"} >
-              <Suspense fallback={<CircularProgress color='secondary' />}>
-                <Banner style={{ filter: 'brightness(90%)' }}>
-                  <div style={{ position: 'relative', height: 56 }} ></div>
-                  <div style={{ width: searchBarWidth }} className={classes.suggestionsContainer}>
-                    {shouldDisplayHitResults && (
+                  <BannerResizable  
+                    style={{ filter: 'brightness(90%)' }} 
+                    type={'organisation'}
+                    listenToScroll={true}
+                    listenToInteraction={true}
+                    initialHeight={80}
+                  >
+                    <div 
+                      className={classes.searchContainer}  
+                      style={{
+                        width: ((((isWidthDown('sm', this.props.width)))) ? 'calc(100% - 32px)' : searchBarWidth),
+                        marginRight: ((((isWidthDown('sm', this.props.width)))) ? 16 : ''),
+                        marginLeft: ((((isWidthDown('sm', this.props.width)))) ? 16 : ''),
+                      }}
+                    >
+                      <SearchField updateFilters={this.updateFilters} newFilter={newFilter} />
                       <SearchSuggestions addToFilters={this.addToFilters} filters={filters} query={query} />
-                    )}
-                  </div>
-                </Banner>
+                    </div>
+                  </BannerResizable>
               </Suspense>
-
-            </Grid>
 
             {shouldDisplayHitResults && (
               <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>

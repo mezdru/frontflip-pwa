@@ -69,7 +69,7 @@ export const styles = theme => ({
     width: '100%'
   },
   searchBar: {
-    position: 'fixed !important',
+    position: 'fixed',
     top: 0,
     left: 0,
     right: 0,
@@ -78,6 +78,18 @@ export const styles = theme => ({
     marginTop: 8,
     background: 'transparent',
     width: '100%',
+  },
+
+  searchContainer: {
+    position: 'absolute',
+    height: 200,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    left:0,
+    right:0,
+    margin: 'auto',
+    paddingTop: 8,
+    paddingBottom: 8,
   },
 
   searchBanner: {

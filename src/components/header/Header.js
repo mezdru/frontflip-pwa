@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { withStyles } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import PropTypes from 'prop-types';
-import { CssBaseline} from '@material-ui/core';
+import { CssBaseline, Fab, Button} from '@material-ui/core';
 import { Redirect } from "react-router-dom";
 import './header.css';
 import { styles } from './Header.css.js'
-import HeaderAppBar from './HeaderAppBar';
 import HeaderDrawer from './HeaderDrawer';
+import Logo from '../utils/logo/Logo';
+import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 class App extends Component {
   constructor(props) {
@@ -40,15 +42,23 @@ class App extends Component {
   render() {
     const {open, successLogout, auth } = this.state;
     const { classes } = this.props;
+    const { locale } = this.props.commonStore;
+    const orgTag = this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag;
 
     if (successLogout) return <Redirect to='/' />;
     
     return (
       <div className={classes.root}>
         <CssBaseline />
-        <HeaderAppBar handleDrawerOpen={this.handleDrawerOpen}
+        <Fab variant="extended" className={classes.menuButton}
+                    onClick={this.handleDrawerOpen} 
+                    children={<Logo />} />
+        {!auth && (
+            <Button variant="text" to={"/" + locale + (orgTag ? '/' + orgTag : '') + '/signin'} component={Link} className={classes.menuLink}><FormattedMessage id="Sign In" /></Button>
+        )}
+        {/* <HeaderAppBar handleDrawerOpen={this.handleDrawerOpen}
           open={open} auth={auth}
-        />
+        /> */}
         <HeaderDrawer handleDrawerOpen={this.handleDrawerOpen}
           handleDrawerClose={this.handleDrawerClose}
           open={open} auth={auth}
