@@ -23,6 +23,10 @@ const styles = theme => ({
     backgroundRepeat: 'no-repeat',
     overflow: 'hidden',
     zIndex: 1000,
+  },
+  bannerMinRelative: {
+    position: 'relative',
+    height: 64,
   }
 });
 
@@ -111,13 +115,16 @@ class BannerResizable extends React.Component {
   }
 
   render() {
-    const { source, initialHeight } = this.state;
+    const { source, initialHeight, bannerState } = this.state;
     const { classes } = this.props;
 
     return (
-      <div className={classes.root} style={{backgroundImage: `url(${source})`, height: initialHeight + 'vh', ...this.props.style}} id="bannerResizable" >
-        {this.props.children}
-      </div>
+      <>
+        {bannerState === 'min' && (<div className={classes.bannerMinRelative}></div>)}
+        <div className={classes.root} style={{backgroundImage: `url(${source})`, height: initialHeight + 'vh', ...this.props.style}} id="bannerResizable" >
+          {this.props.children}
+        </div>
+      </>
     )
   }
 }
