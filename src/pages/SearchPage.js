@@ -9,14 +9,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Header from '../components/header/Header';
 import { styles } from './SearchPage.css';
 import ProfileLayout from "../components/profile/ProfileLayout";
-import BannerResizable from '../components/utils/banner/BannerResizable';
 
-
-import { StickyContainer, Sticky } from 'react-sticky';
-
-
-
-const Banner = React.lazy(() => import('../components/utils/banner/Banner'));
+const BannerResizable = React.lazy(() => import('../components/utils/banner/BannerResizable'));
 const SearchField = React.lazy(() => import('../components/algolia/SearchField'));
 const SearchSuggestions = React.lazy(() => import('../components/algolia/SearchSuggestions'));
 const SearchResults = React.lazy(() => import('../components/algolia/SearchResults'));
@@ -25,11 +19,6 @@ const Card = React.lazy(() => import('../components/card/CardProfile'));
 const AddWingPopup = React.lazy(() => import('../components/utils/addWing/AddWingPopup'));
 const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
 const OnboardCongratulation = React.lazy(() => import('../components/onboard/steps/OnboardCongratulation'));
-
-
-
-
-
 
 console.debug('Loading SearchPage');
 
