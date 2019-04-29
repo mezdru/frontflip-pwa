@@ -82,7 +82,6 @@ export const styles = theme => ({
 
   searchContainer: {
     position: 'absolute',
-    height: 200,
     top: '50%',
     transform: 'translateY(-50%)',
     left:0,

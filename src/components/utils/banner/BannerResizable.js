@@ -11,11 +11,7 @@ const styles = theme => ({
     position: 'relative',
     top:0,
     width: '100%',
-    // height: 222,
     minHeight: 64,
-    // [theme.breakpoints.up('md')]: {
-    //   height: 416,
-    // },
     boxShadow: 'rgba(0, 0, 0, 0.2) 0px 1px 8px 0px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.12) 0px 3px 3px -2px',
     backgroundColor: 'white',
     backgroundSize: 'cover',
@@ -70,16 +66,21 @@ class BannerResizable extends React.Component {
 
       var banner = document.getElementById('bannerResizable');
       var child = banner.firstChild;
-      var heightValue = this.state.bannerState ? MEDIUM_HEIGHT : this.state.initialHeight;
+      var secondChild = child.lastChild;
 
-      child.style.top = '0px';
-      child.style.transform = 'none';
+      var heightValue = this.state.bannerState ? MEDIUM_HEIGHT : this.state.initialHeight;
+      var topValue = 50;
+      var opacityValue = 1;
+
       banner.style.position = 'fixed';
 
       this.setState({bannerState: 'min'});
-
       interval = setInterval(() => {
+        if(secondChild) secondChild.style.opacity = (Math.max(opacityValue -= 0.05, 0));
+
         banner.style.height = (heightValue -= 2) + 'vh';
+        child.style.top = (Math.max(0, (topValue -= 2))) + '%';
+        child.style.transform = 'translateY(-' + (Math.max(0, (topValue -= 2))) + '%)';
         if(heightValue <= 0) interval = clearInterval(interval);
       }, 15);
     }.bind(this));
@@ -95,14 +96,19 @@ class BannerResizable extends React.Component {
       if(! (this.state.bannerState === 'min')) return; 
 
       var child = banner.firstChild;
+      var secondChild = child.lastChild;
+
       var heightValue = 0;
+      var opacityValue = 0;
 
       child.style.top = '50%';
       child.style.transform = 'translateY(-50%)';
 
-      this.setState({bannerState: MEDIUM_HEIGHT});
+      this.setState({bannerState: MEDIUM_HEIGHT});  
 
       interval = setInterval(() => {
+        if(secondChild) secondChild.style.opacity = (Math.min(opacityValue += 0.05, 1));
+
         banner.style.height = (heightValue += 2) + 'vh';
         if(heightValue >= MEDIUM_HEIGHT) interval = clearInterval(interval);
       }, 15);
