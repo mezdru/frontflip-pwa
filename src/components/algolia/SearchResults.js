@@ -97,6 +97,33 @@ class SearchResults extends React.Component {
               </li>
             );
           })}
+                    {hitsResult.map((hit, i) => {
+          return(
+            <li key={i} style={{WebkitAnimationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s', animationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s'}}>
+              <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
+                <HitComponent hit={hit} addToFilters={addToFilters} handleDisplayProfile={handleDisplayProfile} />
+                </Grid>
+              </li>
+            );
+          })}
+                    {hitsResult.map((hit, i) => {
+          return(
+            <li key={i} style={{WebkitAnimationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s', animationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s'}}>
+              <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
+                <HitComponent hit={hit} addToFilters={addToFilters} handleDisplayProfile={handleDisplayProfile} />
+                </Grid>
+              </li>
+            );
+          })}
+                    {hitsResult.map((hit, i) => {
+          return(
+            <li key={i} style={{WebkitAnimationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s', animationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s'}}>
+              <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
+                <HitComponent hit={hit} addToFilters={addToFilters} handleDisplayProfile={handleDisplayProfile} />
+                </Grid>
+              </li>
+            );
+          })} 
           {!hideShowMore && (
             <li>
               <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} container justify={"center"} alignContent={"center"}>
