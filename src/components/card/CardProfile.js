@@ -9,6 +9,8 @@ import Availability from '../availabilityToggle/Availability';
 import Wings from '../utils/wing/Wing';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import ProfileService from '../../services/profile.service';
+import withSearchManagement from '../search/SearchManagement.hoc';
+
 ProfileService.setExtraLinkLimit(5);
 
 
@@ -154,6 +156,8 @@ class CardProfile extends React.Component {
   
   render() {
     const {classes, hit, addToFilters, handleDisplayProfile} = this.props;
+    const { addFilter } = this.props;
+
     ProfileService.transformLinks(hit);
     ProfileService.makeHightlighted(hit);
     ProfileService.orderHashtags(hit);
@@ -212,9 +216,9 @@ class CardProfile extends React.Component {
                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[this.state.locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
                 return (
                   <Wings src={ProfileService.getPicturePath(hashtag.picture)} key={i}
-                         label={ProfileService.htmlDecode(displayedName)}
-                         onClick={(e) => addToFilters(e, {name: displayedName, tag: hashtag.tag})}
-                         className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
+                      label={ProfileService.htmlDecode(displayedName)}
+                      onClick={(e) => addFilter({name: displayedName, tag: hashtag.tag, value: hashtag.tag})}
+                      className={(hashtag.class ? hashtag.class : 'notHighlighted')}/>
                 )
               })}
             </Grid>
@@ -228,6 +232,8 @@ class CardProfile extends React.Component {
 CardProfile.propTypes = {
   classes: PropTypes.object.isRequired,
 };
+
+CardProfile = withSearchManagement(CardProfile);
 
 export default inject('commonStore')(
   observer(

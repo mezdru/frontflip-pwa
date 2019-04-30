@@ -8,6 +8,8 @@ import chat from '../../resources/images/chat.png';
 import AlgoliaService from '../../services/algolia.service';
 import { shuffleArray } from '../../services/utils.service';
 
+import withSearchManagement  from './SearchManagement.hoc';
+
 const styles = theme => ({
   image: {
     width: '47rem',
@@ -35,18 +37,36 @@ class SearchResults extends React.Component {
       loadInProgress: true,
       hideShowMore: false,
       hitsAlreadyDisplayed: 0,
-      observer: () => {}
+      observer: () => {},
+      filterRequest: '',
+      queryRequest: '',
     };
   }
   
   componentDidMount() {
-    AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-    this.fetchHits(this.props.filters, this.props.query, null, null);
+    this.props.makeFiltersRequest()
+    .then((req) => {
+      this.setState({filterRequest: req.filterRequest, queryRequest: req.queryRequest }, () => {
+        AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
+        this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
+      });
+    });
+
     
     this.setState({observer : observe(this.props.commonStore, 'algoliaKey', (change) => {
         AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-        this.fetchHits(this.props.filters, this.props.query, null, null);
+        this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
     })});
+
+    observe(this.props.commonStore, 'searchFilters', (change) => {
+      this.props.makeFiltersRequest()
+      .then((req) => {
+        this.setState({filterRequest: req.filterRequest, queryRequest: req.queryRequest }, () => {
+          AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
+          this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
+        });
+      });
+    });
   }
   
   componentWillUnmount() {
@@ -61,8 +81,7 @@ class SearchResults extends React.Component {
 
       this.props.commonStore.searchResultsCount = content.hits.length;
       
-      this.setState({hitsAlreadyDisplayed: Math.min((content.hitsPerPage * (content.page)), content.nbHits)});
-      if(content.page === (content.nbPages-1)) this.setState({hideShowMore: true});
+      this.setState({hitsAlreadyDisplayed: Math.min((content.hitsPerPage * (content.page)), content.nbHits)});      if(content.page === (content.nbPages-1)) this.setState({hideShowMore: true});
       if(page) this.setState({hits: this.state.hits.concat(content.hits)}, this.endTask());
         else this.setState({hits: content.hits}, this.endTask());
         
@@ -95,38 +114,12 @@ class SearchResults extends React.Component {
           return(
             <li key={i} style={{WebkitAnimationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s', animationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s'}}>
               <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
-                <HitComponent hit={hit} addToFilters={addToFilters} handleDisplayProfile={handleDisplayProfile} />
+                <HitComponent hit={hit} handleDisplayProfile={handleDisplayProfile} />
                 </Grid>
               </li>
             );
           })}
-                    {hitsResult.map((hit, i) => {
-          return(
-            <li key={i} style={{WebkitAnimationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s', animationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s'}}>
-              <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
-                <HitComponent hit={hit} addToFilters={addToFilters} handleDisplayProfile={handleDisplayProfile} />
-                </Grid>
-              </li>
-            );
-          })}
-                    {hitsResult.map((hit, i) => {
-          return(
-            <li key={i} style={{WebkitAnimationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s', animationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s'}}>
-              <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
-                <HitComponent hit={hit} addToFilters={addToFilters} handleDisplayProfile={handleDisplayProfile} />
-                </Grid>
-              </li>
-            );
-          })}
-                    {hitsResult.map((hit, i) => {
-          return(
-            <li key={i} style={{WebkitAnimationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s', animationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s'}}>
-              <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
-                <HitComponent hit={hit} addToFilters={addToFilters} handleDisplayProfile={handleDisplayProfile} />
-                </Grid>
-              </li>
-            );
-          })} 
+
           {!hideShowMore && (
             <li>
               <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} container justify={"center"} alignContent={"center"}>
@@ -156,6 +149,8 @@ class SearchResults extends React.Component {
     );
   }
 }
+
+SearchResults = withSearchManagement(SearchResults);
 
 export default inject('commonStore')(
   observer(

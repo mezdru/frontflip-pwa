@@ -3,6 +3,7 @@ import { observe } from 'mobx';
 import { inject, observer } from "mobx-react";
 import defaultBanner from '../../../resources/images/fly_away.jpg';
 import { withStyles } from '@material-ui/core';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 let interval;
 
@@ -23,12 +24,22 @@ const styles = theme => ({
   bannerMinRelative: {
     position: 'relative',
     height: 64,
+  },
+  bannerBackdrop: {
+    position: 'fixed',
+    height: '100%',
+    width: '100%',
+    top:0,
+    left:0,
+    zIndex: 999,
+    backgroundColor: 'rgba(0, 0, 0, .5)'
   }
 });
 
 const MEDIUM_HEIGHT = 50;
 
 class BannerResizable extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -48,7 +59,6 @@ class BannerResizable extends React.Component {
       })});
 
       if(this.props.listenToScroll) this.listenToScroll();
-      if(this.props.listenToInteraction) this.listenToInteraction();
     }
   }
 
@@ -63,31 +73,7 @@ class BannerResizable extends React.Component {
    */
   listenToScroll = () => {
     window.addEventListener('scroll', function(e) {
-      if(interval || this.state.bannerState === 'min') return;
-
-      var banner = document.getElementById('bannerResizable');
-      var child = banner.firstChild;
-      var secondChild = child.lastChild;
-
-      var heightValue = (this.state.bannerState !== 'initial' ) ? MEDIUM_HEIGHT : this.state.initialHeight;
-      var topValue = 50;
-      var opacityValue = 1;
-
-      if(this.isScrollPossible()) {
-        banner.style.position = 'fixed';
-      }
-
-      interval = setInterval(() => {
-        if(secondChild) secondChild.style.opacity = (Math.max(opacityValue -= 0.05, 0));
-
-        banner.style.height = (heightValue -= 2) + 'vh';
-        child.style.top = (Math.max(0, (topValue -= 2))) + '%';
-        child.style.transform = 'translateY(-' + (Math.max(0, (topValue -= 2))) + '%)';
-        if(heightValue <= 0) {
-          this.setState({bannerState: 'min'});
-          interval = clearInterval(interval);
-        } 
-      }, 15);
+      this.minifyBanner();
     }.bind(this));
   }
 
@@ -95,36 +81,69 @@ class BannerResizable extends React.Component {
     return (document.documentElement.scrollHeight > document.documentElement.clientHeight);
   }
 
-  /**
-   * @description Listen to click event on banner to increase banner size to his medium height.
-   */
-  listenToInteraction = () => {
+  // /**
+  //  * @description Listen to click event on banner to increase banner size to his medium height.
+  //  */
+  // listenToInteraction = () => {
+  //   var banner = document.getElementById('bannerResizable');
+
+  //   banner.addEventListener('click', function(e) {
+  //     this.increaseBanner();
+  //   }.bind(this));
+  // }
+
+  minifyBanner = () => {
+    if(interval || this.state.bannerState === 'min') return;
+
     var banner = document.getElementById('bannerResizable');
+    var child = banner.firstChild;
+    var secondChild = child.lastChild;
 
-    banner.addEventListener('click', function(e) {
-      if(! (this.state.bannerState === 'min')) return; 
+    var heightValue = (this.state.bannerState !== 'initial' ) ? MEDIUM_HEIGHT : this.state.initialHeight;
+    var topValue = 50;
+    var opacityValue = 1;
 
-      var child = banner.firstChild;
-      var secondChild = child.lastChild;
+    if(this.isScrollPossible()) {
+      banner.style.position = 'fixed';
+    }
 
-      var heightValue = 0;
-      var opacityValue = 0;
+    interval = setInterval(() => {
+      if(secondChild) secondChild.style.opacity = (Math.max(opacityValue -= 0.05, 0));
 
-      child.style.top = '50%';
-      child.style.transform = 'translateY(-50%)';
-
-      this.setState({bannerState: MEDIUM_HEIGHT});  
-
-      interval = setInterval(() => {
-        if(secondChild) secondChild.style.opacity = (Math.min(opacityValue += 0.05, 1));
-
-        banner.style.height = (heightValue += 2) + 'vh';
-        if(heightValue >= MEDIUM_HEIGHT) {
-          interval = clearInterval(interval); 
-        } 
-      }, 15);
-    }.bind(this));
+      banner.style.height = (heightValue -= 2) + 'vh';
+      child.style.top = (Math.max(0, (topValue -= 2))) + '%';
+      child.style.transform = 'translateY(-' + (Math.max(0, (topValue -= 2))) + '%)';
+      if(heightValue <= 0) {
+        this.setState({bannerState: 'min'});
+        interval = clearInterval(interval);
+      } 
+    }, 15);
   }
+
+  // increaseBanner = () => {
+  //   if(! (this.state.bannerState === 'min')) return; 
+
+  //   var banner = document.getElementById('bannerResizable');
+  //   var child = banner.firstChild;
+  //   var secondChild = child.lastChild;
+
+  //   var heightValue = 0;
+  //   var opacityValue = 0;
+
+  //   child.style.top = '50%';
+  //   child.style.transform = 'translateY(-50%)';
+
+  //   this.setState({bannerState: MEDIUM_HEIGHT});  
+
+  //   interval = setInterval(() => {
+  //     if(secondChild) secondChild.style.opacity = (Math.min(opacityValue += 0.05, 1));
+
+  //     banner.style.height = (heightValue += 2) + 'vh';
+  //     if(heightValue >= MEDIUM_HEIGHT) {
+  //       interval = clearInterval(interval); 
+  //     } 
+  //   }, 15);
+  // }
 
 
   componentWillUnmount() {
@@ -138,9 +157,14 @@ class BannerResizable extends React.Component {
     return (
       <>
         {bannerState !== 'initial' && this.isScrollPossible() && (<div className={classes.bannerMinRelative}></div>)}
-        <div className={classes.root} style={{backgroundImage: `url(${source})`, height: initialHeight + 'vh', ...this.props.style}} id="bannerResizable" >
-          {this.props.children}
-        </div>
+        <ClickAwayListener onClickAway={(e) => {this.minifyBanner()}} >
+          <div className={classes.root} style={{backgroundImage: `url(${source})`, height: initialHeight + 'vh', ...this.props.style}} id="bannerResizable" >
+            {this.props.children}
+          </div>
+        </ClickAwayListener>
+        {bannerState !== 'initial' && bannerState !== 'min' && this.isScrollPossible() && (
+          <div className={classes.bannerBackdrop}></div>
+        )}
       </>
     )
   }
