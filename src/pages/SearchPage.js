@@ -17,6 +17,9 @@ import './SearchPageStyle.css';
 import SearchButton from '../components/search/SearchButton';
 import { Redirect } from "react-router-dom";
 
+const OnboardCongratulation = React.lazy(() => import('../components/onboard/steps/OnboardCongratulation'));
+const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
+const AddWingPopup = React.lazy(() => import('../components/utils/addWing/AddWingPopup'));
 
 console.debug('Loading SearchPage');
 
@@ -28,13 +31,17 @@ class SearchPage extends React.Component {
 
     this.state = {
       displayedHit: this.getAskedHit(),
+      showCongratulation: false,
+      actionInQueue: this.getActionInQueue(),
+      hashtagsFilter: this.getHashtagsFilter()
     };
   }
 
   getAskedHit = () => {
-    if(this.props.match && this.props.match.params && this.props.match.params.profileTag) {
+    if (this.props.match && this.props.match.params && this.props.match.params.profileTag &&
+      (this.props.match.params.profileTag.charAt(0) === '#' || this.props.match.params.profileTag.charAt(0) === '@')) {
       console.log(this.props.match.params.profileTag);
-      return {tag: this.props.match.params.profileTag};
+      return { tag: this.props.match.params.profileTag };
     } else {
       return null;
     }
@@ -42,42 +49,82 @@ class SearchPage extends React.Component {
 
   componentDidMount() {
     this.moveSearchInputListener();
+    this.handleUrlSearchFilters();
+    try {
+      if (this.props.match.params.profileTag === 'congrats') this.setState({ showCongratulation: true })
+    } catch{ }
   }
 
   moveSearchInputListener = () => {
     var contentPart = document.getElementById('content-container');
     var lastScrollTop = 0;
-    
-    contentPart.addEventListener('scroll', function(e){
+
+    contentPart.addEventListener('scroll', function (e) {
       var contentMain = document.getElementById('search-button');
       var contentShape = contentMain.getBoundingClientRect();
-    
+
       var searchBox = document.getElementById('search-input');
       var contentTop = contentShape.top;
-    
-      if(lastScrollTop < contentPart.scrollTop) {
+
+      if (lastScrollTop < contentPart.scrollTop) {
         var currentSearchTop = searchBox.getBoundingClientRect().top;
-        while ( ( contentTop -  (currentSearchTop + 120)) < 48  && (currentSearchTop >= 8)) {
+        while ((contentTop - (currentSearchTop + 120)) < 48 && (currentSearchTop >= 8)) {
           searchBox.style.top = (currentSearchTop -= 2) + 'px';
         }
       } else {
-        var interval = setInterval(function() {
+        var interval = setInterval(function () {
           var currentSearchTop = searchBox.getBoundingClientRect().top;
-          if( ( contentTop -  (currentSearchTop + 120)) > 16 && (currentSearchTop <= (window.innerHeight * 0.40))) {
+          if ((contentTop - (currentSearchTop + 120)) > 16 && (currentSearchTop <= (window.innerHeight * 0.40))) {
             searchBox.style.top = (currentSearchTop += 2) + 'px';
           } else {
             interval = clearInterval(interval);
           }
         }, 2);
       }
-    
+
       lastScrollTop = contentPart.scrollTop;
     });
   }
 
+  /**
+   * @description Handle URL search filters to make first search filters
+   */
+  handleUrlSearchFilters = () => {
+    let wings = this.props.commonStore.getCookie('hashtagsFilter');
+    this.props.commonStore.removeCookie('hashtagsFilter');
+    if (!wings) return;
+
+    let currentSearchFilters = this.props.commonStore.getSearchFilters();
+    let wingsArray = wings.split(',');
+
+    wingsArray.forEach(wing => {
+      if (!currentSearchFilters.find((searchFilter => searchFilter.tag === '#' + wing))) {
+        currentSearchFilters.push({ tag: '#' + wing, value: '#' + wing, label: '#' + wing });
+      }
+    });
+    this.props.commonStore.setSearchFilters(currentSearchFilters);
+  }
+
+  
+  getActionInQueue = () => {
+    let action = this.props.commonStore.getCookie('actionInQueue');
+    this.props.commonStore.removeCookie('actionInQueue');
+    return action
+  }
+
+  getHashtagsFilter = () => {
+    let wings = this.props.commonStore.getCookie('hashtagsFilter');
+    this.props.commonStore.removeCookie('hashtagsFilter');
+    if (wings) {
+      return wings.split(',');
+    } else {
+      return [];
+    }
+  }
+
   componentDidUpdate() {
-    if(this.state.redirectTo === window.location.pathname) {
-      this.setState({redirectTo: null});
+    if (this.state.redirectTo === window.location.pathname) {
+      this.setState({ redirectTo: null });
     }
   }
 
@@ -87,17 +134,12 @@ class SearchPage extends React.Component {
   }
 
   handleReturnToSearch = () => {
-    this.setState({ displayedHit: null, redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag})
+    this.setState({ displayedHit: null, redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag })
   }
 
   render() {
-    const {displayedHit, redirectTo} = this.state;
-    const {classes} = this.props;
-
-    // if(redirectTo) {
-    //   this.setState({redirectTo: null});
-    //   return <Redirect to={redirectTo} />;
-    // } 
+    const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter } = this.state;
+    const { classes } = this.props;
 
     return (
       <React.Fragment>
@@ -105,7 +147,7 @@ class SearchPage extends React.Component {
         <Header />
         <main className={'search-container'}>
 
-          <BannerResizable 
+          <BannerResizable
             type={'organisation'}
             initialHeight={100}
             style={{
@@ -114,15 +156,15 @@ class SearchPage extends React.Component {
           />
 
           <div className={'search-input'} id="search-input">
-          <Grid container justify='center'>
-                  <Grid item xs={12} sm={8} md={6} lg={4}>
-                    <ErrorBoundary>
-                      <Suspense fallback={<CircularProgress color='secondary' />}>
-                          <Search />
-                      </Suspense>
-                    </ErrorBoundary>
-                  </Grid>
-                </Grid>
+            <Grid container justify='center'>
+              <Grid item xs={12} sm={8} md={6} lg={4}>
+                <ErrorBoundary>
+                  <Suspense fallback={<CircularProgress color='secondary' />}>
+                    <Search />
+                  </Suspense>
+                </ErrorBoundary>
+              </Grid>
+            </Grid>
           </div>
 
           <div className={'search-content-container'} id="content-container">
@@ -131,20 +173,36 @@ class SearchPage extends React.Component {
               <SearchButton />
             </div>
             <div className={'search-content'}>
-            <ErrorBoundary>
-              <Suspense fallback={<CircularProgress color='secondary' />}>
-                <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
-                  <SearchResults handleDisplayProfile={this.handleDisplayProfile} HitComponent={Card} />
-                </Grid>
-              </Suspense>
-            </ErrorBoundary>
+              <ErrorBoundary>
+                <Suspense fallback={<CircularProgress color='secondary' />}>
+                  <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
+                    <SearchResults handleDisplayProfile={this.handleDisplayProfile} HitComponent={Card} />
+                  </Grid>
+                </Suspense>
+              </ErrorBoundary>
             </div>
           </div>
         </main>
 
         {displayedHit && (
-          <ProfileLayout hit={displayedHit} handleReturnToSearch={this.handleReturnToSearch} className={classes.profileContainer}/>
+          <ProfileLayout hit={displayedHit} handleReturnToSearch={this.handleReturnToSearch} className={classes.profileContainer} />
         )}
+
+        {showCongratulation && (
+          <Suspense fallback={<CircularProgress color='secondary' />}>
+            <OnboardCongratulation isOpen={showCongratulation} />
+          </Suspense>
+        )}
+
+        {hashtagsFilter.length > 0 && (actionInQueue === 'add') && (
+          <Suspense fallback={<CircularProgress color='secondary' />}>
+            <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} />
+          </Suspense>
+        )}
+
+        <Suspense fallback={<div></div>}>
+          <PromptIOsInstall />
+        </Suspense>
       </React.Fragment>
     );
   }

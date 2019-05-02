@@ -234,6 +234,8 @@ class MainRouteOrganisationRedirect extends React.Component {
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit/:recordId" component={this.WaitingComponent(OnboardPage, {edit: true})} />
 
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={SearchPage} />
+
+            {/* useless route ? */}
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/:action?" component={SearchPage} />
           </Switch>
         </div>
