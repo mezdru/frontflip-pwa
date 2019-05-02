@@ -16,7 +16,32 @@ const styles = theme => ({
     borderRadius: 5,
     width: 250,
     padding: 16,
-    textAlign: 'center'
+    textAlign: 'center',
+    boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
+    cursor: 'pointer',
+    fontWeight: '600'
+  },
+  bottomShape: {
+    position: 'absolute',
+    bottom: -10,
+    transform: 'rotate(45deg)',
+    width: 20,
+    height: 20,
+    backgroundColor: 'white',
+    left:0,
+    right:0,
+    margin:'auto',
+    boxShadow: '0px 3px 6px rgba(0,0,0,0.16), 0px 3px 6px rgba(0,0,0,0.23)',
+  },
+  bottomShapeCover: {
+    position: 'absolute',
+    bottom:0,
+    height: 15,
+    width: 35,
+    backgroundColor: 'white',
+    left:0,
+    right:0,
+    margin:'auto',
   }
 });
 
@@ -42,8 +67,10 @@ class SearchButton extends React.Component {
 
     return(
       <>
-        <div className={classes.searchBox}>
-        {searchResultsCount} persons found !
+        <div className={classes.searchBox} onClick={this.props.onClick} >
+          🚀 {searchResultsCount} persons found!
+          <div className={classes.bottomShape} />
+          <div className={classes.bottomShapeCover} />
         </div>
       </>
     );

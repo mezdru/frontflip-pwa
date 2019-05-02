@@ -69,7 +69,7 @@ class SearchPage extends React.Component {
       if (lastScrollTop < contentPart.scrollTop) {
         var currentSearchTop = searchBox.getBoundingClientRect().top;
         while ((contentTop - (currentSearchTop + 120)) < 48 && (currentSearchTop >= 8)) {
-          searchBox.style.top = (currentSearchTop -= 2) + 'px';
+          searchBox.style.top = Math.max(8,(currentSearchTop -= 2)) + 'px';
         }
       } else {
         var interval = setInterval(function () {
@@ -84,6 +84,23 @@ class SearchPage extends React.Component {
 
       lastScrollTop = contentPart.scrollTop;
     });
+  }
+
+  /**
+   * @description Scroll to search results part.
+   */
+  handleShowSearchResults = () => {
+    var contentPart = document.getElementById('content-container');
+    let interval = setInterval(function() {
+      if(contentPart.scrollTop <= Math.min(contentPart.scrollHeight, window.innerHeight-120)) {
+        let scrollBefore = contentPart.scrollTop;
+        contentPart.scrollTop += 5;
+        let scrollAfter = contentPart.scrollTop;
+        if(scrollBefore === scrollAfter) interval = clearInterval(interval);
+      } else {
+        interval = clearInterval(interval);
+      }
+    }, 1);
   }
 
   /**
@@ -104,12 +121,11 @@ class SearchPage extends React.Component {
     });
     this.props.commonStore.setSearchFilters(currentSearchFilters);
   }
-
   
   getActionInQueue = () => {
     let action = this.props.commonStore.getCookie('actionInQueue');
     this.props.commonStore.removeCookie('actionInQueue');
-    return action
+    return action;
   }
 
   getHashtagsFilter = () => {
@@ -169,8 +185,8 @@ class SearchPage extends React.Component {
 
           <div className={'search-content-container'} id="content-container">
             <div className={'search-content-offset'}></div>
-            <div className={'search-button'} id="search-button">
-              <SearchButton />
+            <div className={'search-button'} id="search-button" >
+              <SearchButton onClick={this.handleShowSearchResults} />
             </div>
             <div className={'search-content'}>
               <ErrorBoundary>

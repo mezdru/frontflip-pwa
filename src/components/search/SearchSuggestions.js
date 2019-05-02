@@ -18,7 +18,7 @@ const styles = theme => ({
   suggestion: {
     margin: 8,
     paddingRight: 0,
-    background: 'rgb(245,245,245)',
+    background: 'white',
     color: theme.palette.primary.dark,
     '&:hover': {
       background: 'rgb(220,220,220)'
@@ -33,7 +33,7 @@ const styles = theme => ({
   },
   suggestionCount: {
     color: 'rgb(190,190,190)',
-    borderRadius: '50%',
+    borderRadius: '50%',  
     width: 32,
     height:32,
     textAlign: 'center',
