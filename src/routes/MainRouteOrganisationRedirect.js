@@ -12,8 +12,8 @@ import SearchPage from "../pages/SearchPage";
 import SlackService from '../services/slack.service';
 import AuthPage from '../pages/auth/AuthPage';
 import PasswordReset from '../pages/auth/PasswordReset';
+import OnboardPage from '../pages/OnboardPage';
 
-const OnboardPage = React.lazy(() => import('../pages/OnboardPage'));
 const PasswordForgot = React.lazy(() => import('../pages/auth/PasswordForgot'));
 // const PasswordReset = React.lazy(() => import('../pages/auth/PasswordReset'));
 
@@ -229,9 +229,9 @@ class MainRouteOrganisationRedirect extends React.Component {
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
 
             {/* Main route with orgTag */}
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step?" component={this.WaitingComponent(OnboardPage)} />
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit" component={this.WaitingComponent(OnboardPage, {edit: true})} />
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit/:recordId" component={this.WaitingComponent(OnboardPage, {edit: true})} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step?" component={(OnboardPage)} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit" component={(props => { return <OnboardPage edit={true} {...props} /> } )} />
+            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit/:recordId" component={(props => { return <OnboardPage edit={true} {...props} /> } )} />
 
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={SearchPage} />
 
