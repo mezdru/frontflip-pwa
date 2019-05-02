@@ -4,9 +4,10 @@ import { inject, observer } from "mobx-react";
 import withWidth from '@material-ui/core/withWidth';
 import ReactGA from 'react-ga';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Redirect } from "react-router-dom";
+
 import Header from '../components/header/Header';
 import ProfileLayout from "../components/profile/ProfileLayout";
-
 import { styles } from './SearchPage.css';
 import SearchResults from '../components/search/SearchResults';
 import Search from '../components/search/Search';
@@ -15,7 +16,6 @@ import ErrorBoundary from '../components/utils/errors/ErrorBoundary';
 import BannerResizable from '../components/utils/banner/BannerResizable';
 import './SearchPageStyle.css';
 import SearchButton from '../components/search/SearchButton';
-import { Redirect } from "react-router-dom";
 
 const OnboardCongratulation = React.lazy(() => import('../components/onboard/steps/OnboardCongratulation'));
 const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
@@ -40,7 +40,6 @@ class SearchPage extends React.Component {
   getAskedHit = () => {
     if (this.props.match && this.props.match.params && this.props.match.params.profileTag &&
       (this.props.match.params.profileTag.charAt(0) === '#' || this.props.match.params.profileTag.charAt(0) === '@')) {
-      console.log(this.props.match.params.profileTag);
       return { tag: this.props.match.params.profileTag };
     } else {
       return null;
