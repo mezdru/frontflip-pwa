@@ -22,6 +22,7 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.8",
     "react-select": "^2.4.2",
+    "react-stickynode": "^2.1.1",
     "react-swipeable-views": "^0.13.1",
     "react-swipeable-views-utils": "^0.13.1",
     "slack-notify": "^0.1.7",

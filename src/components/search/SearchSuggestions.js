@@ -8,15 +8,17 @@ import withSearchManagement  from './SearchManagement.hoc';
 const styles = theme => ({
   suggestionsContainer: {
     textAlign: 'left',
-    maxHeight: 95,
+    maxHeight: 63,
     overflow: 'hidden',
     padding: '8px 0px',
     marginLeft: '-8px',
+    position: 'relative',
+    zIndex: 1198,
   },
   suggestion: {
     margin: 8,
     paddingRight: 0,
-    background: 'white',
+    background: 'rgb(245,245,245)',
     color: theme.palette.primary.dark,
     '&:hover': {
       background: 'rgb(220,220,220)'

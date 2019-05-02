@@ -81,6 +81,8 @@ class ProfileLayout extends React.Component {
     ProfileService.makeHightlighted(currentHit);
     ProfileService.orderHashtags(currentHit);
 
+    console.log(currentHit)
+
     if (redirectTo) return (<Redirect to={redirectTo} />);
     if (!currentHit) return (<div></div>);
 

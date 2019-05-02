@@ -3,7 +3,6 @@ import { observe } from 'mobx';
 import { inject, observer } from "mobx-react";
 import defaultBanner from '../../../resources/images/fly_away.jpg';
 import { withStyles } from '@material-ui/core';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 let interval;
 
@@ -13,27 +12,12 @@ const styles = theme => ({
     top:0,
     width: '100%',
     minHeight: 64,
-    boxShadow: 'rgba(0, 0, 0, 0.2) 0px 1px 8px 0px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.12) 0px 3px 3px -2px',
+    // boxShadow: 'rgba(0, 0, 0, 0.2) 0px 1px 8px 0px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.12) 0px 3px 3px -2px',
     backgroundColor: 'white',
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
     backgroundRepeat: 'no-repeat',
-    overflow: 'hidden',
-    zIndex: 1000,
   },
-  bannerMinRelative: {
-    position: 'relative',
-    height: 64,
-  },
-  bannerBackdrop: {
-    position: 'fixed',
-    height: '100%',
-    width: '100%',
-    top:0,
-    left:0,
-    zIndex: 999,
-    backgroundColor: 'rgba(0, 0, 0, .5)'
-  }
 });
 
 const MEDIUM_HEIGHT = 50;
@@ -156,15 +140,9 @@ class BannerResizable extends React.Component {
 
     return (
       <>
-        {bannerState !== 'initial' && this.isScrollPossible() && (<div className={classes.bannerMinRelative}></div>)}
-        <ClickAwayListener onClickAway={(e) => {this.minifyBanner()}} >
           <div className={classes.root} style={{backgroundImage: `url(${source})`, height: initialHeight + 'vh', ...this.props.style}} id="bannerResizable" >
             {this.props.children}
           </div>
-        </ClickAwayListener>
-        {bannerState !== 'initial' && bannerState !== 'min' && this.isScrollPossible() && (
-          <div className={classes.bannerBackdrop}></div>
-        )}
       </>
     )
   }

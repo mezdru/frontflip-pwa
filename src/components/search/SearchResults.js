@@ -24,7 +24,31 @@ const styles = theme => ({
     margin: 16,
     color: theme.palette.primary.dark,
     fontWeight: '600'
-  }
+  },
+  hitList: {
+    position: 'relative',
+    zIndex: 999,
+    width: '100%',
+    backgroundColor: '#f2f2f2',
+    '& ul': {
+      listStyleType: 'none',
+      padding: 0,
+      marginTop: '32px',
+      marginBottom: '32px',
+    },
+    '& ul li': {
+      marginBottom: '32px',
+      opacity: 0,
+      animation: 'fadeIn 0.9s 1',
+      animationFillMode: 'forwards',
+    },
+    '& ul li > div:first-child': {
+      position: 'relative',
+      left: '0',
+      right: '0',
+      margin: 'auto'
+    }
+  },
 });
 
 class SearchResults extends React.Component {
@@ -94,13 +118,13 @@ class SearchResults extends React.Component {
   
   handleShowMore = (e) => {
     this.setState({page: this.state.page+1, loadInProgress: true}, () => {
-      this.fetchHits(this.props.filters, this.props.query, null, this.state.page);
+      this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, this.state.page);
     });
   }
   
   render() {
     const {hits, loadInProgress, hideShowMore, hitsAlreadyDisplayed, showNoResult} = this.state;
-    const {addToFilters, handleDisplayProfile, classes, HitComponent, filters, query} = this.props;
+    const {handleDisplayProfile, classes, HitComponent, filters, query} = this.props;
     let hitsResult = hits;
     if( (filters === 'type:person') && !query) {
       // The search results aren't filtered, we can randomize them.

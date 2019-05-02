@@ -90,10 +90,4 @@ export const styles = theme => ({
     paddingTop: 8,
     paddingBottom: 8,
   },
-
-  searchBanner: {
-    position: 'relative',
-    opacity: 0.8,
-    filter: 'blur(.5px) brightness(55%)'
-  }
 });

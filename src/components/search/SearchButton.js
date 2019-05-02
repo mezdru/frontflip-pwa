@@ -1,6 +1,6 @@
 import React from 'react';
 import { inject, observer } from "mobx-react";
-import { withStyles, Grid, CircularProgress } from '@material-ui/core';
+import { withStyles } from '@material-ui/core';
 import { observe } from 'mobx';
 
 
@@ -12,6 +12,11 @@ const styles = theme => ({
     left:0,
     right:0,
     margin: 'auto',
+    backgroundColor: 'white',
+    borderRadius: 5,
+    width: 250,
+    padding: 16,
+    textAlign: 'center'
   }
 });
 
@@ -37,7 +42,9 @@ class SearchButton extends React.Component {
 
     return(
       <>
+        <div className={classes.searchBox}>
         {searchResultsCount} persons found !
+        </div>
       </>
     );
   }
