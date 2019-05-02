@@ -102,6 +102,7 @@ class SearchResults extends React.Component {
       .then((content) => {
       
       if(!content || !content.hits || content.hits.length === 0) this.setState({showNoResult: true, hideShowMore: true});
+      else this.setState({showNoResult: false});
 
       this.props.commonStore.searchResultsCount = content.hits.length;
       

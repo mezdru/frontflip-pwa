@@ -10,7 +10,7 @@ import {Option, customStyles, MultiValueContainer} from './SearchFieldElements';
 import AlgoliaService from '../../services/algolia.service';
 import { observe } from 'mobx';
 import {Search} from '@material-ui/icons';
-import { components } from 'react-select';
+import { components } from 'react-select'; 
 import theme from '../../theme';
 
 class SearchField extends React.Component {
