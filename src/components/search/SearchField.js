@@ -4,7 +4,7 @@ import { injectIntl } from 'react-intl';
 import { inject, observer } from 'mobx-react';
 import '../algolia/SearchField.css';
 import classNames from 'classnames';
-import { withTheme } from '@material-ui/core';
+import { withTheme, withStyles } from '@material-ui/core';
 import ProfileService from '../../services/profile.service';
 import {Option, customStyles, MultiValueContainer} from '../algolia/SearchFieldElements';
 import AlgoliaService from '../../services/algolia.service';
@@ -12,6 +12,45 @@ import { observe } from 'mobx';
 import {Search} from '@material-ui/icons';
 import { components } from 'react-select';
 import theme from '../../theme';
+import Wing from '../utils/wing/Wing';
+import withSearchManagement from './SearchManagement.hoc';
+
+const styles = theme => ({
+  searchContainer: {
+    position: 'relative',
+    zIndex: 1199,
+    border: '1px solid',
+    borderColor: theme.palette.primary.dark,
+    borderRadius: 5,
+    height: 48,
+    background: 'white',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  searchFiltersContainer: {
+    display: 'flex',
+    maxHeight: 42,
+    maxWidth: '80%',
+    background: 'transparent',
+    '& >div': {
+      margin: 8,
+    },
+    overflowX: 'auto',
+    flexWrap: 'nowrap',
+    overflowY: 'hidden',
+    paddingRight: 8,
+    borderRadius: 5,
+  },
+  searchInput: {
+    flex: 'auto',
+    background: 'transparent',
+    outline: 'none',
+    border: 'none',
+    height: '100%',
+    fontSize: '1.1em',
+    paddingLeft: 8,
+  },
+});
 
 class SearchField extends React.Component {
   constructor(props) {
@@ -21,8 +60,30 @@ class SearchField extends React.Component {
       selectedOption: this.props.defaultValue,
       placeholder: this.getSearchFieldPlaceholder(),
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
+      searchFilters: [],
       observer: () => {}
     };
+  }
+
+  componentDidMount() {
+    this.setState({observer: observe(this.props.commonStore, 'searchFilters', (change) => {
+      this.setState({searchFilters: this.props.commonStore.getSearchFilters()}, () => {
+        this.scrollToRight();
+      });
+    })});
+  }
+
+  componentWillUnmount() {
+    this.state.observer();
+  }
+
+  async scrollToRight() {
+    setTimeout(() => {
+      let valueContainer = document.getElementById('search-filters-container');
+      if(valueContainer){
+        valueContainer.scrollLeft = valueContainer.scrollWidth;
+      } 
+    }, 100);
   }
 
   getSearchFieldPlaceholder = () => {
@@ -33,226 +94,45 @@ class SearchField extends React.Component {
     }
   }
 
-  componentDidMount() {
-    AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-
-    this.setState({observer: observe(this.props.commonStore, 'algoliaKey', (change) => {
-      AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-    })});
-
-    observe(this.props.commonStore, 'searchFilters', (change) => {
-
-      let currentFilters = this.props.commonStore.getSearchFilters();
-
-      currentFilters.forEach(filter => {
-        if (this.state.selectedOption && !this.state.selectedOption.some(val => val.value === filter.value)) {
-          let newSelectedOption = this.state.selectedOption;
-          newSelectedOption.push(filter);
-          this.handleChange(newSelectedOption, false);
-        } else if(!this.state.selectedOption){
-          this.handleChange([filter], false);
-        }
-      });
-    });
-  }
-
-  componentWillUnmount() {
-    this.state.observer();
-  }
-
-  // Format an array of options so that they all have a label and a value
-  // i18n of options is performed here
-  prepareLabels = (array) => {
-    let arrayOfLabel = [];
-    array.forEach(hit => {
-      let displayedName;
-      let displayedNameText;
-      if (hit.type === 'hashtag') {
-        displayedNameText = this.getTextLabel(hit);
-        if(hit._highlightResult && hit._highlightResult.name_translated && hit._highlightResult.name_translated[this.state.locale]&& hit._highlightResult.name_translated[this.state.locale].value) {
-          displayedName = hit._highlightResult.name_translated[this.state.locale].value;
-        } else if(hit._highlightResult && hit._highlightResult.name && hit._highlightResult.name.value) {
-          displayedName = hit._highlightResult.name.value;
-        } else if(hit._highlightResult && hit._highlightResult.tag && hit._highlightResult.tag.value){
-          displayedName = hit._highlightResult.tag.value;
-        } else {
-          displayedName = this.getTextLabel(hit);
-        }
-      } else if (hit.type === 'person') {
-        displayedNameText = hit.name || hit.tag;
-        if(hit._highlightResult && hit._highlightResult.name && hit._highlightResult.name.value) {
-          displayedName = hit._highlightResult.name.value
-        } else {
-          displayedName = hit.name || hit.tag;
-        }
-      }
-      arrayOfLabel.push({ label: displayedName, value: hit.tag, labelText: displayedNameText, picturePath: ProfileService.getPicturePath(hit.picture, 'hashtag') });
-    });
-    return arrayOfLabel;
-  }
-
-  getTextLabel = (hit) => {
-    if(!hit) return '';
-    return (hit.name_translated ? 
-      (hit.name_translated[this.state.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag);
-  }
-
-  getOptionValue = (option) => option.value;
-  getOptionLabel = (option) => ProfileService.htmlDecode(option.labelText || option.label);
-
-  // when option is selected
-  handleChange = (selectedOption, shouldUpdateSearchFilters) => {
-    this.scrollToBottom();
-  
-      this.setState({
-        selectedOption: selectedOption,
-        inputValue: ''
-      }, () => {
-        this.refineWithSelectedOptions(selectedOption);
-        if(shouldUpdateSearchFilters) this.props.commonStore.setSearchFilters(selectedOption);
-      });
-  }
-
-  // rename scrollToRight
-  async scrollToBottom() {
-    setTimeout(() => {
-      let valueContainer = document.querySelector('.autocomplete-search div div:nth-child(1)');
-      if(valueContainer){
-        valueContainer.scrollLeft = valueContainer.scrollWidth;
-      } 
-    }, 100);    
-  }
-
-  refineWithSelectedOptions = (selectedOption) => {
-    let optionsString = '';
-    if (selectedOption && selectedOption.length > 0) selectedOption.forEach(option => { optionsString += option.label + ' '; });
-    this.updateOptions(optionsString);
-  }
-
-  getOptions = async (inputValue) => {
-    let algoliaResponse = await this.updateOptions(inputValue);
-    return this.prepareLabels(algoliaResponse.hits);
-  }
-
-  updateOptions = async (inputValue) => {
-    return await AlgoliaService.fetchOptions(inputValue, this.props.hashtagOnly, this.props.wingsFamily);
-  }
-
-  handleCreateOption = async (option) => {
-    if (!this.props.hashtagOnly) {
-      let arrayOfOption = this.state.selectedOption || [];
-      option = option.trim();
-      arrayOfOption.push({ label: option, value: option });
-      return this.handleChange(arrayOfOption, true);
-    } else {
-      let newRecord = {
-        name: option,
-        type: 'hashtag'
-      }
-      if(this.props.wingsFamily){
-        let wingsFamilyRecord;
-        this.props.recordStore.setRecordTag(this.props.wingsFamily);
-        wingsFamilyRecord = await this.props.recordStore.getRecordByTag();
-        newRecord.hashtags = [wingsFamilyRecord];
-      }
-      return this.props.recordStore.postRecord(newRecord)
-      .then(recordSaved => {
-        return this.handleChange(recordSaved, true);
-      }).catch((e) => console.log(e));
+  handleEnter = (e) => {
+    if(e.key === 'Enter') {
+      this.props.addFilter({name: e.target.value, tag: e.target.value});
+      e.target.value = '';
     }
-  }
 
-  noOptionsMessage = (inputValue) => {
-    if (inputValue.inputValue) return this.props.intl.formatMessage({ id: 'algolia.noOptions' }, { input: inputValue.inputValue });
-    return this.props.intl.formatMessage({ id: 'algolia.typeSomething' });
-  }
-
-  createOptionMessage = (inputValue) => {
-    if(this.props.hashtagOnly) 
-      return this.props.intl.formatMessage({ id: 'algolia.createWing' }, { input: inputValue });
-    else
-      return this.props.intl.formatMessage({ id: 'algolia.createOption' }, { input: inputValue });
-  }
-
-  handleSearchClick = (props) => {
-    if(props.selectProps.inputValue.trim() !== '') {
-      this.handleCreateOption(props.selectProps.inputValue);
-    }
-  }
-
-  onInputChange = (inputValue, { action }) => {
-    switch (action) {
-      case 'input-change':
-        this.setState({ inputValue });
-        return;
-      case 'menu-close':
-        let menuIsOpen = undefined;
-        if (this.state.inputValue) {
-          menuIsOpen = true;
-        }
-        this.setState({
-          menuIsOpen
-        });
-        return;
-      default:
-        return;
-    }
-  }
-
-  onKeyDown = (event) => {
-    switch (event.keyCode) {
-        case 13: // ENTER
-            event.preventDefault();
-            this.handleSearchClick({selectProps: {inputValue: this.state.inputValue}});
-            break;
-        default:
-          return;
-    }
   }
 
   render() {
-    const { defaultOptions} = this.props;
-    const { selectedOption, placeholder, inputValue } = this.state;
-
-    const DropdownIndicator = (props) => {
-      return (
-        <components.DropdownIndicator {...props}>
-          <Search onClick={() => {this.handleSearchClick(props)}} style={{color: theme.palette.primary.main}} />
-        </components.DropdownIndicator>
-      );
-    };
+    const { defaultOptions, classes} = this.props;
+    const { selectedOption, placeholder, inputValue, searchFilters } = this.state;
 
     return (
-      <AsyncCreatable
-        formatCreateLabel={this.createOptionMessage}
-        styles={customStyles}
-        className={classNames('autocomplete-search', this.props.className)}
-        value={selectedOption}
-        noOptionsMessage={this.noOptionsMessage}
-        getOptionValue={this.getOptionValue}
-        getOptionLabel={this.getOptionLabel}
-        defaultOptions={defaultOptions}
-        loadOptions={this.getOptions}
-        placeholder={placeholder}
-        onChange={(option) => this.handleChange(option, true)}
-        onCreateOption={this.handleCreateOption}
-        components={{ MultiValueContainer, DropdownIndicator, Option }}
-        isMulti={!this.props.hashtagOnly}
-        onSelectResetsInput={true}
-        onBlurResetsInput={true}
-        onCloseResetsInput={false}
-        arrowRenderer={() => null}
-        clearRenderer={() => null}
-        inputValue={inputValue}
-        onInputChange={this.onInputChange}
-        onKeyDown={this.onKeyDown}
-      />
+      <div className={classes.searchContainer}>
+
+        <div className={classes.searchFiltersContainer} id="search-filters-container">
+          {searchFilters && searchFilters.length > 0 && searchFilters.map((filter, index) => {
+            let displayedName = (filter.name_translated ? 
+                                (filter.name_translated[this.state.locale] || filter.name_translated['en-UK']) || filter.name || filter.tag : 
+                                filter.name);
+            return (
+              <Wing
+                label={ProfileService.htmlDecode(displayedName)} key={index}
+                onDelete={(e) => {this.props.removeFilter(filter)}} />
+            );
+          })}
+        </div>
+
+        <input type='text' name="searchInput" className={classes.searchInput} placeholder={placeholder} onKeyDown={this.handleEnter} />
+
+      </div>
     );
   }
 }
 
+SearchField = withSearchManagement(SearchField);
+
 export default inject('commonStore', 'recordStore', 'organisationStore')(
   observer(
-    injectIntl(withTheme()(SearchField))
+    injectIntl(withTheme()(withStyles(styles)(SearchField)))
   )
 );
