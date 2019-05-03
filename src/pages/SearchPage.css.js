@@ -35,4 +35,10 @@ export const styles = theme => ({
   fullWidth: {
     width: '100%'
   },
+  searchMobileView: {
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: '16px!important',
+      marginRight: '16px!important',
+    },
+  }
 });

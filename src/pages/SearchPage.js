@@ -178,7 +178,7 @@ class SearchPage extends React.Component {
           {/* Search box - Search field & Search suggestions */}
           <div className={'search-input'} id="search-input">
             <Grid container justify='center'>
-              <Grid item xs={12} sm={8} md={6} lg={4}>
+              <Grid item xs={12} sm={8} md={6} lg={4} className={classes.searchMobileView}>
                 <ErrorBoundary>
                   <Suspense fallback={<CircularProgress color='secondary' />}>
                     <Search />

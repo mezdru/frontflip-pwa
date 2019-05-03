@@ -13,7 +13,7 @@ const styles = theme => ({
     padding: '8px 0px',
     marginLeft: '-8px',
     position: 'relative',
-    zIndex: 1198,
+    zIndex: 1197,
   },
   suggestion: {
     margin: 8,

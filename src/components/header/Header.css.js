@@ -127,7 +127,7 @@ export const styles = theme => ({
     position: 'fixed',
     top: 8,
     left: 8,
-    zIndex: 1001,
+    zIndex: 1199,
     padding: 0,
     cursor: 'pointer',
     height: 48,

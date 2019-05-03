@@ -1,7 +1,7 @@
 export const styles = theme => ({
   searchContainer: {
     position: 'relative',
-    zIndex: 1199,
+    zIndex: 1198,
     border: '1px solid',
     borderColor: theme.palette.primary.dark,
     borderRadius: 5,

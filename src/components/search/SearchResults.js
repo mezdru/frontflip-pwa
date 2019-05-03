@@ -49,6 +49,11 @@ const styles = theme => ({
       margin: 'auto'
     }
   },
+  cardMobileView: {
+    [theme.breakpoints.down('xs')]: {
+      margin: '16px!important',
+    },
+  },
 });
 
 class SearchResults extends React.Component {
