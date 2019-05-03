@@ -1,76 +1,22 @@
 import React from 'react';
-import { AsyncCreatable } from 'react-select';
 import { injectIntl } from 'react-intl';
 import { inject, observer } from 'mobx-react';
-import '../algolia/SearchField.css';
-import classNames from 'classnames';
 import { withTheme, withStyles } from '@material-ui/core';
-import ProfileService from '../../services/profile.service';
-import {Option, customStyles, MultiValueContainer} from '../algolia/SearchFieldElements';
-import AlgoliaService from '../../services/algolia.service';
 import { observe } from 'mobx';
-import {Search} from '@material-ui/icons';
-import { components } from 'react-select';
-import theme from '../../theme';
-import Wing from '../utils/wing/Wing';
-import withSearchManagement from './SearchManagement.hoc';
 import {Clear} from '@material-ui/icons';
 import IconButton from '@material-ui/core/IconButton';
 
-const styles = theme => ({
-  searchContainer: {
-    position: 'relative',
-    zIndex: 1199,
-    border: '1px solid',
-    borderColor: theme.palette.primary.dark,
-    borderRadius: 5,
-    height: 50,
-    background: 'white',
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  searchFiltersContainer: {
-    display: 'flex',
-    maxHeight: 42,
-    maxWidth: '80%',
-    background: 'transparent',
-    '& >div': {
-      margin: 8,
-    },
-    overflowX: 'auto',
-    flexWrap: 'nowrap',
-    overflowY: 'hidden',
-    paddingRight: 8,
-    borderRadius: 5,
-  },
-  searchInput: {
-    flex: 'auto',
-    background: 'transparent',
-    outline: 'none',
-    border: 'none',
-    height: '100%',
-    fontSize: '1.1em',
-    paddingLeft: 8,
-  },
-  searchClear: {
-    float: 'right',
-    // lineHeight: '70px',
-    // paddingRight: 8,
-    marginTop: 4,
-    marginRight: 4,
-    height: 40,
-    '& svg': {
-      color: theme.palette.primary.dark
-    }
-  }
-});
+import '../algolia/SearchField.css';
+import ProfileService from '../../services/profile.service';
+import Wing from '../utils/wing/Wing';
+import withSearchManagement from './SearchManagement.hoc';
+import {styles} from './SearchField.css';
 
 class SearchField extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       searchInput: '',
-      selectedOption: this.props.defaultValue,
       placeholder: this.getSearchFieldPlaceholder(),
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
       searchFilters: [],
@@ -130,8 +76,8 @@ class SearchField extends React.Component {
   }
 
   render() {
-    const { classes, theme} = this.props;
-    const { selectedOption, placeholder, searchInput, searchFilters } = this.state;
+    const { classes} = this.props;
+    const { placeholder, searchInput, searchFilters } = this.state;
 
     return (
       <div className={classes.searchContainer} id="search-container">
