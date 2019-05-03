@@ -82,6 +82,14 @@ class SearchSuggestions extends React.Component {
     this.state.observer2();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.autocompleteSuggestions.length > 0) {
+      this.setState({facetHits: nextProps.autocompleteSuggestions});
+    } else {
+      this.setState({facetHits: nextProps.autocompleteSuggestions});
+    }
+  }
+
   fetchSuggestions(filters, query) {
     AlgoliaService.fetchFacetValues(null, false, filters, query)
     .then((res) => {
@@ -102,16 +110,17 @@ class SearchSuggestions extends React.Component {
     return (
       <div className={classes.suggestionsContainer} >
         {facetHits.map((item, i) => {
-          if (this.shouldDisplaySuggestion(item.value)){
+          var itemChosenName = (item.value || item.name || item.tag);
+          if (this.shouldDisplaySuggestion(itemChosenName)){
             return (
               <Chip key={i} 
                     component={ (props)=>
                               <div {...props}>
-                                <div className={classes.suggestionLabel}>{item.value}</div>
+                                <div className={classes.suggestionLabel}>{itemChosenName}</div>
                                 <div className={classes.suggestionCount}>{item.count}</div>
                               </div>
                     }
-                    onClick={(e) => addFilter({ name: item.value, tag: item.value, value: item.value, label: item.value })} 
+                    onClick={(e) => addFilter({ name: itemChosenName, tag: itemChosenName})} 
                     className={classes.suggestion} 
                     style={{animationDelay: (i*0.05) +'s'}} />
             );

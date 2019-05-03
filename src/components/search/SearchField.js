@@ -56,7 +56,7 @@ class SearchField extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputValue: '',
+      searchInput: '',
       selectedOption: this.props.defaultValue,
       placeholder: this.getSearchFieldPlaceholder(),
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
@@ -67,7 +67,7 @@ class SearchField extends React.Component {
 
   componentDidMount() {
     this.setState({observer: observe(this.props.commonStore, 'searchFilters', (change) => {
-      this.setState({searchFilters: this.props.commonStore.getSearchFilters()}, () => {
+      this.setState({searchFilters: this.props.commonStore.getSearchFilters(), searchInput: ''}, () => {
         this.scrollToRight();
       });
     })});
@@ -97,14 +97,18 @@ class SearchField extends React.Component {
   handleEnter = (e) => {
     if(e.key === 'Enter') {
       this.props.addFilter({name: e.target.value, tag: e.target.value});
-      e.target.value = '';
+      this.setState({searchInput: ''});
     }
+  }
 
+  handleInputChange = (inputValue) => {
+    this.setState({searchInput: inputValue});
+    this.props.fetchAutocompleteSuggestions(inputValue);
   }
 
   render() {
     const { defaultOptions, classes} = this.props;
-    const { selectedOption, placeholder, inputValue, searchFilters } = this.state;
+    const { selectedOption, placeholder, searchInput, searchFilters } = this.state;
 
     return (
       <div className={classes.searchContainer}>
@@ -122,7 +126,14 @@ class SearchField extends React.Component {
           })}
         </div>
 
-        <input type='text' name="searchInput" className={classes.searchInput} placeholder={placeholder} onKeyDown={this.handleEnter} />
+        <input 
+          type='text' name="searchInput" 
+          className={classes.searchInput} 
+          value={searchInput}
+          placeholder={placeholder} 
+          onKeyDown={this.handleEnter} 
+          onChange={(e) => {this.handleInputChange(e.target.value)}}
+        />
 
       </div>
     );
