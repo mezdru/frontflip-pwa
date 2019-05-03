@@ -21,6 +21,10 @@ const withSearchManagement = (ComponentToWrap) => {
       commonStore.setSearchFilters(currentSearchFilters);
     }
 
+    resetFilters = () => {
+      commonStore.setSearchFilters([]);
+    }
+
     makeFiltersRequest = async () => {
       var currentFilters = commonStore.getSearchFilters();
       var filterRequest = 'type:person';
@@ -44,6 +48,7 @@ const withSearchManagement = (ComponentToWrap) => {
           addFilter={this.addFilter} 
           makeFiltersRequest={this.makeFiltersRequest}
           removeFilter={this.removeFilter}
+          resetFilters={this.resetFilters}
         />
       )
     }

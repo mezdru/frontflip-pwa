@@ -14,6 +14,8 @@ import { components } from 'react-select';
 import theme from '../../theme';
 import Wing from '../utils/wing/Wing';
 import withSearchManagement from './SearchManagement.hoc';
+import {Clear} from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
 
 const styles = theme => ({
   searchContainer: {
@@ -22,7 +24,7 @@ const styles = theme => ({
     border: '1px solid',
     borderColor: theme.palette.primary.dark,
     borderRadius: 5,
-    height: 48,
+    height: 50,
     background: 'white',
     display: 'flex',
     flexDirection: 'row',
@@ -50,6 +52,17 @@ const styles = theme => ({
     fontSize: '1.1em',
     paddingLeft: 8,
   },
+  searchClear: {
+    float: 'right',
+    // lineHeight: '70px',
+    // paddingRight: 8,
+    marginTop: 4,
+    marginRight: 4,
+    height: 40,
+    '& svg': {
+      color: theme.palette.primary.dark
+    }
+  }
 });
 
 class SearchField extends React.Component {
@@ -106,12 +119,22 @@ class SearchField extends React.Component {
     this.props.fetchAutocompleteSuggestions(inputValue);
   }
 
+  handleInputFocus = () => {
+    var searchContainer = document.getElementById('search-container');
+    searchContainer.style.border = '2px solid';
+  }
+
+  handleInputBlur = () => {
+    var searchContainer = document.getElementById('search-container');
+    searchContainer.style.border = '1px solid';
+  }
+
   render() {
-    const { defaultOptions, classes} = this.props;
+    const { classes, theme} = this.props;
     const { selectedOption, placeholder, searchInput, searchFilters } = this.state;
 
     return (
-      <div className={classes.searchContainer}>
+      <div className={classes.searchContainer} id="search-container">
 
         <div className={classes.searchFiltersContainer} id="search-filters-container">
           {searchFilters && searchFilters.length > 0 && searchFilters.map((filter, index) => {
@@ -133,7 +156,14 @@ class SearchField extends React.Component {
           placeholder={placeholder} 
           onKeyDown={this.handleEnter} 
           onChange={(e) => {this.handleInputChange(e.target.value)}}
+          onFocus={this.handleInputFocus} onBlur={this.handleInputBlur}
         />
+        
+        {(searchInput || (searchFilters && searchFilters.length > 0)) && (
+          <IconButton className={classes.searchClear} onClick={this.props.resetFilters} >
+            <Clear fontSize='medium' />
+          </IconButton>
+        )}
 
       </div>
     );
@@ -144,6 +174,6 @@ SearchField = withSearchManagement(SearchField);
 
 export default inject('commonStore', 'recordStore', 'organisationStore')(
   observer(
-    injectIntl(withTheme()(withStyles(styles)(SearchField)))
+    injectIntl(withTheme()(withStyles(styles, {withTheme: true})(SearchField)))
   )
 );
