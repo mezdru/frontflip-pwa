@@ -19,10 +19,18 @@ class SearchField extends React.Component {
     this.state = {
       inputValue: '',
       selectedOption: this.props.defaultValue,
-      placeholder: this.props.intl.formatMessage({ id: (this.props.hashtagOnly ? 'algolia.onboard' : 'algolia.search') }),
+      placeholder: this.getSearchFieldPlaceholder(),
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
       observer: () => {}
     };
+  }
+
+  getSearchFieldPlaceholder = () => {
+    if(this.props.hashtagOnly) {
+      return this.props.intl.formatMessage({id: 'algolia.onboard'});
+    } else {
+      return this.props.intl.formatMessage({id: 'algolia.search'}, {orgName: this.props.organisationStore.values.organisation.name});
+    }
   }
 
   componentDidMount() {
@@ -243,7 +251,7 @@ class SearchField extends React.Component {
   }
 }
 
-export default inject('commonStore', 'recordStore')(
+export default inject('commonStore', 'recordStore', 'organisationStore')(
   observer(
     injectIntl(withTheme()(SearchField))
   )

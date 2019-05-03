@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from "mobx-react";
 import { withStyles } from '@material-ui/core';
 import { observe } from 'mobx';
-
+import {Person} from '@material-ui/icons';
 
 const styles = theme => ({
   searchBox: {
@@ -14,7 +14,7 @@ const styles = theme => ({
     margin: 'auto',
     backgroundColor: 'white',
     borderRadius: 5,
-    width: 250,
+    width: 100,
     padding: 16,
     textAlign: 'center',
     boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
@@ -42,6 +42,15 @@ const styles = theme => ({
     left:0,
     right:0,
     margin:'auto',
+  },
+  searchCounter: {
+    textAlign:'center',
+    fontWeight: 'bold',
+    fontSize: '1.2em',
+    '& svg': {
+      marginBottom: -10,
+      marginRight: -5
+    }
   }
 });
 
@@ -68,7 +77,7 @@ class SearchButton extends React.Component {
     return(
       <>
         <div className={classes.searchBox} onClick={this.props.onClick} >
-          🚀 {searchResultsCount} persons found!
+          <div className={classes.searchCounter}>{searchResultsCount} <Person fontSize="large"/></div>
           <div className={classes.bottomShape} />
           <div className={classes.bottomShapeCover} />
         </div>
