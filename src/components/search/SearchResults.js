@@ -8,6 +8,8 @@ import chat from '../../resources/images/chat.png';
 import AlgoliaService from '../../services/algolia.service';
 import { shuffleArray } from '../../services/utils.service';
 
+import withSearchManagement  from './SearchManagement.hoc';
+
 const styles = theme => ({
   image: {
     width: '47rem',
@@ -22,7 +24,31 @@ const styles = theme => ({
     margin: 16,
     color: theme.palette.primary.dark,
     fontWeight: '600'
-  }
+  },
+  hitList: {
+    position: 'relative',
+    zIndex: 999,
+    width: '100%',
+    backgroundColor: '#f2f2f2',
+    '& ul': {
+      listStyleType: 'none',
+      padding: 0,
+      marginTop: '32px',
+      marginBottom: '32px',
+    },
+    '& ul li': {
+      marginBottom: '32px',
+      opacity: 0,
+      animation: 'fadeIn 0.9s 1',
+      animationFillMode: 'forwards',
+    },
+    '& ul li > div:first-child': {
+      position: 'relative',
+      left: '0',
+      right: '0',
+      margin: 'auto'
+    }
+  },
 });
 
 class SearchResults extends React.Component {
@@ -35,18 +61,36 @@ class SearchResults extends React.Component {
       loadInProgress: true,
       hideShowMore: false,
       hitsAlreadyDisplayed: 0,
-      observer: () => {}
+      observer: () => {},
+      filterRequest: '',
+      queryRequest: '',
     };
   }
   
   componentDidMount() {
-    AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-    this.fetchHits(this.props.filters, this.props.query, null, null);
+    this.props.makeFiltersRequest()
+    .then((req) => {
+      this.setState({filterRequest: req.filterRequest, queryRequest: req.queryRequest }, () => {
+        AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
+        this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
+      });
+    });
+
     
     this.setState({observer : observe(this.props.commonStore, 'algoliaKey', (change) => {
         AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-        this.fetchHits(this.props.filters, this.props.query, null, null);
+        this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
     })});
+
+    observe(this.props.commonStore, 'searchFilters', (change) => {
+      this.props.makeFiltersRequest()
+      .then((req) => {
+        this.setState({filterRequest: req.filterRequest, queryRequest: req.queryRequest }, () => {
+          AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
+          this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
+        });
+      });
+    });
   }
   
   componentWillUnmount() {
@@ -58,8 +102,11 @@ class SearchResults extends React.Component {
       .then((content) => {
       
       if(!content || !content.hits || content.hits.length === 0) this.setState({showNoResult: true, hideShowMore: true});
-        this.setState({hitsAlreadyDisplayed: Math.min((content.hitsPerPage * (content.page)), content.nbHits)});
-      if(content.page === (content.nbPages-1)) this.setState({hideShowMore: true});
+      else this.setState({showNoResult: false});
+
+      this.props.commonStore.searchResultsCount = content.hits.length;
+      
+      this.setState({hitsAlreadyDisplayed: Math.min((content.hitsPerPage * (content.page)), content.nbHits)});      if(content.page === (content.nbPages-1)) this.setState({hideShowMore: true});
       if(page) this.setState({hits: this.state.hits.concat(content.hits)}, this.endTask());
         else this.setState({hits: content.hits}, this.endTask());
         
@@ -72,13 +119,13 @@ class SearchResults extends React.Component {
   
   handleShowMore = (e) => {
     this.setState({page: this.state.page+1, loadInProgress: true}, () => {
-      this.fetchHits(this.props.filters, this.props.query, null, this.state.page);
+      this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, this.state.page);
     });
   }
   
   render() {
     const {hits, loadInProgress, hideShowMore, hitsAlreadyDisplayed, showNoResult} = this.state;
-    const {addToFilters, handleDisplayProfile, classes, HitComponent, filters, query} = this.props;
+    const {handleDisplayProfile, classes, HitComponent, filters, query} = this.props;
     let hitsResult = hits;
     if( (filters === 'type:person') && !query) {
       // The search results aren't filtered, we can randomize them.
@@ -92,11 +139,12 @@ class SearchResults extends React.Component {
           return(
             <li key={i} style={{WebkitAnimationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s', animationDelay: (0.2*(i-hitsAlreadyDisplayed))+'s'}}>
               <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
-                <HitComponent hit={hit} addToFilters={addToFilters} handleDisplayProfile={handleDisplayProfile} />
+                <HitComponent hit={hit} handleDisplayProfile={handleDisplayProfile} />
                 </Grid>
               </li>
             );
           })}
+
           {!hideShowMore && (
             <li>
               <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} container justify={"center"} alignContent={"center"}>
@@ -126,6 +174,8 @@ class SearchResults extends React.Component {
     );
   }
 }
+
+SearchResults = withSearchManagement(SearchResults);
 
 export default inject('commonStore')(
   observer(

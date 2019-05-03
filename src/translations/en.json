@@ -36,7 +36,7 @@
     "password.new.create": "Create new password",
     "algolia.noOptions": "No results found for {input}",
     "algolia.typeSomething": "Type something to begin ...",
-    "algolia.search": "Search ...",
+    "algolia.search": "Search {orgName}...",
     "algolia.onboard": "Add your Wings",
     "algolia.createOption": "Search \"{input}\"",
     "algolia.createWing": "Create Wing \"{input}\"",

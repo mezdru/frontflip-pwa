@@ -36,7 +36,7 @@
     "password.create.title.noOrgTag": "Bienvenue sur Wingzy",
     "algolia.noOptions": "Pas de résultats pour {input}",
     "algolia.typeSomething": "Écrivez quelque-chose pour commencer ...",
-    "algolia.search": "Recherchez ...",
+    "algolia.search": "Recherchez dans {orgName}...",
     "algolia.onboard": "Ajoutez des Wings",
     "algolia.createOption": "Recherchez \"{input}\"",
     "algolia.createWing": "Créez la Wing \"{input}\"",

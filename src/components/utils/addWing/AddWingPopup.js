@@ -135,7 +135,7 @@ class AddWingPopup extends React.Component {
     const {classes} = this.props;
     const {organisation} = this.props.organisationStore.values;
 
-    if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect to={redirectTo} />);
+    if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
 
     return (
       <React.Fragment>

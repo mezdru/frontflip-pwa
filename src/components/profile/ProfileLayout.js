@@ -14,6 +14,7 @@ import Wings from '../utils/wing/Wing';
 import UrlService from '../../services/url.service';
 import ProfileService from '../../services/profile.service';
 import defaultPicture from '../../resources/images/placeholder_person.png';
+import withSearchManagement from '../search/SearchManagement.hoc';
 
 const Banner = React.lazy(() => import('../../components/utils/banner/Banner'));
 const Logo = React.lazy(() => import('../../components/utils/logo/Logo'));
@@ -60,7 +61,8 @@ class ProfileLayout extends React.Component {
           this.props.handleReturnToSearch();
         }.bind(this), 600);
       } else {
-        this.props.addToFilters(e, element, true);
+        this.props.addFilter(element);
+        this.props.handleReturnToSearch();
       }
     });
   }
@@ -86,6 +88,7 @@ class ProfileLayout extends React.Component {
 
     return (
       <Grid container className={(displayIn ? className : classes.profileContainerHide)}>
+
         {(window.location.pathname !== rootUrl + '/' + hit.tag) && (
           <Redirect to={rootUrl + '/' + hit.tag} />
         )}
@@ -93,24 +96,22 @@ class ProfileLayout extends React.Component {
           <Suspense fallback={<CircularProgress color='secondary' />}>
 
             <Banner source={(currentHit && currentHit.cover && currentHit.cover.url) ? currentHit.cover.url : null}>
+
               <IconButton aria-label="Edit" className={classes.returnButton} onClick={this.handleReturnToSearch}>
                 <Clear fontSize="large" className={classes.returnButtonSize} />
               </IconButton>
+
               {canEdit && (
                 <MenuButton urlUpdateCover={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/cover/id/' + currentHit.objectID, orgTag)}
                   urlEditIntro={'/' + locale + '/' + orgTag + '/onboard/intro/edit/' + currentHit.objectID}
                   urlEditAboutMe={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/about/id/' + currentHit.objectID, orgTag)}
                   urlDeleteProfile={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/record/delete/' + currentHit.objectID, orgTag)}
                 />
-                // <MenuButton urlUpdateCover={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/cover/id/' + currentHit.objectID, orgTag)}
-                // urlEditIntro={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/intro', orgTag, 'recordId=' + currentHit.objectID)}
-                // urlEditAboutMe={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/about/id/' + currentHit.objectID, orgTag)}
-                // urlDeleteProfile={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/record/delete/' + currentHit.objectID, orgTag)}
-                // />
               )}
             </Banner>
           </Suspense>
         </Grid>
+
         <Grid item xs={12} sm={6} lg={3} className={classes.generalPart}>
           <Grid item>
             <Suspense fallback={<CircularProgress color='secondary' />}>
@@ -126,6 +127,7 @@ class ProfileLayout extends React.Component {
               </Typography>
             </div>
           </Grid>
+
           {currentHit.links.map((link, i) => {
             if (!link.value || link.value === '') return null;
             if (link.type === 'workchat') return null; // hide workchat
@@ -138,6 +140,7 @@ class ProfileLayout extends React.Component {
               </Grid>
             )
           })}
+
           {canEdit && (
             <Grid item xs={12} style={{ position: 'relative' }}>
               <Button variant="text" className={classes.button} style={{ color: theme.palette.secondary.main, fontWeight: 'bold' }}
@@ -146,14 +149,8 @@ class ProfileLayout extends React.Component {
                 <FormattedMessage id="profile.addContacts" />
               </Button>
             </Grid>
-            // <Grid item xs={12} style={{position: 'relative'}}>
-            //   <Button variant="text" className={classes.button} style={{color: theme.palette.secondary.main, fontWeight: 'bold'}}
-            //           href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/links', orgTag, 'recordId=' + currentHit.objectID)}>
-            //     <div href={''} className={classNames(classes.contactIcon, "fa fa-plus")} style={{color: theme.palette.secondary.main}}></div>
-            //     <FormattedMessage id="profile.addContacts"/>
-            //   </Button>
-            // </Grid>
           )}
+
         </Grid>
         <Grid container item xs={12} sm={6} lg={9} className={classes.hashtagsPart}>
           <Grid item xs={12} className={classes.minHeightPossible}>
@@ -162,18 +159,16 @@ class ProfileLayout extends React.Component {
               return (
                 <Wings src={ProfileService.getPicturePath(hashtag.picture)}
                   label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
-                  onClick={(e) => this.handleReturnToSearch(e, { name: displayedName, tag: hashtag.tag })}
+                  onClick={(e) => this.handleReturnToSearch(e, { name: displayedName, tag: hashtag.tag, label: displayedName, value: hashtag.tag })}
                   className={(hashtag.class ? hashtag.class : 'notHighlighted')} />
               )
             })}
+
             {canEdit && (
               <Wings label={this.props.intl.formatMessage({ id: 'profile.addWings' })} className={'button'}
                 onClick={() => { this.handleRedirectToEditWings(currentHit.objectID) }} />
-              // <Wings label={this.props.intl.formatMessage({id: 'profile.addWings'})} className={'button'}
-              // onClick={() => {
-              //   window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/hashtags', orgTag, 'recordId=' + currentHit.objectID)
-              // }}/>
             )}
+
             <div style={{ marginTop: 16 }}>
               <Typography variant="h5" style={{ padding: 8 }}>
                 <FormattedMessage id={'profile.aboutMe'} />
@@ -188,6 +183,8 @@ class ProfileLayout extends React.Component {
     )
   }
 }
+
+ProfileLayout = withSearchManagement(ProfileLayout);
 
 export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore')(
   injectIntl(observer(

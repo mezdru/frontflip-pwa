@@ -11,6 +11,7 @@ class CommonStore {
   algoliaKeyOrganisation;
   locale = 'en-UK';
   searchFilters = [];
+  searchResultsCount = 0;
 
   constructor() {
     this.init();
@@ -53,8 +54,18 @@ class CommonStore {
 
   getAccessToken = () => this.getCookie('accessToken');
   getRefreshToken = () => this.getCookie('refreshToken');
-  setSearchFilters = (searchFilters) => this.setCookie('searchFilters', JSON.stringify(searchFilters));
-  getSearchFilters = () => this.getCookie('searchFilters');
+  setSearchFilters = (searchFilters) => {
+    this.setCookie('searchFilters', JSON.stringify(searchFilters));
+    this.init();
+  }
+  getSearchFilters = () => {
+    let coo = this.getCookie('searchFilters')
+    if(coo) {
+      return (coo);
+    } else {
+      return [];
+    }
+  }
 
   setCookie(name, value, expires) {
     if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
@@ -126,6 +137,7 @@ decorate(CommonStore, {
   algoliaKeyOrganisation: observable,
   searchFilters: observable,
   locale: observable,
+  searchResultsCount: observable,
   setToken: action,
   setAlgoliaKey: action,
   getCookie: action,

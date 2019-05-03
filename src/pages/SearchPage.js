@@ -1,24 +1,25 @@
 import React, { Suspense } from 'react'
-import { Grid, withStyles } from '@material-ui/core';
+import { withStyles, Grid } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
-import { Redirect } from "react-router-dom";
-import withWidth, { isWidthUp, isWidthDown } from '@material-ui/core/withWidth';
+import withWidth from '@material-ui/core/withWidth';
 import ReactGA from 'react-ga';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Redirect } from "react-router-dom";
 
 import Header from '../components/header/Header';
-import { styles } from './SearchPage.css';
 import ProfileLayout from "../components/profile/ProfileLayout";
+import { styles } from './SearchPage.css';
+import SearchResults from '../components/search/SearchResults';
+import Search from '../components/search/Search';
+import Card from '../components/card/CardProfile';
+import ErrorBoundary from '../components/utils/errors/ErrorBoundary';
+import BannerResizable from '../components/utils/banner/BannerResizable';
+import './SearchPageStyle.css';
+import SearchButton from '../components/search/SearchButton';
 
-const Banner = React.lazy(() => import('../components/utils/banner/Banner'));
-const SearchField = React.lazy(() => import('../components/algolia/SearchField'));
-const SearchSuggestions = React.lazy(() => import('../components/algolia/SearchSuggestions'));
-const SearchResults = React.lazy(() => import('../components/algolia/SearchResults'));
-const Card = React.lazy(() => import('../components/card/CardProfile'));
-
-const AddWingPopup = React.lazy(() => import('../components/utils/addWing/AddWingPopup'));
-const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
 const OnboardCongratulation = React.lazy(() => import('../components/onboard/steps/OnboardCongratulation'));
+const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
+const AddWingPopup = React.lazy(() => import('../components/utils/addWing/AddWingPopup'));
 
 console.debug('Loading SearchPage');
 
@@ -27,85 +28,111 @@ ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 class SearchPage extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
-      filters: 'type:person',
-      query: '',
-      newFilter: {},
-      displayedHit: null,
-      resultsType: this.props.resultsType || 'person',
-      shouldUpdateUrl: false,
-      shouldDisplayHitResults: true,
-      hashtagsFilter: this.getHashtagsFilter(),
-      actionInQueue: this.getActionInQueue()
+      displayedHit: this.getAskedHit(),
+      showCongratulation: false,
+      actionInQueue: this.getActionInQueue(),
+      hashtagsFilter: this.getHashtagsFilter()
     };
   }
 
-  componentDidMount() {
-    ReactGA.pageview(window.location.pathname);
-    this.props.history.listen((location, action) => ReactGA.pageview(window.location.pathname));
-    if (this.state.hashtagsFilter.length > 0) this.addHashtagsToSearch(this.state.hashtagsFilter);
-  }
-
-  addHashtagsToSearch = async (hashtags) => {
-    let newFilters = [];
-    hashtags.forEach(hashtag => {
-      newFilters.push({ label: hashtag, value: '#' + hashtag });
-      setTimeout(() => { this.setState({ newFilter: { label: hashtag, value: '#' + hashtag } }) }, 50 * newFilters.length);
-    });
-  }
-
-  addToFilters = (e, element, shouldAwaitToUpdateLayout) => {
-    this.setState({ newFilter: { label: element.name, value: element.tag } });
-    if (this.state.resultsType === 'profile') {
-      if (shouldAwaitToUpdateLayout) {
-        setTimeout(function () { this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true }); }.bind(this), 500);
-      } else {
-        this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true });
-      }
+  getAskedHit = () => {
+    if (this.props.match && this.props.match.params && this.props.match.params.profileTag &&
+      (this.props.match.params.profileTag.charAt(0) === '#' || this.props.match.params.profileTag.charAt(0) === '@')) {
+      return { tag: this.props.match.params.profileTag };
+    } else {
+      return null;
     }
   }
 
-  updateFilters = (selectedOptions) => {
-    if (!selectedOptions) return;
-    ReactGA.event({ category: 'Search', action: 'Perform search' });
-    this.setState({ shouldDisplayHitResults: false });
-    let newFilters = 'type:person';
-    let newQuery = '';
+  componentDidMount() {
+    this.moveSearchInputListener();
+    this.handleUrlSearchFilters();
+    try {
+      if (this.props.match.params.profileTag === 'congrats') this.setState({ showCongratulation: true })
+    } catch{ }
+  }
 
-    selectedOptions.forEach(option => {
-      if (option.value.charAt(0) !== '#' && option.value.charAt(0) !== '@') newQuery += ((newQuery !== '') ? ' ' : '') + option.label;
-      else if (option.value.charAt(0) === '#') newFilters += ' AND hashtags.tag:' + option.value;
-      else if (option.value.charAt(0) === '@') newFilters += ' AND tag:' + option.value;
+  moveSearchInputListener = () => {
+    var contentPart = document.getElementById('content-container');
+    var lastScrollTop = 0;
+
+    contentPart.addEventListener('scroll', function (e) {
+      var contentMain = document.getElementById('search-button');
+      var contentShape = contentMain.getBoundingClientRect();
+
+      var searchBox = document.getElementById('search-input');
+      var contentTop = contentShape.top;
+
+      if (lastScrollTop < contentPart.scrollTop) {
+        var currentSearchTop = searchBox.getBoundingClientRect().top;
+        while ((contentTop - (currentSearchTop + 120)) < 48 && (currentSearchTop >= 8)) {
+          searchBox.style.top = Math.max(8,(currentSearchTop -= 2)) + 'px';
+        }
+      } else {
+        var interval = setInterval(function () {
+          var currentSearchTop = searchBox.getBoundingClientRect().top;
+          if ((contentTop - (currentSearchTop + 120)) > 16 && (currentSearchTop <= (window.innerHeight * 0.40))) {
+            searchBox.style.top = (currentSearchTop += 2) + 'px';
+          } else {
+            interval = clearInterval(interval);
+          }
+        }, 2);
+      }
+
+      lastScrollTop = contentPart.scrollTop;
     });
+  }
 
-    this.setState({ filters: newFilters, newFilter: {}, query: newQuery }, () => {
-      this.setState({ shouldDisplayHitResults: true });
+  /**
+   * @description Scroll to search results part.
+   */
+  handleShowSearchResults = () => {
+    var contentPart = document.getElementById('content-container');
+    let interval = setInterval(function() {
+      if(contentPart.scrollTop <= Math.min(contentPart.scrollHeight, window.innerHeight-120)) {
+        let scrollBefore = contentPart.scrollTop;
+        contentPart.scrollTop += 5;
+        let scrollAfter = contentPart.scrollTop;
+        if(scrollBefore === scrollAfter) interval = clearInterval(interval);
+      } else {
+        interval = clearInterval(interval);
+      }
+    }, 1);
+  }
+
+  /**
+   * @description Handle URL search filters to make first search filters
+   */
+  handleUrlSearchFilters = () => {
+    let wings = this.props.commonStore.getCookie('hashtagsFilter');
+    this.props.commonStore.removeCookie('hashtagsFilter');
+    if (!wings) return;
+
+    let currentSearchFilters = this.props.commonStore.getSearchFilters();
+    let wingsArray = wings.split(',');
+
+    wingsArray.forEach(wing => {
+      if (!currentSearchFilters.find((searchFilter => searchFilter.tag === '#' + wing))) {
+        currentSearchFilters.push({ tag: '#' + wing, value: '#' + wing, label: '#' + wing });
+      }
     });
+    this.props.commonStore.setSearchFilters(currentSearchFilters);
+  }
+  
+  /**
+   * @description Get action in queue is used for Add Wings via URL
+   */
+  getActionInQueue = () => {
+    let action = this.props.commonStore.getCookie('actionInQueue');
+    this.props.commonStore.removeCookie('actionInQueue');
+    return action;
   }
 
-  getSearchBarWidth = () => {
-    if (isWidthUp('lg', this.props.width)) return (4 / 12) * 100 + '%';
-    else if (isWidthUp('md', this.props.width)) return (6 / 12) * 100 + '%';
-    else if (isWidthUp('sm', this.props.width)) return (8 / 12) * 100 + '%';
-    else if (isWidthUp('xs', this.props.width)) return 'calc(100% - 32px)';
-    return null;
-  }
-
-  handleDisplayProfile = (e, hit) => {
-    ReactGA.event({ category: 'User', action: 'Display profile' });
-    this.setState({ resultsType: 'profile', displayedHit: hit });
-  }
-
-  handleReturnToSearch = () => this.setState({ resultsType: 'person', displayedHit: null, shouldUpdateUrl: true });
-
-  shouldSetRootUrl = (rootUrl) => {
-    return (this.state.shouldUpdateUrl &&
-      this.state.resultsType === 'person' &&
-      (window.location.pathname !== rootUrl) &&
-      (window.location.pathname !== rootUrl + '/congrats'));
-  }
-
+  /**
+   * @description Fetch Wings filters passed as URL params
+   */
   getHashtagsFilter = () => {
     let wings = this.props.commonStore.getCookie('hashtagsFilter');
     this.props.commonStore.removeCookie('hashtagsFilter');
@@ -116,98 +143,87 @@ class SearchPage extends React.Component {
     }
   }
 
-  getActionInQueue = () => {
-    let action = this.props.commonStore.getCookie('actionInQueue');
-    this.props.commonStore.removeCookie('actionInQueue');
-    return action
+  componentDidUpdate() {
+    if (this.state.redirectTo === window.location.pathname) {
+      this.setState({ redirectTo: null });
+    }
+  }
+
+  handleDisplayProfile = (e, profileRecord) => {
+    ReactGA.event({ category: 'User', action: 'Display profile' });
+    this.setState({ displayedHit: profileRecord });
+  }
+
+  handleReturnToSearch = () => {
+    this.setState({ displayedHit: null, redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag })
   }
 
   render() {
-    const { shouldDisplayHitResults, filters, newFilter, shouldUpdateUrl, query, hashtagsFilter, actionInQueue } = this.state;
+    const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter } = this.state;
     const { classes } = this.props;
-
-    let profileTag = (this.props.match.params ? this.props.match.params.profileTag : null) || ((actionInQueue && actionInQueue.charAt(0) === '@') ? actionInQueue : null);
-    const { locale } = this.props.commonStore;
-    const orgTag = this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag;
-
-    let resultsType = ((profileTag && (profileTag.charAt(0) === '@') && !shouldUpdateUrl) ? 'profile' : null) || this.state.resultsType;
-    let displayedHit = ((profileTag && !shouldUpdateUrl) ? (this.state.displayedHit || { tag: profileTag }) : null) || this.state.displayedHit;
-    let rootUrl = '/' + locale + '/' + orgTag;
-    let searchBarWidth = this.getSearchBarWidth();
-    let redirectTo, showCongratulation;
-
-    //if (profileTag && profileTag.charAt(0) !== '@') redirectTo = '/' + locale + '/' + orgTag;
-    if (profileTag === 'congrats') {
-      profileTag = null;
-      redirectTo = null;
-      resultsType = 'person';
-      showCongratulation = true;
-    }
-    if (redirectTo) {
-      return (<Redirect to={redirectTo} />);
-    }
 
     return (
       <React.Fragment>
+        {redirectTo && (window.location.pathname !== redirectTo) && <Redirect to={redirectTo} />}
+        <Header />
 
-        <Header handleDisplayProfile={this.handleDisplayProfile} />
-        <main>
-          {this.shouldSetRootUrl(rootUrl) && (<Redirect to={rootUrl} />)}
-          <Grid container direction={'column'} alignItems={'center'}>
+        <main className={'search-container'}>
 
-            <div style={{
-              width: ((((isWidthDown('sm', this.props.width)))) ? '75%' : searchBarWidth),
-              marginRight: ((((isWidthDown('sm', this.props.width)))) ? 16 : '')
-            }}
-              className={classes.searchBar} >
-              <Suspense fallback={<CircularProgress color='secondary' />}>
-                <SearchField updateFilters={this.updateFilters} newFilter={newFilter} />
+          <BannerResizable
+            type={'organisation'}
+            initialHeight={100}
+            style={{position: 'absolute'}}
+          />
 
-              </Suspense>
+          {/* Search box - Search field & Search suggestions */}
+          <div className={'search-input'} id="search-input">
+            <Grid container justify='center'>
+              <Grid item xs={12} sm={8} md={6} lg={4}>
+                <ErrorBoundary>
+                  <Suspense fallback={<CircularProgress color='secondary' />}>
+                    <Search />
+                  </Suspense>
+                </ErrorBoundary>
+              </Grid>
+            </Grid>
+          </div>
+
+          <div className={'search-content-container'} id="content-container">
+            <div className={'search-content-offset'}/>
+            <div className={'search-button'} id="search-button" >
+              <SearchButton onClick={this.handleShowSearchResults} />
             </div>
 
-            <Grid container item alignItems={"stretch"} >
-              <Suspense fallback={<CircularProgress color='secondary' />}>
-                <Banner style={{ filter: 'brightness(90%)' }}>
-                  <div style={{ position: 'relative', height: 56 }} ></div>
-                  <div style={{ width: searchBarWidth }} className={classes.suggestionsContainer}>
-                    {shouldDisplayHitResults && (
-                      <SearchSuggestions addToFilters={this.addToFilters} filters={filters} query={query} />
-                    )}
-                  </div>
-                </Banner>
-              </Suspense>
-
-            </Grid>
-
-            {shouldDisplayHitResults && (
-              <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
+            {/* Search results part */}
+            <div className={'search-content'}>
+              <ErrorBoundary>
                 <Suspense fallback={<CircularProgress color='secondary' />}>
-
-                  <SearchResults addToFilters={this.addToFilters} handleDisplayProfile={this.handleDisplayProfile}
-                    classes={classes} HitComponent={Card} filters={filters} query={query} />
+                  <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
+                    <SearchResults handleDisplayProfile={this.handleDisplayProfile} HitComponent={Card} />
+                  </Grid>
                 </Suspense>
-              </Grid>
-            )}
+              </ErrorBoundary>
+            </div>
 
-            {resultsType === 'profile' && (
-              <ProfileLayout hit={displayedHit} addToFilters={this.addToFilters} className={classes.profileContainer}
-                handleReturnToSearch={this.handleReturnToSearch} />
-            )}
-          </Grid>
-
-          {showCongratulation && (
-            <Suspense fallback={<CircularProgress color='secondary' />}>
-              <OnboardCongratulation isOpen={showCongratulation} />
-            </Suspense>
-          )}
-
-          {hashtagsFilter.length > 0 && (actionInQueue === 'add') && (
-            <Suspense fallback={<CircularProgress color='secondary' />}>
-              <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} />
-            </Suspense>
-          )}
+          </div>
         </main>
+
+        {displayedHit && (
+          <ProfileLayout hit={displayedHit} handleReturnToSearch={this.handleReturnToSearch} className={classes.profileContainer} />
+        )}
+
+        {showCongratulation && (
+          <Suspense fallback={<CircularProgress color='secondary' />}>
+            <OnboardCongratulation isOpen={showCongratulation} />
+          </Suspense>
+        )}
+
+        {hashtagsFilter.length > 0 && (actionInQueue === 'add') && (
+          <Suspense fallback={<CircularProgress color='secondary' />}>
+            <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} />
+          </Suspense>
+        )}
+
         <Suspense fallback={<div></div>}>
           <PromptIOsInstall />
         </Suspense>

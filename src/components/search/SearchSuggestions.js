@@ -3,14 +3,17 @@ import { withStyles, Chip } from '@material-ui/core';
 import AlgoliaService from '../../services/algolia.service';
 import { inject, observer } from 'mobx-react';
 import { observe } from 'mobx';
+import withSearchManagement  from './SearchManagement.hoc';
 
 const styles = theme => ({
   suggestionsContainer: {
     textAlign: 'left',
-    maxHeight: 112, // 48 * 2 + 8 + 8
+    maxHeight: 63,
     overflow: 'hidden',
     padding: '8px 0px',
     marginLeft: '-8px',
+    position: 'relative',
+    zIndex: 1198,
   },
   suggestion: {
     margin: 8,
@@ -30,7 +33,7 @@ const styles = theme => ({
   },
   suggestionCount: {
     color: 'rgb(190,190,190)',
-    borderRadius: '50%',
+    borderRadius: '50%',  
     width: 32,
     height:32,
     textAlign: 'center',
@@ -46,7 +49,10 @@ class SearchSuggestions extends React.Component {
     super(props);
     this.state = {
       facetHits: [],
-      observer: () => {}
+      observer: () => {},
+      observer2: () => {},
+      filterRequest: '',
+      queryRequest: '',
     };
 
     this.fetchSuggestions = this.fetchSuggestions.bind(this);
@@ -54,24 +60,26 @@ class SearchSuggestions extends React.Component {
 
   componentDidMount() {
     AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-    this._ismounted = true;
-    this.fetchSuggestions(this.props.filters, this.props.query);
+    this.fetchSuggestions(this.state.filterRequest, this.state.queryRequest);
 
     this.setState({observer: observe(this.props.commonStore, 'algoliaKey', (change) => {
       AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-      this.fetchSuggestions(this.props.filters, this.props.query);
+      this.fetchSuggestions(this.state.filterRequest, this.state.queryRequest);
+    })});
+
+    this.setState({observer2: observe(this.props.commonStore, 'searchFilters', (change) => {
+      this.props.makeFiltersRequest()
+      .then((request) => {
+        this.setState({filterRequest: request.filterRequest, queryRequest: request.queryRequest}, () => {
+          this.fetchSuggestions(request.filterRequest, request.queryRequest);
+        });
+      });
     })});
   }
 
   componentWillUnmount() {
     this.state.observer();
-    this._ismounted = false;
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.filters && this._ismounted) {
-      this.fetchSuggestions(nextProps.filters, nextProps.query);
-    }
+    this.state.observer2();
   }
 
   fetchSuggestions(filters, query) {
@@ -84,12 +92,12 @@ class SearchSuggestions extends React.Component {
   }
 
   shouldDisplaySuggestion(tag) {
-    return (this.props.filters.search(tag) === -1);
+    return (this.state.filterRequest.search(tag) === -1);
   }
 
   render() {
     const {facetHits} = this.state;
-    const {classes, addToFilters} = this.props;
+    const {classes, addFilter} = this.props;
 
     return (
       <div className={classes.suggestionsContainer} >
@@ -103,7 +111,7 @@ class SearchSuggestions extends React.Component {
                                 <div className={classes.suggestionCount}>{item.count}</div>
                               </div>
                     }
-                    onClick={(e) => addToFilters(e, { name: item.value, tag: item.value })} 
+                    onClick={(e) => addFilter({ name: item.value, tag: item.value, value: item.value, label: item.value })} 
                     className={classes.suggestion} 
                     style={{animationDelay: (i*0.05) +'s'}} />
             );
@@ -115,6 +123,8 @@ class SearchSuggestions extends React.Component {
     );
   }
 }
+
+SearchSuggestions = withSearchManagement(SearchSuggestions);
 
 export default inject('commonStore')(
   observer(withStyles(styles)(SearchSuggestions))

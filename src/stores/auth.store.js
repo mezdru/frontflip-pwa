@@ -64,7 +64,7 @@ class AuthStore {
     return agent.Auth.login(this.values.email, this.values.password)
       .then((response) => {
         if (response && response.access_token) {
-          SlackService.notifyError(this.values.email + ' logged in with email and password.', '61', 'quentin', 'auth.store.js');
+          if(process.env.NODE_ENV === 'production') SlackService.notify('#alerts', this.values.email + ' logged in with email and password.');
           commonStore.setAuthTokens(response);
           return userStore.getCurrentUser()
             .then(() => { return 200; })
@@ -90,7 +90,7 @@ class AuthStore {
     return agent.Auth.googleCallbackLogin(this.values.temporaryToken)
       .then((response) => {
         if (response && response.access_token) {
-          SlackService.notifyError(this.values.email + ' google callback login successful.', '90', 'quentin', 'auth.store.js');
+          if(process.env.NODE_ENV === 'production') SlackService.notify('#alerts', this.values.email + ' logged in with Google.')
           commonStore.setAuthTokens(response);
           return userStore.getCurrentUser()
             .then(() => { return 200; });

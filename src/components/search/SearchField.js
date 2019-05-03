@@ -2,15 +2,15 @@ import React from 'react';
 import { AsyncCreatable } from 'react-select';
 import { injectIntl } from 'react-intl';
 import { inject, observer } from 'mobx-react';
-import './SearchField.css';
+import '../algolia/SearchField.css';
 import classNames from 'classnames';
 import { withTheme } from '@material-ui/core';
 import ProfileService from '../../services/profile.service';
-import {Option, customStyles, MultiValueContainer} from './SearchFieldElements';
+import {Option, customStyles, MultiValueContainer} from '../algolia/SearchFieldElements';
 import AlgoliaService from '../../services/algolia.service';
 import { observe } from 'mobx';
 import {Search} from '@material-ui/icons';
-import { components } from 'react-select'; 
+import { components } from 'react-select';
 import theme from '../../theme';
 
 class SearchField extends React.Component {
@@ -19,31 +19,41 @@ class SearchField extends React.Component {
     this.state = {
       inputValue: '',
       selectedOption: this.props.defaultValue,
-      placeholder: this.props.intl.formatMessage({ id: (this.props.hashtagOnly ? 'algolia.onboard' : 'algolia.search') }),
+      placeholder: this.getSearchFieldPlaceholder(),
       locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
       observer: () => {}
     };
   }
 
-  // Used to fetch an event: User click on a Wing, so we should add it to the search filters
-  componentWillReceiveProps(nextProps) {
-    if(this.props.hashtagOnly) return;
-    if (nextProps.newFilter.value && nextProps.newFilter.label) {
-      if (this.state.selectedOption && !this.state.selectedOption.some(val => val.value === nextProps.newFilter.value)) {
-        let newSelectedOption = this.state.selectedOption;
-        newSelectedOption.push(nextProps.newFilter);
-        this.handleChange(newSelectedOption);
-      } else {
-        this.handleChange([nextProps.newFilter]);
-      }
+  getSearchFieldPlaceholder = () => {
+    if(this.props.hashtagOnly) {
+      return this.props.intl.formatMessage({id: 'algolia.onboard'});
+    } else {
+      return this.props.intl.formatMessage({id: 'algolia.search'}, {orgName: this.props.organisationStore.values.organisation.name});
     }
   }
+
   componentDidMount() {
     AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
 
     this.setState({observer: observe(this.props.commonStore, 'algoliaKey', (change) => {
       AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
     })});
+
+    observe(this.props.commonStore, 'searchFilters', (change) => {
+
+      let currentFilters = this.props.commonStore.getSearchFilters();
+
+      currentFilters.forEach(filter => {
+        if (this.state.selectedOption && !this.state.selectedOption.some(val => val.value === filter.value)) {
+          let newSelectedOption = this.state.selectedOption;
+          newSelectedOption.push(filter);
+          this.handleChange(newSelectedOption, false);
+        } else if(!this.state.selectedOption){
+          this.handleChange([filter], false);
+        }
+      });
+    });
   }
 
   componentWillUnmount() {
@@ -91,22 +101,16 @@ class SearchField extends React.Component {
   getOptionLabel = (option) => ProfileService.htmlDecode(option.labelText || option.label);
 
   // when option is selected
-  handleChange = (selectedOption) => {
+  handleChange = (selectedOption, shouldUpdateSearchFilters) => {
     this.scrollToBottom();
-    
-    if(this.props.hashtagOnly) {
-      this.setState({inputValue: '', selectedOption: null}, () => {if(selectedOption) this.props.handleAddWing(null, {tag: selectedOption.value || selectedOption.tag})});
-    } else {
-      this.props.commonStore.setSearchFilters(selectedOption);
+  
       this.setState({
         selectedOption: selectedOption,
         inputValue: ''
       }, () => {
         this.refineWithSelectedOptions(selectedOption);
-        this.props.updateFilters(selectedOption);
+        if(shouldUpdateSearchFilters) this.props.commonStore.setSearchFilters(selectedOption);
       });
-    }
-
   }
 
   // rename scrollToRight
@@ -115,11 +119,6 @@ class SearchField extends React.Component {
       let valueContainer = document.querySelector('.autocomplete-search div div:nth-child(1)');
       if(valueContainer){
         valueContainer.scrollLeft = valueContainer.scrollWidth;
-        // if(valueContainer.scrollHeight > 42) {
-        //   valueContainer.style.marginBottom = '8px';
-        // } else {
-        //   valueContainer.style.marginBottom = '';
-        // }
       } 
     }, 100);    
   }
@@ -144,7 +143,7 @@ class SearchField extends React.Component {
       let arrayOfOption = this.state.selectedOption || [];
       option = option.trim();
       arrayOfOption.push({ label: option, value: option });
-      return this.handleChange(arrayOfOption);
+      return this.handleChange(arrayOfOption, true);
     } else {
       let newRecord = {
         name: option,
@@ -158,7 +157,7 @@ class SearchField extends React.Component {
       }
       return this.props.recordStore.postRecord(newRecord)
       .then(recordSaved => {
-        return this.handleChange(recordSaved);
+        return this.handleChange(recordSaved, true);
       }).catch((e) => console.log(e));
     }
   }
@@ -235,7 +234,7 @@ class SearchField extends React.Component {
         defaultOptions={defaultOptions}
         loadOptions={this.getOptions}
         placeholder={placeholder}
-        onChange={this.handleChange}
+        onChange={(option) => this.handleChange(option, true)}
         onCreateOption={this.handleCreateOption}
         components={{ MultiValueContainer, DropdownIndicator, Option }}
         isMulti={!this.props.hashtagOnly}
@@ -252,7 +251,7 @@ class SearchField extends React.Component {
   }
 }
 
-export default inject('commonStore', 'recordStore')(
+export default inject('commonStore', 'recordStore', 'organisationStore')(
   observer(
     injectIntl(withTheme()(SearchField))
   )

@@ -8,6 +8,10 @@ export const styles = theme => ({
     position: 'absolute',
   },
   menuLink: {
+    position: 'fixed',
+    top: 16,
+    right: 8,
+    zIndex: 1001,
     minWidth: '130px',
     height: '30px',
     marginRight: 8,
@@ -120,6 +124,10 @@ export const styles = theme => ({
     margin: '8px 0',
   },
   menuButton: {
+    position: 'fixed',
+    top: 8,
+    left: 8,
+    zIndex: 1001,
     padding: 0,
     cursor: 'pointer',
     height: 48,
