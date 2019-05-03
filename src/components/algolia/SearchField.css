@@ -1,3 +1,13 @@
+#search-filters-container::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    border: none !important;
+}
+#search-filters-container {
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+}
+
 .hide-options .Select-arrow-zone {
     display: none;
 }

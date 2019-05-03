@@ -173,7 +173,7 @@ class ProfileService {
     let filters = commonStore.getSearchFilters() || commonStore.searchFilters;
     if (filters && filters.length > 0 && item.hashtags && item.hashtags.length > 0) {
       item.hashtags.forEach((hashtag, index) => {
-        if (hashtag.tag && filters.find(filterValue => filterValue.value.toLowerCase() === hashtag.tag.toLowerCase())) item.hashtags[index].class = 'highlighted';
+        if (hashtag.tag && filters.find(filterValue => filterValue.tag.toLowerCase() === hashtag.tag.toLowerCase())) item.hashtags[index].class = 'highlighted';
       });
     }
   };

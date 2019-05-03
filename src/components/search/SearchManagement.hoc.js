@@ -14,15 +14,26 @@ const withSearchManagement = (ComponentToWrap) => {
       commonStore.setSearchFilters(currentSearchFilters);
     }
 
+    removeFilter = (element) => {
+      var currentSearchFilters = commonStore.getSearchFilters();
+      var indexOfElement = currentSearchFilters.findIndex((filter => filter.tag === element.tag));
+      currentSearchFilters.splice(indexOfElement, 1);
+      commonStore.setSearchFilters(currentSearchFilters);
+    }
+
+    resetFilters = () => {
+      commonStore.setSearchFilters([]);
+    }
+
     makeFiltersRequest = async () => {
       var currentFilters = commonStore.getSearchFilters();
       var filterRequest = 'type:person';
       var queryRequest = '';
   
       currentFilters.forEach(filter => {
-        if (filter.value.charAt(0) !== '#' && filter.value.charAt(0) !== '@') queryRequest += ((queryRequest !== '') ? ' ' : '') + filter.label;
-        else if (filter.value.charAt(0) === '#') filterRequest += ' AND hashtags.tag:' + filter.value;
-        else if (filter.value.charAt(0) === '@') filterRequest += ' AND tag:' + filter.value;
+        if (filter.tag.charAt(0) !== '#' && filter.tag.charAt(0) !== '@') queryRequest += ((queryRequest !== '') ? ' ' : '') + filter.name;
+        else if (filter.tag.charAt(0) === '#') filterRequest += ' AND hashtags.tag:' + filter.tag;
+        else if (filter.tag.charAt(0) === '@') filterRequest += ' AND tag:' + filter.tag;
       });
   
       return {
@@ -33,7 +44,12 @@ const withSearchManagement = (ComponentToWrap) => {
 
     render() {
       return (
-        <ComponentToWrap {...this.props} addFilter={this.addFilter} makeFiltersRequest={this.makeFiltersRequest} />
+        <ComponentToWrap {...this.props} 
+          addFilter={this.addFilter} 
+          makeFiltersRequest={this.makeFiltersRequest}
+          removeFilter={this.removeFilter}
+          resetFilters={this.resetFilters}
+        />
       )
     }
   }

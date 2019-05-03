@@ -49,6 +49,11 @@ const styles = theme => ({
       margin: 'auto'
     }
   },
+  cardMobileView: {
+    [theme.breakpoints.down('xs')]: {
+      margin: '16px!important',
+    },
+  },
 });
 
 class SearchResults extends React.Component {
@@ -104,7 +109,7 @@ class SearchResults extends React.Component {
       if(!content || !content.hits || content.hits.length === 0) this.setState({showNoResult: true, hideShowMore: true});
       else this.setState({showNoResult: false});
 
-      this.props.commonStore.searchResultsCount = content.hits.length;
+      this.props.commonStore.searchResultsCount = content.nbHits;
       
       this.setState({hitsAlreadyDisplayed: Math.min((content.hitsPerPage * (content.page)), content.nbHits)});      if(content.page === (content.nbPages-1)) this.setState({hideShowMore: true});
       if(page) this.setState({hits: this.state.hits.concat(content.hits)}, this.endTask());
