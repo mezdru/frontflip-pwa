@@ -4,15 +4,14 @@ import { withStyles} from '@material-ui/core';
 
 const styles = theme => ({
   dispo: {
-    width: 35,
-    height: 35,
-    border: '6px solid white',
+    width: 26,
+    height: 26,
     borderRadius: 30,
     backgroundColor: '#C2CACF',
     zIndex: 9000,
     [theme.breakpoints.down('xs')]: {
-      width: 30,
-      height: 30,
+      width: 20,
+      height: 20,
     }
   }
 });

@@ -53,7 +53,7 @@ export default createMuiTheme({
         padding: 8,
       },
       h5: {
-        color: 'white',
+        color:  'white',
         fontWeight: '700',
       },
       h4: {
@@ -61,7 +61,7 @@ export default createMuiTheme({
         fontWeight: '400',
       },
       body1: {
-        color: 'white',
+        color:  'white',
         fontWeight: '400',
         fontSize: '0.95rem',
       },
@@ -99,7 +99,7 @@ export default createMuiTheme({
     },
     MuiIconButton: {
       root: {
-        color: '#DDE9EB',
+        color: '#aaacbe',
         padding: 8,
       }
     },
@@ -108,7 +108,7 @@ export default createMuiTheme({
         padding: '6px 12px',
         fontWeight: '600',
         margin: '16px 8px 4px 8px',
-        fontSize: '0.8125rem',
+        fontSize: '0.9125rem',
       },
       label: {
         '& div': {
@@ -123,7 +123,7 @@ export default createMuiTheme({
       },
       colorPrimary: {
         color: palette.primary.dark,
-        backgroundColor: palette.primary.main,
+        backgroundColor: '#e7e7ee',
         '&:hover': {
           color: palette.primary.dark,
           backgroundColor: palette.primary.hover +' !important',
@@ -153,7 +153,8 @@ export default createMuiTheme({
         transition: 'all 0.3s cubic-bezier(.25,.8,.25,1)',
         '&:hover': {
           boxShadow: '0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)',
-        }
+        },
+        backgroundImage: 'linear-gradient(to bottom, #2b2d3c, #292a38, #262733, #24242f, #21212b)',
       }
     },
     MuiFab: {
@@ -180,7 +181,7 @@ export default createMuiTheme({
     MuiCardHeader: {
       root: {
         width: '100%',
-        backgroundColor: palette.primary.dark,
+        backgroundColor: "transparent",
       },
       content: {
         display: 'inline-grid',
