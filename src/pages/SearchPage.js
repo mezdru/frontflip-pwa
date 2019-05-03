@@ -121,12 +121,18 @@ class SearchPage extends React.Component {
     this.props.commonStore.setSearchFilters(currentSearchFilters);
   }
   
+  /**
+   * @description Get action in queue is used for Add Wings via URL
+   */
   getActionInQueue = () => {
     let action = this.props.commonStore.getCookie('actionInQueue');
     this.props.commonStore.removeCookie('actionInQueue');
     return action;
   }
 
+  /**
+   * @description Fetch Wings filters passed as URL params
+   */
   getHashtagsFilter = () => {
     let wings = this.props.commonStore.getCookie('hashtagsFilter');
     this.props.commonStore.removeCookie('hashtagsFilter');
@@ -160,16 +166,16 @@ class SearchPage extends React.Component {
       <React.Fragment>
         {redirectTo && (window.location.pathname !== redirectTo) && <Redirect to={redirectTo} />}
         <Header />
+
         <main className={'search-container'}>
 
           <BannerResizable
             type={'organisation'}
             initialHeight={100}
-            style={{
-              position: 'absolute'
-            }}
+            style={{position: 'absolute'}}
           />
 
+          {/* Search box - Search field & Search suggestions */}
           <div className={'search-input'} id="search-input">
             <Grid container justify='center'>
               <Grid item xs={12} sm={8} md={6} lg={4}>
@@ -183,10 +189,12 @@ class SearchPage extends React.Component {
           </div>
 
           <div className={'search-content-container'} id="content-container">
-            <div className={'search-content-offset'}></div>
+            <div className={'search-content-offset'}/>
             <div className={'search-button'} id="search-button" >
               <SearchButton onClick={this.handleShowSearchResults} />
             </div>
+
+            {/* Search results part */}
             <div className={'search-content'}>
               <ErrorBoundary>
                 <Suspense fallback={<CircularProgress color='secondary' />}>
@@ -196,6 +204,7 @@ class SearchPage extends React.Component {
                 </Suspense>
               </ErrorBoundary>
             </div>
+
           </div>
         </main>
 

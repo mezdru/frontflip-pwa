@@ -1,5 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core';
+import SlackService from '../../../services/slack.service';
 
 const styles = theme => ({
   errorBox: {
@@ -27,6 +28,7 @@ class ErrorBoundary extends React.Component {
     // logErrorToMyService(error, info);
     console.error(error);
     console.info(info);
+    SlackService.notifyError(error, 0, 'quentin');
   }
 
   render() {
