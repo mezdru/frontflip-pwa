@@ -87,14 +87,6 @@ class SearchPage extends React.Component {
     });
   }
 
-  // start : 0
-  // max : window.innerHeight - 120
-  calcCurrentOpacity(startScrollTop, endScrollTop, currentScrollTop) {
-    var percentageScrolled = (currentScrollTop / (endScrollTop - startScrollTop));
-  }
-
-
-
   /**
    * @description Scroll to search results part.
    */
