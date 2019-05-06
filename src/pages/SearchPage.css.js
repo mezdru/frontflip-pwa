@@ -39,6 +39,8 @@ export const styles = theme => ({
     [theme.breakpoints.down('xs')]: {
       marginLeft: '16px!important',
       marginRight: '16px!important',
+      maxWidth: 'calc(100% - 32px)',
+      position: 'relative'
     },
   }
 });

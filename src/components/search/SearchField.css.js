@@ -2,18 +2,20 @@ export const styles = theme => ({
   searchContainer: {
     position: 'relative',
     zIndex: 1198,
-    border: '1px solid',
-    borderColor: theme.palette.primary.dark,
+    border: 'none',
     borderRadius: 5,
     height: 50,
-    background: 'white',
+    background: 'rgba(255,255,255,.95)',
     display: 'flex',
     flexDirection: 'row',
+    [theme.breakpoints.down('xs')]: {
+      maxWidth: '100%',
+    }
   },
   searchFiltersContainer: {
     display: 'flex',
     maxHeight: 42,
-    maxWidth: '80%',
+    maxWidth: '70%',
     background: 'transparent',
     '& >div': {
       margin: 8,
@@ -32,6 +34,7 @@ export const styles = theme => ({
     height: '100%',
     fontSize: '1.1em',
     paddingLeft: 8,
+    minWidth: 0,
   },
   searchClear: {
     float: 'right',

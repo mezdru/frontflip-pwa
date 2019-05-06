@@ -65,16 +65,6 @@ class SearchField extends React.Component {
     this.props.fetchAutocompleteSuggestions(inputValue);
   }
 
-  handleInputFocus = () => {
-    var searchContainer = document.getElementById('search-container');
-    searchContainer.style.border = '2px solid';
-  }
-
-  handleInputBlur = () => {
-    var searchContainer = document.getElementById('search-container');
-    searchContainer.style.border = '1px solid';
-  }
-
   render() {
     const { classes} = this.props;
     const { placeholder, searchInput, searchFilters } = this.state;
@@ -90,7 +80,8 @@ class SearchField extends React.Component {
             return (
               <Wing
                 label={ProfileService.htmlDecode(displayedName)} key={index}
-                onDelete={(e) => {this.props.removeFilter(filter)}} />
+                onDelete={(e) => {this.props.removeFilter(filter)}} 
+                className={'highlighted'} />
             );
           })}
         </div>
@@ -102,7 +93,6 @@ class SearchField extends React.Component {
           placeholder={placeholder} 
           onKeyDown={this.handleEnter} 
           onChange={(e) => {this.handleInputChange(e.target.value)}}
-          onFocus={this.handleInputFocus} onBlur={this.handleInputBlur}
         />
         
         {(searchInput || (searchFilters && searchFilters.length > 0)) && (
