@@ -18,7 +18,6 @@ class Search extends React.Component {
   fetchAutocompleteSuggestions = (input) => {
     AlgoliaService.fetchOptions(input, false, false)
     .then(options => {
-      console.log(options);
       this.setState({autocompleteSuggestions: options.hits});
     });
   }
