@@ -70,11 +70,20 @@ class SearchSuggestions extends React.Component {
     this.setState({observer2: observe(this.props.commonStore, 'searchFilters', (change) => {
       this.props.makeFiltersRequest()
       .then((request) => {
-        this.setState({filterRequest: request.filterRequest, queryRequest: request.queryRequest}, () => {
-          this.fetchSuggestions(request.filterRequest, request.queryRequest);
-        });
+        if(JSON.stringify(change.newValue) !== JSON.stringify(change.oldValue))
+          this.setState({filterRequest: request.filterRequest, queryRequest: request.queryRequest}, () => {
+            this.fetchSuggestions(request.filterRequest, request.queryRequest);
+          });
       });
     })});
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if(nextState.shouldUpdate) {
+      this.setState({shouldUpdate: false});
+      return true;
+    }
+    return false;
   }
 
   componentWillUnmount() {
@@ -84,9 +93,9 @@ class SearchSuggestions extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.autocompleteSuggestions.length > 0) {
-      this.setState({facetHits: nextProps.autocompleteSuggestions});
+      this.setState({facetHits: nextProps.autocompleteSuggestions, shouldUpdate: true});
     } else {
-      this.setState({facetHits: nextProps.autocompleteSuggestions});
+      this.setState({facetHits: nextProps.autocompleteSuggestions, shouldUpdate: true});
     }
   }
 
@@ -94,7 +103,7 @@ class SearchSuggestions extends React.Component {
     AlgoliaService.fetchFacetValues(null, false, filters, query)
     .then((res) => {
       if(!res) return;
-      this.setState({facetHits: res.facetHits.splice(0,7)});
+      this.setState({facetHits: res.facetHits.splice(0,7), shouldUpdate: true});
     })
     .catch();
   }
