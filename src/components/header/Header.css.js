@@ -125,8 +125,8 @@ export const styles = theme => ({
   },
   menuButton: {
     position: 'fixed',
-    top: 8,
-    left: 8,
+    top: 16,
+    left: 16,
     zIndex: 1199,
     padding: 0,
     cursor: 'pointer',

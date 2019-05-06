@@ -33,7 +33,9 @@ class SearchPage extends React.Component {
       displayedHit: this.getAskedHit(),
       showCongratulation: false,
       actionInQueue: this.getActionInQueue(),
-      hashtagsFilter: this.getHashtagsFilter()
+      hashtagsFilter: this.getHashtagsFilter(),
+      top: 16,
+      headerHeight: 129,
     };
   }
 
@@ -65,26 +67,26 @@ class SearchPage extends React.Component {
       var contentShape = contentMain.getBoundingClientRect();
       var contentTop = contentShape.top;
 
-      shadowedBackground.style.opacity = Math.min(1, (contentPart.scrollTop / (window.innerHeight - 120))) * 0.6;
+      shadowedBackground.style.opacity = Math.min(1, (contentPart.scrollTop / (window.innerHeight - this.state.headerHeight))) * 0.6;
       
       if (lastScrollTop < contentPart.scrollTop) {
         var currentSearchTop = searchBox.getBoundingClientRect().top;
-        while ((contentTop - (currentSearchTop + 120)) < 48 && (currentSearchTop >= 8)) {
+        while ((contentTop - (currentSearchTop + this.state.headerHeight)) < 48 && (currentSearchTop >= this.state.top)) {
           searchBox.style.top = Math.max(8,(currentSearchTop -= 2)) + 'px';
         }
       } else {
         var interval = setInterval(function () {
           var currentSearchTop = searchBox.getBoundingClientRect().top;
-          if ((contentTop - (currentSearchTop + 120)) > 16 && (currentSearchTop <= (window.innerHeight * 0.40))) {
+          if ((contentTop - (currentSearchTop + this.state.headerHeight)) > 16 && (currentSearchTop <= (window.innerHeight * 0.40))) {
             searchBox.style.top = (currentSearchTop += 2) + 'px';
           } else {
             interval = clearInterval(interval);
           }
-        }, 2);
+        }.bind(this), 2);
       }
 
       lastScrollTop = contentPart.scrollTop;
-    });
+    }.bind(this));
   }
 
   /**

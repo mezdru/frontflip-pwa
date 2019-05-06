@@ -26,7 +26,8 @@ class SearchField extends React.Component {
 
   componentDidMount() {
     this.setState({observer: observe(this.props.commonStore, 'searchFilters', (change) => {
-      this.setState({searchFilters: this.props.commonStore.getSearchFilters(), searchInput: ''}, () => {
+      var currentSearchFilters = this.props.commonStore.getSearchFilters();
+      this.setState({searchFilters: currentSearchFilters, searchInput: (currentSearchFilters.length > 0 ? ' ' : '')}, () => {
         this.scrollToRight();
       });
     })});
@@ -55,8 +56,9 @@ class SearchField extends React.Component {
 
   handleEnter = (e) => {
     if(e.key === 'Enter') {
-      this.props.addFilter({name: e.target.value, tag: e.target.value});
-      this.setState({searchInput: ''});
+      var value = e.target.value.trim();
+      this.props.addFilter({name: value, tag: value});
+      this.setState({searchInput: ' '});
     }
   }
 
