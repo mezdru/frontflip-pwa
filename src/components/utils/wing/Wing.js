@@ -37,8 +37,11 @@ const styles = theme => ({
   },
   removable: {
     paddingRight: 0,
-    '&:hover': {
-      backgroundColor: theme.palette.primary.main + ' !important',
+    '& svg': {
+      color: 'white',
+      '&:hover': {
+        color: 'rgb(220,220,220)'
+      }
     }
   },
   animated: {
