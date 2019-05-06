@@ -42,5 +42,14 @@ export const styles = theme => ({
       maxWidth: 'calc(100% - 32px)',
       position: 'relative'
     },
+  },
+  shadowedBackground: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    top: 0,
+    left: 0,
+    background: 'rgb(0,0,0)',
+    opacity: 0,
   }
 });

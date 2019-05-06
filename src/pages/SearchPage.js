@@ -56,15 +56,17 @@ class SearchPage extends React.Component {
 
   moveSearchInputListener = () => {
     var contentPart = document.getElementById('content-container');
+    var contentMain = document.getElementById('search-button');
+    var searchBox = document.getElementById('search-input');
+    var shadowedBackground = document.getElementById('shadowed-background');
     var lastScrollTop = 0;
 
     contentPart.addEventListener('scroll', function (e) {
-      var contentMain = document.getElementById('search-button');
       var contentShape = contentMain.getBoundingClientRect();
-
-      var searchBox = document.getElementById('search-input');
       var contentTop = contentShape.top;
 
+      shadowedBackground.style.opacity = Math.min(1, (contentPart.scrollTop / (window.innerHeight - 120))) * 0.6;
+      
       if (lastScrollTop < contentPart.scrollTop) {
         var currentSearchTop = searchBox.getBoundingClientRect().top;
         while ((contentTop - (currentSearchTop + 120)) < 48 && (currentSearchTop >= 8)) {
@@ -174,6 +176,7 @@ class SearchPage extends React.Component {
             initialHeight={100}
             style={{position: 'absolute'}}
           />
+          <div id="shadowed-background" className={classes.shadowedBackground} />
 
           {/* Search box - Search field & Search suggestions */}
           <div className={'search-input'} id="search-input">
