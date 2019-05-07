@@ -35,6 +35,7 @@ export const styles = theme => ({
     fontSize: '1.1em',
     paddingLeft: 8,
     minWidth: 0,
+    cursor: 'pointer',
   },
   searchClear: {
     float: 'right',
