@@ -3,7 +3,6 @@ import {FormattedMessage, injectIntl} from 'react-intl';
 import {inject, observer} from 'mobx-react';
 
 import {Button, CircularProgress, Grid, TextField, Typography} from "@material-ui/core";
-import GoogleButton from "../../utils/buttons/GoogleButton";
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import commonStore from '../../../stores/common.store';
 import ReactGA from 'react-ga';

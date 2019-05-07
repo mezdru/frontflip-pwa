@@ -4,7 +4,6 @@ import {Link, Redirect} from 'react-router-dom';
 import {inject, observer} from 'mobx-react';
 
 import {Button, CircularProgress, Grid, TextField, Typography} from '@material-ui/core';
-import GoogleButton from "../../utils/buttons/GoogleButton";
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import ReactGA from 'react-ga';
 import LogRocket from 'logrocket';
