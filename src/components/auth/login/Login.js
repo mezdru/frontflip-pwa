@@ -63,7 +63,8 @@ class Login extends React.Component {
   render() {
     const { values, inProgress } = this.props.authStore;
     const { orgTag } = this.props.organisationStore.values;
-    let { loginErrors, locale, redirectTo, isAuth } = this.state;
+    let { loginErrors, redirectTo, isAuth } = this.state;
+    const {locale} = this.props.commonStore;
     let intl = this.props.intl;
     if (redirectTo){
       return <Redirect push to={redirectTo} />;
@@ -128,7 +129,7 @@ class Login extends React.Component {
             </Grid>
             <Grid item>
               <Button component={Link}
-                      to={"/" + locale + ((orgTag) ? '/' + orgTag : '') + "/password/forgot"}
+                      to={"/" + locale + (orgTag ? '/' + orgTag : '') + "/password/forgot"}
                       variant="text"
                       fullWidth={true}
               >
