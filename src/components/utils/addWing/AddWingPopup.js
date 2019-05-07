@@ -134,6 +134,7 @@ class AddWingPopup extends React.Component {
     const {redirectTo, wingsPopulated} = this.state;
     const {classes} = this.props;
     const {organisation} = this.props.organisationStore.values;
+    const {locale} = this.props.commonStore;
 
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
 
@@ -163,7 +164,7 @@ class AddWingPopup extends React.Component {
                 <br/>
                 <div className={classes.wingsList}>
                 {wingsPopulated.map( (wing, i) => {
-                  let displayedName = (wing.name_translated ? (wing.name_translated[this.state.locale] || wing.name_translated['en-UK']) || wing.name || wing.tag : wing.name || wing.tag)
+                  let displayedName = (wing.name_translated ? (wing.name_translated[locale] || wing.name_translated['en-UK']) || wing.name || wing.tag : wing.name || wing.tag)
                   return(
                   <Wings src={ProfileService.getPicturePath(wing.picture)} key={i}
                     label={ProfileService.htmlDecode(displayedName)}

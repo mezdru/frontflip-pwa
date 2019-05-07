@@ -18,7 +18,6 @@ class Login extends React.Component {
       value: 0,
       redirectTo: null,
       loginErrors: null,
-      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
       isAuth: this.props.authStore.isAuth()
     };
   }
@@ -38,7 +37,7 @@ class Login extends React.Component {
         if (response === 200) {
           ReactGA.event({category: 'User',action: 'Login with password'});
           LogRocket.info('User login with password.');
-          this.setState({ redirectTo: '/' + this.state.locale + (this.props.organisationStore.values.orgTag ? '/' + this.props.organisationStore.values.orgTag : '') });
+          this.setState({ redirectTo: '/' + this.props.commonStore.locale + (this.props.organisationStore.values.orgTag ? '/' + this.props.organisationStore.values.orgTag : '') });
         } else {
           this.setState({ loginErrors: this.props.intl.formatMessage({ id: 'signin.error.generic' }) });
         }
@@ -49,11 +48,11 @@ class Login extends React.Component {
           errorMessage = this.props.intl.formatMessage({ id: 'signin.error.unknown' });
         } else if (err.status === 403) {
           if (err.response.body.error_description === 'Wrong password.') {
-            errorMessage = this.props.intl.formatMessage({ id: 'signin.error.wrongPassword' }, { forgotPasswordLink: '/' + this.state.locale + '/password/forgot' });
+            errorMessage = this.props.intl.formatMessage({ id: 'signin.error.wrongPassword' }, { forgotPasswordLink: '/' + this.props.commonStore.locale + '/password/forgot' });
           } else if (err.response.body.error_description === 'User use Google Auth.') {
             errorMessage = this.props.intl.formatMessage({ id: 'signin.error.useGoogle' });
           } else {
-            errorMessage = this.props.intl.formatMessage({ id: 'signin.error.noPassword' }, { forgotPasswordLink: '/' + this.state.locale + '/password/forgot' });
+            errorMessage = this.props.intl.formatMessage({ id: 'signin.error.noPassword' }, { forgotPasswordLink: '/' + this.props.commonStore.locale + '/password/forgot' });
           }
         }
         if (!errorMessage) errorMessage = this.props.intl.formatMessage({ id: 'signin.error.generic' });

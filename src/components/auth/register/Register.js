@@ -19,7 +19,6 @@ class Register extends React.Component {
       registerErrors: null,
       registerSuccess: false,
       registerSuccessMessage: '',
-      locale: commonStore.locale || commonStore.getCookie('locale')
     };
   }
 
@@ -90,7 +89,7 @@ class Register extends React.Component {
 
         } else if (err.status === 400 && err.response.body.message === 'User already exists.') {
           
-          errorMessage = this.props.intl.formatMessage({ id: 'signup.error.userExists' }, { forgotPasswordLink: '/' + this.state.locale + '/password/forgot' });
+          errorMessage = this.props.intl.formatMessage({ id: 'signup.error.userExists' }, { forgotPasswordLink: '/' + this.props.commonStore.locale + '/password/forgot' });
         
         }
 

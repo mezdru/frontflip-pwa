@@ -26,7 +26,6 @@ class MainRouteOrganisationRedirect extends React.Component {
 
     this.state = {
       redirectTo: null,
-      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
       renderComponent: false,
     };
 
@@ -52,7 +51,7 @@ class MainRouteOrganisationRedirect extends React.Component {
         }).catch((err) => {
           ReactGA.event({category: 'Error',action: 'Redirect to error layout', value: 500});
           SlackService.notifyError(err, '32', 'quentin', 'MainRouteOrganisationRedirect.js');
-          this.setState({redirectTo: '/' + this.state.locale + '/error/500/routes'});
+          this.setState({redirectTo: '/' + this.props.commonStore.locale + '/error/500/routes'});
         });
       });
     }
@@ -74,7 +73,7 @@ class MainRouteOrganisationRedirect extends React.Component {
     }).catch((err) => {
       ReactGA.event({category: 'Error',action: 'Redirect to error layout', value: 500});
       SlackService.notifyError(err, '42', 'quentin', 'MainRouteOrganisationRedirect.js');
-      this.setState({redirectTo: '/' + this.state.locale + '/error/500/routes'});
+      this.setState({redirectTo: '/' + this.props.commonStore.locale + '/error/500/routes'});
     });
   }
 
@@ -109,11 +108,11 @@ class MainRouteOrganisationRedirect extends React.Component {
         }).catch((err) => {
             if(err.status === 403 && err.response.body.message === 'Email not validated') {
               EmailService.confirmLoginEmail(null);
-              this.setState({redirectTo: '/' + this.state.locale + '/error/' + err.status + '/email'});
+              this.setState({redirectTo: '/' + this.props.commonStore.locale + '/error/' + err.status + '/email'});
             } else {
               ReactGA.event({category: 'Error',action: 'Redirect to error layout', value: 500});
               SlackService.notifyError(err, '32', 'quentin', 'MainRouteOrganisationRedirect.js');
-              this.setState({redirectTo: '/' + this.state.locale + '/error/500/routes'});
+              this.setState({redirectTo: '/' + this.props.commonStore.locale + '/error/500/routes'});
             }
         })
       } else {
@@ -130,7 +129,7 @@ class MainRouteOrganisationRedirect extends React.Component {
         !this.props.userStore.values.currentUser.email.validated) {
 
       EmailService.confirmLoginEmail(null);
-      this.setState({redirectTo: '/' + this.state.locale + '/error/403/email'});
+      this.setState({redirectTo: '/' + this.props.commonStore.locale + '/error/403/email'});
     } else {
       window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
       await this.wait(3000);
@@ -146,14 +145,14 @@ class MainRouteOrganisationRedirect extends React.Component {
     let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
     if ( (!currentOrgAndRecord && !this.props.userStore.values.currentUser.superadmin) || (currentOrgAndRecord && !currentOrgAndRecord.welcomed)) {
       // user need to onboard in organisation
-      this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/onboard'});
+      this.setState({redirectTo: '/' + this.props.commonStore.locale + '/' + organisation.tag + '/onboard'});
     } else if (currentOrgAndRecord) {
       this.props.recordStore.setRecordId(currentOrgAndRecord.record);
       await this.props.recordStore.getRecord()
         .then(() => {
-          if (isNewOrg) this.setState({ redirectTo: '/' + this.state.locale + '/' + organisation.tag });
+          if (isNewOrg) this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + organisation.tag });
         }).catch(() => {
-          this.setState({redirectTo: '/' + this.state.locale + '/' + organisation.tag + '/onboard'});
+          this.setState({redirectTo: '/' + this.props.commonStore.locale + '/' + organisation.tag + '/onboard'});
         });
     }
   }
@@ -171,7 +170,7 @@ class MainRouteOrganisationRedirect extends React.Component {
                         SlackService.notifyError('Someone try to access : ' + this.props.match.params.organisationTag + ' and got 404.', 
                                                   '110', 'quentin', 'MainRouteOrganisationRedirect.js');
                         ReactGA.event({category: 'Error',action: 'Redirect to error layout', value: 404});
-                        this.setState({redirectTo: '/' + this.state.locale + '/error/404/organisation'});
+                        this.setState({redirectTo: '/' + this.props.commonStore.locale + '/error/404/organisation'});
                       });
       }
 
@@ -183,7 +182,7 @@ class MainRouteOrganisationRedirect extends React.Component {
                       .catch((err) => {
                         if(err.status === 403 && err.response.body.message === 'Email not validated') {
                           EmailService.confirmLoginEmail(organisation.tag);
-                          this.setState({redirectTo: '/' + this.state.locale + '/error/' + err.status + '/email'});
+                          this.setState({redirectTo: '/' + this.props.commonStore.locale + '/error/' + err.status + '/email'});
                         }
                         return;
                       });
