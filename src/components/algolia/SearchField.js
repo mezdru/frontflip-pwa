@@ -58,8 +58,6 @@ class SearchField extends React.Component {
       let displayedNameText;
       let locale = this.props.commonStore.locale;
       if (hit.type === 'hashtag') {
-        console.log('>>>>>>>>>>>>>')
-        console.log(locale)
         displayedNameText = this.getTextLabel(hit, locale);
         if(hit._highlightResult && hit._highlightResult.name_translated && hit._highlightResult.name_translated[locale]&& hit._highlightResult.name_translated[locale].value) {
           displayedName = hit._highlightResult.name_translated[locale].value;
