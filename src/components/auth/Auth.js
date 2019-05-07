@@ -1,7 +1,6 @@
 import React from 'react';
 import {injectIntl} from 'react-intl';
 import {Redirect} from 'react-router-dom';
-import {observe} from 'mobx';
 import {inject, observer} from 'mobx-react';
 
 import {Grid, Tab, Tabs} from '@material-ui/core';

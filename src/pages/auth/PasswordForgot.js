@@ -3,9 +3,6 @@ import {FormattedHTMLMessage, FormattedMessage, injectIntl} from 'react-intl';
 import {inject, observer} from 'mobx-react';
 
 import {Button, Grid, TextField, Typography, withStyles} from "@material-ui/core";
-import Banner from '../../components/utils/banner/Banner';
-import Header from '../../components/header/Header';
-import Logo from '../../components/utils/logo/Logo';
 import SnackbarCustom from '../../components/utils/snackbars/SnackbarCustom';
 import ReactGA from 'react-ga';
 import AuthLayout from '../../components/auth/AuthLayout';

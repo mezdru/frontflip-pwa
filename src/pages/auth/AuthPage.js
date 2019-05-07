@@ -1,8 +1,11 @@
 import React from 'react';
 import {inject, observer} from 'mobx-react';
+import ReactGA from 'react-ga';
 
 import Auth from '../../components/auth/Auth';
 import AuthLayout from '../../components/auth/AuthLayout';
+
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 console.debug('Loading AuthPage');
 
@@ -33,8 +36,4 @@ class AuthPage extends React.Component {
   }
 }
 
-export default inject('authStore')(
-  (observer(
-    AuthPage
-  ))
-);
+export default inject('authStore')(observer(AuthPage));

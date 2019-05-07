@@ -1,12 +1,9 @@
 import React from 'react';
 import {Grid} from '@material-ui/core';
 import { withStyles} from '@material-ui/core/styles';
-import ReactGA from 'react-ga';
 import Logo from '../utils/logo/Logo';
 import Banner from '../utils/banner/Banner';
 import Header from '../header/Header';
-ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
-
 
 const styles = (theme) => ({
   logo: {
