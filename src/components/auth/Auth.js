@@ -46,7 +46,6 @@ class Auth extends React.Component {
       queryParams: queryString.parse(window.location.search),
       displayLoader: false,
       redirectTo: null,
-      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
       observer: ()=> {}
     };
   };
@@ -70,7 +69,7 @@ class Auth extends React.Component {
           ReactGA.event({category: 'User',action: 'Login with Google'});
           if (googleState && googleState.invitationCode) this.props.authStore.setInvitationCode(googleState.invitationCode);
           if(user.superadmin){
-            this.setState({redirectTo: '/' + this.state.locale + (this.props.organisationStore.values.organisation.tag ? '/'+this.props.organisationStore.values.organisation.tag : '')});
+            this.setState({redirectTo: '/' + this.props.commonStore.locale + (this.props.organisationStore.values.organisation.tag ? '/'+this.props.organisationStore.values.organisation.tag : '')});
             return;
           }
           this.props.authStore.registerToOrg()
@@ -79,10 +78,10 @@ class Auth extends React.Component {
             let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
             if (currentOrgAndRecord) this.props.recordStore.setRecordId(currentOrgAndRecord.record);
             this.props.recordStore.getRecord()
-              .then(() => this.setState({ redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag }))
+              .then(() => this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag }))
               .catch(() => window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag));
-          }).catch((err) => this.setState({redirectTo: '/' + this.state.locale + '/' + this.props.organisationStore.values.organisation.tag}));
-        }).catch((err) => this.setState({redirectTo: '/' + this.state.locale}));
+          }).catch((err) => this.setState({redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag}));
+        }).catch((err) => this.setState({redirectTo: '/' + this.props.commonStore.locale}));
     }).catch((err) => { return;});
 
   }

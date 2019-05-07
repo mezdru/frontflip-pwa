@@ -26,7 +26,6 @@ class WingsSuggestions extends React.Component {
       scrollableClass: Math.floor(Math.random() * 99999),
       onlyViewport: true,
       offsetSuggestionsIndex: 0,
-      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
     };
   }
 
@@ -102,7 +101,7 @@ class WingsSuggestions extends React.Component {
 
   shouldDisplaySuggestion = (tag) => (!this.props.recordStore.values.record.hashtags.some(hashtag => hashtag.tag === tag));
 
-  getDisplayedName = (hit) => (hit.name_translated ? (hit.name_translated[this.state.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag);
+  getDisplayedName = (hit) => (hit.name_translated ? (hit.name_translated[this.props.commonStore.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag);
 
   isNewSuggestions = (tag) => {
     let indexOf = this.props.suggestionsController._newSuggestions.all.findIndex(suggestion => suggestion.tag === tag);

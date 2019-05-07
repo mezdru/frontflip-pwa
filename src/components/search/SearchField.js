@@ -18,7 +18,6 @@ class SearchField extends React.Component {
     this.state = {
       searchInput: '',
       placeholder: this.getSearchFieldPlaceholder(),
-      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
       searchFilters: [],
       observer: () => {}
     };
@@ -77,7 +76,7 @@ class SearchField extends React.Component {
         <div className={classes.searchFiltersContainer} id="search-filters-container">
           {searchFilters && searchFilters.length > 0 && searchFilters.map((filter, index) => {
             let displayedName = (filter.name_translated ? 
-                                (filter.name_translated[this.state.locale] || filter.name_translated['en-UK']) || filter.name || filter.tag : 
+                                (filter.name_translated[this.props.commonStore.locale] || filter.name_translated['en-UK']) || filter.name || filter.tag : 
                                 filter.name);
             return (
               <Wing

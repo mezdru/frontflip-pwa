@@ -20,7 +20,6 @@ class SearchField extends React.Component {
       inputValue: '',
       selectedOption: this.props.defaultValue,
       placeholder: this.props.intl.formatMessage({ id: (this.props.hashtagOnly ? 'algolia.onboard' : 'algolia.search') }),
-      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
       observer: () => {}
     };
   }
@@ -57,16 +56,17 @@ class SearchField extends React.Component {
     array.forEach(hit => {
       let displayedName;
       let displayedNameText;
+      let locale = this.props.commonStore.locale;
       if (hit.type === 'hashtag') {
-        displayedNameText = this.getTextLabel(hit);
-        if(hit._highlightResult && hit._highlightResult.name_translated && hit._highlightResult.name_translated[this.state.locale]&& hit._highlightResult.name_translated[this.state.locale].value) {
-          displayedName = hit._highlightResult.name_translated[this.state.locale].value;
+        displayedNameText = this.getTextLabel(hit, locale);
+        if(hit._highlightResult && hit._highlightResult.name_translated && hit._highlightResult.name_translated[locale]&& hit._highlightResult.name_translated[locale].value) {
+          displayedName = hit._highlightResult.name_translated[locale].value;
         } else if(hit._highlightResult && hit._highlightResult.name && hit._highlightResult.name.value) {
           displayedName = hit._highlightResult.name.value;
         } else if(hit._highlightResult && hit._highlightResult.tag && hit._highlightResult.tag.value){
           displayedName = hit._highlightResult.tag.value;
         } else {
-          displayedName = this.getTextLabel(hit);
+          displayedName = this.getTextLabel(hit, locale);
         }
       } else if (hit.type === 'person') {
         displayedNameText = hit.name || hit.tag;
@@ -81,10 +81,10 @@ class SearchField extends React.Component {
     return arrayOfLabel;
   }
 
-  getTextLabel = (hit) => {
+  getTextLabel = (hit, locale) => {
     if(!hit) return '';
     return (hit.name_translated ? 
-      (hit.name_translated[this.state.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag);
+      (hit.name_translated[locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag);
   }
 
   getOptionValue = (option) => option.value;
