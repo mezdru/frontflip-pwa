@@ -186,8 +186,6 @@ class WingsSuggestions extends React.Component {
   render() {
     const {classes} = this.props;
     const {suggestions, scrollableClass} = this.state;
-
-    console.log(JSON.stringify(this.props.commonStore.locale))
     
     return (
       <div ref={(el) => {this.elementNode = el}}>
