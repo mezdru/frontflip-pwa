@@ -20,6 +20,7 @@ const styles = theme => ({
     height: 240,
     marginBottom: -22,
     marginLeft: -62,
+    backgroundColor: 'white',
     [theme.breakpoints.down('xs')]: {
       width: 190,
       height: 190,

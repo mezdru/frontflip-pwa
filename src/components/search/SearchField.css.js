@@ -8,6 +8,7 @@ export const styles = theme => ({
     background: 'rgba(255,255,255,.95)',
     display: 'flex',
     flexDirection: 'row',
+    transition: 'padding-left 300ms cubic-bezier(0.4, 0, 0.2, 1)',
     [theme.breakpoints.down('xs')]: {
       maxWidth: '100%',
     }

@@ -36,6 +36,7 @@ class SearchPage extends React.Component {
       hashtagsFilter: this.getHashtagsFilter(),
       top: 16,
       headerHeight: 129,
+      headerPosition: 'INITIAL',
     };
   }
 
@@ -74,6 +75,7 @@ class SearchPage extends React.Component {
         while ((contentTop - (currentSearchTop + this.state.headerHeight)) < 48 && (currentSearchTop >= this.state.top)) {
           searchBox.style.top = Math.max(8,(currentSearchTop -= 2)) + 'px';
         }
+        if(currentSearchTop <= this.state.top) this.handleMenuButtonMobileDisplay(true);
       } else {
         var interval = setInterval(function () {
           var currentSearchTop = searchBox.getBoundingClientRect().top;
@@ -81,12 +83,35 @@ class SearchPage extends React.Component {
             searchBox.style.top = (currentSearchTop += 2) + 'px';
           } else {
             interval = clearInterval(interval);
+            if(currentSearchTop >= this.state.top + 8) this.handleMenuButtonMobileDisplay(false);
           }
         }.bind(this), 2);
       }
 
       lastScrollTop = contentPart.scrollTop;
     }.bind(this));
+  }
+
+  handleMenuButtonMobileDisplay = (isInSearch) => {
+    var searchField = document.getElementById('search-container');
+    var headerButton = document.getElementById('header-button');
+
+    if(this.props.width === 'xs' && isInSearch && this.state.headerPosition === 'INITIAL') {
+      searchField.style.paddingLeft = 48 +'px';
+      headerButton.style.top = 20 + 'px';
+      headerButton.style.height = 40 + 'px';
+      headerButton.style.width = 40 + 'px';
+      headerButton.style.minWidth = 0 + 'px';
+      headerButton.style.left = 20 + 'px';
+      this.setState({headerPosition: 'INSIDE'})
+    } else if (!isInSearch && (this.state.headerPosition !== 'INITIAL')) {
+      searchField.style.paddingLeft = 0 +'px';
+      headerButton.style.top = 16 + 'px';
+      headerButton.style.height = 48 + 'px';
+      headerButton.style.width = 48 + 'px';
+      headerButton.style.left = 16 + 'px';
+      this.setState({headerPosition: 'INITIAL'})
+    }
   }
 
   /**
