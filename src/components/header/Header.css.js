@@ -132,6 +132,7 @@ export const styles = theme => ({
     cursor: 'pointer',
     height: 48,
     width: 48,
+    transition: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)',
     backgroundColor: 'white',
     '&:hover': {
       backgroundColor: 'white',
