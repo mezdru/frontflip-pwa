@@ -97,7 +97,7 @@ class Login extends React.Component {
                 type="email"
                 autoComplete="email"
                 fullWidth
-                variant={"outlined"}
+                // variant={"outlined"}
                 value={values.email}
                 onChange={this.handleEmailChange}
                 required
@@ -109,7 +109,7 @@ class Login extends React.Component {
                 type="password"
                 autoComplete="current-password"
                 fullWidth
-                variant={"outlined"}
+                // variant={"outlined"}
                 value={values.password}
                 onChange={this.handlePasswordChange}
                 required
