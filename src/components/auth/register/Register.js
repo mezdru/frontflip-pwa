@@ -113,7 +113,7 @@ class Register extends React.Component {
       )
     } else {
       return (
-        <form onSubmit={this.handleSubmitForm}>
+        <form onSubmit={this.handleSubmitForm} id="form-register">
           <Grid container item direction='column' spacing={16}>
             {registerErrors && (
               <Grid item>

@@ -74,7 +74,7 @@ class Login extends React.Component {
     }
     else {
       return (
-        <form onSubmit={this.handleSubmitForm}>
+        <form onSubmit={this.handleSubmitForm} id="form-login">
           <Grid container item direction='column' spacing={16}>
             {loginErrors && (
               <Grid item>

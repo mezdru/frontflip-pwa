@@ -65,7 +65,7 @@ class IntegrationButton extends React.Component {
 
     return (
       <Button {...this.props} className={classes.root} onClick={this.props.onClick || this.redirectToAuth}>
-        <img src={this.getIntegrationLogo(integrationTag)} className={classes.logo} alt="Social logo" />
+        <img src={this.getIntegrationLogo(integrationTag)} className={classes.logo} alt={labelId} />
       </Button>
     );
   }

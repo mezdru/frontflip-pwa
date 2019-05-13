@@ -110,7 +110,7 @@ class PasswordReset extends React.Component {
 
     return (
       <AuthLayout>
-        <form onSubmit={this.handleSubmitForm} className={classes.form}>
+        <form onSubmit={this.handleSubmitForm} className={classes.form} id="form-password-reset">
           <div className={classes.offset}></div>
           <Grid item container direction={'column'} spacing={16}>
             {!userEmail && (

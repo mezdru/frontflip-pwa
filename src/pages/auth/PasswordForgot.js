@@ -80,7 +80,7 @@ class PasswordForgot extends React.Component {
             </Grid>
           )}
           {!successPasswordReset && (
-            <form onSubmit={this.handleSubmitForm} className={classes.form}>
+            <form onSubmit={this.handleSubmitForm} className={classes.form} id="form-password-forgot">
               <div className={classes.offset}></div>
               <Grid item container direction={'column'} spacing={16}>
                 <Typography variant="h6" className={classes.intro}><FormattedHTMLMessage id="password.forgot.intro"/></Typography>
