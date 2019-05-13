@@ -161,6 +161,9 @@ class SuggestionsService {
       return null;
   }
 
+  /**
+   * @description Static : upgrade array of record data to fetch complete record data
+   */
   upgradeData = async (suggestions) => {
     suggestions = this.populateData(suggestions, bank);
     let bank = await this.syncBank(null);
@@ -176,12 +179,18 @@ class SuggestionsService {
     return suggestions;
   }
 
+  /**
+   * @description Static : Update array with bank of data
+   */
   populateData = (suggestions, bank) => {
     return suggestions.map((suggestion,i) => {
       return (bank ? bank.find(bankElt => bankElt.tag === suggestion.value) || suggestion : suggestion);
     });
   }
 
+  /**
+   * @description Static : Format a query for algolia with missing record tag data
+   */
   formatMissingQuery = (suggestions) => {
     let query = '';
     suggestions.forEach(suggestion => {
