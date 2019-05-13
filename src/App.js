@@ -8,7 +8,7 @@ import { version } from '../package.json'
 import LogRocket from 'logrocket';
 import setupLogRocketReact from 'logrocket-react';
 
-if(process.env.NODE_ENV !== 'development') {
+if(process.env.NODE_ENV !== 'development' && process.env.REACT_APP_LOGROCKET) {
   LogRocket.init(process.env.REACT_APP_LOGROCKET, {
     release: version,
   });
