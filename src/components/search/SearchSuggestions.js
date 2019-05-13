@@ -135,7 +135,7 @@ class SearchSuggestions extends React.Component {
             return (
               <Wings src={ProfileService.getPicturePath(item.picture)} key={i}
                 label={ProfileService.htmlDecode(displayedName)}
-                onClick={(e) => addFilter({ name: displayedName, tag: displayedName })}
+                onClick={(e) => addFilter({ name: displayedName, tag: item.tag })}
                 style={{ animationDelay: (i * 0.05) + 's' }} />
             );
           } else {
