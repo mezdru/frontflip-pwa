@@ -3,10 +3,10 @@ import {FormattedMessage, injectIntl} from 'react-intl';
 import {inject, observer} from 'mobx-react';
 
 import {Button, CircularProgress, Grid, TextField, Typography} from "@material-ui/core";
-import GoogleButton from "../../utils/buttons/GoogleButton";
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import ReactGA from 'react-ga';
 import LogRocket from 'logrocket';
+import IntegrationButton from '../../utils/buttons/IntegrationButton';
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
@@ -120,8 +120,9 @@ class Register extends React.Component {
                 <SnackbarCustom variant="warning" message={registerErrors} />
               </Grid>
             )}
-            <Grid item>
-              <GoogleButton fullWidth={true} onClick={this.props.handleGoogleAuth} id={"Sign up with Google"}/>
+            <Grid container item direction="row" justify="center"  spacing={16} >
+              <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="google" /></Grid>
+              <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="linkedin" /></Grid>            
             </Grid>
             <Grid item>
               <Typography style={{
