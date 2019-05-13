@@ -161,6 +161,37 @@ class SuggestionsService {
       return null;
   }
 
+  upgradeData = async (suggestions) => {
+    suggestions = this.populateData(suggestions, bank);
+    let bank = await this.syncBank(null);
+    let query = this.formatMissingQuery(suggestions);
+    if (query) {
+      suggestions = await this.syncBank(query)
+                    .then(newBank => {
+                      bank = newBank;
+                      return this.populateData(suggestions, bank);
+                    });
+    }
+
+    return suggestions;
+  }
+
+  populateData = (suggestions, bank) => {
+    return suggestions.map((suggestion,i) => {
+      return (bank ? bank.find(bankElt => bankElt.tag === suggestion.value) || suggestion : suggestion);
+    });
+  }
+
+  formatMissingQuery = (suggestions) => {
+    let query = '';
+    suggestions.forEach(suggestion => {
+      if (!suggestion.objectID)
+        query += (query !== '' ? ' OR' : '') + ' tag:' + suggestion.tag;
+    });
+    return query;
+  }
+
+
   /**
    * @description Populate all suggestions data thanks to current Wings bank
    */

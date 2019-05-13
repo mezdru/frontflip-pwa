@@ -4,6 +4,9 @@ import AlgoliaService from '../../services/algolia.service';
 import { inject, observer } from 'mobx-react';
 import { observe } from 'mobx';
 import withSearchManagement  from './SearchManagement.hoc';
+import SuggestionsService from '../../services/suggestions.service';
+import ProfileService from '../../services/profile.service';
+import Wings from '../utils/wing/Wing';
 
 const styles = theme => ({
   suggestionsContainer: {
@@ -103,7 +106,10 @@ class SearchSuggestions extends React.Component {
     AlgoliaService.fetchFacetValues(null, false, filters, query)
     .then((res) => {
       if(!res) return;
-      this.setState({facetHits: res.facetHits.splice(0,7), shouldUpdate: true});
+      SuggestionsService.upgradeData(res.facetHits)
+      .then(resultHits => {
+        this.setState({facetHits: resultHits.splice(0,7), shouldUpdate: true});
+      });
     })
     .catch();
   }
@@ -115,23 +121,31 @@ class SearchSuggestions extends React.Component {
   render() {
     const {facetHits} = this.state;
     const {classes, addFilter} = this.props;
+    const {locale} = this.props.commonStore;
+
+    console.log(facetHits);
 
     return (
       <div className={classes.suggestionsContainer} >
         {facetHits.map((item, i) => {
-          var itemChosenName = (item.value || item.name || item.tag);
-          if (this.shouldDisplaySuggestion(itemChosenName)){
+          let displayedName = (item.name_translated ? (item.name_translated[locale] || item.name_translated['en-UK']) || item.name || item.tag : item.name);
+          if (this.shouldDisplaySuggestion(item.tag)){
             return (
-              <Chip key={i} 
-                    component={ (props)=>
-                              <div {...props}>
-                                <div className={classes.suggestionLabel}>{itemChosenName}</div>
-                                <div className={classes.suggestionCount}>{item.count}</div>
-                              </div>
-                    }
-                    onClick={(e) => addFilter({ name: itemChosenName, tag: itemChosenName})} 
-                    className={classes.suggestion} 
-                    style={{animationDelay: (i*0.05) +'s'}} />
+              <Wings src={ProfileService.getPicturePath(item.picture)} key={i}
+              label={ProfileService.htmlDecode(displayedName)}
+              onClick={(e) => addFilter({ name: displayedName, tag: displayedName})} 
+              style={{animationDelay: (i*0.05) +'s'}}/>
+
+              // <Chip key={i} 
+              //       component={ (props)=>
+              //                 <div {...props}>
+              //                   <div className={classes.suggestionLabel}>{displayedName}</div>
+              //                   <div className={classes.suggestionCount}>{item.count}</div>
+              //                 </div>
+              //       }
+              //       onClick={(e) => addFilter({ name: displayedName, tag: displayedName})} 
+              //       className={classes.suggestion} 
+              //       style={{animationDelay: (i*0.05) +'s'}} />
             );
           }else {
             return null;
