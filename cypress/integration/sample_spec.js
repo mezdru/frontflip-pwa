@@ -1,18 +1,23 @@
-describe('My First Test', function() {
-  it('Does not do much!', function() {
-    expect(true).to.equal(true)
+context('Actions', () => {
+  beforeEach(() => {
+    cy.visit('https://app-staging.wingzy.com/en')
   })
-})
 
-describe('My First Test', function() {
-  it('Does not do much!', function() {
-    expect(true).to.equal(false)
-  })
-})
+  it('.passwordForgot() - Redirect to /password/forgot', () => {
+    cy.contains("don't have my password").click()
 
-describe('My First Test', function() {
-  it('Visits the staging app', function() {
-    cy.visit('https://app-staging.wingzy.com')
-    cy.contains('Google').click()
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/en/password/forgot')
+      expect(loc.protocol).to.eq('https:')
+    })
+
+    cy.contains('Send the email')
   })
+
+  it('.auth() - Auth by email and password', () => {
+    cy.get('form')
+      .find('[type="email"]')
+      .type('fake@email.com').should('have.value', 'fake@email.com')
+  })
+
 })
