@@ -36,7 +36,7 @@ context('Auth', () => {
     })
   })
 
-  it('.auth() - Auth by email and password', () => {
+  it('.login() - Login by email and password', () => {
     cy.get('#form-login')
       .find('[type="email"]')
       .type('quentin+fake@wingzy.com').should('have.value', 'quentin+fake@wingzy.com')
@@ -57,5 +57,27 @@ context('Auth', () => {
     cy.expect(cy.getCookie('accessToken')).to.exist
     cy.expect(cy.getCookie('refreshToken')).to.exist
   })
+
+  it('.register() - Register by email and password', () => {
+
+    cy.contains('Sign Up').click()
+    var randomNumber = Math.floor(Math.random() * (999999 - 100001)) + 100000
+
+    cy.get('#form-register')
+      .find('[type="email"]')
+      .type('quentin+fake'+randomNumber+'@wingzy.com').should('have.value','quentin+fake'+randomNumber+'@wingzy.com')
+
+    cy.get('#form-register')
+      .find('[type="password"]')
+      .type('c1secret').should('have.value','c1secret')
+
+    
+    cy.get('#form-register').contains('Sign Up').click()
+
+    cy.contains('Thank you for signing up! We just sent you an email to confirm your address, check your inbox...')
+
+  })
+
+
 
 })
