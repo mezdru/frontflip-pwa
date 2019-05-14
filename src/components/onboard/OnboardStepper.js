@@ -107,7 +107,8 @@ class OnboardStepper extends React.Component {
       // click on finish
       let user = this.props.userStore.values.currentUser;
       try {
-        SlackService.notify('#alerts', 'We have a new User! ' +
+        if(process.env.NODE_ENV === 'production' && !process.env.REACT_APP_NOLOGS)
+          SlackService.notify('#alerts', 'We have a new User! ' +
                             (user.email ? user.email.value : (user.google? user.google.email : user._id)) +
                             ' in ' + this.props.organisationStore.values.organisation.tag);
       }catch(e) {
