@@ -54,7 +54,7 @@ class SearchSuggestions extends React.Component {
       facetHits: [],
       observer: () => { },
       observer2: () => { },
-      filterRequest: '',
+      filterRequest: 'type:person',
       queryRequest: '',
     };
 
