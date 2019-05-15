@@ -6,7 +6,6 @@ import { observe } from 'mobx';
 import withSearchManagement from './SearchManagement.hoc';
 import SuggestionsService from '../../services/suggestions.service';
 import ProfileService from '../../services/profile.service';
-import Wings from '../utils/wing/Wing';
 
 const styles = theme => ({
   suggestionsContainer: {
@@ -20,7 +19,6 @@ const styles = theme => ({
   },
   suggestion: {
     margin: 8,
-    paddingRight: 0,
     background: 'white',
     color: theme.palette.primary.dark,
     '&:hover': {
@@ -43,7 +41,22 @@ const styles = theme => ({
     lineHeight: '32px'
   },
   suggestionLabel: {
-    marginRight: 8,
+    paddingRight: 12,
+    paddingLeft: 12,
+  },
+  suggestionPicture: {
+    width: 32,
+    height: 48,
+    margin: '-5px -6px 0 -22px', // should be -15px -6px 0 -22px
+    overflow: 'visible',
+    boxShadow: 'none',
+    backgroundColor: 'transparent',
+    '& img': {
+      width: '100%',
+      height: 'auto',
+      textAlign: 'center',
+      objectFit: 'cover',
+    }
   }
 });
 
@@ -128,15 +141,27 @@ class SearchSuggestions extends React.Component {
     const { locale } = this.props.commonStore;
 
     return (
-      <div className={classes.suggestionsContainer} >
+      <div className={classes.suggestionsContainer} id="search-suggestions-container">
+
         {facetHits.map((item, i) => {
           let displayedName = (item.name_translated ? (item.name_translated[locale] || item.name_translated['en-UK']) || item.name || item.tag : item.name);
+          let pictureSrc = ProfileService.getPicturePath(item.picture);
           if (this.shouldDisplaySuggestion(item.tag)) {
             return (
-              <Wings src={ProfileService.getPicturePath(item.picture)} key={i}
-                label={ProfileService.htmlDecode(displayedName)}
-                onClick={(e) => addFilter({ name: displayedName, tag: item.tag })}
-                style={{ animationDelay: (i * 0.05) + 's' }} />
+              <Chip key={i} 
+                    component={ (props)=>
+                              <div {...props}>
+                                { pictureSrc && (
+                                  <div className={classes.suggestionPicture}>
+                                    <img alt="Emoji" src={pictureSrc} />
+                                  </div>
+                                )} 
+                                <div className={classes.suggestionLabel}>{ProfileService.htmlDecode(displayedName)}</div>
+                              </div>
+                    }
+                    onClick={(e) => addFilter({ name: displayedName, tag: item.tag})} 
+                    className={classes.suggestion} 
+                    style={{animationDelay: (i*0.05) +'s'}} />
             );
           } else {
             return null;
