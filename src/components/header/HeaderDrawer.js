@@ -114,9 +114,9 @@ class App extends Component {
                 </ListItem>
 
                 {(organisation.canInvite) && (
-                  <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/invite', organisation.tag)} >
+                  <ListItem className={classes.inviteBtn} button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/invite', organisation.tag)} >
                     <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.invite'})}
-                                  primaryTypographyProps={{style: { fontWeight: 'bold', color: theme.palette.primary.main, textTransform: 'uppercase' } }} />
+                                  primaryTypographyProps={{style: { fontWeight: 'bold', color: 'white', textTransform: 'uppercase' } }} />
                   </ListItem>
                 )}
 

@@ -141,5 +141,15 @@ export const styles = theme => ({
   logoBorder: {
     backgroundCOlor: 'white',
     border: '2px solid white',
+  },
+  inviteBtn: {
+    backgroundColor: theme.palette.secondary.main,
+    borderRadius: 4,
+    textAlign: 'center',
+    margin: '0 4px',
+    width: 'auto',
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.dark,
+    }
   }
 });
