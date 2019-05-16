@@ -19,6 +19,7 @@ const styles = theme => ({
   },
   suggestion: {
     margin: 8,
+    marginBottom: 20,
     background: 'white',
     color: theme.palette.primary.dark,
     '&:hover': {
