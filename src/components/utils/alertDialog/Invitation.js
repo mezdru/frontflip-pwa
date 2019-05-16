@@ -9,8 +9,8 @@ import {styles} from '../../header/Header.css.js';
 import Icon from "@material-ui/core/Icon";
 import {FormattedMessage} from "react-intl";
 import {Clear, InfoRounded, FileCopy} from "@material-ui/icons";
-import {withRouter} from "react-router-dom";
-import {observer} from "mobx-react";
+import {inject, observer} from "mobx-react";
+import {injectIntl} from 'react-intl';
 
 
 function Transition(props) {
@@ -20,8 +20,29 @@ function Transition(props) {
 class Invitation extends React.Component {
   state = {
     open: false,
+    invitationCode: null,
+    errorMessage: null
   };
-  
+
+  componentDidMount() {
+    var orgId = this.props.organisationStore.values.organisation._id;
+    if(orgId)
+      this.props.authStore.getInvitationCode(orgId)
+      .then(invitationCode => {
+        this.setState({invitationCode: invitationCode.code});
+      }).catch(e => {
+        console.error(e);
+        this.setState({errorMessage: this.props.intl.formatMessage({ id: 'invitation.get.error' })})
+      });
+  }
+
+  formatInvitationLink = (code) => {
+    var locale = this.props.commonStore.locale;
+    var orgTag = this.props.organisationStore.values.organisation.tag;
+    var security = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://');
+    return security + process.env.REACT_APP_HOST + '/' + locale + '/' + orgTag + '/signin/' + code;
+  }
+
   copyUrl = () => {
     let copyText = document.getElementById("urlInvitation");
     copyText.select();
@@ -38,6 +59,10 @@ class Invitation extends React.Component {
   
   render() {
     const {classes} = this.props;
+    const {invitationCode, errorMessage} = this.state;
+
+    const invitationCodeLink = this.formatInvitationLink(invitationCode);
+
     return (
       <React.Fragment>
         <Button className={classes.invitationBtn} onClick={this.handleClickOpen}>
@@ -72,7 +97,7 @@ class Invitation extends React.Component {
             </Typography>
             <Grid container direction={'row'} justify={'space-between'} style={{marginTop: 8}}>
               <Grid item xs={10}>
-                <input type="text" value={"https://blablacode.invitation.hello"} className={classes.invitationInput} readOnly={true} id={'urlInvitation'}/>
+                <input type="text" value={errorMessage || invitationCodeLink} className={classes.invitationInput} readOnly={true} id={'urlInvitation'}/>
               </Grid>
               <Grid item xs={2}>
                 <Button className={classes.invitationCopyBtn} aria-label='copy' onClick={this.copyUrl}>
@@ -95,4 +120,8 @@ class Invitation extends React.Component {
   }
 }
 
-export default withRouter(observer(withStyles(styles, {withTheme: true})(Invitation)))
+export default inject('organisationStore', 'authStore', 'commonStore')(
+  injectIntl(observer(
+    withStyles(styles, { withTheme: true })(Invitation)
+  ))
+);
