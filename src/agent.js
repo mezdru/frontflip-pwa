@@ -256,6 +256,16 @@ const Email = {
     )
 }
 
+const Invitation = {
+  getCode: (orgId) =>
+    requests.post(
+      API_ROOT_AUTH + '/api/invitation/code',
+      {
+        orgId: orgId
+      }
+    )
+}
+
 /**
  * @description Test get user with secure call to API
  */
@@ -270,5 +280,6 @@ export default {
   Record,
   Organisation,
   User,
-  Email
+  Email,
+  Invitation
 }

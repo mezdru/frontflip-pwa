@@ -163,6 +163,7 @@ class AuthStore {
       }))
       .finally(action(() => { this.inProgress = false; }));
   }
+
   updatePassword(token, hash) {
     this.inProgress = true;
     this.errors = null;
@@ -171,6 +172,21 @@ class AuthStore {
       .then((data) => {
         this.setEmail(data.email);
         return this.login();
+      })
+      .catch((err) => {
+        this.errors = err;
+        throw err;
+      })
+      .finally(action(() => { this.inProgress = false; }));
+  }
+
+  getInvitationCode(orgId) {
+    this.inProgress = true;
+    this.errors = null;
+
+    return agent.Invitation.getCode(orgId)
+      .then((data) => {
+        return data.invitationCode;
       })
       .catch((err) => {
         this.errors = err;
@@ -210,7 +226,8 @@ decorate(AuthStore, {
   login: action,
   logout: action,
   register: action,
-  registerToOrg: action
+  registerToOrg: action,
+  getInvitationCode: action
 });
 
 export default new AuthStore();

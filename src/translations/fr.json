@@ -92,5 +92,6 @@
     "action.addWings.add": "Ajoutez à votre profil",
     "action.addWings.search": "Cherchez dans {organisationName}",
     "action.addWings.text": "Vous avez trouvé {wingsCount} Wings !",
-    "nobody.searchList": "Il n'y a personne ... pour le moment !"
+    "nobody.searchList": "Il n'y a personne ... pour le moment !",
+    "invitation.get.error": "Il y a eu une erreur ..."
 }
