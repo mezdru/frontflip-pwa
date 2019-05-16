@@ -4,7 +4,6 @@ import { inject, observer } from "mobx-react";
 import PropTypes from 'prop-types';
 import { Divider, SwipeableDrawer, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, ListItemAvatar } from '@material-ui/core';
 import { ChevronLeft as ChevronLeftIcon } from '@material-ui/icons';
-import Icon from '@material-ui/core/Icon';
 import './header.css';
 import AvailabilityToggle from '../availabilityToggle/AvailabilityToggle';
 import { styles } from './Header.css.js'
@@ -14,7 +13,7 @@ import defaultPicture from '../../resources/images/placeholder_person.png';
 import UrlService from '../../services/url.service';
 import { Link, withRouter } from 'react-router-dom';
 import OrganisationsList from '../utils/orgsList/OrganisationsList';
-import Dialogue from './Dialogue';
+import InvitationDialog from '../utils/alertDialog/Invitation';
 
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
@@ -117,10 +116,9 @@ class App extends Component {
 
                 {(organisation.canInvite) && (
                   <ListItem>
-                    <Dialogue/>
+                    <InvitationDialog/>
                   </ListItem>
                 )}
-
                 {(currentUser.superadmin || (currentOrgAndRecord && currentOrgAndRecord.admin)) && (
                   <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/organisation', organisation.tag)} target="_blank">
                     <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.organisationAdmin' })} />
