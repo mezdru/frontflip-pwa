@@ -4,6 +4,7 @@ import { inject, observer } from "mobx-react";
 import PropTypes from 'prop-types';
 import { Divider, SwipeableDrawer, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, ListItemAvatar } from '@material-ui/core';
 import { ChevronLeft as ChevronLeftIcon } from '@material-ui/icons';
+import Icon from '@material-ui/core/Icon';
 import './header.css';
 import AvailabilityToggle from '../availabilityToggle/AvailabilityToggle';
 import { styles } from './Header.css.js'
@@ -13,6 +14,7 @@ import defaultPicture from '../../resources/images/placeholder_person.png';
 import UrlService from '../../services/url.service';
 import { Link, withRouter } from 'react-router-dom';
 import OrganisationsList from '../utils/orgsList/OrganisationsList';
+import Dialogue from './Dialogue';
 
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
@@ -114,9 +116,8 @@ class App extends Component {
                 </ListItem>
 
                 {(organisation.canInvite) && (
-                  <ListItem className={classes.inviteBtn} button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/invite', organisation.tag)} >
-                    <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.invite'})}
-                                  primaryTypographyProps={{style: { fontWeight: 'bold', color: 'white', textTransform: 'uppercase' } }} />
+                  <ListItem>
+                    <Dialogue/>
                   </ListItem>
                 )}
 

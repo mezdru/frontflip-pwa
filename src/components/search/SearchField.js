@@ -98,7 +98,7 @@ class SearchField extends React.Component {
         
         {(searchInput || (searchFilters && searchFilters.length > 0)) && (
           <IconButton className={classes.searchClear} onClick={this.props.resetFilters} >
-            <Clear fontSize='medium' />
+            <Clear fontSize='inherit' />
           </IconButton>
         )}
 

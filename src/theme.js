@@ -228,7 +228,6 @@ export default createMuiTheme({
     MuiInputLabel: {
       shrink: {
         fontWeight: '600',
-        fontSize: 'medium',
       }
     },
     //List

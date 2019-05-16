@@ -17,7 +17,7 @@ export const styles = theme => ({
     marginRight: 8,
     color: theme.palette.secondary.main,
     backgroundColor: 'white',
-    boxShadow:'0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
+    boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
     '&:hover': {
       color: theme.palette.secondary.main,
       backgroundColor: '#d5d5d5',
@@ -25,8 +25,8 @@ export const styles = theme => ({
   },
   title: {
     lineHeight: '50%',
-    [theme.breakpoints.down('sm')] : {
-      display : 'none'
+    [theme.breakpoints.down('sm')]: {
+      display: 'none'
     }
   },
   sectionDesktop: {
@@ -142,14 +142,70 @@ export const styles = theme => ({
     backgroundCOlor: 'white',
     border: '2px solid white',
   },
-  inviteBtn: {
+  invitationBtn: {
     backgroundColor: theme.palette.secondary.main,
     borderRadius: 4,
+    fontSize: 14,
     textAlign: 'center',
-    margin: '0 4px',
-    width: 'auto',
+    width: '100%',
+    fontWeight: 'bold',
+    color: 'white',
+    textTransform: 'uppercase',
     '&:hover': {
       backgroundColor: theme.palette.secondary.dark,
     }
+  },
+  invitationIcon: {
+    color: 'white',
+    marginLeft: 10,
+  },
+  invitationTitle: {
+    padding: 0,
+    textTransform: 'uppercase',
+    fontSize:'larger',
+    marginBottom: 16,
+    color: 'black',
+    fontWeight: '700',
+  },
+  invitationContent: {
+    padding: '0!important',
+  },
+  invitationInput: {
+    padding: 4,
+    borderStyle: 'groove',
+    fontSize: 'inherit',
+    width: '99%',
+    borderRadius: 4,
+    height: 41,
+    fontWeight: '400',
+    [theme.breakpoints.down(350)]: {
+      width: '95%'
+    }
+  },
+  invitationCopyBtn: {
+    minWidth: 0,
+    height: 40,
+    backgroundColor: theme.palette.secondary.main,
+    borderRadius: 4,
+    fontSize: 14,
+    textAlign: 'center',
+    width: '99%',
+    fontWeight: 'bold',
+    color: 'white',
+    textTransform: 'uppercase',
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.dark,
+    },
+    [theme.breakpoints.down(400)]: {
+      width: 10,
+      marginLeft: -1,
+    },
+    [theme.breakpoints.down(350)]: {
+      marginLeft: -8,
+    }
+  },
+  invitationPaper: {
+    margin: 8,
+    padding: 32
   }
 });
