@@ -138,16 +138,21 @@ class SearchSuggestions extends React.Component {
         SuggestionsService.upgradeData(res.facetHits)
           .then(resultHits => {
 
+            console.debug(resultHits)
             var resultHitsFiltered = [];
 
             resultHits.forEach(hit => {
+              console.debug( (hit.tag || hit.value) + ' will be add ?')
               if( hit && this.state.firstWings.findIndex(wing => wing.tag === (hit.tag || hit.value) ) === -1 ) {
+                console.debug('>>> Add.')
                 resultHitsFiltered.push(hit);
+              } else {
+                console.debug('>>> Nop.')
               }
             });
 
             var results = (resultHitsFiltered.length > 4 ? resultHitsFiltered : resultHits);
-
+            console.debug('Final suggestions : ' + JSON.stringify(results.splice(0,5)));
             this.setState({ facetHits: results.splice(0, 5), shouldUpdate: true });
           });
       })
