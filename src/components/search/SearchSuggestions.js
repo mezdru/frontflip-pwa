@@ -141,7 +141,7 @@ class SearchSuggestions extends React.Component {
             var resultHitsFiltered = [];
 
             resultHits.forEach(hit => {
-              if( this.state.firstWings.findIndex(wing => wing.tag === hit.tag) === -1 ) {
+              if( hit && this.state.firstWings.findIndex(wing => wing.tag === (hit.tag || hit.value) ) === -1 ) {
                 resultHitsFiltered.push(hit);
               }
             });
@@ -151,7 +151,7 @@ class SearchSuggestions extends React.Component {
             this.setState({ facetHits: results.splice(0, 5), shouldUpdate: true });
           });
       })
-      .catch();
+      .catch((e) => {console.log(e)});
   }
 
   shouldDisplaySuggestion(tag) {
