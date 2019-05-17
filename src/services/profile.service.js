@@ -162,10 +162,16 @@ class ProfileService {
   }
   
   getEmojiUrl(emoji) {
-    let str = twemoji.parse(emoji);
-    str = str.split(/ /g);
-    str = str[4].split(/"/g);
-    return str[1];
+    try{
+      let str = twemoji.parse(emoji);
+      str = str.split(/ /g);
+      str = str[4].split(/"/g);
+      return str[1];
+    }catch(e) {
+      console.log(e);
+      return null;
+    }
+
   }
   
   makeHightlighted = function (item) {
