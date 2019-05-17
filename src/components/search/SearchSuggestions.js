@@ -174,7 +174,7 @@ class SearchSuggestions extends React.Component {
         {facetHits.map((item, i) => {
           let displayedName = (item.name_translated ? (item.name_translated[locale] || item.name_translated['en-UK']) || item.name || item.tag : item.name) || item.value;
           let pictureSrc = ProfileService.getPicturePath(item.picture);
-          if (this.shouldDisplaySuggestion(item.tag)) {
+          if (this.shouldDisplaySuggestion(item.tag || item.value)) {
             return (
               <Chip key={i} 
                     component={ (props)=>
@@ -187,7 +187,7 @@ class SearchSuggestions extends React.Component {
                                 <div className={classes.suggestionLabel}>{ProfileService.htmlDecode(displayedName)}</div>
                               </div>
                     }
-                    onClick={(e) => addFilter({ name: displayedName, tag: item.tag})} 
+                    onClick={(e) => addFilter({ name: displayedName, tag: (item.tag || item.value)})} 
                     className={classes.suggestion} 
                     style={{animationDelay: (i*0.05) +'s'}} />
             );
