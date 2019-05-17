@@ -167,7 +167,7 @@ class SearchSuggestions extends React.Component {
       <div className={classes.suggestionsContainer} id="search-suggestions-container">
 
         {facetHits.map((item, i) => {
-          let displayedName = (item.name_translated ? (item.name_translated[locale] || item.name_translated['en-UK']) || item.name || item.tag : item.name);
+          let displayedName = (item.name_translated ? (item.name_translated[locale] || item.name_translated['en-UK']) || item.name || item.tag : item.name) || item.value;
           let pictureSrc = ProfileService.getPicturePath(item.picture);
           if (this.shouldDisplaySuggestion(item.tag)) {
             return (
