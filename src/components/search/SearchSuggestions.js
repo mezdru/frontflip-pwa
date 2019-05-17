@@ -70,6 +70,7 @@ class SearchSuggestions extends React.Component {
       observer2: () => { },
       filterRequest: 'type:person',
       queryRequest: '',
+      firstWings: []
     };
 
     this.fetchSuggestions = this.fetchSuggestions.bind(this);
@@ -77,12 +78,22 @@ class SearchSuggestions extends React.Component {
 
   componentDidMount() {
     AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-    this.fetchSuggestions(this.state.filterRequest, this.state.queryRequest);
+    AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:#Wings', null, null, null)
+    .then(content => {
+      this.setState({firstWings: ( (content && content.hits) ? content.hits : [])}, () => {
+        this.fetchSuggestions(this.state.filterRequest, this.state.queryRequest);
+      });
+    });
 
     this.setState({
       observer: observe(this.props.commonStore, 'algoliaKey', (change) => {
         AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-        this.fetchSuggestions(this.state.filterRequest, this.state.queryRequest);
+        AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:#Wings', null, null, null)
+        .then(content => {
+          this.setState({firstWings: ( (content && content.hits) ? content.hits : [])}, () => {
+            this.fetchSuggestions(this.state.filterRequest, this.state.queryRequest);
+          });
+        });
       })
     });
 
@@ -126,7 +137,18 @@ class SearchSuggestions extends React.Component {
         if (!res) return;
         SuggestionsService.upgradeData(res.facetHits)
           .then(resultHits => {
-            this.setState({ facetHits: resultHits.splice(0, 7), shouldUpdate: true });
+
+            var resultHitsFiltered = [];
+
+            resultHits.forEach(hit => {
+              if( this.state.firstWings.findIndex(wing => wing.tag === hit.tag) === -1 ) {
+                resultHitsFiltered.push(hit);
+              }
+            });
+
+            var results = (resultHitsFiltered.length > 4 ? resultHitsFiltered : resultHits);
+
+            this.setState({ facetHits: results.splice(0, 5), shouldUpdate: true });
           });
       })
       .catch();
