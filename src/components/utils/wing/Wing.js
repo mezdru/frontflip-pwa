@@ -12,10 +12,10 @@ const styles = theme => ({
     overflow: 'visible',
   },
   highlighted: {
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: theme.palette.secondary.dark,
     color: 'white',
     '&:hover': {
-      backgroundColor: theme.palette.primary.dark  + ' !important',
+      backgroundColor: theme.palette.secondary.dark  + ' !important',
       color: 'white !important'
     }
   },
