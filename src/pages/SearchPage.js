@@ -5,6 +5,7 @@ import withWidth from '@material-ui/core/withWidth';
 import ReactGA from 'react-ga';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Redirect } from "react-router-dom";
+import { observe } from 'mobx';
 
 import Header from '../components/header/Header';
 import ProfileLayout from "../components/profile/ProfileLayout";
@@ -16,6 +17,7 @@ import ErrorBoundary from '../components/utils/errors/ErrorBoundary';
 import BannerResizable from '../components/utils/banner/BannerResizable';
 import './SearchPageStyle.css';
 import SearchButton from '../components/search/SearchButton';
+import Bezier from '../resources/javascripts/bezier';
 
 const OnboardCongratulation = React.lazy(() => import('../components/onboard/steps/OnboardCongratulation'));
 const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
@@ -55,6 +57,13 @@ class SearchPage extends React.Component {
     try {
       if (this.props.match.params.profileTag === 'congrats') this.setState({ showCongratulation: true })
     } catch{ }
+
+    observe(this.props.commonStore, 'searchFilters', (change) => {
+      if(JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
+        if( (change.newValue && !change.oldValue) || (change.newValue && change.oldValue && change.newValue.length > change.oldValue.length) )
+          this.handleShowSearchResults();
+      }
+    });
   }
 
   moveSearchInputListener = () => {
@@ -119,12 +128,20 @@ class SearchPage extends React.Component {
    */
   handleShowSearchResults = () => {
     var contentPart = document.getElementById('content-container');
+    var scrollInitial = contentPart.scrollTop;
+    var scrollMax = Math.min(contentPart.scrollHeight, window.innerHeight-120); 
+    var scrollingDistance = scrollMax - scrollInitial;
+    var duration = 0;
+    var durationMax = 300;
+
     let interval = setInterval(function() {
-      if(contentPart.scrollTop <= Math.min(contentPart.scrollHeight, window.innerHeight-120)) {
-        let scrollBefore = contentPart.scrollTop;
-        contentPart.scrollTop += 5;
-        let scrollAfter = contentPart.scrollTop;
-        if(scrollBefore === scrollAfter) interval = clearInterval(interval);
+      duration ++;
+      if(contentPart.scrollTop <= scrollMax && duration <= 300) {
+
+        // Calc scrollTop following CubicBezier curve to copy CSS animation cubic-bezier.
+        contentPart.scrollTop = Math.ceil((scrollInitial + scrollingDistance * Bezier.cubicBezier(0.4, 0, 0.2, 1, duration / durationMax , durationMax )));
+
+        if(contentPart.scrollTop === scrollMax) interval = clearInterval(interval);
       } else {
         interval = clearInterval(interval);
       }

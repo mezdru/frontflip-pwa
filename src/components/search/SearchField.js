@@ -12,6 +12,7 @@ import Wing from '../utils/wing/Wing';
 import withSearchManagement from './SearchManagement.hoc';
 import {styles} from './SearchField.css';
 
+
 class SearchField extends React.Component {
   constructor(props) {
     super(props);
