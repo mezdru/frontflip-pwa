@@ -60,6 +60,9 @@ class OrganisationStore {
   }
 
   async getCurrentUserOrganisations() {
+    if(userStore.values.currentUser && (this.values.currentUserOrganisations.length === userStore.values.currentUser.orgsAndRecords.length) )
+      return Promise.resolve();
+    
     if (userStore.values.currentUser && userStore.values.currentUser.orgsAndRecords.length > 0) {
       this.values.currentUserOrganisations = [];
       await this.asyncForEach(userStore.values.currentUser.orgsAndRecords, async (orgAndRecord) => {
