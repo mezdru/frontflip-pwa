@@ -136,22 +136,22 @@ class SearchPage extends React.Component {
     var contentPart = document.getElementById('content-container');
     var scrollInitial = contentPart.scrollTop;
     var scrollMax = Math.min(contentPart.scrollHeight, window.innerHeight-120); 
-    var scrollingDistance = scrollMax - scrollInitial;
-    var duration = 0;
-    var durationMax = 600;
+    this.scrollAnimation(600, 4, scrollInitial, scrollMax)
+  }
 
-    let interval = setInterval(function() {
-      duration +=3;
-      if(contentPart.scrollTop <= scrollMax && duration <= durationMax) {
+  scrollAnimation(durationMax, currentDuration, scrollInit, scrollMax) {
+    var contentPart = document.getElementById('content-container');
 
-        // Calc scrollTop following CubicBezier curve to copy CSS animation cubic-bezier.
-        contentPart.scrollTop = Math.ceil((scrollInitial + scrollingDistance * Bezier.cubicBezier(0.4, 0, 0.2, 1, duration / durationMax , durationMax )));
+    if(contentPart.scrollTop <= scrollMax && currentDuration <= durationMax) {
 
-        if(contentPart.scrollTop === scrollMax) interval = clearInterval(interval);
-      } else {
-        interval = clearInterval(interval);
-      }
-    }, 3);
+      // Calc scrollTop following CubicBezier curve to copy CSS animation cubic-bezier.
+      contentPart.scrollTop = Math.ceil((scrollInit + (scrollMax - scrollInit) * Bezier.cubicBezier(0.4, 0, 0.2, 1, currentDuration / durationMax , durationMax )));
+
+      if(contentPart.scrollTop === scrollMax) return;
+      setTimeout(() => this.scrollAnimation(durationMax, currentDuration+4, scrollInit, scrollMax), 4);
+    } else {
+      return;
+    }
   }
 
   /**
