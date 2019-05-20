@@ -60,11 +60,9 @@ class SearchPage extends React.Component {
 
     observe(this.props.commonStore, 'searchFilters', (change) => {
       if(JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
-        // if( (change.newValue && !change.oldValue) || (change.newValue && change.oldValue && change.newValue.length > change.oldValue.length) ) {
-          console.log('handle search results')
-          console.table(this.state)
+        if( (change.newValue && !change.oldValue) || (change.newValue && change.oldValue && change.newValue.length > change.oldValue.length) ) {
           this.handleShowSearchResults();
-        // }
+        }
         
       }
     });
