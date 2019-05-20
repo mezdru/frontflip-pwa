@@ -80,21 +80,21 @@ class SearchPage extends React.Component {
       shadowedBackground.style.opacity = Math.min(1, (contentPart.scrollTop / (window.innerHeight - this.state.headerHeight))) * 0.6;
       
       if (lastScrollTop < contentPart.scrollTop) {
+
         var currentSearchTop = searchBox.getBoundingClientRect().top;
         while ((contentTop - (currentSearchTop + this.state.headerHeight)) < 48 && (currentSearchTop >= this.state.top)) {
           searchBox.style.top = Math.max(8,(currentSearchTop -= 2)) + 'px';
         }
         if(currentSearchTop <= this.state.top) this.handleMenuButtonMobileDisplay(true);
+        
       } else {
-        var interval = setInterval(function () {
-          var currentSearchTop = searchBox.getBoundingClientRect().top;
-          if ((contentTop - (currentSearchTop + this.state.headerHeight)) > 16 && (currentSearchTop <= (window.innerHeight * 0.40))) {
-            searchBox.style.top = (currentSearchTop += 2) + 'px';
-          } else {
-            interval = clearInterval(interval);
-            if(currentSearchTop >= this.state.top + 8) this.handleMenuButtonMobileDisplay(false);
-          }
-        }.bind(this), 2);
+
+        var currentSearchTop = searchBox.getBoundingClientRect().top;
+        while( (contentTop - (currentSearchTop + this.state.headerHeight)) > 16 && (currentSearchTop <= (window.innerHeight * 0.40)) ) {
+          searchBox.style.top = (currentSearchTop += 2) + 'px';
+        }
+        if(currentSearchTop >= this.state.top + 8) this.handleMenuButtonMobileDisplay(false);
+
       }
 
       lastScrollTop = contentPart.scrollTop;
