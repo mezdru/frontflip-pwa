@@ -60,12 +60,18 @@ class SearchPage extends React.Component {
 
     observe(this.props.commonStore, 'searchFilters', (change) => {
       if(JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
-        if( (change.newValue && !change.oldValue) || (change.newValue && change.oldValue && change.newValue.length > change.oldValue.length) )
+        if( (change.newValue && !change.oldValue) || (change.newValue && change.oldValue && change.newValue.length > change.oldValue.length) ) {
           this.handleShowSearchResults();
+        }
+        
       }
     });
   }
 
+
+  /**
+   * @description Move search block following user scroll
+   */
   moveSearchInputListener = () => {
     var contentPart = document.getElementById('content-container');
     var contentMain = document.getElementById('search-button');
@@ -132,11 +138,11 @@ class SearchPage extends React.Component {
     var scrollMax = Math.min(contentPart.scrollHeight, window.innerHeight-120); 
     var scrollingDistance = scrollMax - scrollInitial;
     var duration = 0;
-    var durationMax = 300;
+    var durationMax = 600;
 
     let interval = setInterval(function() {
-      duration ++;
-      if(contentPart.scrollTop <= scrollMax && duration <= 300) {
+      duration +=3;
+      if(contentPart.scrollTop <= scrollMax && duration <= durationMax) {
 
         // Calc scrollTop following CubicBezier curve to copy CSS animation cubic-bezier.
         contentPart.scrollTop = Math.ceil((scrollInitial + scrollingDistance * Bezier.cubicBezier(0.4, 0, 0.2, 1, duration / durationMax , durationMax )));
@@ -145,7 +151,7 @@ class SearchPage extends React.Component {
       } else {
         interval = clearInterval(interval);
       }
-    }, 1);
+    }, 3);
   }
 
   /**

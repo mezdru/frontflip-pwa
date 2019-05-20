@@ -195,7 +195,7 @@ class SuggestionsService {
     let query = '';
     suggestions.forEach(suggestion => {
       if (!suggestion.objectID)
-        query += (query !== '' ? ' OR' : '') + ' tag:' + suggestion.tag;
+        query += (query !== '' ? ' OR' : '') + ' tag:' + (suggestion.tag || suggestion.value);
     });
     return query;
   }
