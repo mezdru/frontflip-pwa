@@ -6,6 +6,7 @@
 #search-filters-container {
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .hide-options .Select-arrow-zone {
