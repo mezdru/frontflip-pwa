@@ -24,6 +24,7 @@ const styles = theme => ({
     },
     minWidth: 0,
     width: 56,
+    borderRadius: 100
   }
 });
 

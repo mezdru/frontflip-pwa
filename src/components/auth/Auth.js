@@ -59,8 +59,8 @@ class Auth extends React.Component {
     ReactGA.pageview(window.location.pathname);
     if (this.props.authStore.values.invitationCode) this.setState({ value: 1 });
 
-    // HANDLE GOOGLE AUTH CALLBACK
-    this.handleGoogleCallback(this.state.queryParams)
+    // HANDLE AUTH (integrations) CALLBACK
+    this.handleAuthIntegrationCallback(this.state.queryParams)
     .then(() => {
       let googleState = (this.state.queryParams.state ? JSON.parse(this.state.queryParams.state) : null);
       this.props.userStore.getCurrentUser()
@@ -89,10 +89,10 @@ class Auth extends React.Component {
     this.state.observer();
   }
 
-  handleGoogleCallback = async (query) => {
+  handleAuthIntegrationCallback = async (query) => {
     if(!query || !query.token) return Promise.reject('No token');
     this.props.authStore.setTemporaryToken(query.token);
-    return this.props.authStore.googleCallbackLogin();
+    return this.props.authStore.integrationCallbackLogin();
   }
 
   handleChange = (event, value) => {

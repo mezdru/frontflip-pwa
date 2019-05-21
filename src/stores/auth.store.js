@@ -81,7 +81,7 @@ class AuthStore {
       .finally(action(() => { this.inProgress = false; }));
   }
 
-  googleCallbackLogin() {
+  integrationCallbackLogin() {
     if(!this.values.temporaryToken) return Promise.reject();
 
     this.inProgress = true;
