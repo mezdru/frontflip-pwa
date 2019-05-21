@@ -6,7 +6,6 @@ import { observe } from 'mobx';
 import withSearchManagement from './SearchManagement.hoc';
 import SuggestionsService from '../../services/suggestions.service';
 import ProfileService from '../../services/profile.service';
-import Wings from '../utils/wing/Wing';
 
 const styles = theme => ({
   suggestionsContainer: {
@@ -20,11 +19,11 @@ const styles = theme => ({
   },
   suggestion: {
     margin: 8,
-    paddingRight: 0,
-    background: 'white',
+    marginBottom: 20,
+    background: 'rgba(255,255,255, .85)',
     color: theme.palette.primary.dark,
     '&:hover': {
-      background: 'rgb(220,220,220)'
+      background: 'rgba(220,220,220, .85)'
     },
     opacity: 0,
     animation: 'easeIn .6s',
@@ -43,7 +42,22 @@ const styles = theme => ({
     lineHeight: '32px'
   },
   suggestionLabel: {
-    marginRight: 8,
+    paddingRight: 12,
+    paddingLeft: 12,
+  },
+  suggestionPicture: {
+    width: 32,
+    height: 48,
+    margin: '-5px -6px 0 -22px', // should be -15px -6px 0 -22px
+    overflow: 'visible',
+    boxShadow: 'none',
+    backgroundColor: 'transparent',
+    '& img': {
+      width: '100%',
+      height: 'auto',
+      textAlign: 'center',
+      objectFit: 'cover',
+    }
   }
 });
 
@@ -54,8 +68,9 @@ class SearchSuggestions extends React.Component {
       facetHits: [],
       observer: () => { },
       observer2: () => { },
-      filterRequest: '',
+      filterRequest: 'type:person',
       queryRequest: '',
+      firstWings: []
     };
 
     this.fetchSuggestions = this.fetchSuggestions.bind(this);
@@ -63,12 +78,22 @@ class SearchSuggestions extends React.Component {
 
   componentDidMount() {
     AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-    this.fetchSuggestions(this.state.filterRequest, this.state.queryRequest);
+    AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:#Wings', null, null, null)
+    .then(content => {
+      this.setState({firstWings: ( (content && content.hits) ? content.hits : [])}, () => {
+        this.fetchSuggestions(this.state.filterRequest, this.state.queryRequest);
+      });
+    });
 
     this.setState({
       observer: observe(this.props.commonStore, 'algoliaKey', (change) => {
         AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-        this.fetchSuggestions(this.state.filterRequest, this.state.queryRequest);
+        AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:#Wings', null, null, null)
+        .then(content => {
+          this.setState({firstWings: ( (content && content.hits) ? content.hits : [])}, () => {
+            this.fetchSuggestions(this.state.filterRequest, this.state.queryRequest);
+          });
+        });
       })
     });
 
@@ -112,10 +137,20 @@ class SearchSuggestions extends React.Component {
         if (!res) return;
         SuggestionsService.upgradeData(res.facetHits)
           .then(resultHits => {
-            this.setState({ facetHits: resultHits.splice(0, 7), shouldUpdate: true });
+
+            var resultHitsFiltered = [];
+
+            resultHits.forEach(hit => {
+              if( hit && this.state.firstWings.findIndex(wing => wing.tag === (hit.tag || hit.value) ) === -1 ) {
+                resultHitsFiltered.push(hit);
+              }
+            });
+
+            var results = (resultHitsFiltered.length > 4 ? resultHitsFiltered : resultHits);
+            this.setState({ facetHits: results.splice(0, 5), shouldUpdate: true });
           });
       })
-      .catch();
+      .catch((e) => {console.log(e)});
   }
 
   shouldDisplaySuggestion(tag) {
@@ -128,15 +163,27 @@ class SearchSuggestions extends React.Component {
     const { locale } = this.props.commonStore;
 
     return (
-      <div className={classes.suggestionsContainer} >
+      <div className={classes.suggestionsContainer} id="search-suggestions-container">
+
         {facetHits.map((item, i) => {
-          let displayedName = (item.name_translated ? (item.name_translated[locale] || item.name_translated['en-UK']) || item.name || item.tag : item.name);
-          if (this.shouldDisplaySuggestion(item.tag)) {
+          let displayedName = (item.name_translated ? (item.name_translated[locale] || item.name_translated['en-UK']) || item.name || item.tag : item.name) || item.value;
+          let pictureSrc = ProfileService.getPicturePath(item.picture);
+          if (this.shouldDisplaySuggestion(item.tag || item.value)) {
             return (
-              <Wings src={ProfileService.getPicturePath(item.picture)} key={i}
-                label={ProfileService.htmlDecode(displayedName)}
-                onClick={(e) => addFilter({ name: displayedName, tag: item.tag })}
-                style={{ animationDelay: (i * 0.05) + 's' }} />
+              <Chip key={i} 
+                    component={ (props)=>
+                              <div {...props}>
+                                { pictureSrc && (
+                                  <div className={classes.suggestionPicture}>
+                                    <img alt="Emoji" src={pictureSrc} />
+                                  </div>
+                                )} 
+                                <div className={classes.suggestionLabel}>{ProfileService.htmlDecode(displayedName)}</div>
+                              </div>
+                    }
+                    onClick={(e) => addFilter({ name: displayedName, tag: (item.tag || item.value)})} 
+                    className={classes.suggestion} 
+                    style={{animationDelay: (i*0.05) +'s'}} />
             );
           } else {
             return null;

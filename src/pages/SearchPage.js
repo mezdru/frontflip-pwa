@@ -5,6 +5,8 @@ import withWidth from '@material-ui/core/withWidth';
 import ReactGA from 'react-ga';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Redirect } from "react-router-dom";
+import { observe } from 'mobx';
+import { animateScroll as scroll } from 'react-scroll';
 
 import Header from '../components/header/Header';
 import ProfileLayout from "../components/profile/ProfileLayout";
@@ -55,8 +57,21 @@ class SearchPage extends React.Component {
     try {
       if (this.props.match.params.profileTag === 'congrats') this.setState({ showCongratulation: true })
     } catch{ }
+
+    observe(this.props.commonStore, 'searchFilters', (change) => {
+      if(JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
+        if( (change.newValue && !change.oldValue) || (change.newValue && change.oldValue && change.newValue.length > change.oldValue.length) ) {
+          this.handleShowSearchResults();
+        }
+        
+      }
+    });
   }
 
+
+  /**
+   * @description Move search block following user scroll
+   */
   moveSearchInputListener = () => {
     var contentPart = document.getElementById('content-container');
     var contentMain = document.getElementById('search-button');
@@ -71,21 +86,21 @@ class SearchPage extends React.Component {
       shadowedBackground.style.opacity = Math.min(1, (contentPart.scrollTop / (window.innerHeight - this.state.headerHeight))) * 0.6;
       
       if (lastScrollTop < contentPart.scrollTop) {
+
         var currentSearchTop = searchBox.getBoundingClientRect().top;
         while ((contentTop - (currentSearchTop + this.state.headerHeight)) < 48 && (currentSearchTop >= this.state.top)) {
-          searchBox.style.top = Math.max(8,(currentSearchTop -= 2)) + 'px';
+          searchBox.style.top = Math.max(8,(currentSearchTop -= 4)) + 'px';
         }
         if(currentSearchTop <= this.state.top) this.handleMenuButtonMobileDisplay(true);
+        
       } else {
-        var interval = setInterval(function () {
-          var currentSearchTop = searchBox.getBoundingClientRect().top;
-          if ((contentTop - (currentSearchTop + this.state.headerHeight)) > 16 && (currentSearchTop <= (window.innerHeight * 0.40))) {
-            searchBox.style.top = (currentSearchTop += 2) + 'px';
-          } else {
-            interval = clearInterval(interval);
-            if(currentSearchTop >= this.state.top + 8) this.handleMenuButtonMobileDisplay(false);
-          }
-        }.bind(this), 2);
+
+        var currentSearchTop = searchBox.getBoundingClientRect().top;
+        while( (contentTop - (currentSearchTop + this.state.headerHeight)) > 16 && (currentSearchTop <= (window.innerHeight * 0.40)) ) {
+          searchBox.style.top = (currentSearchTop += 4) + 'px';
+        }
+        if(currentSearchTop >= this.state.top + 8) this.handleMenuButtonMobileDisplay(false);
+
       }
 
       lastScrollTop = contentPart.scrollTop;
@@ -119,16 +134,12 @@ class SearchPage extends React.Component {
    */
   handleShowSearchResults = () => {
     var contentPart = document.getElementById('content-container');
-    let interval = setInterval(function() {
-      if(contentPart.scrollTop <= Math.min(contentPart.scrollHeight, window.innerHeight-120)) {
-        let scrollBefore = contentPart.scrollTop;
-        contentPart.scrollTop += 5;
-        let scrollAfter = contentPart.scrollTop;
-        if(scrollBefore === scrollAfter) interval = clearInterval(interval);
-      } else {
-        interval = clearInterval(interval);
-      }
-    }, 1);
+    var scrollMax = Math.min(contentPart.scrollHeight, window.innerHeight-120); 
+    scroll.scrollTo(scrollMax, {
+      duration: 800,
+      smooth: 'easeInOutCubic',
+      containerId: "content-container"
+    });
   }
 
   /**

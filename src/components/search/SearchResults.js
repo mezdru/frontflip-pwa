@@ -29,6 +29,7 @@ const styles = theme => ({
     position: 'relative',
     zIndex: 999,
     width: '100%',
+    minHeight: 'calc(100vh - 129px)',
     backgroundColor: '#f2f2f2',
     '& ul': {
       listStyleType: 'none',
@@ -129,10 +130,10 @@ class SearchResults extends React.Component {
   }
   
   render() {
-    const {hits, loadInProgress, hideShowMore, hitsAlreadyDisplayed, showNoResult} = this.state;
-    const {handleDisplayProfile, classes, HitComponent, filters, query} = this.props;
+    const {hits, loadInProgress, hideShowMore, hitsAlreadyDisplayed, showNoResult, filterRequest, queryRequest} = this.state;
+    const {handleDisplayProfile, classes, HitComponent} = this.props;
     let hitsResult = hits;
-    if( (filters === 'type:person') && !query) {
+    if( (filterRequest === 'type:person') && !queryRequest) {
       // The search results aren't filtered, we can randomize them.
       hitsResult = shuffleArray(hitsResult);
     }

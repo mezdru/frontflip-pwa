@@ -12,6 +12,7 @@ import Wing from '../utils/wing/Wing';
 import withSearchManagement from './SearchManagement.hoc';
 import {styles} from './SearchField.css';
 
+
 class SearchField extends React.Component {
   constructor(props) {
     super(props);
@@ -94,11 +95,12 @@ class SearchField extends React.Component {
           placeholder={placeholder} 
           onKeyDown={this.handleEnter} 
           onChange={(e) => {this.handleInputChange(e.target.value)}}
+          autocomplete="off"
         />
         
         {(searchInput || (searchFilters && searchFilters.length > 0)) && (
           <IconButton className={classes.searchClear} onClick={this.props.resetFilters} >
-            <Clear fontSize='medium' />
+            <Clear fontSize='inherit' />
           </IconButton>
         )}
 

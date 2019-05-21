@@ -113,7 +113,7 @@ class Register extends React.Component {
       )
     } else {
       return (
-        <form onSubmit={this.handleSubmitForm}>
+        <form onSubmit={this.handleSubmitForm} id="form-register">
           <Grid container item direction='column' spacing={16}>
             {registerErrors && (
               <Grid item>
@@ -122,7 +122,7 @@ class Register extends React.Component {
             )}
             <Grid container item direction="row" justify="center"  spacing={16} >
               <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="google" /></Grid>
-              <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="linkedin" /></Grid>            
+              {/* <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="linkedin" /></Grid>             */}
             </Grid>
             <Grid item>
               <Typography style={{
