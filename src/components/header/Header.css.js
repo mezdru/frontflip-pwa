@@ -17,7 +17,7 @@ export const styles = theme => ({
     marginRight: 8,
     color: theme.palette.secondary.main,
     backgroundColor: 'white',
-    boxShadow:'0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
+    boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
     '&:hover': {
       color: theme.palette.secondary.main,
       backgroundColor: '#d5d5d5',
@@ -25,8 +25,8 @@ export const styles = theme => ({
   },
   title: {
     lineHeight: '50%',
-    [theme.breakpoints.down('sm')] : {
-      display : 'none'
+    [theme.breakpoints.down('sm')]: {
+      display: 'none'
     }
   },
   sectionDesktop: {
@@ -132,6 +132,7 @@ export const styles = theme => ({
     cursor: 'pointer',
     height: 48,
     width: 48,
+    transition: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)',
     backgroundColor: 'white',
     '&:hover': {
       backgroundColor: 'white',
@@ -140,5 +141,5 @@ export const styles = theme => ({
   logoBorder: {
     backgroundCOlor: 'white',
     border: '2px solid white',
-  }
+  },
 });

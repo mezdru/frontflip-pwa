@@ -175,6 +175,7 @@ export default createMuiTheme({
         padding: '0 0 8px 8px!important',
         whiteSpace: 'nowrap',
         overflowX: 'scroll',
+        scrollbarWidth: 'none',
       }
     },
     MuiCardHeader: {
@@ -228,7 +229,6 @@ export default createMuiTheme({
     MuiInputLabel: {
       shrink: {
         fontWeight: '600',
-        fontSize: 'medium',
       }
     },
     //List

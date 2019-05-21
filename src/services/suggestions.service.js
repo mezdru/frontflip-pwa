@@ -162,6 +162,46 @@ class SuggestionsService {
   }
 
   /**
+   * @description Static : upgrade array of record data to fetch complete record data
+   */
+  upgradeData = async (suggestions) => {
+    suggestions = this.populateData(suggestions, bank);
+    let bank = await this.syncBank(null);
+    let query = this.formatMissingQuery(suggestions);
+    if (query) {
+      suggestions = await this.syncBank(query)
+                    .then(newBank => {
+                      bank = newBank;
+                      return this.populateData(suggestions, bank);
+                    });
+    }
+
+    return suggestions;
+  }
+
+  /**
+   * @description Static : Update array with bank of data
+   */
+  populateData = (suggestions, bank) => {
+    return suggestions.map((suggestion,i) => {
+      return (bank ? bank.find(bankElt => bankElt.tag === suggestion.value) || suggestion : suggestion);
+    });
+  }
+
+  /**
+   * @description Static : Format a query for algolia with missing record tag data
+   */
+  formatMissingQuery = (suggestions) => {
+    let query = '';
+    suggestions.forEach(suggestion => {
+      if (!suggestion.objectID)
+        query += (query !== '' ? ' OR' : '') + ' tag:' + (suggestion.tag || suggestion.value);
+    });
+    return query;
+  }
+
+
+  /**
    * @description Populate all suggestions data thanks to current Wings bank
    */
   populateSuggestionsData = (isNewSuggestions) => {

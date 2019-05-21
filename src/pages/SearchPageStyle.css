@@ -47,5 +47,8 @@
 .search-content-container::-webkit-scrollbar {
   width: 0 !important;
 }
-.search-content-container { overflow: -moz-scrollbars-none; }
-.search-content-container { -ms-overflow-style: none; }
+.search-content-container { 
+  overflow: -moz-scrollbars-none; 
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

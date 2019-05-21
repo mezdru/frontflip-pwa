@@ -13,6 +13,7 @@ import defaultPicture from '../../resources/images/placeholder_person.png';
 import UrlService from '../../services/url.service';
 import { Link, withRouter } from 'react-router-dom';
 import OrganisationsList from '../utils/orgsList/OrganisationsList';
+import InvitationDialog from '../utils/alertDialog/Invitation';
 
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
@@ -114,12 +115,10 @@ class App extends Component {
                 </ListItem>
 
                 {(organisation.canInvite) && (
-                  <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/invite', organisation.tag)} >
-                    <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.invite'})}
-                                  primaryTypographyProps={{style: { fontWeight: 'bold', color: theme.palette.primary.main, textTransform: 'uppercase' } }} />
+                  <ListItem>
+                    <InvitationDialog/>
                   </ListItem>
                 )}
-
                 {(currentUser.superadmin || (currentOrgAndRecord && currentOrgAndRecord.admin)) && (
                   <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/organisation', organisation.tag)} target="_blank">
                     <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.organisationAdmin' })} />

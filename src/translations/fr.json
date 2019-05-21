@@ -54,7 +54,9 @@
     "menu.drawer.organisationInfoPremium": "Wingzy premium",
     "menu.drawer.organisationInfo": "Votre Wingzy est gratuit et le restera toujours jusqu'à 1000 recherches par mois.",
     "menu.drawer.listOrgTitle": "Allez à ...",
-    "menu.drawer.invite": "Invitez vos collègues",
+    "menu.drawer.invitation": "Inviter mes collègues",
+    "menu.drawer.invitation.description": "Copiez ce lien d'invitation et partagez le à vos collègues",
+    "menu.drawer.invitation.infoUrl": "Ce lien donne acces à votre Wingzy, il restera valable pendant 30 jours.",
     "profile.aboutMe": "À propos de moi",
     "profile.addWings": "Ajoutez des Wings",
     "profile.updateCover": "Changez votre couverture",
@@ -90,5 +92,6 @@
     "action.addWings.add": "Ajoutez à votre profil",
     "action.addWings.search": "Cherchez dans {organisationName}",
     "action.addWings.text": "Vous avez trouvé {wingsCount} Wings !",
-    "nobody.searchList": "Il n'y a personne ... pour le moment !"
+    "nobody.searchList": "Il n'y a personne ... pour le moment !",
+    "invitation.get.error": "Il y a eu une erreur ..."
 }
