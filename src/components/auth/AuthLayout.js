@@ -1,7 +1,7 @@
 import React from 'react';
-import {Grid, Typography} from '@material-ui/core';
-import { withStyles} from '@material-ui/core/styles';
-import {Clear} from '@material-ui/icons';
+import { Grid, Typography, Hidden } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import { Clear } from '@material-ui/icons';
 
 import Logo from '../utils/logo/Logo';
 import Header from '../header/Header';
@@ -12,21 +12,29 @@ const styles = (theme) => ({
     height: '100vh'
   },
   rootContainer: {
+    position: 'relative',
     height: '100%',
   },
   authContainer: {
     backgroundColor: 'white',
     borderRadius: 5,
-    zIndex:2,
+    zIndex: 2,
     margin: 16,
     minHeight: '50%',
     overflow: 'hidden',
     boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
+    [theme.breakpoints.down('xs')]: {
+      position: 'absolute',
+      top: 48,
+      marginTop: 32,
+      left:0,
+      width: 'calc(100vw - 32px)'
+    }
   },
   logo: {
     position: 'relative',
-    left:0,
-    right:0,
+    left: 0,
+    right: 0,
     margin: 'auto',
     marginBottom: 16,
     width: '5rem',
@@ -69,33 +77,37 @@ class Auth extends React.Component {
   };
 
   render() {
-    const {classes} = this.props;
+    const { classes } = this.props;
 
     return (
       <div>
         <Header />
         <main className={classes.root}>
-        <BannerResizable
+          <BannerResizable
             type={'organisation'}
             initialHeight={100}
-            style={{position: 'absolute'}}
+            style={{ position: 'absolute' }}
           />
-                    <div id="shadowed-background" className={classes.shadowedBackground} />
+          <div id="shadowed-background" className={classes.shadowedBackground} />
 
 
           <Grid container direction={"row"} justify="center" alignItems="center" className={classes.rootContainer} >
             <Grid container item xs={12} lg={8} className={classes.authContainer}>
               <Grid item container lg={6} xs={0} className={classes.orgPart} alignItems={"center"} justify={"center"} alignContent={"center"}>
                 <Grid item xs={12} container direction={"row"} >
-                  <Grid item xs={6} style={{position: 'relative'}}>
-                    <Logo type={'wingzy'} alt="org-logo" className={classes.logo} />
-                    <div className={classes.logoCross} >
-                      <Clear fontSize={"large"} />
-                    </div>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Logo type={'organisation'} alt="org-logo" className={classes.logo} />
-                  </Grid>
+
+                  <Hidden smDown>
+                    <Grid item md={6} style={{ position: 'relative' }}>
+                      <Logo type={'wingzy'} alt="org-logo" className={classes.logo} />
+                      <div className={classes.logoCross} >
+                        <Clear fontSize={"large"} />
+                      </div>
+                    </Grid>
+                    <Grid item md={6}>
+                      <Logo type={'organisation'} alt="org-logo" className={classes.logo} />
+                    </Grid>
+                  </Hidden>
+
                   <Typography variant="h2" className={classes.orgPartTitle}>Welcome to Huawei</Typography>
                 </Grid>
 
