@@ -6,6 +6,7 @@ import ReactGA from 'react-ga';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Redirect } from "react-router-dom";
 import { observe } from 'mobx';
+import { animateScroll as scroll } from 'react-scroll';
 
 import Header from '../components/header/Header';
 import ProfileLayout from "../components/profile/ProfileLayout";
@@ -17,7 +18,6 @@ import ErrorBoundary from '../components/utils/errors/ErrorBoundary';
 import BannerResizable from '../components/utils/banner/BannerResizable';
 import './SearchPageStyle.css';
 import SearchButton from '../components/search/SearchButton';
-import Bezier from '../resources/javascripts/bezier';
 
 const OnboardCongratulation = React.lazy(() => import('../components/onboard/steps/OnboardCongratulation'));
 const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
@@ -89,7 +89,7 @@ class SearchPage extends React.Component {
 
         var currentSearchTop = searchBox.getBoundingClientRect().top;
         while ((contentTop - (currentSearchTop + this.state.headerHeight)) < 48 && (currentSearchTop >= this.state.top)) {
-          searchBox.style.top = Math.max(8,(currentSearchTop -= 2)) + 'px';
+          searchBox.style.top = Math.max(8,(currentSearchTop -= 4)) + 'px';
         }
         if(currentSearchTop <= this.state.top) this.handleMenuButtonMobileDisplay(true);
         
@@ -97,7 +97,7 @@ class SearchPage extends React.Component {
 
         var currentSearchTop = searchBox.getBoundingClientRect().top;
         while( (contentTop - (currentSearchTop + this.state.headerHeight)) > 16 && (currentSearchTop <= (window.innerHeight * 0.40)) ) {
-          searchBox.style.top = (currentSearchTop += 2) + 'px';
+          searchBox.style.top = (currentSearchTop += 4) + 'px';
         }
         if(currentSearchTop >= this.state.top + 8) this.handleMenuButtonMobileDisplay(false);
 
@@ -134,24 +134,12 @@ class SearchPage extends React.Component {
    */
   handleShowSearchResults = () => {
     var contentPart = document.getElementById('content-container');
-    var scrollInitial = contentPart.scrollTop;
     var scrollMax = Math.min(contentPart.scrollHeight, window.innerHeight-120); 
-    this.scrollAnimation(600, 4, scrollInitial, scrollMax)
-  }
-
-  scrollAnimation(durationMax, currentDuration, scrollInit, scrollMax) {
-    var contentPart = document.getElementById('content-container');
-
-    if(contentPart.scrollTop <= scrollMax && currentDuration <= durationMax) {
-
-      // Calc scrollTop following CubicBezier curve to copy CSS animation cubic-bezier.
-      contentPart.scrollTop = Math.ceil((scrollInit + (scrollMax - scrollInit) * Bezier.cubicBezier(0.4, 0, 0.2, 1, currentDuration / durationMax , durationMax )));
-
-      if(contentPart.scrollTop === scrollMax) return;
-      setTimeout(() => this.scrollAnimation(durationMax, currentDuration+4, scrollInit, scrollMax), 4);
-    } else {
-      return;
-    }
+    scroll.scrollTo(scrollMax, {
+      duration: 800,
+      smooth: 'easeInOutCubic',
+      containerId: "content-container"
+    });
   }
 
   /**
