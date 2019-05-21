@@ -128,6 +128,7 @@ class SearchPage extends React.Component {
       this.setState({headerPosition: 'INITIAL'})
     }
   }
+  
 
   /**
    * @description Scroll to search results part.
