@@ -92,6 +92,7 @@ class Auth extends React.Component {
   handleGoogleCallback = async (query) => {
     if(!query || !query.token) return Promise.reject('No token');
     this.props.authStore.setTemporaryToken(query.token);
+    if(query.state.success === 'false') return Promise.reject('Auth failed');
     return this.props.authStore.googleCallbackLogin();
   }
 
@@ -103,20 +104,12 @@ class Auth extends React.Component {
     this.setState({ value: index });
   };
 
-  handleGoogleAuth = () => {
-    let state = {};
-    if (this.props.organisationStore.values.orgTag) state.orgTag = this.props.organisationStore.values.orgTag
-    if (this.props.organisationStore.values.organisation.tag) state.orgTag = this.props.organisationStore.values.organisation.tag;
-    if (this.props.authStore.values.invitationCode) state.invitationCode = this.props.authStore.values.invitationCode;
-    window.location.href = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + 
-                            process.env.REACT_APP_API_ROOT_AUTH + 
-                            '/google?state=' + JSON.stringify(state);
-  }
-
   render() {
     const {classes, theme} = this.props;
     const {redirectTo} = this.state;
     let intl = this.props.intl;
+    let authState = JSON.parse(this.state.queryParams.state || "{}");
+
     if (redirectTo) return (<Redirect push to={redirectTo} />);
 
     return (
@@ -139,8 +132,8 @@ class Auth extends React.Component {
             index={this.state.value}
             onChangeIndex={this.handleChangeIndex}
           >
-            <Login handleGoogleAuth={this.handleGoogleAuth} />
-            <Register handleGoogleAuth={this.handleGoogleAuth} />
+            <Login authState={authState} />
+            <Register  />
           </SwipeableViews>
         </Grid>
       </Grid>
