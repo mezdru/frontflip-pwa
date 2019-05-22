@@ -22,6 +22,18 @@ class Login extends React.Component {
     };
   }
 
+  componentDidMount() {
+    let authState = this.props.authState;
+
+    // In this case, the user try to Sign In with an integration (LinkedIn, ...) and we do not already have an account for him.
+    // We will ask him to Sign In with an other method, then, we will link the integration to his account.
+    if(authState && authState.action === 'signin' && authState.success === 'false') {
+      let integrationName = (authState.integration ? authState.integration.charAt(0).toUpperCase() + authState.integration.slice(1) : '');
+      this.setState({ loginErrors: this.props.intl.formatMessage({id: 'signin.error.integration.notFound'}, {integrationName: integrationName}) });
+    }
+
+  }
+
   handleEmailChange = (e) => {
     this.props.authStore.setEmail(e.target.value);
   };
@@ -83,7 +95,7 @@ class Login extends React.Component {
             )}
             <Grid container item direction="row" justify="center"  spacing={16} >
               <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="google" /></Grid>
-              {/* <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="linkedin" /></Grid>             */}
+              <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="linkedin" currentAction="signin" /></Grid>            
             </Grid>
             <Grid item>
               <Typography style={{

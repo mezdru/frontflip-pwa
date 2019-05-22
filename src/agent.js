@@ -129,7 +129,7 @@ let validateToken = () => {
  *              1 User can have many Organisation
  */
 const Auth = {
-  login: (email, password) =>
+  login: (email, password, integrationToken) =>
     requests.post(
       `${API_ROOT_AUTH}/locale`,
       {
@@ -137,7 +137,8 @@ const Auth = {
         password: password,
         client_id: process.env.REACT_APP_CLIENT_ID,
         client_secret: process.env.REACT_APP_CLIENT_SECRET,
-        grant_type: 'password'
+        grant_type: 'password',
+        integration_token: integrationToken
       }
     ),
   googleCallbackLogin: (token) =>
