@@ -10,6 +10,7 @@
     "html-entities": "^1.2.1",
     "logrocket": "^0.6.20",
     "logrocket-react": "^3.0.0",
+    "material-ui-chip-input": "^1.0.0-beta.16",
     "mobx": "^5.9.0",
     "mobx-react": "^5.4.3",
     "notistack": "^0.5.0",

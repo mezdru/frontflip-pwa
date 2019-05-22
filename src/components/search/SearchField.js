@@ -3,15 +3,17 @@ import { injectIntl } from 'react-intl';
 import { inject, observer } from 'mobx-react';
 import { withTheme, withStyles } from '@material-ui/core';
 import { observe } from 'mobx';
-import {Clear} from '@material-ui/icons';
+import { Clear } from '@material-ui/icons';
 import IconButton from '@material-ui/core/IconButton';
+import classNames from 'classnames';
 
 import '../algolia/SearchField.css';
 import ProfileService from '../../services/profile.service';
 import Wing from '../utils/wing/Wing';
 import withSearchManagement from './SearchManagement.hoc';
-import {styles} from './SearchField.css';
+import { styles } from './SearchField.css';
 
+import ChipInput from 'material-ui-chip-input'
 
 class SearchField extends React.Component {
   constructor(props) {
@@ -20,17 +22,19 @@ class SearchField extends React.Component {
       searchInput: '',
       placeholder: this.getSearchFieldPlaceholder(),
       searchFilters: [],
-      observer: () => {}
+      observer: () => { }
     };
   }
 
   componentDidMount() {
-    this.setState({observer: observe(this.props.commonStore, 'searchFilters', (change) => {
-      var currentSearchFilters = this.props.commonStore.getSearchFilters();
-      this.setState({searchFilters: currentSearchFilters, searchInput: (currentSearchFilters.length > 0 ? ' ' : '')}, () => {
-        this.scrollToRight();
-      });
-    })});
+    this.setState({
+      observer: observe(this.props.commonStore, 'searchFilters', (change) => {
+        var currentSearchFilters = this.props.commonStore.getSearchFilters();
+        this.setState({ searchFilters: currentSearchFilters, searchInput: (currentSearchFilters.length > 0 ? ' ' : '') }, () => {
+          this.scrollToRight();
+        });
+      })
+    });
   }
 
   componentWillUnmount() {
@@ -40,71 +44,109 @@ class SearchField extends React.Component {
   async scrollToRight() {
     setTimeout(() => {
       let valueContainer = document.getElementById('search-filters-container');
-      if(valueContainer){
+      if (valueContainer) {
         valueContainer.scrollLeft = valueContainer.scrollWidth;
-      } 
+      }
     }, 100);
   }
 
   getSearchFieldPlaceholder = () => {
-    if(this.props.hashtagOnly) {
-      return this.props.intl.formatMessage({id: 'algolia.onboard'});
+    if (this.props.hashtagOnly) {
+      return this.props.intl.formatMessage({ id: 'algolia.onboard' });
     } else {
-      return this.props.intl.formatMessage({id: 'algolia.search'}, {orgName: this.props.organisationStore.values.organisation.name});
+      return this.props.intl.formatMessage({ id: 'algolia.search' }, { orgName: this.props.organisationStore.values.organisation.name });
     }
   }
 
   handleEnter = (e) => {
-    if(e.key === 'Enter') {
+    if (e.key === 'Enter') {
       var value = e.target.value.trim();
-      this.props.addFilter({name: value, tag: value});
-      this.setState({searchInput: ' '});
+      this.props.addFilter({ name: value, tag: value });
+      this.setState({ searchInput: ' ' });
     }
   }
 
   handleInputChange = (inputValue) => {
-    this.setState({searchInput: inputValue});
+    this.setState({ searchInput: inputValue });
     this.props.fetchAutocompleteSuggestions(inputValue);
   }
 
+  handleAddChip = (value) => {
+    this.props.addFilter({ name: value, tag: value });
+
+    console.log(value)
+  }
+
+  handleDeleteChip = (value) => {
+    this.props.removeFilter(value);
+    console.log(value)
+  }
+
+  renderSearchFilter = (props, key) => {
+    let filter = props.value;
+    // console.log(props)
+    // console.log(key)
+    let displayedName = (filter.name_translated ?
+      (filter.name_translated[this.props.commonStore.locale] || filter.name_translated['en-UK']) || filter.name || filter.tag :
+      filter.name);
+
+    return (
+      <Wing
+        label={ProfileService.htmlDecode(displayedName)} key={key}
+        onDelete={(e) => { this.props.removeFilter(filter) }}
+        className={ (props.isFocused ? 'highlightedFocused' : 'highlighted')} />
+    );
+  }
+
   render() {
-    const { classes} = this.props;
+    const { classes } = this.props;
     const { placeholder, searchInput, searchFilters } = this.state;
 
     return (
-      <div className={classes.searchContainer} id="search-container">
 
-        <div className={classes.searchFiltersContainer} id="search-filters-container">
-          {searchFilters && searchFilters.length > 0 && searchFilters.map((filter, index) => {
-            let displayedName = (filter.name_translated ? 
-                                (filter.name_translated[this.props.commonStore.locale] || filter.name_translated['en-UK']) || filter.name || filter.tag : 
-                                filter.name);
-            return (
-              <Wing
-                label={ProfileService.htmlDecode(displayedName)} key={index}
-                onDelete={(e) => {this.props.removeFilter(filter)}} 
-                className={'highlighted'} />
-            );
-          })}
-        </div>
 
-        <input 
-          type='text' name="searchInput" 
-          className={classes.searchInput} 
-          value={searchInput}
-          placeholder={placeholder} 
-          onKeyDown={this.handleEnter} 
-          onChange={(e) => {this.handleInputChange(e.target.value)}}
-          autocomplete="off"
-        />
-        
-        {(searchInput || (searchFilters && searchFilters.length > 0)) && (
-          <IconButton className={classes.searchClear} onClick={this.props.resetFilters} >
-            <Clear fontSize='inherit' />
-          </IconButton>
-        )}
+      <ChipInput
+        className={classes.searchContainer}
+        value={searchFilters}
+        onAdd={(chip) => this.handleAddChip(chip)}
+        // onDelete={(e) => {this.props.removeFilter(filter)}} 
+        onDelete={(chip, index) => this.handleDeleteChip(chip, index)}
+        chipRenderer={this.renderSearchFilter}
+      />
 
-      </div>
+      // <div className={classes.searchContainer} id="search-container">
+
+      //   <div className={classes.searchFiltersContainer} id="search-filters-container">
+      //     {searchFilters && searchFilters.length > 0 && searchFilters.map((filter, index) => {
+      //       let displayedName = (filter.name_translated ? 
+      //                           (filter.name_translated[this.props.commonStore.locale] || filter.name_translated['en-UK']) || filter.name || filter.tag : 
+      //                           filter.name);
+      //       return (
+      //         <Wing
+      //           label={ProfileService.htmlDecode(displayedName)} key={index}
+      //           onDelete={(e) => {this.props.removeFilter(filter)}} 
+      //           className={'highlighted'} />
+      //       );
+      //     })}
+      //   </div>
+
+      //   <input 
+      //     type='text' name="searchInput" 
+      //     className={classes.searchInput} 
+      //     value={searchInput}
+      //     placeholder={placeholder} 
+      //     onKeyDown={this.handleEnter} 
+      //     onChange={(e) => {this.handleInputChange(e.target.value)}}
+      //     autocomplete="off"
+      //   />
+
+      //   {(searchInput || (searchFilters && searchFilters.length > 0)) && (
+      //     <IconButton className={classes.searchClear} onClick={this.props.resetFilters} >
+      //       <Clear fontSize='inherit' />
+      //     </IconButton>
+      //   )}
+
+      // </div>
     );
   }
 }
@@ -113,6 +155,6 @@ SearchField = withSearchManagement(SearchField);
 
 export default inject('commonStore', 'recordStore', 'organisationStore')(
   observer(
-    injectIntl(withTheme()(withStyles(styles, {withTheme: true})(SearchField)))
+    injectIntl(withTheme()(withStyles(styles, { withTheme: true })(SearchField)))
   )
 );

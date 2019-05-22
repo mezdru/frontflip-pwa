@@ -19,6 +19,15 @@ const styles = theme => ({
       color: 'white !important'
     }
   },
+  highlightedFocused: {
+    backgroundColor: theme.palette.secondary.dark,
+    color: 'white',
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.dark  + ' !important',
+      color: 'white !important'
+    },
+    transform: 'scale(1.1)'
+  },
   button: {
     backgroundColor: theme.palette.secondary.main,
     color: 'white',
