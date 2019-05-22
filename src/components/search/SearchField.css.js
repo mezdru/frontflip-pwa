@@ -19,8 +19,10 @@ export const styles = theme => ({
   },
   searchFiltersContainer: {
     display: 'flex',
-    maxHeight: 42,
-    maxWidth: '70%',
+    // maxHeight: 42,
+    // maxWidth: '70%',
+    height: 50,
+    width: '100%',
     background: 'transparent',
     '& >div': {
       margin: 8,
@@ -39,7 +41,8 @@ export const styles = theme => ({
     height: '100%',
     fontSize: '1.1em',
     paddingLeft: 8,
-    minWidth: 0,
+    // minWidth: 0,
+    minWidth: 100,
     cursor: 'pointer',
   },
   searchClear: {
