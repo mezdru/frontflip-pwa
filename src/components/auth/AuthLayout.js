@@ -94,8 +94,8 @@ class Auth extends React.Component {
 
 
           <Grid container direction={"row"} justify="center" alignItems="center" className={classes.rootContainer} >
-            <Grid container item xs={12} lg={8} className={classes.authContainer}>
-              <Grid item container lg={6} xs={0} className={classes.orgPart} alignItems={"center"} justify={"center"} alignContent={"center"}>
+            <Grid container item xs={12} md={8} lg={8} xl={6} className={classes.authContainer}>
+              <Grid item container md={6} xs={0} className={classes.orgPart} alignItems={"center"} justify={"center"} alignContent={"center"}>
                 <Grid item xs={12} container direction={"row"} >
 
                   <Hidden smDown>
@@ -109,7 +109,7 @@ class Auth extends React.Component {
 
               </Grid>
 
-              <Grid item xs={12} lg={6} style={{padding: 8}}>
+              <Grid item xs={12} md={6} style={{padding: 8}}>
                 {this.props.children}
               </Grid>
             </Grid>
