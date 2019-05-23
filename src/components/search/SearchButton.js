@@ -55,20 +55,12 @@ const styles = theme => ({
 });
 
 class SearchButton extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      observer: () => {},
-    }
-  }
 
   componentDidMount() {
     this.setState({observer: observe(this.props.commonStore, 'searchResultsCount', (change) => {
       this.forceUpdate();
     })});
   }
-
 
   render() {
     const {classes} = this.props;
