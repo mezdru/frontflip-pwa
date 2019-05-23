@@ -20,10 +20,11 @@ const styles = theme => ({
   suggestion: {
     margin: 8,
     marginBottom: 20,
-    background: 'rgba(255,255,255, .85)',
-    color: theme.palette.primary.dark,
+    background: 'rgba(42, 44, 60, 0.85)',
+    color: theme.palette.primary.main,
     '&:hover': {
-      background: 'rgba(220,220,220, .85)'
+      color: theme.palette.primary.dark,
+      background: theme.palette.primary.main,
     },
     opacity: 0,
     animation: 'easeIn .6s',

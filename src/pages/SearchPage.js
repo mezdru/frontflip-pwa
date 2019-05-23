@@ -61,7 +61,7 @@ class SearchPage extends React.Component {
     observe(this.props.commonStore, 'searchFilters', (change) => {
       if(JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
         if( (change.newValue && !change.oldValue) || (change.newValue && change.oldValue && change.newValue.length > change.oldValue.length) ) {
-          this.handleShowSearchResults();
+          this.handleShowSearchResults(50);
         }
         
       }
@@ -132,13 +132,14 @@ class SearchPage extends React.Component {
   /**
    * @description Scroll to search results part.
    */
-  handleShowSearchResults = () => {
+  handleShowSearchResults = (offset) => {
     var contentPart = document.getElementById('content-container');
     var scrollMax = Math.min(contentPart.scrollHeight, window.innerHeight-120); 
     scroll.scrollTo(scrollMax, {
       duration: 800,
       smooth: 'easeInOutCubic',
-      containerId: "content-container"
+      containerId: "content-container",
+      offset: offset || 0
     });
   }
 
