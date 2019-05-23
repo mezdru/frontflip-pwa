@@ -26,7 +26,7 @@
   "signup.success": "<strong>Thank you</strong> for signing up! We just sent you an email to confirm your address, check your inbox...",
   "signup.error.generic": "Oh. That was an unexpected error from us. Please, try to refresh the page.",
   "signup.error.userExists": "An user already exists with this email. Try to sign in or <a href={forgotPasswordLink}>create a new password</a>",
-  "signin.error.integration.notFound": "We can't find an account links to your {integrationName} account.<br/><br/> If you already have an account on Wingzy, please sign in with your usual connection method. Don't worry, next time you will be able to sign in with {integrationName}.<br/><br/>If you don't, please sign up.",  
+  "signin.error.integration.notFound": "Ouch, we found no Wingzy account with your {integrationName} accound. Please signin another way, or <a href={signupLink} >signup.</a>",  
   "password.forgot.intro": "No password&nbsp;? Password forgotten&nbsp;? We will send you an email to create a new password.",
   "password.new.intro": "Create a new password to secure your Wingzy account <strong>{userEmail}</strong>.",
   "password.create.intro": "First, create a password to secure your account",
