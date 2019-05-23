@@ -26,7 +26,7 @@
     "signup.success": "<strong>Merci</strong> pour l'inscription ! Nous venons de vous envoyer un email pour confirmer votre adresse, vérifiez votre boite de réception...",
     "signup.error.generic": "Mince. Il y a eu une erreur imprévue de notre part. Essayez de rafraichir la page s'il vous plait.",
     "signup.error.userExists": "Un utilisateur existe déjà avec cette adresse email. Essayez de vous connecter ou <a href={forgotPasswordLink}>créez un nouveau mot de passe</a>",
-    "signin.error.integration.notFound": "Nous ne trouvons aucun compte relié à votre compte {integrationName}. Essayez de vous connecter autrement, nous relierons votre compte {integrationName} automatiquement !",
+    "signin.error.integration.notFound": "Nous ne trouvons aucun compte relié à votre compte {integrationName}.<br/><br/> Si vous avez déjà un compte Wingzy, connectez vous en utilisant le même moyen que d'habitude. Ne vous inquiétez pas ! La prochaine fois, vous pourrez vous connecter avec {integrationName}.<br/><br/>Si vous n'en avez pas, veuillez créer votre compte.",
     "password.forgot.intro": "Pas de mot de passe&nbsp;? Mot de passe oublié&nbsp;? Nous allons vous envoyer un email pour créer un nouveau mot de passe.",
     "password.new.intro": "Créez un nouveau mot de passe pour sécuriser votre compte Wingzy <strong>{userEmail}</strong>.",
     "password.forgot.success": "Nous vous avons envoyé un email pour créer un nouveau mot de passe.",
