@@ -29,7 +29,13 @@ class Login extends React.Component {
     // We will ask him to Sign In with an other method, then, we will link the integration to his account.
     if(authState && authState.action === 'signin' && authState.success === 'false') {
       let integrationName = (authState.integration ? authState.integration.charAt(0).toUpperCase() + authState.integration.slice(1) : '');
-      this.setState({ loginErrors: this.props.intl.formatMessage({id: 'signin.error.integration.notFound'}, {integrationName: integrationName}) });
+      this.setState({ loginErrors: this.props.intl.formatMessage(
+        {id: 'signin.error.integration.notFound'}, 
+        {
+          integrationName: integrationName,
+          signupLink: '/' + this.props.commonStore.locale + '/' + (this.props.organisationStore.values.organisation && this.props.organisationStore.values.organisation.tag ? this.props.organisationStore.values.organisation.tag + '/' : '') + 'signup' 
+        }
+      )});
     }
 
   }
