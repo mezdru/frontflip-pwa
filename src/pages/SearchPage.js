@@ -13,7 +13,6 @@ import ProfileLayout from "../components/profile/ProfileLayout";
 import { styles } from './SearchPage.css';
 import SearchResults from '../components/search/SearchResults';
 import Search from '../components/search/Search';
-import Card from '../components/card/CardProfile';
 import ErrorBoundary from '../components/utils/errors/ErrorBoundary';
 import BannerResizable from '../components/utils/banner/BannerResizable';
 import './SearchPageStyle.css';
@@ -61,13 +60,12 @@ class SearchPage extends React.Component {
     observe(this.props.commonStore, 'searchFilters', (change) => {
       if(JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
         if( (change.newValue && !change.oldValue) || (change.newValue && change.oldValue && change.newValue.length > change.oldValue.length) ) {
-          this.handleShowSearchResults(50);
+          this.handleShowSearchResults(200);
         }
         
       }
     });
   }
-
 
   /**
    * @description Move search block following user scroll
@@ -77,33 +75,12 @@ class SearchPage extends React.Component {
     var contentMain = document.getElementById('search-button');
     var searchBox = document.getElementById('search-input');
     var shadowedBackground = document.getElementById('shadowed-background');
-    var lastScrollTop = 0;
 
     contentPart.addEventListener('scroll', function (e) {
       var contentShape = contentMain.getBoundingClientRect();
       var contentTop = contentShape.top;
-
       shadowedBackground.style.opacity = Math.min(1, (contentPart.scrollTop / (window.innerHeight - this.state.headerHeight))) * 0.6;
-      
-      if (lastScrollTop < contentPart.scrollTop) {
-
-        var currentSearchTop = searchBox.getBoundingClientRect().top;
-        while ((contentTop - (currentSearchTop + this.state.headerHeight)) < 48 && (currentSearchTop >= this.state.top)) {
-          searchBox.style.top = Math.max(8,(currentSearchTop -= 4)) + 'px';
-        }
-        if(currentSearchTop <= this.state.top) this.handleMenuButtonMobileDisplay(true);
-        
-      } else {
-
-        var currentSearchTop = searchBox.getBoundingClientRect().top;
-        while( (contentTop - (currentSearchTop + this.state.headerHeight)) > 16 && (currentSearchTop <= (window.innerHeight * 0.40)) ) {
-          searchBox.style.top = (currentSearchTop += 4) + 'px';
-        }
-        if(currentSearchTop >= this.state.top + 8) this.handleMenuButtonMobileDisplay(false);
-
-      }
-
-      lastScrollTop = contentPart.scrollTop;
+      searchBox.style.top = Math.min( Math.max(contentTop - this.state.headerHeight + 16, 16), (window.innerHeight * 0.40) ) + 'px';
     }.bind(this));
   }
 
@@ -241,7 +218,7 @@ class SearchPage extends React.Component {
               <ErrorBoundary>
                 <Suspense fallback={<CircularProgress color='secondary' />}>
                   <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
-                    <SearchResults handleDisplayProfile={this.handleDisplayProfile} HitComponent={Card} />
+                    <SearchResults handleDisplayProfile={this.handleDisplayProfile}/>
                   </Grid>
                 </Suspense>
               </ErrorBoundary>
