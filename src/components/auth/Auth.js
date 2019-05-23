@@ -113,7 +113,7 @@ class Auth extends React.Component {
     if (redirectTo) return (<Redirect push to={redirectTo} />);
 
     return (
-      <Grid container spacing={16}>
+      <Grid container>
         <Grid item xs={12} className={classes.tabs}>
           <Tabs
             value={this.state.value}
@@ -121,6 +121,7 @@ class Auth extends React.Component {
             indicatorColor="secondary"
             textColor="secondary"
             variant="fullWidth"
+            style={{padding: 8}}
           >
             <Tab label={intl.formatMessage({id: 'Sign In'})} className={classes.leftTabs}/>
             <Tab label={intl.formatMessage({id: 'Sign Up'})} className={classes.rightTabs}/>

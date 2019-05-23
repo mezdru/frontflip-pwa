@@ -109,7 +109,7 @@ class Auth extends React.Component {
 
               </Grid>
 
-              <Grid item xs={12} lg={6}>
+              <Grid item xs={12} lg={6} style={{padding: 8}}>
                 {this.props.children}
               </Grid>
             </Grid>
