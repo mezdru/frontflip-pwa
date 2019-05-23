@@ -9,7 +9,6 @@ import { observe } from 'mobx';
 import { animateScroll as scroll } from 'react-scroll';
 
 import Header from '../components/header/Header';
-import ProfileLayout from "../components/profile/ProfileLayout";
 import { styles } from './SearchPage.css';
 import SearchResults from '../components/search/SearchResults';
 import Search from '../components/search/Search';
@@ -21,6 +20,7 @@ import SearchButton from '../components/search/SearchButton';
 const OnboardCongratulation = React.lazy(() => import('../components/onboard/steps/OnboardCongratulation'));
 const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
 const AddWingPopup = React.lazy(() => import('../components/utils/addWing/AddWingPopup'));
+const ProfileLayout = React.lazy(() => import("../components/profile/ProfileLayout"));
 
 console.debug('Loading SearchPage');
 
@@ -53,16 +53,13 @@ class SearchPage extends React.Component {
   componentDidMount() {
     this.moveSearchInputListener();
     this.handleUrlSearchFilters();
-    try {
-      if (this.props.match.params.profileTag === 'congrats') this.setState({ showCongratulation: true })
-    } catch{ }
+    try { if (this.props.match.params.profileTag === 'congrats') this.setState({ showCongratulation: true }) } catch{ }
 
     observe(this.props.commonStore, 'searchFilters', (change) => {
-      if(JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
-        if( (change.newValue && !change.oldValue) || (change.newValue && change.oldValue && change.newValue.length > change.oldValue.length) ) {
+      if (JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
+        if ((change.newValue && !change.oldValue) || (change.newValue && change.oldValue && change.newValue.length > change.oldValue.length)) {
           this.handleShowSearchResults(200);
         }
-        
       }
     });
   }
@@ -80,7 +77,7 @@ class SearchPage extends React.Component {
       var contentShape = contentMain.getBoundingClientRect();
       var contentTop = contentShape.top;
       shadowedBackground.style.opacity = Math.min(1, (contentPart.scrollTop / (window.innerHeight - this.state.headerHeight))) * 0.6;
-      searchBox.style.top = Math.min( Math.max(contentTop - this.state.headerHeight + 16, 16), (window.innerHeight * 0.40) ) + 'px';
+      searchBox.style.top = Math.min(Math.max(contentTop - this.state.headerHeight + 16, 16), (window.innerHeight * 0.40)) + 'px';
     }.bind(this));
   }
 
@@ -88,21 +85,21 @@ class SearchPage extends React.Component {
     var searchField = document.getElementById('search-container');
     var headerButton = document.getElementById('header-button');
 
-    if(this.props.width === 'xs' && isInSearch && this.state.headerPosition === 'INITIAL') {
-      searchField.style.paddingLeft = 48 +'px';
+    if (this.props.width === 'xs' && isInSearch && this.state.headerPosition === 'INITIAL') {
+      searchField.style.paddingLeft = 48 + 'px';
       headerButton.style.top = 20 + 'px';
       headerButton.style.height = 40 + 'px';
       headerButton.style.width = 40 + 'px';
       headerButton.style.minWidth = 0 + 'px';
       headerButton.style.left = 20 + 'px';
-      this.setState({headerPosition: 'INSIDE'})
+      this.setState({ headerPosition: 'INSIDE' })
     } else if (!isInSearch && (this.state.headerPosition !== 'INITIAL')) {
-      searchField.style.paddingLeft = 0 +'px';
+      searchField.style.paddingLeft = 0 + 'px';
       headerButton.style.top = 16 + 'px';
       headerButton.style.height = 48 + 'px';
       headerButton.style.width = 48 + 'px';
       headerButton.style.left = 16 + 'px';
-      this.setState({headerPosition: 'INITIAL'})
+      this.setState({ headerPosition: 'INITIAL' })
     }
   }
 
@@ -111,7 +108,7 @@ class SearchPage extends React.Component {
    */
   handleShowSearchResults = (offset) => {
     var contentPart = document.getElementById('content-container');
-    var scrollMax = Math.min(contentPart.scrollHeight, window.innerHeight-120); 
+    var scrollMax = Math.min(contentPart.scrollHeight, window.innerHeight - 120);
     scroll.scrollTo(scrollMax, {
       duration: 800,
       smooth: 'easeInOutCubic',
@@ -138,7 +135,7 @@ class SearchPage extends React.Component {
     });
     this.props.commonStore.setSearchFilters(currentSearchFilters);
   }
-  
+
   /**
    * @description Get action in queue is used for Add Wings via URL
    */
@@ -190,7 +187,7 @@ class SearchPage extends React.Component {
           <BannerResizable
             type={'organisation'}
             initialHeight={100}
-            style={{position: 'absolute'}}
+            style={{ position: 'absolute' }}
           />
           <div id="shadowed-background" className={classes.shadowedBackground} />
 
@@ -208,7 +205,7 @@ class SearchPage extends React.Component {
           </div>
 
           <div className={'search-content-container'} id="content-container">
-            <div className={'search-content-offset'}/>
+            <div className={'search-content-offset'} />
             <div className={'search-button'} id="search-button" >
               <SearchButton onClick={this.handleShowSearchResults} />
             </div>
@@ -218,7 +215,7 @@ class SearchPage extends React.Component {
               <ErrorBoundary>
                 <Suspense fallback={<CircularProgress color='secondary' />}>
                   <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
-                    <SearchResults handleDisplayProfile={this.handleDisplayProfile}/>
+                    <SearchResults handleDisplayProfile={this.handleDisplayProfile} />
                   </Grid>
                 </Suspense>
               </ErrorBoundary>
@@ -228,7 +225,9 @@ class SearchPage extends React.Component {
         </main>
 
         {displayedHit && (
-          <ProfileLayout hit={displayedHit} handleReturnToSearch={this.handleReturnToSearch} className={classes.profileContainer} />
+          <Suspense fallback={<></>}>
+            <ProfileLayout hit={displayedHit} handleReturnToSearch={this.handleReturnToSearch} className={classes.profileContainer} />
+          </Suspense>
         )}
 
         {showCongratulation && (
@@ -243,7 +242,7 @@ class SearchPage extends React.Component {
           </Suspense>
         )}
 
-        <Suspense fallback={<div></div>}>
+        <Suspense fallback={<></>}>
           <PromptIOsInstall />
         </Suspense>
       </React.Fragment>
