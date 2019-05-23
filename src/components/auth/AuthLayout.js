@@ -37,8 +37,8 @@ const styles = (theme) => ({
     right: 0,
     margin: 'auto',
     marginBottom: 16,
-    width: '5rem',
-    height: '5rem',
+    width: '7rem',
+    height: '7rem',
     boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
     // bottom: '3.2rem',
     // marginBottom: '-7rem',
@@ -46,11 +46,13 @@ const styles = (theme) => ({
     border: '4px solid white'
   },
   orgPart: {
+    position: 'relative',
     backgroundImage: 'linear-gradient(to bottom, #2b2d3c, #292a38, #262733, #24242f, #21212b)',
     padding: 16,
   },
   orgPartTitle: {
     color: 'white',
+    width: '100%',
     textAlign: 'center',
   },
   shadowedBackground: {
@@ -97,18 +99,12 @@ class Auth extends React.Component {
                 <Grid item xs={12} container direction={"row"} >
 
                   <Hidden smDown>
-                    <Grid item md={6} style={{ position: 'relative' }}>
-                      <Logo type={'wingzy'} alt="org-logo" className={classes.logo} />
-                      <div className={classes.logoCross} >
-                        <Clear fontSize={"large"} />
-                      </div>
-                    </Grid>
-                    <Grid item md={6}>
+                    <Grid item md={12}>
                       <Logo type={'organisation'} alt="org-logo" className={classes.logo} />
                     </Grid>
                   </Hidden>
 
-                  <Typography variant="h2" className={classes.orgPartTitle}>Welcome to Huawei</Typography>
+                  <Typography variant="h2" className={classes.orgPartTitle}>Welcome to Wingzy</Typography>
                 </Grid>
 
               </Grid>
