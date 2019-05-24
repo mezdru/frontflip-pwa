@@ -8,6 +8,7 @@ import AlgoliaService from '../../../services/algolia.service.js';
 import {styles} from './OnboardFirstWings.css';
 import TransparentGradientBox from "../../utils/fields/TransparentGradientBox";
 import CarouselArrows from "../../utils/buttons/CarouselArrows";
+import ProfileService from '../../../services/profile.service.js';
 
 let interval;
 let interval2;
@@ -126,6 +127,7 @@ class OnboardFirstWings extends React.Component {
 
   render() {
     const {classes, theme} = this.props;
+    const {locale} = this.props.commonStore;
     const { firstWings, scrollableClass } = this.state;
     
     return (
@@ -141,6 +143,7 @@ class OnboardFirstWings extends React.Component {
         <ul className={classNames(classes.firstWingsList, ''+scrollableClass)} >
           {firstWings.length > 0 && firstWings.map((hashtag, i) => {
             if(!this.shouldDisplaySuggestion(hashtag.tag)) return null;
+            let displayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hashtag.tag)
             return (
               <li onClick={(e) => { this.handleAddWing(e, hashtag.tag, i) }} className={classes.firstWing} key={i}
                   style={this.getFirstWingsStyle(i, theme)}
@@ -148,10 +151,10 @@ class OnboardFirstWings extends React.Component {
                   onMouseDown={(e) => this.handleMouseDown(e)}
               >
                 <div>
-                  <img src={hashtag.picture.url} alt="Soft Wing" />
+                  <img src={hashtag.picture.url || ProfileService.getPicturePath(hashtag.picture)} alt="Soft Wing" />
                   <div>
                     <span>
-                      {hashtag.name}
+                      {displayedName}
                     </span>
                   </div>
                 </div>
