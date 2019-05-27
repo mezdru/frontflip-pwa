@@ -10,132 +10,11 @@ import Wings from '../utils/wing/Wing';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import ProfileService from '../../services/profile.service';
 import withSearchManagement from '../search/SearchManagement.hoc';
+import {styles} from './CardProfile.css';
 
 ProfileService.setExtraLinkLimit(5);
 
-
-const styles = theme => ({
-  logo: {
-    width: 240,
-    height: 240,
-    marginBottom: -22,
-    marginLeft: -62,
-    backgroundColor: 'white',
-    [theme.breakpoints.down('xs')]: {
-      width: 190,
-      height: 190,
-      marginLeft: -56,
-      marginBottom: -10,
-    },
-  },
-  name: {
-    '& span em': {
-      backgroundColor: theme.palette.primary.main,
-      borderRadius: 30,
-      color: 'white',
-      fontWeight: '600',
-      paddingLeft: 2,
-      paddingRight: 2,
-    },
-    display: 'block',
-  },
-  intro: {
-    maxHeight: '3em',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
-  },
-  titleSmallestView: {
-    marginLeft: -2,
-    paddingTop: 16,
-    [theme.breakpoints.down('xs')]: {
-      fontSize: '1.2rem!important',
-      marginLeft: -6,
-    },
-  },
-  wings: {
-    display: 'inline-block',
-    color: 'white',
-    position: 'relative',
-    marginTop: '22px!important',
-    marginBottom: 4,
-    [theme.breakpoints.down('xs')]: {
-      marginTop: '18px!important',
-    }
-  },
-  wingsContainer: {
-    minHeight: 30
-  },
-  fullWidth: {
-    width: '100%',
-    cursor: 'pointer'
-  },
-  cardHeader: {
-    maxHeight: 138,
-    [theme.breakpoints.down('xs')]: {
-      maxHeight: 100,
-    }
-  },
-  contact: {
-    [theme.breakpoints.up('xs')]: {
-      margin: 2,
-    }
-  },
-  contactField: {
-    marginLeft: 100,
-    paddingLeft: 82,
-    minHeight: 40,
-    backgroundColor: 'transparent',
-    [theme.breakpoints.down('xs')]: {
-      minHeight: 35,
-      marginLeft: 66,
-      paddingLeft: 72,
-    },
-  },
-  contactButton: {
-    width: 37,
-    height: 37,
-    [theme.breakpoints.down('xs')]: {
-      width: 30,
-      height: 30,
-    },
-    '&::before': {
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      margin: 'auto',
-    },
-    '&:hover': {
-      backgroundColor: '#41424F',
-    }
-  },
-  dispo: {
-    position: 'absolute',
-    [theme.breakpoints.down('xs')]: {
-      marginLeft: 102,
-      marginTop: 148,
-    },
-    marginLeft: 134,
-    marginTop: 187,
-  },
-  available: {
-    backgroundColor: 'green',
-  },
-  unavailable: {
-    backgroundColor: 'red',
-  },
-  backgroundLogo: {
-    backgroundRepeat: 'no-repeat',
-    backgroundPositionX: 'right',
-    backgroundPositionY: 'bottom',
-    borderRadius: '50%',
-    backgroundSize: '200px 200px',
-    [theme.breakpoints.down('xs')]: {
-      backgroundSize: '150px 150px',
-    }
-  }
-})
-
-class CardProfile extends React.Component {
+class CardProfile extends React.PureComponent {
   constructor(props) {
     super(props);
     
@@ -154,7 +33,7 @@ class CardProfile extends React.Component {
   }
   
   render() {
-    const {classes, hit, addToFilters, handleDisplayProfile} = this.props;
+    const {classes, hit, handleDisplayProfile} = this.props;
     const { addFilter } = this.props;
     const {locale} = this.props.commonStore;
 
