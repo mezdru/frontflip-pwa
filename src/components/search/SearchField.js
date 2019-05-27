@@ -98,7 +98,7 @@ class SearchField extends React.Component {
             placeholder={placeholder}
             onKeyDown={this.handleEnter}
             onChange={(e) => { this.handleInputChange(e.target.value) }}
-            autocomplete="off"
+            autoComplete="off"
           />
         </div>
 
