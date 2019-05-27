@@ -44,7 +44,7 @@ class SuggestionsService {
       this.populateSuggestionsData();
       let query = this.formatHashtagsQuery();
       if (query)
-        this.syncBank(query)
+        await this.syncBank(query)
           .then((bank) => {
             this._bank = bank;
             this.populateSuggestionsData();
