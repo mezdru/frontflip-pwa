@@ -75,7 +75,7 @@ class WingsSuggestions extends React.Component {
 
           var cleanedSuggestions = {
             odd: this.state.suggestions.odd.filter(hit => hit.tag !== element.tag),
-            event: this.state.suggestions.even.filter(hit => hit.tag !== element.tag)
+            even: this.state.suggestions.even.filter(hit => hit.tag !== element.tag)
           };
 
           this.setState({ shouldUpdate: true, animationInProgress: false, suggestions: cleanedSuggestions }, () => {
