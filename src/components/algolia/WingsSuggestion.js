@@ -128,7 +128,7 @@ class WingsSuggestions extends React.Component {
 
   renderWing = (classes, hit, i) => {
     return (
-      <li key={i} className={classNames(classes.suggestion, (this.isNewSuggestions(hit.tag) ? classes.animateIn : null))} style={{ animationDelay: ((i - this.state.offsetSuggestionsIndex) * 0.05) + 's' }} id={hit.tag}>
+      <li key={Math.floor(Math.random() * 99999)} className={classNames(classes.suggestion, (this.isNewSuggestions(hit.tag) ? classes.animateIn : null))} style={{ animationDelay: ((i - this.state.offsetSuggestionsIndex) * 0.05) + 's' }} id={hit.tag}>
         <Wings src={ProfileService.getPicturePath(hit.picture)}
           label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
           onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag }, i)}
