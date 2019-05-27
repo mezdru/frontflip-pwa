@@ -11,7 +11,7 @@ const styles = theme => ({
     position: 'relative',
   },
   button: {
-    position: 'fixed',
+    position: 'absolute',
     right: 0,
     margin: 16,
     padding: 0,
