@@ -95,18 +95,6 @@ class Invitation extends React.Component {
     errorMessage: null
   };
 
-  componentDidMount() {
-    var orgId = this.props.organisationStore.values.organisation._id;
-    if(orgId)
-      this.props.authStore.getInvitationCode(orgId)
-      .then(invitationCode => {
-        this.setState({invitationCode: invitationCode.code});
-      }).catch(e => {
-        console.error(e);
-        this.setState({errorMessage: this.props.intl.formatMessage({ id: 'invitation.get.error' })})
-      });
-  }
-
   formatInvitationLink = (code) => {
     var locale = this.props.commonStore.locale;
     var orgTag = this.props.organisationStore.values.organisation.tag;
@@ -121,8 +109,21 @@ class Invitation extends React.Component {
   }
   
   handleClickOpen = () => {
+    this.requestInvitationCode();
     this.setState({open: true});
   };
+
+  requestInvitationCode = () => {
+    var orgId = this.props.organisationStore.values.organisation._id;
+    if(orgId)
+      this.props.authStore.getInvitationCode(orgId)
+      .then(invitationCode => {
+        this.setState({invitationCode: invitationCode.code});
+      }).catch(e => {
+        console.error(e);
+        this.setState({errorMessage: this.props.intl.formatMessage({ id: 'invitation.get.error' })})
+      });
+  }
   
   handleClose = () => {
     this.setState({open: false});
