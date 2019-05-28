@@ -66,7 +66,7 @@ class UserWings extends React.Component {
             
             if(!this.shouldAnimateWing(hashtag)) {
               return (
-                <div className="" key={i} style={{display: 'inline-block'}} >
+                <div className="" key={hashtag._id} style={{display: 'inline-block'}} >
                   <Wings  src={ProfileService.getPicturePath(hashtag.picture)}
                     label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
                     className={''} 
@@ -75,7 +75,7 @@ class UserWings extends React.Component {
               )
             } else {
               return (
-                <div className="" key={i} style={{display: 'inline-block'}} >
+                <div className="" key={hashtag._id} style={{display: 'inline-block'}} >
                   <Wings  src={ProfileService.getPicturePath(hashtag.picture)}
                     label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
                     className={'animated'} 

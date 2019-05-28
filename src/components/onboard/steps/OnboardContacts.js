@@ -47,11 +47,6 @@ class OnboardContacts extends React.Component {
   
   componentDidMount() {
     this.setDefaultLinks();
-    // observe(this.props.recordStore.values, 'record', (change) => {
-    //   this.setState({links: this.props.recordStore.values.record.links}, () => {
-    //     this.forceUpdate();
-    //   });
-    // })
   }
   
   handleLinksChange = (e, link, index) => {
@@ -72,10 +67,8 @@ class OnboardContacts extends React.Component {
   }
   
   addLink = (link) => {
-    // this.props.recordStore.values.record.links.push(link);
     let links = this.state.links;
     links.push(link)
-    console.log('addLink:' + JSON.stringify(links))
     let length = (l) => { return l-1}
     let linkIndex = length(links.length)
     this.setState({links: links, newLinkIndex: linkIndex});
@@ -128,7 +121,7 @@ class OnboardContacts extends React.Component {
               ProfileService.makeLinkIcon(link);
               link.value = entities.decode(link.value);
               return (
-                <Grid item key={i} style={{padding: 8}}>
+                <Grid item key={link._id || i} style={{padding: 8}}>
                   <TextField
                     className={( (newLinkIndex && i === newLinkIndex) ?  classes.link : classes.defaultLink)}
                     label={this.capitalize(link.type)}

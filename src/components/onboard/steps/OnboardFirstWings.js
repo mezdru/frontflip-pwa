@@ -145,7 +145,7 @@ class OnboardFirstWings extends React.Component {
             if(!this.shouldDisplaySuggestion(hashtag.tag)) return null;
             let displayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hashtag.tag)
             return (
-              <li onClick={(e) => { this.handleAddWing(e, hashtag.tag, i) }} className={classes.firstWing} key={i}
+              <li onClick={(e) => { this.handleAddWing(e, hashtag.tag, i) }} className={classes.firstWing} key={hashtag._id || hashtag.objectID}
                   style={this.getFirstWingsStyle(i, theme)}
                   onMouseUp={(e) => this.handleMouseUp(e)}
                   onMouseDown={(e) => this.handleMouseDown(e)}
