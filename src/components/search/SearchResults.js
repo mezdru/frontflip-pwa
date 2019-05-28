@@ -133,7 +133,7 @@ class SearchResults extends React.Component {
         <ul>
           {hitsResult.map((hit, i) => {
             return (
-              <li key={i} style={{ WebkitAnimationDelay: (0.2 * (i - hitsAlreadyDisplayed)) + 's', animationDelay: (0.2 * (i - hitsAlreadyDisplayed)) + 's' }}>
+              <li key={hit.objectID} style={{ WebkitAnimationDelay: (0.2 * (i - hitsAlreadyDisplayed)) + 's', animationDelay: (0.2 * (i - hitsAlreadyDisplayed)) + 's' }}>
                 <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
                   <Card hit={hit} handleDisplayProfile={handleDisplayProfile} />
                 </Grid>

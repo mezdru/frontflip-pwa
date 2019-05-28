@@ -94,7 +94,7 @@ class CardProfile extends React.PureComponent {
               {hit.hashtags && hit.hashtags.map((hashtag, i) => {
                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
                 return (
-                  <Wings src={ProfileService.getPicturePath(hashtag.picture)} key={i}
+                  <Wings src={ProfileService.getPicturePath(hashtag.picture)} key={hashtag._id}
                       label={ProfileService.htmlDecode(displayedName)}
                       onClick={(e) => addFilter({name: displayedName, tag: hashtag.tag, value: hashtag.tag, label: displayedName})}
                       className={(hashtag.class ? hashtag.class : 'notHighlighted')}

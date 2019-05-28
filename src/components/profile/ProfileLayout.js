@@ -158,7 +158,7 @@ class ProfileLayout extends React.Component {
               let displayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || currentHit.tag)
               return (
                 <Wings src={ProfileService.getPicturePath(hashtag.picture)}
-                  label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
+                  label={ProfileService.htmlDecode(displayedName)} key={hashtag._id}
                   onClick={(e) => this.handleReturnToSearch(e, { name: displayedName, tag: hashtag.tag, label: displayedName, value: hashtag.tag })}
                   className={(hashtag.class ? hashtag.class : 'notHighlighted')} />
               )
