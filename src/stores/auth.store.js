@@ -90,7 +90,6 @@ class AuthStore {
     return agent.Auth.googleCallbackLogin(this.values.temporaryToken)
       .then((response) => {
         if (response && response.access_token) {
-          if(process.env.NODE_ENV === 'production' && !process.env.REACT_APP_NOLOGS) SlackService.notify('#alerts', this.values.email + ' logged in with Google.')
           commonStore.setAuthTokens(response);
           return userStore.getCurrentUser()
             .then(() => { return 200; });
@@ -121,11 +120,23 @@ class AuthStore {
               });
           });
       })
-      .catch(action((err) => {
+      .catch((err) => {
         // any other response status than 20X is an error
-        this.errors = err.response && err.response.body && err.response.body.errors;
-        throw err;
-      }))
+        if(this.values.invitationCode) {
+          // try to login user
+          return this.login(this.values.email, this.values.password)
+          .then(respLogin => {
+            return true;
+          }).catch((e) => {
+            // Send register error, not login error.
+            this.errors = err.response && err.response.body && err.response.body.errors;
+            throw err;
+          })
+        } else {
+          this.errors = err.response && err.response.body && err.response.body.errors;
+          throw err;
+        }
+      })
       .finally(action(() => { this.inProgress = false; }));
   }
 
