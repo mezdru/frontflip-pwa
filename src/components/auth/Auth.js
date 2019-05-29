@@ -10,6 +10,7 @@ import Login from './login/Login';
 import Register from './register/Register';
 import UrlService from '../../services/url.service';
 import ReactGA from 'react-ga';
+import emailService from '../../services/email.service';
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 const queryString = require('query-string');
@@ -63,6 +64,7 @@ class Auth extends React.Component {
     this.handleGoogleCallback(this.state.queryParams)
     .then(() => {
       let googleState = (this.state.queryParams.state ? JSON.parse(this.state.queryParams.state) : null);
+      if(googleState.integrationState && (googleState.integrationState.linkedin === 'true')) emailService.sendConfirmIntegrationEmail('LinkedIn').catch(e => console.error(e));
       this.props.userStore.getCurrentUser()
         .then((user) => {
           ReactGA.event({category: 'User',action: 'Login with Google'});

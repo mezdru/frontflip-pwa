@@ -64,8 +64,8 @@ class AuthStore {
     return agent.Auth.login(this.values.email, this.values.password, this.values.temporaryToken)
       .then((response) => {
         if (response && response.access_token) {
-          if(process.env.NODE_ENV === 'production' && !process.env.REACT_APP_NOLOGS) SlackService.notify('#alerts', this.values.email + ' logged in with email and password.');
           commonStore.setAuthTokens(response);
+          if(response.integrationState && (response.integrationState.linkedin === 'true')) emailService.sendConfirmIntegrationEmail('LinkedIn').catch(e => console.error(e));
           return userStore.getCurrentUser()
             .then(() => { return 200; })
             .catch((err) => { console.log(err);})

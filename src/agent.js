@@ -254,6 +254,10 @@ const Email = {
       {
         password: password
       }
+    ),
+  confirmIntegrationEmail: (integrationName) =>
+    requests.post(
+      API_ROOT + '/api/emails/security/integration/' + integrationName
     )
 }
 
