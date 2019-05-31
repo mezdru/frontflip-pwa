@@ -16,7 +16,7 @@ class UserWings extends React.Component {
     this.state = {
       observer: ()=> {},
       newTag: null,
-      currentHashtagsLength: this.props.recordStore.values.record.hashtags.length,
+      currentHashtagsLength: (this.props.recordStore.values.record && this.props.recordStore.values.record.hashtags ? this.props.recordStore.values.record.hashtags.length : 0),
     };
   }
 
