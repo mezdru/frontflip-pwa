@@ -10,7 +10,6 @@ class MainRoute extends React.Component {
     super(props);
 
     this.state = {
-      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
       renderComponent: !this.props.authStore.isAuth()
     }
 
@@ -32,9 +31,12 @@ class MainRoute extends React.Component {
   }
 
   render() {
-    const { renderComponent, locale } = this.state;
+    const { renderComponent } = this.state;
     const endUrl = window.location.pathname + window.location.search;
     const { currentUser } = this.props.userStore.values;
+    const { locale } = this.props.commonStore;
+
+    let defaultLocale = (currentUser ? currentUser.locale || locale : locale);
 
     if (!currentUser && this.props.authStore.isAuth()) this.getUser();
 
@@ -43,7 +45,7 @@ class MainRoute extends React.Component {
         <div>
           <Switch>
             <Route path="/:locale(en|fr|en-UK)" component={MainRouteOrganisation} />
-            <Redirect from="*" to={"/" + (locale ? locale : 'en') + endUrl} />
+            <Redirect from="*" to={"/" + (defaultLocale ? defaultLocale : 'en') + endUrl} />
           </Switch>
         </div>
       );

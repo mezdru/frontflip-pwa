@@ -23,8 +23,19 @@ class MainRouteOrganisation extends React.Component {
 
     // set locale
     if (this.props.match && this.props.match.params && this.props.match.params.locale) {
-      this.props.commonStore.locale = this.props.match.params.locale;
+      this.props.commonStore.setLocale(this.props.match.params.locale);
       this.props.commonStore.populateLocale();
+      this.updateUserLocale();
+    }
+  }
+
+  updateUserLocale = () => {
+    var currentUser = this.props.userStore.values.currentUser;
+    if( this.props.commonStore.locale && currentUser && currentUser._id && this.props.commonStore.locale !== currentUser.locale) {
+      // console.log(JSON.stringify(this.props.userStore.values.currentUser))
+      currentUser.locale = this.props.commonStore.locale;
+      this.props.userStore.setCurrentUser(currentUser);
+      this.props.userStore.updateCurrentUser();
     }
   }
 
@@ -76,7 +87,7 @@ class MainRouteOrganisation extends React.Component {
   }
 }
 
-export default inject('commonStore', 'authStore')(
+export default inject('commonStore', 'authStore', 'userStore')(
   withRouter(observer(
     MainRouteOrganisation
   ))
