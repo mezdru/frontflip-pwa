@@ -23,11 +23,11 @@ class UserWings extends React.Component {
   componentDidMount() {
     setTimeout(() => this.props.scrollUserWingsToBottom(), 100);
     this.setState({observer: observe(this.props.recordStore.values, 'record', (change) => {
-      if(change.newValue.hashtags.length > this.state.currentHashtagsLength) {
+      if(change.newValue && change.newValue.hashtags && (change.newValue.hashtags.length > this.state.currentHashtagsLength)) {
         setTimeout(() => this.props.scrollUserWingsToBottom(), 100);
         this.setState({newTag: change.newValue.hashtags[change.newValue.hashtags.length - 1].tag, currentHashtagsLength: change.newValue.hashtags.length});
       } else {
-        this.setState({newTag: null, currentHashtagsLength: change.newValue.hashtags.length});
+        this.setState({newTag: null, currentHashtagsLength: (change.newValue && change.newValue.hashtags ? change.newValue.hashtags.length : 0)});
       }
     }) });
   }
