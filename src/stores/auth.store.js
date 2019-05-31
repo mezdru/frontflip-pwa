@@ -151,7 +151,8 @@ class AuthStore {
 
     return agent.Auth.registerToOrg(organisationStore.values.organisation._id, this.values.invitationCode)
       .then((data) => {
-        return data;
+        return userStore.getCurrentUser()
+        .then(() => { return data; });      
       })
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.errors;
