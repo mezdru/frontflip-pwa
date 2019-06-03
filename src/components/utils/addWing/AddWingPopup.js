@@ -116,7 +116,7 @@ class AddWingPopup extends React.Component {
 
   handleAddWing = async () => {
     ReactGA.event({category: 'User', action: 'QRCode - Add Wings'});
-    SlackService.notify('#wingzy-events', 'QRCode - Search - '+
+    SlackService.notify('#wingzy-events', 'QRCode - Add Wings - '+
                                           (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '')+
                                           ' - by '+this.props.recordStore.values.record.name);    let record = this.props.recordStore.values.record;
     let wingsToAdd = [];

@@ -191,7 +191,7 @@ class App extends Component {
                 <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.whyWingzy' })} />
               </ListItem>
               {!organisation.premium && (
-                <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/pricing', undefined)} target="_blank">
+                <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/#pricing-a', undefined)} target="_blank">
                   <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.pricing' })} />
                 </ListItem>
               )}
