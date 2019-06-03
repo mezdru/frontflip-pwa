@@ -18,7 +18,6 @@ class SearchField extends React.Component {
     super(props);
     this.state = {
       searchInput: '',
-      placeholder: this.getSearchFieldPlaceholder(),
       searchFilters: [],
       observer: () => { }
     };
@@ -73,7 +72,7 @@ class SearchField extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { placeholder, searchInput, searchFilters } = this.state;
+    const { searchInput, searchFilters } = this.state;
     console.log('current locale in search field:  ' + this.props.commonStore.locale);
 
     return (
@@ -96,7 +95,7 @@ class SearchField extends React.Component {
             type='text' name="searchInput"
             className={classes.searchInput}
             value={searchInput}
-            placeholder={placeholder}
+            placeholder={this.getSearchFieldPlaceholder()}
             onKeyDown={this.handleEnter}
             onChange={(e) => { this.handleInputChange(e.target.value) }}
             autoComplete="off"

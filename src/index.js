@@ -16,18 +16,6 @@ import suggestionsController from './services/suggestionsController.service';
 import HttpsRedirect from 'react-https-redirect';
 import { MuiThemeProvider } from "@material-ui/core";
 import theme from "./theme";
-import { addLocaleData, IntlProvider } from "react-intl";
-import locale_en from 'react-intl/locale-data/en';
-import locale_fr from 'react-intl/locale-data/fr';
-import messages_fr from "./translations/fr.json";
-import messages_en from "./translations/en.json";
-
-addLocaleData([...locale_en, ...locale_fr]);
-
-const messages = {
-  'fr': messages_fr,
-  'en': messages_en
-};
 
 const stores = {
   authStore,
@@ -45,9 +33,7 @@ ReactDOM.render(
   <HttpsRedirect>
     <Provider {...stores}>
       <MuiThemeProvider theme={theme}>
-        <IntlProvider locale={locale} messages={messages[locale]}>
-          <App />
-        </IntlProvider>
+        <App />
       </MuiThemeProvider>
     </Provider>
   </HttpsRedirect>

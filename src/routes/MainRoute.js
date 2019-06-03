@@ -3,6 +3,18 @@ import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import MainRouteOrganisation from './MainRouteOrganisation';
 import { inject, observer } from 'mobx-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { addLocaleData, IntlProvider } from "react-intl";
+import locale_en from 'react-intl/locale-data/en';
+import locale_fr from 'react-intl/locale-data/fr';
+import messages_fr from "../translations/fr.json";
+import messages_en from "../translations/en.json";
+
+addLocaleData([...locale_en, ...locale_fr]);
+
+const messages = {
+  'fr': messages_fr,
+  'en': messages_en
+};
 
 class MainRoute extends React.Component {
 
@@ -39,24 +51,24 @@ class MainRoute extends React.Component {
 
     if (!currentUser && this.props.authStore.isAuth()) this.getUser();
     
-    let defaultLocale = (currentUser ? currentUser.locale || locale : locale);
+    let defaultLocale = (currentUser ? currentUser.locale || locale : locale) || 'en';
 
     if (renderComponent) {
       return (
-        <div>
+        <IntlProvider locale={defaultLocale} messages={messages[defaultLocale]}>
           <Switch>
             <Route path="/:locale(en|fr|en-UK)" component={MainRouteOrganisation} />
-            <Redirect from="*" to={"/" + (defaultLocale ? defaultLocale : 'en') + endUrl} />
+            <Redirect from="*" to={"/" + defaultLocale + endUrl} />
           </Switch>
-        </div>
+        </IntlProvider>
       );
     } else {
       return (
-        <div>
+        <IntlProvider locale={defaultLocale} messages={messages[defaultLocale]}>
           <div style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', textAlign: 'center', width: '100%' }}>
             <CircularProgress color='secondary' />
           </div>
-        </div>
+        </IntlProvider>
       );
     }
   }

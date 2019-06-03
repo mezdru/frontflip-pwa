@@ -22,10 +22,6 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
-    }
-
     this.handleLogout = this.handleLogout.bind(this);
   }
 
@@ -63,12 +59,14 @@ class App extends Component {
     const { record } = this.props.recordStore.values;
     const { organisation } = this.props.organisationStore.values;
     const { currentUser } = this.props.userStore.values;
-    const { locale } = this.state;
+    const { locale } = this.props.commonStore;
     const currentOrgAndRecord = ((currentUser && currentUser.orgsAndRecords) ?
       currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id) : null);
 
     record.name = entities.decode(record.name)
     organisation.name = entities.decode(organisation.name)
+
+    console.log('current locale header drawer: ' + locale);
 
     return (
       <SwipeableDrawer
