@@ -4,7 +4,6 @@ import commonStore from "./common.store";
 import userStore from "./user.store";
 import organisationStore from "./organisation.store";
 import emailService from "../services/email.service";
-import SlackService from '../services/slack.service';
 
 class AuthStore {
   inProgress = false;
