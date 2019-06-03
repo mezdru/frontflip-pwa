@@ -63,7 +63,7 @@ class HeaderDrawer extends Component {
   }
 
   render() {
-    const { classes, auth, open, intl, theme } = this.props;
+    const { classes, auth, open, intl } = this.props;
     const { record } = this.props.recordStore.values;
     const { organisation } = this.props.organisationStore.values;
     const { currentUser } = this.props.userStore.values;
