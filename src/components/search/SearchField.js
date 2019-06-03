@@ -74,6 +74,7 @@ class SearchField extends React.Component {
   render() {
     const { classes } = this.props;
     const { placeholder, searchInput, searchFilters } = this.state;
+    console.log('current locale in search field:  ' + this.props.commonStore.locale);
 
     return (
       <div className={classes.searchContainer} id="search-container">

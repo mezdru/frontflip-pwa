@@ -36,9 +36,10 @@ class MainRoute extends React.Component {
     const { currentUser } = this.props.userStore.values;
     const { locale } = this.props.commonStore;
 
-    let defaultLocale = (currentUser ? currentUser.locale || locale : locale);
 
     if (!currentUser && this.props.authStore.isAuth()) this.getUser();
+    
+    let defaultLocale = (currentUser ? currentUser.locale || locale : locale);
 
     if (renderComponent) {
       return (

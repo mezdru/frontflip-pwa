@@ -23,6 +23,7 @@ class MainRouteOrganisation extends React.Component {
 
     // set locale
     if (this.props.match && this.props.match.params && this.props.match.params.locale) {
+      console.log('set locale to : ' + this.props.match.params.locale)
       this.props.commonStore.setLocale(this.props.match.params.locale);
       this.props.commonStore.populateLocale();
       this.updateUserLocale();

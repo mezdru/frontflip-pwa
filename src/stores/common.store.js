@@ -34,7 +34,6 @@ class CommonStore {
   populateLocale() {
     let localesAccepted = ['en', 'fr'];
     this.locale = window.location.pathname.split('/')[1];
-    console.log(this.locale)
     if (!localesAccepted.some(lg => lg === this.locale)) this.locale = this.getCookie('locale');
     if (!this.locale) {
       this.locale = navigator.language || navigator.userLanguage || 'en';
