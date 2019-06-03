@@ -58,6 +58,7 @@
   "menu.drawer.invitation": "Invite Coworkers",
   "menu.drawer.invitation.description": "Copy this link and share it to your Coworkers",
   "menu.drawer.invitation.infoUrl": "This link give access to your Wingzy, it will remain available for 30 days",
+  "menu.drawer.locale": "Language",
   "profile.aboutMe": "About me",
   "profile.addWings": "Add Wings",
   "profile.updateCover": "Change cover",
