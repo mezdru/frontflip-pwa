@@ -19,7 +19,7 @@ import LocaleSelector from '../utils/fields/LocaleSelector';
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 
-class App extends Component {
+class HeaderDrawer extends Component {
   constructor(props) {
     super(props);
   }
@@ -231,7 +231,7 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
+HeaderDrawer.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
 };
@@ -239,7 +239,7 @@ App.propTypes = {
 export default inject('authStore', 'organisationStore', 'recordStore', 'commonStore', 'userStore')(
   injectIntl(withRouter(observer(
     withStyles(styles, { withTheme: true })(
-      App
+      HeaderDrawer
     )
   )))
 );
