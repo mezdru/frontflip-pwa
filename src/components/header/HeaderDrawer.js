@@ -14,15 +14,14 @@ import UrlService from '../../services/url.service';
 import { Link, withRouter } from 'react-router-dom';
 import OrganisationsList from '../utils/orgsList/OrganisationsList';
 import InvitationDialog from '../utils/alertDialog/Invitation';
+import LocaleSelector from '../utils/fields/LocaleSelector';
 
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 
-class App extends Component {
+class HeaderDrawer extends Component {
   constructor(props) {
     super(props);
-
-    this.handleLogout = this.handleLogout.bind(this);
   }
 
   getPicturePath(picture) {
@@ -32,7 +31,7 @@ class App extends Component {
     else return null;
   }
 
-  handleLogout(e) {
+  handleLogout = (e) => {
     e.preventDefault();
     this.props.handleDrawerClose();
     this.props.authStore.logout().then(() => {
@@ -41,11 +40,11 @@ class App extends Component {
   }
 
   handleTestPushNotification = () => {
-    Notification.requestPermission(function(status) {
+    Notification.requestPermission(function (status) {
       console.log('Notification permission status:', status);
-      if(status === 'granted') {
-        navigator.serviceWorker.getRegistration().then(function(reg) {
-          if(reg)
+      if (status === 'granted') {
+        navigator.serviceWorker.getRegistration().then(function (reg) {
+          if (reg)
             reg.showNotification('Hello world! This is a notification from Wingzy PWA!');
           else
             console.warn("Can't use notification in this APP");
@@ -54,12 +53,18 @@ class App extends Component {
     });
   }
 
+  handleLocaleChange = (e) => {
+    let { organisation } = this.props.organisationStore.values;
+    window.location.pathname = '/' + e.target.value + '/' + (organisation ? organisation.tag : '');
+  }
+
   render() {
-    const { classes, auth, open, intl, theme } = this.props;
+    const { classes, auth, open, intl } = this.props;
     const { record } = this.props.recordStore.values;
     const { organisation } = this.props.organisationStore.values;
     const { currentUser } = this.props.userStore.values;
     const { locale } = this.props.commonStore;
+
     const currentOrgAndRecord = ((currentUser && currentUser.orgsAndRecords) ?
       currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id) : null);
 
@@ -183,6 +188,14 @@ class App extends Component {
                   <Divider className={classes.divider} />
                 </React.Fragment>
               )}
+
+              <ListItem>
+                <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.locale' })} />
+                <ListItemSecondaryAction>
+                < LocaleSelector currentLocale={locale} handleChange={this.handleLocaleChange} />
+                </ListItemSecondaryAction>
+              </ListItem>
+
               <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/', undefined)} target="_blank">
                 <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.whyWingzy' })} />
               </ListItem>
@@ -214,7 +227,7 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
+HeaderDrawer.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
 };
@@ -222,7 +235,7 @@ App.propTypes = {
 export default inject('authStore', 'organisationStore', 'recordStore', 'commonStore', 'userStore')(
   injectIntl(withRouter(observer(
     withStyles(styles, { withTheme: true })(
-      App
+      HeaderDrawer
     )
   )))
 );
