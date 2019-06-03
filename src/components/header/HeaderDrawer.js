@@ -58,10 +58,6 @@ class HeaderDrawer extends Component {
     window.location.pathname = '/' + e.target.value + '/' + (organisation ? organisation.tag : '');
   }
 
-  componentDidUpdate() {
-    if(this.state.redirectTo) this.setState({redirectTo: null});
-  }
-
   render() {
     const { classes, auth, open, intl } = this.props;
     const { record } = this.props.recordStore.values;
