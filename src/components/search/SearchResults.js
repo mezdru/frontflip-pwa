@@ -51,6 +51,7 @@ class SearchResults extends React.Component {
     this.state = {
       hits: [],
       page: 0,
+      currentPageNumber: 0,
       showNoResult: false,
       loadInProgress: true,
       hideShowMore: false,
@@ -81,32 +82,60 @@ class SearchResults extends React.Component {
     observe(this.props.commonStore, 'searchFilters', (change) => {
       this.props.makeFiltersRequest()
         .then((req) => {
-          this.setState({ filterRequest: req.filterRequest, queryRequest: req.queryRequest }, () => {
+          this.setState({ filterRequest: req.filterRequest, queryRequest: req.queryRequest, page: 0 }, () => {
             AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
             this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
           });
         });
     });
+
+    this.createScrollObserver();
   }
 
   componentWillUnmount() {
     this.state.observer();
   }
 
+  createScrollObserver = () => {
+    try{
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting && !this.state.hideShowMore) {
+            this.handleShowMore();
+            }
+        });
+      });
+  
+      let hitList = document.getElementById('algolia-sentinel');
+      observer.observe(hitList);
+    }catch(e) {
+      console.log(e);
+    }
+  }
+
   fetchHits = (filters, query, facetFilters, page) => {
     AlgoliaService.fetchHits(filters, query, facetFilters, page)
       .then((content) => {
 
-        if (!content || !content.hits || content.hits.length === 0) this.setState({ showNoResult: true, hideShowMore: true });
+        if ( (!content || !content.hits || content.hits.length === 0) && (!page || page === 0) ) this.setState({ showNoResult: true, hideShowMore: true });
         else this.setState({ showNoResult: false });
 
         this.props.commonStore.searchResultsCount = content.nbHits;
 
-        this.setState({ hitsAlreadyDisplayed: Math.min((content.hitsPerPage * (content.page)), content.nbHits) }); if (content.page === (content.nbPages - 1)) this.setState({ hideShowMore: true });
-        if (page) this.setState({ hits: this.state.hits.concat(content.hits) }, this.endTask());
-        else this.setState({ hits: content.hits }, this.endTask());
-
-      }).catch((e) => { this.setState({ hits: [] }) });
+        this.setState({ hitsAlreadyDisplayed: Math.min((content.hitsPerPage * (content.page)), content.nbHits) }); 
+        if (content.page >= (content.nbPages - 1)) this.setState({ hideShowMore: true });
+        else if (content.nbPages > 1) this.setState({hideShowMore: false});
+        
+        if (page){
+          this.setState({ hits: this.state.hits.concat(content.hits) }, this.endTask());
+        } else {
+          let contentHits = Array.from(content.hits);
+          if(this.state.filterRequest === 'type:person' && !this.state.queryRequest) {
+            contentHits = shuffleArray(contentHits);
+          }
+          this.setState({ hits: contentHits }, this.endTask());
+        }
+      }).catch((e) => {this.setState({ hits: [] }) });
   }
 
   endTask = () => {
@@ -122,11 +151,7 @@ class SearchResults extends React.Component {
   render() {
     const { hits, loadInProgress, hideShowMore, hitsAlreadyDisplayed, showNoResult, filterRequest, queryRequest } = this.state;
     const { handleDisplayProfile, classes } = this.props;
-    let hitsResult = hits;
-    
-    if ((filterRequest === 'type:person') && !queryRequest) {
-      hitsResult = shuffleArray(hitsResult);
-    }
+    let hitsResult = Array.from(hits);
 
     return (
       <div className={classes.hitList}>
@@ -155,6 +180,7 @@ class SearchResults extends React.Component {
             </Suspense>
           )}
         </ul>
+        <div id="algolia-sentinel"></div>
       </div>
     );
   }

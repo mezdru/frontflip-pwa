@@ -138,7 +138,7 @@ class AlgoliaService {
         query: query || '',
         facetFilters: facetFilters || '',
         filters: filters || 'type:person',
-        hitsPerPage: 20,
+        hitsPerPage: 5,
         attributesToSnippet: [
           "intro:"+15,
           "description:"+15
