@@ -66,8 +66,6 @@ class App extends Component {
     record.name = entities.decode(record.name)
     organisation.name = entities.decode(organisation.name)
 
-    console.log('current locale header drawer: ' + locale);
-
     return (
       <SwipeableDrawer
         className={classes.drawer}
