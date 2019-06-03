@@ -182,8 +182,6 @@ class SearchPage extends React.Component {
     const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter } = this.state;
     const { classes } = this.props;
 
-    console.log('current locale in search : ' + this.props.commonStore.locale);
-
     return (
       <React.Fragment>
         {redirectTo && (window.location.pathname !== redirectTo) && <Redirect to={redirectTo} />}
