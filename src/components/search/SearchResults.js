@@ -27,9 +27,6 @@ const styles = theme => ({
     },
     '& ul li': {
       marginBottom: '32px',
-      opacity: 0,
-      animation: 'fadeIn 300ms 1',
-      animationFillMode: 'forwards',
     },
     '& ul li > div:first-child': {
       position: 'relative',
@@ -55,7 +52,6 @@ class SearchResults extends React.Component {
       showNoResult: false,
       loadInProgress: true,
       hideShowMore: false,
-      hitsAlreadyDisplayed: 0,
       observer: () => { },
       filterRequest: '',
       queryRequest: '',
@@ -122,7 +118,6 @@ class SearchResults extends React.Component {
 
         this.props.commonStore.searchResultsCount = content.nbHits;
 
-        this.setState({ hitsAlreadyDisplayed: Math.min((content.hitsPerPage * (content.page)), content.nbHits) }); 
         if (content.page >= (content.nbPages - 1)) this.setState({ hideShowMore: true });
         else if (content.nbPages > 1) this.setState({hideShowMore: false});
         
@@ -149,7 +144,7 @@ class SearchResults extends React.Component {
   }
 
   render() {
-    const { hits, loadInProgress, hideShowMore, hitsAlreadyDisplayed, showNoResult, filterRequest, queryRequest } = this.state;
+    const { hits, loadInProgress, hideShowMore, showNoResult } = this.state;
     const { handleDisplayProfile, classes } = this.props;
     let hitsResult = Array.from(hits);
 
@@ -158,7 +153,7 @@ class SearchResults extends React.Component {
         <ul>
           {hitsResult.map((hit, i) => {
             return (
-              <li key={hit.objectID} style={{ WebkitAnimationDelay: (0.1 * (i - hitsAlreadyDisplayed)) + 's', animationDelay: (0.1 * (i - hitsAlreadyDisplayed)) + 's' }}>
+              <li key={hit.objectID}>
                 <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
                   <Card hit={hit} handleDisplayProfile={handleDisplayProfile} />
                 </Grid>

@@ -23,10 +23,6 @@ export const styles = theme => ({
     from: { top: 0, opacity: 1 },
     to: { top: '100vh', opacity: 0 }
   },
-  '@keyframes fadeIn': {
-    from: { opacity: 0 },
-    to: { opacity: 1 }
-  },
   cardMobileView: {
     [theme.breakpoints.down('xs')]: {
       margin: '16px!important',
