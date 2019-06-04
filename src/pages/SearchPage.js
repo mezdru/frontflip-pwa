@@ -8,12 +8,8 @@ import { Redirect } from "react-router-dom";
 import { observe } from 'mobx';
 import { animateScroll as scroll } from 'react-scroll';
 
-import Header from '../components/header/Header';
 import { styles } from './SearchPage.css';
-import SearchResults from '../components/search/SearchResults';
-import Search from '../components/search/Search';
 import ErrorBoundary from '../components/utils/errors/ErrorBoundary';
-import BannerResizable from '../components/utils/banner/BannerResizable';
 import './SearchPageStyle.css';
 import SearchButton from '../components/search/SearchButton';
 
@@ -21,6 +17,10 @@ const OnboardCongratulation = React.lazy(() => import('../components/onboard/ste
 const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
 const AddWingPopup = React.lazy(() => import('../components/utils/addWing/AddWingPopup'));
 const ProfileLayout = React.lazy(() => import("../components/profile/ProfileLayout"));
+const BannerResizable = React.lazy(() => import('../components/utils/banner/BannerResizable'));
+const Header = React.lazy(() => import('../components/header/Header'));
+const SearchResults = React.lazy(() => import('../components/search/SearchResults'));
+const Search = React.lazy(() => import('../components/search/Search'));
 
 console.debug('Loading SearchPage');
 
@@ -77,11 +77,11 @@ class SearchPage extends React.Component {
       var contentShape = contentMain.getBoundingClientRect();
       var contentTop = contentShape.top;
       let newTopValue = Math.min(Math.max(contentTop - this.state.headerHeight + 16, 16), (window.innerHeight * 0.40));
-      
-      searchBox.style.top =  newTopValue + 'px';
+
+      searchBox.style.top = newTopValue + 'px';
       shadowedBackground.style.opacity = Math.min(1, (contentPart.scrollTop / (window.innerHeight - this.state.headerHeight))) * 0.6;
 
-      if(newTopValue <= this.state.top) this.handleMenuButtonMobileDisplay(true);
+      if (newTopValue <= this.state.top) this.handleMenuButtonMobileDisplay(true);
       else if (newTopValue >= (this.state.top + 8)) this.handleMenuButtonMobileDisplay(false);
     }.bind(this));
   }
@@ -185,15 +185,21 @@ class SearchPage extends React.Component {
     return (
       <React.Fragment>
         {redirectTo && (window.location.pathname !== redirectTo) && <Redirect to={redirectTo} />}
-        <Header />
+        <Suspense fallback={<></>}>
+          <Header />
+        </Suspense>
 
         <main className={'search-container'}>
 
-          <BannerResizable
-            type={'organisation'}
-            initialHeight={100}
-            style={{ position: 'absolute' }}
-          />
+          <Suspense fallback={<div style={{ position: 'absolute', height: '100vh' }}></div>} >
+            <BannerResizable
+              type={'organisation'}
+              initialHeight={100}
+              style={{ position: 'absolute' }}
+            />
+          </Suspense>
+
+
           <div id="shadowed-background" className={classes.shadowedBackground} />
 
           {/* Search box - Search field & Search suggestions */}
