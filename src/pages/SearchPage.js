@@ -21,6 +21,7 @@ const BannerResizable = React.lazy(() => import('../components/utils/banner/Bann
 const Header = React.lazy(() => import('../components/header/Header'));
 const SearchResults = React.lazy(() => import('../components/search/SearchResults'));
 const Search = React.lazy(() => import('../components/search/Search'));
+const Intercom = React.lazy(() => import('react-intercom'));
 
 console.debug('Loading SearchPage');
 
@@ -181,6 +182,7 @@ class SearchPage extends React.Component {
   render() {
     const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter } = this.state;
     const { classes } = this.props;
+    const { organisation } = this.props.organisationStore.values;
 
     return (
       <React.Fragment>
@@ -233,6 +235,11 @@ class SearchPage extends React.Component {
             </div>
 
           </div>
+          {organisation && (organisation.tag === 'quecbio' || organisation.tag === 'team') && (
+            <Suspense fallback={<></>}>
+              <Intercom appID={"k7gprnv3"} />
+            </Suspense>
+          )}
         </main>
 
         {displayedHit && (
