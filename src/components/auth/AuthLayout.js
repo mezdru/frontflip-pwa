@@ -1,9 +1,11 @@
-import React from 'react';
-import {Grid} from '@material-ui/core';
-import { withStyles} from '@material-ui/core/styles';
+import React, {Suspense} from 'react';
+import { Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import Logo from '../utils/logo/Logo';
 import Banner from '../utils/banner/Banner';
 import Header from '../header/Header';
+
+const Intercom = React.lazy(() => import('react-intercom'));
 
 const styles = (theme) => ({
   logo: {
@@ -23,7 +25,7 @@ class Auth extends React.Component {
   };
 
   render() {
-    const {classes} = this.props;
+    const { classes } = this.props;
 
     return (
       <div>
@@ -40,6 +42,10 @@ class Auth extends React.Component {
               {this.props.children}
             </Grid>
           </Grid>
+
+          <Suspense fallback={<></>}>
+            <Intercom appID={"k7gprnv3"} />
+          </Suspense>
         </main>
       </div>
     );
