@@ -146,10 +146,10 @@ class AlgoliaService {
         ],
       }, (err, content) => {
         if(err) return resolve(content);
-
-        if(logSearch) this.logCurrentSearch(content.hits.length);
-
         if(!content) return resolve(null);
+
+        if(logSearch) this.logCurrentSearch( (content.hits ? content.hits.length : null) );
+
         return resolve(content)
       });
     });
