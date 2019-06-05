@@ -80,14 +80,14 @@ class SearchResults extends React.Component {
     });
 
     observe(this.props.commonStore, 'searchFilters', (change) => {
-      if(JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
+      if (JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
         this.props.makeFiltersRequest()
-        .then((req) => {
-          this.setState({ filterRequest: req.filterRequest, queryRequest: req.queryRequest, page: 0 }, () => {
-            AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
-            this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
+          .then((req) => {
+            this.setState({ filterRequest: req.filterRequest, queryRequest: req.queryRequest, page: 0 }, () => {
+              AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
+              this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
+            });
           });
-        });
       }
     });
 
@@ -99,44 +99,44 @@ class SearchResults extends React.Component {
   }
 
   createScrollObserver = () => {
-    try{
+    try {
       const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
-            if(entry.isIntersecting && !this.state.hideShowMore) {
+          if (entry.isIntersecting && !this.state.hideShowMore) {
             this.handleShowMore();
-            }
+          }
         });
       });
-  
+
       let hitList = document.getElementById('algolia-sentinel');
       observer.observe(hitList);
-    }catch(e) {
+    } catch (e) {
       console.log(e);
     }
   }
 
   fetchHits = (filters, query, facetFilters, page) => {
-    AlgoliaService.fetchHits(filters, query, facetFilters, page, true,  ( (!page || page === 0) ? 5 : 15) )
+    AlgoliaService.fetchHits(filters, query, facetFilters, page, true, ((!page || page === 0) ? 5 : 15))
       .then((content) => {
 
-        if ( (!content || !content.hits || content.hits.length === 0) && (!page || page === 0) ) this.setState({ showNoResult: true, hideShowMore: true });
+        if ((!content || !content.hits || content.hits.length === 0) && (!page || page === 0)) this.setState({ showNoResult: true, hideShowMore: true });
         else this.setState({ showNoResult: false });
 
         this.props.commonStore.searchResultsCount = content.nbHits;
 
         if (content.page >= (content.nbPages - 1)) this.setState({ hideShowMore: true });
-        else if (content.nbPages > 1) this.setState({hideShowMore: false});
-        
-        if (page){
+        else if (content.nbPages > 1) this.setState({ hideShowMore: false });
+
+        if (page) {
           this.setState({ hits: this.state.hits.concat(content.hits) }, this.endTask());
         } else {
           let contentHits = Array.from(content.hits);
-          if(this.state.filterRequest === 'type:person' && !this.state.queryRequest) {
+          if (this.state.filterRequest === 'type:person' && !this.state.queryRequest) {
             contentHits = shuffleArray(contentHits);
           }
           this.setState({ hits: contentHits }, this.endTask());
         }
-      }).catch((e) => {this.setState({ hits: [] }) });
+      }).catch((e) => { this.setState({ hits: [] }) });
   }
 
   endTask = () => {
@@ -166,6 +166,7 @@ class SearchResults extends React.Component {
               </li>
             );
           })}
+          <div id="algolia-sentinel"></div>
 
           {!hideShowMore && (
             <li>
@@ -174,6 +175,7 @@ class SearchResults extends React.Component {
               </Suspense>
             </li>
           )}
+          
 
           {showNoResult && (
             <Suspense fallback={<></>}>
@@ -181,7 +183,6 @@ class SearchResults extends React.Component {
             </Suspense>
           )}
         </ul>
-        <div id="algolia-sentinel" className={classes.sentinel}></div>
       </div>
     );
   }
