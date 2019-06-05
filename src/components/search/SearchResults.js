@@ -40,6 +40,10 @@ const styles = theme => ({
       margin: '16px!important',
     },
   },
+  sentinel: {
+    position: 'relative',
+    marginTop: '-500px',
+  }
 });
 
 class SearchResults extends React.Component {
@@ -177,7 +181,7 @@ class SearchResults extends React.Component {
             </Suspense>
           )}
         </ul>
-        <div id="algolia-sentinel"></div>
+        <div id="algolia-sentinel" className={classes.sentinel}></div>
       </div>
     );
   }
