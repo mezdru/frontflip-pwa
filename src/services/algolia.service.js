@@ -131,7 +131,7 @@ class AlgoliaService {
   }
 
 
-  fetchHits(filters, query, facetFilters, page, logSearch) {
+  fetchHits(filters, query, facetFilters, page, logSearch, hitsPerPage) {
     if(!this.index) return Promise.resolve();
     return new Promise((resolve, reject) => {
       this.index.search({
@@ -139,7 +139,7 @@ class AlgoliaService {
         query: query || '',
         facetFilters: facetFilters || '',
         filters: filters || 'type:person',
-        hitsPerPage: 5,
+        hitsPerPage: hitsPerPage || 30,
         attributesToSnippet: [
           "intro:"+15,
           "description:"+15
@@ -148,7 +148,7 @@ class AlgoliaService {
         if(err) return resolve(content);
         if(!content) return resolve(null);
 
-        if(logSearch) this.logCurrentSearch( (content.hits ? content.hits.length : null) );
+        if(logSearch) this.logCurrentSearch( (content.nbHits || null) );
 
         return resolve(content)
       });
