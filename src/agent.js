@@ -271,6 +271,18 @@ const Invitation = {
     )
 }
 
+const SearchLog = {
+  postSearchLog: (orgId, tagsArray, query, resultsLength) =>
+    requests.post(
+      API_ROOT + '/api/statistics/search/' + orgId,
+      {
+        tags: tagsArray,
+        query: query,
+        results: resultsLength
+      }
+    )
+}
+
 /**
  * @description Test get user with secure call to API
  */
@@ -286,5 +298,6 @@ export default {
   Organisation,
   User,
   Email,
-  Invitation
+  Invitation,
+  SearchLog
 }

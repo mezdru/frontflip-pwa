@@ -11,6 +11,7 @@ import authStore from './stores/auth.store';
 import userStore from './stores/user.store';
 import recordStore from './stores/record.store';
 import commonStore from './stores/common.store';
+import statisticsStore from './stores/statistics.store';
 import organisationStore from './stores/organisation.store';
 import suggestionsController from './services/suggestionsController.service';
 import HttpsRedirect from 'react-https-redirect';
@@ -23,7 +24,8 @@ const stores = {
   recordStore,
   commonStore,
   organisationStore,
-  suggestionsController
+  suggestionsController,
+  statisticsStore
 };
 
 let locale = commonStore.locale;
