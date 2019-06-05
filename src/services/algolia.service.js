@@ -168,10 +168,6 @@ class AlgoliaService {
     statisticsStore.postSearchLog(null, tagsArray, query, resultsCount);
   }
 
-
-
 }
-
-
 
 export default new AlgoliaService(commonStore.algoliaKey);
