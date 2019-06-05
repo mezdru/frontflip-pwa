@@ -76,13 +76,15 @@ class SearchResults extends React.Component {
     });
 
     observe(this.props.commonStore, 'searchFilters', (change) => {
-      this.props.makeFiltersRequest()
+      if(JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
+        this.props.makeFiltersRequest()
         .then((req) => {
           this.setState({ filterRequest: req.filterRequest, queryRequest: req.queryRequest, page: 0 }, () => {
             AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
             this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
           });
         });
+      }
     });
 
     this.createScrollObserver();
@@ -110,7 +112,7 @@ class SearchResults extends React.Component {
   }
 
   fetchHits = (filters, query, facetFilters, page) => {
-    AlgoliaService.fetchHits(filters, query, facetFilters, page)
+    AlgoliaService.fetchHits(filters, query, facetFilters, page, true)
       .then((content) => {
 
         if ( (!content || !content.hits || content.hits.length === 0) && (!page || page === 0) ) this.setState({ showNoResult: true, hideShowMore: true });
