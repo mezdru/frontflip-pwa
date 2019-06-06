@@ -67,6 +67,7 @@ class PasswordForgot extends React.Component {
   render() {
     let {successPasswordReset, emailError} = this.state;
     let {classes, intl} = this.props;
+    let { email } = this.props.authStore.values;
     
     return (
       <AuthLayout>
@@ -90,13 +91,14 @@ class PasswordForgot extends React.Component {
                   </Grid>
                 )}
                 <Grid item>
-                  <TextField label="Email"
-                             type="email"
-                             autoComplete="email"
-                             variant={"outlined"}
-                             fullWidth={true}
-                             onChange={this.handleEmailChange}
-                             required
+                  <TextField  label="Email"
+                              type="email"
+                              autoComplete="email"
+                              variant={"outlined"}
+                              fullWidth={true}
+                              onChange={this.handleEmailChange}
+                              value={email}
+                              required
                   />
                 </Grid>
                 <Grid item>
