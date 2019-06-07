@@ -41,7 +41,7 @@ const styles = theme => ({
     },
   },
   sentinel: {
-    position: 'relative',
+    position: 'absolute',
     marginTop: '-500px',
   }
 });
@@ -116,7 +116,7 @@ class SearchResults extends React.Component {
   }
 
   fetchHits = (filters, query, facetFilters, page) => {
-    AlgoliaService.fetchHits(filters, query, facetFilters, page, true, ((!page || page === 0) ? 5 : 15))
+    AlgoliaService.fetchHits(filters, query, facetFilters, page, true, 5)
       .then((content) => {
 
         if ((!content || !content.hits || content.hits.length === 0) && (!page || page === 0)) this.setState({ showNoResult: true, hideShowMore: true });
@@ -158,15 +158,31 @@ class SearchResults extends React.Component {
       <div className={classes.hitList}>
         <ul>
           {hitsResult.map((hit, i) => {
-            return (
+            return (<>
               <li key={hit.objectID}>
                 <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
                   <Card hit={hit} handleDisplayProfile={handleDisplayProfile} />
                 </Grid>
               </li>
+                            <li key={hit.objectID}>
+                            <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
+                              <Card hit={hit} handleDisplayProfile={handleDisplayProfile} />
+                            </Grid>
+                          </li>
+                                        <li key={hit.objectID}>
+                                        <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
+                                          <Card hit={hit} handleDisplayProfile={handleDisplayProfile} />
+                                        </Grid>
+                                      </li>
+                                                    <li key={hit.objectID}>
+                                                    <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
+                                                      <Card hit={hit} handleDisplayProfile={handleDisplayProfile} />
+                                                    </Grid>
+                                                  </li>
+                                                  </>
             );
           })}
-          <div id="algolia-sentinel"></div>
+          <div id="algolia-sentinel" className={classes.sentinel}></div>
 
           {!hideShowMore && (
             <li>
