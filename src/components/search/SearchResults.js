@@ -158,28 +158,12 @@ class SearchResults extends React.Component {
       <div className={classes.hitList}>
         <ul>
           {hitsResult.map((hit, i) => {
-            return (<>
+            return (
               <li key={hit.objectID}>
                 <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
                   <Card hit={hit} handleDisplayProfile={handleDisplayProfile} />
                 </Grid>
               </li>
-                            <li key={hit.objectID}>
-                            <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
-                              <Card hit={hit} handleDisplayProfile={handleDisplayProfile} />
-                            </Grid>
-                          </li>
-                                        <li key={hit.objectID}>
-                                        <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
-                                          <Card hit={hit} handleDisplayProfile={handleDisplayProfile} />
-                                        </Grid>
-                                      </li>
-                                                    <li key={hit.objectID}>
-                                                    <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
-                                                      <Card hit={hit} handleDisplayProfile={handleDisplayProfile} />
-                                                    </Grid>
-                                                  </li>
-                                                  </>
             );
           })}
           <div id="algolia-sentinel" className={classes.sentinel}></div>
