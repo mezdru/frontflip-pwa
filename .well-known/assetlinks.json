@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.wingzy.app",
+      "sha256_cert_fingerprints": [
+        "A3:7D:41:80:B3:85:E9:F3:B5:90:8C:86:39:19:6B:7C:14:80:AB:9E:65:06:C4:86:EA:BF:98:7A:BF:7A:5C:67"
+      ]
+    }
+  }
+]

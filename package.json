@@ -31,10 +31,15 @@
     "superagent-promise": "^1.1.0",
     "twemoji": "^11.3.0",
     "universal-cookie": "^3.0.7",
-    "uploadcare-widget": "^3.7.0"
+    "uploadcare-widget": "^3.7.0",
+    "compression": "^1.7.4",
+    "express": "^4.16.4",
+    "express-favicon": "^2.0.1",
+    "path": "^0.12.7"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node server.js",
+    "start-react": "react-scripts start",
     "build": "react-scripts build && workbox generateSW workbox.config.js",
     "build-prod": "npm version patch && react-scripts build && workbox generateSW workbox.config.js",
     "test": "react-scripts test",
