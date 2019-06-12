@@ -1,4 +1,4 @@
-import { observable, action, decorate } from "mobx";
+import {action, decorate, observable} from "mobx";
 import agent from '../agent';
 import commonStore from "./common.store";
 import userStore from "./user.store";
@@ -174,6 +174,23 @@ class AuthStore {
       }))
       .finally(action(() => { this.inProgress = false; }));
   }
+  
+   confirmationInvitation(invitationUrl) {
+     this.inProgress = true;
+     this.errors = null;
+     console.log('authstore ' + invitationUrl)
+     return agent.Email.confirmationInvitation(organisationStore.values.organisation._id, invitationUrl)
+       .then((data) => {
+         return data
+       })
+       .catch(action((err) => {
+         this.errors = err;
+         throw err;
+       }))
+       .finally(action(() => {
+         this.inProgress = false;
+       }));
+   }
 
   updatePassword(token, hash) {
     this.inProgress = true;

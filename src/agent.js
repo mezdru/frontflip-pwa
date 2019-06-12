@@ -258,7 +258,14 @@ const Email = {
   confirmIntegrationEmail: (integrationName) =>
     requests.post(
       API_ROOT + '/api/emails/security/integration/' + integrationName
-    )
+    ),
+  confirmationInvitation: (orgId, invitationUrl) =>
+    requests.post(
+      API_ROOT + '/api/emails/invitation/' + orgId + '/confirmation',
+      {
+        invitationUrl: invitationUrl
+      }
+    ),
 }
 
 const Invitation = {
