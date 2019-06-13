@@ -37,7 +37,8 @@ class PasswordForgot extends React.Component {
     super(props);
     this.state = {
       successPasswordReset: false,
-      emailError: null
+      emailError: null,
+      email: this.props.authStore.values.email
     }
   }
   
@@ -50,12 +51,14 @@ class PasswordForgot extends React.Component {
   }
   
   handleEmailChange = (e) => {
-    this.props.authStore.setEmail(e.target.value);
-    this.forceUpdate();
+    // this.props.authStore.setEmail(e.target.value);
+    // this.forceUpdate();
+    this.setState({email: e.target.value});
   };
   
   handleSubmitForm = (e) => {
     e.preventDefault();
+    this.props.authStore.setEmail(this.state.email);
     this.props.authStore.passwordForgot()
       .then(response => {
         this.setState({successPasswordReset: true});
@@ -66,7 +69,7 @@ class PasswordForgot extends React.Component {
   };
   
   render() {
-    const {successPasswordReset, emailError} = this.state;
+    const {successPasswordReset, emailError, email} = this.state;
     const {classes, intl} = this.props;
     const { values } = this.props.authStore;
 
@@ -98,7 +101,7 @@ class PasswordForgot extends React.Component {
                               variant={"outlined"}
                               fullWidth={true}
                               onChange={this.handleEmailChange}
-                              value={values.email}
+                              value={email}
                               required
                   />
                 </Grid>
