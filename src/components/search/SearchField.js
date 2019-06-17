@@ -18,7 +18,7 @@ class SearchField extends React.Component {
     super(props);
     this.state = {
       searchInput: '',
-      searchFilters: [],
+      searchFilters: this.props.commonStore.getSearchFilters() || [],
       observer: () => { }
     };
   }

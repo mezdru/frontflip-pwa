@@ -81,7 +81,7 @@ class AddWingPopup extends React.Component {
     SlackService.notify('#wingzy-events', 'QRCode - Search - '+
                                           (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '')+
                                           ' - by '+this.props.recordStore.values.record.name);
-    this.setState({open: false});
+    this.setState({open: false, redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag});
   }
 
   componentDidMount() {

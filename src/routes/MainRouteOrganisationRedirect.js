@@ -216,9 +216,9 @@ class MainRouteOrganisationRedirect extends React.Component {
     }
 
     if (renderComponent && isAuth) {
-      if (this.props.hashtagsFilter && this.props.match.params && this.props.match.params.action && (this.props.match.params.action === 'add' || this.props.match.params.action === 'filter')) {
-        return <Redirect to={'/' + locale + '/' + orgTag} />;
-      }
+      // if (this.props.hashtagsFilter && this.props.match.params && this.props.match.params.action && (this.props.match.params.action === 'add' || this.props.match.params.action === 'filter')) {
+      //   return <Redirect to={'/' + locale + '/' + orgTag} />;
+      // }
       return (
         <div>
           <Switch>
@@ -234,7 +234,7 @@ class MainRouteOrganisationRedirect extends React.Component {
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit" component={(props => { return <OnboardPage edit={true} {...props} /> })} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit/:recordId" component={(props => { return <OnboardPage edit={true} {...props} /> })} />
 
-            <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={SearchPage} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={SearchPage} />
 
             {/* useless route ? */}
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/:action?" component={SearchPage} />
