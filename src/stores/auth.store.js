@@ -1,4 +1,4 @@
-import {action, decorate, observable} from "mobx";
+import { action, decorate, observable } from "mobx";
 import agent from '../agent';
 import commonStore from "./common.store";
 import userStore from "./user.store";
@@ -47,7 +47,7 @@ class AuthStore {
   isAuth() {
     if (commonStore.getAccessToken() || commonStore.getRefreshToken()) {
       return true;
-    } else {  
+    } else {
       return false;
     }
   }
@@ -64,12 +64,12 @@ class AuthStore {
       .then((response) => {
         if (response && response.access_token) {
           commonStore.setAuthTokens(response);
-          if(response.integrationState && (response.integrationState.linkedin === 'true')) emailService.sendConfirmIntegrationEmail('LinkedIn').catch(e => console.error(e));
+          if (response.integrationState && (response.integrationState.linkedin === 'true')) emailService.sendConfirmIntegrationEmail('LinkedIn').catch(e => console.error(e));
           return userStore.getCurrentUser()
             .then(() => { return 200; })
-            .catch((err) => { console.log(err);})
+            .catch((err) => { console.log(err); })
         }
-        else{
+        else {
           return 403;
         }
       })
@@ -81,7 +81,7 @@ class AuthStore {
   }
 
   googleCallbackLogin() {
-    if(!this.values.temporaryToken) return Promise.reject();
+    if (!this.values.temporaryToken) return Promise.reject();
 
     this.inProgress = true;
     this.errors = null;
@@ -121,16 +121,16 @@ class AuthStore {
       })
       .catch((err) => {
         // any other response status than 20X is an error
-        if(this.values.invitationCode) {
+        if (this.values.invitationCode) {
           // try to login user
           return this.login(this.values.email, this.values.password)
-          .then(respLogin => {
-            return true;
-          }).catch((e) => {
-            // Send register error, not login error.
-            this.errors = err.response && err.response.body && err.response.body.errors;
-            throw err;
-          })
+            .then(respLogin => {
+              return true;
+            }).catch((e) => {
+              // Send register error, not login error.
+              this.errors = err.response && err.response.body && err.response.body.errors;
+              throw err;
+            })
         } else {
           this.errors = err.response && err.response.body && err.response.body.errors;
           throw err;
@@ -144,14 +144,14 @@ class AuthStore {
    * @param {access_token} needed.
    */
   registerToOrg() {
-    if(!organisationStore.values.organisation._id) return;
+    if (!organisationStore.values.organisation._id) return;
     this.inProgress = true;
     this.errors = null;
 
     return agent.Auth.registerToOrg(organisationStore.values.organisation._id, this.values.invitationCode)
       .then((data) => {
         return userStore.getCurrentUser()
-        .then(() => { return data; });      
+          .then(() => { return data; });
       })
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.errors;
@@ -174,23 +174,22 @@ class AuthStore {
       }))
       .finally(action(() => { this.inProgress = false; }));
   }
-  
-   confirmationInvitation(invitationUrl) {
-     this.inProgress = true;
-     this.errors = null;
-     console.log('authstore ' + invitationUrl)
-     return agent.Email.confirmationInvitation(organisationStore.values.organisation._id, invitationUrl)
-       .then((data) => {
-         return data
-       })
-       .catch(action((err) => {
-         this.errors = err;
-         throw err;
-       }))
-       .finally(action(() => {
-         this.inProgress = false;
-       }));
-   }
+
+  confirmationInvitation(invitationUrl) {
+    this.inProgress = true;
+    this.errors = null;
+    return agent.Email.confirmationInvitation(organisationStore.values.organisation._id, invitationUrl)
+      .then((data) => {
+        return data
+      })
+      .catch(action((err) => {
+        this.errors = err;
+        throw err;
+      }))
+      .finally(action(() => {
+        this.inProgress = false;
+      }));
+  }
 
   updatePassword(token, hash) {
     this.inProgress = true;
@@ -212,9 +211,9 @@ class AuthStore {
     this.inProgress = true;
     this.errors = null;
 
-    return agent.Invitation.getCode(orgId)
-      .then((data) => {
-        return data.invitationCode;
+    return agent.Invitation.createCode(orgId)
+      .then((response) => {
+        return response.data;
       })
       .catch((err) => {
         this.errors = err;
