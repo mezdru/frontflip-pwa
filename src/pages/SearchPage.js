@@ -12,6 +12,7 @@ import { styles } from './SearchPage.css';
 import ErrorBoundary from '../components/utils/errors/ErrorBoundary';
 import './SearchPageStyle.css';
 import SearchButton from '../components/search/SearchButton';
+import withSearchManagement from '../components/search/SearchManagement.hoc';
 
 const OnboardCongratulation = React.lazy(() => import('../components/onboard/steps/OnboardCongratulation'));
 const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
@@ -127,19 +128,15 @@ class SearchPage extends React.Component {
    * @description Handle URL search filters to make first search filters
    */
   handleUrlSearchFilters = () => {
-    let wings = this.props.commonStore.getCookie('hashtagsFilter');
-    this.props.commonStore.removeCookie('hashtagsFilter');
-    if (!wings) return;
+    if (!this.state.hashtagsFilter) return;
 
     let currentSearchFilters = this.props.commonStore.getSearchFilters();
-    let wingsArray = wings.split(',');
 
-    wingsArray.forEach(wing => {
+    this.state.hashtagsFilter.forEach(wing => {
       if (!currentSearchFilters.find((searchFilter => searchFilter.tag === '#' + wing))) {
-        currentSearchFilters.push({ tag: '#' + wing, value: '#' + wing, label: '#' + wing });
+        this.props.addFilter({ tag: '#' + wing, value: '#' + wing, label: '#' + wing, name: wing });
       }
     });
-    this.props.commonStore.setSearchFilters(currentSearchFilters);
   }
 
   /**
@@ -183,7 +180,6 @@ class SearchPage extends React.Component {
     const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter } = this.state;
     const { classes } = this.props;
     const { organisation } = this.props.organisationStore.values;
-
     return (
       <React.Fragment>
         {redirectTo && (window.location.pathname !== redirectTo) && <Redirect to={redirectTo} />}
@@ -267,6 +263,8 @@ class SearchPage extends React.Component {
     );
   }
 }
+
+SearchPage = withSearchManagement(SearchPage);
 
 export default inject('commonStore', 'organisationStore')(
   observer(
