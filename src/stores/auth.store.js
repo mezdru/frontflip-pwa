@@ -230,15 +230,6 @@ class AuthStore {
     return Promise.resolve();
   }
 
-  /**
-   * @description test call
-   */
-  getUser() {
-    return agent.Test.getUser()
-      .then((user) => {
-        return user;
-      });
-  }
 }
 
 decorate(AuthStore, {
