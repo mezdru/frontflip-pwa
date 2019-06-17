@@ -101,7 +101,7 @@ class Invitation extends React.Component {
     if (process.env.NODE_ENV === 'development') {
       return 'http://' + process.env.REACT_APP_HOST + '/' + locale + '/' + orgTag + '/signup/' + code;
     }
-    return 'https://' + orgTag + '.wingzy/' + locale + '/code/' + code
+    return 'https://' + orgTag + '.wingzy.com/' + locale + '/code/' + code
   }
 
   copyUrl = () => {
