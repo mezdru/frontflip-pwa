@@ -45,6 +45,10 @@ class CommonStore {
     }
   }
 
+  getSessionStorage = (name) => sessionStorage.getItem(name);
+  setSessionStorage = (name, value) => sessionStorage.setItem(name, value);
+  removeSessionStorage = (name) => sessionStorage.removeItem(name);
+
   getLocalStorage(name, isObject) {
     if(isObject) return JSON.parse(localStorage.getItem(name));
     else return localStorage.getItem(name);
@@ -150,7 +154,10 @@ decorate(CommonStore, {
   removeCookie: action,
   removeAuthTokens: action,
   setSearchFilters: action,
-  getSearchFilters: action
+  getSearchFilters: action,
+  setSessionStorage: action,
+  getSessionStorage: action,
+  removeSessionStorage: action
 });
 
 export default new CommonStore();
