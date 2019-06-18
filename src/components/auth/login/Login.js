@@ -33,7 +33,7 @@ class Login extends React.Component {
         {id: 'signin.error.integration.notFound'}, 
         {
           integrationName: integrationName,
-          signupLink: '/' + this.props.commonStore.locale + '/' + (this.props.organisationStore.values.organisation && this.props.organisationStore.values.organisation.tag ? this.props.organisationStore.values.organisation.tag + '/' : '') + 'signup' 
+          signupLink: this.props.getDefaultRedirectPath() + '/signup' 
         }
       )});
     }
@@ -49,7 +49,7 @@ class Login extends React.Component {
   };
 
   signinSuccessRedirect = () => {
-    let defaultRedirect = '/' + this.props.commonStore.locale + (this.props.organisationStore.values.orgTag ? '/' + this.props.organisationStore.values.orgTag : '');
+    let defaultRedirect = this.props.getDefaultRedirectPath();
     let wantedRedirect = this.props.commonStore.getSessionStorage('signinSuccessRedirect');
     if(wantedRedirect) this.props.commonStore.removeSessionStorage('signinSuccessRedirect');
     this.setState({ redirectTo: wantedRedirect || defaultRedirect });

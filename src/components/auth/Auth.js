@@ -70,7 +70,7 @@ class Auth extends React.Component {
           ReactGA.event({category: 'User',action: 'Login with Google'});
           if (integrationState && integrationState.invitationCode) this.props.authStore.setInvitationCode(integrationState.invitationCode);
           if(user.superadmin){
-            this.setState({redirectTo: '/' + this.props.commonStore.locale + (this.props.organisationStore.values.organisation.tag ? '/'+this.props.organisationStore.values.organisation.tag : '')});
+            this.setState({redirectTo: this.getDefaultRedirectPath()});
             return;
           }
           this.props.authStore.registerToOrg()
@@ -80,15 +80,15 @@ class Auth extends React.Component {
             if (currentOrgAndRecord) this.props.recordStore.setRecordId(currentOrgAndRecord.record);
 
             this.props.recordStore.getRecord()
-              .then(() => this.signinSuccessRedirect(organisation))
-              .catch(() => this.setState({redirectTo: '/' + this.props.commonStore.locale + '/' + organisation.tag + '/onboard'}));
-          }).catch((err) => this.setState({redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag}));
+              .then(() => this.signinSuccessRedirect())
+              .catch(() => this.setState({redirectTo: this.getDefaultRedirectPath() + '/onboard'}));
+          }).catch((err) => this.setState({redirectTo: this.getDefaultRedirectPath()}));
         }).catch((err) => this.setState({redirectTo: '/' + this.props.commonStore.locale}));
     }).catch((err) => { return;});
   }
 
-  signinSuccessRedirect = (organisation) => {
-    let defaultRedirect = '/' + this.props.commonStore.locale + '/' + organisation.tag;
+  signinSuccessRedirect = () => {
+    let defaultRedirect = this.getDefaultRedirectPath();
     let wantedRedirect = this.props.commonStore.getSessionStorage('signinSuccessRedirect');
     if(wantedRedirect) this.props.commonStore.removeSessionStorage('signinSuccessRedirect');
     this.setState({ redirectTo: wantedRedirect || defaultRedirect });
@@ -103,6 +103,12 @@ class Auth extends React.Component {
     this.props.authStore.setTemporaryToken(query.token);
     if(query.state.success === 'false') return Promise.reject('Auth failed');
     return this.props.authStore.googleCallbackLogin();
+  }
+
+  getDefaultRedirectPath = () => {
+    let orgTag = this.props.organisationStore.values.orgTag;
+    let organisation = this.props.organisationStore.values.organisation;
+    return '/' + this.props.commonStore.locale + '/' + orgTag || (organisation ? organisation.tag : '');
   }
 
   handleChange = (event, value) => {
@@ -141,7 +147,7 @@ class Auth extends React.Component {
             index={this.state.value}
             onChangeIndex={this.handleChangeIndex}
           >
-            <Login authState={authState} />
+            <Login authState={authState} getDefaultRedirectPath={this.getDefaultRedirectPath} />
             <Register  />
           </SwipeableViews>
         </Grid>
