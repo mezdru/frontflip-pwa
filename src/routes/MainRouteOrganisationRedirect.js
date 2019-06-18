@@ -202,7 +202,6 @@ class MainRouteOrganisationRedirect extends React.Component {
         await this.redirectUserAuthWithAccess(organisation, false).catch(() => { return; });
       } else {
         // no auth
-        console.log(window.location.pathname)
         if(!this.props.commonStore.getSessionStorage('signinSuccessRedirect')) this.handleSigninRedirect();
       }
     } else if (this.props.authStore.isAuth()) {
