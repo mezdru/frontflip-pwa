@@ -122,7 +122,12 @@ class Invitation extends React.Component {
     if(orgId)
       this.props.authStore.getInvitationCode(orgId)
       .then(invitationCode => {
-           return this.setState({invitationCode: invitationCode.code}, () => resolve());
+        if(invitationCode)
+          return this.setState({invitationCode: invitationCode.code}, () => resolve());
+        else {
+          this.setState({errorMessage: this.props.intl.formatMessage({ id: 'invitation.get.error' })});
+          reject();
+        }
       }).catch(e => {
         console.error(e);
         this.setState({errorMessage: this.props.intl.formatMessage({ id: 'invitation.get.error' })})

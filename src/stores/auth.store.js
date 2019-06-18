@@ -211,9 +211,9 @@ class AuthStore {
     this.inProgress = true;
     this.errors = null;
 
-    return agent.Invitation.getCode(orgId)
-      .then((data) => {
-        return data.invitationCode;
+    return agent.Invitation.createCode(orgId)
+      .then((response) => {
+        return response.data;
       })
       .catch((err) => {
         this.errors = err;
@@ -230,15 +230,6 @@ class AuthStore {
     return Promise.resolve();
   }
 
-  /**
-   * @description test call
-   */
-  getUser() {
-    return agent.Test.getUser()
-      .then((user) => {
-        return user;
-      });
-  }
 }
 
 decorate(AuthStore, {

@@ -269,11 +269,14 @@ const Email = {
 }
 
 const Invitation = {
-  getCode: (orgId) =>
+  createCode: (orgId, userId) =>
     requests.post(
-      API_ROOT_AUTH + '/api/invitation/code',
+      API_ROOT_AUTH + '/api/invitationCodes',
       {
-        orgId: orgId
+        invitationCode: {
+          organisation: orgId,
+          creator: userId
+        }
       }
     )
 }
