@@ -20,7 +20,7 @@ import { virtualize, bindKeyboard } from 'react-swipeable-views-utils';
 import {FormattedMessage} from "react-intl";
 import classNames from 'classnames';
 
-const VirtualizeSwipeableViews = bindKeyboard(virtualize(SwipeableViews));
+const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
 let timeoutArray = [];
 
