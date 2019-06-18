@@ -97,6 +97,12 @@ class MainRouteOrganisationRedirect extends React.Component {
     }
   }
 
+  componentDidUpdate() {
+    if (this.state.redirectTo === window.location.pathname) {
+      this.setState({ redirectTo: null });
+    }
+  }
+
   /**
    * @description Redirect user who is auth but hasn't access to current organisation
    */
@@ -160,6 +166,10 @@ class MainRouteOrganisationRedirect extends React.Component {
     }
   }
 
+  handleSigninRedirect = () => {
+    this.props.commonStore.setSessionStorage('signinSuccessRedirect', window.location.pathname);
+  }
+
   /**
    * @description Manage access right of the user and redirect him if needed.
    */
@@ -190,6 +200,10 @@ class MainRouteOrganisationRedirect extends React.Component {
             return;
           });
         await this.redirectUserAuthWithAccess(organisation, false).catch(() => { return; });
+      } else {
+        // no auth
+        console.log(window.location.pathname)
+        if(!this.props.commonStore.getSessionStorage('signinSuccessRedirect')) this.handleSigninRedirect();
       }
     } else if (this.props.authStore.isAuth()) {
       await this.redirectUserAuthWithoutAccess();
@@ -200,25 +214,17 @@ class MainRouteOrganisationRedirect extends React.Component {
     return new Promise((r, j) => setTimeout(r, ms));
   }
 
-  resetRedirectTo() {
-    this.setState({ redirectTo: null });
-  }
   render() {
-    const { redirectTo, renderComponent, routesError, errorCode } = this.state;
+    const { redirectTo, renderComponent } = this.state;
     const { locale } = this.props.commonStore;
     const { orgTag, organisation } = this.props.organisationStore.values;
     let isAuth = this.props.authStore.isAuth();
-    if (redirectTo) {
-      this.resetRedirectTo();
-      if (window.location.pathname !== redirectTo) {
-        return (<Redirect to={redirectTo} />);
-      }
+
+    if (redirectTo && window.location.pathname !== redirectTo) {
+      return (<Redirect to={redirectTo} />);
     }
 
     if (renderComponent && isAuth) {
-      // if (this.props.hashtagsFilter && this.props.match.params && this.props.match.params.action && (this.props.match.params.action === 'add' || this.props.match.params.action === 'filter')) {
-      //   return <Redirect to={'/' + locale + '/' + orgTag} />;
-      // }
       return (
         <div>
           <Switch>

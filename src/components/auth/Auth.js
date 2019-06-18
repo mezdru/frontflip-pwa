@@ -60,15 +60,15 @@ class Auth extends React.Component {
     ReactGA.pageview(window.location.pathname);
     if (this.props.authStore.values.invitationCode) this.setState({ value: 1 });
 
-    // HANDLE GOOGLE AUTH CALLBACK
-    this.handleGoogleCallback(this.state.queryParams)
+    // HANDLE INTEGRATION AUTH CALLBACK
+    this.handleIntegrationCallback(this.state.queryParams)
     .then(() => {
-      let googleState = (this.state.queryParams.state ? JSON.parse(this.state.queryParams.state) : null);
-      if(googleState.integrationState && (googleState.integrationState.linkedin === 'true')) emailService.sendConfirmIntegrationEmail('LinkedIn').catch(e => console.error(e));
+      let integrationState = (this.state.queryParams.state ? JSON.parse(this.state.queryParams.state) : null);
+      if(integrationState.integrationState && (integrationState.integrationState.linkedin === 'true')) emailService.sendConfirmIntegrationEmail('LinkedIn').catch(e => console.error(e));
       this.props.userStore.getCurrentUser()
         .then((user) => {
           ReactGA.event({category: 'User',action: 'Login with Google'});
-          if (googleState && googleState.invitationCode) this.props.authStore.setInvitationCode(googleState.invitationCode);
+          if (integrationState && integrationState.invitationCode) this.props.authStore.setInvitationCode(integrationState.invitationCode);
           if(user.superadmin){
             this.setState({redirectTo: '/' + this.props.commonStore.locale + (this.props.organisationStore.values.organisation.tag ? '/'+this.props.organisationStore.values.organisation.tag : '')});
             return;
@@ -78,20 +78,27 @@ class Auth extends React.Component {
             let organisation = data.organisation;
             let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
             if (currentOrgAndRecord) this.props.recordStore.setRecordId(currentOrgAndRecord.record);
+
             this.props.recordStore.getRecord()
-              .then(() => this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag }))
-              .catch(() => window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/onboard/welcome', organisation.tag));
+              .then(() => this.signinSuccessRedirect(organisation))
+              .catch(() => this.setState({redirectTo: '/' + this.props.commonStore.locale + '/' + organisation.tag + '/onboard'}));
           }).catch((err) => this.setState({redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag}));
         }).catch((err) => this.setState({redirectTo: '/' + this.props.commonStore.locale}));
     }).catch((err) => { return;});
+  }
 
+  signinSuccessRedirect = (organisation) => {
+    let defaultRedirect = '/' + this.props.commonStore.locale + '/' + organisation.tag;
+    let wantedRedirect = this.props.commonStore.getSessionStorage('signinSuccessRedirect');
+    if(wantedRedirect) this.props.commonStore.removeSessionStorage('signinSuccessRedirect');
+    this.setState({ redirectTo: wantedRedirect || defaultRedirect });
   }
 
   componentWillUnmount() {
     this.state.observer();
   }
 
-  handleGoogleCallback = async (query) => {
+  handleIntegrationCallback = async (query) => {
     if(!query || !query.token) return Promise.reject('No token');
     this.props.authStore.setTemporaryToken(query.token);
     if(query.state.success === 'false') return Promise.reject('Auth failed');
