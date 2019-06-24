@@ -57,7 +57,7 @@ class SuggestionsService {
   }
 
   fetchWingsFamily = (wingsFamily) => {
-    return AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:' + wingsFamily, null, null, null)
+    return AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:' + wingsFamily, null, null, null, null, 100)
       .then(content => {
         if (content) {
           this._currentSuggestions = content.hits;
