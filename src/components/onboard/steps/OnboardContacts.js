@@ -6,6 +6,7 @@ import {withStyles, Grid, TextField, InputAdornment, IconButton, Typography} fro
 import {Clear} from '@material-ui/icons';
 import AddContactField from '../../utils/fields/AddContactField';
 import ProfileService from "../../../services/profile.service";
+import '../../../resources/stylesheets/font-awesome.min.css';
 
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
@@ -82,7 +83,7 @@ class OnboardContacts extends React.Component {
     switch (type) {
       case 'email':
         return type = 'email';
-      case 'phone':
+      case 'phone': case 'landline':
         return type = 'tel';
       default:
         return type = 'text';

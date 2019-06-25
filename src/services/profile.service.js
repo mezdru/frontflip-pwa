@@ -55,6 +55,9 @@ class ProfileService {
       case 'workchat':
         link.icon = 'comment';
         break;
+      case 'landline':
+        link.icon = 'phone';
+        break;
       default:
         link.icon = link.type;
         break;
@@ -72,7 +75,7 @@ class ProfileService {
         case 'email':
           link.url = 'mailto:' + link.value;
           break;
-        case 'phone':
+        case 'phone': case 'landline':
           link.url = 'tel:' + link.value;
           break;
         case 'home':
