@@ -56,7 +56,7 @@ class ProfileService {
         link.icon = 'comment';
         break;
       case 'landline':
-        link.icon = 'phone';
+        link.icon = 'phone-square';
         break;
       default:
         link.icon = link.type;

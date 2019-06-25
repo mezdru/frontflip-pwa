@@ -81,7 +81,7 @@ class AddContactField extends React.Component {
       case 'workchat':
         return name = 'comment';
       case 'landline':
-        return name = 'phone';
+        return name = 'phone-square';
       default:
         return name
     }
