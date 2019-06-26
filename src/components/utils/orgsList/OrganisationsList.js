@@ -3,6 +3,9 @@ import { withStyles, ListItem, List } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import Logo from '../logo/Logo';
 import { Link } from 'react-router-dom';
+
+const Entities = require('html-entities').XmlEntities;
+const entities = new Entities();
 const defaultLogo = 'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg';
 
 const style = theme => ({
@@ -62,8 +65,8 @@ class OrganisationsList extends React.Component {
           if (org && (org.tag !== orgTag)) {
             return (
               <ListItem button component={Link} to={'/' + locale + '/' + org.tag} key={org._id} className={classes.orgItem}>
-                <Logo type={'smallOrg'} alt={org.name} src={ (org.logo ? org.logo.url : null) || defaultLogo} className={classes.itemLogo} />
-                <div className={classes.itemName} >{org.name}</div>
+                <Logo type={'smallOrg'} alt={entities.decode(org.name)} src={ (org.logo ? org.logo.url : null) || defaultLogo} className={classes.itemLogo} />
+                <div className={classes.itemName} >{entities.decode(org.name)}</div>
               </ListItem>
             );
           }else {return null; }
