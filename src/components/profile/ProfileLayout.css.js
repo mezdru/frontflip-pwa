@@ -91,11 +91,12 @@ export const styles = theme => ({
     transform: 'translateY(-100%)',
   },
   contactIcon: {
-    marginRight: 16,
+    marginRight: 8,
     position: 'relative',
     textAlign: 'center',
-    width: 24,
-    fontSize: 'x-large!important'
+    width: 40,
+    fontSize: 'x-large!important',
+    display: 'inline-block',
   },
   returnButton: {
     position: 'absolute',

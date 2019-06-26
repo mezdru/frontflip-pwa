@@ -76,7 +76,12 @@ class OnboardContacts extends React.Component {
   }
 
   getLinkByType = (typeWanted) => {
-    return (this.props.recordStore.values.record.links.find(link => link.type === typeWanted));
+    try{
+      return (this.props.recordStore.values.record.links.find(link => link.type === typeWanted));
+    }catch(e) {
+      console.log(e);
+      return null;
+    }
   }
   
   setTypeInput = (type) => {
