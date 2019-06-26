@@ -154,7 +154,8 @@ class MainRouteOrganisationRedirect extends React.Component {
     let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
     if ((!currentOrgAndRecord && !this.props.userStore.values.currentUser.superadmin) || (currentOrgAndRecord && !currentOrgAndRecord.welcomed)) {
       // user need to onboard in organisation
-      this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + organisation.tag + '/onboard' });
+      let onboardStep = ( this.props.match.params && this.props.match.params.step ? '/' + this.props.match.params.step : '' );
+      this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + organisation.tag + '/onboard' + onboardStep  });
     } else if (currentOrgAndRecord) {
       this.props.recordStore.setRecordId(currentOrgAndRecord.record);
       await this.props.recordStore.getRecord()

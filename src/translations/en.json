@@ -64,6 +64,7 @@
   "profile.updateCover": "Change cover",
   "profile.editContacts": "Edit contact info",
   "errorPage.emailNotValidated": "Your email address isn't validated yet. We just sent you an email at <strong>{email}</strong> to confirm your address, check your inbox...",
+  "errorPage.emailNotValidated.title": "Validate your email address",
   "errorPage.organisationNotFound": "We don't know the organisation (<strong>{orgTag}</strong>) you are looking for. <a href='{newOrgLink}'>Click here to create the Wingzy of {orgTag}</a>",
   "errorPage.unhandledError": "An unexpected error happened. Contact us if the problem persists.",
   "search.showMore": "Show more",
