@@ -147,7 +147,6 @@ class Register extends React.Component {
                 label="Email"
                 type="email"
                 autoComplete="email"
-                variant={"outlined"}
                 fullWidth
                 value={values.email}
                 onChange={this.handleEmailChange}
@@ -159,7 +158,6 @@ class Register extends React.Component {
                 label={intl.formatMessage({ id: 'Password' })}
                 type="password"
                 autoComplete="current-password"
-                variant={"outlined"}
                 fullWidth
                 value={values.password}
                 onChange={this.handlePasswordChange}
