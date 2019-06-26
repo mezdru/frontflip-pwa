@@ -78,7 +78,7 @@ class OnboardFirstWings extends React.Component {
     return style;
   }
 
-  shouldDisplaySuggestion = (tag) => (!this.props.recordStore.values.record.hashtags.some(hashtag => hashtag.tag === tag));
+  shouldDisplaySuggestion = (tag) => (this.props.recordStore.values.record.hashtags && !this.props.recordStore.values.record.hashtags.some(hashtag => hashtag.tag === tag));
 
   scrollRight = () => {
     interval = window.setInterval(function() {

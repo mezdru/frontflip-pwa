@@ -33,7 +33,7 @@ const styles = theme => ({
   },
   text: {
     margin: 0,
-    padding:0,
+    padding: 0,
     paddingTop: 16,
     textAlign: 'center'
   },
@@ -47,7 +47,7 @@ const styles = theme => ({
     marginTop: -8,
     marginBottom: -8,
     textAlign: 'center',
-    [theme.breakpoints.down('sm')] : {
+    [theme.breakpoints.down('sm')]: {
       fontSize: '4.8rem',
     },
     [theme.breakpoints.down('xs')]: {
@@ -74,15 +74,15 @@ class AddWingPopup extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    this.setState({open: nextProps.isOpen})
+    this.setState({ open: nextProps.isOpen })
   }
 
   handleClose = () => {
-    ReactGA.event({category: 'User', action: 'QRCode - Search'});
-    SlackService.notify('#wingzy-events', 'QRCode - Search - '+
-                                          (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '')+
-                                          ' - by '+this.props.recordStore.values.record.name);
-    this.setState({open: false, redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag});
+    ReactGA.event({ category: 'User', action: 'QRCode - Search' });
+    if(process.env.NODE_ENV === 'production') SlackService.notify('#wingzy-events', 'QRCode - Search - ' +
+      (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '') +
+      ' - by ' + this.props.recordStore.values.record.name);
+    this.setState({ open: false, redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag });
   }
 
   componentDidMount() {
@@ -92,23 +92,23 @@ class AddWingPopup extends React.Component {
   populateWingsToAdd = async () => {
     let wingsPopulated = [];
     let orgId = this.props.organisationStore.values.organisation._id ||
-                this.props.organisationStore.values.orgId;
+      this.props.organisationStore.values.orgId;
 
     this.props.recordStore.setOrgId(orgId);
 
     await this.asyncForEach(this.props.wingsToAdd, async (wing) => {
-        this.props.recordStore.setRecordTag('#' + wing);
-        await this.props.recordStore.getRecordByTag()
+      this.props.recordStore.setRecordTag('#' + wing);
+      await this.props.recordStore.getRecordByTag()
         .then((hashtagToAdd => {
           wingsPopulated.push(hashtagToAdd);
-        })).catch(e => {console.log(e)});
+        })).catch(e => { console.log(e) });
     });
 
-    this.setState({wingsPopulated: wingsPopulated, onLoad: false});
+    this.setState({ wingsPopulated: wingsPopulated, onLoad: false });
   }
 
   recordHasHashtag = (tag) => {
-    let resp =  (this.props.recordStore.values.record.hashtags.find(hashtag => hashtag.tag === tag) ? true: false);
+    let resp = (this.props.recordStore.values.record.hashtags.find(hashtag => hashtag.tag === tag) ? true : false);
     return resp;
   }
 
@@ -119,26 +119,29 @@ class AddWingPopup extends React.Component {
   }
 
   handleAddWing = async () => {
-    ReactGA.event({category: 'User', action: 'QRCode - Add Wings'});
-    SlackService.notify('#wingzy-events', 'QRCode - Add Wings - '+
-                                          (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '')+
-                                          ' - by '+this.props.recordStore.values.record.name);    let record = this.props.recordStore.values.record;
+    ReactGA.event({ category: 'User', action: 'QRCode - Add Wings' });
+    if(process.env.NODE_ENV === 'production') SlackService.notify('#wingzy-events', 'QRCode - Add Wings - ' +
+      (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '') +
+      ' - by ' + this.props.recordStore.values.record.name);
+
+    let record = this.props.recordStore.values.record;
     let wingsToAdd = [];
     this.state.wingsPopulated.forEach(wing => {
-      if(!this.recordHasHashtag(wing.tag)) {
+      if (!this.recordHasHashtag(wing.tag)) {
         wingsToAdd.push(wing);
       }
     })
     record.hashtags = record.hashtags.concat(wingsToAdd);
     await this.props.recordStore.updateRecord(['hashtags']);
-    this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag + '/' + this.props.recordStore.values.record.tag });
+    this.props.handleDisplayProfile(null, record);
+    this.setState({open: false});
   }
 
   render() {
-    const {redirectTo, wingsPopulated, onLoad} = this.state;
-    const {classes} = this.props;
-    const {organisation} = this.props.organisationStore.values;
-    const {locale} = this.props.commonStore;
+    const { redirectTo, wingsPopulated, onLoad } = this.state;
+    const { classes } = this.props;
+    const { organisation } = this.props.organisationStore.values;
+    const { locale } = this.props.commonStore;
 
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
 
@@ -155,28 +158,28 @@ class AddWingPopup extends React.Component {
           aria-labelledby="alert-dialog-slide-title"
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogContent style={{overflow: 'hidden', padding: 16}} >
+          <DialogContent style={{ overflow: 'hidden', padding: 16 }} >
             <Typography variant="h1" className={classes.title}>
               <FormattedMessage id="onboard.end.title" />
               <Hidden xsDown>
-                <img src={ProfileService.getEmojiUrl('🎉')} alt="congratulation" className={classes.titleEmoji}/>
+                <img src={ProfileService.getEmojiUrl('🎉')} alt="congratulation" className={classes.titleEmoji} />
               </Hidden>
             </Typography>
             <DialogContentText id="alert-dialog-slide-description" className={classes.content}>
               <Typography variant="h6" className={classes.text}>
-                <FormattedMessage id="action.addWings.text" values={{wingsCount: wingsPopulated.length}} />
-                <br/>
+                <FormattedMessage id="action.addWings.text" values={{ wingsCount: wingsPopulated.length }} />
+                <br />
                 <div className={classes.wingsList}>
                   {onLoad && (
                     <CircularProgress color='secondary' />
                   )}
 
-                  {!onLoad && wingsPopulated.map( (wing, i) => {
+                  {!onLoad && wingsPopulated.map((wing, i) => {
                     let displayedName = (wing.name_translated ? (wing.name_translated[locale] || wing.name_translated['en-UK']) || wing.name || wing.tag : wing.name || wing.tag)
-                    return(
-                    <Wings src={ProfileService.getPicturePath(wing.picture)} key={i}
-                      label={ProfileService.htmlDecode(displayedName)}
-                      className={'bigWing'}
+                    return (
+                      <Wings src={ProfileService.getPicturePath(wing.picture)} key={i}
+                        label={ProfileService.htmlDecode(displayedName)}
+                        className={'bigWing'}
                       />);
                   })}
                 </div>
@@ -185,15 +188,15 @@ class AddWingPopup extends React.Component {
           </DialogContent>
           <DialogActions className={classes.actions}>
             <Button onClick={this.handleAddWing} color="secondary" variant="contained" size="medium" className={classes.buttons} >
-                <Add />
-                <FormattedMessage id="action.addWings.add" />
+              <Add />
+              <FormattedMessage id="action.addWings.add" />
             </Button>
             <Hidden smUp>
-                <br/><br/>
+              <br /><br />
             </Hidden>
-            <Button onClick={this.handleClose} color="secondary" variant="contained"  size="medium" className={classes.buttons}  >
-                <Search />
-                <FormattedMessage id="action.addWings.search" values={{organisationName: organisation.name}}/>
+            <Button onClick={this.handleClose} color="secondary" variant="contained" size="medium" className={classes.buttons}  >
+              <Search />
+              <FormattedMessage id="action.addWings.search" values={{ organisationName: organisation.name }} />
             </Button>
           </DialogActions>
         </Dialog>

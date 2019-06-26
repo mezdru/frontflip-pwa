@@ -8,6 +8,9 @@ import Header from '../../components/header/Header';
 import Logo from '../../components/utils/logo/Logo';
 import UrlService from '../../services/url.service';
 
+const Entities = require('html-entities').XmlEntities;
+const entities = new Entities();
+
 const styles = (theme) => ({
   logo: {
     width: 110,
@@ -99,7 +102,7 @@ class OnboardWelcome extends React.Component {
         <Banner />
         <Hidden smDown>
           <div className={classes.banner}>
-            <Typography variant="h2" ><FormattedMessage id={'onboard.welcome'}/> {organisation.name}</Typography>
+            <Typography variant="h2" ><FormattedMessage id={'onboard.welcome'}/> {entities.decode(organisation.name)}</Typography>
           </div>
         </Hidden>
       </Grid>
@@ -110,10 +113,10 @@ class OnboardWelcome extends React.Component {
         <form onSubmit={this.handleSubmitForm} className={classes.form}>
           <Grid item container direction={'column'} xs={12} sm={6} lg={4} spacing={16}>
             <Hidden mdUp>
-            <Typography variant="h2" style={{textAlign: 'center'}} ><FormattedMessage id={'onboard.welcome'}/> {organisation.name}</Typography>
+            <Typography variant="h2" style={{textAlign: 'center'}} ><FormattedMessage id={'onboard.welcome'}/> {entities.decode(organisation.name)}</Typography>
             </Hidden>
             <Grid item>
-              <FormattedHTMLMessage id="onboard.welcome.text" values={{organisationName: organisation.name}} />
+              <FormattedHTMLMessage id="onboard.welcome.text" values={{organisationName: entities.decode(organisation.name)}} />
             </Grid>
             <Grid item>
               <Button onClick={this.props.handleEnterToOnboard} fullWidth color="secondary" ><FormattedMessage id={'onboard.start'}/></Button>

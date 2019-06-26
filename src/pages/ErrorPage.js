@@ -11,13 +11,20 @@ console.debug('Loading ErrorPage');
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
-const styles = theme =>  ({
+const styles = theme => ({
   layout: {
     height: 'calc(100vh - 72px)',
     flexGrow: 1
   },
   title: {
-    fontSize: '4rem'
+    fontSize: '4rem',
+  },
+  titleEmail: {
+    fontSize: '3rem',
+    textAlign: 'center',
+  },
+  subtitleEmail: {
+    textAlign: 'center'
   },
   subLayout: {
     height: 'auto'
@@ -36,16 +43,16 @@ class ErrorPage extends React.Component {
 
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
-    if(this.props.match && this.props.match.params) {
-      this.setState({errorCode: this.props.match.params.errorCode, errorType: this.props.match.params.errorType});
+    if (this.props.match && this.props.match.params) {
+      this.setState({ errorCode: this.props.match.params.errorCode, errorType: this.props.match.params.errorType });
     }
   }
 
   render() {
-    const {classes} = this.props;
-    const { errorCode, errorType} = this.state;
-    const {currentUser} = this.props.userStore.values;
-    const { orgTag} = this.props.organisationStore.values;
+    const { classes } = this.props;
+    const { errorCode, errorType } = this.state;
+    const { currentUser } = this.props.userStore.values;
+    const { orgTag } = this.props.organisationStore.values;
 
     return (
       <div>
@@ -62,27 +69,39 @@ class ErrorPage extends React.Component {
                 justify={'center'}
               >
                 <Grid item>
-                  <img className={classes.bigPicture} src={ProfileService.getEmojiUrl('🧰')} alt="bigPicture" />
-                </Grid>
-                <Grid item>
-                  <Typography variant={'h1'} className={classes.title}>{errorCode} Oops</Typography>
+                  {errorType === 'email' && (
+                    <img className={classes.bigPicture} src={ProfileService.getEmojiUrl('📧')} alt="bigPicture" />
+                  )}
+                  {errorType !== 'email' && (
+                    <img className={classes.bigPicture} src={ProfileService.getEmojiUrl('🧰')} alt="bigPicture" />
+                  )}
                 </Grid>
                 <Grid item>
                   {errorType === 'email' && (
-                    <Typography variant={'subheading'}>
-                      <FormattedHTMLMessage id="errorPage.emailNotValidated" values={{email: currentUser.email.value}} />
+                    <Typography variant={'h1'} className={classes.titleEmail}>
+                      <FormattedHTMLMessage id="errorPage.emailNotValidated.title" />
+                    </Typography>
+                  )}
+                  {errorType !== 'email' && (
+                    <Typography variant={'h1'} className={classes.title}>{errorCode} Oops</Typography>
+                  )}
+                </Grid>
+                <Grid item>
+                  {errorType === 'email' && (
+                    <Typography variant={'subheading'} className={classes.subtitleEmail}>
+                      <FormattedHTMLMessage id="errorPage.emailNotValidated" values={{ email: currentUser.email.value }} />
                     </Typography>
                   )}
                   {(errorType === 'organisation' && errorCode === '404') && (
                     <Typography variant={'subheading'}>
-                      <FormattedHTMLMessage id="errorPage.organisationNotFound" values={{newOrgLink: UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', null, null), orgTag: orgTag}} />
+                      <FormattedHTMLMessage id="errorPage.organisationNotFound" values={{ newOrgLink: UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', null, null), orgTag: orgTag }} />
                     </Typography>
                   )}
                   {(errorCode === '500' && errorType === 'routes') && (
                     <Typography variant={'subheading'}>
                       <FormattedHTMLMessage id="errorPage.unhandledError" />
                     </Typography>
-                    )}
+                  )}
                 </Grid>
               </Grid>
             </Grid>
@@ -95,6 +114,6 @@ class ErrorPage extends React.Component {
 
 export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore')(
   observer(
-    withStyles(styles, {withTheme: true})(ErrorPage)
+    withStyles(styles, { withTheme: true })(ErrorPage)
   )
 );
