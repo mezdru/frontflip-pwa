@@ -102,7 +102,7 @@ class Auth extends React.Component {
     if(!query || !query.token) return Promise.reject('No token');
     this.props.authStore.setTemporaryToken(query.token);
     if(query.state.success === 'false') return Promise.reject('Auth failed');
-    return this.props.authStore.integrationCallbackLogin();
+    return this.props.authStore.googleCallbackLogin();
   }
 
   getDefaultRedirectPath = () => {
