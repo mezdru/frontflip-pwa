@@ -1,7 +1,6 @@
-import { Grid, Typography, Hidden } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import React, {Suspense} from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Logo from '../utils/logo/Logo';
 import Header from '../header/Header';
 import BannerResizable from '../utils/banner/BannerResizable';
 
@@ -16,8 +15,10 @@ const styles = (theme) => ({
     height: '100%',
   },
   authContainer: {
+    maxWidth: 500,
     backgroundColor: 'white',
     borderRadius: 5,
+    padding: 8,
     zIndex: 2,
     margin: 16,
     minHeight: '50%',
@@ -31,30 +32,6 @@ const styles = (theme) => ({
       width: 'calc(100vw - 32px)'
     }
   },
-  logo: {
-    position: 'relative',
-    left: 0,
-    right: 0,
-    margin: 'auto',
-    marginBottom: 16,
-    width: '7rem',
-    height: '7rem',
-    boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
-    // bottom: '3.2rem',
-    // marginBottom: '-7rem',
-    // zIndex: 2,
-    border: '4px solid white'
-  },
-  orgPart: {
-    position: 'relative',
-    backgroundImage: 'linear-gradient(to bottom, #2b2d3c, #292a38, #262733, #24242f, #21212b)',
-    padding: 16,
-  },
-  orgPartTitle: {
-    color: 'white',
-    width: '100%',
-    textAlign: 'center',
-  },
   shadowedBackground: {
     position: 'absolute',
     width: '100%',
@@ -64,13 +41,7 @@ const styles = (theme) => ({
     background: 'rgb(0,0,0)',
     opacity: .3,
   },
-  logoCross: {
-    position: 'absolute',
-    color: 'white',
-    right: 0,
-    top: '50%',
-    transform: 'translateY(-50%) translateX(50%)',
-  }
+
 });
 
 class Auth extends React.Component {
@@ -94,24 +65,8 @@ class Auth extends React.Component {
 
 
           <Grid container direction={"row"} justify="center" alignItems="center" className={classes.rootContainer} >
-            <Grid container item xs={12} md={8} lg={8} xl={6} className={classes.authContainer}>
-              <Grid item container md={6} xs={0} className={classes.orgPart} alignItems={"center"} justify={"center"} alignContent={"center"}>
-                <Grid item xs={12} container direction={"row"} >
-
-                  <Hidden smDown>
-                    <Grid item md={12}>
-                      <Logo type={'organisation'} alt="org-logo" className={classes.logo} />
-                    </Grid>
-                  </Hidden>
-
-                  <Typography variant="h2" className={classes.orgPartTitle}>Welcome to Wingzy</Typography>
-                </Grid>
-
-              </Grid>
-
-              <Grid item xs={12} md={6} style={{padding: 8}}>
-                {this.props.children}
-              </Grid>
+            <Grid container item xs={12} className={classes.authContainer}>
+              {this.props.children}
             </Grid>
           </Grid>
 

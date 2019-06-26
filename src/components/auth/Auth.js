@@ -1,16 +1,17 @@
 import React from 'react';
-import {injectIntl} from 'react-intl';
-import {Redirect} from 'react-router-dom';
-import {inject, observer} from 'mobx-react';
+import { injectIntl } from 'react-intl';
+import { Redirect } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 
-import {Grid, Tab, Tabs} from '@material-ui/core';
-import {withTheme, withStyles} from '@material-ui/core/styles';
+import { Grid, Typography, Button } from '@material-ui/core';
+import { withTheme, withStyles } from '@material-ui/core/styles';
 import SwipeableViews from 'react-swipeable-views';
 import Login from './login/Login';
 import Register from './register/Register';
 import UrlService from '../../services/url.service';
 import ReactGA from 'react-ga';
 import emailService from '../../services/email.service';
+
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 const queryString = require('query-string');
@@ -46,51 +47,51 @@ class Auth extends React.Component {
       queryParams: queryString.parse(window.location.search),
       displayLoader: false,
       redirectTo: null,
-      observer: ()=> {}
+      observer: () => { }
     };
   };
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.initialTab) {
-      this.setState({value: nextProps.initialTab})
+    if (nextProps.initialTab) {
+      this.setState({ value: nextProps.initialTab })
     }
   }
-  
+
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
     if (this.props.authStore.values.invitationCode) this.setState({ value: 1 });
 
     // HANDLE INTEGRATION AUTH CALLBACK
     this.handleIntegrationCallback(this.state.queryParams)
-    .then(() => {
-      let integrationState = (this.state.queryParams.state ? JSON.parse(this.state.queryParams.state) : null);
-      if(integrationState.integrationState && (integrationState.integrationState.linkedin === 'true')) emailService.sendConfirmIntegrationEmail('LinkedIn').catch(e => console.error(e));
-      this.props.userStore.getCurrentUser()
-        .then((user) => {
-          ReactGA.event({category: 'User',action: 'Login with Google'});
-          if (integrationState && integrationState.invitationCode) this.props.authStore.setInvitationCode(integrationState.invitationCode);
-          if(user.superadmin){
-            this.setState({redirectTo: this.getDefaultRedirectPath()});
-            return;
-          }
-          this.props.authStore.registerToOrg()
-          .then((data) => {
-            let organisation = data.organisation;
-            let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
-            if (currentOrgAndRecord) this.props.recordStore.setRecordId(currentOrgAndRecord.record);
+      .then(() => {
+        let integrationState = (this.state.queryParams.state ? JSON.parse(this.state.queryParams.state) : null);
+        if (integrationState.integrationState && (integrationState.integrationState.linkedin === 'true')) emailService.sendConfirmIntegrationEmail('LinkedIn').catch(e => console.error(e));
+        this.props.userStore.getCurrentUser()
+          .then((user) => {
+            ReactGA.event({ category: 'User', action: 'Login with Google' });
+            if (integrationState && integrationState.invitationCode) this.props.authStore.setInvitationCode(integrationState.invitationCode);
+            if (user.superadmin) {
+              this.setState({ redirectTo: this.getDefaultRedirectPath() });
+              return;
+            }
+            this.props.authStore.registerToOrg()
+              .then((data) => {
+                let organisation = data.organisation;
+                let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
+                if (currentOrgAndRecord) this.props.recordStore.setRecordId(currentOrgAndRecord.record);
 
-            this.props.recordStore.getRecord()
-              .then(() => this.signinSuccessRedirect())
-              .catch(() => this.setState({redirectTo: this.getDefaultRedirectPath() + '/onboard'}));
-          }).catch((err) => this.setState({redirectTo: this.getDefaultRedirectPath()}));
-        }).catch((err) => this.setState({redirectTo: '/' + this.props.commonStore.locale}));
-    }).catch((err) => { return;});
+                this.props.recordStore.getRecord()
+                  .then(() => this.signinSuccessRedirect())
+                  .catch(() => this.setState({ redirectTo: this.getDefaultRedirectPath() + '/onboard' }));
+              }).catch((err) => this.setState({ redirectTo: this.getDefaultRedirectPath() }));
+          }).catch((err) => this.setState({ redirectTo: '/' + this.props.commonStore.locale }));
+      }).catch((err) => { return; });
   }
 
   signinSuccessRedirect = () => {
     let defaultRedirect = this.getDefaultRedirectPath();
     let wantedRedirect = this.props.commonStore.getSessionStorage('signinSuccessRedirect');
-    if(wantedRedirect) this.props.commonStore.removeSessionStorage('signinSuccessRedirect');
+    if (wantedRedirect) this.props.commonStore.removeSessionStorage('signinSuccessRedirect');
     this.setState({ redirectTo: wantedRedirect || defaultRedirect });
   }
 
@@ -99,9 +100,9 @@ class Auth extends React.Component {
   }
 
   handleIntegrationCallback = async (query) => {
-    if(!query || !query.token) return Promise.reject('No token');
+    if (!query || !query.token) return Promise.reject('No token');
     this.props.authStore.setTemporaryToken(query.token);
-    if(query.state.success === 'false') return Promise.reject('Auth failed');
+    if (query.state.success === 'false') return Promise.reject('Auth failed');
     return this.props.authStore.googleCallbackLogin();
   }
 
@@ -120,8 +121,8 @@ class Auth extends React.Component {
   };
 
   render() {
-    const {classes, theme} = this.props;
-    const {redirectTo} = this.state;
+    const { classes, theme } = this.props;
+    const { redirectTo } = this.state;
     let intl = this.props.intl;
     let authState = JSON.parse(this.state.queryParams.state || "{}");
 
@@ -129,27 +130,14 @@ class Auth extends React.Component {
 
     return (
       <Grid container>
-        <Grid item xs={12} className={classes.tabs}>
-          <Tabs
-            value={this.state.value}
-            onChange={this.handleChange}
-            indicatorColor="secondary"
-            textColor="secondary"
-            variant="fullWidth"
-            style={{padding: 8}}
-          >
-            <Tab label={intl.formatMessage({id: 'Sign In'})} className={classes.leftTabs}/>
-            <Tab label={intl.formatMessage({id: 'Sign Up'})} className={classes.rightTabs}/>
-          </Tabs>
-        </Grid>
         <Grid item xs={12}>
           <SwipeableViews
             axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
             index={this.state.value}
             onChangeIndex={this.handleChangeIndex}
           >
-            <Login authState={authState} getDefaultRedirectPath={this.getDefaultRedirectPath} />
-            <Register  />
+            <Login authState={authState} getDefaultRedirectPath={this.getDefaultRedirectPath} handleChangeIndex={this.handleChangeIndex} />
+            <Register handleChangeIndex={this.handleChangeIndex} />
           </SwipeableViews>
         </Grid>
       </Grid>
@@ -159,7 +147,7 @@ class Auth extends React.Component {
 
 export default inject('authStore', 'organisationStore', 'commonStore', 'userStore', 'recordStore')(
   withTheme()(
-    withStyles(styles, {withTheme: true})(
+    withStyles(styles, { withTheme: true })(
       injectIntl(observer((Auth)))
     )
   )

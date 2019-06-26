@@ -1,9 +1,9 @@
 import React from 'react';
-import {FormattedMessage, injectIntl} from 'react-intl';
-import {inject, observer} from 'mobx-react';
-import {Redirect} from 'react-router-dom';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { inject, observer } from 'mobx-react';
+import { Redirect } from 'react-router-dom';
 
-import {Button, CircularProgress, Grid, TextField, Typography} from "@material-ui/core";
+import { Button, CircularProgress, Grid, TextField, Typography } from "@material-ui/core";
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import ReactGA from 'react-ga';
 import LogRocket from 'logrocket';
@@ -35,7 +35,7 @@ class Register extends React.Component {
     this.props.authStore.register()
       .then(() => {
 
-        ReactGA.event({category: 'User',action: 'Register with password'});
+        ReactGA.event({ category: 'User', action: 'Register with password' });
         LogRocket.info('User register with password.');
 
         if (this.props.organisationStore.values.orgTag) {
@@ -43,13 +43,13 @@ class Register extends React.Component {
           this.props.authStore.registerToOrg()
             .then((data) => {
 
-              ReactGA.event({category: 'User',action: 'Register to Organisation'});
+              ReactGA.event({ category: 'User', action: 'Register to Organisation' });
 
               let cUser = this.props.userStore.values.currentUser;
 
-              if(cUser && cUser.email && cUser.email.validated) {
+              if (cUser && cUser.email && cUser.email.validated) {
                 // User already validated, redirect to onboard.
-                this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag});
+                this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag });
               } else {
                 // New User, shows success message.
                 this.setState({ registerSuccess: true });
@@ -60,7 +60,7 @@ class Register extends React.Component {
 
               this.setState({ registerSuccess: true });
               this.setState({ registerSuccessMessage: this.props.intl.formatMessage({ id: 'signup.warning.forbiddenOrg' }, { orgName: this.props.organisationStore.values.organisation.name }) });
-            
+
             });
         } else {
 
@@ -83,7 +83,7 @@ class Register extends React.Component {
 
                 // (frequency over 100 000 passwords, 3 000 000 000 people use internet, 30 000 = 3 000 000 000 / 100 000)
                 errorMessage = (errorMessage ? errorMessage + '<br/>' : '') + this.props.intl.formatMessage({ id: 'signup.error.dumbPassword' }, { dumbCount: (parseInt(error.msg) * 30000).toLocaleString() });
-              
+
               } else {
 
                 errorMessage = (errorMessage ? errorMessage + '<br/>' : '') + this.props.intl.formatMessage({ id: 'signup.error.shortPassword' });
@@ -92,19 +92,19 @@ class Register extends React.Component {
             } else if (error.param === 'email') {
 
               errorMessage = (errorMessage ? errorMessage + '<br/>' : '') + this.props.intl.formatMessage({ id: 'signup.error.wrongEmail' });
-            
+
             }
           });
 
         } else if (err.status === 400 && err.response.body.message === 'User already exists.') {
-          
+
           errorMessage = this.props.intl.formatMessage({ id: 'signup.error.userExists' }, { forgotPasswordLink: '/' + this.props.commonStore.locale + '/password/forgot' });
-        
+
         }
 
         if (!errorMessage) errorMessage = this.props.intl.formatMessage({ id: 'signup.error.generic' });
         this.setState({ registerErrors: errorMessage });
-      
+
       });
   };
 
@@ -113,7 +113,7 @@ class Register extends React.Component {
     let { registerErrors, registerSuccess, registerSuccessMessage, redirectTo } = this.state;
     let intl = this.props.intl;
 
-    if(redirectTo) return <Redirect push to={redirectTo} />;
+    if (redirectTo) return <Redirect push to={redirectTo} />;
 
     if (registerSuccess) {
       return (
@@ -132,17 +132,16 @@ class Register extends React.Component {
                 <SnackbarCustom variant="warning" message={registerErrors} />
               </Grid>
             )}
-            <Grid container item direction="row" justify="center"  spacing={16} >
-              <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="google" /></Grid>
-              <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="linkedin" /></Grid>
+            <Grid item>
+              <Typography variant="h3">
+                Create a Wingzy account
+              </Typography>
             </Grid>
             <Grid item>
-              <Typography style={{
-                fontSize: '1rem',
-                color: '#7c7c7c',
-                textAlign: 'center'
-              }}><FormattedMessage id="or" /></Typography>
+              <Button variant="text" onClick={() => this.props.handleChangeIndex(0)} >or sign in to your account</Button>
             </Grid>
+
+
             <Grid item>
               <TextField
                 label="Email"
@@ -175,9 +174,20 @@ class Register extends React.Component {
               }
               {
                 !inProgress && (
-                  <Button fullWidth={true} type="submit" color="secondary"><FormattedMessage id="Sign Up"/></Button>
+                  <Button fullWidth={true} type="submit" color="secondary"><FormattedMessage id="Sign Up" /></Button>
                 )
               }
+            </Grid>
+            <Grid item>
+              <Typography style={{
+                fontSize: '1rem',
+                color: '#7c7c7c',
+                textAlign: 'center'
+              }}>or create an account with</Typography>
+            </Grid>
+            <Grid container item direction="row" justify="center" spacing={16} >
+              <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="google" /></Grid>
+              <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="linkedin" /></Grid>
             </Grid>
           </Grid>
         </form>

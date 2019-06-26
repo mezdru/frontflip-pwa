@@ -109,16 +109,13 @@ class Login extends React.Component {
                 <SnackbarCustom variant="warning" message={loginErrors} />
               </Grid>
             )}
-            <Grid container item direction="row" justify="center"  spacing={16} >
-              <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="google" /></Grid>
-              <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="linkedin" currentAction="signin" /></Grid>            
+            <Grid item>
+              <Typography variant="h3">
+                Sign in to Wingzy
+              </Typography>
             </Grid>
             <Grid item>
-              <Typography style={{
-                fontSize: '1rem',
-                color: '#7c7c7c',
-                textAlign: 'center'
-              }}><FormattedMessage id="or" /></Typography>
+              <Button variant="text" onClick={() => this.props.handleChangeIndex(1)} >or create an account</Button>
             </Grid>
             <Grid item>
               <TextField
@@ -141,6 +138,9 @@ class Login extends React.Component {
                 // variant={"outlined"}
                 value={values.password}
                 onChange={this.handlePasswordChange}
+                // InputProps={{
+                //   endAdornment: <Button variant="text">HEY</Button>
+                // }}
                 required
               />
             </Grid>
@@ -156,14 +156,25 @@ class Login extends React.Component {
                 )
               }
             </Grid>
-            <Grid item>
+            <Grid item container justify="flex-end">
               <Button component={Link}
                       to={"/" + locale + (orgTag ? '/' + orgTag : '') + "/password/forgot"}
                       variant="text"
-                      fullWidth={true}
+                      // fullWidth={true}
               >
                 <FormattedMessage id="I don't have my password" />
               </Button>
+            </Grid>
+            <Grid item>
+              <Typography style={{
+                fontSize: '1rem',
+                color: '#7c7c7c',
+                textAlign: 'center'
+              }}>or sign in with</Typography>
+            </Grid>
+            <Grid container item direction="row" justify="center"  spacing={16} >
+              <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="google" /></Grid>
+              <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="linkedin" currentAction="signin" /></Grid>            
             </Grid>
           </Grid>
         </form>
