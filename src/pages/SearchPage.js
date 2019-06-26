@@ -169,7 +169,6 @@ class SearchPage extends React.Component {
 
   handleDisplayProfile = (e, profileRecord) => {
     ReactGA.event({ category: 'User', action: 'Display profile' });
-    console.log('profile record : ' + JSON.stringify(profileRecord))
     this.setState({ displayedHit: profileRecord });
   }
 
