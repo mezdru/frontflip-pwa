@@ -169,6 +169,7 @@ class SearchPage extends React.Component {
 
   handleDisplayProfile = (e, profileRecord) => {
     ReactGA.event({ category: 'User', action: 'Display profile' });
+    console.log('profile record : ' + JSON.stringify(profileRecord))
     this.setState({ displayedHit: profileRecord });
   }
 
@@ -184,7 +185,7 @@ class SearchPage extends React.Component {
       <React.Fragment>
         {redirectTo && (window.location.pathname !== redirectTo) && <Redirect to={redirectTo} />}
         <Suspense fallback={<></>}>
-          <Header />
+          <Header handleDisplayProfile={this.handleDisplayProfile} />
         </Suspense>
 
         <main className={'search-container'}>
@@ -252,7 +253,7 @@ class SearchPage extends React.Component {
 
         {hashtagsFilter.length > 0 && (actionInQueue === 'add') && (
           <Suspense fallback={<CircularProgress color='secondary' />}>
-            <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} />
+            <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} handleDisplayProfile={this.handleDisplayProfile} />
           </Suspense>
         )}
 
