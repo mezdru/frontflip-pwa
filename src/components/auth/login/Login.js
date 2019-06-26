@@ -123,7 +123,6 @@ class Login extends React.Component {
                 type="email"
                 autoComplete="email"
                 fullWidth
-                // variant={"outlined"}
                 value={values.email}
                 onChange={this.handleEmailChange}
                 required
@@ -135,12 +134,8 @@ class Login extends React.Component {
                 type="password"
                 autoComplete="current-password"
                 fullWidth
-                // variant={"outlined"}
                 value={values.password}
                 onChange={this.handlePasswordChange}
-                // InputProps={{
-                //   endAdornment: <Button variant="text">HEY</Button>
-                // }}
                 required
               />
             </Grid>
@@ -156,11 +151,10 @@ class Login extends React.Component {
                 )
               }
             </Grid>
-            <Grid item container justify="flex-end">
+            <Grid item container justify="flex-start">
               <Button component={Link}
                       to={"/" + locale + (orgTag ? '/' + orgTag : '') + "/password/forgot"}
                       variant="text"
-                      // fullWidth={true}
               >
                 <FormattedMessage id="I don't have my password" />
               </Button>
