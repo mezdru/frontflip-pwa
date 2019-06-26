@@ -188,6 +188,12 @@ class MainRouteOrganisationRedirect extends React.Component {
           });
       }
 
+      if(this.props.authStore.isAuth() && this.props.match.params && this.props.match.params.invitationCode) {
+        // try to register the User in wanted org
+        this.props.authStore.setInvitationCode(this.props.match.params.invitationCode);
+        await this.props.authStore.registerToOrg().then().catch(e => console.log(e));
+      }
+
       if (!this.canUserAccessOrganisation(organisation) && this.props.authStore.isAuth()) {
         await this.redirectUserAuthWithoutAccess();
       } else if (this.props.authStore.isAuth()) {

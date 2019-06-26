@@ -69,8 +69,12 @@ class MainRouteOrganisation extends React.Component {
           <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit" component={MainRouteOrganisationRedirect} />
           <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step?" component={MainRouteOrganisationRedirect} />
 
+          <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode" component={MainRouteOrganisationRedirect} />
+          <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode" component={MainRouteOrganisationRedirect} />
+
           <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin" component={MainRouteOrganisationRedirect} />
           <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup" component={MainRouteOrganisationRedirect} />
+
           <Route path="/:locale(en|fr|en-UK)/:organisationTag/:hashtags/:action" component={(props) => <MainRouteOrganisationRedirect hashtagsFilter={true} {...props} />} />
 
           <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={MainRouteOrganisationRedirect} />
