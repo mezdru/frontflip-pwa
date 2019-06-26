@@ -1,6 +1,7 @@
 import React from 'react';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import {inject, observer} from 'mobx-react';
+import {Redirect} from 'react-router-dom';
 
 import {Button, CircularProgress, Grid, TextField, Typography} from "@material-ui/core";
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
@@ -43,8 +44,17 @@ class Register extends React.Component {
             .then((data) => {
 
               ReactGA.event({category: 'User',action: 'Register to Organisation'});
-              this.setState({ registerSuccess: true });
-              this.setState({ registerSuccessMessage: this.props.intl.formatMessage({ id: 'signup.success' }) });
+
+              let cUser = this.props.userStore.values.currentUser;
+
+              if(cUser && cUser.email && cUser.email.validated) {
+                // User already validated, redirect to onboard.
+                this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag});
+              } else {
+                // New User, shows success message.
+                this.setState({ registerSuccess: true });
+                this.setState({ registerSuccessMessage: this.props.intl.formatMessage({ id: 'signup.success' }) });
+              }
 
             }).catch((err) => {
 
@@ -100,8 +110,10 @@ class Register extends React.Component {
 
   render() {
     const { values, inProgress } = this.props.authStore;
-    let { registerErrors, registerSuccess, registerSuccessMessage } = this.state;
+    let { registerErrors, registerSuccess, registerSuccessMessage, redirectTo } = this.state;
     let intl = this.props.intl;
+
+    if(redirectTo) return <Redirect push to={redirectTo} />;
 
     if (registerSuccess) {
       return (

@@ -95,23 +95,13 @@ class Invitation extends React.Component {
     errorMessage: null
   };
 
-  componentDidMount() {
-    var orgId = this.props.organisationStore.values.organisation._id;
-    if(orgId)
-      this.props.authStore.getInvitationCode(orgId)
-      .then(invitationCode => {
-        this.setState({invitationCode: invitationCode.code});
-      }).catch(e => {
-        console.error(e);
-        this.setState({errorMessage: this.props.intl.formatMessage({ id: 'invitation.get.error' })})
-      });
-  }
-
   formatInvitationLink = (code) => {
     var locale = this.props.commonStore.locale;
     var orgTag = this.props.organisationStore.values.organisation.tag;
-    var security = (process.env.NODE_ENV === 'development' ? 'http://' : 'https://');
-    return security + process.env.REACT_APP_HOST + '/' + locale + '/' + orgTag + '/signin/' + code;
+    if (process.env.NODE_ENV === 'development') {
+      return 'http://' + process.env.REACT_APP_HOST + '/' + locale + '/' + orgTag + '/signup/' + code;
+    }
+    return 'https://' + orgTag + '.wingzy.com/' + locale + '/code/' + code
   }
 
   copyUrl = () => {
@@ -121,8 +111,32 @@ class Invitation extends React.Component {
   }
   
   handleClickOpen = () => {
+    this.requestInvitationCode()
+      .then(() => this.props.authStore.confirmationInvitation(this.formatInvitationLink(this.state.invitationCode)))
     this.setState({open: true});
   };
+
+  requestInvitationCode = () => {
+    return new Promise((resolve, reject) => {
+    var orgId = this.props.organisationStore.values.organisation._id;
+    if(orgId)
+      this.props.authStore.getInvitationCode(orgId)
+      .then(invitationCode => {
+        if(invitationCode)
+          return this.setState({invitationCode: invitationCode.code}, () => resolve());
+        else {
+          this.setState({errorMessage: this.props.intl.formatMessage({ id: 'invitation.get.error' })});
+          reject();
+        }
+      }).catch(e => {
+        console.error(e);
+        this.setState({errorMessage: this.props.intl.formatMessage({ id: 'invitation.get.error' })})
+          reject(e);
+      });
+    else
+      resolve();
+    })
+  }
   
   handleClose = () => {
     this.setState({open: false});
@@ -157,7 +171,7 @@ class Invitation extends React.Component {
               </Typography>
             </Grid>
             <Grid item>
-              <IconButton aria-label="Close" onClick={this.handleClose} style={{marginLeft: -10, marginBottom: 10, marginTop: -10}}>
+              <IconButton aria-label="Close" onClick={this.handleClose} style={{position:'fixed', marginLeft: -4, marginTop: -32}}>
                 <Clear fontSize="small"/>
               </IconButton>
             </Grid>
@@ -168,7 +182,7 @@ class Invitation extends React.Component {
             </Typography>
             <Grid container direction={'row'} justify={'space-between'} style={{marginTop: 8}}>
               <Grid item xs={10}>
-                <input type="text" value={errorMessage || invitationCodeLink} className={classes.invitationInput} readOnly={true} id={'urlInvitation'}/>
+                <input type="text" value={errorMessage || invitationCodeLink} className={classes.invitationInput} id={'urlInvitation'} readOnly={true} />
               </Grid>
               <Grid item xs={2}>
                 <Button className={classes.invitationCopyBtn} aria-label='copy' onClick={this.copyUrl}>

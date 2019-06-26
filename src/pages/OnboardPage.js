@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { inject, observer } from "mobx-react";
 import { observe } from 'mobx';
 import OnboardWelcome from '../components/onboard/OnboardWelcome';
@@ -6,6 +6,8 @@ import OnboardStepper from '../components/onboard/OnboardStepper';
 import { withStyles } from '@material-ui/core';
 import SuggestionsController from '../services/suggestionsController.service';
 import ReactGA from 'react-ga';
+
+const Intercom = React.lazy(() => import('react-intercom'));
 
 console.debug('Loading OnboardPage');
 
@@ -27,7 +29,7 @@ class OnboardPage extends React.Component {
     super(props);
     this.state = {
       inOnboarding: false,
-      observer: ()=>{},
+      observer: () => { },
       stepNumber: 0,
       editMode: this.props.edit || false,
       renderComponent: (this.props.edit ? false : true)
@@ -44,16 +46,18 @@ class OnboardPage extends React.Component {
       setTimeout(() => this.populateStep(this.props.match.params.step), 10);
     });
 
-    this.setState({observer: observe(this.props.recordStore.values, 'record', (change) => {
-      this.forceUpdate();
-    })});
-    if(this.props.match && this.props.match.params && this.props.match.params.recordId && this.props.edit) {
+    this.setState({
+      observer: observe(this.props.recordStore.values, 'record', (change) => {
+        this.forceUpdate();
+      })
+    });
+    if (this.props.match && this.props.match.params && this.props.match.params.recordId && this.props.edit) {
       this.props.recordStore.setRecordId(this.props.match.params.recordId);
       this.props.recordStore.getRecord()
-      .then(() => {this.setState({renderComponent: true})}).catch(err => console.log(err));
+        .then(() => { this.setState({ renderComponent: true }) }).catch(err => console.log(err));
     } else {
       this.getRecordForUser()
-      .then(() => {this.setState({renderComponent: true})}).catch(err => console.log(err));
+        .then(() => { this.setState({ renderComponent: true }) }).catch(err => console.log(err));
     }
     if (this.props.match && this.props.match.params && this.props.match.params.step) {
       this.populateStep(this.props.match.params.step);
@@ -67,50 +71,59 @@ class OnboardPage extends React.Component {
   populateStep = (stepLabel) => {
     switch (stepLabel) {
       case 'intro':
-        this.setState({stepNumber: 0, inOnboarding: true});
+        this.setState({ stepNumber: 0, inOnboarding: true });
         break;
       case 'contacts':
-        this.setState({stepNumber: 1, inOnboarding: true});
+        this.setState({ stepNumber: 1, inOnboarding: true });
         break;
       case 'firstWings':
-        this.setState({stepNumber: 2, inOnboarding: true});
+        this.setState({ stepNumber: 2, inOnboarding: true });
         break;
       case 'wings':
-        this.setState({stepNumber: 3, inOnboarding: true});
+        this.setState({ stepNumber: 3, inOnboarding: true });
         break;
       default:
-        if(stepLabel && (stepLabel.replace('%23', '#')).charAt(0) === '#') {
-          this.setState({stepNumber: 3, inOnboarding: true});
+        if (stepLabel && (stepLabel.replace('%23', '#')).charAt(0) === '#') {
+          this.setState({ stepNumber: 3, inOnboarding: true });
         }
         break;
     }
   }
 
   getRecordForUser = () => {
-    if(!this.props.recordStore.values.orgId) {
+    if (!this.props.recordStore.values.orgId) {
       this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
     }
     return this.props.recordStore.getRecordByUser();
   }
 
   handleEnterToOnboard = () => {
-    this.setState({inOnboarding: true});
+    this.setState({ inOnboarding: true });
   }
 
   render() {
-    const {inOnboarding, stepNumber, editMode, renderComponent} = this.state;
+    const { inOnboarding, stepNumber, editMode, renderComponent } = this.state;
 
-    if(!renderComponent) return null;
+    if (!renderComponent) return null;
 
-    if(!inOnboarding) {
+    if (!inOnboarding) {
       return (
-        <OnboardWelcome handleEnterToOnboard={this.handleEnterToOnboard} />
+        <>
+          <OnboardWelcome handleEnterToOnboard={this.handleEnterToOnboard} />
+
+          <Suspense fallback={<></>}>
+            <Intercom appID={"k7gprnv3"} />
+          </Suspense>
+        </>
       );
     } else {
       return (
         <React.Fragment>
           <main>
             <OnboardStepper initStep={stepNumber} SuggestionsController={SuggestionsController} edit={editMode} />
+            <Suspense fallback={<></>}>
+              <Intercom appID={"k7gprnv3"} />
+            </Suspense>
           </main>
         </React.Fragment>
       );
@@ -120,6 +133,6 @@ class OnboardPage extends React.Component {
 
 export default inject('commonStore', 'organisationStore', 'recordStore', 'userStore')(
   observer(
-    withStyles(styles, {withTheme: true})(OnboardPage)
+    withStyles(styles, { withTheme: true })(OnboardPage)
   )
 );

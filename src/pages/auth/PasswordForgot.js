@@ -37,7 +37,8 @@ class PasswordForgot extends React.Component {
     super(props);
     this.state = {
       successPasswordReset: false,
-      emailError: null
+      emailError: null,
+      email: this.props.authStore.values.email
     }
   }
   
@@ -50,11 +51,14 @@ class PasswordForgot extends React.Component {
   }
   
   handleEmailChange = (e) => {
-    this.props.authStore.setEmail(e.target.value);
+    // this.props.authStore.setEmail(e.target.value);
+    // this.forceUpdate();
+    this.setState({email: e.target.value});
   };
   
   handleSubmitForm = (e) => {
     e.preventDefault();
+    this.props.authStore.setEmail(this.state.email);
     this.props.authStore.passwordForgot()
       .then(response => {
         this.setState({successPasswordReset: true});
@@ -65,9 +69,10 @@ class PasswordForgot extends React.Component {
   };
   
   render() {
-    let {successPasswordReset, emailError} = this.state;
-    let {classes, intl} = this.props;
-    
+    const {successPasswordReset, emailError, email} = this.state;
+    const {classes, intl} = this.props;
+    const { values } = this.props.authStore;
+
     return (
       <AuthLayout>
         <Grid container item justify={"center"} className={classes.container}>
@@ -90,13 +95,14 @@ class PasswordForgot extends React.Component {
                   </Grid>
                 )}
                 <Grid item>
-                  <TextField label="Email"
-                             type="email"
-                             autoComplete="email"
-                             variant={"outlined"}
-                             fullWidth={true}
-                             onChange={this.handleEmailChange}
-                             required
+                  <TextField  label="Email"
+                              type="email"
+                              autoComplete="email"
+                              variant={"outlined"}
+                              fullWidth={true}
+                              onChange={this.handleEmailChange}
+                              value={email}
+                              required
                   />
                 </Grid>
                 <Grid item>

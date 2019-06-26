@@ -254,15 +254,41 @@ const Email = {
       {
         password: password
       }
-    )
+    ),
+  confirmIntegrationEmail: (integrationName) =>
+    requests.post(
+      API_ROOT + '/api/emails/security/integration/' + integrationName
+    ),
+  confirmationInvitation: (orgId, invitationUrl) =>
+    requests.post(
+      API_ROOT + '/api/emails/invitation/' + orgId + '/confirmation',
+      {
+        invitationUrl: invitationUrl
+      }
+    ),
 }
 
 const Invitation = {
-  getCode: (orgId) =>
+  createCode: (orgId, userId) =>
     requests.post(
-      API_ROOT_AUTH + '/api/invitation/code',
+      API_ROOT_AUTH + '/api/invitationCodes',
       {
-        orgId: orgId
+        invitationCode: {
+          organisation: orgId,
+          creator: userId
+        }
+      }
+    )
+}
+
+const SearchLog = {
+  postSearchLog: (orgId, tagsArray, query, resultsLength) =>
+    requests.post(
+      API_ROOT + '/api/statistics/search/' + orgId,
+      {
+        tags: tagsArray,
+        query: query,
+        results: resultsLength
       }
     )
 }
@@ -282,5 +308,6 @@ export default {
   Organisation,
   User,
   Email,
-  Invitation
+  Invitation,
+  SearchLog
 }

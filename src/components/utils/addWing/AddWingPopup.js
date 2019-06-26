@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Slide from '@material-ui/core/Slide';
 import { Redirect } from 'react-router-dom';
-import { withStyles, Typography, Hidden } from '@material-ui/core';
+import { withStyles, Typography, Hidden, CircularProgress } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { FormattedMessage } from 'react-intl';
 import { Add, Search } from '@material-ui/icons';
@@ -69,6 +69,7 @@ class AddWingPopup extends React.Component {
     open: this.props.isOpen,
     redirectTo: null,
     wingsPopulated: [],
+    onLoad: true,
     locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
   };
 
@@ -81,7 +82,7 @@ class AddWingPopup extends React.Component {
     SlackService.notify('#wingzy-events', 'QRCode - Search - '+
                                           (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '')+
                                           ' - by '+this.props.recordStore.values.record.name);
-    this.setState({open: false});
+    this.setState({open: false, redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag});
   }
 
   componentDidMount() {
@@ -90,7 +91,10 @@ class AddWingPopup extends React.Component {
 
   populateWingsToAdd = async () => {
     let wingsPopulated = [];
-    this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
+    let orgId = this.props.organisationStore.values.organisation._id ||
+                this.props.organisationStore.values.orgId;
+
+    this.props.recordStore.setOrgId(orgId);
 
     await this.asyncForEach(this.props.wingsToAdd, async (wing) => {
         this.props.recordStore.setRecordTag('#' + wing);
@@ -100,7 +104,7 @@ class AddWingPopup extends React.Component {
         })).catch(e => {console.log(e)});
     });
 
-    this.setState({wingsPopulated: wingsPopulated});
+    this.setState({wingsPopulated: wingsPopulated, onLoad: false});
   }
 
   recordHasHashtag = (tag) => {
@@ -116,7 +120,7 @@ class AddWingPopup extends React.Component {
 
   handleAddWing = async () => {
     ReactGA.event({category: 'User', action: 'QRCode - Add Wings'});
-    SlackService.notify('#wingzy-events', 'QRCode - Search - '+
+    SlackService.notify('#wingzy-events', 'QRCode - Add Wings - '+
                                           (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '')+
                                           ' - by '+this.props.recordStore.values.record.name);    let record = this.props.recordStore.values.record;
     let wingsToAdd = [];
@@ -131,7 +135,7 @@ class AddWingPopup extends React.Component {
   }
 
   render() {
-    const {redirectTo, wingsPopulated} = this.state;
+    const {redirectTo, wingsPopulated, onLoad} = this.state;
     const {classes} = this.props;
     const {organisation} = this.props.organisationStore.values;
     const {locale} = this.props.commonStore;
@@ -163,14 +167,18 @@ class AddWingPopup extends React.Component {
                 <FormattedMessage id="action.addWings.text" values={{wingsCount: wingsPopulated.length}} />
                 <br/>
                 <div className={classes.wingsList}>
-                {wingsPopulated.map( (wing, i) => {
-                  let displayedName = (wing.name_translated ? (wing.name_translated[locale] || wing.name_translated['en-UK']) || wing.name || wing.tag : wing.name || wing.tag)
-                  return(
-                  <Wings src={ProfileService.getPicturePath(wing.picture)} key={i}
-                    label={ProfileService.htmlDecode(displayedName)}
-                    className={'bigWing'}
-                    />);
-                })}
+                  {onLoad && (
+                    <CircularProgress color='secondary' />
+                  )}
+
+                  {!onLoad && wingsPopulated.map( (wing, i) => {
+                    let displayedName = (wing.name_translated ? (wing.name_translated[locale] || wing.name_translated['en-UK']) || wing.name || wing.tag : wing.name || wing.tag)
+                    return(
+                    <Wings src={ProfileService.getPicturePath(wing.picture)} key={i}
+                      label={ProfileService.htmlDecode(displayedName)}
+                      className={'bigWing'}
+                      />);
+                  })}
                 </div>
               </Typography>
             </DialogContentText>

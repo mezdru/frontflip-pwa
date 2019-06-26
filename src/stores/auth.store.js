@@ -1,10 +1,9 @@
-import { observable, action, decorate } from "mobx";
+import { action, decorate, observable } from "mobx";
 import agent from '../agent';
 import commonStore from "./common.store";
 import userStore from "./user.store";
 import organisationStore from "./organisation.store";
 import emailService from "../services/email.service";
-import SlackService from '../services/slack.service';
 
 class AuthStore {
   inProgress = false;
@@ -48,7 +47,7 @@ class AuthStore {
   isAuth() {
     if (commonStore.getAccessToken() || commonStore.getRefreshToken()) {
       return true;
-    } else {  
+    } else {
       return false;
     }
   }
@@ -64,13 +63,13 @@ class AuthStore {
     return agent.Auth.login(this.values.email, this.values.password, this.values.temporaryToken)
       .then((response) => {
         if (response && response.access_token) {
-          if(process.env.NODE_ENV === 'production' && !process.env.REACT_APP_NOLOGS) SlackService.notify('#alerts', this.values.email + ' logged in with email and password.');
           commonStore.setAuthTokens(response);
+          if (response.integrationState && (response.integrationState.linkedin === 'true')) emailService.sendConfirmIntegrationEmail('LinkedIn').catch(e => console.error(e));
           return userStore.getCurrentUser()
             .then(() => { return 200; })
-            .catch((err) => { console.log(err);})
+            .catch((err) => { console.log(err); })
         }
-        else{
+        else {
           return 403;
         }
       })
@@ -81,8 +80,8 @@ class AuthStore {
       .finally(action(() => { this.inProgress = false; }));
   }
 
-  integrationCallbackLogin() {
-    if(!this.values.temporaryToken) return Promise.reject();
+  googleCallbackLogin() {
+    if (!this.values.temporaryToken) return Promise.reject();
 
     this.inProgress = true;
     this.errors = null;
@@ -90,7 +89,6 @@ class AuthStore {
     return agent.Auth.googleCallbackLogin(this.values.temporaryToken)
       .then((response) => {
         if (response && response.access_token) {
-          if(process.env.NODE_ENV === 'production' && !process.env.REACT_APP_NOLOGS) SlackService.notify('#alerts', this.values.email + ' logged in with Google.')
           commonStore.setAuthTokens(response);
           return userStore.getCurrentUser()
             .then(() => { return 200; });
@@ -121,11 +119,23 @@ class AuthStore {
               });
           });
       })
-      .catch(action((err) => {
+      .catch((err) => {
         // any other response status than 20X is an error
-        this.errors = err.response && err.response.body && err.response.body.errors;
-        throw err;
-      }))
+        if (this.values.invitationCode) {
+          // try to login user
+          return this.login(this.values.email, this.values.password)
+            .then(respLogin => {
+              return true;
+            }).catch((e) => {
+              // Send register error, not login error.
+              this.errors = err.response && err.response.body && err.response.body.errors;
+              throw err;
+            })
+        } else {
+          this.errors = err.response && err.response.body && err.response.body.errors;
+          throw err;
+        }
+      })
       .finally(action(() => { this.inProgress = false; }));
   }
 
@@ -134,13 +144,14 @@ class AuthStore {
    * @param {access_token} needed.
    */
   registerToOrg() {
-    if(!organisationStore.values.organisation._id) return;
+    if (!organisationStore.values.organisation._id) return;
     this.inProgress = true;
     this.errors = null;
 
     return agent.Auth.registerToOrg(organisationStore.values.organisation._id, this.values.invitationCode)
       .then((data) => {
-        return data;
+        return userStore.getCurrentUser()
+          .then(() => { return data; });
       })
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.errors;
@@ -164,6 +175,22 @@ class AuthStore {
       .finally(action(() => { this.inProgress = false; }));
   }
 
+  confirmationInvitation(invitationUrl) {
+    this.inProgress = true;
+    this.errors = null;
+    return agent.Email.confirmationInvitation(organisationStore.values.organisation._id, invitationUrl)
+      .then((data) => {
+        return data
+      })
+      .catch(action((err) => {
+        this.errors = err;
+        throw err;
+      }))
+      .finally(action(() => {
+        this.inProgress = false;
+      }));
+  }
+
   updatePassword(token, hash) {
     this.inProgress = true;
     this.errors = null;
@@ -184,9 +211,9 @@ class AuthStore {
     this.inProgress = true;
     this.errors = null;
 
-    return agent.Invitation.getCode(orgId)
-      .then((data) => {
-        return data.invitationCode;
+    return agent.Invitation.createCode(orgId)
+      .then((response) => {
+        return response.data;
       })
       .catch((err) => {
         this.errors = err;
@@ -203,15 +230,6 @@ class AuthStore {
     return Promise.resolve();
   }
 
-  /**
-   * @description test call
-   */
-  getUser() {
-    return agent.Test.getUser()
-      .then((user) => {
-        return user;
-      });
-  }
 }
 
 decorate(AuthStore, {

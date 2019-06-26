@@ -74,7 +74,7 @@ const styles = theme => ({
   }
 });
 
-const Wing = ({ src, label, color, ...props }) => {
+const Wing = React.memo(({ src, label, color, ...props }) => {
   if (src) {
     return (
       <Chip
@@ -105,6 +105,6 @@ const Wing = ({ src, label, color, ...props }) => {
     )
   }
 
-};
+});
 
 export default withStyles(styles)(Wing)

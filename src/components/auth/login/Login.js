@@ -29,7 +29,13 @@ class Login extends React.Component {
     // We will ask him to Sign In with an other method, then, we will link the integration to his account.
     if(authState && authState.action === 'signin' && authState.success === 'false') {
       let integrationName = (authState.integration ? authState.integration.charAt(0).toUpperCase() + authState.integration.slice(1) : '');
-      this.setState({ loginErrors: this.props.intl.formatMessage({id: 'signin.error.integration.notFound'}, {integrationName: integrationName}) });
+      this.setState({ loginErrors: this.props.intl.formatMessage(
+        {id: 'signin.error.integration.notFound'}, 
+        {
+          integrationName: integrationName,
+          signupLink: this.props.getDefaultRedirectPath() + '/signup' 
+        }
+      )});
     }
 
   }
@@ -42,6 +48,13 @@ class Login extends React.Component {
     this.props.authStore.setPassword(e.target.value)
   };
 
+  signinSuccessRedirect = () => {
+    let defaultRedirect = this.props.getDefaultRedirectPath();
+    let wantedRedirect = this.props.commonStore.getSessionStorage('signinSuccessRedirect');
+    if(wantedRedirect) this.props.commonStore.removeSessionStorage('signinSuccessRedirect');
+    this.setState({ redirectTo: wantedRedirect || defaultRedirect });
+  }
+
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.authStore.login()
@@ -49,28 +62,31 @@ class Login extends React.Component {
         if (response === 200) {
           ReactGA.event({category: 'User',action: 'Login with password'});
           LogRocket.info('User login with password.');
-          this.setState({ redirectTo: '/' + this.props.commonStore.locale + (this.props.organisationStore.values.orgTag ? '/' + this.props.organisationStore.values.orgTag : '') });
+          this.signinSuccessRedirect();
         } else {
           this.setState({ loginErrors: this.props.intl.formatMessage({ id: 'signin.error.generic' }) });
         }
       }).catch((err) => {
-        // Err can have 3 forms : User has no password. || Wrong password. || User does not exists.
-        let errorMessage;
-        if (err.status === 404) {
-          errorMessage = this.props.intl.formatMessage({ id: 'signin.error.unknown' });
-        } else if (err.status === 403) {
-          if (err.response.body.error_description === 'Wrong password.') {
-            errorMessage = this.props.intl.formatMessage({ id: 'signin.error.wrongPassword' }, { forgotPasswordLink: '/' + this.props.commonStore.locale + '/password/forgot' });
-          } else if (err.response.body.error_description === 'User use Google Auth.') {
-            errorMessage = this.props.intl.formatMessage({ id: 'signin.error.useGoogle' });
-          } else {
-            errorMessage = this.props.intl.formatMessage({ id: 'signin.error.noPassword' }, { forgotPasswordLink: '/' + this.props.commonStore.locale + '/password/forgot' });
-          }
-        }
-        if (!errorMessage) errorMessage = this.props.intl.formatMessage({ id: 'signin.error.generic' });
-        this.setState({ loginErrors: errorMessage });
+        this.setState({ loginErrors: this.getSigninErrorMessage(err) });
       });
   };
+
+  getSigninErrorMessage = (err) => {
+    let errorMessage;
+    if (err.status === 404) {
+      errorMessage = this.props.intl.formatMessage({ id: 'signin.error.unknown' });
+    } else if (err.status === 403) {
+      if (err.response.body.error_description === 'Wrong password.') {
+        errorMessage = this.props.intl.formatMessage({ id: 'signin.error.wrongPassword' }, { forgotPasswordLink: '/' + this.props.commonStore.locale + '/password/forgot' });
+      } else if (err.response.body.error_description === 'User use Google Auth.') {
+        errorMessage = this.props.intl.formatMessage({ id: 'signin.error.useGoogle' });
+      } else {
+        errorMessage = this.props.intl.formatMessage({ id: 'signin.error.noPassword' }, { forgotPasswordLink: '/' + this.props.commonStore.locale + '/password/forgot' });
+      }
+    }
+    if (!errorMessage) errorMessage = this.props.intl.formatMessage({ id: 'signin.error.generic' });
+    return errorMessage;
+  }
 
   render() {
     const { values, inProgress } = this.props.authStore;

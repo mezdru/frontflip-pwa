@@ -44,7 +44,7 @@ class SuggestionsService {
       this.populateSuggestionsData();
       let query = this.formatHashtagsQuery();
       if (query)
-        this.syncBank(query)
+        await this.syncBank(query)
           .then((bank) => {
             this._bank = bank;
             this.populateSuggestionsData();
@@ -57,7 +57,7 @@ class SuggestionsService {
   }
 
   fetchWingsFamily = (wingsFamily) => {
-    return AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:' + wingsFamily, null, null, null)
+    return AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:' + wingsFamily, null, null, null, null, 100)
       .then(content => {
         if (content) {
           this._currentSuggestions = content.hits;

@@ -55,10 +55,26 @@ class UserStore {
       .finally(action(() => { this.inProgress = false; }));
   }
 
+  updateCurrentUser() {
+    this.inProgress = true;
+    this.errors = null;
+
+    return agent.User.update(this.values.currentUser._id, this.values.currentUser)
+      .then(data => {
+        this.values.currentUser = (data ? data.user : {});
+        return this.values.currentUser;
+      })
+      .catch(action((err) => {
+        this.errors = err.response && err.response.body && err.response.body.errors;
+        throw err;
+      }))
+      .finally(action(() => { this.inProgress = false; }));
+  }
+
   syncRecord() {
     if (!recordStore.values.record._id && organisationStore.values.organisation._id) {
       let currentOrgAndRecord = this.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisationStore.values.organisation._id);
-      if (currentOrgAndRecord) {
+      if (currentOrgAndRecord && currentOrgAndRecord.record) {
         recordStore.setRecordId(currentOrgAndRecord.record);
         recordStore.getRecord();
       }
@@ -75,7 +91,7 @@ decorate(UserStore, {
   errors: observable,
   values: observable,
   getCurrentUser: action,
-  updateUser: action,
+  updateCurrentUser: action,
   forgetUser: action
 });
 

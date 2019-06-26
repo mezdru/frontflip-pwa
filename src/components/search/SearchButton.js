@@ -12,14 +12,15 @@ const styles = theme => ({
     left:0,
     right:0,
     margin: 'auto',
-    backgroundColor: 'white',
+    backgroundColor: theme.palette.primary.dark,
     borderRadius: 4,
     width: 100,
     padding: 16,
     textAlign: 'center',
     boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
     cursor: 'pointer',
-    fontWeight: '600'
+    fontWeight: '600',
+    color: 'white',
   },
   bottomShape: {
     position: 'absolute',
@@ -27,7 +28,7 @@ const styles = theme => ({
     transform: 'rotate(45deg)',
     width: 20,
     height: 20,
-    backgroundColor: 'white',
+    backgroundColor: theme.palette.primary.dark,
     left:0,
     right:0,
     margin:'auto',
@@ -38,7 +39,7 @@ const styles = theme => ({
     bottom:0,
     height: 15,
     width: 35,
-    backgroundColor: 'white',
+    backgroundColor: theme.palette.primary.dark,
     left:0,
     right:0,
     margin:'auto',
@@ -55,20 +56,12 @@ const styles = theme => ({
 });
 
 class SearchButton extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      observer: () => {},
-    }
-  }
 
   componentDidMount() {
     this.setState({observer: observe(this.props.commonStore, 'searchResultsCount', (change) => {
       this.forceUpdate();
     })});
   }
-
 
   render() {
     const {classes} = this.props;

@@ -16,11 +16,11 @@ import { withSnackbar } from 'notistack';
 import LoaderFeedback from '../utils/buttons/LoaderFeedback';
 
 import SwipeableViews from 'react-swipeable-views';
-import { virtualize, bindKeyboard } from 'react-swipeable-views-utils';
+import { virtualize } from 'react-swipeable-views-utils';
 import {FormattedMessage} from "react-intl";
 import classNames from 'classnames';
 
-const VirtualizeSwipeableViews = bindKeyboard(virtualize(SwipeableViews));
+const VirtualizeSwipeableViews = virtualize(SwipeableViews);
 
 let timeoutArray = [];
 

@@ -2,6 +2,7 @@ import commonStore from '../stores/common.store';
 import algoliasearch  from 'algoliasearch';
 import organisationStore from '../stores/organisation.store';
 import {observe} from 'mobx';
+import statisticsStore from '../stores/statistics.store';
 
 class AlgoliaService {
 
@@ -130,7 +131,7 @@ class AlgoliaService {
   }
 
 
-  fetchHits(filters, query, facetFilters, page) {
+  fetchHits(filters, query, facetFilters, page, logSearch, hitsPerPage) {
     if(!this.index) return Promise.resolve();
     return new Promise((resolve, reject) => {
       this.index.search({
@@ -138,7 +139,7 @@ class AlgoliaService {
         query: query || '',
         facetFilters: facetFilters || '',
         filters: filters || 'type:person',
-        hitsPerPage: 20,
+        hitsPerPage: hitsPerPage || 30,
         attributesToSnippet: [
           "intro:"+15,
           "description:"+15
@@ -146,14 +147,27 @@ class AlgoliaService {
       }, (err, content) => {
         if(err) return resolve(content);
         if(!content) return resolve(null);
+
+        if(logSearch) this.logCurrentSearch( (content.nbHits || null) );
+
         return resolve(content)
       });
     });
   }
 
+  logCurrentSearch(resultsCount) {
+    let searchFilters = commonStore.searchFilters || [];
+    let tagsArray = [];
+    let query = '';
+
+    searchFilters.forEach(filter => {
+      if (filter.tag.charAt(0) !== '#' && filter.tag.charAt(0) !== '@') query += ((query !== '') ? ' ' : '') + filter.name;
+      else tagsArray.push(filter.tag);
+    });
+
+    statisticsStore.postSearchLog(null, tagsArray, query, resultsCount);
+  }
 
 }
-
-
 
 export default new AlgoliaService(commonStore.algoliaKey);

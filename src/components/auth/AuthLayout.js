@@ -1,11 +1,11 @@
-import React from 'react';
 import { Grid, Typography, Hidden } from '@material-ui/core';
+import React, {Suspense} from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Clear } from '@material-ui/icons';
-
 import Logo from '../utils/logo/Logo';
 import Header from '../header/Header';
 import BannerResizable from '../utils/banner/BannerResizable';
+
+const Intercom = React.lazy(() => import('react-intercom'));
 
 const styles = (theme) => ({
   root: {
@@ -114,6 +114,10 @@ class Auth extends React.Component {
               </Grid>
             </Grid>
           </Grid>
+
+          <Suspense fallback={<></>}>
+            <Intercom appID={"k7gprnv3"} />
+          </Suspense>
         </main>
       </div>
     );

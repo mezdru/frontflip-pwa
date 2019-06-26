@@ -26,6 +26,11 @@ class CommonStore {
     this.populateLocale();
   }
 
+  setLocale(locale) {
+    this.locale = locale;
+    this.setCookie('locale', locale);
+  }
+
   populateLocale() {
     let localesAccepted = ['en', 'fr'];
     this.locale = window.location.pathname.split('/')[1];
@@ -39,6 +44,10 @@ class CommonStore {
       }
     }
   }
+
+  getSessionStorage = (name) => sessionStorage.getItem(name);
+  setSessionStorage = (name, value) => sessionStorage.setItem(name, value);
+  removeSessionStorage = (name) => sessionStorage.removeItem(name);
 
   getLocalStorage(name, isObject) {
     if(isObject) return JSON.parse(localStorage.getItem(name));
@@ -145,7 +154,10 @@ decorate(CommonStore, {
   removeCookie: action,
   removeAuthTokens: action,
   setSearchFilters: action,
-  getSearchFilters: action
+  getSearchFilters: action,
+  setSessionStorage: action,
+  getSessionStorage: action,
+  removeSessionStorage: action
 });
 
 export default new CommonStore();

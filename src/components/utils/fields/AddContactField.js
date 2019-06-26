@@ -2,6 +2,7 @@ import React from 'react';
 import {inject, observer} from 'mobx-react';
 import {Grid, Grow, Paper, Popper, ClickAwayListener, Fab, IconButton, withStyles, Tooltip} from '@material-ui/core'
 import {Add} from "@material-ui/icons";
+import '../../../resources/stylesheets/font-awesome.min.css';
 
 const styles = theme =>  ({
   addButton: {
@@ -79,6 +80,8 @@ class AddContactField extends React.Component {
         return name = 'user';
       case 'workchat':
         return name = 'comment';
+      case 'landline':
+        return name = 'phone-square';
       default:
         return name
     }
@@ -88,7 +91,7 @@ class AddContactField extends React.Component {
   render() {
     const {classes} = this.props;
     const {open} = this.state;
-    let linkName = ['email', 'phone', 'linkedin', 'twitter', 'facebook', 'github', 'link', 'workplace', 'workchat']
+    let linkName = ['email', 'phone', 'linkedin', 'twitter', 'facebook', 'github', 'link', 'workplace', 'workchat', 'landline']
     
     return (
       <Grid container item  direction={'column'} alignItems={'center'}>
