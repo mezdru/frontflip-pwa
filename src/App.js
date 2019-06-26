@@ -7,6 +7,8 @@ import { SnackbarProvider } from 'notistack';
 import { version } from '../package.json'
 import LogRocket from 'logrocket';
 import setupLogRocketReact from 'logrocket-react';
+import { disableBodyScroll } from 'body-scroll-lock';
+
 
 if(process.env.NODE_ENV !== 'development' && process.env.REACT_APP_LOGROCKET) {
   LogRocket.init(process.env.REACT_APP_LOGROCKET, {
@@ -15,6 +17,8 @@ if(process.env.NODE_ENV !== 'development' && process.env.REACT_APP_LOGROCKET) {
   setupLogRocketReact(LogRocket);
 }
 
+// disable body scroll
+disableBodyScroll(window.document.body);
 
 class App extends Component {
 
