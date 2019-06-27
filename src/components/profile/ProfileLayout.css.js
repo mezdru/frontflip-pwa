@@ -51,6 +51,28 @@ export const styles = theme => ({
       border: '9px solid white'
     },
   },
+  logoEditable: {
+    position: 'absolute',
+    transform: 'translateY(-50%)',
+    top: 0,
+    left: 0,
+    right: 0,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: LOGO_HEIGHT,
+    height: LOGO_HEIGHT,
+    '& img': {
+      width: '100%',
+      height: '100%',
+      borderRadius: '50%',
+      border: '9px solid white'
+    },
+    cursor: 'pointer',
+    transition: 'filter 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+    '&:hover': {
+      filter: 'brightness(0.75)'
+    }
+  },
   subheader: {
     position: 'relative',
     marginTop: (LOGO_HEIGHT / 2),
