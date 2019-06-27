@@ -70,6 +70,11 @@ class ProfileLayout extends React.Component {
   handleRedirectToEditWings = (id) => {
     this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag + '/onboard/wings/edit/' + id });
   }
+
+  showOnboardIntro = (id) => {
+    if(this.state.canEdit)
+      this.setState({redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag + '/onboard/intro/edit/' + id});
+  }
   
   render() {
     const { hit, className, classes, theme } = this.props;
@@ -117,7 +122,9 @@ class ProfileLayout extends React.Component {
           <Grid item>
             <Suspense fallback={<CircularProgress color='secondary' />}>
               
-              <Logo type={'person'} className={classes.logo} src={ProfileService.getPicturePathResized(currentHit.picture, 'person', '170x170') || defaultPicture} />
+              <Logo type={'person'} className={(canEdit ? classes.logoEditable : classes.logo)} 
+                    src={ProfileService.getPicturePathResized(currentHit.picture, 'person', '170x170') || defaultPicture}
+                    onClick={() => this.showOnboardIntro(currentHit.objectID)} />
             </Suspense>
             <div className={classes.subheader}>
               <Typography variant="h4" className={classes.name}>
