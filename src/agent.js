@@ -3,6 +3,7 @@ import _superagent from 'superagent';
 import authStore from './stores/auth.store';
 import commonStore from './stores/common.store';
 import UrlService from './services/url.service';
+import LogRocket from 'logrocket';
 
 const superagent = superagentPromise(_superagent, global.Promise);
 const locale = ((process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') ? (commonStore.getCookie('locale') || commonStore.locale) : 'en-UK');
@@ -98,8 +99,8 @@ let validateToken = () => {
       superagent.post(
         (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${API_ROOT_AUTH}/locale`,
         {
-          client_id: 'frontflip',
-          client_secret: 'abcd1234',
+          client_id: process.env.REACT_APP_CLIENT_ID,
+          client_secret: process.env.REACT_APP_CLIENT_SECRET,
           grant_type: 'refresh_token',
           refresh_token: commonStore.getRefreshToken()
         }
@@ -107,11 +108,17 @@ let validateToken = () => {
         .timeout({
           response: 30000,
         })
-        .end(handleErrors)
+        .end( (err) => {
+          LogRocket.info("The refresh token exchange has not worked.");
+          LogRocket.error(err);
+          handleErrors(err);
+        })
         .then((response) => {
           commonStore.setAuthTokens(JSON.parse(response.text));
           resolve();
         }).catch((err) => {
+          LogRocket.info("The refresh token exchange has not worked.");
+          LogRocket.error(err);
           authStore.logout();
           window.location.href = UrlService.createUrl(window.location.host, '/signin', null);
         });
