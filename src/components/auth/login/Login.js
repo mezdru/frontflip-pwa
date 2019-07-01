@@ -109,12 +109,12 @@ class Login extends React.Component {
                 <SnackbarCustom variant="warning" message={loginErrors} />
               </Grid>
             )}
-            <Grid item>
+            <Grid item container justify='center'>
               <Typography variant="h3">
                 Sign in to Wingzy
               </Typography>
             </Grid>
-            <Grid item>
+            <Grid item justify={'center'} container>
               <Button variant="text" onClick={() => this.props.handleChangeIndex(1)} >or create an account</Button>
             </Grid>
             <Grid item>
@@ -151,7 +151,7 @@ class Login extends React.Component {
                 )
               }
             </Grid>
-            <Grid item container justify="flex-start">
+            <Grid item container justify="center">
               <Button component={Link}
                       to={"/" + locale + (orgTag ? '/' + orgTag : '') + "/password/forgot"}
                       variant="text"

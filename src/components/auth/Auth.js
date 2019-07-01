@@ -3,12 +3,10 @@ import { injectIntl } from 'react-intl';
 import { Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
-import { Grid, Typography, Button } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { withTheme, withStyles } from '@material-ui/core/styles';
-import SwipeableViews from 'react-swipeable-views';
 import Login from './login/Login';
 import Register from './register/Register';
-import UrlService from '../../services/url.service';
 import ReactGA from 'react-ga';
 import emailService from '../../services/email.service';
 
@@ -131,14 +129,12 @@ class Auth extends React.Component {
     return (
       <Grid container>
         <Grid item xs={12}>
-          <SwipeableViews
-            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-            index={this.state.value}
-            onChangeIndex={this.handleChangeIndex}
-          >
+          {this.state.value === 0 && (
             <Login authState={authState} getDefaultRedirectPath={this.getDefaultRedirectPath} handleChangeIndex={this.handleChangeIndex} />
+          )}
+          {this.state.value === 1 && (
             <Register handleChangeIndex={this.handleChangeIndex} />
-          </SwipeableViews>
+          )}
         </Grid>
       </Grid>
     );

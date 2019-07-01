@@ -132,12 +132,12 @@ class Register extends React.Component {
                 <SnackbarCustom variant="warning" message={registerErrors} />
               </Grid>
             )}
-            <Grid item>
-              <Typography variant="h3">
+            <Grid item container justify='center'>
+              <Typography variant="h3" style={{textAlign: 'center'}}>
                 Create a Wingzy account
               </Typography>
             </Grid>
-            <Grid item>
+            <Grid item container justify='center'>
               <Button variant="text" onClick={() => this.props.handleChangeIndex(0)} >or sign in to your account</Button>
             </Grid>
 

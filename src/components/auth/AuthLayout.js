@@ -18,7 +18,7 @@ const styles = (theme) => ({
     maxWidth: 500,
     backgroundColor: 'white',
     borderRadius: 5,
-    padding: 8,
+    padding: 40,
     zIndex: 2,
     margin: 16,
     minHeight: '50%',
@@ -29,7 +29,8 @@ const styles = (theme) => ({
       top: 48,
       marginTop: 32,
       left:0,
-      width: 'calc(100vw - 32px)'
+      width: 'calc(100vw - 32px)',
+      padding: 8
     }
   },
   shadowedBackground: {
