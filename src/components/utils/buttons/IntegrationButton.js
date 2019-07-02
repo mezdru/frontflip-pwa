@@ -9,10 +9,7 @@ const styles = theme => ({
   logo: {
     width: '25px', 
     height: '25px', 
-    position: 'absolute', 
-    left: 0,
-    right: 0,
-    margin: 'auto'
+    marginRight: 16,
   },
   root: {
     '&:not(:hover)': {
@@ -23,7 +20,6 @@ const styles = theme => ({
       color: 'black',
     },
     minWidth: 0,
-    width: 56,
   }
 });
 
@@ -67,7 +63,7 @@ class IntegrationButton extends React.Component {
 
     return (
       <Button {...this.props} className={classes.root} onClick={this.props.onClick || this.redirectToAuth}>
-        <img src={this.getIntegrationLogo(integrationTag)} className={classes.logo} alt={labelId} />
+        <img src={this.getIntegrationLogo(integrationTag)} className={classes.logo} alt={labelId} /> {integrationTag}
       </Button>
     );
   }

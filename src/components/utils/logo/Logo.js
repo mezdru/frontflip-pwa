@@ -26,6 +26,8 @@ class Logo extends React.Component {
         let org = this.props.organisationStore.values.organisation;
         this.setState({ source: (org.logo && org.logo.url ? org.logo.url : defaultLogo) });
       })});
+    } else if(this.state.type === 'wingzy') {
+      this.setState({source: defaultLogo});
     }
   }
 

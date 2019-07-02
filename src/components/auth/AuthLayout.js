@@ -1,22 +1,48 @@
-import React, {Suspense} from 'react';
 import { Grid } from '@material-ui/core';
+import React, {Suspense} from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Logo from '../utils/logo/Logo';
-import Banner from '../utils/banner/Banner';
 import Header from '../header/Header';
+import BannerResizable from '../utils/banner/BannerResizable';
 
 const Intercom = React.lazy(() => import('react-intercom'));
 
 const styles = (theme) => ({
-  logo: {
-    width: '6.6rem',
-    height: '6.6rem',
-    boxShadow: '0 5px 15px -1px darkgrey, 0 0 0 5px transparent',
-    bottom: '3.2rem',
-    marginBottom: '-7rem',
+  root: {
+    height: '100vh'
+  },
+  rootContainer: {
+    position: 'relative',
+    height: '100%',
+  },
+  authContainer: {
+    maxWidth: 500,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    padding: 40,
     zIndex: 2,
-    border: '4px solid white'
-  }
+    margin: 16,
+    minHeight: '50%',
+    overflow: 'hidden',
+    boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
+    [theme.breakpoints.down('xs')]: {
+      position: 'absolute',
+      top: 48,
+      marginTop: 32,
+      left:0,
+      width: 'calc(100vw - 32px)',
+      padding: 8
+    }
+  },
+  shadowedBackground: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    top: 0,
+    left: 0,
+    background: 'rgb(0,0,0)',
+    opacity: .3,
+  },
+
 });
 
 class Auth extends React.Component {
@@ -30,15 +56,17 @@ class Auth extends React.Component {
     return (
       <div>
         <Header />
-        <main>
-          <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
-            <Grid container item alignItems={"stretch"}>
-              <Banner />
-            </Grid>
-            <Grid item container justify={"center"}>
-              <Logo type={'organisation'} alt="org-logo" className={classes.logo} />
-            </Grid>
-            <Grid container item xs={12} sm={6} lg={4}>
+        <main className={classes.root}>
+          <BannerResizable
+            type={'organisation'}
+            initialHeight={100}
+            style={{ position: 'absolute' }}
+          />
+          <div id="shadowed-background" className={classes.shadowedBackground} />
+
+
+          <Grid container direction={"row"} justify="center" alignItems="center" className={classes.rootContainer} >
+            <Grid container item xs={12} className={classes.authContainer}>
               {this.props.children}
             </Grid>
           </Grid>

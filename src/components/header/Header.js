@@ -17,8 +17,13 @@ class App extends Component {
     this.state = {
       successLogout: false,
       open: false,
-      auth: this.props.authStore.isAuth()
+      auth: this.props.authStore.isAuth(),
+      isSigninOrSignupPage: this.isSigninOrSignup()
     };
+  }
+
+  isSigninOrSignup = () => {
+    return ( (window.location.pathname.indexOf('signin') !== -1) || (window.location.pathname.indexOf('signup') !== -1)  );
   }
 
   handleDrawerOpen = () => {
@@ -40,7 +45,7 @@ class App extends Component {
   }
 
   render() {
-    const {open, successLogout, auth } = this.state;
+    const {open, successLogout, auth, isSigninOrSignupPage } = this.state;
     const { classes } = this.props;
     const { locale } = this.props.commonStore;
     const orgTag = this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag;
@@ -52,8 +57,8 @@ class App extends Component {
         <CssBaseline />
         <Fab variant="extended" className={classes.menuButton}
                     onClick={this.handleDrawerOpen} 
-                    children={<Logo />} id="header-button" />
-        {!auth && (
+                    children={<Logo type={(this.props.authStore.isAuth() ? 'organisation' : 'wingzy')} />} id="header-button" />
+        {!auth && !isSigninOrSignupPage && (
             <Button variant="text" to={"/" + locale + (orgTag ? '/' + orgTag : '') + '/signin'} component={Link} className={classes.menuLink}><FormattedMessage id="Sign In" /></Button>
         )}
         {/* <HeaderAppBar handleDrawerOpen={this.handleDrawerOpen}

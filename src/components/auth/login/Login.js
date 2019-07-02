@@ -1,9 +1,9 @@
 import React from 'react';
-import {FormattedMessage, injectIntl} from 'react-intl';
-import {Link, Redirect} from 'react-router-dom';
-import {inject, observer} from 'mobx-react';
+import { FormattedMessage, injectIntl, FormattedHTMLMessage } from 'react-intl';
+import { Link, Redirect } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 
-import {Button, CircularProgress, Grid, TextField, Typography} from '@material-ui/core';
+import { Button, CircularProgress, Grid, TextField, Typography } from '@material-ui/core';
 import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import ReactGA from 'react-ga';
 import LogRocket from 'logrocket';
@@ -27,15 +27,17 @@ class Login extends React.Component {
 
     // In this case, the user try to Sign In with an integration (LinkedIn, ...) and we do not already have an account for him.
     // We will ask him to Sign In with an other method, then, we will link the integration to his account.
-    if(authState && authState.action === 'signin' && authState.success === 'false') {
+    if (authState && authState.action === 'signin' && authState.success === 'false') {
       let integrationName = (authState.integration ? authState.integration.charAt(0).toUpperCase() + authState.integration.slice(1) : '');
-      this.setState({ loginErrors: this.props.intl.formatMessage(
-        {id: 'signin.error.integration.notFound'}, 
-        {
-          integrationName: integrationName,
-          signupLink: this.props.getDefaultRedirectPath() + '/signup' 
-        }
-      )});
+      this.setState({
+        loginErrors: this.props.intl.formatMessage(
+          { id: 'signin.error.integration.notFound' },
+          {
+            integrationName: integrationName,
+            signupLink: this.props.getDefaultRedirectPath() + '/signup'
+          }
+        )
+      });
     }
 
   }
@@ -51,7 +53,7 @@ class Login extends React.Component {
   signinSuccessRedirect = () => {
     let defaultRedirect = this.props.getDefaultRedirectPath();
     let wantedRedirect = this.props.commonStore.getSessionStorage('signinSuccessRedirect');
-    if(wantedRedirect) this.props.commonStore.removeSessionStorage('signinSuccessRedirect');
+    if (wantedRedirect) this.props.commonStore.removeSessionStorage('signinSuccessRedirect');
     this.setState({ redirectTo: wantedRedirect || defaultRedirect });
   }
 
@@ -60,7 +62,7 @@ class Login extends React.Component {
     this.props.authStore.login()
       .then((response) => {
         if (response === 200) {
-          ReactGA.event({category: 'User',action: 'Login with password'});
+          ReactGA.event({ category: 'User', action: 'Login with password' });
           LogRocket.info('User login with password.');
           this.signinSuccessRedirect();
         } else {
@@ -92,9 +94,9 @@ class Login extends React.Component {
     const { values, inProgress } = this.props.authStore;
     const { orgTag } = this.props.organisationStore.values;
     let { loginErrors, redirectTo, isAuth } = this.state;
-    const {locale} = this.props.commonStore;
+    const { locale } = this.props.commonStore;
     let intl = this.props.intl;
-    if (redirectTo){
+    if (redirectTo) {
       return <Redirect push to={redirectTo} />;
     }
     else if (isAuth) {
@@ -109,16 +111,15 @@ class Login extends React.Component {
                 <SnackbarCustom variant="warning" message={loginErrors} />
               </Grid>
             )}
-            <Grid container item direction="row" justify="center"  spacing={16} >
-              <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="google" /></Grid>
-              <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="linkedin" currentAction="signin" /></Grid>            
+            <Grid item container justify='center' style={{ textAlign: 'center' }}>
+              <Typography variant="h3">
+                <FormattedHTMLMessage id="signin.title.org" />
+              </Typography>
             </Grid>
-            <Grid item>
-              <Typography style={{
-                fontSize: '1rem',
-                color: '#7c7c7c',
-                textAlign: 'center'
-              }}><FormattedMessage id="or" /></Typography>
+            <Grid item justify={'center'} container>
+              <Button variant="text" onClick={() => this.props.handleChangeIndex(1)} >
+                <FormattedHTMLMessage id="signin.or.create" />
+              </Button>
             </Grid>
             <Grid item>
               <TextField
@@ -126,7 +127,6 @@ class Login extends React.Component {
                 type="email"
                 autoComplete="email"
                 fullWidth
-                variant={"outlined"}
                 value={values.email}
                 onChange={this.handleEmailChange}
                 required
@@ -138,7 +138,6 @@ class Login extends React.Component {
                 type="password"
                 autoComplete="current-password"
                 fullWidth
-                variant={"outlined"}
                 value={values.password}
                 onChange={this.handlePasswordChange}
                 required
@@ -156,14 +155,26 @@ class Login extends React.Component {
                 )
               }
             </Grid>
-            <Grid item>
+            <Grid item container justify="center">
               <Button component={Link}
-                      to={"/" + locale + (orgTag ? '/' + orgTag : '') + "/password/forgot"}
-                      variant="text"
-                      fullWidth={true}
+                to={"/" + locale + (orgTag ? '/' + orgTag : '') + "/password/forgot"}
+                variant="text"
               >
                 <FormattedMessage id="I don't have my password" />
               </Button>
+            </Grid>
+            <Grid item>
+              <Typography style={{
+                fontSize: '1rem',
+                color: '#7c7c7c',
+                textAlign: 'center'
+              }}>
+                <FormattedHTMLMessage id="signin.or.integration" />
+              </Typography>
+            </Grid>
+            <Grid container item direction="row" justify="center" spacing={16} >
+              <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="google" /></Grid>
+              <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="linkedin" currentAction="signin" /></Grid>
             </Grid>
           </Grid>
         </form>
