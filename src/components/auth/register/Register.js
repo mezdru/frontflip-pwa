@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl, FormattedHTMLMessage } from 'react-intl';
 import { inject, observer } from 'mobx-react';
 import { Redirect } from 'react-router-dom';
 
@@ -134,11 +134,13 @@ class Register extends React.Component {
             )}
             <Grid item container justify='center'>
               <Typography variant="h3" style={{textAlign: 'center'}}>
-                Create a Wingzy account
+                <FormattedHTMLMessage id="signup.title.org" />
               </Typography>
             </Grid>
             <Grid item container justify='center'>
-              <Button variant="text" onClick={() => this.props.handleChangeIndex(0)} >or sign in to your account</Button>
+              <Button variant="text" onClick={() => this.props.handleChangeIndex(0)} >
+                <FormattedHTMLMessage id="signup.or.signin" />
+              </Button>
             </Grid>
 
 
@@ -181,7 +183,7 @@ class Register extends React.Component {
                 fontSize: '1rem',
                 color: '#7c7c7c',
                 textAlign: 'center'
-              }}>or create an account with</Typography>
+              }}><FormattedHTMLMessage id="signup.or.integration" /></Typography>
             </Grid>
             <Grid container item direction="row" justify="center" spacing={16} >
               <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="google" /></Grid>
