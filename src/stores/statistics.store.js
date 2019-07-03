@@ -1,6 +1,7 @@
 import { observable, action, decorate } from "mobx";
 import agent from '../agent';
 import organisationStore from './organisation.store';
+import authStore from './auth.store';
 
 class StatisticsStore {
   inProgress = false;
@@ -12,6 +13,7 @@ class StatisticsStore {
    * @description Post search log
    */
   postSearchLog(orgId, tagsArray, query, resultsCount) {
+    if(!authStore.isAuth()) return Promise.resolve();
     this.inProgress = true;
     this.errors = null;
     let storedOrgId =  organisationStore.values.organisation._id;
