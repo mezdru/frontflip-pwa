@@ -300,6 +300,20 @@ const SearchLog = {
     )
 }
 
+const Clap = {
+  post: (clap) => 
+    requests.post(
+      process.env.REACT_APP_API_ROOT_RECOGNIZE + '/api/claps',
+      {
+        clap: clap
+      }
+    ),
+  getClapCountByProfile: (recordId) =>
+    requests.get(
+      process.env.REACT_APP_API_ROOT_RECOGNIZE + '/api/claps/record/' + recordId,
+    )
+}
+
 /**
  * @description Test get user with secure call to API
  */
@@ -316,5 +330,6 @@ export default {
   User,
   Email,
   Invitation,
-  SearchLog
+  SearchLog,
+  Clap
 }
