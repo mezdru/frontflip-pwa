@@ -16,8 +16,14 @@ class ClapStore {
     this.values.clap = clap;
   }
 
+  setCurrentRecordId(recordId) {
+    this.values.currentRecordId = recordId;
+  }
+
   reset() {
     this.values.clap = {};
+    this.values.currentRecordId = null;
+    this.values.currentRecordClapCount = [];
   }
 
   postClap() {
@@ -60,6 +66,10 @@ decorate(OrganisationStore, {
   errors: observable,
   values: observable,
   reset: action,
+  getClapCountByProfile: action,
+  postClap: action,
+  setClap: action,
+  setCurrentRecordId
 });
 
 export default new ClapStore();
