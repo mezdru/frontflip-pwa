@@ -1,6 +1,8 @@
 import React from 'react';
 import { Avatar, Chip, withStyles } from '@material-ui/core';
 import classNames from 'classnames';
+import withClapManagement from '../../../hoc/ClapManagement.hoc';
+import { Delete } from '@material-ui/icons';
 
 const styles = theme => ({
   wingImg: {
@@ -15,7 +17,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.secondary.dark,
     color: 'white',
     '&:hover': {
-      backgroundColor: theme.palette.secondary.dark  + ' !important',
+      backgroundColor: theme.palette.secondary.dark + ' !important',
       color: 'white !important'
     }
   },
@@ -74,30 +76,30 @@ const styles = theme => ({
   }
 });
 
-const Wing = React.memo(({ src, label, color, ...props }) => {
+var Wing = React.memo(({ src, label, color, ...props }) => {
   if (src) {
     return (
       <Chip
-        avatar={<Avatar className={props.classes.wingImg} src={src} alt="wings-img"/>}
-        label={label}
-        color={color}
-        className={classNames(props.classes[props.className], (props.onDelete ? props.classes.removable : null) )}
-        onClick={props.onClick}
-        onDelete={props.onDelete}
-        onMouseDown={props.onMouseDown}
-        onMouseUp={props.onMouseUp}
-        onBlur={props.onBlur}
-        >
-      </Chip>
-    )
-  } else {
-    return (
-      <Chip
+        avatar={<Avatar className={props.classes.wingImg} src={src} alt="wings-img" />}
         label={label}
         color={color}
         className={classNames(props.classes[props.className], (props.onDelete ? props.classes.removable : null))}
         onClick={props.onClick}
         onDelete={props.onDelete}
+        onMouseDown={props.onMouseDown}
+        onMouseUp={props.onMouseUp}
+        onBlur={props.onBlur}
+      >
+      </Chip>
+    )
+  } else {
+    return (
+      <Chip
+        label={label + ' (' + props.getClapCount(props.hashtagId) +')'}
+        color={color}
+        className={classNames(props.classes[props.className], (props.onDelete ? props.classes.removable : null))}
+        onClick={props.onClick}
+        onDelete={() => props.handleClap(props.recordId, props.hashtagId)}
         onMouseDown={props.onMouseDown}
         onMouseUp={props.onMouseUp}
         onBlur={props.onBlur}>
@@ -106,5 +108,7 @@ const Wing = React.memo(({ src, label, color, ...props }) => {
   }
 
 });
+
+Wing = withClapManagement(Wing);
 
 export default withStyles(styles)(Wing)

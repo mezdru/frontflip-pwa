@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import '../algolia/SearchField.css';
 import ProfileService from '../../services/profile.service';
 import Wing from '../utils/wing/Wing';
-import withSearchManagement from './SearchManagement.hoc';
+import withSearchManagement from '../../hoc/SearchManagement.hoc';
 import { styles } from './SearchField.css';
 
 

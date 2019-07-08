@@ -1,7 +1,5 @@
 import { observable, action, decorate } from "mobx";
 import agent from '../agent';
-import commonStore from "./common.store";
-import userStore from "./user.store";
 
 class ClapStore {
   inProgress = false;
@@ -61,7 +59,7 @@ class ClapStore {
   }
 }
 
-decorate(OrganisationStore, {
+decorate(ClapStore, {
   inProgress: observable,
   errors: observable,
   values: observable,
@@ -69,7 +67,7 @@ decorate(OrganisationStore, {
   getClapCountByProfile: action,
   postClap: action,
   setClap: action,
-  setCurrentRecordId
+  setCurrentRecordId: action
 });
 
 export default new ClapStore();

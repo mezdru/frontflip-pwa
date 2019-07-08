@@ -3,7 +3,7 @@ import { withStyles, Chip } from '@material-ui/core';
 import AlgoliaService from '../../services/algolia.service';
 import { inject, observer } from 'mobx-react';
 import { observe } from 'mobx';
-import withSearchManagement from './SearchManagement.hoc';
+import withSearchManagement from '../../hoc/SearchManagement.hoc';
 import SuggestionsService from '../../services/suggestions.service';
 import ProfileService from '../../services/profile.service';
 

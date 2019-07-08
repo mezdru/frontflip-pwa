@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import commonStore from '../../stores/common.store';
+import commonStore from '../stores/common.store';
 
 const withSearchManagement = (ComponentToWrap) => {
   class SearchManagement extends Component {

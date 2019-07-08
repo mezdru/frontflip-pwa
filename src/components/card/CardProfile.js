@@ -9,7 +9,7 @@ import Availability from '../availabilityToggle/Availability';
 import Wings from '../utils/wing/Wing';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import ProfileService from '../../services/profile.service';
-import withSearchManagement from '../search/SearchManagement.hoc';
+import withSearchManagement from '../../hoc/SearchManagement.hoc';
 import {styles} from './CardProfile.css';
 
 ProfileService.setExtraLinkLimit(5);

@@ -12,7 +12,7 @@ import { styles } from './SearchPage.css';
 import ErrorBoundary from '../components/utils/errors/ErrorBoundary';
 import './SearchPageStyle.css';
 import SearchButton from '../components/search/SearchButton';
-import withSearchManagement from '../components/search/SearchManagement.hoc';
+import withSearchManagement from '../hoc/SearchManagement.hoc';
 
 const OnboardCongratulation = React.lazy(() => import('../components/onboard/steps/OnboardCongratulation'));
 const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
