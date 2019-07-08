@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import { injectIntl } from 'react-intl';
 import { inject, observer } from 'mobx-react';
 import { withTheme, withStyles } from '@material-ui/core';
@@ -13,7 +13,7 @@ import withSearchManagement from './SearchManagement.hoc';
 import { styles } from './SearchField.css';
 
 
-class SearchField extends React.Component {
+class SearchField extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
