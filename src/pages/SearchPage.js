@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, PureComponent } from 'react'
 import { withStyles, Grid } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import withWidth from '@material-ui/core/withWidth';
@@ -28,7 +28,7 @@ console.debug('Loading SearchPage');
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
-class SearchPage extends React.Component {
+class SearchPage extends PureComponent {
   constructor(props) {
     super(props);
 
