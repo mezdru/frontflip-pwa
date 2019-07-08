@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {PureComponent} from 'react'
 import { withStyles, Chip } from '@material-ui/core';
 import AlgoliaService from '../../services/algolia.service';
 import { inject, observer } from 'mobx-react';
@@ -63,7 +63,7 @@ const styles = theme => ({
   }
 });
 
-class SearchSuggestions extends React.Component {
+class SearchSuggestions extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -75,7 +75,6 @@ class SearchSuggestions extends React.Component {
       firstWings: []
     };
 
-    this.fetchSuggestions = this.fetchSuggestions.bind(this);
   }
 
   componentDidMount() {
@@ -133,7 +132,7 @@ class SearchSuggestions extends React.Component {
     }
   }
 
-  fetchSuggestions(filters, query) {
+  fetchSuggestions = (filters, query) => {
     AlgoliaService.fetchFacetValues(null, false, filters, query)
       .then((res) => {
         if (!res) return;

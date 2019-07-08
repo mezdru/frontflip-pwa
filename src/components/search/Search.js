@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import SearchField from './SearchField';
 import SearchSuggestions from './SearchSuggestions';
 import AlgoliaService from '../../services/algolia.service';
 
-class Search extends React.Component {
+class Search extends PureComponent {
   constructor(props) {
     super(props);
 
