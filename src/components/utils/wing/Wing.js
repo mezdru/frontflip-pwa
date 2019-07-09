@@ -2,7 +2,6 @@ import React from 'react';
 import { Avatar, Chip, withStyles } from '@material-ui/core';
 import classNames from 'classnames';
 import withClapManagement from '../../../hoc/ClapManagement.hoc';
-import { Delete } from '@material-ui/icons';
 
 const styles = theme => ({
   wingImg: {
@@ -95,11 +94,11 @@ var Wing = React.memo(({ src, label, color, ...props }) => {
   } else {
     return (
       <Chip
-        label={label + ' (' + props.getClapCount(props.hashtagId) +')'}
+        label={label}
         color={color}
         className={classNames(props.classes[props.className], (props.onDelete ? props.classes.removable : null))}
         onClick={props.onClick}
-        onDelete={() => props.handleClap(props.recordId, props.hashtagId)}
+        onDelete={props.onDelete}
         onMouseDown={props.onMouseDown}
         onMouseUp={props.onMouseUp}
         onBlur={props.onBlur}>

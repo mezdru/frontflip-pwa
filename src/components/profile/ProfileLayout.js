@@ -10,7 +10,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import '../../resources/stylesheets/font-awesome.min.css';
 import './ContactsColors.css';
 import { styles } from './ProfileLayout.css';
-import Wings from '../utils/wing/Wing';
+import Wings from '../utils/wing/Wings';
+import WingsChip from '../utils/wing/Wing';
 import UrlService from '../../services/url.service';
 import ProfileService from '../../services/profile.service';
 import defaultPicture from '../../resources/images/placeholder_person.png';
@@ -167,12 +168,13 @@ class ProfileLayout extends React.Component {
                   label={ProfileService.htmlDecode(displayedName)} key={hashtag._id}
                   onClick={(e) => this.handleReturnToSearch(e, { name: displayedName, tag: hashtag.tag, label: displayedName, value: hashtag.tag })}
                   className={(hashtag.class ? hashtag.class : 'notHighlighted')} 
-                  recordId={currentHit.objectID} hashtagId={hashtag._id} />
+                  recordId={currentHit.objectID || currentHit._id} hashtagId={hashtag._id} 
+                  />
               )
             })}
             
             {canEdit && (
-              <Wings label={this.props.intl.formatMessage({ id: 'profile.addWings' })} className={'button'}
+              <WingsChip label={this.props.intl.formatMessage({ id: 'profile.addWings' })} className={'button'}
                 onClick={() => { this.handleRedirectToEditWings(currentHit.objectID) }} />
             )}
             

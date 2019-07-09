@@ -9,18 +9,24 @@ const withClapManagement = (ComponentToWrap) => {
       return (clapCountEntry ? clapCountEntry.claps : 0);
     }
 
-    handleClap = (recipient, hashtag) => {
+    handleClap = (recipient, hashtag,  given) => {
+      if(!recipient || !hashtag || !this.props.recordStore.values.record._id) return;
+      this.props.clapStore.setCurrentRecordId(recipient);
+
       var clap = {
         recipient: recipient,
         hashtag: hashtag,
-        given: 1,
+        given: given || 1,
         giver: this.props.recordStore.values.record._id,
         organisation: this.props.organisationStore.values.organisation._id
       };
 
       this.props.clapStore.setClap(clap);
-      this.props.clapStore.postClap()
-      .then(() => this.props.clapStore.getClapCountByProfile());
+      return this.props.clapStore.postClap();
+    }
+
+    canClap = (recipient) => {
+      return !(this.props.recordStore.values.record._id === (recipient));
     }
 
     render() {
@@ -28,6 +34,7 @@ const withClapManagement = (ComponentToWrap) => {
         <ComponentToWrap {...this.props} 
           handleClap={this.handleClap} 
           getClapCount={this.getClapCount}
+          canClap={this.canClap}
         />
       )
     }

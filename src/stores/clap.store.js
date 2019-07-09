@@ -18,6 +18,10 @@ class ClapStore {
     this.values.currentRecordId = recordId;
   }
 
+  setCurrentRecordClapCount(clapCount) {
+    this.values.currentRecordClapCount = clapCount;
+  }
+
   reset() {
     this.values.clap = {};
     this.values.currentRecordId = null;
@@ -48,7 +52,7 @@ class ClapStore {
 
     return agent.Clap.getClapCountByProfile(this.values.currentRecordId)
       .then(response => {
-        this.values.currentRecordClapCount = response.data;
+        this.setCurrentRecordClapCount(response.data);
         return this.values.currentRecordClapCount;
       })
       .catch(action((err) => {
@@ -67,7 +71,8 @@ decorate(ClapStore, {
   getClapCountByProfile: action,
   postClap: action,
   setClap: action,
-  setCurrentRecordId: action
+  setCurrentRecordId: action,
+  setCurrentRecordClapCount: action
 });
 
 export default new ClapStore();
