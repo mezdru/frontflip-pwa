@@ -6,13 +6,23 @@ export const styles = theme => ({
     borderRadius: 16,
     boxSizing: 'border-box',
     fontSize: '0.9125rem',
-    backgroundColor: '#E0E0E0',
     display: 'inline-flex',
     fontWeight: 600,
     height: 32,
     transition: 'background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+  },
+  profileMode: {
+    backgroundColor: '#E0E0E0',
+    color: theme.palette.primary.dark,
     '&:hover': {
       backgroundColor: 'rgb(206, 206, 206)',
+    }
+  },
+  cardMode: {
+    backgroundColor: '#FFFFFF',
+    color: theme.palette.primary.dark,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.hover
     }
   },
   avatar: {

@@ -6,7 +6,7 @@ import {inject, observer} from 'mobx-react';
 
 import '../../resources/stylesheets/font-awesome.min.css';
 import Availability from '../availabilityToggle/Availability';
-import Wings from '../utils/wing/Wing';
+import Wings from '../utils/wing/Wings';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import ProfileService from '../../services/profile.service';
 import withSearchManagement from '../../hoc/SearchManagement.hoc';
@@ -89,16 +89,16 @@ class CardProfile extends React.PureComponent {
           </CardActions>
         </Grid>
         <Grid container item className={classes.wingsContainer}>
-          <CardContent>
+          <CardContent style={{paddingBottom: 0}}>
             <Grid container className={classes.wings}>
               {hit.hashtags && hit.hashtags.map((hashtag, i) => {
                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
                 return (
                   <Wings src={ProfileService.getPicturePath(hashtag.picture)} key={hashtag._id}
-                      label={ProfileService.htmlDecode(displayedName)}
-                      onClick={(e) => addFilter({name: displayedName, tag: hashtag.tag, value: hashtag.tag, label: displayedName})}
-                      className={(hashtag.class ? hashtag.class : 'notHighlighted')}
-                         color={'primary'}
+                    label={ProfileService.htmlDecode(displayedName)}
+                    onClick={(e) => addFilter({name: displayedName, tag: hashtag.tag, value: hashtag.tag, label: displayedName})}
+                    // className={(hashtag.class ? hashtag.class : 'notHighlighted')}
+                    recordId={hit.objectID || hit._id} hashtagId={hashtag._id} claps={hashtag.claps || 0} mode="card"
                   />
                 )
               })}

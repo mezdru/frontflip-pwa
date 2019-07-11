@@ -3,6 +3,7 @@ import withClapManagement from "../../../hoc/ClapManagement.hoc";
 import { withStyles } from '@material-ui/core';
 import {styles} from './Wings.css';
 import applauseIcon from '../../../resources/icons/applause_black.png';
+import classNames from 'classnames';
 
 let interval;
 
@@ -39,13 +40,25 @@ class Wings extends React.PureComponent {
     this.setState({currentClapAdded: 0});
   }
 
+  getClasseByMode = () => {
+    switch(this.props.mode){
+      case "card":
+        return this.props.classes.cardMode;
+      case "profile":
+        return this.props.classes.profileMode;
+      default:
+        return null;
+    }
+  }
+
   render() {
     const {classes, label, src} = this.props;
     const {addClapCounterLocal} = this.state;
-    const claps = addClapCounterLocal + this.props.getClapCount(this.props.hashtagId);
+    const remoteClaps = this.props.claps || this.props.getClapCount(this.props.hashtagId);
+    const claps = addClapCounterLocal + remoteClaps;
 
     return (
-      <div className={classes.root} >
+      <div className={classNames(classes.root, this.getClasseByMode())} >
         {src && (
           <div className={classes.avatar}>
             <img src={src} alt="emoji" />

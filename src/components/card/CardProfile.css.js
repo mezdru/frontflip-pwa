@@ -38,7 +38,7 @@ export const styles = theme => ({
   },
   wings: {
     display: 'inline-block',
-    color: 'white',
+    overflowY: 'hidden',
     position: 'relative',
     marginTop: '22px!important',
     marginBottom: 4,
