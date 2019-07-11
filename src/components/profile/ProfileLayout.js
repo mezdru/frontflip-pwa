@@ -167,8 +167,7 @@ class ProfileLayout extends React.Component {
                 <Wings src={ProfileService.getPicturePath(hashtag.picture)}
                   label={ProfileService.htmlDecode(displayedName)} key={hashtag._id}
                   onClick={(e) => this.handleReturnToSearch(e, { name: displayedName, tag: hashtag.tag, label: displayedName, value: hashtag.tag })}
-                  // className={(hashtag.class ? hashtag.class : 'notHighlighted')} 
-                  recordId={currentHit.objectID || currentHit._id} hashtagId={hashtag._id} mode="profile"
+                  recordId={currentHit.objectID || currentHit._id} hashtagId={hashtag._id} mode={(hashtag.class ? 'highlight' : 'profile')}
                   />
               )
             })}

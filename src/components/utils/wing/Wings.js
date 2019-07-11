@@ -2,7 +2,7 @@ import React from 'react';
 import withClapManagement from "../../../hoc/ClapManagement.hoc";
 import { withStyles } from '@material-ui/core';
 import {styles} from './Wings.css';
-import applauseIcon from '../../../resources/icons/applause_black.png';
+import ApplauseIcon from '../../../resources/icons/Applause.js';
 import classNames from 'classnames';
 
 let interval;
@@ -46,33 +46,37 @@ class Wings extends React.PureComponent {
         return this.props.classes.cardMode;
       case "profile":
         return this.props.classes.profileMode;
+      case "highlight":
+        return this.props.classes.highlightMode;
       default:
         return null;
     }
   }
 
   render() {
-    const {classes, label, src} = this.props;
+    const {classes, label, src, theme} = this.props;
     const {addClapCounterLocal} = this.state;
     const remoteClaps = this.props.claps || this.props.getClapCount(this.props.hashtagId);
     const claps = addClapCounterLocal + remoteClaps;
+    const classMode = this.getClasseByMode();
 
     return (
-      <div className={classNames(classes.root, this.getClasseByMode())} >
+      <div className={classNames(classes.root, classMode)} >
         {src && (
-          <div className={classes.avatar}>
+          <div className={classes.avatar} onClick={this.props.onClick}>
             <img src={src} alt="emoji" />
           </div>
         )}
-        <span className={classes.label}>
+        <span className={classes.label} onClick={this.props.onClick}>
           {label}
         </span>
   
         <div className={classes.clapRoot} 
           onMouseDown={this.handleClapDown} 
           onMouseUp={this.handleClapUp} 
+          id="clap"
         >
-          <img src={applauseIcon} alt="applause"/>
+          <ApplauseIcon className={classNames(classMode, classes.applauseIcon)} />
           <span>
             {claps}
           </span>
@@ -83,4 +87,4 @@ class Wings extends React.PureComponent {
   }
 }
 
-export default withStyles(styles)(withClapManagement(Wings));
+export default withStyles(styles, {withTheme: true})(withClapManagement(Wings));

@@ -25,6 +25,17 @@ export const styles = theme => ({
       backgroundColor: theme.palette.primary.hover
     }
   },
+  highlightMode: {
+    backgroundColor: theme.palette.secondary.main,
+    color: 'white'
+  },
+  applauseIcon: {
+    width: 20,
+    height: 20,
+    backgroundColor: 'transparent !important',
+    pointerEvents: 'none',
+    borderRadius: '50%',
+  },
   avatar: {
     position: 'relative',
     height: 48,
