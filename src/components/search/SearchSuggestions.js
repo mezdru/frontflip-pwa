@@ -166,8 +166,8 @@ class SearchSuggestions extends PureComponent {
               }
             });
 
-            var results = (resultHitsFiltered.length > 9 ? resultHitsFiltered : resultHits);
-            this.setState({ facetHits: results.splice(0, 10), shouldUpdate: true });
+            var results = (resultHitsFiltered.length > 19 ? resultHitsFiltered : resultHits);
+            this.setState({ facetHits: results.splice(0, 20), shouldUpdate: true });
           });
       })
       .catch((e) => { console.log(e) });
