@@ -15,14 +15,14 @@ export const styles = theme => ({
     backgroundColor: '#E0E0E0',
     color: theme.palette.primary.dark,
     '&:hover': {
-      backgroundColor: 'rgb(206, 206, 206)',
+      boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'
     }
   },
   cardMode: {
     backgroundColor: '#FFFFFF',
     color: theme.palette.primary.dark,
     '&:hover': {
-      backgroundColor: theme.palette.primary.hover
+      boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
     }
   },
   highlightMode: {
@@ -67,9 +67,11 @@ export const styles = theme => ({
     float: 'right',
     display: 'flex',
     height: 48,
-    "& img": {
-      height: 20,
-      width: 20
+    opacity: .65,
+    fontWeight: 500,
+    transition: 'opacity 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+    '&:hover': {
+      opacity: 1
     },
     '& span': {
       marginLeft: 2
