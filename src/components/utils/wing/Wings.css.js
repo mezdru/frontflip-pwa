@@ -66,8 +66,7 @@ export const styles = theme => ({
     userSelect: 'none', /* Non-prefixed version, currently supported by Chrome and Opera */
     float: 'right',
     display: 'flex',
-    height: 48,
-    opacity: .65,
+    opacity: .6,
     fontWeight: 500,
     transition: 'opacity 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
     '&:hover': {
