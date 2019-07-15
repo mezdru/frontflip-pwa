@@ -10,11 +10,12 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import '../../resources/stylesheets/font-awesome.min.css';
 import './ContactsColors.css';
 import { styles } from './ProfileLayout.css';
-import Wings from '../utils/wing/Wing';
+import Wings from '../utils/wing/Wings';
+import WingsChip from '../utils/wing/Wing';
 import UrlService from '../../services/url.service';
 import ProfileService from '../../services/profile.service';
 import defaultPicture from '../../resources/images/placeholder_person.png';
-import withSearchManagement from '../search/SearchManagement.hoc';
+import withSearchManagement from '../../hoc/SearchManagement.hoc';
 
 const Banner = React.lazy(() => import('../../components/utils/banner/Banner'));
 const Logo = React.lazy(() => import('../../components/utils/logo/Logo'));
@@ -29,6 +30,7 @@ class ProfileLayout extends React.Component {
       canEdit: false,
       record: null,
       displayIn: true,
+      clapsCount: []
     }
   }
   
@@ -48,11 +50,19 @@ class ProfileLayout extends React.Component {
     this.props.recordStore.getRecordByTag()
       .then((record) => {
         record.objectID = record._id;
-        this.setState({ record: record, canEdit: this.canEdit(record) });
+        this.setState({ record: record, canEdit: this.canEdit(record) }, this.getClapsCount);
       }).catch(() => {
       return;
     })
   };
+
+  getClapsCount = () => {
+    this.props.clapStore.setCurrentRecordId(this.state.record.objectID);
+    this.props.clapStore.getClapCountByProfile()
+    .then(clapsCount => {
+      this.setState({clapsCount: clapsCount});
+    }).catch();
+  }
   
   handleReturnToSearch = (e, element) => {
     this.setState({ displayIn: false }, () => {
@@ -78,7 +88,7 @@ class ProfileLayout extends React.Component {
   
   render() {
     const { hit, className, classes, theme } = this.props;
-    const { canEdit, record, displayIn, redirectTo } = this.state;
+    const { canEdit, record, displayIn, redirectTo, clapsCount } = this.state;
     const { locale } = this.props.commonStore;
     const orgTag = this.props.organisationStore.values.organisation.tag;
     let rootUrl = '/' + locale + '/' + orgTag;
@@ -155,14 +165,15 @@ class ProfileLayout extends React.Component {
               let displayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || currentHit.tag)
               return (
                 <Wings src={ProfileService.getPicturePath(hashtag.picture)}
-                       label={ProfileService.htmlDecode(displayedName)} key={hashtag._id}
+                  label={ProfileService.htmlDecode(displayedName)} key={hashtag._id}
                   onClick={(e) => this.handleReturnToSearch(e, { name: displayedName, tag: hashtag.tag, label: displayedName, value: hashtag.tag })}
-                  className={(hashtag.class ? hashtag.class : 'notHighlighted')} />
+                  recordId={currentHit.objectID || currentHit._id} hashtagId={hashtag._id} mode={(hashtag.class ? 'highlight' : 'profile')}
+                  />
               )
             })}
             
             {canEdit && (
-              <Wings label={this.props.intl.formatMessage({ id: 'profile.addWings' })} className={'button'}
+              <WingsChip label={this.props.intl.formatMessage({ id: 'profile.addWings' })} className={'button'}
                 onClick={() => { this.handleRedirectToEditWings(currentHit.objectID) }} />
             )}
             
@@ -183,7 +194,7 @@ class ProfileLayout extends React.Component {
 
 ProfileLayout = withSearchManagement(ProfileLayout);
 
-export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore')(
+export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore', 'clapStore')(
   injectIntl(observer(
     withStyles(styles, { withTheme: true })(ProfileLayout)
   ))

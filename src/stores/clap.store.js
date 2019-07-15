@@ -1,7 +1,5 @@
 import { observable, action, decorate } from "mobx";
 import agent from '../agent';
-import commonStore from "./common.store";
-import userStore from "./user.store";
 
 class ClapStore {
   inProgress = false;
@@ -18,6 +16,10 @@ class ClapStore {
 
   setCurrentRecordId(recordId) {
     this.values.currentRecordId = recordId;
+  }
+
+  setCurrentRecordClapCount(clapCount) {
+    this.values.currentRecordClapCount = clapCount;
   }
 
   reset() {
@@ -50,7 +52,7 @@ class ClapStore {
 
     return agent.Clap.getClapCountByProfile(this.values.currentRecordId)
       .then(response => {
-        this.values.currentRecordClapCount = response.data;
+        this.setCurrentRecordClapCount(response.data);
         return this.values.currentRecordClapCount;
       })
       .catch(action((err) => {
@@ -61,7 +63,7 @@ class ClapStore {
   }
 }
 
-decorate(OrganisationStore, {
+decorate(ClapStore, {
   inProgress: observable,
   errors: observable,
   values: observable,
@@ -69,7 +71,8 @@ decorate(OrganisationStore, {
   getClapCountByProfile: action,
   postClap: action,
   setClap: action,
-  setCurrentRecordId
+  setCurrentRecordId: action,
+  setCurrentRecordClapCount: action
 });
 
 export default new ClapStore();

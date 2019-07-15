@@ -7,7 +7,7 @@ import AlgoliaService from '../../services/algolia.service';
 import { shuffleArray } from '../../services/utils.service';
 import Card from '../card/CardProfile';
 
-import withSearchManagement from './SearchManagement.hoc';
+import withSearchManagement from '../../hoc/SearchManagement.hoc';
 
 const SearchShowMore = React.lazy(() => import('./SearchShowMore'));
 const SearchNoResults = React.lazy(() => import('./SearchNoResults'));

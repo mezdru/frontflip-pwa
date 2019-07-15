@@ -6,10 +6,10 @@ import {inject, observer} from 'mobx-react';
 
 import '../../resources/stylesheets/font-awesome.min.css';
 import Availability from '../availabilityToggle/Availability';
-import Wings from '../utils/wing/Wing';
+import Wings from '../utils/wing/Wings';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import ProfileService from '../../services/profile.service';
-import withSearchManagement from '../search/SearchManagement.hoc';
+import withSearchManagement from '../../hoc/SearchManagement.hoc';
 import {styles} from './CardProfile.css';
 
 ProfileService.setExtraLinkLimit(5);
@@ -90,17 +90,16 @@ class CardProfile extends React.PureComponent {
           </CardActions>
         </Grid>
         <Grid container item className={classes.wingsContainer}>
-          <CardContent>
+          <CardContent style={{paddingBottom: 0}}>
             <Grid container className={classes.wings}>
               {hit.hashtags && hit.hashtags.map((hashtag, i) => {
                 if(i >= WINGS_DISPLAYED) return null;
                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
                 return (
                   <Wings src={ProfileService.getPicturePath(hashtag.picture)} key={hashtag._id}
-                      label={ProfileService.htmlDecode(displayedName)}
-                      onClick={(e) => addFilter({name: displayedName, tag: hashtag.tag, value: hashtag.tag, label: displayedName})}
-                      className={(hashtag.class ? hashtag.class : 'notHighlighted')}
-                         color={'primary'}
+                    label={ProfileService.htmlDecode(displayedName)}
+                    onClick={(e) => addFilter({name: displayedName, tag: hashtag.tag, value: hashtag.tag, label: displayedName})}
+                    recordId={hit.objectID || hit._id} hashtagId={hashtag._id} claps={hashtag.claps || 0} mode={(hashtag.class ? 'highlight' : 'card')}
                   />
                 )
               })}

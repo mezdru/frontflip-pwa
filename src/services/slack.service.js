@@ -7,10 +7,13 @@ const FILENAME = 'slack_helper.js';
 class SlackService {
 
     static notifyError(err, line, developerName = null, filename = FILENAME){
+        if(process.env.NODE_ENV !== 'production') return;
         let slackObject = {channel : '#errors'+(developerName?'-'+developerName:''), text : filename + ':line:'+line+ ' - ' + err};
         slack.send(slackObject);
     }
     static notify(channel, message){
+        if(process.env.NODE_ENV !== 'production') return;
+
         slack.send({
             channel: channel,
             text: message
