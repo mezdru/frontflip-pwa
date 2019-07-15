@@ -24,9 +24,8 @@ class Wings extends React.PureComponent {
   handleClapDown = (e) => {
     if (!this.state.canClap) return;
 
-    e.currentTarget.addEventListener('mouseout', (e2) => {
-      this.handleClapUp();
-    });
+    e.currentTarget.addEventListener('mouseout', this.handleClapUp);
+    e.currentTarget.addEventListener('touchleave', this.handleClapUp);
 
     this.setState({ addClapCounterLocal: this.state.addClapCounterLocal + 1, currentClapAdded: this.state.currentClapAdded + 1 })
     interval = setInterval(() => {
@@ -75,8 +74,10 @@ class Wings extends React.PureComponent {
 
         {canClap && (
           <ClickBurst intervalDuration={intervalDuration}>
-            <div className={classes.clapRoot} id="clap" onMouseDown={this.handleClapDown}
-              onMouseUp={this.handleClapUp}>
+            <div className={classes.clapRoot} id="clap"
+              onMouseDown={this.handleClapDown}
+              onMouseUp={this.handleClapUp}
+            >
               <ApplauseIcon className={classNames(classMode, classes.applauseIcon)} />
               <span>
                 {claps}

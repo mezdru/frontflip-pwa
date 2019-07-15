@@ -103,6 +103,7 @@ class ClickBurst extends React.Component {
 
     }
     if (child.props.onMouseDown) child.props.onMouseDown(e)
+
   }
 
   stopZoomLoop = (e, child) => {
@@ -124,6 +125,8 @@ class ClickBurst extends React.Component {
       return React.cloneElement(child, {
         onMouseDown: e => this.zoomLoop(e, child),
         onMouseUp: e => this.stopZoomLoop(e, child),
+        onTouchStart: e => this.zoomLoop(e, child),
+        onTouchEnd: e => this.stopZoomLoop(e, child),
         style: {
           cursor: `pointer`,
           userSelect: `none`,
