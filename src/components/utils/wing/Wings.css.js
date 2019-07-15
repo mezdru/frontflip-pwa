@@ -73,6 +73,7 @@ export const styles = theme => ({
       opacity: 1
     },
     '& span': {
+      pointerEvents: 'none',
       marginLeft: 2
     }
   }

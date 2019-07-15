@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core';
 import { styles } from './Wings.css';
 import ApplauseIcon from '../../../resources/icons/Applause.js';
 import classNames from 'classnames';
-import mojs from 'mo-js'
 import ClickBurst from '../../../hoc/ClickBurst';
 
 let interval;
@@ -14,7 +13,8 @@ class Wings extends React.PureComponent {
   state = {
     addClapCounterLocal: 0,
     currentClapAdded: 0,
-    canClap: false
+    canClap: false,
+    intervalDuration: 455 // BPM of Boogie Wonderland (In The Style Of Earth, Wind & Fire)
   }
 
   componentDidMount() {
@@ -31,7 +31,7 @@ class Wings extends React.PureComponent {
     this.setState({ addClapCounterLocal: this.state.addClapCounterLocal + 1, currentClapAdded: this.state.currentClapAdded + 1 })
     interval = setInterval(() => {
       this.setState({ addClapCounterLocal: this.state.addClapCounterLocal + 1, currentClapAdded: this.state.currentClapAdded + 1 })
-    }, 500);
+    }, this.state.intervalDuration);
   }
 
   handleClapUp = (e) => {
@@ -57,7 +57,7 @@ class Wings extends React.PureComponent {
 
   render() {
     const { classes, label, src, theme } = this.props;
-    const { addClapCounterLocal } = this.state;
+    const { addClapCounterLocal, intervalDuration, canClap } = this.state;
     const remoteClaps = this.props.claps || this.props.getClapCount(this.props.hashtagId);
     const claps = addClapCounterLocal + remoteClaps;
     const classMode = this.getClasseByMode();
@@ -73,19 +73,26 @@ class Wings extends React.PureComponent {
           {label}
         </span>
 
+        {canClap && (
+          <ClickBurst intervalDuration={intervalDuration}>
+            <div className={classes.clapRoot} id="clap" onMouseDown={this.handleClapDown}
+              onMouseUp={this.handleClapUp}>
+              <ApplauseIcon className={classNames(classMode, classes.applauseIcon)} />
+              <span>
+                {claps}
+              </span>
+            </div>
+          </ClickBurst>
+        )}
 
-        <ClickBurst>
-          <div className={classes.clapRoot} id="clap" onMouseDown={this.handleClapDown}
-            onMouseUp={this.handleClapUp}>
+        {!canClap && (
+          <div className={classes.clapRoot} id="clap" >
             <ApplauseIcon className={classNames(classMode, classes.applauseIcon)} />
-
             <span>
               {claps}
             </span>
-
           </div>
-        </ClickBurst>
-
+        )}
 
       </div>
     )

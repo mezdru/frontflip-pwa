@@ -7,6 +7,7 @@ class ClickBurst extends React.Component {
   state = {
     numBurstsToGenerate: 10,
     bursts: [],
+    duration: this.props.intervalDuration
   }
 
   rand = ({ min = 0, max = 1, int = true }) => {
@@ -36,7 +37,7 @@ class ClickBurst extends React.Component {
             stroke: `rgb(255,0,24)`,
             strokeDasharray: `100%`,
             strokeDashoffset: { '-100%': `100%` },
-            duration: this.rand({ min: 400, max: 600 }),
+            duration: this.state.duration,
             easing: `quad.out`,
           },
           onStart() {
@@ -76,7 +77,7 @@ class ClickBurst extends React.Component {
     if (!el) return;
     new mojs.Html({
       el: el,
-      duration: 500,
+      duration: this.state.duration,
       scale: { 2: 1 },
       easing: mojs.easing.out
     }).replay();
@@ -98,7 +99,7 @@ class ClickBurst extends React.Component {
       interval = setInterval(() => {
         this.zoomEffect(el);
         this.kaboom(event, child);
-      }, 500);
+      }, this.state.duration);
 
     }
     if (child.props.onMouseDown) child.props.onMouseDown(e)
@@ -106,7 +107,7 @@ class ClickBurst extends React.Component {
 
   stopZoomLoop = (e, child) => {
     clearInterval(interval);
-    setTimeout(this.clearShapes, 500);
+    setTimeout(this.clearShapes, this.state.duration);
     if (child.props.onMouseUp) child.props.onMouseUp(e)
   }
 
@@ -121,7 +122,6 @@ class ClickBurst extends React.Component {
   render() {
     return React.Children.map(this.props.children, child => {
       return React.cloneElement(child, {
-        onClick: e => this.kaboom(e, child),
         onMouseDown: e => this.zoomLoop(e, child),
         onMouseUp: e => this.stopZoomLoop(e, child),
         style: {
