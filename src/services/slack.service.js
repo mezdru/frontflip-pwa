@@ -1,4 +1,4 @@
-let slack = require('slack-notify')('https://hooks.slack.com/services/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');
+let slack = require('slack-notify')(process.env.REACT_APP_SLACK_APP);
 const FILENAME = 'slack_helper.js';
 
 /**
