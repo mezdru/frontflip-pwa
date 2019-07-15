@@ -17,13 +17,11 @@ const styles = theme => ({
     overflowX: 'hidden',
     overflowY: 'hidden',
     padding: '8px 0px',
-    marginLeft: '-8px',
     position: 'relative',
     zIndex: 1197,
     whiteSpace: 'nowrap',
   },
   suggestion: {
-    display: 'inline-block',
     margin: 8,
     marginBottom: 20,
     background: 'rgba(42, 44, 60, 0.85)',
@@ -45,7 +43,6 @@ const styles = theme => ({
     paddingLeft: 12,
   },
   suggestionPicture: {
-    position: 'absolute',
     width: 32,
     height: 48,
     margin: '-5px -6px 0 -22px', // should be -15px -6px 0 -22px
@@ -79,10 +76,15 @@ const styles = theme => ({
   },
   rightButton: {
     right: -80
+  },
+  roundImg: {
+    '& img': {
+      borderRadius: '50%'
+    }
   }
 });
 
-class SearchSuggestions extends PureComponent {
+class SearchSuggestions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -121,10 +123,11 @@ class SearchSuggestions extends PureComponent {
       observer2: observe(this.props.commonStore, 'searchFilters', (change) => {
         this.props.makeFiltersRequest()
           .then((request) => {
-            if (JSON.stringify(change.newValue) !== JSON.stringify(change.oldValue))
+            if (JSON.stringify(change.newValue) !== JSON.stringify(change.oldValue)){
               this.setState({ filterRequest: request.filterRequest, queryRequest: request.queryRequest }, () => {
                 this.fetchSuggestions(request.filterRequest, request.queryRequest);
               });
+            }
           });
       })
     });
@@ -144,6 +147,8 @@ class SearchSuggestions extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
+    this.props.resetScroll("search-suggestions-container");
+
     if (nextProps.autocompleteSuggestions.length > 0) {
       this.setState({ facetHits: nextProps.autocompleteSuggestions, shouldUpdate: true });
     } else {
@@ -167,6 +172,8 @@ class SearchSuggestions extends PureComponent {
             });
 
             var results = (resultHitsFiltered.length > 19 ? resultHitsFiltered : resultHits);
+
+            this.props.resetScroll("search-suggestions-container");
             this.setState({ facetHits: results.splice(0, 20), shouldUpdate: true });
           });
       })
@@ -211,7 +218,7 @@ class SearchSuggestions extends PureComponent {
                   component={(props) =>
                     <div {...props}>
                       {pictureSrc && (
-                        <div className={classes.suggestionPicture}>
+                        <div className={classNames(classes.suggestionPicture, (item.type === 'person' ? classes.roundImg : null) )}>
                           <img alt="Emoji" src={pictureSrc} />
                         </div>
                       )}

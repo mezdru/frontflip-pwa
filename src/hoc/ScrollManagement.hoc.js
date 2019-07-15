@@ -19,6 +19,11 @@ const withScrollManagement = (ComponentToWrap) => {
       }.bind(this), 5);    
     }
 
+    resetScroll = (scrollContainerId) => {
+      var element = window.document.getElementById(scrollContainerId);
+      if(element) element.scrollLeft = 0;
+    }
+
     scrollStop = () => {
       clearInterval(interval);
     }
@@ -28,6 +33,7 @@ const withScrollManagement = (ComponentToWrap) => {
         <ComponentToWrap {...this.props} 
           scrollTo={this.scrollTo}
           scrollStop={this.scrollStop}
+          resetScroll={this.resetScroll}
         />
       )
     }

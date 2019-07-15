@@ -173,8 +173,8 @@ class ProfileLayout extends React.Component {
             })}
             
             {canEdit && (
-              <WingsChip label={this.props.intl.formatMessage({ id: 'profile.addWings' })} className={'button'}
-                onClick={() => { this.handleRedirectToEditWings(currentHit.objectID) }} />
+              <Wings label={this.props.intl.formatMessage({ id: 'profile.addWings' })} mode="button"
+                onClick={() => { this.handleRedirectToEditWings(currentHit.objectID) }} enableClap={false}  />
             )}
             
             <div style={{ marginTop: 16 }}>
