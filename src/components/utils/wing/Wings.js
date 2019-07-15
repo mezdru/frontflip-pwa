@@ -14,7 +14,8 @@ class Wings extends React.PureComponent {
     addClapCounterLocal: 0,
     currentClapAdded: 0,
     canClap: false,
-    intervalDuration: 455 // BPM of Boogie Wonderland (In The Style Of Earth, Wind & Fire)
+    intervalDuration: 455, // BPM of Boogie Wonderland (In The Style Of Earth, Wind & Fire)
+    rateLimitActive: false
   }
 
   componentDidMount() {
@@ -22,7 +23,13 @@ class Wings extends React.PureComponent {
   }
 
   handleClapDown = (e) => {
-    if (!this.state.canClap) return;
+    if (!this.state.canClap || this.state.rateLimitActive) return;
+
+    this.setState({rateLimitActive: true}, () => {
+      setTimeout(() => {
+        this.setState({rateLimitActive: false});
+      }, this.state.intervalDuration);
+    })
 
     e.currentTarget.addEventListener('mouseout', this.handleClapUp);
     e.currentTarget.addEventListener('touchleave', this.handleClapUp);
