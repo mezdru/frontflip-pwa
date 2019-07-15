@@ -29,6 +29,13 @@ export const styles = theme => ({
     backgroundColor: theme.palette.secondary.main,
     color: 'white'
   },
+  buttonMode: {
+    backgroundColor: theme.palette.secondary.main,
+    color: 'white',
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.dark
+    }
+  },
   applauseIcon: {
     width: 20,
     height: 20,

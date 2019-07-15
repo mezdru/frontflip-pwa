@@ -56,13 +56,15 @@ class Wings extends React.PureComponent {
         return this.props.classes.profileMode;
       case "highlight":
         return this.props.classes.highlightMode;
+      case "button":
+        return this.props.classes.buttonMode;
       default:
         return null;
     }
   }
 
   render() {
-    const { classes, label, src, theme } = this.props;
+    const { classes, label, src, theme, enableClap } = this.props;
     const { addClapCounterLocal, intervalDuration, canClap } = this.state;
     const remoteClaps = this.props.claps || this.props.getClapCount(this.props.hashtagId);
     const claps = addClapCounterLocal + remoteClaps;
@@ -79,7 +81,7 @@ class Wings extends React.PureComponent {
           {label}
         </span>
 
-        {canClap && (
+        {canClap && enableClap && (
           <ClickBurst intervalDuration={intervalDuration}>
             <div className={classes.clapRoot} id="clap"
               onMouseDown={this.handleClapDown}
@@ -93,7 +95,7 @@ class Wings extends React.PureComponent {
           </ClickBurst>
         )}
 
-        {!canClap && (
+        {!canClap && enableClap && (
           <div className={classes.clapRoot} id="clap" >
             <ApplauseIcon className={classNames(classMode, classes.applauseIcon)} />
             <span>
