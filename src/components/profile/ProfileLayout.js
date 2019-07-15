@@ -168,7 +168,7 @@ class ProfileLayout extends React.Component {
                   label={ProfileService.htmlDecode(displayedName)} key={hashtag._id}
                   onClick={(e) => this.handleReturnToSearch(e, { name: displayedName, tag: hashtag.tag, label: displayedName, value: hashtag.tag })}
                   recordId={currentHit.objectID || currentHit._id} hashtagId={hashtag._id} mode={(hashtag.class ? 'highlight' : 'profile')}
-                  />
+                />
               )
             })}
             

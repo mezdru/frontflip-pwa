@@ -99,7 +99,7 @@ class CardProfile extends React.PureComponent {
                   <Wings src={ProfileService.getPicturePath(hashtag.picture)} key={hashtag._id}
                     label={ProfileService.htmlDecode(displayedName)}
                     onClick={(e) => addFilter({name: displayedName, tag: hashtag.tag, value: hashtag.tag, label: displayedName})}
-                    recordId={hit.objectID || hit._id} hashtagId={hashtag._id} claps={hashtag.claps || 0} mode={(hashtag.class ? 'highlight' : 'card')}
+                    recordId={hit.objectID} hashtagId={hashtag._id} claps={hashtag.claps || 0} mode={(hashtag.class ? 'highlight' : 'card')}
                   />
                 )
               })}

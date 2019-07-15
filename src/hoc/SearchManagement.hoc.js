@@ -10,8 +10,10 @@ const withSearchManagement = (ComponentToWrap) => {
      */
     addFilter = (element) => {
       var currentSearchFilters = commonStore.getSearchFilters();
-      currentSearchFilters.push(element);
-      commonStore.setSearchFilters(currentSearchFilters);
+      if(!this.isInSearchFilters(currentSearchFilters, element)) {
+        currentSearchFilters.push(element);
+        commonStore.setSearchFilters(currentSearchFilters);
+      }
     }
 
     removeFilter = (element) => {
@@ -40,6 +42,10 @@ const withSearchManagement = (ComponentToWrap) => {
         filterRequest: filterRequest,
         queryRequest: queryRequest
       };
+    }
+
+    isInSearchFilters(searchFilters, element) {
+      return (searchFilters.find(filter =>  ( (filter.tag &&  element.tag && (filter.tag === element.tag) )  || (filter.name &&  element.name && (filter.name === element.name) ) )) !== undefined);
     }
 
     render() {
