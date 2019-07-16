@@ -100,6 +100,7 @@ class CardProfile extends React.PureComponent {
                     label={ProfileService.htmlDecode(displayedName)}
                     onClick={(e) => addFilter({name: displayedName, tag: hashtag.tag, value: hashtag.tag, label: displayedName})}
                     recordId={hit.objectID} hashtagId={hashtag._id} claps={hashtag.claps || 0} mode={(hashtag.class ? 'highlight' : 'card')}
+                    enableClap={true}
                   />
                 )
               })}
