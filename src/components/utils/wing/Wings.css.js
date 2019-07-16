@@ -26,7 +26,7 @@ export const styles = theme => ({
     }
   },
   highlightMode: {
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary.hover,
     color: 'white'
   },
   buttonMode: {
