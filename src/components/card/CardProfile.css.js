@@ -42,7 +42,7 @@ export const styles = theme => ({
     position: 'relative',
     marginTop: '22px!important',
     marginBottom: 4,
-    '& div:first-child': {
+    '& >div:first-child': {
       marginLeft: 16
     },
     [theme.breakpoints.down('xs')]: {
