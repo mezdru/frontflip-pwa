@@ -32,6 +32,12 @@ class CardProfile extends React.PureComponent {
         return '200x200';
     }
   }
+
+  getClaps(hit, hashtagId) {
+    if(!hit || !hit.hashtags_claps) return null;
+    var clapEntry = hit.hashtags_claps.find(elt => elt.hashtag === hashtagId);
+    return clapEntry ? clapEntry.claps : null;
+  }
   
   render() {
     const {classes, hit, handleDisplayProfile} = this.props;
@@ -95,11 +101,12 @@ class CardProfile extends React.PureComponent {
               {hit.hashtags && hit.hashtags.map((hashtag, i) => {
                 if(i >= WINGS_DISPLAYED) return null;
                 let displayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
+                let claps = this.getClaps(hit, hashtag._id);
                 return (
                   <Wings src={ProfileService.getPicturePath(hashtag.picture)} key={hashtag._id}
                     label={ProfileService.htmlDecode(displayedName)}
                     onClick={(e) => addFilter({name: displayedName, tag: hashtag.tag, value: hashtag.tag, label: displayedName})}
-                    recordId={hit.objectID} hashtagId={hashtag._id} claps={hashtag.claps || 0} mode={(hashtag.class ? 'highlight' : 'card')}
+                    recordId={hit.objectID} hashtagId={hashtag._id} claps={claps} mode={(hashtag.class ? 'highlight' : 'card')}
                     enableClap={true}
                   />
                 )
