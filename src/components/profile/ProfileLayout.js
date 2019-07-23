@@ -1,39 +1,106 @@
-import React, { Suspense } from 'react'
+import React from 'react';
+import ProfileThumbnail from './ProfileThumbnail';
+import { withStyles, Grid, Button } from '@material-ui/core';
 import { inject, observer } from 'mobx-react';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import { Redirect } from 'react-router-dom';
-import classNames from 'classnames';
-import { Button, Grid, IconButton, Typography, withStyles } from '@material-ui/core';
-import { Clear } from '@material-ui/icons';
-import CircularProgress from '@material-ui/core/CircularProgress';
-
-import '../../resources/stylesheets/font-awesome.min.css';
-import './ContactsColors.css';
-import { styles } from './ProfileLayout.css';
-import Wings from '../utils/wing/Wings';
-import WingsChip from '../utils/wing/Wing';
-import UrlService from '../../services/url.service';
 import ProfileService from '../../services/profile.service';
-import defaultPicture from '../../resources/images/placeholder_person.png';
-import withSearchManagement from '../../hoc/SearchManagement.hoc';
+import Banner from '../utils/banner/Banner';
+import BannerResizable from '../utils/banner/BannerResizable';
+import ProfileWings from './ProfileWings';
+import ProfileClapHistory from './ProfileClapHistory';
+import { FilterList } from '@material-ui/icons';
+import ProfileActions from './ProfileActions';
 
-const Banner = React.lazy(() => import('../../components/utils/banner/Banner'));
-const Logo = React.lazy(() => import('../../components/utils/logo/Logo'));
-const MenuButton = React.lazy(() => import('./menuButton'));
-
+const styles = {
+  root: {
+    position: 'fixed',
+    width: '100vw',
+    minHeight: '100vh',
+    backgroundColor: 'white',
+    zIndex: 99999,
+    top: 0,
+    left: 0,
+    overflow: 'hidden'
+  },
+  thumbnail: {
+    position: 'relative',
+    padding: 32,
+    paddingRight: 0,
+    height: 'calc(100vh - 112px)',
+  },
+  content: {
+    position: 'relative',
+    padding: 32,
+    paddingTop: 16,
+    paddingLeft: 0,
+  },
+  clapHistory: {
+    paddingLeft: 16,
+    marginTop: -23 // Height of title
+  },
+  wings: {
+    paddingRight: 16,
+    paddingLeft: 24
+  },
+  actions: {
+    padding: 32
+  },
+  blackFilter: {
+    position: 'fixed',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'black',
+    opacity: 0.35,
+    overflow: 'hidden',
+  },
+  banner: {
+    position: 'fixed',
+    // WebkitFilter: 'blur(2px)',
+    // MozFilter: 'blur(2px)',
+    // OFilter: 'blur(2px)',
+    // MsFilter: 'blur(2px)',
+    // filter: 'blur(2px)',
+  },
+  button: {
+    height: 'initial',
+    marginLeft: 32
+  }
+}
 
 class ProfileLayout extends React.Component {
-  
-  constructor(props) {
-    super(props);
-    this.state = {
-      canEdit: false,
-      record: null,
-      displayIn: true,
-      clapsCount: []
-    }
+
+  state = {
+    recordWingzy: {},
+    recordAlgolia: {},
+    canEdit: false
   }
-  
+
+  componentDidMount() {
+    if (!this.props.hit) return;
+    if (!this.props.authStore.isAuth()) return;
+
+    var algoliaHit = JSON.parse(JSON.stringify(this.props.hit));
+    ProfileService.transformLinks(algoliaHit);
+    ProfileService.makeHightlighted(algoliaHit);
+    ProfileService.orderHashtags(algoliaHit);
+    this.setState({recordAlgolia: algoliaHit});
+
+    this.props.recordStore.setRecordTag(this.props.hit.tag);
+    this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
+    this.props.recordStore.getRecordByTag()
+      .then((record) => {
+        record.objectID = record._id;
+
+        ProfileService.transformLinks(record);
+        ProfileService.makeHightlighted(record);
+        ProfileService.orderHashtags(record);
+
+        this.setState({ recordWingzy: record, canEdit: this.canEdit(record) });
+      }).catch((e) => {
+        console.log(e);
+        return;
+      })
+  }
+
   canEdit = (workingRecord) => {
     if (!(this.props.userStore.values.currentUser && this.props.userStore.values.currentUser._id)) return false;
     if (this.props.userStore.values.currentUser.superadmin) return true;
@@ -41,151 +108,39 @@ class ProfileLayout extends React.Component {
     else if (this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === workingRecord.organisation && orgAndRecord.admin)) return true;
     else return false;
   }
-  
-  componentDidMount() {
-    if (!this.props.hit) return;
-    if (!this.props.authStore.isAuth()) return;
-    this.props.recordStore.setRecordTag(this.props.hit.tag);
-    this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
-    this.props.recordStore.getRecordByTag()
-      .then((record) => {
-        record.objectID = record._id;
-        this.setState({ record: record, canEdit: this.canEdit(record) }, this.getClapsCount);
-      }).catch(() => {
-      return;
-    })
-  };
 
-  getClapsCount = () => {
-    this.props.clapStore.setCurrentRecordId(this.state.record.objectID);
-    this.props.clapStore.getClapCountByProfile()
-    .then(clapsCount => {
-      this.setState({clapsCount: clapsCount});
-    }).catch();
-  }
-  
-  handleReturnToSearch = (e, element) => {
-    this.setState({ displayIn: false }, () => {
-      if (!element) {
-        setTimeout(function () {
-          this.props.handleReturnToSearch();
-        }.bind(this), 600);
-      } else {
-        this.props.addFilter(element);
-        this.props.handleReturnToSearch();
-      }
-    });
-  }
-  
-  handleRedirectToEditWings = (id) => {
-    this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag + '/onboard/wings/edit/' + id });
-  }
-
-  showOnboardIntro = (id) => {
-    if(this.state.canEdit)
-      this.setState({redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag + '/onboard/intro/edit/' + id});
-  }
-  
   render() {
-    const { hit, className, classes, theme } = this.props;
-    const { canEdit, record, displayIn, redirectTo, clapsCount } = this.state;
+    const { classes } = this.props;
+    const { recordWingzy, canEdit, recordAlgolia } = this.state;
     const { locale } = this.props.commonStore;
-    const orgTag = this.props.organisationStore.values.organisation.tag;
-    let rootUrl = '/' + locale + '/' + orgTag;
-    
-    const currentHit = record || hit;
-    ProfileService.transformLinks(currentHit);
-    ProfileService.makeHightlighted(currentHit);
-    ProfileService.orderHashtags(currentHit);
-    
-    if (redirectTo) return (<Redirect to={redirectTo} />);
-    if (!currentHit) return (<div></div>);
-    
+
+    // console.log('UPDATE')
+    // console.log(recordAlgolia)
+    // console.log(JSON.stringify(recordWingzy))
+    // console.log(recordAlgolia.objectID || recordWingzy._id)
+
     return (
-      <Grid container className={(displayIn ? className : classes.profileContainerHide)}>
-        
-        {(window.location.pathname !== rootUrl + '/' + hit.tag) && (
-          <Redirect to={rootUrl + '/' + hit.tag} />
-        )}
-        <Grid container item alignItems={"stretch"}>
-          <Suspense fallback={<CircularProgress color='secondary' />}>
-            
-            <Banner source={(currentHit && currentHit.cover && currentHit.cover.url) ? currentHit.cover.url : null}>
-              
-              <IconButton aria-label="Edit" className={classes.returnButton} onClick={this.handleReturnToSearch}>
-                <Clear fontSize="large" className={classes.returnButtonSize} />
-              </IconButton>
-              
-              {canEdit && (
-                <MenuButton urlUpdateCover={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/cover/id/' + currentHit.objectID, orgTag)}
-                            urlEditIntro={'/' + locale + '/' + orgTag + '/onboard/intro/edit/' + currentHit.objectID}
-                            urlEditContact={'/' + locale + '/' + orgTag + '/onboard/contacts/edit/' + currentHit.objectID}
-                            urlEditAboutMe={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/about/id/' + currentHit.objectID, orgTag)}
-                            urlDeleteProfile={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/record/delete/' + currentHit.objectID, orgTag)}
-                />
-              )}
-            </Banner>
-          </Suspense>
+      <Grid container className={classes.root} alignContent="flex-start">
+        <BannerResizable
+          type={'organisation'}
+          initialHeight={100}
+          style={styles.banner}
+        />
+        <div className={classes.blackFilter} >
+
+        </div>
+        <Grid container item xs={12} style={{ height: 116 }} alignContent="flex-start" justify="flex-end" className={classes.actions} >
+            <ProfileActions canPropose canFilter canEdit={canEdit} recordId={recordWingzy.objectID || recordWingzy._id} />
         </Grid>
-        
-        <Grid item xs={12} sm={6} lg={3} className={classes.generalPart}>
-          <Grid item>
-            <Suspense fallback={<CircularProgress color='secondary' />}>
-              
-              <Logo type={'person'} className={(canEdit ? classes.logoEditable : classes.logo)} 
-                    src={ProfileService.getPicturePathResized(currentHit.picture, 'person', '170x170') || defaultPicture}
-                    onClick={() => this.showOnboardIntro(currentHit.objectID)} />
-            </Suspense>
-            <div className={classes.subheader}>
-              <Typography variant="h4" className={classes.name}>
-                {ProfileService.htmlDecode(currentHit.name) || currentHit.tag}
-              </Typography>
-              <Typography variant="body1" className={classes.name}>
-                {ProfileService.htmlDecode(currentHit.intro || '')}
-              </Typography>
-            </div>
-          </Grid>
-          <Grid container item direction={'row'} style={{paddingLeft: 16}}>
-            {currentHit.links.map((link, i) => {
-              if (!link.value || link.value === '') return null;
-              if (link.type === 'workchat') return null; // hide workchat
-              return (
-                <Grid item key={link._id} style={{position: 'relative'}}>
-                  <Grid item key={link._id} className={classes.contact}>
-                    <IconButton href={link.url} rel="noopener" target="_blank" className={classNames(classes.contactIcon,"fa fa-" + link.icon)}/>
-                  </Grid>
-                </Grid>
-              )
-            })}
-          </Grid>
+        <Grid item className={classes.thumbnail} xs={12} lg={3}>
+          <ProfileThumbnail record={recordWingzy} />
         </Grid>
-        <Grid container item xs={12} sm={6} lg={9} className={classes.hashtagsPart}>
-          <Grid item xs={12} className={classes.minHeightPossible}>
-            {currentHit.hashtags && currentHit.hashtags.map((hashtag, i) => {
-              let displayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || currentHit.tag)
-              return (
-                <Wings src={ProfileService.getPicturePath(hashtag.picture)}
-                  label={ProfileService.htmlDecode(displayedName)} key={hashtag._id}
-                  onClick={(e) => this.handleReturnToSearch(e, { name: displayedName, tag: hashtag.tag, label: displayedName, value: hashtag.tag })}
-                  recordId={currentHit.objectID || currentHit._id} hashtagId={hashtag._id} mode={(hashtag.class ? 'highlight' : 'profile')}
-                  enableClap={true}
-                />
-              )
-            })}
-            
-            {canEdit && (
-              <Wings label={this.props.intl.formatMessage({ id: 'profile.addWings' })} mode="button"
-                onClick={() => { this.handleRedirectToEditWings(currentHit.objectID) }} enableClap={false}  />
-            )}
-            
-            <div style={{ marginTop: 16 }}>
-              <Typography variant="h5" style={{ padding: 8, color:'#2b2d3c'}}>
-                <FormattedMessage id={'profile.aboutMe'} />
-              </Typography>
-              <div className={classes.aboutMe}>
-                {ProfileService.htmlDecode(currentHit.description || '')}
-              </div>
-            </div>
+        <Grid container item className={classes.content} xs={12} lg={9} alignContent="flex-start">
+          <Grid item xs={12} lg={8} className={classes.wings} >
+            <ProfileWings wings={recordWingzy.hashtags} recordId={recordWingzy.objectID || recordWingzy._id} clapDictionnary={recordAlgolia.hashtags_claps} />
+          </Grid>
+          <Grid item xs={12} lg={4} className={classes.clapHistory}>
+            <ProfileClapHistory />
           </Grid>
         </Grid>
       </Grid>
@@ -193,10 +148,8 @@ class ProfileLayout extends React.Component {
   }
 }
 
-ProfileLayout = withSearchManagement(ProfileLayout);
-
-export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore', 'clapStore')(
-  injectIntl(observer(
-    withStyles(styles, { withTheme: true })(ProfileLayout)
-  ))
+export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'clapStore', 'userStore')(
+  observer(
+    withStyles(styles)(ProfileLayout)
+  )
 );
