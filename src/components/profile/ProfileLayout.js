@@ -1,14 +1,13 @@
 import React from 'react';
 import ProfileThumbnail from './ProfileThumbnail';
-import { withStyles, Grid, Button, Slide } from '@material-ui/core';
+import { withStyles, Grid, Slide } from '@material-ui/core';
 import { inject, observer } from 'mobx-react';
 import ProfileService from '../../services/profile.service';
-import Banner from '../utils/banner/Banner';
 import BannerResizable from '../utils/banner/BannerResizable';
 import ProfileWings from './ProfileWings';
 import ProfileClapHistory from './ProfileClapHistory';
-import { FilterList } from '@material-ui/icons';
 import ProfileActions from './ProfileActions';
+import { Redirect } from 'react-router-dom';
 
 const styles = {
   root: {
@@ -83,7 +82,7 @@ class ProfileLayout extends React.Component {
     ProfileService.transformLinks(algoliaHit);
     ProfileService.makeHightlighted(algoliaHit);
     ProfileService.orderHashtags(algoliaHit);
-    this.setState({recordAlgolia: algoliaHit});
+    this.setState({ recordAlgolia: algoliaHit });
 
     this.props.recordStore.setRecordTag(this.props.hit.tag);
     this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
@@ -97,9 +96,8 @@ class ProfileLayout extends React.Component {
 
         this.setState({ recordWingzy: record, canEdit: this.canEdit(record) });
       }).catch((e) => {
-        console.log(e);
         return;
-      })
+      });
   }
 
   canEdit = (workingRecord) => {
@@ -111,46 +109,45 @@ class ProfileLayout extends React.Component {
   }
 
   handleClose = () => {
-    this.setState({visible: false});
+    this.setState({ visible: false });
   }
 
   render() {
     const { classes, visible, transitionDuration } = this.props;
     const { recordWingzy, canEdit, recordAlgolia } = this.state;
-    const { locale } = this.props.commonStore;
-
-    // console.log('UPDATE')
-    // console.log(recordAlgolia)
-    // console.log(JSON.stringify(recordWingzy))
-    // console.log(recordAlgolia.objectID || recordWingzy._id)
+    const rootUrl = '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag;
 
     return (
-      <Slide direction="up" in={visible} mountOnEnter unmountOnExit timeout={{enter: transitionDuration, exit: transitionDuration/2}}>
+      <Slide direction="up" in={visible} mountOnEnter unmountOnExit timeout={{ enter: transitionDuration, exit: transitionDuration / 2 }}>
 
-      <Grid container className={classes.root} alignContent="flex-start">
-        <BannerResizable
-          type={'organisation'}
-          initialHeight={100}
-          style={styles.banner}
-        />
-        <div className={classes.blackFilter} >
+        <Grid container className={classes.root} alignContent="flex-start">
 
-        </div>
-        <Grid container item xs={12} style={{ height: 116 }} alignContent="flex-start" justify="flex-end" className={classes.actions} >
+          {(window.location.pathname !== rootUrl + '/' + recordAlgolia.tag) && (
+            <Redirect to={rootUrl + '/' + recordAlgolia.tag} />
+          )}
+
+          <BannerResizable
+            type={'organisation'}
+            initialHeight={100}
+            style={styles.banner}
+          />
+          <div className={classes.blackFilter} ></div>
+
+          <Grid container item xs={12} style={{ height: 116 }} alignContent="flex-start" justify="flex-end" className={classes.actions} >
             <ProfileActions canPropose canFilter canEdit={canEdit} recordId={recordWingzy.objectID || recordWingzy._id} handleClose={this.props.handleClose} />
-        </Grid>
-        <Grid item className={classes.thumbnail} xs={12} lg={3}>
-          <ProfileThumbnail record={recordWingzy} />
-        </Grid>
-        <Grid container item className={classes.content} xs={12} lg={9} alignContent="flex-start">
-          <Grid item xs={12} lg={8} className={classes.wings} >
-            <ProfileWings wings={recordWingzy.hashtags} recordId={recordWingzy.objectID || recordWingzy._id} clapDictionnary={recordAlgolia.hashtags_claps} />
           </Grid>
-          <Grid item xs={12} lg={4} className={classes.clapHistory}>
-            <ProfileClapHistory />
+          <Grid item className={classes.thumbnail} xs={12} lg={3}>
+            <ProfileThumbnail record={recordWingzy} />
+          </Grid>
+          <Grid container item className={classes.content} xs={12} lg={9} alignContent="flex-start">
+            <Grid item xs={12} lg={8} className={classes.wings} >
+              <ProfileWings wings={recordWingzy.hashtags} recordId={recordWingzy.objectID || recordWingzy._id} clapDictionnary={recordAlgolia.hashtags_claps} />
+            </Grid>
+            <Grid item xs={12} lg={4} className={classes.clapHistory}>
+              <ProfileClapHistory />
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
       </Slide>
     )
   }

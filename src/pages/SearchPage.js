@@ -40,7 +40,7 @@ class SearchPage extends PureComponent {
       top: 16,
       headerHeight: 129,
       headerPosition: 'INITIAL',
-      visible: false,
+      visible: (this.getAskedHit() ? true : false),
       transitionDuration: 800
     };
   }

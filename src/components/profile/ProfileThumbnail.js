@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { withStyles, Paper, Grid, Typography } from '@material-ui/core';
 import Logo from '../utils/logo/Logo';
-
 import ProfileService from '../../services/profile.service';
 import ProfileContacts from './ProfileContacts';
 
@@ -47,7 +46,6 @@ class ProfileThumbnail extends PureComponent {
   render() {
 
     const { classes, record } = this.props;
-    console.log(JSON.stringify(record.picture))
 
     return (
       <Paper className={classes.main}>

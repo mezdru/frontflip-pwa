@@ -1,6 +1,5 @@
 import React from 'react';
-import { withStyles, IconButton, Grid } from '@material-ui/core';
-import classNames from 'classnames';
+import { withStyles } from '@material-ui/core';
 import Wings from '../utils/wing/Wings';
 import ProfileService from '../../services/profile.service';
 import { inject, observer } from 'mobx-react';
@@ -26,28 +25,22 @@ let getClaps = (hashtags_claps, hashtagId) => {
 
 
 class ProfileWings extends React.PureComponent {
-  state = {
-  }
 
   componentWillReceiveProps(nextProps) {
     this.getClapsCount(nextProps.recordId);
   }
 
   getClapsCount = (recordId) => {
-    console.log('GET count')
     this.props.clapStore.setCurrentRecordId(recordId);
     this.props.clapStore.getClapCountByProfile()
       .then(clapsCount => {
-        console.log('COUNT FETCHED')
         this.forceUpdate();
-      }).catch(e => console.log(e));
+      }).catch(e => {return;});
   }
 
   render() {
     const {classes, wings, recordId, clapDictionnary} = this.props;
     const {locale} = this.props.commonStore;
-
-    console.log('UPDATE WINGS')
 
     return (
       <div className={classes.root} >
