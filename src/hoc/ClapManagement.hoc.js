@@ -7,7 +7,6 @@ const withClapManagement = (ComponentToWrap) => {
 
     getClapCount = (hashtagId) => {
       var clapCountEntry = this.props.clapStore.values.currentRecordClapCount.find(entry => entry._id === hashtagId);
-      console.log(JSON.stringify(this.props.clapStore.values.currentRecordClapCount))
       return (clapCountEntry ? clapCountEntry.claps : 0);
     }
 

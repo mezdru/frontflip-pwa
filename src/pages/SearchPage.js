@@ -180,12 +180,12 @@ class SearchPage extends PureComponent {
       this.setState({ displayedHit: null, redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag }
       )
     },
-      this.state.transitionDuration
+      this.state.transitionDuration/2
     );
   }
 
   render() {
-    const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter, visible } = this.state;
+    const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter, visible, transitionDuration } = this.state;
     const { classes } = this.props;
     const { organisation } = this.props.organisationStore.values;
     return (
@@ -248,7 +248,7 @@ class SearchPage extends PureComponent {
 
         {displayedHit && (
           <Suspense fallback={<></>}>
-            <ProfileLayout hit={displayedHit} visible={visible} handleClose={this.handleCloseProfile} />
+            <ProfileLayout hit={displayedHit} visible={visible} handleClose={this.handleCloseProfile} transitionDuration={transitionDuration} />
           </Suspense>
         )}
 

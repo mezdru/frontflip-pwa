@@ -44,8 +44,6 @@ class MenuDropdown extends React.PureComponent {
     const { classes, actions } = this.props;
     const { open } = this.state;
 
-    console.table(actions);
-
     return (
       <>
         <IconButton

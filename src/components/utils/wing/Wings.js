@@ -77,11 +77,7 @@ class Wings extends React.PureComponent {
     let claps = addClapCounterLocal + remoteClaps;
     claps = (claps > 0 ? claps : null);
     const classMode = this.getClasseByMode();
-
-    console.log(this.props.claps)
-    console.log(remoteClaps)
-    console.log(this.props.hashtagId)
-
+    
     return (
       <div className={classNames(classes.root, classMode)} >
         {src && (

@@ -2,6 +2,7 @@ import React from 'react';
 import { Avatar } from '@material-ui/core';
 import { observe } from 'mobx';
 import { inject, observer } from "mobx-react";
+import defaultPicture from '../../../resources/images/placeholder_person.png';
 const defaultLogo = 'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg';
 
 class Logo extends React.Component {
@@ -39,7 +40,7 @@ class Logo extends React.Component {
     const { source } = this.state;
 
     return (
-      <Avatar src={source || this.props.src} alt="org-logo" className={this.props.className} style={{backgroundColor:'white'}} onClick={this.props.onClick} />
+      <Avatar src={source || this.props.src || defaultPicture} alt="org-logo" className={this.props.className} style={{backgroundColor:'white'}} onClick={this.props.onClick} />
     )
   }
 }

@@ -47,10 +47,11 @@ class ProfileThumbnail extends PureComponent {
   render() {
 
     const { classes, record } = this.props;
+    console.log(JSON.stringify(record.picture))
 
     return (
       <Paper className={classes.main}>
-        <Logo className={classes.profilePicture} src={record.picture ? record.picture.url : null} />
+        <Logo className={classes.profilePicture} src={record.picture ? record.picture.url : null} type="person" />
         <div className={classes.topOffset} ></div>
         <Grid container spacing={32}>
           <Grid item xs={12}>

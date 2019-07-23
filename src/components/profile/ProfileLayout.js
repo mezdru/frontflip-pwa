@@ -115,7 +115,7 @@ class ProfileLayout extends React.Component {
   }
 
   render() {
-    const { classes, visible } = this.props;
+    const { classes, visible, transitionDuration } = this.props;
     const { recordWingzy, canEdit, recordAlgolia } = this.state;
     const { locale } = this.props.commonStore;
 
@@ -125,7 +125,7 @@ class ProfileLayout extends React.Component {
     // console.log(recordAlgolia.objectID || recordWingzy._id)
 
     return (
-      <Slide direction="up" in={visible} mountOnEnter unmountOnExit timeout={{enter: 600, exit: 600}}>
+      <Slide direction="up" in={visible} mountOnEnter unmountOnExit timeout={{enter: transitionDuration, exit: transitionDuration/2}}>
 
       <Grid container className={classes.root} alignContent="flex-start">
         <BannerResizable
