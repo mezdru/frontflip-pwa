@@ -1,6 +1,6 @@
 import React from 'react';
 import ProfileThumbnail from './ProfileThumbnail';
-import { withStyles, Grid, Button } from '@material-ui/core';
+import { withStyles, Grid, Button, Slide } from '@material-ui/core';
 import { inject, observer } from 'mobx-react';
 import ProfileService from '../../services/profile.service';
 import Banner from '../utils/banner/Banner';
@@ -71,7 +71,8 @@ class ProfileLayout extends React.Component {
   state = {
     recordWingzy: {},
     recordAlgolia: {},
-    canEdit: false
+    canEdit: false,
+    visible: true
   }
 
   componentDidMount() {
@@ -109,8 +110,12 @@ class ProfileLayout extends React.Component {
     else return false;
   }
 
+  handleClose = () => {
+    this.setState({visible: false});
+  }
+
   render() {
-    const { classes } = this.props;
+    const { classes, visible } = this.props;
     const { recordWingzy, canEdit, recordAlgolia } = this.state;
     const { locale } = this.props.commonStore;
 
@@ -120,6 +125,8 @@ class ProfileLayout extends React.Component {
     // console.log(recordAlgolia.objectID || recordWingzy._id)
 
     return (
+      <Slide direction="up" in={visible} mountOnEnter unmountOnExit timeout={{enter: 600, exit: 600}}>
+
       <Grid container className={classes.root} alignContent="flex-start">
         <BannerResizable
           type={'organisation'}
@@ -130,7 +137,7 @@ class ProfileLayout extends React.Component {
 
         </div>
         <Grid container item xs={12} style={{ height: 116 }} alignContent="flex-start" justify="flex-end" className={classes.actions} >
-            <ProfileActions canPropose canFilter canEdit={canEdit} recordId={recordWingzy.objectID || recordWingzy._id} />
+            <ProfileActions canPropose canFilter canEdit={canEdit} recordId={recordWingzy.objectID || recordWingzy._id} handleClose={this.props.handleClose} />
         </Grid>
         <Grid item className={classes.thumbnail} xs={12} lg={3}>
           <ProfileThumbnail record={recordWingzy} />
@@ -144,6 +151,7 @@ class ProfileLayout extends React.Component {
           </Grid>
         </Grid>
       </Grid>
+      </Slide>
     )
   }
 }

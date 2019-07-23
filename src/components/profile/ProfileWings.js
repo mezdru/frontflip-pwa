@@ -27,20 +27,19 @@ let getClaps = (hashtags_claps, hashtagId) => {
 
 class ProfileWings extends React.PureComponent {
   state = {
-
   }
 
-  componentDidMount() {
-    this.getClapsCount();
+  componentWillReceiveProps(nextProps) {
+    this.getClapsCount(nextProps.recordId);
   }
 
-  getClapsCount = () => {
+  getClapsCount = (recordId) => {
     console.log('GET count')
-    this.props.clapStore.setCurrentRecordId(this.props.recordId);
+    this.props.clapStore.setCurrentRecordId(recordId);
     this.props.clapStore.getClapCountByProfile()
       .then(clapsCount => {
         console.log('COUNT FETCHED')
-        this.setState({ clapsCount: clapsCount });
+        this.forceUpdate();
       }).catch(e => console.log(e));
   }
 
@@ -48,13 +47,15 @@ class ProfileWings extends React.PureComponent {
     const {classes, wings, recordId, clapDictionnary} = this.props;
     const {locale} = this.props.commonStore;
 
+    console.log('UPDATE WINGS')
+
     return (
       <div className={classes.root} >
         {wings && wings.length > 0 && wings.map((wing, index) => {
           let displayedName = (wing.name_translated ? (wing.name_translated[locale] || wing.name_translated['en-UK']) || wing.name || wing.tag : wing.name || "...")
           return (
             <Wings src={ProfileService.getPicturePath(wing.picture)}
-              label={ProfileService.htmlDecode(displayedName)} key={wing._id}
+              label={ProfileService.htmlDecode(displayedName)} key={wing._id  }
               recordId={recordId} hashtagId={wing._id} mode={(wing.class ? 'highlight' : 'profile')}
               enableClap={true} claps={getClaps(clapDictionnary, wing._id)}
             />

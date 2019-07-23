@@ -34,6 +34,12 @@ const styles = theme => ({
   text: {
     color: theme.palette.primary.dark,
   },
+  description: {
+    color: '#555555',
+    maxHeight: 150,
+    overflowY: 'scroll',
+    marginTop: 16
+  }
 });
 
 class ProfileThumbnail extends PureComponent {
@@ -64,7 +70,9 @@ class ProfileThumbnail extends PureComponent {
             <Typography variant="h3" className={classes.text}>
               A propos de moi
             </Typography>
-
+            <Typography variant="body1" className={classes.description}>
+              {record.description}
+            </Typography>
           </Grid>
 
 

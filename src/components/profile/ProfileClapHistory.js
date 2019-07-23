@@ -20,7 +20,7 @@ class ProfileClapHistory extends React.Component {
 
     return(
       <div>
-        <Typography variant="h3" style={{textTransform: 'uppercase', color: 'white'}}>
+        <Typography variant="h3" style={{textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.85)'}}>
           Activity History
         </Typography>
 

@@ -21,6 +21,12 @@ class Wings extends React.PureComponent {
 
   componentDidMount() {
     this.setState({ canClap: this.props.canClap(this.props.recordId) });
+
+    if(this.props.mode === 'profile') {
+      this.props.observeClapCount((change) => {
+        this.forceUpdate();
+      });
+    }
   }
 
   handleClapDown = (e) => {
@@ -71,6 +77,10 @@ class Wings extends React.PureComponent {
     let claps = addClapCounterLocal + remoteClaps;
     claps = (claps > 0 ? claps : null);
     const classMode = this.getClasseByMode();
+
+    console.log(this.props.claps)
+    console.log(remoteClaps)
+    console.log(this.props.hashtagId)
 
     return (
       <div className={classNames(classes.root, classMode)} >

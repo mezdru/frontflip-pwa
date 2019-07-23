@@ -40,6 +40,8 @@ class SearchPage extends PureComponent {
       top: 16,
       headerHeight: 129,
       headerPosition: 'INITIAL',
+      visible: false,
+      transitionDuration: 800
     };
   }
 
@@ -117,7 +119,7 @@ class SearchPage extends PureComponent {
     var contentPart = document.getElementById('content-container');
     var scrollMax = Math.min(contentPart.scrollHeight, window.innerHeight - 120);
     scroll.scrollTo(scrollMax, {
-      duration: 800,
+      duration: this.state.transitionDuration,
       smooth: 'easeInOutCubic',
       containerId: "content-container",
       offset: offset || 0
@@ -169,15 +171,21 @@ class SearchPage extends PureComponent {
 
   handleDisplayProfile = (e, profileRecord) => {
     ReactGA.event({ category: 'User', action: 'Display profile' });
-    this.setState({ displayedHit: profileRecord });
+    this.setState({ displayedHit: profileRecord, visible: true });
   }
 
-  handleReturnToSearch = () => {
-    this.setState({ displayedHit: null, redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag })
+  handleCloseProfile = () => {
+    this.setState({ visible: false });
+    setTimeout(() => {
+      this.setState({ displayedHit: null, redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag }
+      )
+    },
+      this.state.transitionDuration
+    );
   }
 
   render() {
-    const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter } = this.state;
+    const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter, visible } = this.state;
     const { classes } = this.props;
     const { organisation } = this.props.organisationStore.values;
     return (
@@ -240,7 +248,7 @@ class SearchPage extends PureComponent {
 
         {displayedHit && (
           <Suspense fallback={<></>}>
-            <ProfileLayout hit={displayedHit} handleReturnToSearch={this.handleReturnToSearch} className={classes.profileContainer} />
+            <ProfileLayout hit={displayedHit} visible={visible} handleClose={this.handleCloseProfile} />
           </Suspense>
         )}
 

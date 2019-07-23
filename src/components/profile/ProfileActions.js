@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import MenuDropdown from '../utils/menu/MenuDropdown';
 import { inject, observer } from 'mobx-react';
 import UrlService from '../../services/url.service.js';
+import { Redirect } from "react-router-dom";
 
 const styles = theme => ({
   button: {
@@ -64,7 +65,7 @@ render() {
       )}
 
       <Grid item>
-        <IconButton aria-label="Edit" className={classNames(classes.button, classes.returnButton)}>
+        <IconButton className={classNames(classes.button, classes.returnButton)} onClick={this.props.handleClose} >
           <Clear />
         </IconButton>
       </Grid>

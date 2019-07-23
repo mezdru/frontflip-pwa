@@ -32,7 +32,7 @@ body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: transparent;
+    background: #2b2d3c;
     border-radius: 10px;
 }
 
