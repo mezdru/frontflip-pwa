@@ -5,8 +5,6 @@ import ProfileService from '../../services/profile.service';
 import { inject, observer } from 'mobx-react';
 
 const styles = theme => ({
-  root: {
-  },
   contactIcon: {
     marginRight: 8,
     position: 'relative',
@@ -16,13 +14,6 @@ const styles = theme => ({
     display: 'inline-block',
   },
 });
-
-let getClaps = (hashtags_claps, hashtagId) => {
-  if(!hashtags_claps) return null;
-  var clapEntry = hashtags_claps.find(elt => elt.hashtag === hashtagId);
-  return clapEntry ? clapEntry.claps : null;
-}
-
 
 class ProfileWings extends React.PureComponent {
 
@@ -38,6 +29,12 @@ class ProfileWings extends React.PureComponent {
       }).catch(e => {return;});
   }
 
+  getClaps = (hashtags_claps, hashtagId) => {
+    if(!hashtags_claps) return null;
+    var clapEntry = hashtags_claps.find(elt => elt.hashtag === hashtagId);
+    return clapEntry ? clapEntry.claps : null;
+  }
+
   render() {
     const {classes, wings, recordId, clapDictionnary} = this.props;
     const {locale} = this.props.commonStore;
@@ -50,7 +47,7 @@ class ProfileWings extends React.PureComponent {
             <Wings src={ProfileService.getPicturePath(wing.picture)}
               label={ProfileService.htmlDecode(displayedName)} key={wing._id  }
               recordId={recordId} hashtagId={wing._id} mode={(wing.class ? 'highlight' : 'profile')}
-              enableClap={true} claps={getClaps(clapDictionnary, wing._id)}
+              enableClap={true} claps={this.getClaps(clapDictionnary, wing._id)}
             />
           )
         })}
@@ -60,7 +57,7 @@ class ProfileWings extends React.PureComponent {
 
 }
 
-export default inject('commonStore', 'recordStore', 'clapStore', 'userStore')(
+export default inject('commonStore', 'clapStore')(
   observer(
     withStyles(styles)(ProfileWings)
   )

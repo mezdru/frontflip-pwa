@@ -1,69 +1,15 @@
 import React from 'react';
-import ProfileThumbnail from './ProfileThumbnail';
 import { withStyles, Grid, Slide } from '@material-ui/core';
+import { Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+
+import ProfileThumbnail from './ProfileThumbnail';
 import ProfileService from '../../services/profile.service';
 import BannerResizable from '../utils/banner/BannerResizable';
 import ProfileWings from './ProfileWings';
 import ProfileClapHistory from './ProfileClapHistory';
 import ProfileActions from './ProfileActions';
-import { Redirect } from 'react-router-dom';
-
-const styles = {
-  root: {
-    position: 'fixed',
-    width: '100vw',
-    minHeight: '100vh',
-    backgroundColor: 'white',
-    zIndex: 99999,
-    top: 0,
-    left: 0,
-    overflow: 'hidden'
-  },
-  thumbnail: {
-    position: 'relative',
-    padding: 32,
-    paddingRight: 0,
-    height: 'calc(100vh - 112px)',
-  },
-  content: {
-    position: 'relative',
-    padding: 32,
-    paddingTop: 16,
-    paddingLeft: 0,
-  },
-  clapHistory: {
-    paddingLeft: 16,
-    marginTop: -23 // Height of title
-  },
-  wings: {
-    paddingRight: 16,
-    paddingLeft: 24
-  },
-  actions: {
-    padding: 32
-  },
-  blackFilter: {
-    position: 'fixed',
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'black',
-    opacity: 0.35,
-    overflow: 'hidden',
-  },
-  banner: {
-    position: 'fixed',
-    // WebkitFilter: 'blur(2px)',
-    // MozFilter: 'blur(2px)',
-    // OFilter: 'blur(2px)',
-    // MsFilter: 'blur(2px)',
-    // filter: 'blur(2px)',
-  },
-  button: {
-    height: 'initial',
-    marginLeft: 32
-  }
-}
+import {styles} from './ProfileLayout.css';
 
 class ProfileLayout extends React.Component {
 
@@ -108,10 +54,6 @@ class ProfileLayout extends React.Component {
     else return false;
   }
 
-  handleClose = () => {
-    this.setState({ visible: false });
-  }
-
   render() {
     const { classes, visible, transitionDuration } = this.props;
     const { recordWingzy, canEdit, recordAlgolia } = this.state;
@@ -153,7 +95,7 @@ class ProfileLayout extends React.Component {
   }
 }
 
-export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'clapStore', 'userStore')(
+export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore')(
   observer(
     withStyles(styles)(ProfileLayout)
   )

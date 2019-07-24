@@ -1,160 +1,55 @@
-const LOGO_HEIGHT = 170;
-
-export const styles = theme => ({
-  generalPart: {
-    position: 'relative',
-    [theme.breakpoints.down('sm')]: {
-      minHeight: 'unset'
-    },
-    [theme.breakpoints.up('sm')]: {
-      minHeight: 'calc(100vh - 166px)'
-    },
-    [theme.breakpoints.up('md')]: {
-      minHeight: 'calc(100vh - 350px)'
-    },
-    background: theme.palette.primary.dark,
-    padding: 16
-  },
-  hashtagsPart: {
-    position: 'relative',
-    background: 'white',
-    [theme.breakpoints.down('sm')]: {
-      minHeight: 'unset'
-    },
-    [theme.breakpoints.up('sm')]: {
-      minHeight: 'calc(100vh - 166px)'
-    },
-    [theme.breakpoints.up('md')]: {
-      minHeight: 'calc(100vh - 350px)'
-    },
-    padding: 16,
-  },
-  logoContainer: {
-    position: 'relative',
-    transform: 'translateY(-50%)',
-    top: 0,
-  },
-  logo: {
-    position: 'absolute',
-    transform: 'translateY(-50%)',
+export const styles = {
+  root: {
+    position: 'fixed',
+    width: '100vw',
+    minHeight: '100vh',
+    backgroundColor: 'white',
+    zIndex: 99999,
     top: 0,
     left: 0,
-    right: 0,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    width: LOGO_HEIGHT,
-    height: LOGO_HEIGHT,
-    '& img': {
-      width: '100%',
-      height: '100%',
-      borderRadius: '50%',
-      border: '9px solid white'
-    },
+    overflow: 'hidden'
   },
-  logoEditable: {
-    position: 'absolute',
-    transform: 'translateY(-50%)',
-    top: 0,
-    left: 0,
-    right: 0,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    width: LOGO_HEIGHT,
-    height: LOGO_HEIGHT,
-    '& img': {
-      width: '100%',
-      height: '100%',
-      borderRadius: '50%',
-      border: '9px solid white'
-    },
-    cursor: 'pointer',
-    transition: 'filter 300ms cubic-bezier(0.4, 0, 0.2, 1)',
-    '&:hover': {
-      filter: 'brightness(0.75)'
-    }
-  },
-  subheader: {
+  thumbnail: {
     position: 'relative',
-    marginTop: (LOGO_HEIGHT / 2),
-    marginBottom: 16,
+    padding: 32,
+    paddingRight: 0,
+    height: 'calc(100vh - 112px)',
   },
-  button: {
-    color: 'white',
-    wordBreak: 'break-all',
-    padding: '8px 24px',
-    '&:hover': {
-      color: 'white'
-    }
-  }
-  ,
-  buttonIcon: {
-    color: theme.palette.secondary.main
+  content: {
+    position: 'relative',
+    padding: 32,
+    paddingTop: 16,
+    paddingLeft: 0,
+  },
+  clapHistory: {
+    paddingLeft: 16,
+    marginTop: -23 // Height of title
   },
   wings: {
-    display: 'inline-block',
-    color: 'white',
-    position: 'relative',
+    paddingRight: 16,
+    paddingLeft: 24
   },
-  minHeightPossible: {
-    height: '-moz-min-content',
-    // eslint-disable-next-line
-    height: '-webkit-min-content',
-    // eslint-disable-next-line
-    height: 'min-content',
+  actions: {
+    padding: 32
   },
-  editButton: {
-    color: theme.palette.secondary.main,
-    marginLeft: 16
-  },
-  updateCoverButton: {
-    position: 'absolute',
-    top: -24,
-    right: 16,
-    transform: 'translateY(-100%)',
-  },
-  contactIcon: {
-    marginRight: 8,
-    position: 'relative',
-    textAlign: 'center',
-    width: 40,
-    fontSize: 'x-large!important',
-    display: 'inline-block',
-  },
-  returnButton: {
-    position: 'absolute',
-    zIndex: 9999,
-    margin: 16,
-    background: 'white',
-    color: theme.palette.secondary.main,
-    opacity: 0.7,
-    '&:hover': {
-      backgroundColor: 'white',
-      opacity: 1,
-    }
-  },
-  returnButtonSize: {
-    fontSize: 24,
-  },
-  profileContainerHide: {
+  blackFilter: {
     position: 'fixed',
-    top: 0,
-    zIndex: 99999,
-    backgroundColor: 'white',
     width: '100%',
-    '& ul': {
-      listStyleType: 'none',
-      padding: 0,
-      marginTop: 0,
-    },
-    animationName: 'popOut',
-    animationDuration: '.6s',
-    animationFillMode: 'forwards',
+    height: '100%',
+    backgroundColor: 'black',
+    opacity: 0.35,
+    overflow: 'hidden',
   },
-  
-  name: {
-    marginLeft: 16,
+  banner: {
+    position: 'fixed',
+    // WebkitFilter: 'blur(2px)',
+    // MozFilter: 'blur(2px)',
+    // OFilter: 'blur(2px)',
+    // MsFilter: 'blur(2px)',
+    // filter: 'blur(2px)',
   },
-  aboutMe: {
-    padding: 8,
+  button: {
+    height: 'initial',
+    marginLeft: 32
   }
-});
+}

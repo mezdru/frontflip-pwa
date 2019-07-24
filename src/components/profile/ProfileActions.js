@@ -1,11 +1,10 @@
 import React from 'react';
 import { withStyles, Grid, Button, IconButton } from '@material-ui/core';
-import { FilterList, Clear, Edit } from '@material-ui/icons';
+import { FilterList, Clear } from '@material-ui/icons';
 import classNames from 'classnames';
 import MenuDropdown from '../utils/menu/MenuDropdown';
 import { inject, observer } from 'mobx-react';
 import UrlService from '../../services/url.service.js';
-import { Redirect } from "react-router-dom";
 
 const styles = theme => ({
   button: {
@@ -74,7 +73,7 @@ render() {
 }
 }
 
-export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'clapStore', 'userStore')(
+export default inject('commonStore', 'organisationStore')(
   observer(
     withStyles(styles)(ProfileActions)
   )
