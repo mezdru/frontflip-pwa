@@ -1,160 +1,81 @@
-const LOGO_HEIGHT = 170;
+// I don't know why, but if I use 'theme' like in other css.js files, the layout is broken.
+import theme from '../../theme';
 
-export const styles = theme => ({
-  generalPart: {
-    position: 'relative',
-    [theme.breakpoints.down('sm')]: {
-      minHeight: 'unset'
-    },
-    [theme.breakpoints.up('sm')]: {
-      minHeight: 'calc(100vh - 166px)'
-    },
-    [theme.breakpoints.up('md')]: {
-      minHeight: 'calc(100vh - 350px)'
-    },
-    background: theme.palette.primary.dark,
-    padding: 16
+export const styles = {
+  root: {
+    position: 'fixed',
+    width: '100vw',
+    minHeight: '100vh',
+    backgroundColor: 'white',
+    zIndex: 99999,
+    top: 0,
+    left: 0,
+    // overflow: 'scroll'
   },
-  hashtagsPart: {
+  thumbnail: {
     position: 'relative',
-    background: 'white',
-    [theme.breakpoints.down('sm')]: {
-      minHeight: 'unset'
-    },
-    [theme.breakpoints.up('sm')]: {
-      minHeight: 'calc(100vh - 166px)'
-    },
-    [theme.breakpoints.up('md')]: {
-      minHeight: 'calc(100vh - 350px)'
-    },
     padding: 16,
-  },
-  logoContainer: {
-    position: 'relative',
-    transform: 'translateY(-50%)',
-    top: 0,
-  },
-  logo: {
-    position: 'absolute',
-    transform: 'translateY(-50%)',
-    top: 0,
-    left: 0,
-    right: 0,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    width: LOGO_HEIGHT,
-    height: LOGO_HEIGHT,
-    '& img': {
-      width: '100%',
-      height: '100%',
-      borderRadius: '50%',
-      border: '9px solid white'
+    [theme.breakpoints.up('sm')]: {
+      padding: 32,
+      paddingBottom: 16,
+    },
+    [theme.breakpoints.up('md')]: {
+      paddingRight: 0,
+      paddingBottom: 32,
+      height: 'calc(100vh - 116px)',
     },
   },
-  logoEditable: {
-    position: 'absolute',
-    transform: 'translateY(-50%)',
-    top: 0,
-    left: 0,
-    right: 0,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    width: LOGO_HEIGHT,
-    height: LOGO_HEIGHT,
-    '& img': {
-      width: '100%',
-      height: '100%',
-      borderRadius: '50%',
-      border: '9px solid white'
-    },
-    cursor: 'pointer',
-    transition: 'filter 300ms cubic-bezier(0.4, 0, 0.2, 1)',
-    '&:hover': {
-      filter: 'brightness(0.75)'
-    }
-  },
-  subheader: {
+  content: {
     position: 'relative',
-    marginTop: (LOGO_HEIGHT / 2),
-    marginBottom: 16,
+    padding: 16,
+    paddingTop: 0,
+    [theme.breakpoints.up('sm')]: {
+      padding: 32,
+      paddingTop: 0,
+    },
+    [theme.breakpoints.up('md')]: {
+      padding: 32,
+      paddingLeft: 0,
+      paddingTop: 16,
+    },
   },
-  button: {
-    color: 'white',
-    wordBreak: 'break-all',
-    padding: '8px 24px',
-    '&:hover': {
-      color: 'white'
+  clapHistory: {
+    marginTop: 28, // 32 - 4 (margin-bottom of one wing)
+    [theme.breakpoints.up('md')]: {
+      paddingLeft: 16,
+      marginTop: -23 // Height of title
     }
-  }
-  ,
-  buttonIcon: {
-    color: theme.palette.secondary.main
   },
   wings: {
-    display: 'inline-block',
-    color: 'white',
-    position: 'relative',
-  },
-  minHeightPossible: {
-    height: '-moz-min-content',
-    // eslint-disable-next-line
-    height: '-webkit-min-content',
-    // eslint-disable-next-line
-    height: 'min-content',
-  },
-  editButton: {
-    color: theme.palette.secondary.main,
-    marginLeft: 16
-  },
-  updateCoverButton: {
-    position: 'absolute',
-    top: -24,
-    right: 16,
-    transform: 'translateY(-100%)',
-  },
-  contactIcon: {
-    marginRight: 8,
-    position: 'relative',
-    textAlign: 'center',
-    width: 40,
-    fontSize: 'x-large!important',
-    display: 'inline-block',
-  },
-  returnButton: {
-    position: 'absolute',
-    zIndex: 9999,
-    margin: 16,
-    background: 'white',
-    color: theme.palette.secondary.main,
-    opacity: 0.7,
-    '&:hover': {
-      backgroundColor: 'white',
-      opacity: 1,
+    [theme.breakpoints.up('md')]: {
+      paddingRight: 16,
+      paddingLeft: 24
     }
   },
-  returnButtonSize: {
-    fontSize: 24,
+  actions: {
+    padding: 16,
+    [theme.breakpoints.up('sm')]: {
+      padding: 32,
+    }
   },
-  profileContainerHide: {
+  blackFilter: {
     position: 'fixed',
-    top: 0,
-    zIndex: 99999,
-    backgroundColor: 'white',
     width: '100%',
-    '& ul': {
-      listStyleType: 'none',
-      padding: 0,
-      marginTop: 0,
-    },
-    animationName: 'popOut',
-    animationDuration: '.6s',
-    animationFillMode: 'forwards',
+    height: '100%',
+    backgroundColor: 'black',
+    opacity: 0.35,
+    overflow: 'hidden',
   },
-  
-  name: {
-    marginLeft: 16,
+  banner: {
+    position: 'fixed',
+    // WebkitFilter: 'blur(2px)',
+    // MozFilter: 'blur(2px)',
+    // OFilter: 'blur(2px)',
+    // MsFilter: 'blur(2px)',
+    // filter: 'blur(2px)',
   },
-  aboutMe: {
-    padding: 8,
+  button: {
+    height: 'initial',
+    marginLeft: 32
   }
-});
+}

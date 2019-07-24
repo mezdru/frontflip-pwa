@@ -13,6 +13,7 @@ export const styles = theme => ({
     },
   },
   name: {
+    color: 'white',
     '& span em': {
       backgroundColor: theme.palette.primary.main,
       borderRadius: 30,

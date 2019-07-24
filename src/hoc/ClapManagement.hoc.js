@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
+import {observe} from 'mobx';
 
 const withClapManagement = (ComponentToWrap) => {
   class ClapManagement extends Component {
@@ -7,6 +8,10 @@ const withClapManagement = (ComponentToWrap) => {
     getClapCount = (hashtagId) => {
       var clapCountEntry = this.props.clapStore.values.currentRecordClapCount.find(entry => entry._id === hashtagId);
       return (clapCountEntry ? clapCountEntry.claps : 0);
+    }
+
+    observeClapCount = (cb) => {
+      observe(this.props.clapStore.values, 'currentRecordClapCount', cb);
     }
 
     handleClap = (recipient, hashtag,  given) => {
@@ -35,6 +40,7 @@ const withClapManagement = (ComponentToWrap) => {
           handleClap={this.handleClap} 
           getClapCount={this.getClapCount}
           canClap={this.canClap}
+          observeClapCount={this.observeClapCount}
         />
       )
     }

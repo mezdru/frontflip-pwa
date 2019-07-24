@@ -23,17 +23,8 @@ export default createMuiTheme({
     useNextVariants: true,
     fontSize: 12,
     fontFamily: [
-      '"Open sans"',
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
+      "Poppins",
+      "sans-serif"
     ].join(','),
   },
   overrides: {
@@ -46,22 +37,31 @@ export default createMuiTheme({
     },
     MuiTypography: {
       root: {
-        // overflow: 'hidden',
+        color: palette.primary.dark
+      },
+      h1: {
+        fontSize: '2rem',
+        fontWeight: 600,
+      },
+      h2: {
+        fontSize: '1.5rem',
+        fontWeight: 600,
+      },
+      h3: {
+        fontSize: '1.2rem',
+        fontWeight: 600,
       },
       h6: {
         display: 'block',
         padding: 8,
       },
       h5: {
-        color:  'white',
         fontWeight: '700',
       },
       h4: {
-        color: 'white',
         fontWeight: '400',
       },
       body1: {
-        color:  'white',
         fontWeight: '400',
         fontSize: '0.95rem',
       },
@@ -205,7 +205,7 @@ export default createMuiTheme({
     },
     MuiPaper: {
       root: {
-        padding: '16px',
+        padding: '16px'
       }
     },
     MuiDialog: {

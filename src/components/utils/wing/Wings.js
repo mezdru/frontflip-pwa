@@ -5,6 +5,7 @@ import { styles } from './Wings.css';
 import ApplauseIcon from '../../../resources/icons/Applause.js';
 import classNames from 'classnames';
 import ClickBurst from '../../../hoc/ClickBurst';
+import { observe } from 'mobx';
 
 let interval;
 
@@ -20,6 +21,12 @@ class Wings extends React.PureComponent {
 
   componentDidMount() {
     this.setState({ canClap: this.props.canClap(this.props.recordId) });
+
+    if(this.props.mode === 'profile') {
+      this.props.observeClapCount((change) => {
+        this.forceUpdate();
+      });
+    }
   }
 
   handleClapDown = (e) => {
@@ -66,11 +73,11 @@ class Wings extends React.PureComponent {
   render() {
     const { classes, label, src, theme, enableClap } = this.props;
     const { addClapCounterLocal, intervalDuration, canClap } = this.state;
-    const remoteClaps = this.props.claps || this.props.getClapCount(this.props.hashtagId);
+    const remoteClaps = this.props.getClapCount(this.props.hashtagId) || this.props.claps;
     let claps = addClapCounterLocal + remoteClaps;
     claps = (claps > 0 ? claps : null);
     const classMode = this.getClasseByMode();
-
+    
     return (
       <div className={classNames(classes.root, classMode)} >
         {src && (

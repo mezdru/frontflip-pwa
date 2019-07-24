@@ -152,7 +152,7 @@ class ProfileService {
     let urlSplited = pictureUrl.split('/resize/');
     if (urlSplited.length === 2) {
       urlSplited[1] = '/' + size + '/';
-      return urlSplited.join('/resize/');
+      return urlSplited.join('/resize');
     } else {
       return pictureUrl;
     }
