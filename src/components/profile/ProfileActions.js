@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles, Grid, Button, IconButton } from '@material-ui/core';
+import { withStyles, Grid, Button, IconButton, Hidden } from '@material-ui/core';
 import { FilterList, Clear } from '@material-ui/icons';
 import classNames from 'classnames';
 import MenuDropdown from '../utils/menu/MenuDropdown';
@@ -37,40 +37,43 @@ class ProfileActions extends React.PureComponent {
       { href: UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/about/id/' + this.props.recordId, orgTag), textId: 'profile.editAboutMe' },
       { href: UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/record/delete/' + this.props.recordId, orgTag), textId: 'delete profile' }
     ];
-}
+  }
 
-render() {
-  const { canPropose, canFilter, canEdit, classes } = this.props;
-  const actions = this.buildAction();
+  render() {
+    const { canPropose, canFilter, canEdit, classes } = this.props;
+    const actions = this.buildAction();
 
-  return (
-    <>
-      {canPropose && (
+    return (
+      <>
+        <Hidden mdDown>
+          {canPropose && (
+            <Grid item>
+              <Button className={classes.button} color="secondary" disabled >Propose Wings</Button>
+            </Grid>
+          )}
+
+          {canFilter && (
+            <Grid item>
+              <Button className={classes.button} disabled>Filter <FilterList /> </Button>
+            </Grid>
+          )}
+
+          {canEdit && (
+            <Grid item>
+              <MenuDropdown actions={actions} />
+            </Grid>
+          )}
+        </Hidden>
+
+
         <Grid item>
-          <Button className={classes.button} color="secondary" disabled >Propose Wings</Button>
+          <IconButton className={classNames(classes.button, classes.returnButton)} onClick={this.props.handleClose} >
+            <Clear />
+          </IconButton>
         </Grid>
-      )}
-
-      {canFilter && (
-        <Grid item>
-          <Button className={classes.button} disabled>Filter <FilterList /> </Button>
-        </Grid>
-      )}
-
-      {canEdit && (
-        <Grid item>
-          <MenuDropdown actions={actions} />
-        </Grid>
-      )}
-
-      <Grid item>
-        <IconButton className={classNames(classes.button, classes.returnButton)} onClick={this.props.handleClose} >
-          <Clear />
-        </IconButton>
-      </Grid>
-    </>
-  )
-}
+      </>
+    )
+  }
 }
 
 export default inject('commonStore', 'organisationStore')(

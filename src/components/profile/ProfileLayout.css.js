@@ -1,3 +1,6 @@
+// I don't know why, but if I use 'theme' like in other css.js files, the layout is broken.
+import theme from '../../theme';
+
 export const styles = {
   root: {
     position: 'fixed',
@@ -7,30 +10,53 @@ export const styles = {
     zIndex: 99999,
     top: 0,
     left: 0,
-    overflow: 'hidden'
+    // overflow: 'scroll'
   },
   thumbnail: {
     position: 'relative',
-    padding: 32,
-    paddingRight: 0,
-    height: 'calc(100vh - 112px)',
+    padding: 16,
+    [theme.breakpoints.up('sm')]: {
+      padding: 32,
+      paddingBottom: 16,
+    },
+    [theme.breakpoints.up('md')]: {
+      paddingRight: 0,
+      paddingBottom: 32,
+      height: 'calc(100vh - 116px)',
+    },
   },
   content: {
     position: 'relative',
-    padding: 32,
-    paddingTop: 16,
-    paddingLeft: 0,
+    padding: 16,
+    paddingTop: 0,
+    [theme.breakpoints.up('sm')]: {
+      padding: 32,
+      paddingTop: 0,
+    },
+    [theme.breakpoints.up('md')]: {
+      padding: 32,
+      paddingLeft: 0,
+      paddingTop: 16,
+    },
   },
   clapHistory: {
-    paddingLeft: 16,
-    marginTop: -23 // Height of title
+    marginTop: 28, // 32 - 4 (margin-bottom of one wing)
+    [theme.breakpoints.up('md')]: {
+      paddingLeft: 16,
+      marginTop: -23 // Height of title
+    }
   },
   wings: {
-    paddingRight: 16,
-    paddingLeft: 24
+    [theme.breakpoints.up('md')]: {
+      paddingRight: 16,
+      paddingLeft: 24
+    }
   },
   actions: {
-    padding: 32
+    padding: 16,
+    [theme.breakpoints.up('sm')]: {
+      padding: 32,
+    }
   },
   blackFilter: {
     position: 'fixed',
