@@ -49,7 +49,7 @@ class ProfileThumbnail extends PureComponent {
 
     return (
       <Paper className={classes.main}>
-        <Logo className={classes.profilePicture} src={record.picture ? record.picture.url : null} type="person" />
+        <Logo className={classes.profilePicture} src={ProfileService.getPicturePathResized(record.picture, 'person', '200x200')} type="person" />
         <div className={classes.topOffset} ></div>
         <Grid container spacing={32}>
           <Grid item xs={12}>

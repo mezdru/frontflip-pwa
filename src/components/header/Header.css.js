@@ -62,6 +62,9 @@ export const styles = theme => ({
     display: 'none',
   },
   drawer: {
+    '& span': {
+      color: 'white',
+    },
     width: drawerWidth,
     flexShrink: 0,
   },
