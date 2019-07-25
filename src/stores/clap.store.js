@@ -78,6 +78,7 @@ class ClapStore {
         return this.values.currentClapHistory;
       })
       .catch(action((err) => {
+        this.setCurrentClapHistory([]);
         this.errors = err.response && err.response.body && err.response.body.errors;
         throw err;
       }))
