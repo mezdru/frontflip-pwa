@@ -51,22 +51,23 @@ export default createMuiTheme({
         fontSize: '1.2rem',
         fontWeight: 600,
       },
-      h6: {
-        display: 'block',
-        padding: 8,
+      h4: {
+        fontWeight: '400',
       },
       h5: {
         fontWeight: '700',
       },
-      h4: {
-        fontWeight: '400',
+      h6: {
+        // display: 'block',
+        padding: 8,
       },
       body1: {
-        fontWeight: '400',
-        fontSize: '0.95rem',
+        fontWeight: '600',
+        fontSize: '1rem',
       },
       body2: {
-        fontWeight: '600',
+        fontSize: '.85rem',
+        color: '#555555'
       }
     },
     // Avatar

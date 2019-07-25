@@ -7,7 +7,8 @@ class ClapStore {
   values = {
     clap: {},
     currentRecordId: null,
-    currentRecordClapCount: []
+    currentRecordClapCount: [],
+    currentClapHistory: []
   };
 
   setClap(clap) {
@@ -20,6 +21,10 @@ class ClapStore {
 
   setCurrentRecordClapCount(clapCount) {
     this.values.currentRecordClapCount = clapCount;
+  }
+
+  setCurrentClapHistory(clapHistory) {
+    this.values.currentClapHistory = clapHistory;
   }
 
   reset() {
@@ -61,6 +66,23 @@ class ClapStore {
       }))
       .finally(action(() => { this.inProgress = false; }));
   }
+
+  getClapHistory() {
+    if (!this.values.currentRecordId) return Promise.reject(new Error('No record id'));
+    this.inProgress = true;
+    this.errors = null;
+
+    return agent.Clap.getClapHistory(this.values.currentRecordId)
+      .then(response => {
+        this.setCurrentClapHistory(response.data);
+        return this.values.currentClapHistory;
+      })
+      .catch(action((err) => {
+        this.errors = err.response && err.response.body && err.response.body.errors;
+        throw err;
+      }))
+      .finally(action(() => { this.inProgress = false; }));
+  }
 }
 
 decorate(ClapStore, {
@@ -72,7 +94,9 @@ decorate(ClapStore, {
   postClap: action,
   setClap: action,
   setCurrentRecordId: action,
-  setCurrentRecordClapCount: action
+  setCurrentRecordClapCount: action,
+  setCurrentClapHistory: action,
+  getClapHistory: action
 });
 
 export default new ClapStore();

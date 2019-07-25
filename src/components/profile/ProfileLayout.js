@@ -1,5 +1,5 @@
-import React from 'react';
-import { withStyles, Grid, Slide } from '@material-ui/core';
+import React, {Suspense} from 'react';
+import { withStyles, Grid, Slide, CircularProgress } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
@@ -7,9 +7,11 @@ import ProfileThumbnail from './ProfileThumbnail';
 import ProfileService from '../../services/profile.service';
 import BannerResizable from '../utils/banner/BannerResizable';
 import ProfileWings from './ProfileWings';
-import ProfileClapHistory from './ProfileClapHistory';
 import ProfileActions from './ProfileActions';
-import {styles} from './ProfileLayout.css';
+import { styles } from './ProfileLayout.css';
+
+const ProfileClapHistory = React.lazy(() => import('./ProfileClapHistory'));
+
 
 class ProfileLayout extends React.Component {
 
@@ -75,22 +77,25 @@ class ProfileLayout extends React.Component {
           />
           <div className={classes.blackFilter} ></div>
 
-          <Grid container alignContent="flex-start" style={{height: '100vh', overflowY: 'auto'}} >
+          <Grid container alignContent="flex-start" style={{ height: '100vh', overflowY: 'auto' }} >
 
-          <Grid container item xs={12} style={{ height: 116 }} alignContent="flex-start" justify="flex-end" className={classes.actions} >
-            <ProfileActions canPropose canFilter canEdit={canEdit} recordId={recordWingzy.objectID || recordWingzy._id} handleClose={this.props.handleClose} />
-          </Grid>
-          <Grid item className={classes.thumbnail} xs={12} lg={3}>
-            <ProfileThumbnail record={recordWingzy} />
-          </Grid>
-          <Grid container item className={classes.content} xs={12} lg={9} alignContent="flex-start">
-            <Grid item xs={12} lg={8} className={classes.wings} >
-              <ProfileWings wings={recordWingzy.hashtags} recordId={recordWingzy.objectID || recordWingzy._id} clapDictionnary={recordAlgolia.hashtags_claps} />
+            <Grid container item xs={12} style={{ height: 116 }} alignContent="flex-start" justify="flex-end" className={classes.actions} >
+              <ProfileActions canPropose canFilter canEdit={canEdit} recordId={recordWingzy.objectID || recordWingzy._id} handleClose={this.props.handleClose} />
             </Grid>
-            <Grid item xs={12} lg={4} className={classes.clapHistory}>
-              <ProfileClapHistory />
+            <Grid item className={classes.thumbnail} xs={12} lg={3}>
+              <ProfileThumbnail record={recordWingzy} />
             </Grid>
-          </Grid>
+            <Grid container item className={classes.content} xs={12} lg={9} alignContent="flex-start">
+              <Grid item xs={12} lg={8} className={classes.wings} >
+                <ProfileWings wings={recordWingzy.hashtags} recordId={recordWingzy.objectID || recordWingzy._id} clapDictionnary={recordAlgolia.hashtags_claps} />
+              </Grid>
+
+              <Grid item xs={12} lg={4} className={classes.clapHistory}>
+                <Suspense fallback={<CircularProgress color='secondary' />}>
+                  <ProfileClapHistory recordId={recordWingzy.objectID || recordWingzy._id} />
+                </Suspense>
+              </Grid>
+            </Grid>
           </Grid>
 
 

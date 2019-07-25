@@ -28,7 +28,7 @@ export const styles = theme => ({
     color: theme.palette.primary.dark,
   },
   description: {
-    color: '#555555',
+    // color: '#555555',
     maxHeight: 150,
     overflowY: 'scroll',
     marginTop: 16

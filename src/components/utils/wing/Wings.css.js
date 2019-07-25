@@ -13,7 +13,6 @@ export const styles = theme => ({
   },
   profileMode: {
     backgroundColor: '#FFFFFF',
-    fontSize: '1rem',
     color: theme.palette.primary.dark,
     '&:hover': {
       boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'
