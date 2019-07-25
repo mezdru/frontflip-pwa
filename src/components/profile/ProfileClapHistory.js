@@ -38,17 +38,19 @@ class ProfileClapHistory extends React.Component {
     this.props.clapStore.getClapHistory()
       .then(clapHistory => {
         this.setState({ clapHistory: JSON.parse(JSON.stringify(clapHistory)) });
-      }).catch(e => console.log(e));
+      }).catch(e => {return;});
   }
 
   render() {
     const { classes } = this.props;
     const { clapHistory } = this.state;
+    const { locale } = this.props.commonStore;
+    const { organisation } = this.props.organisationStore.values;
 
     const lastClapHistory = clapHistory.slice(0, 10);
 
     return (
-      <div>
+      <>
         <Typography variant="h3" style={{ textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.85)' }}>
           Activity History
         </Typography>
@@ -62,6 +64,7 @@ class ProfileClapHistory extends React.Component {
             given={clap.given}
             created={clap.created}
             locale={this.props.commonStore.locale}
+            link={'/' + locale + '/' + organisation.tag + '/' + clap.giver.tag}
           />
         )}
 
@@ -71,12 +74,12 @@ class ProfileClapHistory extends React.Component {
           </Grid>
         )}
 
-      </div>
+      </>
     );
   }
 }
 
-export default inject('recordStore', 'clapStore', 'commonStore')(
+export default inject('recordStore', 'clapStore', 'commonStore', 'organisationStore')(
   observer(
     withStyles(styles)(ProfileClapHistory)
   )

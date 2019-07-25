@@ -5,7 +5,6 @@ import { styles } from './Wings.css';
 import ApplauseIcon from '../../../resources/icons/Applause.js';
 import classNames from 'classnames';
 import ClickBurst from '../../../hoc/ClickBurst';
-import { observe } from 'mobx';
 
 let interval;
 

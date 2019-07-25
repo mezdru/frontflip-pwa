@@ -44,9 +44,11 @@ class UserStore {
 
     return agent.User.welcomeUser(this.values.currentUser._id, orgId)
       .then(data => {
-        this.values.currentUser = (data ? data.user : {});
-        this.syncRecord();
-        return this.values.currentUser;
+        if(data.message !== 'User already welcomed in Organisation') {
+          this.values.currentUser = (data ? data.user : {});
+          this.syncRecord();
+          return this.values.currentUser;
+        }
       })
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.errors;
