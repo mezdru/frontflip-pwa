@@ -87,7 +87,6 @@ class MainRouteOrganisationRedirect extends React.Component {
    * @param {Organisation} organisation 
    */
   canUserAccessOrganisation = (organisation) => {
-    console.log(JSON.parse(JSON.stringify(this.props.userStore.values)))
     if (!organisation) return false;
     if (organisation.public) {
       return true;
