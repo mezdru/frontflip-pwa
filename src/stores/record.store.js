@@ -61,10 +61,12 @@ class RecordStore {
 
     return agent.Record.getByTag(this.values.recordTag, this.values.orgId)
       .then(data => {
-        this.values.otherRecord = (data ? data.record : {});
+        this.setOtherRecord(data.record);
+
         return this.values.otherRecord;
       })
       .catch(action((err) => {
+        console.log(err)
         this.errors = err.response && err.response.body && err.response.body.errors;
         throw err;
       }))

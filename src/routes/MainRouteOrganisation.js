@@ -77,7 +77,7 @@ class MainRouteOrganisation extends React.Component {
 
           <Route path="/:locale(en|fr|en-UK)/:organisationTag/:hashtags/:action" component={(props) => <MainRouteOrganisationRedirect hashtagsFilter={true} {...props} />} />
 
-          <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={MainRouteOrganisationRedirect} />
+          <Route path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={MainRouteOrganisationRedirect} />
           <Route path="/:locale(en|fr|en-UK)" component={MainRouteOrganisationRedirect} />
           {isAuth && (
             <Redirect to={"/" + locale} />

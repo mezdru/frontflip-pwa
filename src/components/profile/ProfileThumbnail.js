@@ -31,7 +31,7 @@ const ProfileThumbnail = React.memo(withStyles(styles)(({classes, record, ...pro
           <Typography variant="h3" className={classes.text}>
             <FormattedMessage id="profile.aboutMe" />
           </Typography>
-          <Typography variant="body1" className={classes.description}>
+          <Typography variant="body2" className={classes.description}>
             {record.description}
           </Typography>
         </Grid>

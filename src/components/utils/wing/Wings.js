@@ -1,11 +1,10 @@
 import React from 'react';
 import withClapManagement from "../../../hoc/ClapManagement.hoc";
-import { withStyles } from '@material-ui/core';
+import { withStyles, Typography } from '@material-ui/core';
 import { styles } from './Wings.css';
 import ApplauseIcon from '../../../resources/icons/Applause.js';
 import classNames from 'classnames';
 import ClickBurst from '../../../hoc/ClickBurst';
-import { observe } from 'mobx';
 
 let interval;
 
@@ -86,7 +85,9 @@ class Wings extends React.PureComponent {
           </div>
         )}
         <span className={classes.label} onClick={this.props.onClick}>
-          {label}
+          <Typography variant="body1">
+            {label}
+          </Typography>
         </span>
 
         {canClap && enableClap && (

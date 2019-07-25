@@ -311,6 +311,10 @@ const Clap = {
   getClapCountByProfile: (recordId) =>
     requests.get(
       process.env.REACT_APP_API_ROOT_RECOGNIZE + '/api/claps/record/' + recordId + '/count',
+    ),
+  getClapHistory: (recordId) => 
+    requests.get(
+      process.env.REACT_APP_API_ROOT_RECOGNIZE + '/api/claps/record/' + recordId
     )
 }
 

@@ -47,11 +47,13 @@ class MainRouteOrganisationRedirect extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    if (props.history.action === 'PUSH' && ((props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) || (!this.props.organisationStore.values.fullOrgFetch))) {
+    if (props.history.action === 'PUSH' && ((props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) || (!this.props.organisationStore.values.fullOrgFetch) || 
+    (props.match.params && props.match.params.profileTag) )) {
       this.setState({ renderComponent: false }, () => {
         this.manageAccessRight().then(() => {
           this.setState({ renderComponent: true });
         }).catch((err) => {
+          console.log(err)
           ReactGA.event({ category: 'Error', action: 'Redirect to error layout', value: 500 });
           SlackService.notifyError(err, '32', 'quentin', 'MainRouteOrganisationRedirect.js');
           this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/error/500/routes' });
@@ -84,12 +86,13 @@ class MainRouteOrganisationRedirect extends React.Component {
    * @description Perform the authorization process to access the organisation or not
    * @param {Organisation} organisation 
    */
-  canUserAccessOrganisation(organisation) {
+  canUserAccessOrganisation = (organisation) => {
     if (!organisation) return false;
     if (organisation.public) {
       return true;
     } else {
       if (!this.props.authStore.isAuth()) return false;
+      if (!this.props.userStore.values.currentUser) return false;
       if (!this.props.userStore.values.currentUser._id) return false;
       if (this.props.userStore.values.currentUser.superadmin) return true;
       if (this.props.userStore.values.currentUser.orgsAndRecords.length === 0 || !this.props.userStore.values.currentUser.orgsAndRecords) return false;

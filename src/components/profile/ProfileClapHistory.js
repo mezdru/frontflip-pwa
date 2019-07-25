@@ -1,5 +1,8 @@
 import React from 'react';
 import { Typography, withStyles, Grid } from '@material-ui/core';
+import { inject, observer } from 'mobx-react';
+import { observe } from 'mobx';
+import ActivityCard from './ActivityCard';
 
 const styles = {
   activity: {
@@ -12,24 +15,72 @@ const styles = {
 
 class ProfileClapHistory extends React.Component {
   state = {
+    clapHistory: [],
+    observer: () => { }
+  }
 
+  componentDidMount() {
+    this.getClapHistory();
+
+    this.setState({
+      observer: observe(this.props.recordStore.values, 'otherRecord', (change) => {
+        this.getClapHistory();
+      })
+    });
+  }
+
+  componentWillUnmount() {
+    this.state.observer();
+  }
+
+  getClapHistory = () => {
+    this.props.clapStore.setCurrentRecordId(this.props.recordId || this.props.recordStore.values.otherRecord._id);
+    this.props.clapStore.getClapHistory()
+      .then(clapHistory => {
+        this.setState({ clapHistory: JSON.parse(JSON.stringify(clapHistory)) });
+      }).catch(e => {return;});
   }
 
   render() {
     const { classes } = this.props;
+    const { clapHistory } = this.state;
+    const { locale } = this.props.commonStore;
+    const { organisation } = this.props.organisationStore.values;
 
-    return(
-      <div>
-        <Typography variant="h3" style={{textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.85)'}}>
+    const lastClapHistory = clapHistory.slice(0, 10);
+
+    return (
+      <>
+        <Typography variant="h3" style={{ textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.85)' }}>
           Activity History
         </Typography>
 
-        <Grid item container xs={12} className={classes.activity} >
-          Here will appears the history of the activities link to your profile.
-        </Grid>
-      </div>
+        {lastClapHistory && lastClapHistory.length > 0 && lastClapHistory.map((clap, index) =>
+          <ActivityCard 
+            picture={clap.giver.picture ? clap.giver.picture.url : null}
+            hashtag={clap.hashtag}
+            authorName={clap.giver.name}
+            message={clap.message}
+            given={clap.given}
+            created={clap.created}
+            locale={this.props.commonStore.locale}
+            link={'/' + locale + '/' + organisation.tag + '/' + clap.giver.tag}
+          />
+        )}
+
+        {!lastClapHistory || lastClapHistory.length === 0 && (
+          <Grid item container xs={12} className={classes.activity} >
+            Here will appears the history of the activities link to your profile.
+          </Grid>
+        )}
+
+      </>
     );
   }
 }
 
-export default withStyles(styles)(ProfileClapHistory);
+export default inject('recordStore', 'clapStore', 'commonStore', 'organisationStore')(
+  observer(
+    withStyles(styles)(ProfileClapHistory)
+  )
+)
