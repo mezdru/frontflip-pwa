@@ -62,7 +62,6 @@ class RecordStore {
     return agent.Record.getByTag(this.values.recordTag, this.values.orgId)
       .then(data => {
         this.setOtherRecord(data.record);
-        console.log(JSON.parse(JSON.stringify(this.values)))
 
         return this.values.otherRecord;
       })
