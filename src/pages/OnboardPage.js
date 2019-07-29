@@ -31,6 +31,7 @@ class OnboardPage extends React.Component {
       inOnboarding: false,
       observer: () => { },
       stepNumber: 0,
+      steps: [],
       editMode: this.props.edit || false,
       renderComponent: (this.props.edit ? false : true)
     };
@@ -40,6 +41,7 @@ class OnboardPage extends React.Component {
   }
 
   componentDidMount() {
+    this.makeStepOrder();
     this.props.history.listen((location, action) => {
       ReactGA.pageview(window.location.pathname);
       // The react router dom params are updated async
@@ -68,23 +70,29 @@ class OnboardPage extends React.Component {
     this.state.observer();
   }
 
-  populateStep = (stepLabel) => {
-    switch (stepLabel) {
-      case 'intro':
-        this.setState({ stepNumber: 0, inOnboarding: true });
-        break;
-      case 'contacts':
-        this.setState({ stepNumber: 1, inOnboarding: true });
-        break;
-      case 'wings':
-        this.setState({ stepNumber: 2, inOnboarding: true });
-        break;
-      default:
-        if (stepLabel && (stepLabel.replace('%23', '#')).charAt(0) === '#') {
-          this.setState({ stepNumber: 3, inOnboarding: true });
-        }
-        break;
+  makeStepOrder = async () => {
+    let org = this.props.organisationStore.values.organisation;
+    if(org && org.onboardSteps && org.onboardSteps.length > 0) {
+      await this.setState({steps: org.onboardSteps});
+    } else {
+      await this.setState({steps: ['intro', 'contacts', 'wings']});
     }
+
+    if(org.featuredWingsFamily && org.featuredWingsFamily.length > 0) {
+      var steps = this.state.steps;
+      org.featuredWingsFamily.forEach(fwf => {
+        if(!steps.find(elt => elt === fwf.tag))
+          steps.push(fwf.tag);
+
+      });
+    }
+  }
+
+  populateStep = (stepLabel) => {
+    this.makeStepOrder()
+    .then(() => {
+      this.setState({ stepNumber: this.state.steps.indexOf(stepLabel.replace('%23', '#')), inOnboarding: true });
+    });
   }
 
   getRecordForUser = () => {
@@ -99,7 +107,7 @@ class OnboardPage extends React.Component {
   }
 
   render() {
-    const { inOnboarding, stepNumber, editMode, renderComponent } = this.state;
+    const { inOnboarding, stepNumber, steps, editMode, renderComponent } = this.state;
 
     if (!renderComponent) return null;
 
@@ -117,7 +125,7 @@ class OnboardPage extends React.Component {
       return (
         <React.Fragment>
           <main>
-            <OnboardStepper initStep={stepNumber} SuggestionsController={SuggestionsController} edit={editMode} />
+            <OnboardStepper initStep={stepNumber} steps={steps} SuggestionsController={SuggestionsController} edit={editMode} />
             <Suspense fallback={<></>}>
               <Intercom appID={"k7gprnv3"} />
             </Suspense>
