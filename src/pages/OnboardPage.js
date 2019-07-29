@@ -76,11 +76,8 @@ class OnboardPage extends React.Component {
       case 'contacts':
         this.setState({ stepNumber: 1, inOnboarding: true });
         break;
-      case 'firstWings':
-        this.setState({ stepNumber: 2, inOnboarding: true });
-        break;
       case 'wings':
-        this.setState({ stepNumber: 3, inOnboarding: true });
+        this.setState({ stepNumber: 2, inOnboarding: true });
         break;
       default:
         if (stepLabel && (stepLabel.replace('%23', '#')).charAt(0) === '#') {
