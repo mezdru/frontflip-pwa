@@ -102,9 +102,6 @@ class OnboardStepper extends React.Component {
     }
 
     this.initializeSuggestions(this.state.steps[this.state.activeStep+1]);
-
-    console.log(this.state.activeStep)
-    console.log(this.state.steps.length - 1)
     
     if ((this.state.activeStep === (this.state.steps.length - 1))) {
       // click on finish
