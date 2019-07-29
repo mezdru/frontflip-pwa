@@ -75,7 +75,7 @@ class OnboardStepper extends React.Component {
    * @description Make steps array thanks to organisation data
    */
   makeSteps = () => {
-    var steps = ['intro', 'contacts', 'firstWings', 'wings'];
+    var steps = ['intro', 'contacts', 'wings'];
     if (this.props.organisationStore.values.organisation && this.props.organisationStore.values.organisation.featuredWingsFamily) {
       var familySteps = this.props.organisationStore.values.organisation.featuredWingsFamily.map(
         fam => fam.tag
@@ -152,8 +152,6 @@ class OnboardStepper extends React.Component {
         return OnboardIntro;
       case 'contacts':
         return OnboardContacts;
-      // case 'firstWings':
-      //   return OnboardFirstWings;
       default:
         return OnboardWings;
     }
@@ -193,9 +191,6 @@ class OnboardStepper extends React.Component {
       case 'contacts':
         if(record.links && record.links.length > 0) return true;
         return false;
-      case 'firstWings':
-        if(record.hashtags && record.hashtags.length > 0) return true;
-        return false;
       case 'wings':
         if(record.hashtags && record.hashtags.length > 9) return true;
         return false;
@@ -209,7 +204,7 @@ class OnboardStepper extends React.Component {
     const { organisation, orgTag } = this.props.organisationStore.values;
     const {locale} = this.props.commonStore;
     const { activeStep, steps, canNext, showFeedback, redirectTo } = this.state;
-    // let StepComponent = this.getStepComponent(steps, activeStep);
+
     let wantedUrl = '/' + locale + '/' + (organisation.tag || orgTag) + '/onboard/' + steps[activeStep].replace('#', '%23');
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
     return (
