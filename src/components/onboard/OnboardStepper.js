@@ -56,33 +56,18 @@ class OnboardStepper extends React.Component {
     super(props);
     this.state = {
       activeStep: this.props.initStep || 0,
-      steps: this.makeSteps(),
-      canNext: true
+      canNext: true,
     };
   }
 
   componentDidMount() {
-    this.initializeSuggestions(this.state.steps[this.state.activeStep]);
+    this.initializeSuggestions(this.props.steps[this.state.activeStep]);
   }
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.initStep !== this.props.initStep) {
       this.setState({activeStep: nextProps.initStep}, () => {this.forceUpdate()});
     }
-  }
-
-  /**
-   * @description Make steps array thanks to organisation data
-   */
-  makeSteps = () => {
-    var steps = ['intro', 'contacts', 'wings'];
-    if (this.props.organisationStore.values.organisation && this.props.organisationStore.values.organisation.featuredWingsFamily) {
-      var familySteps = this.props.organisationStore.values.organisation.featuredWingsFamily.map(
-        fam => fam.tag
-      );
-      steps = steps.concat(familySteps);
-    }
-    return steps;
   }
 
   initializeSuggestions = (currentStep) => {
@@ -101,9 +86,9 @@ class OnboardStepper extends React.Component {
                         '/' + this.props.recordStore.values.record.tag }, () => {this.forceUpdate()});
     }
 
-    this.initializeSuggestions(this.state.steps[this.state.activeStep+1]);
+    this.initializeSuggestions(this.props.steps[this.state.activeStep+1]);
     
-    if ((this.state.activeStep === (this.state.steps.length - 1))) {
+    if ((this.state.activeStep === (this.props.steps.length - 1))) {
       // click on finish
       let user = this.props.userStore.values.currentUser;
       try {
@@ -139,7 +124,7 @@ class OnboardStepper extends React.Component {
       '/' + this.props.organisationStore.values.orgTag + 
       '/' + this.props.recordStore.values.record.tag }, () => {this.forceUpdate()});
 
-    this.initializeSuggestions(this.state.steps[this.state.activeStep-1])
+    this.initializeSuggestions(this.props.steps[this.state.activeStep-1])
 
     this.setState(state => ({
       activeStep: state.activeStep - 1,
@@ -178,7 +163,7 @@ class OnboardStepper extends React.Component {
 
   getNextButtonText = () => {
     if(this.props.edit) return <FormattedMessage id={'onboard.edit.save'}/>
-    else if (this.state.activeStep === (this.state.steps.length -1)) return <FormattedMessage id={'onboard.stepperFinish'}/>
+    else if (this.state.activeStep === (this.props.steps.length -1)) return <FormattedMessage id={'onboard.stepperFinish'}/>
     else return <FormattedMessage id={'onboard.stepperNext'}/>
   }
 
@@ -200,10 +185,10 @@ class OnboardStepper extends React.Component {
   }
 
   render() {
-    const { theme, classes, edit } = this.props;
+    const { theme, classes, edit, steps } = this.props;
     const { organisation, orgTag } = this.props.organisationStore.values;
     const {locale} = this.props.commonStore;
-    const { activeStep, steps, canNext, showFeedback, redirectTo } = this.state;
+    const { activeStep, canNext, showFeedback, redirectTo } = this.state;
 
     let wantedUrl = '/' + locale + '/' + (organisation.tag || orgTag) + '/onboard/' + steps[activeStep].replace('#', '%23');
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
@@ -216,9 +201,9 @@ class OnboardStepper extends React.Component {
           <Grid item xs={12} sm={8} md={6} lg={4} style={{ position: 'relative', left: 0, right: 0, margin: 'auto'}} >
             <MobileStepper
               variant="dots"
-              steps={3}
+              steps={steps.length}
               position="static"
-              activeStep={(edit ? -1 : Math.min(activeStep, 2))}
+              activeStep={(edit ? -1 : Math.min(activeStep, steps.length-1))}
               style={{ maxWidth: '100%' }}
               className={classes.root}
               nextButton={
