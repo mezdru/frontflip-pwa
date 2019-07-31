@@ -1,11 +1,13 @@
 import React from 'react'
-import { withStyles, Grid } from '@material-ui/core';
+import { withStyles, Grid, Hidden } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
-import SearchField from '../../algolia/SearchField';
+import SearchField from '../../search/SearchField';
 import UserWings from '../../utils/wing/UserWings';
 import WingsSuggestion from '../../algolia/WingsSuggestion';
 import Typography from '@material-ui/core/Typography';
 import { FormattedMessage } from "react-intl";
+import AlgoliaService from '../../../services/algolia.service';
+import SearchSuggestions from '../../search/SearchSuggestions';
 
 const styles = theme => ({
   userWingsPosition: {
@@ -23,8 +25,20 @@ class OnboardWings extends React.Component {
     super(props);
     this.state = {
       activeStepOne: this.props.activeStep,
-      scrollableClass: Math.floor(Math.random() * 99999)
+      scrollableClass: Math.floor(Math.random() * 99999),
+      autocompleteSuggestions: [],
+      input: null
     };
+  }
+
+  /**
+   * @description Fetch current suggestions related to the user input.
+   */
+  fetchAutocompleteSuggestions = (input) => {
+    AlgoliaService.fetchOptions(input, true, false)
+      .then(options => {
+        this.setState({ autocompleteSuggestions: options.hits, input: input });
+      });
   }
 
   scrollUserWingsToBottom = () => {
@@ -89,6 +103,11 @@ class OnboardWings extends React.Component {
 
   render() {
     const { classes } = this.props;
+    const { autocompleteSuggestions, input } = this.state;
+
+    console.table(this.state)
+    console.log( (autocompleteSuggestions.length > 0 || input) )
+
     return (
       <Grid container direction="column" style={{ height: 'calc(100vh - 73px)', background: 'white', overflow: 'hidden' }}>
         <Grid item style={{
@@ -104,16 +123,20 @@ class OnboardWings extends React.Component {
 
             <Grid item xs={12} style={{ padding: 16, paddingBottom: 0, paddingTop: 0 }}>
               <SearchField hashtagOnly handleAddWing={this.handleAddWing}
-                wingsFamily={this.isFeaturedWings() ? this.props.activeStepLabel : null} />
+                wingsFamily={this.isFeaturedWings() ? this.props.activeStepLabel : null}
+                fetchAutocompleteSuggestions={this.fetchAutocompleteSuggestions} />
             </Grid>
 
             <Grid item xs={12} >
-              <WingsSuggestion handleAddWing={this.handleAddWing} handleSave={this.props.handleSave}
-                wingsFamily={this.isFeaturedWings() ? this.props.activeStepLabel : null}
-                SuggestionsController={this.props.SuggestionsController} stepLabel={this.props.activeStepLabel} />
+              <Hidden xsDown>
+                <Typography variant="subtitle2" style={{ padding: 16, paddingBottom: 0 }} ><FormattedMessage id={'wingsSuggestions'} /></Typography>
+              </Hidden>
+                <WingsSuggestion handleAddWing={this.handleAddWing} handleSave={this.props.handleSave}
+                  wingsFamily={this.isFeaturedWings() ? this.props.activeStepLabel : null}
+                  SuggestionsController={this.props.SuggestionsController} stepLabel={this.props.activeStepLabel} />
             </Grid>
 
-          </Grid>          
+          </Grid>
         </Grid>
 
         <Grid item justify="center" direction="row" container className={classes.userWingsPosition} id={this.state.scrollableClass}>

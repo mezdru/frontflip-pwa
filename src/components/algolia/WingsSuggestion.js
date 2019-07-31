@@ -206,9 +206,9 @@ class WingsSuggestions extends React.Component {
 
     return (
       <div ref={(el) => { this.elementNode = el }}>
-        <Hidden xsDown>
+        {/* <Hidden xsDown>
           <Typography variant="subtitle2" style={{ padding: 16, paddingBottom: 0 }} ><FormattedMessage id={'wingsSuggestions'} /></Typography>
-        </Hidden>
+        </Hidden> */}
         <div style={{ position: 'relative', height: 126 }}>
           <Hidden smDown>
             <CarouselArrows scrollPosition={'scrollLeft'} onMouseDown={this.scrollLeft} onMouseUp={this.scrollStop} variant="outlined" />
