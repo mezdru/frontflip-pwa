@@ -3,6 +3,7 @@ import { withStyles, IconButton, Grid } from '@material-ui/core';
 import classNames from 'classnames';
 import '../../resources/stylesheets/font-awesome.min.css';
 import './ContactsColors.css';
+import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 
 const styles = theme => ({
   contactIcon: {
@@ -15,7 +16,8 @@ const styles = theme => ({
   },
 });
 
-const ProfileContacts = React.memo(withStyles(styles)(({ classes, contacts, ...props }) => {
+const ProfileContacts = React.memo(withProfileManagement(withStyles(styles)(({ classes, profileContext, ...props }) => {
+  var contacts = profileContext.getProp('links');
   return (
     <>
       {contacts && contacts.length > 0 && contacts.map((contact, index) => {
@@ -29,6 +31,6 @@ const ProfileContacts = React.memo(withStyles(styles)(({ classes, contacts, ...p
       })}
     </>
   );
-}));
+})));
 
 export default ProfileContacts;

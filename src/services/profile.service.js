@@ -199,6 +199,7 @@ class ProfileService {
   };
   
   htmlDecode = function (input) {
+    if(!input) return '';
     var e = document.createElement('textarea');
     e.innerHTML = input;
     return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;

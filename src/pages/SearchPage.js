@@ -13,6 +13,7 @@ import ErrorBoundary from '../components/utils/errors/ErrorBoundary';
 import './SearchPageStyle.css';
 import SearchButton from '../components/search/SearchButton';
 import withSearchManagement from '../hoc/SearchManagement.hoc';
+import { withProfileManagement } from '../hoc/profile/withProfileManagement';
 
 const OnboardCongratulation = React.lazy(() => import('../components/onboard/steps/OnboardCongratulation'));
 const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
@@ -171,6 +172,7 @@ class SearchPage extends PureComponent {
 
   handleDisplayProfile = (e, profileRecord) => {
     ReactGA.event({ category: 'User', action: 'Display profile' });
+    this.props.profileContext.setProfileData(profileRecord);
     this.setState({ displayedHit: profileRecord, visible: true });
   }
 
@@ -248,7 +250,7 @@ class SearchPage extends PureComponent {
 
         {displayedHit && (
           <Suspense fallback={<></>}>
-            <ProfileLayout hit={displayedHit} visible={visible} handleClose={this.handleCloseProfile} transitionDuration={transitionDuration} />
+            <ProfileLayout visible={visible} handleClose={this.handleCloseProfile} transitionDuration={transitionDuration} />
           </Suspense>
         )}
 
@@ -272,7 +274,7 @@ class SearchPage extends PureComponent {
   }
 }
 
-SearchPage = withSearchManagement(SearchPage);
+SearchPage = withSearchManagement( withProfileManagement(SearchPage));
 
 export default inject('commonStore', 'organisationStore')(
   observer(

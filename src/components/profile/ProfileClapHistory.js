@@ -3,6 +3,7 @@ import { Typography, withStyles, Grid } from '@material-ui/core';
 import { inject, observer } from 'mobx-react';
 import { observe } from 'mobx';
 import ActivityCard from './ActivityCard';
+import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 
 const styles = {
   activity: {
@@ -23,7 +24,7 @@ class ProfileClapHistory extends React.Component {
     this.getClapHistory();
 
     this.setState({
-      observer: observe(this.props.recordStore.values, 'otherRecord', (change) => {
+      observer: observe(this.props.recordStore.values, 'displayedRecord', (change) => {
         this.getClapHistory();
       })
     });
@@ -34,7 +35,7 @@ class ProfileClapHistory extends React.Component {
   }
 
   getClapHistory = () => {
-    this.props.clapStore.setCurrentRecordId(this.props.recordId || this.props.recordStore.values.otherRecord._id);
+    this.props.clapStore.setCurrentRecordId(this.props.profileContext.getProp('_id'));
     this.props.clapStore.getClapHistory()
       .then(clapHistory => {
         this.setState({ clapHistory: JSON.parse(JSON.stringify(clapHistory)) });
@@ -42,11 +43,10 @@ class ProfileClapHistory extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, profileContext } = this.props;
     const { clapHistory } = this.state;
     const { locale } = this.props.commonStore;
     const { organisation } = this.props.organisationStore.values;
-    const { otherRecord } = this.props.recordStore.values;
 
     const lastClapHistory = clapHistory.slice(0, 10);
 
@@ -57,7 +57,7 @@ class ProfileClapHistory extends React.Component {
         </Typography>
 
         {lastClapHistory && lastClapHistory.length > 0 && lastClapHistory.map((clap, index) => {
-          if (clap.recipient === otherRecord._id) {
+          if (clap.recipient === profileContext.getProp('_id') && profileContext.isWingsDisplayed(clap.hashtag._id || clap.hashtag)) {
             return <ActivityCard
               picture={clap.giver.picture ? clap.giver.picture.url : null}
               hashtag={clap.hashtag}
@@ -85,6 +85,6 @@ class ProfileClapHistory extends React.Component {
 
 export default inject('recordStore', 'clapStore', 'commonStore', 'organisationStore')(
   observer(
-    withStyles(styles)(ProfileClapHistory)
+    withStyles(styles)( withProfileManagement(ProfileClapHistory))
   )
 )

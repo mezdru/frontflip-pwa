@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import MenuDropdown from '../utils/menu/MenuDropdown';
 import { inject, observer } from 'mobx-react';
 import UrlService from '../../services/url.service.js';
+import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 
 const styles = theme => ({
   button: {
@@ -40,7 +41,8 @@ class ProfileActions extends React.PureComponent {
   }
 
   render() {
-    const { canPropose, canFilter, canEdit, classes } = this.props;
+    const { canPropose, canFilter, classes } = this.props;
+    const {isEditable, filterProfile } = this.props.profileContext;
     const actions = this.buildAction();
 
     return (
@@ -54,11 +56,11 @@ class ProfileActions extends React.PureComponent {
 
           {canFilter && (
             <Grid item>
-              <Button className={classes.button} disabled>Filter <FilterList /> </Button>
+              <Button className={classes.button} disabled >Filter <FilterList /> </Button>
             </Grid>
           )}
 
-          {canEdit && (
+          {isEditable && (
             <Grid item>
               <MenuDropdown actions={actions} />
             </Grid>
@@ -78,6 +80,6 @@ class ProfileActions extends React.PureComponent {
 
 export default inject('commonStore', 'organisationStore')(
   observer(
-    withStyles(styles)(ProfileActions)
+    withStyles(styles)( withProfileManagement(ProfileActions))
   )
 );
