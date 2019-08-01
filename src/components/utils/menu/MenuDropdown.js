@@ -41,22 +41,10 @@ class MenuDropdown extends React.PureComponent {
   };
 
   render() {
-    const { classes, actions } = this.props;
-    const { open } = this.state;
+    const { classes, actions, open } = this.props;
 
     return (
       <>
-        <IconButton
-          className={classes.button}
-          buttonRef={node => {
-            this.anchorEl = node;
-          }}
-          aria-owns={open ? 'menu-list-grow' : undefined}
-          aria-haspopup="true"
-          onClick={this.handleClick}
-        >
-          <Edit />
-        </IconButton>
         <Popper open={open} anchorEl={this.anchorEl} transition disablePortal className={classes.popup}>
           {({ TransitionProps, placement }) => (
             <Grow

@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles, Grid, Button, IconButton, Hidden } from '@material-ui/core';
-import { FilterList, Clear } from '@material-ui/icons';
+import { FilterList, Clear, Edit } from '@material-ui/icons';
 import classNames from 'classnames';
 import MenuDropdown from '../utils/menu/MenuDropdown';
 import { inject, observer } from 'mobx-react';
@@ -27,6 +27,11 @@ const styles = theme => ({
 
 class ProfileActions extends React.PureComponent {
 
+  state = {
+    openEdit: false,
+    openFilter: false
+  }
+
   buildAction = () => {
     let locale = this.props.commonStore.locale;
     let orgTag = this.props.organisationStore.values.organisation.tag;
@@ -42,8 +47,11 @@ class ProfileActions extends React.PureComponent {
 
   render() {
     const { canPropose, canFilter, classes } = this.props;
-    const {isEditable, filterProfile } = this.props.profileContext;
+    const { isEditable, filterProfile } = this.props.profileContext;
+    const { openEdit, openFilter} = this.state;
     const actions = this.buildAction();
+
+    console.log('is editable ? ' + isEditable)
 
     return (
       <>
@@ -62,7 +70,18 @@ class ProfileActions extends React.PureComponent {
 
           {isEditable && (
             <Grid item>
-              <MenuDropdown actions={actions} />
+              <IconButton
+                className={classes.button}
+                buttonRef={node => {
+                  this.anchorEl = node;
+                }}
+                aria-owns={openEdit ? 'menu-list-grow' : undefined}
+                aria-haspopup="true"
+                onClick={this.handleClick}
+              >
+                <Edit />
+              </IconButton>
+              <MenuDropdown actions={actions} open={openEdit} />
             </Grid>
           )}
         </Hidden>
@@ -80,6 +99,6 @@ class ProfileActions extends React.PureComponent {
 
 export default inject('commonStore', 'organisationStore')(
   observer(
-    withStyles(styles)( withProfileManagement(ProfileActions))
+    withStyles(styles)(withProfileManagement(ProfileActions))
   )
 );

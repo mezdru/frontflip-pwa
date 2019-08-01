@@ -44,7 +44,7 @@ class ProfileProvider extends React.Component {
     ProfileService.transformLinks(algoliaRecord);
     ProfileService.makeHightlighted(algoliaRecord);
     ProfileService.orderHashtags(algoliaRecord);
-    this.setState({algoliaRecord});
+    this.setState({algoliaRecord}, this.setWingzyRecord);
   }
 
   setWingzyRecord = () => {
@@ -87,6 +87,6 @@ class ProfileProvider extends React.Component {
   }
 }
 
-export default inject('organisationStore', 'recordStore')(
+export default inject('organisationStore', 'recordStore', 'userStore')(
   observer(ProfileProvider)
 );
