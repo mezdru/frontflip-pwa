@@ -52,8 +52,12 @@ class Register extends React.Component {
                 this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag });
               } else {
                 // New User, shows success message.
-                this.setState({ registerSuccess: true });
-                this.setState({ registerSuccessMessage: this.props.intl.formatMessage({ id: 'signup.success' }) });
+                this.setState(
+                  {
+                    registerSuccess: true,
+                    registerSuccessMessage: this.props.intl.formatMessage({ id: 'signup.success' })
+                  },
+                );
               }
 
             }).catch((err) => {
@@ -113,6 +117,8 @@ class Register extends React.Component {
     let { registerErrors, registerSuccess, registerSuccessMessage, redirectTo } = this.state;
     let intl = this.props.intl;
 
+    console.debug('%c Render Register.js', 'background-color: grey; padding: 6px 12px; border-radius: 5px; color: white;');
+
     if (redirectTo) return <Redirect push to={redirectTo} />;
 
     if (registerSuccess) {
@@ -133,7 +139,7 @@ class Register extends React.Component {
               </Grid>
             )}
             <Grid item container justify='center'>
-              <Typography variant="h3" style={{textAlign: 'center'}}>
+              <Typography variant="h3" style={{ textAlign: 'center' }}>
                 <FormattedHTMLMessage id="signup.title.org" />
               </Typography>
             </Grid>

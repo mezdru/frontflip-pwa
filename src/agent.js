@@ -181,7 +181,7 @@ const User = {
       API_ROOT + '/api/users/me/orgsAndRecords',
       {
         orgAndRecord: {
-          organisaation: organisationId,
+          organisation: organisationId,
           welcomed: true
         }
       }

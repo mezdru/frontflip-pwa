@@ -15,6 +15,7 @@ class AuthPage extends React.Component {
     this.state = {
       initialTabState: 0
     };
+    console.debug('Construct AuthPage.js', this.props)
   }
 
   componentDidMount() {
@@ -27,6 +28,8 @@ class AuthPage extends React.Component {
   render() {
     const { initialTab} = this.props;
     const {initialTabState} = this.state;
+
+    console.debug('%c Render AuthPage.js', 'background-color: grey; padding: 6px 12px; border-radius: 5px; color: white;');
 
     return (
       <AuthLayout>

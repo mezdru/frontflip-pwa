@@ -122,7 +122,6 @@ class WingsSuggestions extends React.Component {
 
   isNewSuggestions = (tag) => {
     let indexOf = this.props.suggestionsController._newSuggestions.all.findIndex(suggestion => suggestion.tag === tag);
-    // console.log('index of ' + tag + ' is ' + indexOf);
     return (indexOf > -1);
   }
 

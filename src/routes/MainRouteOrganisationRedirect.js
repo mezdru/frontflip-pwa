@@ -46,12 +46,19 @@ class MainRouteOrganisationRedirect extends React.Component {
     );
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if(JSON.stringify(nextState) !== JSON.stringify(this.state)) return true;
+    return false;
+  }
+
   componentWillReceiveProps(props) {
+    if(props.history.action === 'POP' && props.location.pathname === window.location.pathname) return;
+
     if (props.history.action === 'PUSH' && ((props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) || (!this.props.organisationStore.values.fullOrgFetch) || 
     (props.match.params && props.match.params.profileTag) )) {
       this.setState({ renderComponent: false }, () => {
         this.manageAccessRight().then(() => {
-          this.setState({ renderComponent: true });
+          this.setState({ renderComponent: true }, () => {this.forceUpdate()});
         }).catch((err) => {
           console.log('err: ', err)
           ReactGA.event({ category: 'Error', action: 'Redirect to error layout', value: 500 });
@@ -74,7 +81,7 @@ class MainRouteOrganisationRedirect extends React.Component {
 
   componentDidMount() {
     this.manageAccessRight().then(() => {
-      this.setState({ renderComponent: true });
+      this.setState({ renderComponent: true }, () => {this.forceUpdate()});
     }).catch((err) => {
       console.log('err: ', err);
       ReactGA.event({ category: 'Error', action: 'Redirect to error layout', value: 500 });
@@ -242,9 +249,9 @@ class MainRouteOrganisationRedirect extends React.Component {
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={this.WaitingComponent(PasswordForgot)} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={(PasswordReset)} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/create/:token/:hash/:email" component={(PasswordReset)} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={AuthPage} />
+            {/* <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={AuthPage} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={(props) => { return <AuthPage initialTab={1} {...props} /> }} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} /> */}
 
             {/* Main route with orgTag */}
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step?" component={(OnboardPage)} />
