@@ -191,8 +191,6 @@ class SearchPage extends PureComponent {
     const {locale} = this.props.commonStore;
     let forceRedirect = null;
 
-    console.table(this.state);
-
     if(!displayedHit && this.props.match.params.profileTag) forceRedirect = "/" + locale + "/" + organisation.tag;
 
     return (
