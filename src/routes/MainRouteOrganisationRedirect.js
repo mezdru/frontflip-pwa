@@ -53,7 +53,7 @@ class MainRouteOrganisationRedirect extends React.Component {
         this.manageAccessRight().then(() => {
           this.setState({ renderComponent: true });
         }).catch((err) => {
-          console.log(err)
+          console.log('err: ', err)
           ReactGA.event({ category: 'Error', action: 'Redirect to error layout', value: 500 });
           SlackService.notifyError(err, '32', 'quentin', 'MainRouteOrganisationRedirect.js');
           this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/error/500/routes' });
@@ -76,6 +76,7 @@ class MainRouteOrganisationRedirect extends React.Component {
     this.manageAccessRight().then(() => {
       this.setState({ renderComponent: true });
     }).catch((err) => {
+      console.log('err: ', err);
       ReactGA.event({ category: 'Error', action: 'Redirect to error layout', value: 500 });
       SlackService.notifyError(err, '42', 'quentin', 'MainRouteOrganisationRedirect.js');
       this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/error/500/routes' });
@@ -122,6 +123,7 @@ class MainRouteOrganisationRedirect extends React.Component {
               EmailService.confirmLoginEmail(null);
               this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/error/' + err.status + '/email' });
             } else {
+              console.log('err: ', err);
               ReactGA.event({ category: 'Error', action: 'Redirect to error layout', value: 500 });
               SlackService.notifyError(err, '32', 'quentin', 'MainRouteOrganisationRedirect.js');
               this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/error/500/routes' });
