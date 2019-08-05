@@ -191,11 +191,13 @@ class SearchPage extends PureComponent {
     const {locale} = this.props.commonStore;
     let forceRedirect = null;
 
+    console.table(this.state);
+
     if(!displayedHit && this.props.match.params.profileTag) forceRedirect = "/" + locale + "/" + organisation.tag;
 
     return (
       <React.Fragment>
-        { (redirectTo && (window.location.pathname !== redirectTo)) || forceRedirect && <Redirect to={redirectTo || forceRedirect} />}
+        { ((redirectTo && (window.location.pathname !== redirectTo)) || forceRedirect) && <Redirect to={redirectTo || forceRedirect} />}
         <Suspense fallback={<></>}>
           <Header handleDisplayProfile={this.handleDisplayProfile} />
         </Suspense>
