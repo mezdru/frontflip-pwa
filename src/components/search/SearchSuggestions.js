@@ -216,7 +216,6 @@ class SearchSuggestions extends React.Component {
               return (
                 <Chip key={i}
                   component={React.forwardRef((props, ref) => {
-                    console.log(props);
                     return  (
                       <div {...props} ref={ref} >
                       {pictureSrc && (

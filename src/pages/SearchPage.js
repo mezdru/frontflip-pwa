@@ -188,14 +188,10 @@ class SearchPage extends PureComponent {
     const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter, visible, transitionDuration } = this.state;
     const { classes, profileTag } = this.props;
     const { organisation } = this.props.organisationStore.values;
-    const {locale} = this.props.commonStore;
-    let forceRedirect = null;
-
-    if(!displayedHit && this.props.match.params.profileTag) forceRedirect = "/" + locale + "/" + organisation.tag;
 
     return (
       <React.Fragment>
-        { ((redirectTo && (window.location.pathname !== redirectTo)) || forceRedirect) && <Redirect to={redirectTo || forceRedirect} />}
+        { ((redirectTo && (window.location.pathname !== redirectTo))) && <Redirect to={redirectTo} />}
         <Suspense fallback={<></>}>
           <Header handleDisplayProfile={this.handleDisplayProfile} />
         </Suspense>

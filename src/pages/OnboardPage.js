@@ -81,9 +81,8 @@ class OnboardPage extends React.Component {
     if(org.featuredWingsFamily && org.featuredWingsFamily.length > 0) {
       var steps = this.state.steps;
       org.featuredWingsFamily.forEach(fwf => {
-        if(!steps.find(elt => elt === fwf.tag))
+        if(!steps.find(elt => elt === fwf.tag) && fwf.tag)
           steps.push(fwf.tag);
-
       });
     }
   }
