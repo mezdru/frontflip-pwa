@@ -215,8 +215,10 @@ class SearchSuggestions extends React.Component {
             if (this.shouldDisplaySuggestion(item.tag || item.value)) {
               return (
                 <Chip key={i}
-                  component={(props) =>
-                    <div {...props}>
+                  component={React.forwardRef((props, ref) => {
+                    console.log(props);
+                    return  (
+                      <div {...props} ref={ref} >
                       {pictureSrc && (
                         <div className={classNames(classes.suggestionPicture, (item.type === 'person' ? classes.roundImg : null) )}>
                           <img alt="Emoji" src={pictureSrc} />
@@ -224,6 +226,9 @@ class SearchSuggestions extends React.Component {
                       )}
                       <div className={classes.suggestionLabel}>{ProfileService.htmlDecode(displayedName)}</div>
                     </div>
+                    )
+                  })
+
                   }
                   onClick={(e) => addFilter({ name: displayedName, tag: (item.tag || item.value) })}
                   className={classes.suggestion}
