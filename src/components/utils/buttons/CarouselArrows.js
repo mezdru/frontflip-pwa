@@ -25,12 +25,12 @@ const styles = {
 };
 
 
-const CarouselArrows = ({scrollPosition, ...props}) => {
+const CarouselArrows = withStyles(styles)(({scrollPosition, ...props}) => {
   return (
     <Button className={classNames(props.classes[scrollPosition], props.classes.scrollButton)} variant="outlined" {...props}>
       {scrollPosition === 'scrollRight' ? <ArrowRight fontSize="inherit"/> : <ArrowLeft fontSize="inherit"/>}
     </Button>
   )
-}
+});
 
-export default withStyles(styles, {withTheme: true})(CarouselArrows)
+export default CarouselArrows;

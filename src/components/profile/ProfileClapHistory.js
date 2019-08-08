@@ -59,6 +59,7 @@ class ProfileClapHistory extends React.Component {
         {lastClapHistory && lastClapHistory.length > 0 && lastClapHistory.map((clap, index) => {
           if (clap.recipient === otherRecord._id) {
             return <ActivityCard
+              key={clap._id}
               picture={clap.giver.picture ? clap.giver.picture.url : null}
               hashtag={clap.hashtag}
               authorName={clap.giver.name}

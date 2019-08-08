@@ -47,6 +47,7 @@ class Auth extends React.Component {
       redirectTo: null,
       observer: () => { }
     };
+    console.debug('Construct Auth.js')
   };
 
   componentWillReceiveProps(nextProps) {
@@ -123,6 +124,9 @@ class Auth extends React.Component {
     const { redirectTo } = this.state;
     let intl = this.props.intl;
     let authState = JSON.parse(this.state.queryParams.state || "{}");
+
+    console.debug('%c Render Auth.js', 'background-color: grey; padding: 6px 12px; border-radius: 5px; color: white;');
+    console.log(this.props.initialTab)
 
     if (redirectTo) return (<Redirect push to={redirectTo} />);
 

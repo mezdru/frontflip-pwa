@@ -105,7 +105,7 @@ class HeaderDrawer extends Component {
                           <Logo type={'person'} src={this.getPicturePath(record.picture) || defaultPicture} alt={record.name || record.tag} className={classes.logoBorder} />
                         </ListItemAvatar>
                         <ListItemText primary={record.name || record.tag}
-                          primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold', color: 'white' } }} />
+                          primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold', color: 'white', fontSize: '1rem' } }} />
                       </ListItem>
                       <ListItem button component={Link} to={'/' + locale + '/' + organisation.tag + '/' + record.tag} onClick={(e) => { this.props.handleDisplayProfile(e, { tag: record.tag }) }}>
                         <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.profile' })} />
@@ -126,7 +126,7 @@ class HeaderDrawer extends Component {
                       <Logo type={'organisation'} alt={organisation.name} className={classes.logoBorder} />
                     </ListItemAvatar>
                     <ListItemText primary={organisation.name || organisation.tag}
-                      primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold', color: 'white' } }} />
+                      primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold', color: 'white', fontSize: '1rem' } }} />
                   </ListItem>
 
                   {(organisation.canInvite || currentUser.superadmin || (currentOrgAndRecord && currentOrgAndRecord.admin)) && (

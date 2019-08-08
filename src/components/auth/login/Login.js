@@ -96,6 +96,9 @@ class Login extends React.Component {
     let { loginErrors, redirectTo, isAuth } = this.state;
     const { locale } = this.props.commonStore;
     let intl = this.props.intl;
+
+    console.debug('%c Render Login.js', 'background-color: grey; padding: 6px 12px; border-radius: 5px; color: white;');
+
     if (redirectTo) {
       return <Redirect push to={redirectTo} />;
     }

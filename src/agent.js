@@ -174,11 +174,17 @@ const Auth = {
 const User = {
   getCurrent: () =>
     requests.get(
-      API_ROOT + '/api/users/current'
+      API_ROOT + '/api/users/me'
     ),
   welcomeUser: (userId, organisationId) =>
     requests.put(
-      API_ROOT + '/api/users/welcome/'+ userId +'/organisation/' + organisationId
+      API_ROOT + '/api/users/me/orgsAndRecords',
+      {
+        orgAndRecord: {
+          organisation: organisationId,
+          welcomed: true
+        }
+      }
     ),
   update: (userId, user) =>
     requests.put(
@@ -192,19 +198,19 @@ const User = {
 const Record = {
   get: (recordId) =>
     requests.get(
-      API_ROOT + '/api/profiles/' + recordId
+      API_ROOT + '/api/records/' + recordId
     ),
   getByTag: (recordTag, orgId) =>
     requests.get(
-      API_ROOT + '/api/profiles/tag/' + recordTag + '/organisation/' + orgId
+      `${API_ROOT}/api/records/?tag=${recordTag}&organisation=${orgId}`
     ),
   getByUser: (userId, orgId) =>
     requests.get(
-      API_ROOT + '/api/profiles/user/' + userId + '/organisation/' + orgId
+      `${API_ROOT}/api/records/populated?user=${userId}&organisation=${orgId}`
     ),
   post: (orgId, record) =>
     requests.post(
-      API_ROOT + '/api/profiles/',
+      API_ROOT + '/api/records/',
       {
         orgId: orgId,
         record: record
@@ -212,7 +218,7 @@ const Record = {
     ),
   put: (orgId, recordId, record) =>
     requests.put(
-      API_ROOT + '/api/profiles/' + recordId,
+      API_ROOT + '/api/records/' + recordId,
       {
         orgId: orgId,
         record: record
@@ -220,7 +226,7 @@ const Record = {
     ),
   delete: (recordId) =>
     requests.del(
-      API_ROOT + '/api/profiles/' + recordId
+      API_ROOT + '/api/records/' + recordId
     )
 
 };
@@ -228,7 +234,7 @@ const Record = {
 const Organisation = {
   getForPublic: (orgTag) =>
     requests.get(
-      API_ROOT + '/api/organisations/' + orgTag + '/forpublic'
+      API_ROOT + '/api/organisations/forPublic?tag=' + orgTag
     ),
   getAlgoliaKey: (orgId, isPublic) =>
     requests.get(
@@ -291,11 +297,14 @@ const Invitation = {
 const SearchLog = {
   postSearchLog: (orgId, tagsArray, query, resultsLength) =>
     requests.post(
-      API_ROOT + '/api/statistics/search/' + orgId,
+      API_ROOT + '/api/statistics',
       {
-        tags: tagsArray,
-        query: query,
-        results: resultsLength
+        searchLog: {
+          tags: tagsArray,
+          query: query,
+          results: resultsLength,
+          organisation: orgId
+        }
       }
     )
 }

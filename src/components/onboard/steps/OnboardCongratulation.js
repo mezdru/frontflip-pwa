@@ -67,8 +67,9 @@ class OnboardCongratulation extends React.Component {
   render() {
     const {redirectTo} = this.state;
     const {classes} = this.props;
+    console.log('RENDER CONGRATS')
 
-    if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect to={redirectTo} />);
+    if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
 
     return (
       <React.Fragment>

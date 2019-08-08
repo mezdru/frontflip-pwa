@@ -77,7 +77,7 @@ class ProfileLayout extends React.Component {
           />
           <div className={classes.blackFilter} ></div>
 
-          <Grid container alignContent="flex-start" style={{ height: '100vh', overflowY: 'auto' }} >
+          <Grid container alignContent="flex-start" style={{ height: '100vh', overflowY: 'auto', zIndex: 1 }} >
 
             <Grid container item xs={12} style={{ height: 116 }} alignContent="flex-start" justify="flex-end" className={classes.actions} >
               <ProfileActions canPropose canFilter canEdit={canEdit} recordId={recordWingzy.objectID || recordWingzy._id} handleClose={this.props.handleClose} />

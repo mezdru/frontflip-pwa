@@ -144,6 +144,7 @@ class OnboardStepper extends React.Component {
 
   handleSave = async (arrayOfLabels) => {
     this.props.recordStore.setRecordId(this.props.recordStore.values.record._id);
+    this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);  
     return await this.props.recordStore.updateRecord(arrayOfLabels).then((record) => {
       //this.props.enqueueSnackbar('Your data has been saved successfully', {variant: 'success'});
       timeoutArray.forEach(tm => { clearTimeout(tm) });
@@ -190,7 +191,7 @@ class OnboardStepper extends React.Component {
     const {locale} = this.props.commonStore;
     const { activeStep, canNext, showFeedback, redirectTo } = this.state;
 
-    let wantedUrl = '/' + locale + '/' + (organisation.tag || orgTag) + '/onboard/' + steps[activeStep].replace('#', '%23');
+    let wantedUrl = '/' + locale + '/' + (organisation.tag || orgTag) + '/onboard/' + (steps[activeStep] ? steps[activeStep].replace('#', '%23') : '');
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
     return (
       <Grid style={{ height: '100vh' }} item>

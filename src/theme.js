@@ -246,24 +246,6 @@ export default createMuiTheme({
         paddingBottom: 8,
       },
     },
-    // Tabs
-    MuiTab: {
-      root: {
-        fontSize: '0.875rem!important',
-        fontWeight: '600',
-        '&:hover': {
-          color: palette.secondary.main
-        },
-        transition: 'font-size 0.3s cubic-bezier(.25,.8,.25,1), font-weight 0.3s cubic-bezier(.25,.8,.25,1)'
-      },
-      labelContainer: {
-        padding: '0px!important', // nous permet d'avoir nos espacement de 16px à chaques view
-      },
-      selected: {
-        fontSize: '1.2rem !important',
-        fontWeight: 700,
-      }
-    },
     MuiMobileStepper: {
       dot: {
         backgroundColor: palette.primary.main,

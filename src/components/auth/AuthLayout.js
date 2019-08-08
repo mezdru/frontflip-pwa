@@ -45,13 +45,17 @@ const styles = (theme) => ({
 
 });
 
-class Auth extends React.Component {
+class AuthLayout extends React.Component {
   constructor(props) {
     super(props);
+
+    console.debug('Construct AuthLayout.js')
   };
 
   render() {
     const { classes } = this.props;
+
+    console.debug('%c Render AuthLayout.js', 'background-color: grey; padding: 6px 12px; border-radius: 5px; color: white;');
 
     return (
       <div>
@@ -80,4 +84,4 @@ class Auth extends React.Component {
   }
 }
 
-export default withStyles(styles)(Auth);
+export default withStyles(styles)(AuthLayout);
