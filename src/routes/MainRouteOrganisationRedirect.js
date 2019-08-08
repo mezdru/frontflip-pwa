@@ -46,14 +46,26 @@ class MainRouteOrganisationRedirect extends React.Component {
     );
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (JSON.stringify(nextState) !== JSON.stringify(this.state)) return true;
+    return false;
+  }
+
   componentWillReceiveProps(props) {
-    if (props.history.action === 'PUSH' && ((props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) || (!this.props.organisationStore.values.fullOrgFetch) || 
-    (props.match.params && props.match.params.profileTag) )) {
+    if (props.history.action === 'POP' && props.location.pathname === this.props.location.pathname) return;
+
+    if (
+        props.history.action === 'PUSH' &&
+        ((props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) ||
+        (!this.props.organisationStore.values.fullOrgFetch) ||
+        (props.match.params && props.match.params.profileTag)) ||
+        (props.history.action === 'POP' && props.location.pathname !== this.props.location.pathname)
+    ) {
       this.setState({ renderComponent: false }, () => {
         this.manageAccessRight().then(() => {
-          this.setState({ renderComponent: true });
+          this.setState({ renderComponent: true }, () => { this.forceUpdate() });
         }).catch((err) => {
-          console.log(err)
+          console.log('err: ', err)
           ReactGA.event({ category: 'Error', action: 'Redirect to error layout', value: 500 });
           SlackService.notifyError(err, '32', 'quentin', 'MainRouteOrganisationRedirect.js');
           this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/error/500/routes' });
@@ -74,8 +86,9 @@ class MainRouteOrganisationRedirect extends React.Component {
 
   componentDidMount() {
     this.manageAccessRight().then(() => {
-      this.setState({ renderComponent: true });
+      this.setState({ renderComponent: true }, () => { this.forceUpdate() });
     }).catch((err) => {
+      console.log('err: ', err);
       ReactGA.event({ category: 'Error', action: 'Redirect to error layout', value: 500 });
       SlackService.notifyError(err, '42', 'quentin', 'MainRouteOrganisationRedirect.js');
       this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/error/500/routes' });
@@ -122,6 +135,7 @@ class MainRouteOrganisationRedirect extends React.Component {
               EmailService.confirmLoginEmail(null);
               this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/error/' + err.status + '/email' });
             } else {
+              console.log('err: ', err);
               ReactGA.event({ category: 'Error', action: 'Redirect to error layout', value: 500 });
               SlackService.notifyError(err, '32', 'quentin', 'MainRouteOrganisationRedirect.js');
               this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/error/500/routes' });
@@ -157,8 +171,8 @@ class MainRouteOrganisationRedirect extends React.Component {
     let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
     if ((!currentOrgAndRecord && !this.props.userStore.values.currentUser.superadmin) || (currentOrgAndRecord && !currentOrgAndRecord.welcomed)) {
       // user need to onboard in organisation
-      let onboardStep = ( this.props.match.params && this.props.match.params.step ? '/' + this.props.match.params.step : '' );
-      this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + organisation.tag + '/onboard' + onboardStep  });
+      let onboardStep = (this.props.match.params && this.props.match.params.step ? '/' + this.props.match.params.step : '');
+      this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + organisation.tag + '/onboard' + onboardStep });
     } else if (currentOrgAndRecord) {
       this.props.recordStore.setRecordId(currentOrgAndRecord.record);
       await this.props.recordStore.getRecord()
@@ -191,7 +205,7 @@ class MainRouteOrganisationRedirect extends React.Component {
           });
       }
 
-      if(this.props.authStore.isAuth() && this.props.match.params && this.props.match.params.invitationCode) {
+      if (this.props.authStore.isAuth() && this.props.match.params && this.props.match.params.invitationCode) {
         // try to register the User in wanted org
         this.props.authStore.setInvitationCode(this.props.match.params.invitationCode);
         await this.props.authStore.registerToOrg().then().catch(e => console.log(e));
@@ -212,7 +226,7 @@ class MainRouteOrganisationRedirect extends React.Component {
         await this.redirectUserAuthWithAccess(organisation, false).catch(() => { return; });
       } else {
         // no auth
-        if(!this.props.commonStore.getSessionStorage('signinSuccessRedirect')) this.handleSigninRedirect();
+        if (!this.props.commonStore.getSessionStorage('signinSuccessRedirect')) this.handleSigninRedirect();
       }
     } else if (this.props.authStore.isAuth()) {
       await this.redirectUserAuthWithoutAccess();
@@ -240,9 +254,9 @@ class MainRouteOrganisationRedirect extends React.Component {
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={this.WaitingComponent(PasswordForgot)} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={(PasswordReset)} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/create/:token/:hash/:email" component={(PasswordReset)} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={AuthPage} />
+            {/* <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/google/callback" component={AuthPage} />
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode?" component={(props) => { return <AuthPage initialTab={1} {...props} /> }} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
+            <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} /> */}
 
             {/* Main route with orgTag */}
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step?" component={(OnboardPage)} />

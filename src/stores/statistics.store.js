@@ -19,8 +19,8 @@ class StatisticsStore {
     let storedOrgId =  organisationStore.values.organisation._id;
 
     return agent.SearchLog.postSearchLog(orgId || storedOrgId, tagsArray || [], query || null, resultsCount)
-      .then(data => {
-        return data; 
+      .then(res => {
+        return (res ? res.data : null); 
       })
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.errors;

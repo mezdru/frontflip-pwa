@@ -59,6 +59,7 @@ class ProfileClapHistory extends React.Component {
         {lastClapHistory && lastClapHistory.length > 0 && lastClapHistory.map((clap, index) => {
           if (clap.recipient === profileContext.getProp('_id') && profileContext.isWingsDisplayed(clap.hashtag._id || clap.hashtag)) {
             return <ActivityCard
+              key={clap._id}
               picture={clap.giver.picture ? clap.giver.picture.url : null}
               hashtag={clap.hashtag}
               authorName={clap.giver.name}

@@ -20,8 +20,8 @@ class UserStore {
     this.inProgress = true;
     this.errors = null;
     return agent.User.getCurrent()
-      .then(data => {
-        this.setCurrentUser(data.user);
+      .then(res => {
+        this.setCurrentUser(res.data);
         this.syncRecord();
 
         // Identify user for LogRocket
@@ -43,9 +43,9 @@ class UserStore {
     this.errors = null;
 
     return agent.User.welcomeUser(this.values.currentUser._id, orgId)
-      .then(data => {
-        if( (data.message !== 'User already welcomed in Organisation') && (data.user)) {
-          this.values.currentUser = data.user;
+      .then(res => {
+        if( (res.message !== 'User already welcomed in Organisation') && (res.data)) {
+          this.values.currentUser = res.data;
           this.syncRecord();
           return this.values.currentUser;
         }
@@ -62,8 +62,8 @@ class UserStore {
     this.errors = null;
 
     return agent.User.update(this.values.currentUser._id, this.values.currentUser)
-      .then(data => {
-        this.values.currentUser = (data ? data.user : {});
+      .then(res => {
+        this.values.currentUser = (res ? res.data : {});
         return this.values.currentUser;
       })
       .catch(action((err) => {

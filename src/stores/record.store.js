@@ -43,8 +43,8 @@ class RecordStore {
     this.errors = null;
 
     return agent.Record.get(this.values.recordId)
-      .then(data => {
-        this.values.record = (data ? data.record : {});
+      .then(res => {
+        this.values.record = (res ? res.data : {});
         return this.values.record;
       })
       .catch(action((err) => {
@@ -60,8 +60,9 @@ class RecordStore {
     this.errors = null;
 
     return agent.Record.getByTag(this.values.recordTag, this.values.orgId)
-      .then(data => {
-        this.setdisplayedRecord(data.record);
+      .then(res => {
+
+        this.setdisplayedRecord(res.data.length > 0 ? res.data[0] : res.data);
 
         return this.values.displayedRecord;
       })
@@ -79,8 +80,8 @@ class RecordStore {
     this.errors = null;
 
     return agent.Record.getByUser(userStore.values.currentUser._id, this.values.orgId)
-      .then(data => {
-        this.values.record = (data ? data.record : null);
+      .then(res => {
+        this.values.record = (res ? res.data : null);
         return this.values.record;
       })
       .catch(action((err) => {
@@ -98,10 +99,10 @@ class RecordStore {
     this.errors = null;
 
     return agent.Record.post(this.values.orgId, record || this.values.record)
-      .then(data => {
+      .then(res => {
         if(!record)
-          this.values.record = data.record;
-        return data.record; 
+          this.values.record = res.data;
+        return res.data; 
       })
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.errors;
@@ -120,7 +121,7 @@ class RecordStore {
     let recordToUpdate = this.buildRecordToUpdate(arrayOfFields);
 
     return agent.Record.put(this.values.orgId, this.values.recordId, recordToUpdate)
-      .then(data => { this.values.record = (data ? data.record : {}); return this.values.record;})
+      .then(res => { this.values.record = (res ? res.data : {}); return this.values.record;})
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.errors;
         throw err;
@@ -148,7 +149,7 @@ class RecordStore {
     this.errors = null;
 
     return agent.Record.delete(this.values.recordId)
-      .then(data => {
+      .then(res => {
         this.values.record = {};
         this.values.recordId = '';
       })

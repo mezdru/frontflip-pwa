@@ -42,8 +42,8 @@ class OrganisationStore {
       this.errors = null;
 
       return agent.Organisation.get(this.values.orgId)
-        .then(data => {
-          this.setOrganisation(data.organisation);
+        .then(res => {
+          this.setOrganisation(res.data);
           this.setFullOrgFetch(true);
           return this.getAlgoliaKey(true).then(() => {
             return this.values.organisation;
@@ -88,10 +88,10 @@ class OrganisationStore {
     if (commonStore.algoliaKeyOrganisation === this.values.organisation.tag && !forceUpdate) return Promise.resolve(commonStore.algoliaKey);
 
     return agent.Organisation.getAlgoliaKey(this.values.organisation._id, this.values.organisation.public)
-      .then(data => {
-        if (data) {
-          commonStore.setAlgoliaKey(data.public_key, this.values.organisation.tag);
-          return data.public_key.value;
+      .then(res => {
+        if (res) {
+          commonStore.setAlgoliaKey(res.data, this.values.organisation.tag);
+          return res.data.value;
         }
         return null;
       })
@@ -110,8 +110,8 @@ class OrganisationStore {
       this.errors = null;
 
       return agent.Organisation.getForPublic(this.values.orgTag)
-        .then(data => {
-          this.setOrganisation(data.organisation);
+        .then(res => {
+          this.setOrganisation(res.data);
           this.setFullOrgFetch(false);
           if(this.values.organisation.public) {
             return this.getAlgoliaKey(true).then(() => {
