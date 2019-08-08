@@ -30,9 +30,6 @@ const stores = {
   clapStore
 };
 
-let locale = commonStore.locale;
-if (locale === 'en-UK') locale = 'en';
-
 ReactDOM.render(
   <HttpsRedirect>
     <Provider {...stores}>
