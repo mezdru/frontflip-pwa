@@ -176,7 +176,6 @@ export default createMuiTheme({
         // padding: '0 0 8px 8px!important',
         padding: 0,
         whiteSpace: 'nowrap',
-        overflowX: 'scroll',
         scrollbarWidth: 'none',
       }
     },
