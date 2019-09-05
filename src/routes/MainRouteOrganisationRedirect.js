@@ -244,8 +244,6 @@ class MainRouteOrganisationRedirect extends React.Component {
     const { orgTag, organisation } = this.props.organisationStore.values;
     let isAuth = this.props.authStore.isAuth();
 
-    console.log('render main route')
-
     if (redirectTo && window.location.pathname !== redirectTo) {
       return (<Redirect to={redirectTo} />);
     }
