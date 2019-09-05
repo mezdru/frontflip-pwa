@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage, injectIntl, FormattedHTMLMessage } from 'react-intl';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
 import { Button, CircularProgress, Grid, TextField, Typography } from '@material-ui/core';
@@ -188,6 +188,6 @@ class Login extends React.Component {
 
 export default inject('authStore', 'userStore', 'organisationStore', 'commonStore')(
   injectIntl(observer(
-    (Login)
+    withRouter(Login)
   ))
 );

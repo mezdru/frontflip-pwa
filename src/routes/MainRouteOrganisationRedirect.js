@@ -13,6 +13,7 @@ import SlackService from '../services/slack.service';
 import AuthPage from '../pages/auth/AuthPage';
 import PasswordReset from '../pages/auth/PasswordReset';
 import OnboardPage from '../pages/OnboardPage';
+import ProfileProvider from "../hoc/profile/Profile.provider";
 
 const PasswordForgot = React.lazy(() => import('../pages/auth/PasswordForgot'));
 // const PasswordReset = React.lazy(() => import('../pages/auth/PasswordReset'));
@@ -243,13 +244,15 @@ class MainRouteOrganisationRedirect extends React.Component {
     const { orgTag, organisation } = this.props.organisationStore.values;
     let isAuth = this.props.authStore.isAuth();
 
+    console.log('render main route')
+
     if (redirectTo && window.location.pathname !== redirectTo) {
       return (<Redirect to={redirectTo} />);
     }
 
     if (renderComponent && isAuth) {
       return (
-        <div>
+        <ProfileProvider>
           <Switch>
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={this.WaitingComponent(PasswordForgot)} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={(PasswordReset)} />
@@ -268,11 +271,11 @@ class MainRouteOrganisationRedirect extends React.Component {
             {/* useless route ? */}
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/:action?" component={SearchPage} />
           </Switch>
-        </div>
+        </ProfileProvider>
       );
     } else if (renderComponent) {
       return (
-        <div>
+        <ProfileProvider>
           <Switch>
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/forgot" component={this.WaitingComponent(PasswordForgot)} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/password/reset/:token/:hash" component={(PasswordReset)} />
@@ -290,7 +293,7 @@ class MainRouteOrganisationRedirect extends React.Component {
             )}
             <Redirect to={'/' + locale + (orgTag ? '/' + orgTag : '') + '/signin' + window.location.search} />
           </Switch>
-        </div>
+        </ProfileProvider>
       );
     } else {
       return (
