@@ -30,13 +30,28 @@ class ProfileProvider extends React.Component {
     if(!this.state.filteredWings) return true;
     if(this.state.filteredWings.length === 0 ) return false;
 
+    let res = false;
+
     this.state.filteredWings.forEach(wing => {
-      if(wing._id === wingsId) return true;
+      if( JSON.stringify(wing._id) === JSON.stringify(wingsId)) {
+        res = true;
+        return;
+      }
     });
-    return false;
+    return res;
   }
 
   filterProfile = (wingsId) => {
+    if(!wingsId) return this.setState({filteredWings: null});
+
+    let hashtags = this.state.wingzyRecord.hashtags;
+    let filteredWings = [];
+
+    hashtags.forEach(wing => {
+      if(wing.hashtags && wing.hashtags.find(familyWingId => familyWingId === wingsId)) filteredWings.push(wing);
+    });
+
+    this.setState({filteredWings: filteredWings});
   }
 
   setProfileData = (algoliaRecord) => {
