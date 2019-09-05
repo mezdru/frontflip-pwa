@@ -39,10 +39,9 @@ export const styles = theme => ({
   },
   wings: {
     display: 'inline-block',
-    overflowY: 'hidden',
     position: 'relative',
     marginTop: '22px!important',
-    marginBottom: 4,
+    marginBottom: 0,
     '& >div:first-child': {
       marginLeft: 16
     },
@@ -51,7 +50,15 @@ export const styles = theme => ({
     }
   },
   wingsContainer: {
-    minHeight: 30
+    minHeight: 30,
+    overflowY: 'hidden',
+    overflowX: 'auto',
+    overflow: '-moz-scrollbars-none',
+    MsOverflowStyle: 'none',
+    scrollbarColor: '#2b2d3c #2b2d3c',
+    '&::-webkit-scrollbar': {
+      width: '0 !important',
+    },
   },
   fullWidth: {
     width: '100%',
