@@ -66,9 +66,9 @@ class OrganisationStore {
     if (userStore.values.currentUser && userStore.values.currentUser.orgsAndRecords.length > 0) {
       this.values.currentUserOrganisations = [];
       await this.asyncForEach(userStore.values.currentUser.orgsAndRecords, async (orgAndRecord) => {
-        let org = await agent.Organisation.get(orgAndRecord.organisation).catch();
-        if(org && org.organisation && !this.values.currentUserOrganisations.some(currentOrg => currentOrg.tag === org.organisation.tag)) {
-          this.values.currentUserOrganisations.push(org.organisation);
+        let response = await agent.Organisation.get(orgAndRecord.organisation).catch();
+        if(response && response.data && !this.values.currentUserOrganisations.some(currentOrg => currentOrg.tag === response.data.tag)) {
+          this.values.currentUserOrganisations.push(response.data);
         }
       });
     }
