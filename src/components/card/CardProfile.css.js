@@ -50,7 +50,7 @@ export const styles = theme => ({
     }
   },
   wingsContainer: {
-    minHeight: 30,
+    height: 94,
     overflowY: 'hidden',
     overflowX: 'auto',
     overflow: '-moz-scrollbars-none',
