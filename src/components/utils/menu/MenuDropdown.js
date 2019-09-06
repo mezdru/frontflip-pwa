@@ -54,7 +54,7 @@ class MenuDropdown extends React.PureComponent {
                   <MenuList>
                     {mode === 'filter' && (
                       <MenuItem key={-1} button onClick={() => this.props.profileContext.filterProfile(null)}>
-                        No filter
+                        <FormattedMessage id="profile.filter.default" />
                       </MenuItem>
                     )}
                     {actions && actions.length > 0 && actions.map((action, index) => {

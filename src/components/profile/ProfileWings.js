@@ -48,7 +48,7 @@ class ProfileWings extends React.PureComponent {
     return (
       <div className={classes.root} >
         {wings && wings.length > 0 && wings.map((wing, index) => {
-          let displayedName = (wing.name_translated ? (wing.name_translated[locale] || wing.name_translated['en-UK']) || wing.name || wing.tag : wing.name || "...")
+          let displayedName = ProfileService.getWingDisplayedName(wing, locale);
           return (
             <Wings src={ProfileService.getPicturePath(wing.picture)}
               label={ProfileService.htmlDecode(displayedName)} key={wing._id}

@@ -79,9 +79,7 @@ class SearchField extends PureComponent {
 
         <div className={classes.searchFiltersContainer} id="search-filters-container">
           {searchFilters && searchFilters.length > 0 && searchFilters.map((filter, index) => {
-            let displayedName = (filter.name_translated ?
-              (filter.name_translated[this.props.commonStore.locale] || filter.name_translated['en-UK']) || filter.name || filter.tag :
-              filter.name);
+            let displayedName = ProfileService.getWingDisplayedName(filter, this.props.commonStore.locale);
             return (
               <Wing
                 label={ProfileService.htmlDecode(displayedName)} key={index}

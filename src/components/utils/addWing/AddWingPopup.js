@@ -175,7 +175,7 @@ class AddWingPopup extends React.Component {
                   )}
 
                   {!onLoad && wingsPopulated.map((wing, i) => {
-                    let displayedName = (wing.name_translated ? (wing.name_translated[locale] || wing.name_translated['en-UK']) || wing.name || wing.tag : wing.name || wing.tag)
+                    let displayedName = ProfileService.getWingDisplayedName(wing, locale);
                     return (
                       <Wings src={ProfileService.getPicturePath(wing.picture)} key={i}
                         label={ProfileService.htmlDecode(displayedName)}

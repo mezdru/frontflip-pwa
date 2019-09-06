@@ -106,5 +106,6 @@
   "invitation.get.error": "There was an error...",
   "profile.activity.title": "Activity history",
   "profile.activity.empty": "No activity yet",
-  "profile.filter.title": "Filter"
+  "profile.filter.title": "Filter",
+  "profile.filter.default": "No filter"
 }

@@ -62,7 +62,7 @@ class UserWings extends React.Component {
         <div className="" style={{padding: 8, paddingTop: 10}}>
           {record && record.hashtags && record.hashtags.length > 0 && record.hashtags.map((hashtag, i) => {
             if(!this.shoudlRenderWing(hashtag)) return null;
-            let displayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name)
+            let displayedName = ProfileService.getWingDisplayedName(hashtag, locale);
             
             if(!this.shouldAnimateWing(hashtag)) {
               return (
