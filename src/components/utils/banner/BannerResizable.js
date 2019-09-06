@@ -31,7 +31,7 @@ class BannerResizable extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.type === 'organisation') {
+    if (this.props.type === 'organisation' && !this.props.source) {
       this.updateSource();
 
       this.setState({observer: observe(this.props.organisationStore.values, 'organisation', (change) => {

@@ -4,7 +4,6 @@ import { Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
 import ProfileThumbnail from './ProfileThumbnail';
-import ProfileService from '../../services/profile.service';
 import BannerResizable from '../utils/banner/BannerResizable';
 import ProfileWings from './ProfileWings';
 import ProfileActions from './ProfileActions';
@@ -15,11 +14,9 @@ const ProfileClapHistory = React.lazy(() => import('./ProfileClapHistory'));
 
 
 class ProfileLayout extends React.Component {
-
   render() {
     const { classes, visible, transitionDuration } = this.props;
     const rootUrl = '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag;
-
 
     return (
       <Slide direction="up" in={visible} mountOnEnter unmountOnExit timeout={{ enter: transitionDuration, exit: transitionDuration / 2 }}>
@@ -32,6 +29,7 @@ class ProfileLayout extends React.Component {
 
           <BannerResizable
             type={'organisation'}
+            source={this.props.profileContext.getProp('cover') ? this.props.profileContext.getProp('cover').url : null}
             initialHeight={100}
             style={styles.banner}
           />

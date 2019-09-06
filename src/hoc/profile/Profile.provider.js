@@ -53,18 +53,19 @@ class ProfileProvider extends React.Component {
     this.setState({filteredWings: filteredWings});
   }
 
-  setProfileData = (algoliaRecord) => {
+  setProfileData = async (algoliaRecord) => {
     algoliaRecord = JSON.parse(JSON.stringify(algoliaRecord));
     ProfileService.transformLinks(algoliaRecord);
     ProfileService.makeHightlighted(algoliaRecord);
     ProfileService.orderHashtags(algoliaRecord);
-    this.setState({algoliaRecord, filteredWings: null}, this.setWingzyRecord);
+    await this.setState({algoliaRecord, filteredWings: null});
+    await this.setWingzyRecord();
   }
 
-  setWingzyRecord = () => {
+  setWingzyRecord = async () => {
     this.props.recordStore.setRecordTag(this.state.algoliaRecord.tag);
     this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
-    this.props.recordStore.getRecordByTag()
+    await this.props.recordStore.getRecordByTag()
       .then((record) => {
         record.objectID = record._id;
 
@@ -87,6 +88,7 @@ class ProfileProvider extends React.Component {
   }
 
   render() {
+
     return (
       <ProfileContext.Provider
         value={{
