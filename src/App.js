@@ -22,7 +22,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <SnackbarProvider maxSnack={3}>
-          <MainRoute />
+            <MainRoute />
         </SnackbarProvider>
       </BrowserRouter>
     );

@@ -10,7 +10,7 @@ class RecordStore {
     recordId: '',
     recordTag: '',
     record: {},
-    otherRecord: {},
+    displayedRecord: {},
   };
 
   setOrgId(orgId) {
@@ -27,8 +27,8 @@ class RecordStore {
   setRecord(record) {
     this.values.record = record;
   }
-  setOtherRecord(record) {
-    this.values.otherRecord = record;
+  setdisplayedRecord(record) {
+    this.values.displayedRecord = record;
   }
 
   reset() {
@@ -61,10 +61,8 @@ class RecordStore {
 
     return agent.Record.getByTag(this.values.recordTag, this.values.orgId)
       .then(res => {
-
-        this.setOtherRecord(res.data.length > 0 ? res.data[0] : res.data);
-
-        return this.values.otherRecord;
+        this.setdisplayedRecord(res.data.length > 0 ? res.data[0] : res.data);
+        return this.values.displayedRecord;
       })
       .catch(action((err) => {
         console.log(err)

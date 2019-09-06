@@ -9,65 +9,25 @@ import BannerResizable from '../utils/banner/BannerResizable';
 import ProfileWings from './ProfileWings';
 import ProfileActions from './ProfileActions';
 import { styles } from './ProfileLayout.css';
+import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 
 const ProfileClapHistory = React.lazy(() => import('./ProfileClapHistory'));
 
 
 class ProfileLayout extends React.Component {
 
-  state = {
-    recordWingzy: {},
-    recordAlgolia: {},
-    canEdit: false,
-    visible: true
-  }
-
-  componentDidMount() {
-    if (!this.props.hit) return;
-    if (!this.props.authStore.isAuth()) return;
-
-    var algoliaHit = JSON.parse(JSON.stringify(this.props.hit));
-    ProfileService.transformLinks(algoliaHit);
-    ProfileService.makeHightlighted(algoliaHit);
-    ProfileService.orderHashtags(algoliaHit);
-    this.setState({ recordAlgolia: algoliaHit });
-
-    this.props.recordStore.setRecordTag(this.props.hit.tag);
-    this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
-    this.props.recordStore.getRecordByTag()
-      .then((record) => {
-        record.objectID = record._id;
-
-        ProfileService.transformLinks(record);
-        ProfileService.makeHightlighted(record);
-        ProfileService.orderHashtags(record);
-
-        this.setState({ recordWingzy: record, canEdit: this.canEdit(record) });
-      }).catch((e) => {
-        return;
-      });
-  }
-
-  canEdit = (workingRecord) => {
-    if (!(this.props.userStore.values.currentUser && this.props.userStore.values.currentUser._id)) return false;
-    if (this.props.userStore.values.currentUser.superadmin) return true;
-    else if (this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.record === workingRecord.objectID)) return true;
-    else if (this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === workingRecord.organisation && orgAndRecord.admin)) return true;
-    else return false;
-  }
-
   render() {
     const { classes, visible, transitionDuration } = this.props;
-    const { recordWingzy, canEdit, recordAlgolia } = this.state;
     const rootUrl = '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag;
+
 
     return (
       <Slide direction="up" in={visible} mountOnEnter unmountOnExit timeout={{ enter: transitionDuration, exit: transitionDuration / 2 }}>
 
         <Grid container className={classes.root} alignContent="flex-start">
 
-          {(window.location.pathname !== rootUrl + '/' + recordAlgolia.tag) && (
-            <Redirect to={rootUrl + '/' + recordAlgolia.tag} />
+          {(window.location.pathname !== rootUrl + '/' + this.props.profileContext.getProp('tag')) && (
+            <Redirect to={rootUrl + '/' + this.props.profileContext.getProp('tag')} />
           )}
 
           <BannerResizable
@@ -79,20 +39,20 @@ class ProfileLayout extends React.Component {
 
           <Grid container alignContent="flex-start" style={{ height: '100vh', overflowY: 'auto', zIndex: 1 }} >
 
-            <Grid container item xs={12} style={{ height: 116 }} alignContent="flex-start" justify="flex-end" className={classes.actions} >
-              <ProfileActions canPropose canFilter canEdit={canEdit} recordId={recordWingzy.objectID || recordWingzy._id} handleClose={this.props.handleClose} />
+            <Grid container item xs={12} style={{ height: 116 }} alignContent="flex-start" justify="flex-start" className={classes.actions} >
+              <ProfileActions canPropose canFilter handleClose={this.props.handleClose} />
             </Grid>
             <Grid item className={classes.thumbnail} xs={12} lg={3}>
-              <ProfileThumbnail record={recordWingzy} />
+              <ProfileThumbnail />
             </Grid>
             <Grid container item className={classes.content} xs={12} lg={9} alignContent="flex-start">
               <Grid item xs={12} lg={8} className={classes.wings} >
-                <ProfileWings wings={recordWingzy.hashtags} recordId={recordWingzy.objectID || recordWingzy._id} clapDictionnary={recordAlgolia.hashtags_claps} />
+                <ProfileWings />
               </Grid>
 
               <Grid item xs={12} lg={4} className={classes.clapHistory}>
                 <Suspense fallback={<CircularProgress color='secondary' />}>
-                  <ProfileClapHistory recordId={recordWingzy.objectID || recordWingzy._id} />
+                  <ProfileClapHistory />
                 </Suspense>
               </Grid>
             </Grid>
@@ -107,6 +67,6 @@ class ProfileLayout extends React.Component {
 
 export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore')(
   observer(
-    withStyles(styles)(ProfileLayout)
+    withStyles(styles)( withProfileManagement(ProfileLayout))
   )
 );

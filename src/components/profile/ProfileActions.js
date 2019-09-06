@@ -1,15 +1,17 @@
 import React from 'react';
-import { withStyles, Grid, Button, IconButton, Hidden } from '@material-ui/core';
-import { FilterList, Clear } from '@material-ui/icons';
+import { withStyles, Grid, Button, IconButton, Hidden, ClickAwayListener } from '@material-ui/core';
+import { FilterList, Clear, Edit } from '@material-ui/icons';
 import classNames from 'classnames';
 import MenuDropdown from '../utils/menu/MenuDropdown';
 import { inject, observer } from 'mobx-react';
 import UrlService from '../../services/url.service.js';
+import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
+import { FormattedMessage } from 'react-intl';
 
 const styles = theme => ({
   button: {
     height: 40,
-    marginLeft: 16,
+    marginRight: 16,
   },
   returnButton: {
     width: 40,
@@ -26,51 +28,108 @@ const styles = theme => ({
 
 class ProfileActions extends React.PureComponent {
 
+  state = {
+    openEdit: false,
+    openFilter: false
+  }
+
   buildAction = () => {
     let locale = this.props.commonStore.locale;
     let orgTag = this.props.organisationStore.values.organisation.tag;
+    let recordId = this.props.profileContext.getProp('_id');
 
     return [
-      { href: UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/cover/id/' + this.props.recordId, orgTag), textId: 'profile.updateCover' },
-      { href: '/' + locale + '/' + orgTag + '/onboard/intro/edit/' + this.props.recordId, textId: 'profile.editIntro' },
-      { href: '/' + locale + '/' + orgTag + '/onboard/contacts/edit/' + this.props.recordId, textId: 'profile.editContacts' },
-      { href: UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/about/id/' + this.props.recordId, orgTag), textId: 'profile.editAboutMe' },
-      { href: UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/record/delete/' + this.props.recordId, orgTag), textId: 'delete profile' }
+      { href: UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/cover/id/' + recordId, orgTag), textId: 'profile.updateCover' },
+      { href: '/' + locale + '/' + orgTag + '/onboard/intro/edit/' + recordId, textId: 'profile.editIntro' },
+      { href: '/' + locale + '/' + orgTag + '/onboard/contacts/edit/' + recordId, textId: 'profile.editContacts' },
+      { href: UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/about/id/' + recordId, orgTag), textId: 'profile.editAboutMe' },
+      { href: UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/record/delete/' + recordId, orgTag), textId: 'delete profile' }
     ];
   }
 
+  buildFilters = () => {
+    let filters = [];
+
+    this.props.organisationStore.values.organisation.featuredWingsFamily.forEach(featuredWingFamily => {
+      filters.push({
+        text: featuredWingFamily.name || featuredWingFamily,
+        wingId: featuredWingFamily._id,
+      });
+    });
+
+    return filters;
+  }
+
+  handleClickEdit = (e) => {
+    this.setState({ openEdit: !this.state.openEdit, menuDropdownAnchor: e.currentTarget });
+  }
+
+  handleClickFilter = (e) => {
+    this.setState({ openFilter: !this.state.openFilter, menuDropdownAnchor: e.currentTarget });
+  }
+
   render() {
-    const { canPropose, canFilter, canEdit, classes } = this.props;
+    const { canPropose, canFilter, classes } = this.props;
+    const { isEditable, filterProfile } = this.props.profileContext;
+    const { openEdit, openFilter, menuDropdownAnchor } = this.state;
     const actions = this.buildAction();
+    const filters = this.buildFilters();
 
     return (
       <>
-        <Hidden mdDown>
-          {canPropose && (
-            <Grid item>
-              <Button className={classes.button} color="secondary" disabled >Propose Wings</Button>
-            </Grid>
-          )}
 
-          {canFilter && (
-            <Grid item>
-              <Button className={classes.button} disabled>Filter <FilterList /> </Button>
-            </Grid>
-          )}
-
-          {canEdit && (
-            <Grid item>
-              <MenuDropdown actions={actions} />
-            </Grid>
-          )}
-        </Hidden>
-
-
-        <Grid item>
+        <Grid item xs={2}>
           <IconButton className={classNames(classes.button, classes.returnButton)} onClick={this.props.handleClose} >
             <Clear />
           </IconButton>
         </Grid>
+
+        <Hidden mdDown>
+          <Grid container item justify="flex-end" alignContent="flex-end" xs={10}>
+          {/* {canPropose && (
+            <Grid item>
+              <Button className={classes.button} color="secondary" disabled >Propose Wings</Button>
+            </Grid>
+          )} */}
+
+          {canFilter && filters.length > 0 && (
+            <Grid item style={{position: 'relative'}}>
+              <Button className={classes.button} onClick={this.handleClickFilter} ><FormattedMessage id="profile.filter.title" /> <FilterList /> </Button>
+
+              {openFilter && (
+                <ClickAwayListener onClickAway={this.handleClickFilter}>
+                  <MenuDropdown actions={filters} open={openFilter} mode="filter" />
+                </ClickAwayListener>
+              )}
+            </Grid>
+          )}
+
+          {isEditable && (
+            <Grid item style={{position: 'relative'}}>
+              <IconButton
+                className={classNames(classes.button, classes.returnButton)}
+                buttonRef={node => {
+                  this.anchorEl = node;
+                }}
+                aria-owns={openEdit ? 'menu-list-grow' : undefined}
+                aria-haspopup="true"
+                onClick={this.handleClickEdit}
+              >
+                <Edit />
+              </IconButton>
+              {
+                openEdit && (
+                  <ClickAwayListener onClickAway={this.handleClickEdit}>
+                    <MenuDropdown actions={actions} open={openEdit} anchorElParent={menuDropdownAnchor} />
+                  </ClickAwayListener>
+                )
+              }
+
+            </Grid>
+          )}
+          </Grid>
+
+        </Hidden>
       </>
     )
   }
@@ -78,6 +137,6 @@ class ProfileActions extends React.PureComponent {
 
 export default inject('commonStore', 'organisationStore')(
   observer(
-    withStyles(styles)(ProfileActions)
+    withStyles(styles)(withProfileManagement(ProfileActions))
   )
 );

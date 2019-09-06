@@ -100,7 +100,7 @@ class CardProfile extends React.PureComponent {
             <Grid container className={classes.wings}>
               {hit.hashtags && hit.hashtags.map((hashtag, i) => {
                 if(i >= WINGS_DISPLAYED) return null;
-                let displayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name || hit.tag)
+                let displayedName = ProfileService.getWingDisplayedName(hashtag, locale);
                 let claps = this.getClaps(hit, hashtag._id);
                 return (
                   <Wings src={ProfileService.getPicturePath(hashtag.picture)} key={hashtag._id}

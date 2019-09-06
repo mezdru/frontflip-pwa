@@ -186,6 +186,11 @@ class ProfileService {
       });
     }
   };
+
+  getWingDisplayedName = function (wing, locale) {
+    return (wing.name_translated ? (wing.name_translated[locale] || wing.name_translated['en-UK']) || wing.name || wing.tag : wing.name || null);
+
+  }
   
   orderHashtags = function (item) {
     if (!item || !item.hashtags) return;
@@ -199,6 +204,7 @@ class ProfileService {
   };
   
   htmlDecode = function (input) {
+    if(!input) return '';
     var e = document.createElement('textarea');
     e.innerHTML = input;
     return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;

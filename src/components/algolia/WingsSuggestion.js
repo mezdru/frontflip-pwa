@@ -118,18 +118,17 @@ class WingsSuggestions extends React.Component {
 
   shouldDisplaySuggestion = (tag) => (!this.props.recordStore.values.record.hashtags.some(hashtag => hashtag.tag === tag));
 
-  getDisplayedName = (hit) => (hit.name_translated ? (hit.name_translated[this.props.commonStore.locale] || hit.name_translated['en-UK']) || hit.name || hit.tag : hit.name || hit.tag);
-
   isNewSuggestions = (tag) => {
     let indexOf = this.props.suggestionsController._newSuggestions.all.findIndex(suggestion => suggestion.tag === tag);
     return (indexOf > -1);
   }
 
   renderWing = (classes, hit, i) => {
+    let displayedName = ProfileService.getWingDisplayedName(hit, this.props.commonStore.locale);
     return (
-      <li key={hit.objectID || hit._id || this.getDisplayedName(hit)} className={classNames(classes.suggestion, (this.isNewSuggestions(hit.tag) ? classes.animateIn : null))} style={{ animationDelay: ((i - this.state.offsetSuggestionsIndex) * 0.05) + 's' }} id={hit.tag}>
+      <li key={hit.objectID || hit._id || displayedName} className={classNames(classes.suggestion, (this.isNewSuggestions(hit.tag) ? classes.animateIn : null))} style={{ animationDelay: ((i - this.state.offsetSuggestionsIndex) * 0.05) + 's' }} id={hit.tag}>
         <Wings src={ProfileService.getPicturePath(hit.picture)}
-          label={ProfileService.htmlDecode(this.getDisplayedName(hit))}
+          label={ProfileService.htmlDecode(displayedName)}
           onClick={(e) => this.handleSelectSuggestion(e, { name: hit.name || hit.tag, tag: hit.tag }, i)}
           onMouseDown={(e) => this.handleMouseDown(e)}
           onMouseUp={(e) => this.handleMouseUp(e)}

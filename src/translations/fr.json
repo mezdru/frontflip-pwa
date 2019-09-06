@@ -103,5 +103,9 @@
     "action.addWings.search": "Cherchez dans {organisationName}",
     "action.addWings.text": "Vous avez trouvé {wingsCount} Wings !",
     "nobody.searchList": "Il n'y a personne ... pour le moment !",
-    "invitation.get.error": "Il y a eu une erreur ..."
+    "invitation.get.error": "Il y a eu une erreur ...",
+    "profile.activity.title": "Historique des activités",
+    "profile.activity.empty": "Il n'y a pas encore d'acitivités sur ce profil",
+    "profile.filter.title": "Filtre",
+    "profile.filter.default": "Pas de filtre"
 }

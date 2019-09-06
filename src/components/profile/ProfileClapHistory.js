@@ -3,6 +3,8 @@ import { Typography, withStyles, Grid } from '@material-ui/core';
 import { inject, observer } from 'mobx-react';
 import { observe } from 'mobx';
 import ActivityCard from './ActivityCard';
+import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
+import { FormattedMessage } from 'react-intl';
 
 const styles = {
   activity: {
@@ -23,8 +25,8 @@ class ProfileClapHistory extends React.Component {
     this.getClapHistory();
 
     this.setState({
-      observer: observe(this.props.recordStore.values, 'otherRecord', (change) => {
-        this.getClapHistory();
+      observer: observe(this.props.recordStore.values, 'displayedRecord', (change) => {
+        this.getClapHistory(change.newValue ? change.newValue._id : null);
       })
     });
   }
@@ -33,8 +35,8 @@ class ProfileClapHistory extends React.Component {
     this.state.observer();
   }
 
-  getClapHistory = () => {
-    this.props.clapStore.setCurrentRecordId(this.props.recordId || this.props.recordStore.values.otherRecord._id);
+  getClapHistory = (recordId) => {
+    this.props.clapStore.setCurrentRecordId(recordId || (this.props.recordStore.values.displayedRecord ? this.props.recordStore.values.displayedRecord._id : null));
     this.props.clapStore.getClapHistory()
       .then(clapHistory => {
         this.setState({ clapHistory: JSON.parse(JSON.stringify(clapHistory)) });
@@ -42,22 +44,20 @@ class ProfileClapHistory extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, profileContext } = this.props;
     const { clapHistory } = this.state;
     const { locale } = this.props.commonStore;
     const { organisation } = this.props.organisationStore.values;
-    const { otherRecord } = this.props.recordStore.values;
-
     const lastClapHistory = clapHistory.slice(0, 10);
 
     return (
       <>
         <Typography variant="h3" style={{ textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.85)' }}>
-          Activity History
+          <FormattedMessage id="profile.activity.title" />
         </Typography>
 
         {lastClapHistory && lastClapHistory.length > 0 && lastClapHistory.map((clap, index) => {
-          if (clap.recipient === otherRecord._id) {
+          if (clap.recipient === profileContext.getProp('_id') && profileContext.isWingsDisplayed(clap.hashtag._id || clap.hashtag)) {
             return <ActivityCard
               key={clap._id}
               picture={clap.giver.picture ? clap.giver.picture.url : null}
@@ -69,13 +69,12 @@ class ProfileClapHistory extends React.Component {
               locale={this.props.commonStore.locale}
               link={'/' + locale + '/' + organisation.tag + '/' + clap.giver.tag}
             />
-          }
-          return null;
+          }else return null;
         })}
 
         {!lastClapHistory || lastClapHistory.length === 0 && (
           <Grid item container xs={12} className={classes.activity} >
-            Here will appears the history of the activities link to your profile.
+            <FormattedMessage id="profile.activity.empty" />
           </Grid>
         )}
 
@@ -86,6 +85,6 @@ class ProfileClapHistory extends React.Component {
 
 export default inject('recordStore', 'clapStore', 'commonStore', 'organisationStore')(
   observer(
-    withStyles(styles)(ProfileClapHistory)
+    withStyles(styles)( withProfileManagement(ProfileClapHistory))
   )
 )
