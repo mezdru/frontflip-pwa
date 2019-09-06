@@ -34,7 +34,7 @@ class SearchPage extends PureComponent {
     super(props);
 
     this.state = {
-      displayedHit: this.getAskedHit(),
+      displayedHit: null,
       showCongratulation: false,
       actionInQueue: this.getActionInQueue(),
       hashtagsFilter: this.getHashtagsFilter(),
@@ -44,18 +44,18 @@ class SearchPage extends PureComponent {
       visible: (this.getAskedHit() ? true : false),
       transitionDuration: 800
     };
+
   }
 
   getAskedHit = () => {
     if (this.props.match && this.props.match.params && this.props.match.params.profileTag &&
       (this.props.match.params.profileTag.charAt(0) === '#' || this.props.match.params.profileTag.charAt(0) === '@')) {
-      return { tag: this.props.match.params.profileTag };
-    } else {
-      return null;
+        this.handleDisplayProfile(null, { tag: this.props.match.params.profileTag });
     }
   }
 
   componentDidMount() {
+    this.getAskedHit();
     this.moveSearchInputListener();
     this.handleUrlSearchFilters();
     try { if (this.props.match.params.profileTag === 'congrats') this.setState({ showCongratulation: true }) } catch{ }
@@ -174,8 +174,10 @@ class SearchPage extends PureComponent {
 
   handleDisplayProfile = (e, profileRecord) => {
     ReactGA.event({ category: 'User', action: 'Display profile' });
-    this.props.profileContext.setProfileData(profileRecord);
-    this.setState({ displayedHit: profileRecord, visible: true });
+    this.props.profileContext.setProfileData(profileRecord)
+    .then(() => {
+      this.setState({ displayedHit: profileRecord, visible: true });
+    });
   }
 
   handleCloseProfile = () => {
