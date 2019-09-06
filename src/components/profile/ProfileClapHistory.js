@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { observe } from 'mobx';
 import ActivityCard from './ActivityCard';
 import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
+import { FormattedMessage } from 'react-intl';
 
 const styles = {
   activity: {
@@ -25,7 +26,7 @@ class ProfileClapHistory extends React.Component {
 
     this.setState({
       observer: observe(this.props.recordStore.values, 'displayedRecord', (change) => {
-        this.getClapHistory();
+        this.getClapHistory(change.newValue ? change.newValue._id : null);
       })
     });
   }
@@ -34,8 +35,8 @@ class ProfileClapHistory extends React.Component {
     this.state.observer();
   }
 
-  getClapHistory = () => {
-    this.props.clapStore.setCurrentRecordId(this.props.profileContext.getProp('_id'));
+  getClapHistory = (recordId) => {
+    this.props.clapStore.setCurrentRecordId(recordId || (this.props.recordStore.values.displayedRecord ? this.props.recordStore.values.displayedRecord._id : null));
     this.props.clapStore.getClapHistory()
       .then(clapHistory => {
         this.setState({ clapHistory: JSON.parse(JSON.stringify(clapHistory)) });
@@ -47,13 +48,12 @@ class ProfileClapHistory extends React.Component {
     const { clapHistory } = this.state;
     const { locale } = this.props.commonStore;
     const { organisation } = this.props.organisationStore.values;
-
     const lastClapHistory = clapHistory.slice(0, 10);
 
     return (
       <>
         <Typography variant="h3" style={{ textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.85)' }}>
-          Activity History
+          <FormattedMessage id="profile.activity.title" />
         </Typography>
 
         {lastClapHistory && lastClapHistory.length > 0 && lastClapHistory.map((clap, index) => {
@@ -69,8 +69,7 @@ class ProfileClapHistory extends React.Component {
               locale={this.props.commonStore.locale}
               link={'/' + locale + '/' + organisation.tag + '/' + clap.giver.tag}
             />
-          }
-          return null;
+          }else return null;
         })}
 
         {!lastClapHistory || lastClapHistory.length === 0 && (

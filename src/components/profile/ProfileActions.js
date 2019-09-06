@@ -74,8 +74,6 @@ class ProfileActions extends React.PureComponent {
     const actions = this.buildAction();
     const filters = this.buildFilters();
 
-    console.log('is editable ? ' + isEditable)
-
     return (
       <>
 

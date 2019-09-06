@@ -35,7 +35,6 @@ class ProfileProvider extends React.Component {
     this.state.filteredWings.forEach(wing => {
       if( JSON.stringify(wing._id) === JSON.stringify(wingsId)) {
         res = true;
-        return;
       }
     });
     return res;
@@ -59,7 +58,7 @@ class ProfileProvider extends React.Component {
     ProfileService.transformLinks(algoliaRecord);
     ProfileService.makeHightlighted(algoliaRecord);
     ProfileService.orderHashtags(algoliaRecord);
-    this.setState({algoliaRecord}, this.setWingzyRecord);
+    this.setState({algoliaRecord, filteredWings: null}, this.setWingzyRecord);
   }
 
   setWingzyRecord = () => {

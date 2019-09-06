@@ -61,9 +61,7 @@ class RecordStore {
 
     return agent.Record.getByTag(this.values.recordTag, this.values.orgId)
       .then(res => {
-
         this.setdisplayedRecord(res.data.length > 0 ? res.data[0] : res.data);
-
         return this.values.displayedRecord;
       })
       .catch(action((err) => {
