@@ -104,5 +104,7 @@
   "action.addWings.text": "You found {wingsCount} Wings!",
   "nobody.searchList": "No one here ... yet !",
   "invitation.get.error": "There was an error...",
-  "profile.activity.title": "Activity history"
+  "profile.activity.title": "Activity history",
+  "profile.activity.empty": "No activity yet",
+  "profile.filter.title": "Filter"
 }

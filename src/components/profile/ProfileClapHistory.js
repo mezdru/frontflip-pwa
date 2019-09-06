@@ -74,7 +74,7 @@ class ProfileClapHistory extends React.Component {
 
         {!lastClapHistory || lastClapHistory.length === 0 && (
           <Grid item container xs={12} className={classes.activity} >
-            Here will appears the history of the activities link to your profile.
+            <FormattedMessage id="profile.activity.empty" />
           </Grid>
         )}
 
