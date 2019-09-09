@@ -80,17 +80,20 @@ class SearchPage extends PureComponent {
     var searchBox = document.getElementById('search-input');
     var shadowedBackground = document.getElementById('shadowed-background');
 
-    contentPart.addEventListener('scroll', function (e) {
-      var contentShape = contentMain.getBoundingClientRect();
-      var contentTop = contentShape.top;
-      let newTopValue = Math.min(Math.max(contentTop - this.state.headerHeight + 16, 16), (window.innerHeight * 0.40));
+    contentPart.addEventListener('scroll', (e) => this.moveSearchInput(contentPart, contentMain, searchBox, shadowedBackground));
+    window.addEventListener('resize', (e) => this.moveSearchInput(contentPart, contentMain, searchBox, shadowedBackground));
+  }
 
-      searchBox.style.top = newTopValue + 'px';
-      shadowedBackground.style.opacity = Math.min(1, (contentPart.scrollTop / (window.innerHeight - this.state.headerHeight))) * 0.6;
+  moveSearchInput = (contentPart, contentMain, searchBox, shadowedBackground) => {
+    var contentShape = contentMain.getBoundingClientRect();
+    var contentTop = contentShape.top;
+    let newTopValue = Math.min(Math.max(contentTop - this.state.headerHeight + 16, 16), (window.innerHeight * 0.40));
 
-      if (newTopValue <= this.state.top) this.handleMenuButtonMobileDisplay(true);
-      else if (newTopValue >= (this.state.top + 8)) this.handleMenuButtonMobileDisplay(false);
-    }.bind(this));
+    searchBox.style.top = newTopValue + 'px';
+    shadowedBackground.style.opacity = Math.min(1, (contentPart.scrollTop / (window.innerHeight - this.state.headerHeight))) * 0.6;
+
+    if (newTopValue <= this.state.top) this.handleMenuButtonMobileDisplay(true);
+    else if (newTopValue >= (this.state.top + 8)) this.handleMenuButtonMobileDisplay(false);
   }
 
   handleMenuButtonMobileDisplay = (isInSearch) => {
