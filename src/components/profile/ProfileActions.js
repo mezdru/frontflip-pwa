@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles, Grid, Button, IconButton, Hidden, ClickAwayListener } from '@material-ui/core';
-import { FilterList, Clear, Edit } from '@material-ui/icons';
+import { FilterList, ArrowBack, Edit } from '@material-ui/icons';
 import classNames from 'classnames';
 import MenuDropdown from '../utils/menu/MenuDropdown';
 import { inject, observer } from 'mobx-react';
@@ -82,7 +82,7 @@ class ProfileActions extends React.PureComponent {
 
         <Grid item xs={2}>
           <IconButton className={classNames(classes.button, classes.returnButton)} onClick={this.props.handleClose} >
-            <Clear />
+            <ArrowBack />
           </IconButton>
         </Grid>
 
