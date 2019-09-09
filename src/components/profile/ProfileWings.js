@@ -5,6 +5,8 @@ import ProfileService from '../../services/profile.service';
 import { inject, observer } from 'mobx-react';
 import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 import { observe } from 'mobx';
+import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 const styles = theme => ({
   contactIcon: {
@@ -15,6 +17,25 @@ const styles = theme => ({
     fontSize: 32,
     display: 'inline-block',
   },
+  buttonAddWings: {
+    padding: '6px 12px',
+    cursor: 'pointer',
+    margin: '16px 8px 4px 8px',
+    borderRadius: 16,
+    boxSizing: 'border-box',
+    fontSize: '0.9125rem',
+    display: 'inline-flex',
+    fontWeight: 600,
+    height: 32,
+    transition: 'background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+    backgroundColor: theme.palette.secondary.dark,
+    textDecoration: 'none',
+    color: '#FFFFFF',
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.main,
+      boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'
+    }
+  }
 });
 
 class ProfileWings extends React.PureComponent {
@@ -42,7 +63,9 @@ class ProfileWings extends React.PureComponent {
 
   render() {
     const { classes, profileContext } = this.props;
+    const { isEditable } = this.props.profileContext;
     const { locale } = this.props.commonStore;
+    const {organisation} = this.props.organisationStore.values;
     var wings = profileContext.getProp('hashtags');
 
     return (
@@ -57,13 +80,18 @@ class ProfileWings extends React.PureComponent {
             />
           )
         })}
+        {isEditable && (
+          <a href={"/" + locale + "/" + organisation.tag + "/onboard/wings/edit/" + profileContext.getProp('_id')} className={classes.buttonAddWings} >
+            <FormattedMessage id="profile.addWings" />
+          </a>
+        )}
       </div>
     );
   }
 
 }
 
-export default inject('commonStore', 'clapStore', 'recordStore')(
+export default inject('commonStore', 'clapStore', 'recordStore', 'organisationStore')(
   observer(
     withStyles(styles)(withProfileManagement(ProfileWings))
   )
