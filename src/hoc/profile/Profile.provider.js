@@ -14,7 +14,8 @@ class ProfileProvider extends React.Component {
       filterProfile: this.filterProfile,
       setProfileData: this.setProfileData,
       isWingsDisplayed: this.isWingsDisplayed,
-      getProp: this.getProp
+      getProp: this.getProp,
+      getBaseUrl: this.getBaseUrl
     };
   }
 
@@ -86,6 +87,11 @@ class ProfileProvider extends React.Component {
     else return false;
   }
 
+  // Nothing to do here, it's a common method
+  getBaseUrl = () => {
+    return '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag;
+  }
+
   render() {
     return (
       <ProfileContext.Provider
@@ -101,6 +107,6 @@ class ProfileProvider extends React.Component {
   }
 }
 
-export default inject('organisationStore', 'recordStore', 'userStore')(
+export default inject('organisationStore', 'recordStore', 'userStore', 'commonStore')(
   observer(ProfileProvider)
 );

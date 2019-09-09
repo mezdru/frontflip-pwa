@@ -23,6 +23,7 @@ export const styles = theme => ({
   topOffset: {
     position: 'relative',
     height: 100,
+    zIndex: -1,
   },
   text: {
     color: theme.palette.primary.dark,
