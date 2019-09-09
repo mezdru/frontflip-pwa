@@ -3,14 +3,16 @@ import { withStyles, Paper, Grid, Typography } from '@material-ui/core';
 import Logo from '../utils/logo/Logo';
 import ProfileService from '../../services/profile.service';
 import ProfileContacts from './ProfileContacts';
-import {styles} from './ProfileThumbnail.css';
+import { styles } from './ProfileThumbnail.css';
 import { FormattedMessage } from 'react-intl';
 import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 
-const ProfileThumbnail = React.memo(withProfileManagement(withStyles(styles)(({classes, record, profileContext,  ...props}) => {
+const ProfileThumbnail = React.memo(withProfileManagement(withStyles(styles)(({ classes, record, profileContext, ...props }) => {
   return (
     <Paper className={classes.main}>
-      <Logo className={classes.profilePicture} src={ProfileService.getPicturePathResized( profileContext.getProp('picture'), 'person', '200x200')} type="person" />
+      <a href={profileContext.getBaseUrl() + '/onboard/intro/edit/' + profileContext.getProp('_id')} >
+        <Logo className={classes.profilePicture} src={ProfileService.getPicturePathResized(profileContext.getProp('picture'), 'person', '200x200')} type="person" />
+      </a>
       <div className={classes.topOffset} ></div>
 
       <Grid container spacing={32}>
@@ -19,7 +21,7 @@ const ProfileThumbnail = React.memo(withProfileManagement(withStyles(styles)(({c
           <Typography variant="h1" className={classes.text}>
             {ProfileService.htmlDecode(profileContext.getProp('name')) || profileContext.getProp('tag')}
           </Typography>
-          <Typography variant="h2" className={classes.text} style={{color: '#555555', marginTop: 16}} >
+          <Typography variant="h2" className={classes.text} style={{ color: '#555555', marginTop: 16 }} >
             {ProfileService.htmlDecode(profileContext.getProp('intro'))}
           </Typography>
         </Grid>
