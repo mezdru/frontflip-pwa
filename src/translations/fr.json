@@ -107,5 +107,6 @@
     "profile.activity.title": "Historique des activités",
     "profile.activity.empty": "Il n'y a pas encore d'acitivités sur ce profil",
     "profile.filter.title": "Filtre",
-    "profile.filter.default": "Pas de filtre"
+    "profile.filter.default": "Pas de filtre",
+    "card.moreWings": "... {counter} en plus"
 }

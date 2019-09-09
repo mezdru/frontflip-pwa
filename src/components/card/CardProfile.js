@@ -11,6 +11,7 @@ import defaultPicture from '../../resources/images/placeholder_person.png';
 import ProfileService from '../../services/profile.service';
 import withSearchManagement from '../../hoc/SearchManagement.hoc';
 import {styles} from './CardProfile.css';
+import { injectIntl } from 'react-intl';
 
 ProfileService.setExtraLinkLimit(5);
 const WINGS_DISPLAYED = 7;
@@ -111,6 +112,13 @@ class CardProfile extends React.PureComponent {
                   />
                 )
               })}
+              {hit.hashtags && hit.hashtags.length > WINGS_DISPLAYED && (
+                <Wings label={this.props.intl.formatMessage({ id: 'card.moreWings' }, { counter: (hit.hashtags.length - WINGS_DISPLAYED)})}
+                  enableClap={false} 
+                  mode='card' 
+                  onClick={(e) => handleDisplayProfile(e, hit)}
+                />
+              )}
             </Grid>
           </CardContent>
         </Grid>
@@ -127,6 +135,6 @@ CardProfile = withSearchManagement(CardProfile);
 
 export default inject('commonStore')(
   observer(
-    withWidth()(withStyles(styles)(CardProfile))
+    withWidth()(withStyles(styles)(injectIntl(CardProfile)))
   )
 );
