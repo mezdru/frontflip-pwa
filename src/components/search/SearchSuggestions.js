@@ -24,7 +24,8 @@ const styles = theme => ({
       width: '0 !important'
     },
     overflow: '-moz-scrollbars-none',
-    MsOverflowStyle: 'none'
+    MsOverflowStyle: 'none',
+    scrollbarWidth: 'none',
   },
   suggestion: {
     margin: 8,
@@ -65,22 +66,23 @@ const styles = theme => ({
   suggestionButton: {
     position: 'absolute',
     zIndex: 1197,
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    backgroundColor: 'rgba(42, 44, 60, 0.85)',
     top: '50%',
     transform: 'translateY(-50%)',
     fontSize: 32,
     padding: 0,
-    color: 'rgba(42, 44, 60, 0.85)',
+    color: 'white',
     transition: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)',
     '&:hover': {
+      color: 'rgba(42, 44, 60, 0.85)',
       backgroundColor: 'white'
     }
   },
   leftButton: {
-    left: -80,
+    left: -42,
   },
   rightButton: {
-    right: -80
+    right: -42
   },
   roundImg: {
     '& img': {
