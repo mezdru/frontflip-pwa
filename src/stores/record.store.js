@@ -1,6 +1,7 @@
 import { observable, action, decorate } from "mobx";
 import agent from '../agent';
 import userStore from './user.store';
+import organisationStore from './organisation.store';
 
 class RecordStore {
   inProgress = false;
@@ -96,7 +97,7 @@ class RecordStore {
     this.inProgress = true;
     this.errors = null;
 
-    return agent.Record.post(this.values.orgId, record || this.values.record)
+    return agent.Record.post(organisationStore.values.organisation._id, record || this.values.record)
       .then(res => {
         if(!record)
           this.values.record = res.data;
