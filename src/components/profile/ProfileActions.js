@@ -50,6 +50,8 @@ class ProfileActions extends React.PureComponent {
   buildFilters = () => {
     let filters = [];
 
+    if(!this.props.organisationStore.values.organisation.featuredWingsFamily) return filters;
+
     this.props.organisationStore.values.organisation.featuredWingsFamily.forEach(featuredWingFamily => {
       filters.push({
         text: featuredWingFamily.name || featuredWingFamily,

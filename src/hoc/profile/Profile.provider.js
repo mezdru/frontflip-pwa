@@ -63,6 +63,7 @@ class ProfileProvider extends React.Component {
   }
 
   setWingzyRecord = () => {
+    if(!this.props.authStore.isAuth()) return;
     this.props.recordStore.setRecordTag(this.state.algoliaRecord.tag);
     this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
     this.props.recordStore.getRecordByTag()
@@ -107,6 +108,6 @@ class ProfileProvider extends React.Component {
   }
 }
 
-export default inject('organisationStore', 'recordStore', 'userStore', 'commonStore')(
+export default inject('organisationStore', 'recordStore', 'userStore', 'commonStore', 'authStore')(
   observer(ProfileProvider)
 );
