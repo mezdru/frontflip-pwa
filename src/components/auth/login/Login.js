@@ -44,10 +44,12 @@ class Login extends React.Component {
 
   handleEmailChange = (e) => {
     this.props.authStore.setEmail(e.target.value);
+    this.forceUpdate();
   };
 
   handlePasswordChange = (e) => {
-    this.props.authStore.setPassword(e.target.value)
+    this.props.authStore.setPassword(e.target.value);
+    this.forceUpdate();
   };
 
   signinSuccessRedirect = () => {
