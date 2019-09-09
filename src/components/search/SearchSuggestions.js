@@ -60,15 +60,15 @@ const styles = theme => ({
   suggestionButton: {
     position: 'absolute',
     zIndex: 1197,
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
     top: '50%',
     transform: 'translateY(-50%)',
-    fontSize: 70,
+    fontSize: 32,
+    padding: 0,
     color: 'rgba(42, 44, 60, 0.85)',
-    transition: 'color 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+    transition: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)',
     '&:hover': {
-      backgroundColor: 'transparent',
-      color: 'rgba(42, 44, 60, 0.50)',
+      backgroundColor: 'white'
     }
   },
   leftButton: {
