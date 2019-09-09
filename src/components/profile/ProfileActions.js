@@ -84,28 +84,31 @@ class ProfileActions extends React.PureComponent {
           </IconButton>
         </Grid>
 
-        <Hidden mdDown>
-          <Grid container item justify="flex-end" alignContent="flex-end" xs={10}>
+        <Grid container item justify="flex-end" alignContent="flex-end" xs={10}>
           {/* {canPropose && (
             <Grid item>
               <Button className={classes.button} color="secondary" disabled >Propose Wings</Button>
             </Grid>
           )} */}
 
-          {canFilter && filters.length > 0 && (
-            <Grid item style={{position: 'relative'}}>
-              <Button className={classes.button} onClick={this.handleClickFilter} ><FormattedMessage id="profile.filter.title" /> <FilterList /> </Button>
+          <Hidden mdDown>
 
-              {openFilter && (
-                <ClickAwayListener onClickAway={this.handleClickFilter}>
-                  <MenuDropdown actions={filters} open={openFilter} mode="filter" />
-                </ClickAwayListener>
-              )}
-            </Grid>
-          )}
+            {canFilter && filters.length > 0 && (
+              <Grid item style={{ position: 'relative' }}>
+                <Button className={classes.button} onClick={this.handleClickFilter} ><FormattedMessage id="profile.filter.title" /> <FilterList /> </Button>
+
+                {openFilter && (
+                  <ClickAwayListener onClickAway={this.handleClickFilter}>
+                    <MenuDropdown actions={filters} open={openFilter} mode="filter" />
+                  </ClickAwayListener>
+                )}
+              </Grid>
+            )}
+
+          </Hidden>
 
           {isEditable && (
-            <Grid item style={{position: 'relative'}}>
+            <Grid item style={{ position: 'relative' }}>
               <IconButton
                 className={classNames(classes.button, classes.returnButton)}
                 buttonRef={node => {
@@ -127,9 +130,7 @@ class ProfileActions extends React.PureComponent {
 
             </Grid>
           )}
-          </Grid>
-
-        </Hidden>
+        </Grid>
       </>
     )
   }
