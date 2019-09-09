@@ -30,14 +30,16 @@ const ProfileThumbnail = React.memo(withProfileManagement(withStyles(styles)(({ 
           <ProfileContacts />
         </Grid>
 
-        <Grid item xs={12} >
-          <Typography variant="h3" className={classes.text}>
-            <FormattedMessage id="profile.aboutMe" />
-          </Typography>
-          <Typography variant="body2" className={classes.description}>
-            {profileContext.getProp('description')}
-          </Typography>
-        </Grid>
+        {profileContext.getProp('description') && profileContext.getProp('description') !== '' && (
+          <Grid item xs={12} >
+            <Typography variant="h3" className={classes.text}>
+              <FormattedMessage id="profile.aboutMe" />
+            </Typography>
+            <Typography variant="body2" className={classes.description}>
+              {profileContext.getProp('description')}
+            </Typography>
+          </Grid>
+        )}
 
       </Grid>
     </Paper>
