@@ -14,12 +14,17 @@ const styles = theme => ({
   suggestionsContainer: {
     textAlign: 'left',
     maxHeight: 63,
-    overflowX: 'hidden',
+    overflowX: 'auto',
     overflowY: 'hidden',
     padding: '8px 0px',
     position: 'relative',
     zIndex: 1197,
     whiteSpace: 'nowrap',
+    '&::-webkit-scrollbar': {
+      width: '0 !important'
+    },
+    overflow: '-moz-scrollbars-none',
+    MsOverflowStyle: 'none'
   },
   suggestion: {
     margin: 8,
