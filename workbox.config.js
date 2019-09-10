@@ -46,6 +46,20 @@ module.exports = {
         },
       },
       {
+        urlPattern: new RegExp('^https://twemoji\.maxcdn\.com/'),
+        handler: 'CacheFirst',
+        options: {
+          cacheName: 'emojis',
+          cacheableResponse: {
+            statuses: [0, 200]
+          },
+          expiration: {
+            maxEntries: 300,
+            maxAgeSeconds: 60*60*24*365 // 1 year
+          }
+        }
+      },
+      {
         urlPattern: /\.(?:woff2|eot|ttf|woff|otf)$/,
         handler: 'CacheFirst',
         options: {
@@ -55,6 +69,20 @@ module.exports = {
           },
           expiration: {
             maxEntries: 20
+          }
+        }
+      },
+      {
+        urlPattern: new RegExp('^https:\/\/fonts\.gstatic\.com/'),
+        handler: 'CacheFirst',
+        options: {
+          cacheName: 'fonts',
+          cacheableResponse: {
+            statuses: [0, 200]
+          },
+          expiration: {
+            maxEntries: 20,
+            maxAgeSeconds: 60*60*24*365 // 1 year
           }
         }
       }
