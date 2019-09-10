@@ -3,22 +3,22 @@
   "name": "Wingzy for Les Testeurs",
   "icons": [
     {
-      "src": "../favicon.ico",
+      "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "../wingzy.png",
+      "src": "test_144.png",
       "sizes":"144x144",
       "type":"image/png"
     },
       {
-    "src": "../wingzy_192.png",
+    "src": "test_192.png",
     "type": "image/png",
     "sizes": "192x192"
   },
   {
-    "src": "../wingzy_512.png",
+    "src": "test_512.png",
     "type": "image/png",
     "sizes": "512x512"
   }
