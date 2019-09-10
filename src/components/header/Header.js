@@ -57,7 +57,7 @@ class App extends Component {
         <CssBaseline />
         <Fab variant="extended" className={classes.menuButton}
                     onClick={this.handleDrawerOpen} 
-                    children={<Logo type={(this.props.authStore.isAuth() ? 'organisation' : 'wingzy')} />} id="header-button" />
+                    children={<Logo type={'organisation'} />} id="header-button" />
         {!auth && !isSigninOrSignupPage && (
             <Button variant="text" to={"/" + locale + (orgTag ? '/' + orgTag : '') + '/signin'} component={Link} className={classes.menuLink}><FormattedMessage id="Sign In" /></Button>
         )}
