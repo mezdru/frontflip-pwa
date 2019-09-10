@@ -44,7 +44,19 @@ module.exports = {
             maxEntries: 100,
           },
         },
-
+      },
+      {
+        urlPattern: /\.(?:woff2|eot|ttf|woff|otf)$/,
+        handler: 'CacheFirst',
+        options: {
+          cacheName: 'fonts',
+          cacheableResponse: {
+            statuses: [0, 200]
+          },
+          expiration: {
+            maxEntries: 20
+          }
+        }
       }
   ]
 };
