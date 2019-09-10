@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <link rel="icon" type="image/x-icon" href="%PUBLIC_URL%/favicon.ico" />
+  <!-- <link rel="icon" type="image/x-icon" href="%PUBLIC_URL%/favicon.ico" /> -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, minimum-scale=1,maximum-scale=1,user-scalable=no">
   <meta name="description" content="Wingzy is an intuitive app to find the coworkers you need according to what they love and know">
@@ -68,12 +68,20 @@
 
   <script>
     var manifestLink = document.createElement('link');
+    var faviconLink = document.createElement('link');
     manifestLink.rel = 'manifest';
-    
+    faviconLink.rel = 'icon';
+    faviconLink.type = 'image/x-icon';
+
+    // <link rel="icon" type="image/x-icon" href="%PUBLIC_URL%/favicon.ico" />
+
     if (window.location.href.search('test') !== -1) {
       manifestLink.href = '%PUBLIC_URL%/test/manifest.json';
+      faviconLink.href= '%PUBLIC_URL%/test/favicon.ico';
+      document.title = 'Les Testeurs';
     } else {
       manifestLink.href = '%PUBLIC_URL%/manifest.json';
+      faviconLink.href= '%PUBLIC_URL%/favicon.ico';
     }
     document.head.appendChild(manifestLink);
   </script>
