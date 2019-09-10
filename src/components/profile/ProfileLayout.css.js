@@ -19,7 +19,7 @@ export const styles = {
       padding: 32,
       paddingBottom: 16,
     },
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('lg')]: {
       paddingRight: 0,
       paddingBottom: 32,
       height: 'calc(100vh - 116px)',
@@ -33,7 +33,7 @@ export const styles = {
       padding: 32,
       paddingTop: 0,
     },
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('lg')]: {
       padding: 32,
       paddingLeft: 0,
       paddingTop: 16,
@@ -41,13 +41,13 @@ export const styles = {
   },
   clapHistory: {
     marginTop: 28, // 32 - 4 (margin-bottom of one wing)
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('lg')]: {
       paddingLeft: 16,
       marginTop: -23 // Height of title
     }
   },
   wings: {
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('lg')]: {
       paddingRight: 16,
       paddingLeft: 24
     }
