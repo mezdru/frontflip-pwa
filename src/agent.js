@@ -11,6 +11,8 @@ const API_ROOT_AUTH = process.env.REACT_APP_API_ROOT_AUTH;
 const API_ROOT = process.env.REACT_APP_API_ROOT + '/' + locale;
 
 const handleErrors = err => {
+  LogRocket.error(err);
+
   if (err && err.response && err.response.status === 401) {
     authStore.logout();
     window.location.href = UrlService.createUrl(window.location.host, '/signin', null);

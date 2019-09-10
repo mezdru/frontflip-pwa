@@ -100,6 +100,8 @@ class SearchPage extends PureComponent {
     var searchField = document.getElementById('search-container');
     var headerButton = document.getElementById('header-button');
 
+    if(!searchField || !headerButton) return;
+
     if (this.props.width === 'xs' && isInSearch && this.state.headerPosition === 'INITIAL') {
       searchField.style.paddingLeft = 48 + 'px';
       headerButton.style.top = 20 + 'px';
