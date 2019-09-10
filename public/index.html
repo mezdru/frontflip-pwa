@@ -65,7 +65,21 @@
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+
+  <script>
+    var manifestLink = document.createElement('link');
+    manifestLink.rel = 'manifest';
+    
+    if (window.location.href.search('test') !== -1) {
+      manifestLink.href = '%PUBLIC_URL%/test/manifest.json';
+    } else {
+      manifestLink.href = '%PUBLIC_URL%/manifest.json';
+    }
+    document.head.appendChild(manifestLink);
+  </script>
+  
+  <!-- <link rel="manifest" href="%PUBLIC_URL%/manifest.json"> -->
+  <!-- <link rel="manifest" href="meridiam/manifest.json" /> -->
   
   <!-- PWACompat to bring Web App Manifest to older browsers  -->
   <script async src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.8/pwacompat.min.js"
