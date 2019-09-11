@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles, ListItem, List } from '@material-ui/core';
+import { withStyles, ListItem, List, CircularProgress } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import Logo from '../logo/Logo';
 import { Link } from 'react-router-dom';
@@ -39,6 +39,11 @@ const style = theme => ({
     marginTop: 8,
     color: 'white'
   },
+  circularProgressContainer: {
+    position: 'relative',
+    width: '100%',
+    textAlign: 'center'
+  }
 });
 
 class OrganisationsList extends React.Component {
@@ -65,12 +70,17 @@ class OrganisationsList extends React.Component {
           if (org && (org.tag !== orgTag)) {
             return (
               <ListItem button component={Link} to={'/' + locale + '/' + org.tag} key={org._id} className={classes.orgItem}>
-                <Logo type={'smallOrg'} alt={entities.decode(org.name)} src={ (org.logo ? org.logo.url : null) || defaultLogo} className={classes.itemLogo} />
+                <Logo type={'smallOrg'} alt={entities.decode(org.name)} src={(org.logo ? org.logo.url : null) || defaultLogo} className={classes.itemLogo} />
                 <div className={classes.itemName} >{entities.decode(org.name)}</div>
               </ListItem>
             );
-          }else {return null; }
+          } else { return null; }
         })}
+        {(!currentUserOrganisations || currentUserOrganisations.length === 0) && (
+          <div className={classes.circularProgressContainer} >
+            <CircularProgress />
+          </div>
+        )}
       </List>
     );
   }
