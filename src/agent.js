@@ -111,7 +111,7 @@ let validateToken = () => {
           response: 30000,
         })
         .end( (err) => {
-          LogRocket.info("The refresh token exchange has not worked.");
+          LogRocket.error("The refresh token exchange has not worked.");
           LogRocket.error(err);
           handleErrors(err);
         })
@@ -119,7 +119,7 @@ let validateToken = () => {
           commonStore.setAuthTokens(JSON.parse(response.text));
           resolve();
         }).catch((err) => {
-          LogRocket.info("The refresh token exchange has not worked.");
+          LogRocket.error("The refresh token exchange has not worked.");
           LogRocket.error(err);
           authStore.logout();
           window.location.href = UrlService.createUrl(window.location.host, '/signin', null);
