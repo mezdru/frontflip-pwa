@@ -31,7 +31,7 @@ class ProfileLayout extends React.Component {
           )}
 
           <BannerResizable
-            type={'organisation'}
+            type={'profile'}
             initialHeight={100}
             style={styles.banner}
           />

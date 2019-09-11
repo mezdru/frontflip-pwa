@@ -3,6 +3,7 @@ import { observe } from 'mobx';
 import { inject, observer } from "mobx-react";
 import defaultBanner from '../../../resources/images/fly_away.jpg';
 import { withStyles } from '@material-ui/core';
+import { withProfileManagement } from '../../../hoc/profile/withProfileManagement';
 
 const styles = theme => ({
   root: {
@@ -39,7 +40,23 @@ class BannerResizable extends React.Component {
       })});
 
       if(this.props.listenToScroll) this.listenToScroll();
+      
+    } else if (this.props.type === 'profile') {
+
+      if(!this.updateProfileSource()) this.updateSource();
+
+      this.setState({observer: observe(this.props.recordStore.values, 'displayedRecord', (change) => {
+        this.updateProfileSource();
+        if(!this.state.source) this.updateSource();
+      })});
     }
+  }
+
+  updateProfileSource = async () => {
+    var profileCover = this.props.recordStore.values.displayedRecord.cover;
+    var profileCoverUrl = (profileCover && profileCover.url ? profileCover.url : null);
+    this.setState({source: profileCoverUrl});
+    return profileCoverUrl;
   }
 
   updateSource = () => {
@@ -66,8 +83,8 @@ class BannerResizable extends React.Component {
   }
 }
 
-export default inject('organisationStore')(
+export default inject('organisationStore', 'recordStore')(
   observer(
-    withStyles(styles, { withTheme: true })(BannerResizable)
+    withStyles(styles, { withTheme: true })(withProfileManagement(BannerResizable))
   )
 );
