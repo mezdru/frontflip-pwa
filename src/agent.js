@@ -11,7 +11,7 @@ const API_ROOT_AUTH = process.env.REACT_APP_API_ROOT_AUTH;
 const API_ROOT = process.env.REACT_APP_API_ROOT + '/' + locale;
 
 const handleErrors = err => {
-  LogRocket.error(err);
+  if(err) LogRocket.error(err);
 
   if (err && err.response && err.response.status === 401) {
     authStore.logout();
@@ -111,8 +111,7 @@ let validateToken = () => {
           response: 30000,
         })
         .end( (err) => {
-          LogRocket.error("The refresh token exchange has not worked.");
-          LogRocket.error(err);
+          if(err) LogRocket.error("The refresh token exchange has not worked.");
           handleErrors(err);
         })
         .then((response) => {
