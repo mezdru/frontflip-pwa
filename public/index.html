@@ -77,6 +77,10 @@
       manifestLink.href = '%PUBLIC_URL%/test/manifest.json';
       faviconLink.href= '%PUBLIC_URL%/test/favicon.ico';
       document.title = 'Les Testeurs';
+    } else if (window.location.href.search('meridiam') !== -1) {
+      manifestLink.href = '%PUBLIC_URL%/meridiam/manifest.json';
+      faviconLink.href= '%PUBLIC_URL%/meridiam/favicon.ico';
+      document.title = 'Meridiam Network';
     } else {
       manifestLink.href = '%PUBLIC_URL%/manifest.json';
       faviconLink.href= '%PUBLIC_URL%/favicon.ico';
