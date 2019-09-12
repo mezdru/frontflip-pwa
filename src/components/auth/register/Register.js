@@ -139,7 +139,7 @@ class Register extends React.Component {
               </Grid>
             )}
             <Grid item container justify='center'>
-              <Typography variant="h3" style={{ textAlign: 'center' }}>
+              <Typography variant="h1" style={{ textAlign: 'center' }}>
                 <FormattedHTMLMessage id="signup.title.org" />
               </Typography>
             </Grid>

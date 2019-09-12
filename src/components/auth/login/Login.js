@@ -117,7 +117,7 @@ class Login extends React.Component {
               </Grid>
             )}
             <Grid item container justify='center' style={{ textAlign: 'center' }}>
-              <Typography variant="h3">
+              <Typography variant="h1">
                 <FormattedHTMLMessage id="signin.title.org" />
               </Typography>
             </Grid>
