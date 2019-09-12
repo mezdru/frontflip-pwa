@@ -188,8 +188,7 @@ class ProfileService {
   };
 
   getWingDisplayedName = function (wing, locale) {
-    return (wing.name_translated ? (wing.name_translated[locale] || wing.name_translated['en-UK']) || wing.name || wing.tag : wing.name || null);
-
+    return (wing.name_translated ? (wing.name_translated[locale] || wing.name_translated['en-UK']) || wing.name || wing.tag : wing.name || wing.tag);
   }
   
   orderHashtags = function (item) {
