@@ -218,6 +218,9 @@ class SearchSuggestions extends React.Component {
 
           {facetHits.map((item, i) => {
             let displayedName = ProfileService.getWingDisplayedName(item, locale);
+
+            if(!displayedName) console.log('No displayedName for the Record: ', item);
+            
             let pictureSrc = ProfileService.getPicturePath(item.picture);
             if (this.shouldDisplaySuggestion(item.tag || item.value)) {
               return (
