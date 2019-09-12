@@ -73,8 +73,6 @@
     faviconLink.rel = 'icon';
     faviconLink.type = 'image/x-icon';
 
-    // <link rel="icon" type="image/x-icon" href="%PUBLIC_URL%/favicon.ico" />
-
     if (window.location.href.search('test') !== -1) {
       manifestLink.href = '%PUBLIC_URL%/test/manifest.json';
       faviconLink.href= '%PUBLIC_URL%/test/favicon.ico';
@@ -83,6 +81,7 @@
       manifestLink.href = '%PUBLIC_URL%/manifest.json';
       faviconLink.href= '%PUBLIC_URL%/favicon.ico';
     }
+    document.head.appendChild(faviconLink);
     document.head.appendChild(manifestLink);
   </script>
   
