@@ -15,9 +15,10 @@ import SearchButton from '../components/search/SearchButton';
 import withSearchManagement from '../hoc/SearchManagement.hoc';
 import { withProfileManagement } from '../hoc/profile/withProfileManagement';
 
-const OnboardCongratulation = React.lazy(() => import('../components/onboard/steps/OnboardCongratulation'));
-const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
-const AddWingPopup = React.lazy(() => import('../components/utils/addWing/AddWingPopup'));
+const OnboardCongratulation = React.lazy(() => import('../components/utils/popup/OnboardCongratulation'));
+const PromptIOsInstall = React.lazy(() => import('../components/utils/popup/PromptIOsInstall'));
+const AskForHelp = React.lazy(() => import('../components/utils/popup/AskForHelp'));
+const AddWingPopup = React.lazy(() => import('../components/utils/popup/AddWingPopup'));
 const ProfileLayout = React.lazy(() => import("../components/profile/ProfileLayout"));
 const BannerResizable = React.lazy(() => import('../components/utils/banner/BannerResizable'));
 const Header = React.lazy(() => import('../components/header/Header'));
@@ -42,7 +43,8 @@ class SearchPage extends PureComponent {
       headerHeight: 129,
       headerPosition: 'INITIAL',
       visible: (this.getAskedHit() ? true : false),
-      transitionDuration: 800
+      transitionDuration: 800,
+      showAskForHelp: true
     };
   }
 
@@ -100,7 +102,7 @@ class SearchPage extends PureComponent {
     var searchField = document.getElementById('search-container');
     var headerButton = document.getElementById('header-button');
 
-    if(!searchField || !headerButton) return;
+    if (!searchField || !headerButton) return;
 
     if (this.props.width === 'xs' && isInSearch && this.state.headerPosition === 'INITIAL') {
       searchField.style.paddingLeft = 48 + 'px';
@@ -194,7 +196,7 @@ class SearchPage extends PureComponent {
   }
 
   render() {
-    const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter, visible, transitionDuration } = this.state;
+    const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter, visible, transitionDuration, showAskForHelp } = this.state;
     const { classes, profileTag } = this.props;
     const { organisation } = this.props.organisationStore.values;
 
@@ -259,6 +261,12 @@ class SearchPage extends PureComponent {
         {displayedHit && (
           <Suspense fallback={<></>}>
             <ProfileLayout visible={visible} handleClose={this.handleCloseProfile} transitionDuration={transitionDuration} />
+          </Suspense>
+        )}
+
+        {showAskForHelp && (
+          <Suspense fallback={<CircularProgress color='secondary' />}>
+            <AskForHelp isOpen={true} />
           </Suspense>
         )}
 
