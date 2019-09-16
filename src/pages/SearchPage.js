@@ -256,7 +256,11 @@ class SearchPage extends PureComponent {
           )}
           {organisation && (organisation.tag !== 'quecbio' && organisation.tag !== 'team') && this.props.authStore.isAuth() && (
             <Suspense fallback={<></>}>
-              <Intercom appID={"k7gprnv3"} user_id={this.props.userStore.values.currentUser._id} />
+              <Intercom 
+                appID={"k7gprnv3"} 
+                user_id={this.props.userStore.values.currentUser._id}
+                name={this.props.recordStore.values.record ? this.props.recordStore.values.record.name : null}  
+              />
             </Suspense>
           )}
         </main>
@@ -289,7 +293,7 @@ class SearchPage extends PureComponent {
 
 SearchPage = withSearchManagement(withProfileManagement(SearchPage));
 
-export default inject('commonStore', 'organisationStore', 'authStore', 'userStore')(
+export default inject('commonStore', 'organisationStore', 'authStore', 'userStore', 'recordStore')(
   observer(
     withWidth()(withStyles(styles)(SearchPage))
   )
