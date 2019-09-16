@@ -18,6 +18,21 @@ export const styles = theme => ({
       boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'
     }
   },
+  personMode: {
+    backgroundColor: theme.palette.primary.dark,
+    '& p': {
+      color: '#FFFFFF !important',
+    },
+    '& svg': {
+      color: '#FFFFFF !important',
+    },
+    '& img': {
+      borderRadius: '50%',
+    },
+    '&:hover': {
+      boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
+    }
+  },
   cardMode: {
     backgroundColor: '#FFFFFF',
     color: theme.palette.primary.dark,

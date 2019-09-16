@@ -128,18 +128,19 @@ class SearchResults extends React.Component {
         else if (content.nbPages > 1) this.setState({ hideShowMore: false });
 
         if (page) {
-          this.setState({ hits: this.state.hits.concat(content.hits) }, this.endTask());
+          this.setState({ hits: this.state.hits.concat(content.hits) }, this.endHitsLoad());
         } else {
           let contentHits = Array.from(content.hits);
           if (this.state.filterRequest === 'type:person' && !this.state.queryRequest) {
             contentHits = shuffleArray(contentHits);
           }
-          this.setState({ hits: contentHits }, this.endTask());
+          this.setState({ hits: contentHits }, this.endHitsLoad());
         }
       }).catch((e) => { this.setState({ hits: [] }) });
   }
 
-  endTask = () => {
+  endHitsLoad = () => {
+    this.props.commonStore.searchResults = this.state.hits;
     this.setState({ loadInProgress: false });
   }
 
