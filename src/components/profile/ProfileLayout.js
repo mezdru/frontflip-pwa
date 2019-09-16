@@ -26,7 +26,7 @@ class ProfileLayout extends React.Component {
 
         <Grid container className={classes.root} alignContent="flex-start">
 
-          {(window.location.pathname !== rootUrl + '/' + this.props.profileContext.getProp('tag')) && (
+          {(this.props.profileContext.getProp('tag') &&  window.location.pathname !== rootUrl + '/' + this.props.profileContext.getProp('tag')) && (
             <Redirect to={rootUrl + '/' + this.props.profileContext.getProp('tag')} />
           )}
 
