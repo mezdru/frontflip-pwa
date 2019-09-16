@@ -14,6 +14,7 @@ import './SearchPageStyle.css';
 import SearchButton from '../components/search/SearchButton';
 import withSearchManagement from '../hoc/SearchManagement.hoc';
 import { withProfileManagement } from '../hoc/profile/withProfileManagement';
+import PopupLayout from '../components/utils/popup/PopupLayout';
 
 const OnboardCongratulation = React.lazy(() => import('../components/utils/popup/OnboardCongratulation'));
 const PromptIOsInstall = React.lazy(() => import('../components/utils/popup/PromptIOsInstall'));
@@ -266,7 +267,7 @@ class SearchPage extends PureComponent {
 
         {showAskForHelp && (
           <Suspense fallback={<CircularProgress color='secondary' />}>
-            <AskForHelp isOpen={true} />
+            <PopupLayout title='test' isOpen={true} />
           </Suspense>
         )}
 

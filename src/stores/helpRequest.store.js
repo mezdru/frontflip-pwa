@@ -5,7 +5,15 @@ class HelpRequestStore {
   inProgress = false;
   errors = null;
   values = {
-    helpRequest: null
+    helpRequest: {
+      recipients: [],
+      organisation: '',
+      sender: '',
+      message: 'Message',
+      results: 0,
+      query: '',
+      tags: []
+    }
   };
 
   setHelpRequest(hr) {
@@ -38,7 +46,7 @@ decorate(HelpRequestStore, {
   errors: observable,
   values: observable,
   postHelpRequest: action,
-  setHelpRequest: action
+  setHelpRequest: action,
 });
 
 export default new HelpRequestStore();

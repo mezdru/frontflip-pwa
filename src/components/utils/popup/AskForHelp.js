@@ -14,7 +14,7 @@ import profileService from '../../../services/profile.service';
 
 const styles = theme => ({
   root: {
-    textAlign: 'center',
+    textAlign: 'left',
   },
   picture: {
     width: '60%',
@@ -25,7 +25,7 @@ const styles = theme => ({
     margin: 0,
     padding:0,
     paddingTop: 16,
-    textAlign: 'center'
+    textAlign: 'left'
   },
   titleEmoji: {
     marginLeft: 16
@@ -43,6 +43,9 @@ const styles = theme => ({
     justifyContent: 'center', 
     margin: 0,
     padding: 24,
+  },
+  textarea: {
+    marginTop: 16,
   }
 });
 
@@ -53,28 +56,64 @@ function Transition(props) {
 class AskForHelp extends React.Component {
 
   state = {
-    isOpen: this.props.isOpen
+    isOpen: this.props.isOpen,
+    message: null,
+    recipients: this.props.commonStore.searchResults
   }
 
   componentDidMount() {
     observe(this.props.commonStore, 'searchResults', (change) => {
       console.log(change)
-      this.forceUpdate();
+      this.setState({recipients: change.newValue});
     });
   }
 
-  handleClose = () => {
-    this.setState({isOpen: false});
-  }
+  handleClose = () => this.setState({isOpen: false});
 
   handleSend = () => {
 
+    let helpRequest = {
+      organisation: this.props.organisationStore.values.organisation._id,
+      sender: this.props.recordStore.values.record._id,
+      recipients: this.buildRecipientsArray(this.props.commonStore.searchResults),
+      results: this.props.commonStore.searchResultsCount,
+      tags: this.buildTagsArray(this.props.commonStore.searchFilters),
+      service: 'email'
+    }
+
+    this.props.helpRequestStore.setHelpRequest(helpRequest);
+    this.props.helpRequestStore.postHelpRequest()
+    .then(hr => {
+      this.setState({isOpen: false});
+    });
+
+  }
+
+  buildRecipientsArray(recipients) {
+    if(!recipients) return [];
+    return recipients.map(recipient => recipient._id || recipient.objectID);
+  }
+
+  buildTagsArray(filters) {
+    if(!filters) return [];
+    return filters.map(filter => filter.tag);
+  }
+
+  handleMessageChange = (e) => this.setState({message: e.target.value});
+
+  handleRemoveRecipient = (rId) => {
+    let recipients = this.state.recipients;
+    let indexToRemove = recipients.findIndex(recipient => (recipient._id  || recipient.objectID) === rId);
+    recipients.splice(indexToRemove, 1);
+    this.setState({recipients: recipients});
   }
 
   render() {
-    const { isOpen } = this.state;
+    const { isOpen, message } = this.state;
     const {classes} = this.props;
     const { searchResults, searchResultsCount, searchFilters } = this.props.commonStore;
+    const {helpRequest} = this.props.helpRequestStore.values;
+
     console.log(JSON.parse(JSON.stringify(searchResults)))
     return (
       <React.Fragment>
@@ -94,26 +133,26 @@ class AskForHelp extends React.Component {
               <FormattedMessage id="askForHelp.popup.title" />
             </Typography>
             <DialogContentText id="alert-dialog-slide-description">
-              <Typography variant="h6" className={classes.text}>
+              <Typography variant="h6" className={classes.title}>
                 <FormattedMessage id="askForHelp.popup.subtitle" />
               </Typography>
               {searchResults.map( (hit, index) => 
                 <Wings  
                   label={hit.name || hit.tag} 
                   src={profileService.getPicturePath(hit.picture) || profileService.getDefaultPictureByType(hit.type)} 
-                  key={hit._id || hit.objectID || index} 
+                  key={hit._id || hit.objectID} 
                   mode="person" 
-                  onDelete={() => {console.log('REMOVE')}} 
+                  onDelete={() => this.handleRemoveRecipient(hit._id || hit.objectID)} 
                 />
               )}
-              <br/><br/>
               <TextField
-                label="Your message"
+                className={classes.textarea}
+                label="Explain your needs here"
+                fullWidth
                 multiline
-                rowsMax={10}
-                value={""}
-                onChange={() => {}}
-                helperText={"Your message here."}
+                rows={8}
+                value={message}
+                onChange={this.handleMessageChange}
                 variant="outlined"
               />
 
@@ -130,7 +169,7 @@ class AskForHelp extends React.Component {
   }
 }
 
-export default inject('commonStore', 'helpRequestStore')(
+export default inject('commonStore', 'helpRequestStore', 'recordStore', 'organisationStore')(
   observer(
     withStyles(styles, { withTheme: true })(
       AskForHelp

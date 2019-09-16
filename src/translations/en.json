@@ -108,5 +108,8 @@
   "profile.activity.empty": "No activity yet",
   "profile.filter.title": "Filter",
   "profile.filter.default": "No filter",
-  "card.moreWings": "... {counter} more"
+  "card.moreWings": "... {counter} more",
+  "askForHelp.popup.title": "Ask for Help",
+  "askForHelp.popup.subtitle": "You don't know who to ask for help? Ask several persons and find an answer quickly!",
+  "askForHelp.popup.send": "Send my request"
 }
