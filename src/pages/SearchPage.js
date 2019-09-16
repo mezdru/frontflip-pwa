@@ -100,7 +100,7 @@ class SearchPage extends PureComponent {
     var searchField = document.getElementById('search-container');
     var headerButton = document.getElementById('header-button');
 
-    if(!searchField || !headerButton) return;
+    if (!searchField || !headerButton) return;
 
     if (this.props.width === 'xs' && isInSearch && this.state.headerPosition === 'INITIAL') {
       searchField.style.paddingLeft = 48 + 'px';
@@ -254,6 +254,11 @@ class SearchPage extends PureComponent {
               <Intercom appID={"k7gprnv3"} />
             </Suspense>
           )}
+          {organisation && (organisation.tag !== 'quecbio' && organisation.tag !== 'team') && this.props.authStore.isAuth() && (
+            <Suspense fallback={<></>}>
+              <Intercom appID={"k7gprnv3"} user_id={this.props.userStore.values.currentUser._id} />
+            </Suspense>
+          )}
         </main>
 
         {displayedHit && (
@@ -284,7 +289,7 @@ class SearchPage extends PureComponent {
 
 SearchPage = withSearchManagement(withProfileManagement(SearchPage));
 
-export default inject('commonStore', 'organisationStore')(
+export default inject('commonStore', 'organisationStore', 'authStore', 'userStore')(
   observer(
     withWidth()(withStyles(styles)(SearchPage))
   )
