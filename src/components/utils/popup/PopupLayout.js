@@ -7,17 +7,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Slide from '@material-ui/core/Slide';
 import { withStyles } from '@material-ui/core/styles';
-import { FormattedMessage } from 'react-intl';
-import { observe } from 'mobx';
-import Wings from '../wing/Wings';
-import profileService from '../../../services/profile.service';
 
-const styles = theme => {
-  console.log(theme); 
-  return {
-  root: {
+const styles = theme => ({
+  content: {
     overflow: 'hidden',
-    padding: theme.spacing.unit*4
+    padding: theme.spacing.unit*2 + 'px !important'
   },
   picture: {
     width: '60%',
@@ -45,12 +39,12 @@ const styles = theme => {
   actions: {
     justifyContent: 'center',
     margin: 0,
-    padding: 24,
+    padding: theme.spacing.unit*2,
   },
   textarea: {
     marginTop: 16,
   }
-}};
+});
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -69,11 +63,10 @@ class PopupLayout extends React.Component {
         fullWidth
         maxWidth={'sm'}
         onClose={this.props.onClose}
-        className={classes.root}
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogContent className={classes.root} >
+        <DialogContent className={classes.content} >
           {this.props.title}
           <DialogContentText id="alert-dialog-slide-description">
             {this.props.children}

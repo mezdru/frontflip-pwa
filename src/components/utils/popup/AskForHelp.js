@@ -11,6 +11,7 @@ import { FormattedMessage } from 'react-intl';
 import { observe } from 'mobx';
 import Wings from '../wing/Wings';
 import profileService from '../../../services/profile.service';
+import PopupLayout from './PopupLayout';
 
 const styles = theme => ({
   root: {
@@ -23,7 +24,7 @@ const styles = theme => ({
   },
   text: {
     margin: 0,
-    padding:0,
+    padding: 0,
     paddingTop: 16,
     textAlign: 'left'
   },
@@ -32,7 +33,7 @@ const styles = theme => ({
   },
   title: {
     textAlign: 'center',
-    [theme.breakpoints.down('sm')] : {
+    [theme.breakpoints.down('sm')]: {
       fontSize: '4.8rem',
     },
     [theme.breakpoints.down('xs')]: {
@@ -40,7 +41,7 @@ const styles = theme => ({
     }
   },
   actions: {
-    justifyContent: 'center', 
+    justifyContent: 'center',
     margin: 0,
     padding: 24,
   },
@@ -64,11 +65,11 @@ class AskForHelp extends React.Component {
   componentDidMount() {
     observe(this.props.commonStore, 'searchResults', (change) => {
       console.log(change)
-      this.setState({recipients: change.newValue});
+      this.setState({ recipients: change.newValue });
     });
   }
 
-  handleClose = () => this.setState({isOpen: false});
+  handleClose = () => this.setState({ isOpen: false });
 
   handleSend = () => {
 
@@ -83,89 +84,77 @@ class AskForHelp extends React.Component {
 
     this.props.helpRequestStore.setHelpRequest(helpRequest);
     this.props.helpRequestStore.postHelpRequest()
-    .then(hr => {
-      this.setState({isOpen: false});
-    });
+      .then(hr => {
+        this.setState({ isOpen: false });
+      });
 
   }
 
   buildRecipientsArray(recipients) {
-    if(!recipients) return [];
+    if (!recipients) return [];
     return recipients.map(recipient => recipient._id || recipient.objectID);
   }
 
   buildTagsArray(filters) {
-    if(!filters) return [];
+    if (!filters) return [];
     return filters.map(filter => filter.tag);
   }
 
-  handleMessageChange = (e) => this.setState({message: e.target.value});
+  handleMessageChange = (e) => this.setState({ message: e.target.value });
 
   handleRemoveRecipient = (rId) => {
     let recipients = this.state.recipients;
-    let indexToRemove = recipients.findIndex(recipient => (recipient._id  || recipient.objectID) === rId);
+    let indexToRemove = recipients.findIndex(recipient => (recipient._id || recipient.objectID) === rId);
     recipients.splice(indexToRemove, 1);
-    this.setState({recipients: recipients});
+    this.setState({ recipients: recipients });
   }
 
   render() {
     const { isOpen, message } = this.state;
-    const {classes} = this.props;
+    const { classes } = this.props;
     const { searchResults, searchResultsCount, searchFilters } = this.props.commonStore;
-    const {helpRequest} = this.props.helpRequestStore.values;
+    const { helpRequest } = this.props.helpRequestStore.values;
 
     console.log(JSON.parse(JSON.stringify(searchResults)))
-    return (
-      <React.Fragment>
-        <Dialog
-          open={isOpen}
-          TransitionComponent={Transition}
-          keepMounted
-          fullWidth
-          maxWidth={'sm'}
-          onClose={this.handleClose}
-          className={classes.root}
-          aria-labelledby="alert-dialog-slide-title"
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogContent style={{ overflow: 'hidden' }} >
-            <Typography variant="h1" className={classes.title}>
-              <FormattedMessage id="askForHelp.popup.title" />
-            </Typography>
-            <DialogContentText id="alert-dialog-slide-description">
-              <Typography variant="h6" className={classes.title}>
-                <FormattedMessage id="askForHelp.popup.subtitle" />
-              </Typography>
-              {searchResults.map( (hit, index) => 
-                <Wings  
-                  label={hit.name || hit.tag} 
-                  src={profileService.getPicturePath(hit.picture) || profileService.getDefaultPictureByType(hit.type)} 
-                  key={hit._id || hit.objectID} 
-                  mode="person" 
-                  onDelete={() => this.handleRemoveRecipient(hit._id || hit.objectID)} 
-                />
-              )}
-              <TextField
-                className={classes.textarea}
-                label="Explain your needs here"
-                fullWidth
-                multiline
-                rows={8}
-                value={message}
-                onChange={this.handleMessageChange}
-                variant="outlined"
-              />
 
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions className={classes.actions}>
-            <Button onClick={this.handleSend} color="secondary">
-              <FormattedMessage id="askForHelp.popup.send" />
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </React.Fragment>
-    );
+    return (
+      <PopupLayout
+        isOpen={isOpen}
+        title={
+          <Typography variant="h1" className={classes.title}>
+            <FormattedMessage id="askForHelp.popup.title" />
+          </Typography>
+        }
+        actions={
+          <Button onClick={this.handleSend} color="secondary">
+            <FormattedMessage id="askForHelp.popup.send" />
+          </Button>
+        }
+      >
+        <Typography variant="h6" className={classes.title}>
+          <FormattedMessage id="askForHelp.popup.subtitle" />
+        </Typography>
+        {searchResults.map((hit, index) =>
+          <Wings
+            label={hit.name || hit.tag}
+            src={profileService.getPicturePath(hit.picture) || profileService.getDefaultPictureByType(hit.type)}
+            key={hit._id || hit.objectID}
+            mode="person"
+            onDelete={() => this.handleRemoveRecipient(hit._id || hit.objectID)}
+          />
+        )}
+        <TextField
+          className={classes.textarea}
+          label="Explain your needs here"
+          fullWidth
+          multiline
+          rows={8}
+          value={message}
+          onChange={this.handleMessageChange}
+          variant="outlined"
+        />
+      </PopupLayout >
+    )
   }
 }
 

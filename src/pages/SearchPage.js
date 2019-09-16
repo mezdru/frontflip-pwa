@@ -267,7 +267,7 @@ class SearchPage extends PureComponent {
 
         {showAskForHelp && (
           <Suspense fallback={<CircularProgress color='secondary' />}>
-            <PopupLayout title='test' isOpen={true} />
+            <AskForHelp isOpen={true} />
           </Suspense>
         )}
 
