@@ -162,7 +162,7 @@ class HeaderDrawer extends Component {
                   {currentUser.superadmin && (
                     <React.Fragment>
                       <Divider className={classes.divider} />
-                      <ListItem button component={Link} to={'/' + locale + '/' + organisation.tag + '/onboard'}>
+                      <ListItem button component="a" href={'/' + locale + '/' + organisation.tag + '/onboard'}>
                         <ListItemText primary={"Onboard"} />
                       </ListItem>
                     </React.Fragment>
