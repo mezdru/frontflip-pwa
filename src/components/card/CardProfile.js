@@ -39,6 +39,10 @@ class CardProfile extends React.PureComponent {
     var clapEntry = hit.hashtags_claps.find(elt => elt.hashtag === hashtagId);
     return clapEntry ? clapEntry.claps : null;
   }
+
+  isHidden = (tag) => {
+    return (this.props.commonStore.hiddenWings.find((hiddenWing => hiddenWing.tag === tag)));
+  }
   
   render() {
     const {classes, hit, handleDisplayProfile} = this.props;
@@ -100,7 +104,7 @@ class CardProfile extends React.PureComponent {
           <CardContent style={{paddingBottom: 0}}>
             <Grid container className={classes.wings}>
               {hit.hashtags && hit.hashtags.map((hashtag, i) => {
-                if(i >= WINGS_DISPLAYED) return null;
+                if(i >= WINGS_DISPLAYED || this.isHidden(hashtag.tag)) return null;
                 let displayedName = ProfileService.getWingDisplayedName(hashtag, locale);
                 let claps = this.getClaps(hit, hashtag._id);
                 return (
