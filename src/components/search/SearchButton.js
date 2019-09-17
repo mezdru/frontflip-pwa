@@ -14,7 +14,7 @@ const styles = theme => ({
     margin: 'auto',
     backgroundColor: theme.palette.primary.dark,
     borderRadius: 4,
-    width: 100,
+    width: 150,
     padding: 16,
     textAlign: 'center',
     boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
