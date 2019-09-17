@@ -1,11 +1,6 @@
 import React from 'react';
 import { inject, observer } from "mobx-react";
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import Slide from '@material-ui/core/Slide';
 import { withStyles, Typography, TextField } from '@material-ui/core';
 import { FormattedMessage } from 'react-intl';
 import { observe } from 'mobx';
@@ -14,45 +9,27 @@ import profileService from '../../../services/profile.service';
 import PopupLayout from './PopupLayout';
 
 const styles = theme => ({
-  root: {
-    textAlign: 'left',
-  },
-  picture: {
-    width: '60%',
-    height: 'auto',
-    marginBottom: 40,
-  },
   text: {
     margin: 0,
     padding: 0,
-    paddingTop: 16,
+    paddingTop: theme.spacing.unit * 2,
     textAlign: 'left'
-  },
-  titleEmoji: {
-    marginLeft: 16
   },
   title: {
     textAlign: 'center',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '4.8rem',
-    },
-    [theme.breakpoints.down('xs')]: {
-      fontSize: '3rem',
-    }
-  },
-  actions: {
-    justifyContent: 'center',
-    margin: 0,
-    padding: 24,
   },
   textarea: {
-    marginTop: 16,
+    marginTop: theme.spacing.unit * 2,
+    '& textarea': {
+      lineHeight: 1.5,
+      fontSize: '1rem',
+    }
+  },
+  recipients: {
+    height: 180,
+    overflowY: 'auto'
   }
 });
-
-function Transition(props) {
-  return <Slide direction="up" {...props} />;
-}
 
 class AskForHelp extends React.Component {
 
@@ -131,28 +108,36 @@ class AskForHelp extends React.Component {
           </Button>
         }
       >
+
         <Typography variant="h6" className={classes.title}>
           <FormattedMessage id="askForHelp.popup.subtitle" />
         </Typography>
-        {searchResults.map((hit, index) =>
-          <Wings
-            label={hit.name || hit.tag}
-            src={profileService.getPicturePath(hit.picture) || profileService.getDefaultPictureByType(hit.type)}
-            key={hit._id || hit.objectID}
-            mode="person"
-            onDelete={() => this.handleRemoveRecipient(hit._id || hit.objectID)}
-          />
-        )}
+
+        <div className={classes.recipients}>
+          {searchResults.map((hit, index) =>
+            <Wings
+              label={hit.name || hit.tag}
+              src={profileService.getPicturePath(hit.picture) || profileService.getDefaultPictureByType(hit.type)}
+              key={hit._id || hit.objectID}
+              mode="person"
+              onDelete={() => this.handleRemoveRecipient(hit._id || hit.objectID)}
+            />
+          )}
+        </div>
+
         <TextField
           className={classes.textarea}
           label="Explain your needs here"
           fullWidth
           multiline
-          rows={8}
+          rows={5}
+          maxRows={10}
+          margin="none"
           value={message}
           onChange={this.handleMessageChange}
           variant="outlined"
         />
+
       </PopupLayout >
     )
   }

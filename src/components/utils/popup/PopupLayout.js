@@ -1,6 +1,4 @@
 import React from 'react';
-import { inject, observer } from "mobx-react";
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -13,36 +11,10 @@ const styles = theme => ({
     overflow: 'hidden',
     padding: theme.spacing.unit*2 + 'px !important'
   },
-  picture: {
-    width: '60%',
-    height: 'auto',
-    marginBottom: 40,
-  },
-  text: {
-    margin: 0,
-    padding: 0,
-    paddingTop: 16,
-    textAlign: 'left'
-  },
-  titleEmoji: {
-    marginLeft: 16
-  },
-  title: {
-    textAlign: 'center',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '4.8rem',
-    },
-    [theme.breakpoints.down('xs')]: {
-      fontSize: '3rem',
-    }
-  },
   actions: {
     justifyContent: 'center',
     margin: 0,
     padding: theme.spacing.unit*2,
-  },
-  textarea: {
-    marginTop: 16,
   }
 });
 
