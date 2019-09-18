@@ -75,8 +75,6 @@ class ProfileProvider extends React.Component {
         ProfileService.makeHightlighted(record);
         ProfileService.orderHashtags(record);
 
-        console.log('build wings by families');
-
         this.setState({ wingzyRecord: record, isEditable: this.canEdit(record) }, this.buildWingsByFamilies) ;
       }).catch((e) => {
         return;

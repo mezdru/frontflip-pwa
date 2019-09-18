@@ -5,7 +5,6 @@ import ProfileService from '../../services/profile.service';
 import { inject, observer } from 'mobx-react';
 import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 import { observe } from 'mobx';
-import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
 const styles = theme => ({
@@ -67,12 +66,9 @@ class ProfileWings extends React.PureComponent {
     const { isEditable, wingsByFamilies } = this.props.profileContext;
     const { locale } = this.props.commonStore;
     const {organisation} = this.props.organisationStore.values;
-    var wings = profileContext.getProp('hashtags');
-    console.log(wingsByFamilies)
 
     return (
       <div className={classes.root} >
-
         {wingsByFamilies && wingsByFamilies.length > 0 && wingsByFamilies.map((wbf, index) => {
           if(wbf.wings.length === 0) return null;
           return(
@@ -90,8 +86,7 @@ class ProfileWings extends React.PureComponent {
               })}
             </div>
           );
-        })} 
-
+        })}
 
         {isEditable && (
           <a href={"/" + locale + "/" + organisation.tag + "/onboard/wings/edit/" + profileContext.getProp('_id')} 
