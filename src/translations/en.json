@@ -111,5 +111,9 @@
   "card.moreWings": "... {counter} more",
   "askForHelp.popup.title": "Ask for Help",
   "askForHelp.popup.subtitle": "You don't know who to ask for help? Ask several persons and find an answer quickly!",
-  "askForHelp.popup.send": "Send my request"
+  "askForHelp.popup.send": "Send my request",
+  "askForHelp.popup.success": "We have sent your request! Please check your e-mail box to know if someone answered you.",
+  "askForHelp.popup.error": "There was an error, please retry in a few moments",
+  "askForHelp.popup.close": "Close",
+  "askForHelp.popup.missingMessage": "You must provide a message to explain your needs to your coworkers."
 }

@@ -118,11 +118,13 @@ class SearchResults extends React.Component {
   fetchHits = (filters, query, facetFilters, page) => {
     AlgoliaService.fetchHits(filters, query, facetFilters, page, true, 5)
       .then((content) => {
+        console.log('Get results from Algolia for: ', filters);
 
         if ((!content || !content.hits || content.hits.length === 0) && (!page || page === 0)) this.setState({ showNoResult: true, hideShowMore: true });
         else this.setState({ showNoResult: false });
 
         this.props.commonStore.searchResultsCount = content.nbHits;
+        console.log('Current results number: ', content.nbHits);
 
         if (content.page >= (content.nbPages - 1)) this.setState({ hideShowMore: true });
         else if (content.nbPages > 1) this.setState({ hideShowMore: false });
@@ -140,6 +142,7 @@ class SearchResults extends React.Component {
   }
 
   endHitsLoad = () => {
+    console.log('UPDATE search results', this.state.hits);
     this.props.commonStore.searchResults = this.state.hits;
     this.setState({ loadInProgress: false });
   }

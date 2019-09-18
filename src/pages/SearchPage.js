@@ -1,5 +1,5 @@
 import React, { Suspense, PureComponent } from 'react'
-import { withStyles, Grid } from '@material-ui/core';
+import { withStyles, Grid, Fab } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import withWidth from '@material-ui/core/withWidth';
 import ReactGA from 'react-ga';
@@ -15,6 +15,8 @@ import SearchButton from '../components/search/SearchButton';
 import withSearchManagement from '../hoc/SearchManagement.hoc';
 import { withProfileManagement } from '../hoc/profile/withProfileManagement';
 import PopupLayout from '../components/utils/popup/PopupLayout';
+import { LiveHelp } from '@material-ui/icons';
+import AskForHelpFab from '../components/utils/buttons/AskForHelpFab';
 
 const OnboardCongratulation = React.lazy(() => import('../components/utils/popup/OnboardCongratulation'));
 const PromptIOsInstall = React.lazy(() => import('../components/utils/popup/PromptIOsInstall'));
@@ -45,7 +47,7 @@ class SearchPage extends PureComponent {
       headerPosition: 'INITIAL',
       visible: (this.getAskedHit() ? true : false),
       transitionDuration: 800,
-      showAskForHelp: true
+      showAskForHelp: false
     };
   }
 
@@ -180,6 +182,10 @@ class SearchPage extends PureComponent {
     }
   }
 
+  handleDisplayAskForHelp = () => {
+    this.setState({showAskForHelp: false}, () => {this.setState({showAskForHelp: true})});
+  }
+
   handleDisplayProfile = (e, profileRecord) => {
     ReactGA.event({ category: 'User', action: 'Display profile' });
     this.props.profileContext.setProfileData(profileRecord);
@@ -265,11 +271,11 @@ class SearchPage extends PureComponent {
           </Suspense>
         )}
 
-        {showAskForHelp && (
+        {/* {showAskForHelp && ( */}
           <Suspense fallback={<CircularProgress color='secondary' />}>
-            <AskForHelp isOpen={true} />
+            <AskForHelp isOpen={showAskForHelp} />
           </Suspense>
-        )}
+        {/* )} */}
 
         {showCongratulation && (
           <Suspense fallback={<CircularProgress color='secondary' />}>
@@ -282,6 +288,8 @@ class SearchPage extends PureComponent {
             <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} handleDisplayProfile={this.handleDisplayProfile} />
           </Suspense>
         )}
+
+        <AskForHelpFab className={classes.askForHelpButton} onClick={this.handleDisplayAskForHelp}/>
 
         <Suspense fallback={<></>}>
           <PromptIOsInstall />

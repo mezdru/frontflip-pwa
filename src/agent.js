@@ -280,6 +280,10 @@ const Email = {
         invitationUrl: invitationUrl
       }
     ),
+  sendHelpRequest: (hrId) =>
+    requests.post(
+      API_ROOT + '/api/emails/helpRequest/' + hrId
+    )
 }
 
 const Invitation = {

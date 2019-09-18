@@ -23,5 +23,11 @@ export const styles = theme => ({
     left: 0,
     background: 'rgb(0,0,0)',
     opacity: 0,
+  },
+  askForHelpButton: {
+    position: 'fixed',
+    top: 16,
+    right: 16,
+    zIndex: 2
   }
 });
