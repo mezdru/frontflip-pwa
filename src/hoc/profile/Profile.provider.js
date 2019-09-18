@@ -15,7 +15,8 @@ class ProfileProvider extends React.Component {
       setProfileData: this.setProfileData,
       isWingsDisplayed: this.isWingsDisplayed,
       getProp: this.getProp,
-      getBaseUrl: this.getBaseUrl
+      getBaseUrl: this.getBaseUrl,
+      wingsByFamilies: []
     };
   }
 
@@ -74,7 +75,9 @@ class ProfileProvider extends React.Component {
         ProfileService.makeHightlighted(record);
         ProfileService.orderHashtags(record);
 
-        this.setState({ wingzyRecord: record, isEditable: this.canEdit(record) });
+        console.log('build wings by families');
+
+        this.setState({ wingzyRecord: record, isEditable: this.canEdit(record) }, this.buildWingsByFamilies) ;
       }).catch((e) => {
         return;
       });
@@ -88,9 +91,34 @@ class ProfileProvider extends React.Component {
     else return false;
   }
 
-  // Nothing to do here, it's a common method
+  //@todo Nothing to do here, it's a common method
   getBaseUrl = () => {
     return '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag;
+  }
+
+  /**
+   * @description Create an array of link between : Family and Profile Wings
+   */
+  buildWingsByFamilies = () => {
+    let organisation = this.props.organisationStore.values.organisation;
+    let wingsByFamilies = [];
+    let otherWings = this.getProp('hashtags');
+    let allWings = this.getProp('hashtags');
+
+    organisation.featuredWingsFamily.forEach(family => {
+      let familyWings = [];
+      allWings.map( (wing, index) => {
+        if(wing.hashtags.find(hashtag => (hashtag._id || hashtag) === family._id)) {
+          familyWings.push(wing);
+          if(otherWings[index]._id === wing._id) otherWings.splice(index, 1);
+        }
+      });
+      wingsByFamilies.push({family: family, wings: familyWings});
+    });
+
+    wingsByFamilies.push({family: {name: 'Others'}, wings: otherWings});
+
+    this.setState({wingsByFamilies: wingsByFamilies});
   }
 
   render() {
