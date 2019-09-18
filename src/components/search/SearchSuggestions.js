@@ -221,9 +221,6 @@ class SearchSuggestions extends React.Component {
         <div className={classes.suggestionsContainer} id="search-suggestions-container">
 
           {facetHits.map((item, i) => {
-            let indexOfItem = facetHits.findIndex(hit => (hit.tag || hit.value) === (item.tag || item.value) );
-            if(indexOfItem < i) return null; // Already displayed
-
             let displayedName = ProfileService.getWingDisplayedName(item, locale);
 
             if(!displayedName) console.log('No displayedName for the Record: ', item);
