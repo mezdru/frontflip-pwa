@@ -35,7 +35,7 @@ class ErrorBoundary extends React.Component {
     const {classes} = this.props;
     if (this.state.hasError) {
       // You can render any custom fallback UI
-      return <p className={classes.errorBox} >❌ Something went wrong.</p>;
+      return <p className={classes.errorBox} ><span role="img" aria-label="Red cross">❌</span> Something went wrong.</p>;
     }
 
     return this.props.children; 

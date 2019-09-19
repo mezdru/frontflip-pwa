@@ -51,6 +51,7 @@
   },
   "browserslist": [],
   "devDependencies": {
+    "eslint-plugin-react": "^7.14.3",
     "workbox-cli": "^4.2.0"
   }
 }

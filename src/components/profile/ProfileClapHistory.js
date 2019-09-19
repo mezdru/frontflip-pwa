@@ -72,11 +72,11 @@ class ProfileClapHistory extends React.Component {
           }else return null;
         })}
 
-        {!lastClapHistory || lastClapHistory.length === 0 && (
+        {(!lastClapHistory || lastClapHistory.length === 0) ? (
           <Grid item container xs={12} className={classes.activity} >
             <FormattedMessage id="profile.activity.empty" />
           </Grid>
-        )}
+        ): null}
 
       </>
     );

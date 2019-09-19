@@ -195,9 +195,8 @@ class SearchPage extends PureComponent {
 
   render() {
     const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter, visible, transitionDuration } = this.state;
-    const { classes, profileTag } = this.props;
+    const { classes } = this.props;
     const { organisation } = this.props.organisationStore.values;
-    const { record } = this.props.recordStore.values;
     const { currentUser } = this.props.userStore.values;
 
     return (

@@ -165,8 +165,8 @@ class SuggestionsService {
    * @description Static : upgrade array of record data to fetch complete record data
    */
   upgradeData = async (suggestions) => {
-    suggestions = this.populateData(suggestions, bank);
     let bank = await this.syncBank(null);
+    suggestions = this.populateData(suggestions, bank);
     let query = this.formatMissingQuery(suggestions);
     if (query) {
       suggestions = await this.syncBank(query)

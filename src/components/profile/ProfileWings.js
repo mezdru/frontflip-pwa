@@ -5,7 +5,6 @@ import ProfileService from '../../services/profile.service';
 import { inject, observer } from 'mobx-react';
 import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 import { observe } from 'mobx';
-import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
 const styles = theme => ({
