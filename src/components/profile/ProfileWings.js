@@ -68,17 +68,17 @@ class ProfileWings extends React.PureComponent {
     const { classes, profileContext } = this.props;
     const { isEditable, wingsByFamilies } = this.props.profileContext;
     const { locale } = this.props.commonStore;
-    const {organisation} = this.props.organisationStore.values;
+    const { organisation } = this.props.organisationStore.values;
 
     return (
       <div className={classes.root} >
         {wingsByFamilies && wingsByFamilies.length > 0 && wingsByFamilies.map((wbf, index) => {
-          if(wbf.wings.length === 0) return null;
-          return(
+          if (wbf.wings.length === 0) return null;
+          return (
             <div key={index} className={classes.wingsFamilyContainer}>
-              {wingsByFamilies.length > 1 && (
-                <Typography variant="h3" style={{ textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.85)', marginTop: 16 }}>{wbf.family.name}</Typography>
-              )}
+              <Typography variant="h3" style={{ textTransform: 'uppercase', color: (wingsByFamilies.length > 1) ? 'rgba(255, 255, 255, 0.85)' : 'rgba(0,0,0,0)' }}>
+                {(wingsByFamilies.length > 1) ? wbf.family.name : '.'}
+              </Typography>
               {wbf.wings.map((wing, index) => {
                 let displayedName = ProfileService.getWingDisplayedName(wing, locale);
                 return (
@@ -94,8 +94,8 @@ class ProfileWings extends React.PureComponent {
         })}
 
         {isEditable && (
-          <a href={"/" + locale + "/" + organisation.tag + "/onboard/wings/edit/" + profileContext.getProp('_id')} 
-              className={classes.buttonAddWings} >
+          <a href={"/" + locale + "/" + organisation.tag + "/onboard/wings/edit/" + profileContext.getProp('_id')}
+            className={classes.buttonAddWings} >
             <FormattedMessage id="profile.addWings" />
           </a>
         )}
