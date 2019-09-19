@@ -15,8 +15,10 @@ const withScrollManagement = (ComponentToWrap) => {
           case "right":
             element.scrollLeft -= 2;
             break;
+          default:
+            return;
         }
-      }.bind(this), 5);    
+      }, 5);    
     }
 
     resetScroll = (scrollContainerId) => {

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
 import { withStyles, Chip, Hidden, IconButton } from '@material-ui/core';
 import AlgoliaService from '../../services/algolia.service';
 import { inject, observer } from 'mobx-react';

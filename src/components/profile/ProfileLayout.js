@@ -4,7 +4,6 @@ import { Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
 import ProfileThumbnail from './ProfileThumbnail';
-import ProfileService from '../../services/profile.service';
 import BannerResizable from '../utils/banner/BannerResizable';
 import ProfileWings from './ProfileWings';
 import ProfileActions from './ProfileActions';

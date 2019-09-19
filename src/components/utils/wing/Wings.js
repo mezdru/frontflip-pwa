@@ -70,7 +70,7 @@ class Wings extends React.PureComponent {
   }
 
   render() {
-    const { classes, label, src, theme, enableClap } = this.props;
+    const { classes, label, src, enableClap } = this.props;
     const { addClapCounterLocal, intervalDuration, canClap } = this.state;
     const remoteClaps = this.props.getClapCount(this.props.hashtagId) || this.props.claps;
     let claps = addClapCounterLocal + remoteClaps;

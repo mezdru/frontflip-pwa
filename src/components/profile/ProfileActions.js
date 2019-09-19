@@ -71,8 +71,8 @@ class ProfileActions extends React.PureComponent {
   }
 
   render() {
-    const { canPropose, canFilter, classes } = this.props;
-    const { isEditable, filterProfile } = this.props.profileContext;
+    const { canFilter, classes } = this.props;
+    const { isEditable } = this.props.profileContext;
     const { openEdit, openFilter, menuDropdownAnchor } = this.state;
     const actions = this.buildAction();
     const filters = this.buildFilters();

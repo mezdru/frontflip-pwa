@@ -20,9 +20,6 @@ const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 
 class HeaderDrawer extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   getPicturePath(picture) {
     if (picture && picture.path) return null;
