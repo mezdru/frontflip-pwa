@@ -2,6 +2,7 @@ import { ProfileContext } from "./Profile.context";
 import * as React from "react";
 import ProfileService from '../../services/profile.service';
 import { inject, observer } from "mobx-react";
+import { injectIntl } from "react-intl";
 
 class ProfileProvider extends React.Component {
   constructor() {
@@ -114,7 +115,7 @@ class ProfileProvider extends React.Component {
       if(familyWings.length > 0) wingsByFamilies.push({family: family, wings: familyWings});
     });
 
-    wingsByFamilies.push({family: {name: 'Others'}, wings: otherWings});
+    wingsByFamilies.push({family: {intro: this.props.intl.formatMessage({id: 'profile.others'})}, wings: otherWings});
 
     this.setState({wingsByFamilies: wingsByFamilies});
   }
@@ -135,5 +136,5 @@ class ProfileProvider extends React.Component {
 }
 
 export default inject('organisationStore', 'recordStore', 'userStore', 'commonStore', 'authStore')(
-  observer(ProfileProvider)
+  observer(injectIntl(ProfileProvider))
 );

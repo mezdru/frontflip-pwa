@@ -36,7 +36,14 @@ const styles = theme => ({
     }
   },
   wingsFamilyContainer: {
-    paddingBottom: 16
+    paddingBottom: 24
+  },
+  wingsFamilyTitle: {
+    textTransform: 'uppercase', 
+    fontSize: '0.8rem', 
+    fontWeight: 400,
+    marginLeft: 16, 
+    lineHeight: 1,
   }
 });
 
@@ -76,8 +83,8 @@ class ProfileWings extends React.PureComponent {
           if (wbf.wings.length === 0) return null;
           return (
             <div key={index} className={classes.wingsFamilyContainer}>
-              <Typography variant="h3" style={{ textTransform: 'uppercase', color: (wingsByFamilies.length > 1) ? 'rgba(255, 255, 255, 0.85)' : 'rgba(0,0,0,0)' }}>
-                {(wingsByFamilies.length > 1) ? wbf.family.name : '.'}
+              <Typography variant="body1" style={{color: (wingsByFamilies.length > 1) ? 'rgba(255, 255, 255, 1)' : 'rgba(0,0,0,0)' }} className={classes.wingsFamilyTitle}>
+                {(wingsByFamilies.length > 1) ? wbf.family.intro : '.'}
               </Typography>
               {wbf.wings.map((wing, index) => {
                 let displayedName = ProfileService.getWingDisplayedName(wing, locale);

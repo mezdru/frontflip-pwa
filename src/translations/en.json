@@ -108,5 +108,6 @@
   "profile.activity.empty": "No activity yet",
   "profile.filter.title": "Filter",
   "profile.filter.default": "No filter",
+  "profile.others":"Others",
   "card.moreWings": "... {counter} more"
 }

@@ -2,7 +2,7 @@ export const styles = theme => ({
   root: {
     padding: '6px 12px',
     cursor: 'pointer',
-    margin: '16px 8px 4px 8px',
+    margin: '16px 8px 0px 8px',
     borderRadius: 16,
     boxSizing: 'border-box',
     fontSize: '0.9125rem',

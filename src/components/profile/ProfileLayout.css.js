@@ -50,7 +50,7 @@ export const styles = {
     [theme.breakpoints.up('lg')]: {
       paddingRight: 16,
       paddingLeft: 24,
-      marginTop: -20,
+      marginTop: -13,
     }
   },
   actions: {
