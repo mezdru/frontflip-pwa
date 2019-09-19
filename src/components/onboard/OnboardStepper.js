@@ -154,7 +154,7 @@ class OnboardStepper extends React.Component {
       })
     }).catch((e) => {
       console.error(e);
-      this.props.enqueueSnackbar('Your data can\'t be saved, please check the errors', { variant: 'warning' });
+      this.props.enqueueSnackbar('Your data can\'t be saved, please contact us at contact@wingzy.com.', { variant: 'warning' });
     });
   }
 

@@ -204,8 +204,9 @@ class SearchPage extends PureComponent {
 
   render() {
     const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter, visible, transitionDuration, showAskForHelp } = this.state;
-    const { classes, profileTag } = this.props;
+    const { classes } = this.props;
     const { organisation } = this.props.organisationStore.values;
+    const { currentUser } = this.props.userStore.values;
 
     return (
       <React.Fragment>
@@ -263,6 +264,16 @@ class SearchPage extends PureComponent {
               <Intercom appID={"k7gprnv3"} />
             </Suspense>
           )}
+          {organisation && (organisation.tag !== 'quecbio' && organisation.tag !== 'team') && this.props.authStore.isAuth() && (
+            <Suspense fallback={<></>}>
+              <Intercom 
+                appID={"k7gprnv3"} 
+                user_id={this.props.userStore.values.currentUser._id}
+                name={this.props.recordStore.values.record ? this.props.recordStore.values.record.name : null}
+                email={currentUser.email ? currentUser.email.value : (currentUser.google ? currentUser.google.email : null)}
+              />
+            </Suspense>
+          )}
         </main>
 
         {displayedHit && (
@@ -301,7 +312,7 @@ class SearchPage extends PureComponent {
 
 SearchPage = withSearchManagement(withProfileManagement(SearchPage));
 
-export default inject('commonStore', 'organisationStore')(
+export default inject('commonStore', 'organisationStore', 'authStore', 'userStore', 'recordStore')(
   observer(
     withWidth()(withStyles(styles)(SearchPage))
   )

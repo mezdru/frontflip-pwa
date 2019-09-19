@@ -20,9 +20,6 @@ const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 
 class HeaderDrawer extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   getPicturePath(picture) {
     if (picture && picture.path) return null;
@@ -162,7 +159,7 @@ class HeaderDrawer extends Component {
                   {currentUser.superadmin && (
                     <React.Fragment>
                       <Divider className={classes.divider} />
-                      <ListItem button component={Link} to={'/' + locale + '/' + organisation.tag + '/onboard'}>
+                      <ListItem button component="a" href={'/' + locale + '/' + organisation.tag + '/onboard'}>
                         <ListItemText primary={"Onboard"} />
                       </ListItem>
                     </React.Fragment>

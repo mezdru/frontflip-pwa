@@ -4,7 +4,6 @@ import { Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
 import ProfileThumbnail from './ProfileThumbnail';
-import ProfileService from '../../services/profile.service';
 import BannerResizable from '../utils/banner/BannerResizable';
 import ProfileWings from './ProfileWings';
 import ProfileActions from './ProfileActions';
@@ -26,7 +25,7 @@ class ProfileLayout extends React.Component {
 
         <Grid container className={classes.root} alignContent="flex-start">
 
-          {(window.location.pathname !== rootUrl + '/' + this.props.profileContext.getProp('tag')) && (
+          {(this.props.profileContext.getProp('tag') &&  window.location.pathname !== rootUrl + '/' + this.props.profileContext.getProp('tag')) && (
             <Redirect to={rootUrl + '/' + this.props.profileContext.getProp('tag')} />
           )}
 

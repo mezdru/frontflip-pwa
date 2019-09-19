@@ -115,5 +115,6 @@
   "askForHelp.popup.success": "We have sent your request! Please check your e-mail box to know if someone answered you.",
   "askForHelp.popup.error": "There was an error, please retry in a few moments",
   "askForHelp.popup.close": "Close",
-  "askForHelp.popup.missingMessage": "You must provide a message to explain your needs to your coworkers."
+  "askForHelp.popup.missingMessage": "You must provide a message to explain your needs to your coworkers.",
+  "profile.others":"Others"
 }

@@ -81,6 +81,10 @@
       manifestLink.href = '%PUBLIC_URL%/meridiam/manifest.json';
       faviconLink.href= '%PUBLIC_URL%/meridiam/favicon.ico';
       document.title = 'Meridiam Network';
+    } else if (window.location.href.search('circularity') !== -1) {
+      manifestLink.href = '%PUBLIC_URL%/circularity/manifest.json';
+      faviconLink.href= '%PUBLIC_URL%/circularity/favicon.ico';
+      document.title = 'Circularity';
     } else {
       manifestLink.href = '%PUBLIC_URL%/manifest.json';
       faviconLink.href= '%PUBLIC_URL%/favicon.ico';

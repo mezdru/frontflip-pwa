@@ -1,11 +1,10 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core';
+import { withStyles, Typography } from '@material-ui/core';
 import Wings from '../utils/wing/Wings';
 import ProfileService from '../../services/profile.service';
 import { inject, observer } from 'mobx-react';
 import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 import { observe } from 'mobx';
-import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
 const styles = theme => ({
@@ -35,6 +34,16 @@ const styles = theme => ({
       backgroundColor: theme.palette.secondary.main,
       boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'
     }
+  },
+  wingsFamilyContainer: {
+    paddingBottom: 24
+  },
+  wingsFamilyTitle: {
+    textTransform: 'uppercase', 
+    fontSize: '0.8rem', 
+    fontWeight: 400,
+    marginLeft: 16, 
+    lineHeight: 1,
   }
 });
 
@@ -47,7 +56,8 @@ class ProfileWings extends React.PureComponent {
   }
 
   getClapsCount = (recordId) => {
-    this.props.clapStore.setCurrentRecordId(recordId || (this.props.recordStore.values.displayedRecord ? this.props.recordStore.values.displayedRecord._id : null));
+    let displayedRecord = this.props.recordStore.values.displayedRecord;
+    this.props.clapStore.setCurrentRecordId(recordId || (displayedRecord ? displayedRecord._id : null));
     this.props.clapStore.getClapCountByProfile()
       .then(clapsCount => {
         this.forceUpdate();
@@ -63,25 +73,36 @@ class ProfileWings extends React.PureComponent {
 
   render() {
     const { classes, profileContext } = this.props;
-    const { isEditable } = this.props.profileContext;
+    const { isEditable, wingsByFamilies } = this.props.profileContext;
     const { locale } = this.props.commonStore;
-    const {organisation} = this.props.organisationStore.values;
-    var wings = profileContext.getProp('hashtags');
+    const { organisation } = this.props.organisationStore.values;
 
     return (
       <div className={classes.root} >
-        {wings && wings.length > 0 && wings.map((wing, index) => {
-          let displayedName = ProfileService.getWingDisplayedName(wing, locale);
+        {wingsByFamilies && wingsByFamilies.length > 0 && wingsByFamilies.map((wbf, index) => {
+          if (wbf.wings.length === 0) return null;
           return (
-            <Wings src={ProfileService.getPicturePath(wing.picture)}
-              label={ProfileService.htmlDecode(displayedName)} key={wing._id}
-              recordId={profileContext.getProp('_id')} hashtagId={wing._id} mode={(wing.class ? 'highlight' : 'profile')}
-              enableClap={true} claps={this.getClaps(wing._id)}
-            />
-          )
+            <div key={index} className={classes.wingsFamilyContainer}>
+              <Typography variant="body1" style={{color: (wingsByFamilies.length > 1) ? 'rgba(255, 255, 255, 1)' : 'rgba(0,0,0,0)' }} className={classes.wingsFamilyTitle}>
+                {(wingsByFamilies.length > 1) ? wbf.family.intro : '.'}
+              </Typography>
+              {wbf.wings.map((wing, index) => {
+                let displayedName = ProfileService.getWingDisplayedName(wing, locale);
+                return (
+                  <Wings src={ProfileService.getPicturePath(wing.picture)}
+                    label={ProfileService.htmlDecode(displayedName)} key={wing._id}
+                    recordId={profileContext.getProp('_id')} hashtagId={wing._id} mode={(wing.class ? 'highlight' : 'profile')}
+                    enableClap={true} claps={this.getClaps(wing._id)}
+                  />
+                )
+              })}
+            </div>
+          );
         })}
+
         {isEditable && (
-          <a href={"/" + locale + "/" + organisation.tag + "/onboard/wings/edit/" + profileContext.getProp('_id')} className={classes.buttonAddWings} >
+          <a href={"/" + locale + "/" + organisation.tag + "/onboard/wings/edit/" + profileContext.getProp('_id')}
+            className={classes.buttonAddWings} >
             <FormattedMessage id="profile.addWings" />
           </a>
         )}

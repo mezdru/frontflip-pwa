@@ -71,7 +71,6 @@ class PasswordForgot extends React.Component {
   render() {
     const {successPasswordReset, emailError, email} = this.state;
     const {classes, intl} = this.props;
-    const { values } = this.props.authStore;
 
     return (
       <AuthLayout>

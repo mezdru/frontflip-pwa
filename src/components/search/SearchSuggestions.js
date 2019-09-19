@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
 import { withStyles, Chip, Hidden, IconButton } from '@material-ui/core';
 import AlgoliaService from '../../services/algolia.service';
 import { inject, observer } from 'mobx-react';
@@ -109,7 +109,11 @@ class SearchSuggestions extends React.Component {
     AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
     AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:#Wings', null, null, null)
       .then(content => {
-        this.setState({ firstWings: ((content && content.hits) ? content.hits : []) }, () => {
+
+        let firstWings = ((content && content.hits) ? content.hits : []);
+        this.props.commonStore.hiddenWings = firstWings;
+
+        this.setState({ firstWings: firstWings }, () => {
           this.fetchSuggestions(this.state.filterRequest, this.state.queryRequest);
         });
       });
@@ -217,6 +221,9 @@ class SearchSuggestions extends React.Component {
         <div className={classes.suggestionsContainer} id="search-suggestions-container">
 
           {facetHits.map((item, i) => {
+            let indexOfItem = facetHits.findIndex(hit => (hit.tag || hit.value) === (item.tag || item.value) );
+            if(indexOfItem < i) return null; // Already displayed
+
             let displayedName = ProfileService.getWingDisplayedName(item, locale);
 
             if(!displayedName) console.log('No displayedName for the Record: ', item);
