@@ -33,7 +33,6 @@ export const styles = theme => ({
     marginLeft: -2,
     paddingTop: 16,
     [theme.breakpoints.down('xs')]: {
-      fontSize: '1.2rem!important',
       marginLeft: -6,
     },
   },
