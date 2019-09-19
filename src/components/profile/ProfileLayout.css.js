@@ -43,13 +43,14 @@ export const styles = {
     marginTop: 28, // 32 - 4 (margin-bottom of one wing)
     [theme.breakpoints.up('lg')]: {
       paddingLeft: 16,
-      marginTop: -23 // Height of title
+      marginTop: -20 // Height of title
     }
   },
   wings: {
     [theme.breakpoints.up('lg')]: {
       paddingRight: 16,
-      paddingLeft: 24
+      paddingLeft: 24,
+      marginTop: -13,
     }
   },
   actions: {
