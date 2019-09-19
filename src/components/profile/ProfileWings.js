@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core';
+import { withStyles, Typography } from '@material-ui/core';
 import Wings from '../utils/wing/Wings';
 import ProfileService from '../../services/profile.service';
 import { inject, observer } from 'mobx-react';
@@ -34,6 +34,9 @@ const styles = theme => ({
       backgroundColor: theme.palette.secondary.main,
       boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'
     }
+  },
+  wingsFamilyContainer: {
+    paddingBottom: 16
   }
 });
 
@@ -72,8 +75,10 @@ class ProfileWings extends React.PureComponent {
         {wingsByFamilies && wingsByFamilies.length > 0 && wingsByFamilies.map((wbf, index) => {
           if(wbf.wings.length === 0) return null;
           return(
-            <div key={index}>
-              <p>{wbf.family.name}</p>
+            <div key={index} className={classes.wingsFamilyContainer}>
+              {wingsByFamilies.length > 1 && (
+                <Typography variant="h3" style={{ textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.85)', marginTop: 16 }}>{wbf.family.name}</Typography>
+              )}
               {wbf.wings.map((wing, index) => {
                 let displayedName = ProfileService.getWingDisplayedName(wing, locale);
                 return (

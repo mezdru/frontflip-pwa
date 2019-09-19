@@ -111,7 +111,7 @@ class ProfileProvider extends React.Component {
           if(otherWings[index]._id === wing._id) otherWings.splice(index, 1);
         }
       });
-      wingsByFamilies.push({family: family, wings: familyWings});
+      if(familyWings.length > 0) wingsByFamilies.push({family: family, wings: familyWings});
     });
 
     wingsByFamilies.push({family: {name: 'Others'}, wings: otherWings});
