@@ -17,6 +17,7 @@ import { withProfileManagement } from '../hoc/profile/withProfileManagement';
 import PopupLayout from '../components/utils/popup/PopupLayout';
 import { LiveHelp } from '@material-ui/icons';
 import AskForHelpFab from '../components/utils/buttons/AskForHelpFab';
+import MyProfileFab from '../components/utils/buttons/MyProfileFab';
 
 const OnboardCongratulation = React.lazy(() => import('../components/utils/popup/OnboardCongratulation'));
 const PromptIOsInstall = React.lazy(() => import('../components/utils/popup/PromptIOsInstall'));
@@ -188,8 +189,8 @@ class SearchPage extends PureComponent {
 
   handleDisplayProfile = (e, profileRecord) => {
     ReactGA.event({ category: 'User', action: 'Display profile' });
-    this.props.profileContext.setProfileData(profileRecord);
-    this.setState({ displayedHit: profileRecord, visible: true });
+    this.props.profileContext.setProfileData(profileRecord || this.props.recordStore.values.record);
+    this.setState({ displayedHit: profileRecord || this.props.recordStore.values.record, visible: true });
   }
 
   handleCloseProfile = () => {
@@ -207,6 +208,7 @@ class SearchPage extends PureComponent {
     const { classes } = this.props;
     const { organisation } = this.props.organisationStore.values;
     const { currentUser } = this.props.userStore.values;
+    let searchFilters = this.props.commonStore.getSearchFilters();
 
     return (
       <React.Fragment>
@@ -259,12 +261,12 @@ class SearchPage extends PureComponent {
             </div>
 
           </div>
-          {organisation && (organisation.tag === 'quecbio' || organisation.tag === 'team') && (
+          {organisation && !this.props.authStore.isAuth() && (
             <Suspense fallback={<></>}>
               <Intercom appID={"k7gprnv3"} />
             </Suspense>
           )}
-          {organisation && (organisation.tag !== 'quecbio' && organisation.tag !== 'team') && this.props.authStore.isAuth() && (
+          {/* {organisation && (organisation.tag !== 'quecbio' && organisation.tag !== 'team') && this.props.authStore.isAuth() && (
             <Suspense fallback={<></>}>
               <Intercom 
                 appID={"k7gprnv3"} 
@@ -273,7 +275,7 @@ class SearchPage extends PureComponent {
                 email={currentUser.email ? currentUser.email.value : (currentUser.google ? currentUser.google.email : null)}
               />
             </Suspense>
-          )}
+          )} */}
         </main>
 
         {displayedHit && (
@@ -300,7 +302,13 @@ class SearchPage extends PureComponent {
           </Suspense>
         )}
 
-        <AskForHelpFab className={classes.askForHelpButton} onClick={this.handleDisplayAskForHelp}/>
+{/* searchFilters isn't updated , the component doesn't update  */}
+        {searchFilters.length > 0 ? (
+          <AskForHelpFab className={classes.fab} onClick={this.handleDisplayAskForHelp}/>
+        ) : (
+          <MyProfileFab className={classes.fab} onClick={this.handleDisplayProfile} />
+        )}
+
 
         <Suspense fallback={<></>}>
           <PromptIOsInstall />

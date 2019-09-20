@@ -24,10 +24,10 @@ export const styles = theme => ({
     background: 'rgb(0,0,0)',
     opacity: 0,
   },
-  askForHelpButton: {
+  fab: {
     position: 'fixed',
-    top: 16,
+    bottom: 16,
     right: 16,
-    zIndex: 2
+    zIndex: 1000
   }
 });
