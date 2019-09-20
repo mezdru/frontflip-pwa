@@ -116,9 +116,10 @@ class SearchResults extends React.Component {
   }
 
   fetchHits = (filters, query, facetFilters, page) => {
+    console.log('>>> will fetch hits')
     AlgoliaService.fetchHits(filters, query, facetFilters, page, true, 5)
       .then((content) => {
-        console.log('Get results from Algolia for: ', filters);
+        console.log('Get ' + content.hits.length + ' results from Algolia for: ', filters);
 
         if ((!content || !content.hits || content.hits.length === 0) && (!page || page === 0)) this.setState({ showNoResult: true, hideShowMore: true });
         else this.setState({ showNoResult: false });
@@ -130,25 +131,26 @@ class SearchResults extends React.Component {
         else if (content.nbPages > 1) this.setState({ hideShowMore: false });
 
         if (page) {
-          this.setState({ hits: this.state.hits.concat(content.hits) }, this.endHitsLoad());
+          this.setState({ hits: this.state.hits.concat(content.hits) }, this.endHitsLoad);
         } else {
           let contentHits = Array.from(content.hits);
           if (this.state.filterRequest === 'type:person' && !this.state.queryRequest) {
             contentHits = shuffleArray(contentHits);
           }
-          this.setState({ hits: contentHits }, this.endHitsLoad());
+          this.setState({ hits: contentHits }, this.endHitsLoad);
         }
       }).catch((e) => { this.setState({ hits: [] }) });
   }
 
   endHitsLoad = () => {
-    console.log('UPDATE search results', this.state.hits);
+    console.log(' >>>>>>>>>>>>>>>>>>>> UPDATE search results', this.state.hits.length);
     this.props.commonStore.searchResults = this.state.hits;
     this.setState({ loadInProgress: false });
   }
 
   handleShowMore = (e) => {
     this.setState({ page: this.state.page + 1, loadInProgress: true }, () => {
+      console.log('handle show more')
       this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, this.state.page);
     });
   }
@@ -157,6 +159,8 @@ class SearchResults extends React.Component {
     const { hits, loadInProgress, hideShowMore, showNoResult } = this.state;
     const { handleDisplayProfile, classes } = this.props;
     let hitsResult = Array.from(hits);
+
+    console.log(hitsResult)
 
     return (
       <div className={classes.hitList}>

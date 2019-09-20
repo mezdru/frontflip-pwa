@@ -71,6 +71,7 @@ class SearchPage extends PureComponent {
         if ((change.newValue && !change.oldValue) || (change.newValue && change.oldValue && change.newValue.length > change.oldValue.length)) {
           this.handleShowSearchResults(200);
         }
+        this.forceUpdate();
       }
     });
 

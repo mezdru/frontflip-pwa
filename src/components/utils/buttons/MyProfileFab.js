@@ -8,7 +8,7 @@ class MyProfileFab extends React.Component {
   render() {
     return(
       <Fab color="secondary" aria-label="My profile" className={classNames(this.props.className)} onClick={this.props.onClick} >
-        <Person />
+        <Person fontSize="large" />
       </Fab>
     );
   }

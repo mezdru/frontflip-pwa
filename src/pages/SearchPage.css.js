@@ -26,8 +26,16 @@ export const styles = theme => ({
   },
   fab: {
     position: 'fixed',
-    bottom: 16,
-    right: 16,
-    zIndex: 1000
+    bottom: 32,
+    right: 32,
+    zIndex: 1000,
+    width: 64,
+    height: 64,
+    [theme.breakpoints.down('xs')]: {
+      bottom: 16,
+      right: 16,
+      width: 56,
+      height: 56,
+    }
   }
 });

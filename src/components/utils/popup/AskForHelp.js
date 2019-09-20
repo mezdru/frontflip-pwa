@@ -45,6 +45,7 @@ class AskForHelp extends React.Component {
 
   componentDidMount() {
     observe(this.props.commonStore, 'searchResults', (change) => {
+      console.log("search results update ! ");
       this.setState({ recipients: change.newValue });
     });
   }
@@ -118,6 +119,7 @@ class AskForHelp extends React.Component {
     const { searchResults } = this.props.commonStore;
 
     console.log(JSON.parse(JSON.stringify(recipients)))
+    // Probleme de sync des recipients = search results
 
     return (
       <PopupLayout
