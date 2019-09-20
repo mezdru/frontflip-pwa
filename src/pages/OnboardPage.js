@@ -68,13 +68,7 @@ class OnboardPage extends React.Component {
   }
 
   shouldComponentUpdate(nextProp, nextState) {
-    console.log('should update ? ', JSON.stringify(nextState) !== JSON.stringify(this.state));
-
     return (JSON.stringify(nextState) !== JSON.stringify(this.state))
-  }
-
-  componentDidUpdate(nextProp, nextState) {
-    console.log('>> UPDATE')
   }
 
   componentWillUnmount() {
@@ -118,7 +112,6 @@ class OnboardPage extends React.Component {
 
   render() {
     const { inOnboarding, stepNumber, steps, editMode, renderComponent } = this.state;
-    console.log('rerender')
 
     if (!renderComponent) return null;
 
