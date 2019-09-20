@@ -41,6 +41,7 @@ class OnboardPage extends React.Component {
   }
 
   componentDidMount() {
+    console.log('make step order')
     this.makeStepOrder();
     this.props.history.listen((location, action) => {
       ReactGA.pageview(window.location.pathname);
@@ -77,26 +78,24 @@ class OnboardPage extends React.Component {
 
   makeStepOrder = async () => {
     let org = this.props.organisationStore.values.organisation;
-    if(org && org.onboardSteps && org.onboardSteps.length > 0) {
-      await this.setState({steps: org.onboardSteps});
+    if (org && org.onboardSteps && org.onboardSteps.length > 0) {
+      await this.setState({ steps: org.onboardSteps });
     } else {
-      await this.setState({steps: ['intro', 'contacts', 'wings']});
-    }
-
-    if(org.featuredWingsFamily && org.featuredWingsFamily.length > 0) {
-      var steps = this.state.steps;
-      org.featuredWingsFamily.forEach(fwf => {
-        if(!steps.find(elt => elt === fwf.tag) && fwf.tag)
-          steps.push(fwf.tag);
-      });
+      var steps = ['intro', 'contacts', 'wings'];
+      if (org.featuredWingsFamily && org.featuredWingsFamily.length > 0)
+        org.featuredWingsFamily.forEach(fwf => {
+          if (!steps.find(elt => elt === fwf.tag) && fwf.tag)
+            steps.push(fwf.tag);
+        });
+      await this.setState({ steps: steps });
     }
   }
 
   populateStep = (stepLabel) => {
     this.makeStepOrder()
-    .then(() => {
-      this.setState({ stepNumber: this.state.steps.indexOf(stepLabel.replace('%23', '#')), inOnboarding: true });
-    });
+      .then(() => {
+        this.setState({ stepNumber: this.state.steps.indexOf(stepLabel.replace('%23', '#')), inOnboarding: true });
+      });
   }
 
   getRecordForUser = () => {
