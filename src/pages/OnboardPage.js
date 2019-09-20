@@ -50,7 +50,8 @@ class OnboardPage extends React.Component {
 
     this.setState({
       observer: observe(this.props.recordStore.values, 'record', (change) => {
-        this.forceUpdate();
+        // console.log('>> FORCE UPDATE');
+        // this.forceUpdate();
       })
     });
     if (this.props.match && this.props.match.params && this.props.match.params.recordId && this.props.edit) {
@@ -64,6 +65,10 @@ class OnboardPage extends React.Component {
     if (this.props.match && this.props.match.params && this.props.match.params.step) {
       this.populateStep(this.props.match.params.step);
     }
+  }
+
+  shouldComponentUpdate(nextProp, nextState) {
+    return (JSON.stringify(nextState) !== JSON.stringify(this.state))
   }
 
   componentWillUnmount() {
