@@ -30,8 +30,10 @@ class WingsSuggestions extends React.Component {
   }
 
   componentDidMount() {
-    observe(this.props.suggestionsController, '_observeUpdate', (change) => {
-      this.setState({ suggestions: this.props.suggestionsController._currentSuggestions, shouldUpdate: true });
+    this.setState({observer:
+      observe(this.props.suggestionsController, '_observeUpdate', (change) => {
+        this.setState({ suggestions: this.props.suggestionsController._currentSuggestions, shouldUpdate: true });
+      })
     });
   }
 
@@ -125,6 +127,7 @@ class WingsSuggestions extends React.Component {
 
   renderWing = (classes, hit, i) => {
     let displayedName = ProfileService.getWingDisplayedName(hit, this.props.commonStore.locale);
+    if(!this.shouldDisplaySuggestion(hit.tag)) return null;
     return (
       <li key={hit.objectID || hit._id || displayedName} className={classNames(classes.suggestion, (this.isNewSuggestions(hit.tag) ? classes.animateIn : null))} style={{ animationDelay: ((i - this.state.offsetSuggestionsIndex) * 0.05) + 's' }} id={hit.tag}>
         <Wings src={ProfileService.getPicturePath(hit.picture)}
