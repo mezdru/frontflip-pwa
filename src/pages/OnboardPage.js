@@ -41,8 +41,7 @@ class OnboardPage extends React.Component {
   }
 
   componentDidMount() {
-    console.log('make step order')
-    this.makeStepOrder();
+      this.makeStepOrder();
     this.props.history.listen((location, action) => {
       ReactGA.pageview(window.location.pathname);
       // The react router dom params are updated async
