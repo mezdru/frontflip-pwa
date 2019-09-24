@@ -93,7 +93,7 @@ class ProfileActions extends React.PureComponent {
             </Grid>
           )} */}
 
-          <Hidden mdDown>
+          {/* <Hidden mdDown>
 
             {canFilter && filters.length > 0 && (
               <Grid item style={{ position: 'relative' }}>
@@ -107,7 +107,7 @@ class ProfileActions extends React.PureComponent {
               </Grid>
             )}
 
-          </Hidden>
+          </Hidden> */}
 
           {isEditable && (
             <Grid item style={{ position: 'relative' }}>
