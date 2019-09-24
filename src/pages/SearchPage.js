@@ -78,6 +78,10 @@ class SearchPage extends PureComponent {
     if (this.state.displayedHit) this.handleDisplayProfile(null, this.state.displayedHit);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener();
+  }
+
   /**
    * @description Move search block following user scroll
    */

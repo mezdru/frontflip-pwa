@@ -52,7 +52,7 @@ class SearchField extends PureComponent {
       return this.props.intl.formatMessage({ id: 'algolia.onboard' });
     } else {
       let organisation = this.props.organisationStore.values.organisation;
-      if(organisation && organisation.intro && organisation.intro[this.props.commonStore.locale] && organisation.intro[this.props.commonStore.locale] !== '') {
+      if(organisation.intro && organisation.intro[this.props.commonStore.locale] && organisation.intro[this.props.commonStore.locale] !== '') {
         return organisation.intro[this.props.commonStore.locale];
       }
       return this.props.intl.formatMessage({ id: 'algolia.search' }, { orgName: this.props.organisationStore.values.organisation.name });
