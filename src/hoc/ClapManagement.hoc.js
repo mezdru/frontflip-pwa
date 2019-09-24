@@ -31,7 +31,7 @@ const withClapManagement = (ComponentToWrap) => {
     }
 
     canClap = (recipient) => {
-      return !(this.props.recordStore.values.record._id === (recipient));
+      return this.props.recordStore.values.record._id !== (recipient);
     }
 
     render() {

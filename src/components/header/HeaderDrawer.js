@@ -226,12 +226,11 @@ class HeaderDrawer extends Component {
 
 HeaderDrawer.propTypes = {
   classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
 };
 
 export default inject('authStore', 'organisationStore', 'recordStore', 'commonStore', 'userStore')(
   injectIntl(withRouter(observer(
-    withStyles(styles, { withTheme: true })(
+    withStyles(styles)(
       HeaderDrawer
     )
   )))

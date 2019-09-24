@@ -87,11 +87,11 @@ class OnboardContacts extends React.Component {
   setTypeInput = (type) => {
     switch (type) {
       case 'email':
-        return type = 'email';
+        return 'email';
       case 'phone': case 'landline':
-        return type = 'tel';
+        return 'tel';
       default:
-        return type = 'text';
+        return 'text';
     }
   }
   
