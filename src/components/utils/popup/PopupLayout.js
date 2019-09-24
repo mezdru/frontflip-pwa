@@ -9,6 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 const styles = theme => ({
   content: {
     overflow: 'hidden',
+    textAlign: 'center',
     padding: theme.spacing.unit*2 + 'px !important'
   },
   actions: {

@@ -31,7 +31,8 @@ const styles = theme => ({
   },
   recipients: {
     height: 180,
-    overflowY: 'auto'
+    overflowY: 'auto',
+    textAlign: 'left',
   }
 });
 

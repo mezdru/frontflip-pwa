@@ -11,6 +11,7 @@ import { inject, observer } from "mobx-react";
 import { FormattedMessage } from 'react-intl';
 
 import ColleagueImg from '../../../resources/images/colleagues.png';
+import PopupLayout from './PopupLayout';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -18,7 +19,6 @@ function Transition(props) {
 
 const styles = theme => ({
   root: {
-    textAlign: 'center',
   },
   picture: {
     width: '60%',
@@ -27,7 +27,7 @@ const styles = theme => ({
   },
   text: {
     margin: 0,
-    padding:0,
+    padding: 0,
     paddingTop: 16,
     textAlign: 'center'
   },
@@ -36,7 +36,7 @@ const styles = theme => ({
   },
   title: {
     textAlign: 'center',
-    [theme.breakpoints.down('sm')] : {
+    [theme.breakpoints.down('sm')]: {
       fontSize: '4.8rem',
     },
     [theme.breakpoints.down('xs')]: {
@@ -44,7 +44,7 @@ const styles = theme => ({
     }
   },
   actions: {
-    justifyContent: 'center', 
+    justifyContent: 'center',
     margin: 0,
     padding: 24,
   }
@@ -57,51 +57,77 @@ class OnboardCongratulation extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    this.setState({open: nextProps.isOpen})
+    this.setState({ open: nextProps.isOpen })
   }
 
   handleOnboardEnd = () => {
-      this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag });
+    this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag });
   }
 
   render() {
-    const {redirectTo} = this.state;
-    const {classes} = this.props;
+    const { redirectTo } = this.state;
+    const { classes } = this.props;
     console.log('RENDER CONGRATS')
 
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
 
     return (
-      <React.Fragment>
-        <Dialog
-          open={this.state.open}
-          TransitionComponent={Transition}
-          keepMounted
-          fullWidth
-          maxWidth={'sm'}
-          onClose={this.handleOnboardEnd}
-          className={classes.root}
-          aria-labelledby="alert-dialog-slide-title"
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogContent style={{overflow: 'hidden'}} >
+      <PopupLayout
+        isOpen={this.state.open}
+        title={
+          <>
             <img src={ColleagueImg} alt="Colleagues" className={classes.picture} />
             <Typography variant="h1" className={classes.title}>
               <FormattedMessage id="onboard.end.title" />
             </Typography>
-            <DialogContentText id="alert-dialog-slide-description">
-              <Typography variant="h6" className={classes.text}>
-                <FormattedMessage id="onboard.end.text" values={{organisationName: this.props.organisationStore.values.organisation.name}} />
-              </Typography>
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions className={classes.actions}>
-            <Button onClick={this.handleOnboardEnd} color="secondary">
-              <FormattedMessage id="onboard.end.cta" values={{organisationName: this.props.organisationStore.values.organisation.name}} />
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </React.Fragment>
+          </>
+        }
+        actions={
+          <Button onClick={this.handleOnboardEnd} color="secondary">
+            <FormattedMessage id="onboard.end.cta" values={{ organisationName: this.props.organisationStore.values.organisation.name }} />
+          </Button>
+        }
+        onClose={this.handleClose}
+      >
+        <Typography variant="h6" className={classes.text}>
+          <FormattedMessage id="onboard.end.text" values={{ organisationName: this.props.organisationStore.values.organisation.name }} />
+        </Typography>
+      </PopupLayout>
+
+
+
+
+
+      // <React.Fragment>
+      //   <Dialog
+      //     open={this.state.open}
+      //     TransitionComponent={Transition}
+      //     keepMounted
+      //     fullWidth
+      //     maxWidth={'sm'}
+      //     onClose={this.handleOnboardEnd}
+      //     className={classes.root}
+      //     aria-labelledby="alert-dialog-slide-title"
+      //     aria-describedby="alert-dialog-slide-description"
+      //   >
+      //     <DialogContent style={{overflow: 'hidden'}} >
+      //       <img src={ColleagueImg} alt="Colleagues" className={classes.picture} />
+      //       <Typography variant="h1" className={classes.title}>
+      //         <FormattedMessage id="onboard.end.title" />
+      //       </Typography>
+      //       <DialogContentText id="alert-dialog-slide-description">
+      //         <Typography variant="h6" className={classes.text}>
+      //           <FormattedMessage id="onboard.end.text" values={{organisationName: this.props.organisationStore.values.organisation.name}} />
+      //         </Typography>
+      //       </DialogContentText>
+      //     </DialogContent>
+      //     <DialogActions className={classes.actions}>
+      //       <Button onClick={this.handleOnboardEnd} color="secondary">
+      //         <FormattedMessage id="onboard.end.cta" values={{organisationName: this.props.organisationStore.values.organisation.name}} />
+      //       </Button>
+      //     </DialogActions>
+      //   </Dialog>
+      // </React.Fragment>
     );
   }
 }
