@@ -58,9 +58,9 @@ class UserWings extends React.Component {
 
     return (
       <div>
-        <Typography variant="h4" style={{textAlign: 'center', color:theme.palette.primary.dark}} ><FormattedMessage id="onboard.userWings" values={{wingsCount: ( (record && record.hashtags) ? record.hashtags.length : 0)}} /></Typography>
+        <Typography variant="h4" style={{textAlign: 'center', color:theme.palette.primary.dark}} ><FormattedMessage id="onboard.userWings" values={{wingsCount: ( record.hashtags ? record.hashtags.length : 0)}} /></Typography>
         <div className="" style={{padding: 8, paddingTop: 10}}>
-          {record && record.hashtags && record.hashtags.length > 0 && record.hashtags.map((hashtag, i) => {
+          {record.hashtags && record.hashtags.length > 0 && record.hashtags.map((hashtag, i) => {
             if(!this.shoudlRenderWing(hashtag)) return null;
             let displayedName = ProfileService.getWingDisplayedName(hashtag, locale);
             
@@ -86,7 +86,7 @@ class UserWings extends React.Component {
             }
             
           })}
-          {record && record.hashtags && record.hashtags.length === 0 && (
+          {record.hashtags && record.hashtags.length === 0 && (
             <Typography variant="h6">
               <FormattedHTMLMessage id="onboard.noWings" />
             </Typography>

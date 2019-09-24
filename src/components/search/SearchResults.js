@@ -118,13 +118,15 @@ class SearchResults extends React.Component {
   fetchHits = (filters, query, facetFilters, page) => {
     AlgoliaService.fetchHits(filters, query, facetFilters, page, true, 5)
       .then((content) => {
-        this.props.commonStore.searchResultsCount = content.nbHits;
 
-        if ((!content || !content.hits || content.hits.length === 0) && (!page || page === 0)) this.setState({ showNoResult: true, hideShowMore: true });
+        if(!content) return;
+
+        if ((!content.hits || content.hits.length === 0) && (!page || page === 0)) this.setState({ showNoResult: true, hideShowMore: true });
         else this.setState({ showNoResult: false });
 
+        this.props.commonStore.searchResultsCount = content.nbHits;
 
-        if (content.page >= (content.nbPages - 1)) this.setState({ hideShowMore: true });
+        if (content.page >= (content.nbPages - 1) ) this.setState({ hideShowMore: true });
         else if (content.nbPages > 1) this.setState({ hideShowMore: false });
 
         if (page) {

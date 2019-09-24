@@ -66,20 +66,21 @@ class SnackbarCustom extends React.Component {
     const { open } = this.state;
 
     return (
-      (open &&
-        <SnackbarContent
-          className={classNames(classes[variant], className, classes['verticalCenter'], classes.root)}
-          aria-describedby="client-snackbar"
-          message={
-            <span id="client-snackbar" className={classes.message}>
-              <Icon className={classNames(classes.icon, classes.iconVariant)} />
-              <span dangerouslySetInnerHTML={{ __html: message }}></span>
-            </span>
-          }
-          {...other}
-        />
-      )
-
+      <>
+        {open &&
+          <SnackbarContent
+            className={classNames(classes[variant], className, classes['verticalCenter'], classes.root)}
+            aria-describedby="client-snackbar"
+            message={
+              <span id="client-snackbar" className={classes.message}>
+                <Icon className={classNames(classes.icon, classes.iconVariant)} />
+                <span dangerouslySetInnerHTML={{ __html: message }}></span>
+              </span>
+            }
+            {...other}
+          />
+        }
+      </>
     );
   }
 }

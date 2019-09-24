@@ -75,15 +75,15 @@ class AddContactField extends React.Component {
   getIcon = name => {
     switch (name) {
       case 'email':
-        return name = 'envelope-o';
+        return 'envelope-o';
       case 'workplace':
-        return name = 'user';
+        return 'user';
       case 'workchat':
-        return name = 'comment';
+        return 'comment';
       case 'landline':
-        return name = 'phone-square';
+        return 'phone-square';
       default:
-        return name
+        return name;
     }
   }
   

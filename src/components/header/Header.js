@@ -77,12 +77,11 @@ class App extends Component {
 
 App.propTypes = {
   classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
 };
 
 export default inject('commonStore', 'userStore', 'authStore', 'organisationStore')(
   observer(
-    withStyles(styles, { withTheme: true })(
+    withStyles(styles)(
       App
     )
   )

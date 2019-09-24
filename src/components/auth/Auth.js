@@ -64,7 +64,7 @@ class Auth extends React.Component {
     this.handleIntegrationCallback(this.state.queryParams)
       .then(() => {
         let integrationState = (this.state.queryParams.state ? JSON.parse(this.state.queryParams.state) : null);
-        if (integrationState.integrationState && (integrationState.integrationState.linkedin === 'true')) emailService.sendConfirmIntegrationEmail('LinkedIn').catch(e => console.error(e));
+        if (integrationState && integrationState.integrationState && (integrationState.integrationState.linkedin === 'true')) emailService.sendConfirmIntegrationEmail('LinkedIn').catch(e => console.error(e));
         this.props.userStore.getCurrentUser()
           .then((user) => {
             ReactGA.event({ category: 'User', action: 'Login with Google' });
@@ -108,7 +108,7 @@ class Auth extends React.Component {
   getDefaultRedirectPath = () => {
     let orgTag = this.props.organisationStore.values.orgTag;
     let organisation = this.props.organisationStore.values.organisation;
-    return '/' + this.props.commonStore.locale + '/' + orgTag || (organisation ? organisation.tag : '');
+    return '/' + this.props.commonStore.locale + '/' + (orgTag || (organisation ? organisation.tag : ''));
   }
 
   handleChange = (event, value) => {

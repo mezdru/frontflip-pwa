@@ -87,11 +87,11 @@ class OnboardContacts extends React.Component {
   setTypeInput = (type) => {
     switch (type) {
       case 'email':
-        return type = 'email';
+        return 'email';
       case 'phone': case 'landline':
-        return type = 'tel';
+        return 'tel';
       default:
-        return type = 'text';
+        return 'text';
     }
   }
   
@@ -140,7 +140,7 @@ class OnboardContacts extends React.Component {
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start" style={{fontSize: 24}}>
-                          <i className={"fa fa-" + link.icon || link.type}/>
+                          <i className={"fa fa-" + (link.icon || link.type)}/>
                         </InputAdornment>
                       ),
                       endAdornment: (

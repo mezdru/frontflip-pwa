@@ -1,12 +1,11 @@
 import React from 'react';
-import { withStyles, Grid, Button, IconButton, Hidden, ClickAwayListener } from '@material-ui/core';
-import { FilterList, ArrowBack, Edit } from '@material-ui/icons';
+import { withStyles, Grid, IconButton, ClickAwayListener } from '@material-ui/core';
+import { ArrowBack, Edit } from '@material-ui/icons';
 import classNames from 'classnames';
 import MenuDropdown from '../utils/menu/MenuDropdown';
 import { inject, observer } from 'mobx-react';
 import UrlService from '../../services/url.service.js';
 import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
-import { FormattedMessage } from 'react-intl';
 
 const styles = theme => ({
   button: {
@@ -71,11 +70,10 @@ class ProfileActions extends React.PureComponent {
   }
 
   render() {
-    const { canFilter, classes } = this.props;
+    const { classes } = this.props;
     const { isEditable } = this.props.profileContext;
-    const { openEdit, openFilter, menuDropdownAnchor } = this.state;
+    const { openEdit, menuDropdownAnchor } = this.state;
     const actions = this.buildAction();
-    const filters = this.buildFilters();
 
     return (
       <>

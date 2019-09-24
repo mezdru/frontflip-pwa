@@ -43,13 +43,12 @@ class SuggestionsService {
 
       this.populateSuggestionsData();
       let query = this.formatHashtagsQuery();
-      if (query)
+      if (query) {
         await this.syncBank(query)
           .then((bank) => {
             this._bank = bank;
             this.populateSuggestionsData();
           }).catch(e => {console.log(e)})
-      else {
       }
     } else {
       await this.fetchWingsFamily(wingsFamily);
@@ -73,11 +72,11 @@ class SuggestionsService {
       if(!suggestionToAdd) continue;
 
       suggestionToAdd.tag = suggestionToAdd.value || suggestionToAdd.tag;
-      if(suggestionToAdd && !this.isInSuggestions(suggestionToAdd.tag) && !this.isInUserWings(suggestionToAdd.tag)){
+      if(!this.isInSuggestions(suggestionToAdd.tag) && !this.isInUserWings(suggestionToAdd.tag)){
         // console.log('>>>>>>>>> ADD >>>>>>>>>> '  + suggestionToAdd.tag)
         suggestions.push(suggestionToAdd);
         this._newSuggestions.push(suggestionToAdd);
-      } else if (suggestionToAdd && !this.isInUserWings(suggestionToAdd.tag)) {
+      } else if (!this.isInUserWings(suggestionToAdd.tag)) {
         this._newSuggestions.push(suggestionToAdd);
       }
       else i--;
@@ -208,16 +207,18 @@ class SuggestionsService {
     if(!isNewSuggestions) {
       let suggestions = this._currentSuggestions;
       // eslint-disable-next-line
-      this._currentSuggestions.map((suggestion, i) => {
+      for(var i = 0; i < this._currentSuggestions.length; i++) {
         suggestions[i] = this.getData(suggestion.tag) || suggestion;
-      });
+      }
+
       this._currentSuggestions = suggestions;
     } else {
       let suggestions = this._newSuggestions;
       // eslint-disable-next-line
-      this._newSuggestions.map((suggestion, i) => {
+      for(var i = 0; i < this._newSuggestions.length; i++) {
         suggestions[i] = this.getData(suggestion.tag) || suggestion;
-      });
+      }
+
       this._newSuggestions = suggestions;
     }
   }

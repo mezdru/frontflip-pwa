@@ -59,7 +59,7 @@ class MainRouteOrganisationRedirect extends React.Component {
     //@todo Remake this statement...
     if (
         props.history.action === 'PUSH' &&
-        ((props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) ||
+        ((props.match.params && props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) ||
         (!this.props.organisationStore.values.fullOrgFetch) ||
         (props.match.params && props.match.params.profileTag)) ||
         (props.history.action === 'POP' && props.location.pathname !== this.props.location.pathname)
@@ -197,7 +197,7 @@ class MainRouteOrganisationRedirect extends React.Component {
   manageAccessRight = async () => {
     if (this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
       let organisation = this.props.organisationStore.values.organisation;
-      if (!(this.props.organisationStore.values.orgTag === this.props.match.params.organisationTag)) {
+      if (this.props.organisationStore.values.orgTag !== this.props.match.params.organisationTag) {
         this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
         organisation = await this.props.organisationStore.getOrganisationForPublic()
           .catch((err) => {
