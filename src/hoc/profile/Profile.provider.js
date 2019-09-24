@@ -101,15 +101,16 @@ class ProfileProvider extends React.Component {
   buildWingsByFamilies = () => {
     let organisation = this.props.organisationStore.values.organisation;
     let wingsByFamilies = [];
-    let otherWings = this.getProp('hashtags');
-    let allWings = this.getProp('hashtags');
+    let otherWings = Array.from(this.getProp('hashtags'));
+    let allWings = Array.from(this.getProp('hashtags'));
 
     organisation.featuredWingsFamily.forEach(family => {
       let familyWings = [];
       allWings.map( (wing, index) => {
+
         if(wing.hashtags.find(hashtag => (hashtag._id || hashtag) === family._id)) {
           familyWings.push(wing);
-          if(otherWings[index]._id === wing._id) otherWings.splice(index, 1);
+          otherWings = otherWings.filter(otherWing => otherWing._id !== wing._id);
         }
       });
       if(familyWings.length > 0) wingsByFamilies.push({family: family, wings: familyWings});

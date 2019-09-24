@@ -68,7 +68,7 @@ class CardProfile extends React.PureComponent {
               </Grid>
             }
             title={
-              <Typography variant="h4" className={`${classes.name} ${classes.titleSmallestView}`} gutterBottom>
+              <Typography variant="h2" className={`${classes.name} ${classes.titleSmallestView}`} gutterBottom>
                 <span dangerouslySetInnerHTML={{__html: ProfileService.htmlDecode(((hit._highlightResult && hit._highlightResult.name) ? hit._highlightResult.name.value : null) || hit.name) || hit.tag}}></span>
               </Typography>
             }

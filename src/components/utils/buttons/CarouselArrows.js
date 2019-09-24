@@ -25,9 +25,9 @@ const styles = {
 };
 
 
-const CarouselArrows = withStyles(styles)(({scrollPosition, ...props}) => {
+const CarouselArrows = withStyles(styles)(({scrollPosition, classes, ...props}) => {
   return (
-    <Button className={classNames(props.classes[scrollPosition], props.classes.scrollButton)} variant="outlined" {...props}>
+    <Button className={classNames(classes[scrollPosition], classes.scrollButton)} variant="outlined" {...props}>
       {scrollPosition === 'scrollRight' ? <ArrowRight fontSize="inherit"/> : <ArrowLeft fontSize="inherit"/>}
     </Button>
   )

@@ -18,7 +18,6 @@ export const styles = theme => ({
       backgroundColor: theme.palette.primary.main,
       borderRadius: 30,
       color: 'white',
-      fontWeight: '600',
       paddingLeft: 2,
       paddingRight: 2,
     },
