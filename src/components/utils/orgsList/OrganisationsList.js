@@ -76,7 +76,7 @@ class OrganisationsList extends React.Component {
             );
           } else { return null; }
         })}
-        {(!currentUserOrganisations || currentUserOrganisations.length === 0) && (
+        {(currentUserOrganisations.length === 0) && (
           <div className={classes.circularProgressContainer} >
             <CircularProgress />
           </div>

@@ -81,7 +81,7 @@ class OnboardPage extends React.Component {
       await this.setState({ steps: org.onboardSteps });
     } else {
       var steps = ['intro', 'contacts', 'wings'];
-      if (org.featuredWingsFamily && org.featuredWingsFamily.length > 0)
+      if (org && org.featuredWingsFamily && org.featuredWingsFamily.length > 0)
         org.featuredWingsFamily.forEach(fwf => {
           if (!steps.find(elt => elt === fwf.tag) && fwf.tag)
             steps.push(fwf.tag);

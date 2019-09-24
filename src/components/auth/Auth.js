@@ -108,7 +108,7 @@ class Auth extends React.Component {
   getDefaultRedirectPath = () => {
     let orgTag = this.props.organisationStore.values.orgTag;
     let organisation = this.props.organisationStore.values.organisation;
-    return '/' + this.props.commonStore.locale + '/' + orgTag || (organisation ? organisation.tag : '');
+    return '/' + this.props.commonStore.locale + '/' + (orgTag || (organisation ? organisation.tag : ''));
   }
 
   handleChange = (event, value) => {

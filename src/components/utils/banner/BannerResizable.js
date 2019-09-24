@@ -52,7 +52,7 @@ class BannerResizable extends React.Component {
     }
   }
 
-  updateProfileSource = async () => {
+  updateProfileSource = () => {
     var profileCover = this.props.recordStore.values.displayedRecord.cover;
     var profileCoverUrl = (profileCover && profileCover.url ? profileCover.url : null);
     this.setState({source: profileCoverUrl});
