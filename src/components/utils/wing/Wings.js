@@ -41,7 +41,8 @@ class Wings extends React.PureComponent {
     e.currentTarget.addEventListener('mouseout', this.handleClapUp);
     e.currentTarget.addEventListener('touchleave', this.handleClapUp);
 
-    this.setState({ addClapCounterLocal: this.state.addClapCounterLocal + 1, currentClapAdded: this.state.currentClapAdded + 1 })
+    this.setState({ addClapCounterLocal: this.state.addClapCounterLocal + 1, currentClapAdded: this.state.currentClapAdded + 1 });
+    
     interval = setInterval(() => {
       this.setState({ addClapCounterLocal: this.state.addClapCounterLocal + 1, currentClapAdded: this.state.currentClapAdded + 1 })
     }, this.state.intervalDuration);
