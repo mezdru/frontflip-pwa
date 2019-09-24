@@ -16,7 +16,7 @@ export const Option = props => {
     <div {...innerProps} className="custom-option">
       <div className="custom-option-main">
         {props.data.picturePath && (
-          <img alt="img-logo" src={props.data.picturePath ||
+          <img alt="img-logo" src={
             (ProfileService.getProfileType(props.data.value) === 'person' ? 
               (process.env.NODE_ENV === 'production' ? 'https://' : 'http://') +window.location.host + defaultPicture : 
               null) } 
@@ -39,9 +39,9 @@ export const customStyles = {
     borderRadius: '4px',
     boxSizing: 'border-box',
     border: state.isFocused ? "2px solid #FF0018" : "1px solid #FF0018",
-    boxShadow: state.isFocused ? null : null,
+    boxShadow: null,
     "&:hover": {
-      borderColor: state.isFocused ? "#FF0018" : "#FF0018",
+      borderColor:"#FF0018",
       boxSizing: 'border-box'
     },
     padding: '2px 16px',
