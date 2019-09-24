@@ -52,7 +52,7 @@ class ClickBurst extends React.Component {
   }
 
   kaboom = (e, child) => {
-    e.stopPropagation()
+    if(e) e.stopPropagation()
 
     if (this.state.bursts.length !== this.state.numBurstsToGenerate) {
       this.generateBursts()
@@ -84,7 +84,7 @@ class ClickBurst extends React.Component {
   }
 
   zoomLoop = (e, child) => {
-    e.persist();
+    if(e) e.persist();
     var event = e;
     if (event && event.target) {
 

@@ -140,7 +140,7 @@ class OnboardContacts extends React.Component {
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start" style={{fontSize: 24}}>
-                          <i className={"fa fa-" + link.icon || link.type}/>
+                          <i className={"fa fa-" + (link.icon || link.type)}/>
                         </InputAdornment>
                       ),
                       endAdornment: (

@@ -159,12 +159,7 @@ class SearchSuggestions extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.props.resetScroll("search-suggestions-container");
-
-    if (nextProps.autocompleteSuggestions.length > 0) {
-      this.setState({ facetHits: nextProps.autocompleteSuggestions, shouldUpdate: true });
-    } else {
-      this.setState({ facetHits: nextProps.autocompleteSuggestions, shouldUpdate: true });
-    }
+    this.setState({ facetHits: nextProps.autocompleteSuggestions, shouldUpdate: true });
   }
 
   fetchSuggestions = (filters, query) => {

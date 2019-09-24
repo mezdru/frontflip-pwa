@@ -32,7 +32,7 @@ class HeaderDrawer extends Component {
     e.preventDefault();
     this.props.handleDrawerClose();
     this.props.authStore.logout().then(() => {
-      window.location.href = UrlService.createUrl(window.location.host, '/' + this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag, null);
+      window.location.href = UrlService.createUrl(window.location.host, '/' + this.props.organisationStore.values.organisation.tag, null);
     });
   }
 
@@ -92,9 +92,9 @@ class HeaderDrawer extends Component {
           </div>
 
           <div className={'leftMenu'}>
-            {(auth && (organisation && organisation._id)) && (
+            {(auth && organisation._id) && (
               <React.Fragment>
-                {record && record._id && (
+                {record._id && (
                   <React.Fragment>
                     <List className={'leftSubmenu'}>
                       <ListItem >
@@ -205,7 +205,7 @@ class HeaderDrawer extends Component {
                 <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.terms' })} />
               </ListItem>
               <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/protectingYourData',
-                ((organisation && organisation.tag) ? organisation.tag : undefined))} target="_blank">
+                organisation.tag)} target="_blank">
                 <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.protectingYourData' })} />
               </ListItem>
               {auth && (

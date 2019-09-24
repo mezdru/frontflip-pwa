@@ -34,7 +34,7 @@ class ClapStore {
   }
 
   postClap() {
-    if (!this.values.clap || this.values.clap === {}) return Promise.reject(new Error('No clap object'));
+    if (!this.values.clap || Object.keys(this.values.clap).length === 0) return Promise.reject(new Error('No clap object'));
     this.inProgress = true;
     this.errors = null;
 

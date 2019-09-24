@@ -208,13 +208,12 @@ class SearchPage extends PureComponent {
     const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter, visible, transitionDuration, showAskForHelp } = this.state;
     const { classes } = this.props;
     const { organisation } = this.props.organisationStore.values;
-    const { currentUser } = this.props.userStore.values;
     const { searchResultsCount } = this.props.commonStore;
     let searchFilters = this.props.commonStore.getSearchFilters();
 
     return (
       <React.Fragment>
-        {((redirectTo && (window.location.pathname !== redirectTo))) && <Redirect to={redirectTo} />}
+        {(redirectTo && (window.location.pathname !== redirectTo)) && <Redirect to={redirectTo} />}
         <Suspense fallback={<></>}>
           <Header handleDisplayProfile={this.handleDisplayProfile} />
         </Suspense>
