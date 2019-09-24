@@ -84,7 +84,8 @@ class AskForHelp extends React.Component {
 
   handleSend = () => {
 
-    if(!this.state.message) return this.setState({errorMessage: this.props.intl.formatMessage({id: "askForHelp.popup.missingMessage"})});
+    if(!this.state.message || this.state.message.length < 35) 
+      return this.setState({errorMessage: this.props.intl.formatMessage({id: "askForHelp.popup.missingMessage"})});
 
     let helpRequest = {
       organisation: this.props.organisationStore.values.organisation._id,

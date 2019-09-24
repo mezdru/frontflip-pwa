@@ -73,7 +73,7 @@ class SearchPage extends PureComponent {
       }
     });
 
-    observe(this.props.commonStore, 'searchResultsCount', (change) => {this.forceUpdate();});
+    observe(this.props.commonStore, 'searchResultsCount', (change) => { this.forceUpdate(); });
 
     if (this.state.displayedHit) this.handleDisplayProfile(null, this.state.displayedHit);
   }
@@ -185,7 +185,7 @@ class SearchPage extends PureComponent {
   }
 
   handleDisplayAskForHelp = () => {
-    this.setState({showAskForHelp: false}, () => {this.setState({showAskForHelp: true})});
+    this.setState({ showAskForHelp: false }, () => { this.setState({ showAskForHelp: true }) });
   }
 
   handleDisplayProfile = (e, profileRecord) => {
@@ -287,9 +287,9 @@ class SearchPage extends PureComponent {
         )}
 
         {/* {showAskForHelp && ( */}
-          <Suspense fallback={<CircularProgress color='secondary' />}>
-            <AskForHelp isOpen={showAskForHelp} />
-          </Suspense>
+        <Suspense fallback={<CircularProgress color='secondary' />}>
+          <AskForHelp isOpen={showAskForHelp} />
+        </Suspense>
         {/* )} */}
 
         {showCongratulation && (
@@ -304,12 +304,17 @@ class SearchPage extends PureComponent {
           </Suspense>
         )}
 
-        { (searchFilters.length > 0 && searchResultsCount <= 10 ) ? (
-          <AskForHelpFab className={classes.fab} onClick={this.handleDisplayAskForHelp}/>
-        ) : (
-          <MyProfileFab className={classes.fab} onClick={this.handleDisplayProfile} />
-        )}
-
+        {
+          this.props.authStore.isAuth() && (
+            <>
+              {(searchFilters.length > 0 && searchResultsCount <= 10) ? (
+                <AskForHelpFab className={classes.fab} onClick={this.handleDisplayAskForHelp} />
+              ) : (
+                  <MyProfileFab className={classes.fab} onClick={this.handleDisplayProfile} />
+                )}
+            </>
+          )
+        }
 
         <Suspense fallback={<></>}>
           <PromptIOsInstall />
