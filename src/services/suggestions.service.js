@@ -208,6 +208,7 @@ class SuggestionsService {
       let suggestions = this._currentSuggestions;
       // eslint-disable-next-line
       for(var i = 0; i < this._currentSuggestions.length; i++) {
+        let suggestion = this._currentSuggestions[i];
         suggestions[i] = this.getData(suggestion.tag) || suggestion;
       }
 
@@ -216,6 +217,7 @@ class SuggestionsService {
       let suggestions = this._newSuggestions;
       // eslint-disable-next-line
       for(var i = 0; i < this._newSuggestions.length; i++) {
+        let suggestion = this._newSuggestions[i];
         suggestions[i] = this.getData(suggestion.tag) || suggestion;
       }
 
