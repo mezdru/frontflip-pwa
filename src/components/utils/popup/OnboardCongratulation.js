@@ -1,10 +1,5 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import Slide from '@material-ui/core/Slide';
 import { Redirect } from 'react-router-dom';
 import { withStyles, Typography } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
@@ -12,10 +7,6 @@ import { FormattedMessage } from 'react-intl';
 
 import ColleagueImg from '../../../resources/images/colleagues.png';
 import PopupLayout from './PopupLayout';
-
-function Transition(props) {
-  return <Slide direction="up" {...props} />;
-}
 
 const styles = theme => ({
   root: {
@@ -67,7 +58,6 @@ class OnboardCongratulation extends React.Component {
   render() {
     const { redirectTo } = this.state;
     const { classes } = this.props;
-    console.log('RENDER CONGRATS')
 
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
 
@@ -93,41 +83,6 @@ class OnboardCongratulation extends React.Component {
           <FormattedMessage id="onboard.end.text" values={{ organisationName: this.props.organisationStore.values.organisation.name }} />
         </Typography>
       </PopupLayout>
-
-
-
-
-
-      // <React.Fragment>
-      //   <Dialog
-      //     open={this.state.open}
-      //     TransitionComponent={Transition}
-      //     keepMounted
-      //     fullWidth
-      //     maxWidth={'sm'}
-      //     onClose={this.handleOnboardEnd}
-      //     className={classes.root}
-      //     aria-labelledby="alert-dialog-slide-title"
-      //     aria-describedby="alert-dialog-slide-description"
-      //   >
-      //     <DialogContent style={{overflow: 'hidden'}} >
-      //       <img src={ColleagueImg} alt="Colleagues" className={classes.picture} />
-      //       <Typography variant="h1" className={classes.title}>
-      //         <FormattedMessage id="onboard.end.title" />
-      //       </Typography>
-      //       <DialogContentText id="alert-dialog-slide-description">
-      //         <Typography variant="h6" className={classes.text}>
-      //           <FormattedMessage id="onboard.end.text" values={{organisationName: this.props.organisationStore.values.organisation.name}} />
-      //         </Typography>
-      //       </DialogContentText>
-      //     </DialogContent>
-      //     <DialogActions className={classes.actions}>
-      //       <Button onClick={this.handleOnboardEnd} color="secondary">
-      //         <FormattedMessage id="onboard.end.cta" values={{organisationName: this.props.organisationStore.values.organisation.name}} />
-      //       </Button>
-      //     </DialogActions>
-      //   </Dialog>
-      // </React.Fragment>
     );
   }
 }
