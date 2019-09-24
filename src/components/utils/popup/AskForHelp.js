@@ -12,6 +12,7 @@ import SnackbarCustom from '../snackbars/SnackbarCustom';
 import withSearchManagement from '../../../hoc/SearchManagement.hoc';
 import AlgoliaService from '../../../services/algolia.service';
 
+
 const styles = theme => ({
   text: {
     margin: 0,
