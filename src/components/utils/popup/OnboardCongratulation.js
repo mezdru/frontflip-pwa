@@ -9,8 +9,6 @@ import ColleagueImg from '../../../resources/images/colleagues.png';
 import PopupLayout from './PopupLayout';
 
 const styles = theme => ({
-  root: {
-  },
   picture: {
     width: '60%',
     height: 'auto',
@@ -22,9 +20,6 @@ const styles = theme => ({
     paddingTop: 16,
     textAlign: 'center'
   },
-  titleEmoji: {
-    marginLeft: 16
-  },
   title: {
     textAlign: 'center',
     [theme.breakpoints.down('sm')]: {
@@ -33,11 +28,6 @@ const styles = theme => ({
     [theme.breakpoints.down('xs')]: {
       fontSize: '3rem',
     }
-  },
-  actions: {
-    justifyContent: 'center',
-    margin: 0,
-    padding: 24,
   }
 });
 

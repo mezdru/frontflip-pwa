@@ -1,10 +1,5 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import Slide from '@material-ui/core/Slide';
 import { Redirect } from 'react-router-dom';
 import { withStyles, Typography, Hidden, CircularProgress } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
@@ -15,30 +10,17 @@ import ReactGA from 'react-ga';
 import Wings from '../wing/Wing';
 import ProfileService from '../../../services/profile.service';
 import SlackService from '../../../services/slack.service';
+import PopupLayout from './PopupLayout';
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
-function Transition(props) {
-  return <Slide direction="up" {...props} />;
-}
-
 const styles = theme => ({
-  root: {
-    textAlign: 'center',
-  },
-  picture: {
-    width: '60%',
-    height: 'auto',
-    marginBottom: 32,
-  },
+
   text: {
     margin: 0,
     padding: 0,
     paddingTop: 16,
     textAlign: 'center'
-  },
-  content: {
-    padding: 0,
   },
   titleEmoji: {
     marginLeft: 16
@@ -56,11 +38,12 @@ const styles = theme => ({
   },
   actions: {
     margin: 0,
-    padding: 16,
+    padding: 8,
     display: 'block'
   },
   buttons: {
     height: 'unset',
+    margin: 8,
   }
 });
 
@@ -79,7 +62,7 @@ class AddWingPopup extends React.Component {
 
   handleClose = () => {
     ReactGA.event({ category: 'User', action: 'QRCode - Search' });
-    if(process.env.NODE_ENV === 'production') SlackService.notify('#wingzy-events', 'QRCode - Search - ' +
+    if (process.env.NODE_ENV === 'production') SlackService.notify('#wingzy-events', 'QRCode - Search - ' +
       (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '') +
       ' - by ' + this.props.recordStore.values.record.name);
     this.setState({ open: false, redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag });
@@ -120,7 +103,7 @@ class AddWingPopup extends React.Component {
 
   handleAddWing = async () => {
     ReactGA.event({ category: 'User', action: 'QRCode - Add Wings' });
-    if(process.env.NODE_ENV === 'production') SlackService.notify('#wingzy-events', 'QRCode - Add Wings - ' +
+    if (process.env.NODE_ENV === 'production') SlackService.notify('#wingzy-events', 'QRCode - Add Wings - ' +
       (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '') +
       ' - by ' + this.props.recordStore.values.record.name);
 
@@ -134,7 +117,7 @@ class AddWingPopup extends React.Component {
     record.hashtags = record.hashtags.concat(wingsToAdd);
     await this.props.recordStore.updateRecord(['hashtags']);
     this.props.handleDisplayProfile(null, record);
-    this.setState({open: false});
+    this.setState({ open: false });
   }
 
   render() {
@@ -146,47 +129,18 @@ class AddWingPopup extends React.Component {
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
 
     return (
-      <React.Fragment>
-        <Dialog
-          open={this.state.open}
-          TransitionComponent={Transition}
-          keepMounted
-          fullWidth
-          maxWidth={'sm'}
-          onClose={this.handleClose}
-          className={classes.root}
-          aria-labelledby="alert-dialog-slide-title"
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogContent style={{ overflow: 'hidden', padding: 16 }} >
-            <Typography variant="h1" className={classes.title}>
-              <FormattedMessage id="onboard.end.title" />
-              <Hidden xsDown>
-                <img src={ProfileService.getEmojiUrl('🎉')} alt="congratulation" className={classes.titleEmoji} />
-              </Hidden>
-            </Typography>
-            <DialogContentText id="alert-dialog-slide-description" className={classes.content}>
-              <Typography variant="h6" className={classes.text}>
-                <FormattedMessage id="action.addWings.text" values={{ wingsCount: wingsPopulated.length }} />
-                <br />
-                <div className={classes.wingsList}>
-                  {onLoad && (
-                    <CircularProgress color='secondary' />
-                  )}
-
-                  {!onLoad && wingsPopulated.map((wing, i) => {
-                    let displayedName = ProfileService.getWingDisplayedName(wing, locale);
-                    return (
-                      <Wings src={ProfileService.getPicturePath(wing.picture)} key={i}
-                        label={ProfileService.htmlDecode(displayedName)}
-                        className={'bigWing'}
-                      />);
-                  })}
-                </div>
-              </Typography>
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions className={classes.actions}>
+      <PopupLayout
+        isOpen={this.state.open}
+        title={
+          <Typography variant="h1" className={classes.title}>
+            <FormattedMessage id="onboard.end.title" />
+            <Hidden xsDown>
+              <img src={ProfileService.getEmojiUrl('🎉')} alt="congratulation" className={classes.titleEmoji} />
+            </Hidden>
+          </Typography>
+        }
+        actions={
+          <div className={classes.actions}>
             <Button onClick={this.handleAddWing} color="secondary" variant="contained" size="medium" className={classes.buttons} >
               <Add />
               <FormattedMessage id="action.addWings.add" />
@@ -198,9 +152,29 @@ class AddWingPopup extends React.Component {
               <Search />
               <FormattedMessage id="action.addWings.search" values={{ organisationName: organisation.name }} />
             </Button>
-          </DialogActions>
-        </Dialog>
-      </React.Fragment>
+          </div>
+        }
+        onClose={this.handleClose}
+      >
+        <Typography variant="h6" className={classes.text}>
+          <FormattedMessage id="action.addWings.text" values={{ wingsCount: wingsPopulated.length }} />
+          <br />
+          <div className={classes.wingsList}>
+            {onLoad && (
+              <CircularProgress color='secondary' />
+            )}
+
+            {!onLoad && wingsPopulated.map((wing, i) => {
+              let displayedName = ProfileService.getWingDisplayedName(wing, locale);
+              return (
+                <Wings src={ProfileService.getPicturePath(wing.picture)} key={i}
+                  label={ProfileService.htmlDecode(displayedName)}
+                  className={'bigWing'}
+                />);
+            })}
+          </div>
+        </Typography>
+      </PopupLayout>
     );
   }
 }
