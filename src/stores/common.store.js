@@ -12,7 +12,6 @@ class CommonStore {
   locale = 'en-UK';
   searchFilters = [];
   searchResultsCount = 0;
-  searchResults = [];
   hiddenWings = [];
 
   constructor() {
@@ -147,7 +146,6 @@ decorate(CommonStore, {
   algoliaKey: observable,
   algoliaKeyOrganisation: observable,
   searchFilters: observable,
-  searchResults: observable,
   hiddenWings: observable,
   locale: observable,
   searchResultsCount: observable,

@@ -9,6 +9,8 @@ import profileService from '../../../services/profile.service';
 import PopupLayout from './PopupLayout';
 import EmailService from '../../../services/email.service';
 import SnackbarCustom from '../snackbars/SnackbarCustom';
+import withSearchManagement from '../../../hoc/SearchManagement.hoc';
+import AlgoliaService from '../../../services/algolia.service';
 
 const styles = theme => ({
   text: {
@@ -38,15 +40,25 @@ class AskForHelp extends React.Component {
   state = {
     isOpen: this.props.isOpen,
     message: null,
-    recipients: JSON.parse(JSON.stringify(this.props.commonStore.searchResults)),
+    recipients: [],
     success: false,
     error: false
   }
 
   componentDidMount() {
-    observe(this.props.commonStore, 'searchResults', (change) => {
-      console.log("search results update ! ");
-      this.setState({ recipients: change.newValue });
+    observe(this.props.commonStore, 'searchFilters', (change) => {
+      if(JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue))
+        this.getSearchResults();
+    });
+
+  }
+
+  getSearchResults = async () => {
+    // get request params
+    let reqObject = await this.props.makeFiltersRequest();
+    AlgoliaService.fetchHits(reqObject.filterRequest, reqObject.queryRequest, null, null, false, 10)
+    .then((content) => {
+      this.setState({recipients: Array.from(content.hits)});
     });
   }
 
@@ -55,7 +67,6 @@ class AskForHelp extends React.Component {
       this.setState({
         isOpen: nextProps.isOpen,
         message: null,
-        recipients: this.props.commonStore.searchResults,
         success: false,
         error: false
       });
@@ -76,7 +87,7 @@ class AskForHelp extends React.Component {
     let helpRequest = {
       organisation: this.props.organisationStore.values.organisation._id,
       sender: this.props.recordStore.values.record._id,
-      recipients: this.buildRecipientsArray(this.props.commonStore.searchResults),
+      recipients: this.buildRecipientsArray(this.state.recipients),
       results: this.props.commonStore.searchResultsCount,
       tags: this.buildTagsArray(this.props.commonStore.searchFilters),
       service: 'email',
@@ -116,10 +127,6 @@ class AskForHelp extends React.Component {
   render() {
     const { isOpen, message, error, success, errorMessage, recipients } = this.state;
     const { classes } = this.props;
-    const { searchResults } = this.props.commonStore;
-
-    console.log(JSON.parse(JSON.stringify(recipients)))
-    // Probleme de sync des recipients = search results
 
     return (
       <PopupLayout
@@ -189,7 +196,7 @@ class AskForHelp extends React.Component {
 export default inject('commonStore', 'helpRequestStore', 'recordStore', 'organisationStore')(
   observer(
     withStyles(styles, { withTheme: true })(
-      injectIntl(AskForHelp)
+      injectIntl( withSearchManagement(AskForHelp))
     )
   )
 );

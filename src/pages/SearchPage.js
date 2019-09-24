@@ -1,5 +1,5 @@
 import React, { Suspense, PureComponent } from 'react'
-import { withStyles, Grid, Fab } from '@material-ui/core';
+import { withStyles, Grid } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import withWidth from '@material-ui/core/withWidth';
 import ReactGA from 'react-ga';
@@ -14,8 +14,6 @@ import './SearchPageStyle.css';
 import SearchButton from '../components/search/SearchButton';
 import withSearchManagement from '../hoc/SearchManagement.hoc';
 import { withProfileManagement } from '../hoc/profile/withProfileManagement';
-import PopupLayout from '../components/utils/popup/PopupLayout';
-import { LiveHelp } from '@material-ui/icons';
 import AskForHelpFab from '../components/utils/buttons/AskForHelpFab';
 import MyProfileFab from '../components/utils/buttons/MyProfileFab';
 
@@ -74,6 +72,8 @@ class SearchPage extends PureComponent {
         this.forceUpdate();
       }
     });
+
+    observe(this.props.commonStore, 'searchResultsCount', (change) => {this.forceUpdate();});
 
     if (this.state.displayedHit) this.handleDisplayProfile(null, this.state.displayedHit);
   }
@@ -209,6 +209,7 @@ class SearchPage extends PureComponent {
     const { classes } = this.props;
     const { organisation } = this.props.organisationStore.values;
     const { currentUser } = this.props.userStore.values;
+    const { searchResultsCount } = this.props.commonStore;
     let searchFilters = this.props.commonStore.getSearchFilters();
 
     return (
@@ -303,8 +304,7 @@ class SearchPage extends PureComponent {
           </Suspense>
         )}
 
-{/* searchFilters isn't updated , the component doesn't update  */}
-        {searchFilters.length > 0 ? (
+        { (searchFilters.length > 0 && searchResultsCount <= 10 ) ? (
           <AskForHelpFab className={classes.fab} onClick={this.handleDisplayAskForHelp}/>
         ) : (
           <MyProfileFab className={classes.fab} onClick={this.handleDisplayProfile} />
