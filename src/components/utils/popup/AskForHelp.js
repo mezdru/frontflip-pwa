@@ -167,7 +167,7 @@ class AskForHelp extends React.Component {
 
             <TextField
               className={classes.textarea}
-              label="Explain your needs here"
+              label={this.props.intl.formatMessage({id: "askForHelp.popup.placeholder"})}
               fullWidth
               multiline
               rows={5}
