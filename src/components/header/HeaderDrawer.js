@@ -13,7 +13,7 @@ import defaultPicture from '../../resources/images/placeholder_person.png';
 import UrlService from '../../services/url.service';
 import { Link, withRouter } from 'react-router-dom';
 import OrganisationsList from '../utils/orgsList/OrganisationsList';
-import InvitationDialog from '../utils/alertDialog/Invitation';
+import InvitationDialog from '../utils/popup/Invitation';
 import LocaleSelector from '../utils/fields/LocaleSelector';
 
 const Entities = require('html-entities').XmlEntities;

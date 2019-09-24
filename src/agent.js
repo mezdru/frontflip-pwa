@@ -280,6 +280,10 @@ const Email = {
         invitationUrl: invitationUrl
       }
     ),
+  sendHelpRequest: (hrId) =>
+    requests.post(
+      API_ROOT + '/api/emails/helpRequest/' + hrId
+    )
 }
 
 const Invitation = {
@@ -328,6 +332,16 @@ const Clap = {
     )
 }
 
+const HelpRequest = {
+  post: (hr) =>
+    requests.post(
+      process.env.REACT_APP_API_ROOT + '/api/helpRequests',
+      {
+        helpRequest: hr
+      }
+    )
+}
+
 /**
  * @description Test get user with secure call to API
  */
@@ -345,5 +359,6 @@ export default {
   Email,
   Invitation,
   SearchLog,
-  Clap
+  Clap,
+  HelpRequest
 }

@@ -14,10 +14,13 @@ import './SearchPageStyle.css';
 import SearchButton from '../components/search/SearchButton';
 import withSearchManagement from '../hoc/SearchManagement.hoc';
 import { withProfileManagement } from '../hoc/profile/withProfileManagement';
+import AskForHelpFab from '../components/utils/buttons/AskForHelpFab';
+import MyProfileFab from '../components/utils/buttons/MyProfileFab';
 
-const OnboardCongratulation = React.lazy(() => import('../components/onboard/steps/OnboardCongratulation'));
-const PromptIOsInstall = React.lazy(() => import('../components/utils/prompt/PromptIOsInstall'));
-const AddWingPopup = React.lazy(() => import('../components/utils/addWing/AddWingPopup'));
+const OnboardCongratulation = React.lazy(() => import('../components/utils/popup/OnboardCongratulation'));
+const PromptIOsInstall = React.lazy(() => import('../components/utils/popup/PromptIOsInstall'));
+const AskForHelp = React.lazy(() => import('../components/utils/popup/AskForHelp'));
+const AddWingPopup = React.lazy(() => import('../components/utils/popup/AddWingPopup'));
 const ProfileLayout = React.lazy(() => import("../components/profile/ProfileLayout"));
 const BannerResizable = React.lazy(() => import('../components/utils/banner/BannerResizable'));
 const Header = React.lazy(() => import('../components/header/Header'));
@@ -42,7 +45,8 @@ class SearchPage extends PureComponent {
       headerHeight: 129,
       headerPosition: 'INITIAL',
       visible: (this.getAskedHit() ? true : false),
-      transitionDuration: 800
+      transitionDuration: 800,
+      showAskForHelp: false
     };
   }
 
@@ -65,8 +69,11 @@ class SearchPage extends PureComponent {
         if ((change.newValue && !change.oldValue) || (change.newValue && change.oldValue && change.newValue.length > change.oldValue.length)) {
           this.handleShowSearchResults(200);
         }
+        this.forceUpdate();
       }
     });
+
+    observe(this.props.commonStore, 'searchResultsCount', (change) => { this.forceUpdate(); });
 
     if (this.state.displayedHit) this.handleDisplayProfile(null, this.state.displayedHit);
   }
@@ -177,10 +184,14 @@ class SearchPage extends PureComponent {
     }
   }
 
+  handleDisplayAskForHelp = () => {
+    this.setState({ showAskForHelp: false }, () => { this.setState({ showAskForHelp: true }) });
+  }
+
   handleDisplayProfile = (e, profileRecord) => {
     ReactGA.event({ category: 'User', action: 'Display profile' });
-    this.props.profileContext.setProfileData(profileRecord);
-    this.setState({ displayedHit: profileRecord, visible: true });
+    this.props.profileContext.setProfileData(profileRecord || this.props.recordStore.values.record);
+    this.setState({ displayedHit: profileRecord || this.props.recordStore.values.record, visible: true });
   }
 
   handleCloseProfile = () => {
@@ -194,10 +205,12 @@ class SearchPage extends PureComponent {
   }
 
   render() {
-    const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter, visible, transitionDuration } = this.state;
+    const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter, visible, transitionDuration, showAskForHelp } = this.state;
     const { classes } = this.props;
     const { organisation } = this.props.organisationStore.values;
     const { currentUser } = this.props.userStore.values;
+    const { searchResultsCount } = this.props.commonStore;
+    let searchFilters = this.props.commonStore.getSearchFilters();
 
     return (
       <React.Fragment>
@@ -250,12 +263,12 @@ class SearchPage extends PureComponent {
             </div>
 
           </div>
-          {organisation && (organisation.tag === 'quecbio' || organisation.tag === 'team') && (
+          {organisation && !this.props.authStore.isAuth() && (
             <Suspense fallback={<></>}>
               <Intercom appID={"k7gprnv3"} />
             </Suspense>
           )}
-          {organisation && (organisation.tag !== 'quecbio' && organisation.tag !== 'team') && this.props.authStore.isAuth() && (
+          {/* {organisation && (organisation.tag !== 'quecbio' && organisation.tag !== 'team') && this.props.authStore.isAuth() && (
             <Suspense fallback={<></>}>
               <Intercom 
                 appID={"k7gprnv3"} 
@@ -264,7 +277,7 @@ class SearchPage extends PureComponent {
                 email={currentUser.email ? currentUser.email.value : (currentUser.google ? currentUser.google.email : null)}
               />
             </Suspense>
-          )}
+          )} */}
         </main>
 
         {displayedHit && (
@@ -272,6 +285,12 @@ class SearchPage extends PureComponent {
             <ProfileLayout visible={visible} handleClose={this.handleCloseProfile} transitionDuration={transitionDuration} />
           </Suspense>
         )}
+
+        {/* {showAskForHelp && ( */}
+        <Suspense fallback={<CircularProgress color='secondary' />}>
+          <AskForHelp isOpen={showAskForHelp} />
+        </Suspense>
+        {/* )} */}
 
         {showCongratulation && (
           <Suspense fallback={<CircularProgress color='secondary' />}>
@@ -284,6 +303,18 @@ class SearchPage extends PureComponent {
             <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} handleDisplayProfile={this.handleDisplayProfile} />
           </Suspense>
         )}
+
+        {
+          this.props.authStore.isAuth() && (
+            <>
+              {(searchFilters.length > 0 && searchResultsCount <= 10) ? (
+                <AskForHelpFab className={classes.fab} onClick={this.handleDisplayAskForHelp} />
+              ) : (
+                  <MyProfileFab className={classes.fab} onClick={this.handleDisplayProfile} />
+                )}
+            </>
+          )
+        }
 
         <Suspense fallback={<></>}>
           <PromptIOsInstall />

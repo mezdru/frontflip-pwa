@@ -108,6 +108,14 @@
   "profile.activity.empty": "No activity yet",
   "profile.filter.title": "Filter",
   "profile.filter.default": "No filter",
-  "profile.others":"Others",
-  "card.moreWings": "... {counter} more"
+  "card.moreWings": "... {counter} more",
+  "askForHelp.popup.title": "Ask for Help",
+  "askForHelp.popup.subtitle": "These people match with your request, explain them your issue to find help quickly!",
+  "askForHelp.popup.send": "Send my request",
+  "askForHelp.popup.success": "We have sent your request! Please check your e-mail box to know if someone answered you.",
+  "askForHelp.popup.error": "There was an error, please retry in a few moments",
+  "askForHelp.popup.close": "Close",
+  "askForHelp.popup.missingMessage": "You must provide a complete message to explain your issue to your coworkers.",
+  "askForHelp.popup.placeholder": "Explain your issue here.",
+  "profile.others":"Others"
 }

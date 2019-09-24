@@ -118,28 +118,28 @@ class SearchResults extends React.Component {
   fetchHits = (filters, query, facetFilters, page) => {
     AlgoliaService.fetchHits(filters, query, facetFilters, page, true, 5)
       .then((content) => {
+        this.props.commonStore.searchResultsCount = content.nbHits;
 
         if ((!content || !content.hits || content.hits.length === 0) && (!page || page === 0)) this.setState({ showNoResult: true, hideShowMore: true });
         else this.setState({ showNoResult: false });
 
-        this.props.commonStore.searchResultsCount = content.nbHits;
 
         if (content.page >= (content.nbPages - 1)) this.setState({ hideShowMore: true });
         else if (content.nbPages > 1) this.setState({ hideShowMore: false });
 
         if (page) {
-          this.setState({ hits: this.state.hits.concat(content.hits) }, this.endTask());
+          this.setState({ hits: this.state.hits.concat(content.hits) }, this.endHitsLoad);
         } else {
           let contentHits = Array.from(content.hits);
           if (this.state.filterRequest === 'type:person' && !this.state.queryRequest) {
             contentHits = shuffleArray(contentHits);
           }
-          this.setState({ hits: contentHits }, this.endTask());
+          this.setState({ hits: contentHits }, this.endHitsLoad);
         }
       }).catch((e) => { this.setState({ hits: [] }) });
   }
 
-  endTask = () => {
+  endHitsLoad = () => {
     this.setState({ loadInProgress: false });
   }
 

@@ -5,6 +5,7 @@ import { styles } from './Wings.css';
 import ApplauseIcon from '../../../resources/icons/Applause.js';
 import classNames from 'classnames';
 import ClickBurst from '../../../hoc/ClickBurst';
+import { Clear } from '@material-ui/icons';
 
 let interval;
 
@@ -64,13 +65,15 @@ class Wings extends React.PureComponent {
         return this.props.classes.highlightMode;
       case "button":
         return this.props.classes.buttonMode;
+      case "person":
+        return this.props.classes.personMode;
       default:
         return null;
     }
   }
 
   render() {
-    const { classes, label, src, enableClap } = this.props;
+    const { classes, label, src, enableClap, onDelete } = this.props;
     const { addClapCounterLocal, intervalDuration, canClap } = this.state;
     const remoteClaps = this.props.getClapCount(this.props.hashtagId) || this.props.claps;
     let claps = addClapCounterLocal + remoteClaps;
@@ -110,6 +113,12 @@ class Wings extends React.PureComponent {
             <span>
               {claps}
             </span>
+          </div>
+        )}
+
+        {onDelete && (
+          <div className={classes.clapRoot} onClick={onDelete} >
+            <Clear />
           </div>
         )}
 
