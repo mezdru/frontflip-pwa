@@ -49,6 +49,7 @@ const styles = theme => ({
   },
   root: {
     maxWidth: 604,
+    margin: '16px 0px'
   }
 });
 
