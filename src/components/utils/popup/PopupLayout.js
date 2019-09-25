@@ -5,6 +5,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Slide from '@material-ui/core/Slide';
 import { withStyles } from '@material-ui/core/styles';
+import { IconButton } from '@material-ui/core';
+import { Close } from '@material-ui/icons';
 
 const styles = theme => ({
   content: {
@@ -16,6 +18,11 @@ const styles = theme => ({
     justifyContent: 'center',
     margin: 0,
     padding: theme.spacing.unit*2,
+  },
+  closeButton: {
+    position: 'absolute',
+    right:0,
+    marginRight: 32
   }
 });
 
@@ -40,6 +47,9 @@ class PopupLayout extends React.Component {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogContent className={classes.content} >
+          <IconButton className={classes.closeButton} onClick={this.props.onClose}>
+            <Close />
+          </IconButton>
           {this.props.title}
           <DialogContentText id="alert-dialog-slide-description">
             {this.props.children}

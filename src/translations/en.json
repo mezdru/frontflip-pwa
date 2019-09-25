@@ -110,13 +110,13 @@
   "profile.filter.default": "No filter",
   "card.moreWings": "... {counter} more",
   "askForHelp.popup.title": "Ask a question",
-  "askForHelp.popup.subtitle": "These people match with your request, explain them your issue to find help quickly!",
-  "askForHelp.popup.send": "Send my request",
-  "askForHelp.popup.success": "We have sent your request! Please check your e-mail box to know if someone answered you.",
+  "askForHelp.popup.subtitle": "Send an email to {resultsCount} people:",
+  "askForHelp.popup.send": "Send my question",
+  "askForHelp.popup.success": "We sent your question to {resultsCount} people! Check your inbox for answers.",
   "askForHelp.popup.error": "There was an error, please retry in a few moments",
   "askForHelp.popup.close": "Close",
-  "askForHelp.popup.missingMessage": "You must provide a complete message to explain your issue to your coworkers.",
-  "askForHelp.popup.placeholder": "Explain your issue here.",
+  "askForHelp.popup.missingMessage": "Explain your question to your coworkers to find help quickly.",
+  "askForHelp.popup.placeholder": "Your question here.",
   "profile.others":"Others"
 }
 
