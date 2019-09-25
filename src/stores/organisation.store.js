@@ -7,8 +7,8 @@ class OrganisationStore {
   inProgress = false;
   errors = null;
   values = {
-    orgTag: '',
-    orgId: '',
+    orgTag: null,
+    orgId: null,
     organisation: {},
     currentUserOrganisations: [],
     fullOrgFetch: false
@@ -33,7 +33,7 @@ class OrganisationStore {
 
   reset() {
     this.values.organisation = {};
-    this.values.orgTag = '';
+    this.values.orgTag = null;
   }
 
   getOrganisation() {
