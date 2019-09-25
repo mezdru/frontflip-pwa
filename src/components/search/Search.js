@@ -24,11 +24,12 @@ class Search extends PureComponent {
 
   render() {
     const {autocompleteSuggestions} = this.state;
+    const {onSelect, mode} = this.props;
 
     return(
       <>
         <SearchField fetchAutocompleteSuggestions={this.fetchAutocompleteSuggestions} />
-        <SearchSuggestions autocompleteSuggestions={autocompleteSuggestions} />
+        <SearchSuggestions autocompleteSuggestions={autocompleteSuggestions} onSelect={onSelect} mode={mode} />
       </>
     );
   }

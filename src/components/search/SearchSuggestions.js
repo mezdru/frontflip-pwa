@@ -190,6 +190,14 @@ class SearchSuggestions extends React.Component {
     return (this.state.filterRequest.search(tag) === -1);
   }
 
+  handleWingClick = (wing) => {
+    if(this.props.onSelect) {
+      this.props.onSelect(wing);
+    } else {
+      this.props.addFilter(wing);
+    }
+  }
+
   render() {
     const { facetHits } = this.state;
     const { classes, addFilter } = this.props;
@@ -241,7 +249,7 @@ class SearchSuggestions extends React.Component {
                   })
 
                   }
-                  onClick={(e) => addFilter({ name: displayedName, tag: (item.tag || item.value) })}
+                  onClick={(e) => this.handleWingClick({ name: displayedName, tag: (item.tag || item.value) })}
                   className={classes.suggestion}
                   style={{ animationDelay: (i * 0.05) + 's' }} />
               );

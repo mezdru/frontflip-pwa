@@ -14,7 +14,7 @@ console.debug('Loading OnboardPage');
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
-const styles = {
+const styles = theme => ({
   root: {
     height: '100vh',
   },
@@ -42,9 +42,16 @@ const styles = {
     zIndex: 2,
     borderRadius: 5,
     boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    margin: 16,
+    [theme.breakpoints.down('xs')]: {
+      position: 'absolute',
+      top: 48,
+      marginTop: 32,
+      maxWidth: 'calc(100% - 32px)'
+    }
   }
-};
+});
 
 class OnboardPage extends React.Component {
   constructor(props) {
@@ -76,24 +83,6 @@ class OnboardPage extends React.Component {
   shouldComponentUpdate(nextProp, nextState) {
     return (JSON.stringify(nextState) !== JSON.stringify(this.state))
   }
-
-  // makeSteps = async (stepLabel = "") => {
-  //   let org = this.props.organisationStore.values.organisation;
-  //   let steps;
-
-  //   if (undefsafe(org, 'onboardSteps.length') > 0) {
-  //     steps = org.onboardSteps;
-  //   } else {
-  //     steps = ['intro', 'contacts', 'wings'];
-  //     if (undefsafe(org, 'featuredWingsFamily.length') > 0)
-  //       org.featuredWingsFamily.forEach(fwf => {
-  //         if (!steps.find(elt => elt === fwf.tag) && fwf.tag)
-  //           steps.push(fwf.tag);
-  //       });
-  //   }
-  //   this.setState({ steps: steps, stepNumber: this.state.steps.indexOf(stepLabel.replace('%23', '#')), inOnboarding: true });
-
-  // }
 
   getRecordForUser = () => {
     this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);

@@ -1,9 +1,8 @@
 import React from 'react'
 import { withStyles, Grid } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
-import SearchField from '../../algolia/SearchField';
+import Search from '../../search/Search';
 import UserWings from '../../utils/wing/UserWings';
-import WingsSuggestion from '../../algolia/WingsSuggestion';
 import Typography from '@material-ui/core/Typography';
 import { FormattedMessage } from "react-intl";
 
@@ -40,8 +39,8 @@ class OnboardWings extends React.Component {
     this.props.handleSave(['hashtags']);
   }
 
-  handleAddWing = (e, element) => {
-    if (e) e.preventDefault();
+  handleAddWing = (element) => {
+    console.log(element)
     this.props.recordStore.setRecordTag(element.tag);
     this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
     if (this.props.recordStore.values.record.hashtags.find(elt => elt.tag === element.tag)) return Promise.resolve();
@@ -97,6 +96,10 @@ class OnboardWings extends React.Component {
 
             <Grid item xs={12} style={{ padding: 8 }}>
               {this.renderTitleByStep()}
+            </Grid>
+
+            <Grid item xs={12} style={{padding: '0px 24px'}}>
+              <Search mode="onboard" onSelect={this.handleAddWing} />
             </Grid>
 
             {/* <Grid item xs={12} style={{ padding: 16, paddingBottom: 0, paddingTop: 0 }}>
