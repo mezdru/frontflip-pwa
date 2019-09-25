@@ -31,7 +31,7 @@ const styles = theme => ({
     }
   },
   recipients: {
-    height: 180,
+    maxHeight: 180,
     overflowY: 'auto',
     textAlign: 'left',
   }
@@ -173,7 +173,6 @@ class AskForHelp extends React.Component {
               fullWidth
               multiline
               rows={5}
-              maxRows={10}
               margin="none"
               value={message}
               onChange={this.handleMessageChange}
