@@ -10,10 +10,7 @@ import { FormattedMessage } from "react-intl";
 const styles = theme => ({
   userWingsPosition: {
     paddingTop: 16,
-    height: 'calc(100% - 320px)',
-    [theme.breakpoints.down('sm')]: {
-      height: 'calc(100% - 280px)',
-    },
+    height: 300,
     overflowY: 'auto'
   }
 });
@@ -90,19 +87,19 @@ class OnboardWings extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <Grid container direction="column" style={{ height: 'calc(100vh - 73px)', background: 'white', overflow: 'hidden' }}>
+      <Grid container direction="column" style={{background: 'white', overflow: 'hidden' }}>
         <Grid item style={{
           background: this.props.theme.palette.primary.main, maxWidth: '100%', position: 'relative', zIndex: 2,
           boxShadow: 'rgba(0, 0, 0, 0.2) 0px 1px 8px 0px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.12) 0px 3px 3px -2px',
         }}
           justify="center" direction="row" container >
-          <Grid container item xs={12} sm={8} md={6} lg={4} >
+          <Grid container item xs={12} >
 
             <Grid item xs={12} style={{ padding: 8 }}>
               {this.renderTitleByStep()}
             </Grid>
 
-            <Grid item xs={12} style={{ padding: 16, paddingBottom: 0, paddingTop: 0 }}>
+            {/* <Grid item xs={12} style={{ padding: 16, paddingBottom: 0, paddingTop: 0 }}>
               <SearchField hashtagOnly handleAddWing={this.handleAddWing}
                 wingsFamily={this.isFeaturedWings() ? this.props.activeStepLabel : null} />
             </Grid>
@@ -111,13 +108,13 @@ class OnboardWings extends React.Component {
               <WingsSuggestion handleAddWing={this.handleAddWing} handleSave={this.props.handleSave}
                 wingsFamily={this.isFeaturedWings() ? this.props.activeStepLabel : null}
                 SuggestionsController={this.props.SuggestionsController} stepLabel={this.props.activeStepLabel} />
-            </Grid>
+            </Grid> */}
 
           </Grid>          
         </Grid>
 
         <Grid item justify="center" direction="row" container className={classes.userWingsPosition} id={this.state.scrollableClass}>
-          <Grid container item xs={12} sm={8} md={6} lg={4}>
+          <Grid container item xs={12}>
             <Grid item xs={12} >
               <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? this.getFeaturedWings() : null}
                 scrollUserWingsToBottom={this.scrollUserWingsToBottom} />

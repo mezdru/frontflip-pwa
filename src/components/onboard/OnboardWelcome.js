@@ -1,17 +1,20 @@
 import React from 'react'
-import {FormattedMessage, FormattedHTMLMessage} from 'react-intl';
-import {inject, observer} from 'mobx-react';
+import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
+import { inject, observer } from 'mobx-react';
 
-import {Button, Grid, Typography, withStyles, Hidden} from "@material-ui/core";
-import Banner from '../../components/utils/banner/Banner';
-import Header from '../../components/header/Header';
-import Logo from '../../components/utils/logo/Logo';
+import { Button, Grid, Typography, withStyles, Hidden } from "@material-ui/core";
+import Banner from '../utils/banner/Banner';
+import Header from '../header/Header';
+import Logo from '../utils/logo/Logo';
 import UrlService from '../../services/url.service';
 
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 
 const styles = (theme) => ({
+  root: {
+    padding: 24
+  },
   logo: {
     width: 110,
     height: 110,
@@ -34,14 +37,8 @@ const styles = (theme) => ({
   },
   title: {
     textAlign: 'center',
-    paddingTop: 16,
-    paddingBottom:16,
-    [theme.breakpoints.down(400)]: {
-      padding: 5,
-    }
-  },
-  form: {
-    width: '100%',
+    paddingBottom: 24,
+    paddingTop: 8,
   },
   term: {
     [theme.breakpoints.down('md')]: {
@@ -66,14 +63,14 @@ const styles = (theme) => ({
     [theme.breakpoints.up('md')]: {
       height: 416,
       lineHeight: 416,
-    }, 
+    },
     background: 'radial-gradient(rgba(50,50,50,.4), rgba(50,50,50,.1))',
     backgroundRepeat: 'no-repeat',
     '& h2': {
-      position:'absolute',
+      position: 'absolute',
       top: '50%',
-      left:0,
-      right:0,
+      left: 0,
+      right: 0,
       margin: 'auto',
       transform: 'translateY(-50%)',
       color: 'white',
@@ -90,53 +87,35 @@ class OnboardWelcome extends React.Component {
   }
 
   render() {
-    const {organisation} = this.props.organisationStore.values;
-    const {classes} = this.props;
+    const { organisation } = this.props.organisationStore.values;
+    const { classes } = this.props;
 
     return (
-      <Grid container direction={"column"} justify={"space-around"}>
-      <Grid container item>
-        <Header/>
-      </Grid>
-      <Grid container item alignItems={"stretch"}>
-        <Banner />
-        <Hidden smDown>
-          <div className={classes.banner}>
-            <Typography variant="h2" ><FormattedMessage id={'onboard.welcome'}/> {entities.decode(organisation.name)}</Typography>
-          </div>
-        </Hidden>
-      </Grid>
-      <Grid container item justify={"center"}>
-        <Logo type={"organisation"} alt="org-logo" className={classes.logo}/>
-      </Grid>
-      <Grid container item justify={"center"} className={classes.container}>
-        <form onSubmit={this.handleSubmitForm} className={classes.form}>
-          <Grid item container direction={'column'} xs={12} sm={6} lg={4} spacing={16}>
-            <Hidden mdUp>
-            <Typography variant="h2" style={{textAlign: 'center'}} ><FormattedMessage id={'onboard.welcome'}/> {entities.decode(organisation.name)}</Typography>
-            </Hidden>
-            <Grid item>
-              <FormattedHTMLMessage id="onboard.welcome.text" values={{organisationName: entities.decode(organisation.name)}} />
+      <form onSubmit={this.props.handleEnterToOnboard}>
+        <Grid item container direction={'column'} xs={12} spacing={16} className={classes.root}>
+          <Typography variant="h2" className={classes.title} >
+            <FormattedMessage id={'onboard.welcome'} /> {entities.decode(organisation.name)}
+          </Typography>
+          <Grid item>
+            <FormattedHTMLMessage id="onboard.welcome.text" values={{ organisationName: entities.decode(organisation.name) }} />
+          </Grid>
+          <Grid item>
+            <Button onClick={this.props.handleEnterToOnboard} fullWidth color="secondary" ><FormattedMessage id={'onboard.start'} /></Button>
+          </Grid>
+          <Grid item container direction="row" justify='space-around' >
+            <Grid item lg={6}>
+              <Button className={classes.term} variant="text" fullWidth={true} component="a" target="_blank" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/terms', undefined)}>
+                <FormattedMessage id="menu.drawer.terms" />
+              </Button>
             </Grid>
-            <Grid item>
-              <Button onClick={this.props.handleEnterToOnboard} fullWidth color="secondary" ><FormattedMessage id={'onboard.start'}/></Button>
-            </Grid>
-            <Grid item container direction="row" justify='space-around' >
-              <Grid item lg={6}>
-                <Button  className={classes.term} variant="text" fullWidth={true} component="a" target="_blank" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/terms', undefined)}>
-                  <FormattedMessage id="menu.drawer.terms" />
-                </Button>
-              </Grid>
-              <Grid item lg={6}>
-                <Button className={classes.protectingData} variant="text" fullWidth={true}  component="a" target="_blank" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/protectingYourData', undefined)}>
-                  <FormattedMessage id="menu.drawer.protectingYourData" style={{justifyContent: 'flex-end!important'}}/>
-                </Button>
-              </Grid>
+            <Grid item lg={6}>
+              <Button className={classes.protectingData} variant="text" fullWidth={true} component="a" target="_blank" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/protectingYourData', undefined)}>
+                <FormattedMessage id="menu.drawer.protectingYourData" style={{ justifyContent: 'flex-end!important' }} />
+              </Button>
             </Grid>
           </Grid>
-        </form>
-      </Grid>
-    </Grid>
+        </Grid>
+      </form>
     );
   }
 }

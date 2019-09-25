@@ -15,3 +15,11 @@ export const shuffleArray = (array) => {
   }
   return arrayOut;
 }
+
+/**
+ * 
+ * @param {*} props which contains commonStore & organisationStore
+ */
+export const getBaseUrl = (props) => {
+  return '/' + props.commonStore.locale + '/' + props.organisationStore.values.organisation.tag;
+}

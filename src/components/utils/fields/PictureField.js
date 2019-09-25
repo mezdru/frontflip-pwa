@@ -10,7 +10,7 @@ import './uploadcare_customize.css';
 const styles = theme => ({
   pictureContainer: {
     position: 'relative',
-    margin: '8px 16px',
+    margin: '0px 16px',
     textAlign: 'center',
     [theme.breakpoints.down('xs')] : {
       margin: 8,
@@ -19,8 +19,8 @@ const styles = theme => ({
   picture: {
     position: 'relative',
     borderRadius: '50%',
-    width:300,
-    height:300,
+    width:250,
+    height:250,
     [theme.breakpoints.down('xs')] : {
       width: 180,
       height: 180,

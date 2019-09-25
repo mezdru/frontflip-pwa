@@ -36,6 +36,7 @@
     "superagent": "^4.1.0",
     "superagent-promise": "^1.1.0",
     "twemoji": "^11.3.0",
+    "undefsafe": "^2.0.2",
     "universal-cookie": "^3.0.7",
     "uploadcare-widget": "^3.7.0"
   },

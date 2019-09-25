@@ -118,8 +118,8 @@ class OnboardContacts extends React.Component {
     const {classes} = this.props;
   
     return (
-      <Grid container style={{minHeight: 'calc(100vh - 73px)', background: this.props.theme.palette.primary.main}} direction="column" alignItems="center">
-        <Grid item xs={12} sm={8} md={6} lg={4} style={{width: '100%'}}>
+      <Grid container style={{background: this.props.theme.palette.primary.main, padding: 24}} direction="column" alignItems="center">
+        <Grid item xs={12} style={{width: '100%'}}>
             <Typography variant="h4" style={{textAlign: 'center', padding: 16, color:this.props.theme.palette.primary.dark}}>
               <FormattedMessage id={'onboard.yourContact'}/>
             </Typography>
