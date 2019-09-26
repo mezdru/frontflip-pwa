@@ -116,6 +116,6 @@
     "askForHelp.popup.success": "Nous avons envoyé votre question à {resultsCount} personnes ! Vérifiez votre boite mail pour savoir si quelqu'un vous a répondu.",
     "askForHelp.popup.error": "Il y a eu un problème, veuillez essayer dans quelques instants.",
     "askForHelp.popup.close": "Fermer",
-    "askForHelp.popup.missingMessage": "Detaillez votre question afin de demander de l'aide à vos collaborateurs.",
+    "askForHelp.popup.missingMessage": "Detaillez votre question afin d'obtenir une réponse rapidement.",
     "askForHelp.popup.placeholder": "Votre question ici."
 }
