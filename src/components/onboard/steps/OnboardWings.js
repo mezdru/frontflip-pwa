@@ -59,6 +59,13 @@ class OnboardWings extends React.Component {
       });
   }
 
+  handleCreateWing = async (wing) => {
+    let newWing = {name: wing.name, type: 'hashtag'};
+    if(this.isFeaturedWings()) newWing.hashtags = [this.getFeaturedWings()];
+    let newWingSaved = await this.props.recordStore.postRecord(newWing);
+    this.handleAddWing(newWingSaved);
+  }
+
   handleRemoveWing = (e, tag) => {
     e.preventDefault();
     let record = this.props.recordStore.values.record;
@@ -85,7 +92,7 @@ class OnboardWings extends React.Component {
 
   render() {
     const { classes } = this.props;
-    
+
     return (
       <Grid container direction="column" style={{background: 'white', overflow: 'hidden' }}>
         <Grid item style={{
@@ -100,7 +107,7 @@ class OnboardWings extends React.Component {
             </Grid>
 
             <Grid item xs={12} style={{padding: '0px 24px'}}>
-              <Search mode="onboard" onSelect={this.handleAddWing} max={10} wingsFamily={this.getFeaturedWings()} />
+              <Search mode="onboard" onSelect={this.handleAddWing} max={10} wingsFamily={this.getFeaturedWings()} handleCreateWing={this.handleCreateWing} />
             </Grid>
 
           </Grid>          

@@ -38,11 +38,8 @@ class OnboardSuggestions extends React.Component {
     this.fetchSuggestions();
   }
 
-  fetchSuggestions = (lastSelected, query, wingsFamily) => {
-    SuggestionsService.getOnboardSuggestions(lastSelected, query, wingsFamily )
-      .then(suggestions => {
-        this.setState({ suggestions: suggestions });
-      });
+  fetchSuggestions = async (lastSelected, query, wingsFamily) => {
+    this.setState({suggestions: await SuggestionsService.getOnboardSuggestions(lastSelected, query, wingsFamily )});
   }
 
   shouldDisplaySuggestion = (suggestion) => {
@@ -55,7 +52,8 @@ class OnboardSuggestions extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return  (JSON.stringify(this.state.suggestions) !== JSON.stringify(nextState.suggestions)) || 
-            (JSON.stringify(nextProps.wingsFamily) !== JSON.stringify(this.props.wingsFamily));
+            (JSON.stringify(nextProps.wingsFamily) !== JSON.stringify(this.props.wingsFamily)) ||
+            (nextProps.userQuery !== this.props.userQuery)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -70,10 +68,11 @@ class OnboardSuggestions extends React.Component {
   }
 
   render() {
-    const { classes, max } = this.props;
+    const { classes, max, userQuery } = this.props;
     const { locale } = this.props.commonStore;
     const { suggestions } = this.state;
     let suggestionsDisplayed = 0;
+    console.log(userQuery)
 
     return (
       <Grid container item xs={12} >
@@ -82,6 +81,13 @@ class OnboardSuggestions extends React.Component {
         </Typography>
 
         <Grid item className={classes.suggestionsContainer}>
+          {userQuery && (
+            <Wings
+              label={"Create " + userQuery}
+              mode="button"
+              onClick={() => this.props.handleCreateWing({name: userQuery})}
+            />
+          )}
           {suggestions.map((suggestion, index) => {
             if (!this.shouldDisplaySuggestion(suggestion)) return null;
             if (max && suggestionsDisplayed >= max) return null;
