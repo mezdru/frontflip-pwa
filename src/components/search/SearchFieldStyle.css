@@ -1,0 +1,104 @@
+#search-filters-container::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  border: none !important;
+}
+#search-filters-container {
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-options .Select-arrow-zone {
+  display: none;
+}
+
+.hide-options .Select-menu-outer {
+  display: none;
+}
+
+.autocomplete-search {
+  position: absolute;
+  left:0;
+  right:0;
+  margin:auto;
+  width: 100%;
+  z-index: 1199;
+}
+
+.editableChip {
+  padding-right: 0 !important;
+  padding-left: 6px !important;
+  margin: 5px !important;
+}
+
+.editableChip span {
+  padding-right:  5px !important;
+}
+
+.editableChip span div:nth-child(1) {
+  padding-right: 6px !important;
+}
+.editableChip span div:nth-child(2):hover {
+color: #789094;
+background: white;
+}
+
+.custom-option {
+  cursor: pointer;
+  position: relative;
+  padding: 16px;
+}
+.custom-option-main {
+  position: relative;
+  padding: 16px;
+  top:0;
+  left:0;
+  width: 66%;
+}
+.custom-option-secondary {
+  position: absolute;
+  padding: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0;
+  width:33%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: rgb(150,150,150);
+}
+.custom-option-img {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 50%;
+  left:0;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  overflow:hidden;
+}
+.custom-option-label {
+  position: absolute;
+  left: 72px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left;
+  max-width: 100%;
+  top : 50%;
+  transform: translateY(-50%);
+}
+.custom-option:hover {
+  background: #DDE9EB;
+}
+.custom-option-main span span{
+  font-weight: bold;
+}
+@media screen and (max-width: 600px) {
+  .custom-option-secondary {
+      display: none;
+  }
+}

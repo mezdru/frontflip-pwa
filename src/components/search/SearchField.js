@@ -6,7 +6,7 @@ import { observe } from 'mobx';
 import { Clear } from '@material-ui/icons';
 import IconButton from '@material-ui/core/IconButton';
 
-import '../algolia/SearchField.css';
+import './SearchFieldStyle.css';
 import ProfileService from '../../services/profile.service';
 import Wings from '../utils/wing/Wings';
 import withSearchManagement from '../../hoc/SearchManagement.hoc';
