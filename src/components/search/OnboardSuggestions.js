@@ -38,8 +38,8 @@ class OnboardSuggestions extends React.Component {
     this.fetchSuggestions();
   }
 
-  fetchSuggestions = (lastSelected, query) => {
-    SuggestionsService.getOnboardSuggestions(lastSelected, query)
+  fetchSuggestions = (lastSelected, query, wingsFamily) => {
+    SuggestionsService.getOnboardSuggestions(lastSelected, query, wingsFamily )
       .then(suggestions => {
         this.setState({ suggestions: suggestions });
       });
@@ -54,11 +54,12 @@ class OnboardSuggestions extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return (JSON.stringify(this.state.suggestions) !== JSON.stringify(nextState.suggestions));
+    return  (JSON.stringify(this.state.suggestions) !== JSON.stringify(nextState.suggestions)) || 
+            (JSON.stringify(nextProps.wingsFamily) !== JSON.stringify(this.props.wingsFamily));
   }
 
   componentWillReceiveProps(nextProps) {
-    this.fetchSuggestions(null, nextProps.userQuery);
+    this.fetchSuggestions(null, nextProps.userQuery, nextProps.wingsFamily);
   }
 
   handleSelectSuggestion = (suggestion) => {

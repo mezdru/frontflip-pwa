@@ -2,7 +2,7 @@ import React from 'react'
 import { withStyles, CircularProgress } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { injectIntl } from 'react-intl';
-
+import ProfileService from '../../../services/profile.service';
 import Uploader from '../uploadcare/Uploader';
 import defaultPicture from '../../../resources/images/placeholder_person.png';
 import './uploadcare_customize.css';
@@ -91,7 +91,7 @@ class PictureField extends React.Component {
               <CircularProgress color='secondary' className={classes.picture} size={300} />
             )}
             {(!loading || pictureUrl) && (
-              <img src={pictureUrl || defaultPicture} alt="" className={classes.picture} />
+              <img src={ProfileService.getPicturePathResized({url: pictureUrl}, 'person', '250x250') || defaultPicture} alt="" className={classes.picture} />
             )}
           </div>
 

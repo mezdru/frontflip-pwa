@@ -85,6 +85,7 @@ class OnboardWings extends React.Component {
 
   render() {
     const { classes } = this.props;
+    
     return (
       <Grid container direction="column" style={{background: 'white', overflow: 'hidden' }}>
         <Grid item style={{
@@ -99,19 +100,8 @@ class OnboardWings extends React.Component {
             </Grid>
 
             <Grid item xs={12} style={{padding: '0px 24px'}}>
-              <Search mode="onboard" onSelect={this.handleAddWing} max={10} />
+              <Search mode="onboard" onSelect={this.handleAddWing} max={10} wingsFamily={this.getFeaturedWings()} />
             </Grid>
-
-            {/* <Grid item xs={12} style={{ padding: 16, paddingBottom: 0, paddingTop: 0 }}>
-              <SearchField hashtagOnly handleAddWing={this.handleAddWing}
-                wingsFamily={this.isFeaturedWings() ? this.props.activeStepLabel : null} />
-            </Grid>
-
-            <Grid item xs={12} >
-              <WingsSuggestion handleAddWing={this.handleAddWing} handleSave={this.props.handleSave}
-                wingsFamily={this.isFeaturedWings() ? this.props.activeStepLabel : null}
-                SuggestionsController={this.props.SuggestionsController} stepLabel={this.props.activeStepLabel} />
-            </Grid> */}
 
           </Grid>          
         </Grid>

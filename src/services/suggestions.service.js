@@ -2,6 +2,7 @@ import commonStore from '../stores/common.store';
 import recordStore from '../stores/record.store';
 import AlgoliaService from './algolia.service';
 import { observable, decorate } from 'mobx';
+import undefsafe from 'undefsafe';
 
 class SuggestionsService {
 
@@ -25,16 +26,15 @@ class SuggestionsService {
    * @param lastSelection can be the latest wings chosen
    * @param query the current entry of the User in search field
    */
-  getOnboardSuggestions = async (lastSelection, query) => {
+  getOnboardSuggestions = async (lastSelection, query, wingsFamily) => {
     let suggestions = [];
     let algoliaRes;
 
-    if(lastSelection) {
+    if(lastSelection && !wingsFamily) {
       algoliaRes = await AlgoliaService.fetchFacetValues(lastSelection, false, null, query);
     } else {
-      algoliaRes = await AlgoliaService.fetchOptions(query, true, false, 40);
+      algoliaRes = await AlgoliaService.fetchOptions(query, true, undefsafe(wingsFamily, 'tag'), 40);
     }
-    console.log('ALGOLIA: ', algoliaRes)
     if(!algoliaRes) return [];
 
     suggestions = await this.upgradeData(algoliaRes.facetHits || algoliaRes.hits); // can be algoliaRes.hits ?

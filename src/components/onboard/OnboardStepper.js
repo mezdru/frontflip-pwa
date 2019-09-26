@@ -167,9 +167,6 @@ class OnboardStepper extends React.Component {
 
     let wantedUrl = '/' + locale + '/' + (organisation.tag || orgTag) + '/onboard/' + (steps[activeStep] ? steps[activeStep].replace('#', '%23') : '');
 
-    console.log(this.state);
-    console.log(this.props.wantedStep);
-
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
 
     return (
