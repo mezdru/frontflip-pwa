@@ -11,7 +11,7 @@ import EmailService from '../../../services/email.service';
 import SnackbarCustom from '../snackbars/SnackbarCustom';
 import withSearchManagement from '../../../hoc/SearchManagement.hoc';
 import AlgoliaService from '../../../services/algolia.service';
-
+import { Email } from '@material-ui/icons';
 
 const styles = theme => ({
   text: {
@@ -31,7 +31,7 @@ const styles = theme => ({
     }
   },
   recipients: {
-    height: 180,
+    maxHeight: 180,
     overflowY: 'auto',
     textAlign: 'left',
   }
@@ -49,7 +49,7 @@ class AskForHelp extends React.Component {
 
   componentDidMount() {
     observe(this.props.commonStore, 'searchFilters', (change) => {
-      if(JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue))
+      if (JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue))
         this.getSearchResults();
     });
 
@@ -59,13 +59,13 @@ class AskForHelp extends React.Component {
     // get request params
     let reqObject = await this.props.makeFiltersRequest();
     AlgoliaService.fetchHits(reqObject.filterRequest, reqObject.queryRequest, null, null, false, 10)
-    .then((content) => {
-      this.setState({recipients: Array.from(content.hits)});
-    });
+      .then((content) => {
+        this.setState({ recipients: Array.from(content.hits) });
+      });
   }
 
   componentWillReceiveProps(nextProps) {
-    if(this.props.isOpen !== nextProps.isOpen) {
+    if (this.props.isOpen !== nextProps.isOpen) {
       this.setState({
         isOpen: nextProps.isOpen,
         message: null,
@@ -79,13 +79,13 @@ class AskForHelp extends React.Component {
 
   handleError = (e) => {
     console.error(e);
-    this.setState({ error: true})
+    this.setState({ error: true })
   }
 
   handleSend = () => {
 
-    if(!this.state.message || this.state.message.length < 35) 
-      return this.setState({errorMessage: this.props.intl.formatMessage({id: "askForHelp.popup.missingMessage"})});
+    if (!this.state.message || this.state.message.length < 35)
+      return this.setState({ errorMessage: this.props.intl.formatMessage({ id: "askForHelp.popup.missingMessage" }) });
 
     let helpRequest = {
       organisation: this.props.organisationStore.values.organisation._id,
@@ -102,7 +102,7 @@ class AskForHelp extends React.Component {
       .then(hr => {
         EmailService.sendHelpRequest(hr._id)
           .then(() => {
-            this.setState({success: true});
+            this.setState({ success: true });
           }).catch(this.handleError);
       }).catch(this.handleError);
 
@@ -141,15 +141,24 @@ class AskForHelp extends React.Component {
         }
         actions={
           <Button onClick={(error || success) ? this.handleClose : this.handleSend} color="secondary" type="submit">
-            <FormattedMessage id={(error || success) ? "askForHelp.popup.close" : "askForHelp.popup.send"} />
+            {(error || success) ? (
+            <FormattedMessage id={"askForHelp.popup.close"} />
+            ) : (
+              <>
+                <Email /><span>&nbsp;&nbsp;</span>
+                <FormattedMessage id={"askForHelp.popup.send"} />
+              </>
+            )}
           </Button>
         }
         onClose={this.handleClose}
       >
 
-        <Typography variant="h6" className={classes.title}>
-          <FormattedMessage id="askForHelp.popup.subtitle" />
-        </Typography>
+        {!success && (
+          <Typography variant="h6" className={classes.title}>
+            <FormattedMessage id="askForHelp.popup.subtitle" values={{ resultsCount: recipients.length }} />
+          </Typography>
+        )}
 
         {!error && !success && (
           <>
@@ -167,11 +176,10 @@ class AskForHelp extends React.Component {
 
             <TextField
               className={classes.textarea}
-              label={this.props.intl.formatMessage({id: "askForHelp.popup.placeholder"})}
+              label={this.props.intl.formatMessage({ id: "askForHelp.popup.placeholder" })}
               fullWidth
               multiline
               rows={5}
-              maxRows={10}
               margin="none"
               value={message}
               onChange={this.handleMessageChange}
@@ -184,11 +192,11 @@ class AskForHelp extends React.Component {
         )}
 
         {error && (
-          <SnackbarCustom variant="warning" message={this.props.intl.formatMessage({id: "askForHelp.popup.error"})} />
+          <SnackbarCustom variant="warning" message={this.props.intl.formatMessage({ id: "askForHelp.popup.error" })} />
         )}
 
         {success && (
-          <SnackbarCustom variant="success" message={this.props.intl.formatMessage({id: "askForHelp.popup.success"})} />
+          <SnackbarCustom variant="success" message={this.props.intl.formatMessage({ id: "askForHelp.popup.success" }, { resultsCount: recipients.length })} />
         )}
 
       </PopupLayout >
@@ -199,7 +207,7 @@ class AskForHelp extends React.Component {
 export default inject('commonStore', 'helpRequestStore', 'recordStore', 'organisationStore')(
   observer(
     withStyles(styles, { withTheme: true })(
-      injectIntl( withSearchManagement(AskForHelp))
+      injectIntl(withSearchManagement(AskForHelp))
     )
   )
 );

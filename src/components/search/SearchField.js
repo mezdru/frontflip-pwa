@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 import '../algolia/SearchField.css';
 import ProfileService from '../../services/profile.service';
-import Wing from '../utils/wing/Wing';
+import Wings from '../utils/wing/Wings';
 import withSearchManagement from '../../hoc/SearchManagement.hoc';
 import { styles } from './SearchField.css';
 
@@ -85,9 +85,10 @@ class SearchField extends PureComponent {
           {searchFilters && searchFilters.length > 0 && searchFilters.map((filter, index) => {
             let displayedName = ProfileService.getWingDisplayedName(filter, this.props.commonStore.locale);
             return (
-              <Wing
+              <Wings
                 label={ProfileService.htmlDecode(displayedName)} key={index}
                 onDelete={(e) => { this.props.removeFilter(filter) }}
+                mode="highlight"
                 className={'highlighted'} />
             );
           })}
