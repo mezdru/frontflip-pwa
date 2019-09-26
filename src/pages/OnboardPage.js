@@ -38,14 +38,15 @@ const styles = theme => ({
     position: 'fixed',
   },
   container: {
+    position: 'absolute',
     backgroundColor: 'white',
+    width: '100%',
     zIndex: 2,
     borderRadius: 5,
     boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
     overflow: 'hidden',
     margin: 16,
     [theme.breakpoints.down('xs')]: {
-      position: 'absolute',
       top: 48,
       marginTop: 32,
       maxWidth: 'calc(100% - 32px)'
@@ -105,13 +106,13 @@ class OnboardPage extends React.Component {
         </Suspense>
 
         <BannerResizable
-          type={'profile'}
+          type={'organisation'}
           initialHeight={100}
           style={styles.banner}
         />
         <div className={classes.blackFilter} ></div>
 
-        <Grid item xs={12} sm={8} md={6} lg={4} className={classes.container}>
+        <Grid item xs={12} sm={8} md={6} lg={6} className={classes.container}>
           {inOnboarding ? (
             <OnboardStepper edit={editMode} wantedStep={undefsafe(this.props, 'match.params.step')} />
           ) : (

@@ -5,7 +5,7 @@ import { observable, decorate } from 'mobx';
 
 class SuggestionsService {
 
-  constructor(){
+  constructor() {
     this._currentSuggestions = [];
     this._bank = [];
     this._workInProgress = false;
@@ -15,14 +15,36 @@ class SuggestionsService {
     this._newSuggestions = [];
   }
 
-  async init(algoliaKey){
+  async init(algoliaKey) {
     await AlgoliaService.setAlgoliaKey(algoliaKey);
     this._bank = await this.syncBank(null);
   }
 
   /**
- * @description Sync wings bank with current state bank
- */
+   * @description Get suggestions for onboard
+   * @param lastSelection can be the latest wings chosen
+   * @param query the current entry of the User in search field
+   */
+  getOnboardSuggestions = async (lastSelection, query) => {
+    let suggestions = [];
+    let algoliaRes;
+
+    if(lastSelection) {
+      algoliaRes = await AlgoliaService.fetchFacetValues(lastSelection, false, null, query);
+    } else {
+      algoliaRes = await AlgoliaService.fetchOptions(query, true, false, 40);
+    }
+    console.log('ALGOLIA: ', algoliaRes)
+    if(!algoliaRes) return [];
+
+    suggestions = await this.upgradeData(algoliaRes.facetHits || algoliaRes.hits); // can be algoliaRes.hits ?
+
+    return suggestions;
+  }
+
+  /**
+   * @description Sync wings bank with current state bank
+   */
   syncBank = async (filters) => AlgoliaService.loadBank(filters).then(() => { return commonStore.getLocalStorage('wingsBank', true) });
 
 
@@ -31,13 +53,13 @@ class SuggestionsService {
     return this._currentSuggestions;
   }
 
-  makeInitialSuggestions = async (wingsFamily, id) => { 
+  makeInitialSuggestions = async (wingsFamily, id) => {
     this._currentSuggestions = [];
     this._newSuggestions = [];
     if (!wingsFamily) {
       await this.fetchSuggestions(null, true, 15);
       await this.fetchSuggestions(null, false, 10);
-      if(this._currentSuggestions.length < 10) {
+      if (this._currentSuggestions.length < 10) {
         await this.fetchPublicHashtags(10);
       }
 
@@ -48,7 +70,7 @@ class SuggestionsService {
           .then((bank) => {
             this._bank = bank;
             this.populateSuggestionsData();
-          }).catch(e => {console.log(e)})
+          }).catch(e => { console.log(e) })
       }
     } else {
       await this.fetchWingsFamily(wingsFamily);
@@ -69,10 +91,10 @@ class SuggestionsService {
     for (let i = 0; i < nbHitToAdd; i++) {
 
       let suggestionToAdd = hits.splice(i, 1)[0];
-      if(!suggestionToAdd) continue;
+      if (!suggestionToAdd) continue;
 
       suggestionToAdd.tag = suggestionToAdd.value || suggestionToAdd.tag;
-      if(!this.isInSuggestions(suggestionToAdd.tag) && !this.isInUserWings(suggestionToAdd.tag)){
+      if (!this.isInSuggestions(suggestionToAdd.tag) && !this.isInUserWings(suggestionToAdd.tag)) {
         // console.log('>>>>>>>>> ADD >>>>>>>>>> '  + suggestionToAdd.tag)
         suggestions.push(suggestionToAdd);
         this._newSuggestions.push(suggestionToAdd);
@@ -86,10 +108,10 @@ class SuggestionsService {
 
   fetchPublicHashtags = (nbHitToAdd) => {
     return AlgoliaService.fetchHashtags()
-    .then(content => {
-      if (!content.hits || content.hits.length === 0) return;
-      this._currentSuggestions = this.addHitsToSuggestions(this.removeUserWings(content.hits), nbHitToAdd);
-    }).catch((e) => { console.log(e) });
+      .then(content => {
+        if (!content.hits || content.hits.length === 0) return;
+        this._currentSuggestions = this.addHitsToSuggestions(this.removeUserWings(content.hits), nbHitToAdd);
+      }).catch((e) => { console.log(e) });
   }
 
   /**
@@ -115,7 +137,7 @@ class SuggestionsService {
     suggestions.forEach(suggestion => {
       let suggestionTag = suggestion.value || suggestion.tag;
       try {
-        if (recordStore.values.record.hashtags.findIndex(hashtag => {return (hashtag.tag === (suggestionTag))}) > -1) {
+        if (recordStore.values.record.hashtags.findIndex(hashtag => { return (hashtag.tag === (suggestionTag)) }) > -1) {
           let index = suggestionsToReturn.findIndex(sugInRet => (sugInRet.tag === suggestionTag) || (sugInRet.value === suggestionTag));
           if (index > -1) suggestionsToReturn.splice(index, 1);
         }
@@ -136,7 +158,7 @@ class SuggestionsService {
     await this.fetchSuggestions(null, true, 2, index);
     await this.fetchSuggestions(filters, false, 2, index);
     await this.fetchSuggestions(null, false, 1, index);
-    if(this._newSuggestions.length < 3) {
+    if (this._newSuggestions.length < 3) {
       await this.fetchPublicHashtags(4);
     }
 
@@ -169,10 +191,10 @@ class SuggestionsService {
     let query = this.formatMissingQuery(suggestions);
     if (query) {
       suggestions = await this.syncBank(query)
-                    .then(newBank => {
-                      bank = newBank;
-                      return this.populateData(suggestions, bank);
-                    });
+        .then(newBank => {
+          bank = newBank;
+          return this.populateData(suggestions, bank);
+        });
     }
 
     return suggestions;
@@ -182,7 +204,7 @@ class SuggestionsService {
    * @description Static : Update array with bank of data
    */
   populateData = (suggestions, bank) => {
-    return suggestions.map((suggestion,i) => {
+    return suggestions.map((suggestion, i) => {
       return (bank ? bank.find(bankElt => bankElt.tag === suggestion.value) || suggestion : suggestion);
     });
   }
@@ -204,10 +226,10 @@ class SuggestionsService {
    * @description Populate all suggestions data thanks to current Wings bank
    */
   populateSuggestionsData = (isNewSuggestions) => {
-    if(!isNewSuggestions) {
+    if (!isNewSuggestions) {
       let suggestions = this._currentSuggestions;
       // eslint-disable-next-line
-      for(var i = 0; i < this._currentSuggestions.length; i++) {
+      for (var i = 0; i < this._currentSuggestions.length; i++) {
         let suggestion = this._currentSuggestions[i];
         suggestions[i] = this.getData(suggestion.tag) || suggestion;
       }
@@ -216,7 +238,7 @@ class SuggestionsService {
     } else {
       let suggestions = this._newSuggestions;
       // eslint-disable-next-line
-      for(var i = 0; i < this._newSuggestions.length; i++) {
+      for (var i = 0; i < this._newSuggestions.length; i++) {
         let suggestion = this._newSuggestions[i];
         suggestions[i] = this.getData(suggestion.tag) || suggestion;
       }

@@ -2,13 +2,15 @@ import React, {PureComponent} from 'react';
 import SearchField from './SearchField';
 import SearchSuggestions from './SearchSuggestions';
 import AlgoliaService from '../../services/algolia.service';
+import OnboardSuggestions from './OnboardSuggestions';
 
 class Search extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      autocompleteSuggestions: []
+      autocompleteSuggestions: [],
+      userQuery: ''
     }
   }
 
@@ -22,14 +24,25 @@ class Search extends PureComponent {
     });
   }
 
+  updateUserQuery = (userQuery) => {
+    this.setState({userQuery: userQuery});
+  }
+
   render() {
-    const {autocompleteSuggestions} = this.state;
-    const {onSelect, mode} = this.props;
+    const {autocompleteSuggestions, userQuery} = this.state;
+    const {onSelect, mode, max} = this.props;
 
     return(
       <>
-        <SearchField fetchAutocompleteSuggestions={this.fetchAutocompleteSuggestions} />
-        <SearchSuggestions autocompleteSuggestions={autocompleteSuggestions} onSelect={onSelect} mode={mode} />
+        <SearchField 
+          fetchAutocompleteSuggestions={this.fetchAutocompleteSuggestions} 
+          updateUserQuery={this.updateUserQuery} 
+        />
+        {mode !== 'onboard' ? (
+          <SearchSuggestions autocompleteSuggestions={autocompleteSuggestions} />
+        ): (
+          <OnboardSuggestions userQuery={userQuery} max={max} onSelect={onSelect} />
+        )}
       </>
     );
   }

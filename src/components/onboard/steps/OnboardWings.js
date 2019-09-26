@@ -99,7 +99,7 @@ class OnboardWings extends React.Component {
             </Grid>
 
             <Grid item xs={12} style={{padding: '0px 24px'}}>
-              <Search mode="onboard" onSelect={this.handleAddWing} />
+              <Search mode="onboard" onSelect={this.handleAddWing} max={10} />
             </Grid>
 
             {/* <Grid item xs={12} style={{ padding: 16, paddingBottom: 0, paddingTop: 0 }}>

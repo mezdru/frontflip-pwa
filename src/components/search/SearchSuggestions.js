@@ -191,20 +191,17 @@ class SearchSuggestions extends React.Component {
   }
 
   handleWingClick = (wing) => {
-    if(this.props.onSelect) {
-      this.props.onSelect(wing);
-    } else {
-      this.props.addFilter(wing);
-    }
+    this.props.addFilter(wing);
   }
 
   render() {
     const { facetHits } = this.state;
-    const { classes, addFilter } = this.props;
+    const { classes } = this.props;
     const { locale } = this.props.commonStore;
 
     return (
       <div style={{position: 'relative'}}>
+        
         <Hidden smDown>
 
           <IconButton className={classNames(classes.suggestionButton, classes.leftButton)} aria-label="Delete" 

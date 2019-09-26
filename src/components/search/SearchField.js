@@ -71,6 +71,7 @@ class SearchField extends PureComponent {
 
   handleInputChange = (inputValue) => {
     this.setState({ searchInput: inputValue });
+    this.props.updateUserQuery(inputValue);
     this.props.fetchAutocompleteSuggestions(inputValue);
   }
 

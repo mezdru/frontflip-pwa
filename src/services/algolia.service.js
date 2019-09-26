@@ -108,7 +108,7 @@ class AlgoliaService {
     });
   }
 
-  fetchOptions(inputValue, hashtagOnly, wingsFamily){
+  fetchOptions(inputValue, hashtagOnly, wingsFamily, hitsParPage){
     if(!this.index) return Promise.resolve();
     return new Promise((resolve, reject) => {
       this.index.search({
@@ -118,7 +118,7 @@ class AlgoliaService {
           restrictSearchableAttributes: ['name', 'name_translated', 'tag'],
           highlightPreTag: '<span>',
           highlightPostTag: '</span>',
-          hitsPerPage: 5
+          hitsPerPage: hitsParPage || 5
         }, (err, content) => resolve(content));
     });
   }

@@ -15,7 +15,6 @@ import statisticsStore from './stores/statistics.store';
 import organisationStore from './stores/organisation.store';
 import clapStore from './stores/clap.store';
 import helpRequestStore from './stores/helpRequest.store';
-import suggestionsController from './services/suggestionsController.service';
 import HttpsRedirect from 'react-https-redirect';
 import { MuiThemeProvider } from "@material-ui/core";
 import theme from "./theme";
@@ -26,7 +25,6 @@ const stores = {
   recordStore,
   commonStore,
   organisationStore,
-  suggestionsController,
   statisticsStore,
   clapStore,
   helpRequestStore
