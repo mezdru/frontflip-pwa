@@ -115,7 +115,7 @@
   "askForHelp.popup.success": "We sent your question to {resultsCount} people! Check your inbox for answers.",
   "askForHelp.popup.error": "There was an error, please retry in a few moments",
   "askForHelp.popup.close": "Close",
-  "askForHelp.popup.missingMessage": "Explain your question to your coworkers to find help quickly.",
+  "askForHelp.popup.missingMessage": "Explain your question to your coworkers to get an answer quickly.",
   "askForHelp.popup.placeholder": "Your question here.",
   "profile.others":"Others"
 }

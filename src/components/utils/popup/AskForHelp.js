@@ -141,7 +141,14 @@ class AskForHelp extends React.Component {
         }
         actions={
           <Button onClick={(error || success) ? this.handleClose : this.handleSend} color="secondary" type="submit">
-            <Email /><span>&nbsp;&nbsp;</span><FormattedMessage id={(error || success) ? "askForHelp.popup.close" : "askForHelp.popup.send"} />
+            {(error || success) ? (
+            <FormattedMessage id={"askForHelp.popup.close"} />
+            ) : (
+              <>
+                <Email /><span>&nbsp;&nbsp;</span>
+                <FormattedMessage id={"askForHelp.popup.send"} />
+              </>
+            )}
           </Button>
         }
         onClose={this.handleClose}
