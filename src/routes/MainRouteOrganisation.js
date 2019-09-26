@@ -52,8 +52,6 @@ class MainRouteOrganisation extends React.Component {
     const { isAuth } = this.state;
     const { locale } = this.props.match.params;
 
-    console.log(this.props.userStore.values.currentUser.superadmin)
-
     return (
       <div>
         <Switch>
