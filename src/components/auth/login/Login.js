@@ -54,8 +54,8 @@ class Login extends React.Component {
 
   signinSuccessRedirect = () => {
     let defaultRedirect = this.props.getDefaultRedirectPath();
-    let wantedRedirect = this.props.commonStore.getSessionStorage('signinSuccessRedirect');
-    if (wantedRedirect) this.props.commonStore.removeSessionStorage('signinSuccessRedirect');
+    let wantedRedirect = this.props.commonStore.getCookie('wantedPath');
+    if (wantedRedirect) this.props.commonStore.removeCookie('wantedPath');
     this.setState({ redirectTo: wantedRedirect || defaultRedirect });
   }
 
