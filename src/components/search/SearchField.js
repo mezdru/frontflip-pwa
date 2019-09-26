@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import { injectIntl } from 'react-intl';
 import { inject, observer } from 'mobx-react';
 import { withTheme, withStyles } from '@material-ui/core';
@@ -17,7 +17,6 @@ class SearchField extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      searchInput: '',
       searchFilters: this.props.commonStore.getSearchFilters() || [],
       observer: () => { }
     };
@@ -27,11 +26,12 @@ class SearchField extends PureComponent {
     this.setState({
       observer: observe(this.props.commonStore, 'searchFilters', (change) => {
         var currentSearchFilters = this.props.commonStore.getSearchFilters();
-        this.setState({ searchFilters: currentSearchFilters, searchInput: (currentSearchFilters.length > 0 ? ' ' : '') }, () => {
-          this.scrollToRight();
-        });
+        this.props.searchStore.setUserQuery(currentSearchFilters.length > 0 ? ' ' : '');
+        this.setState({ searchFilters: currentSearchFilters }, this.scrollToRight);
       })
     });
+
+    observe(this.props.searchStore.values, 'userQuery', (change) => {this.forceUpdate()});
   }
 
   componentWillUnmount() {
@@ -52,7 +52,7 @@ class SearchField extends PureComponent {
       return this.props.intl.formatMessage({ id: 'algolia.onboard' });
     } else {
       let organisation = this.props.organisationStore.values.organisation;
-      if(organisation.intro && organisation.intro[this.props.commonStore.locale] && organisation.intro[this.props.commonStore.locale] !== '') {
+      if (organisation.intro && organisation.intro[this.props.commonStore.locale] && organisation.intro[this.props.commonStore.locale] !== '') {
         return organisation.intro[this.props.commonStore.locale];
       }
       return this.props.intl.formatMessage({ id: 'algolia.search' }, { orgName: this.props.organisationStore.values.organisation.name });
@@ -62,22 +62,37 @@ class SearchField extends PureComponent {
   handleEnter = (e) => {
     if (e.key === 'Enter') {
       var value = e.target.value.trim();
-      if(value) {
-        this.props.addFilter({ name: value, tag: value });
-        this.setState({ searchInput: ' ' });
+      this.props.searchStore.setUserQuery('');
+      if (this.props.mode !== 'onboard') {
+        if (value) {
+          this.props.addFilter({ name: value, tag: value });
+        }
+      } else {
+        if (value) {
+          this.props.handleCreateWing({ name: value });
+        }
       }
+      e.target.value = '';
     }
   }
 
   handleInputChange = (inputValue) => {
-    this.setState({ searchInput: inputValue });
-    this.props.updateUserQuery(inputValue);
-    this.props.fetchAutocompleteSuggestions(inputValue);
+    this.props.searchStore.setUserQuery(inputValue);
+    if (this.props.mode !== 'onboard')
+      this.props.fetchAutocompleteSuggestions(inputValue);
+  }
+
+  reset = () => {
+    this.props.searchStore.reset();
+    this.props.resetFilters();
   }
 
   render() {
     const { classes } = this.props;
-    const { searchInput, searchFilters } = this.state;
+    let { userQuery } = this.props.searchStore.values;
+    const { searchFilters } = this.state;
+
+    console.log('RENDER with this user query : ', userQuery)
 
     return (
       <div className={classes.searchContainer} id="search-container">
@@ -97,7 +112,7 @@ class SearchField extends PureComponent {
           <input
             type='text' name="searchInput"
             className={classes.searchInput}
-            value={searchInput}
+            value={userQuery}
             placeholder={this.getSearchFieldPlaceholder()}
             onKeyDown={this.handleEnter}
             onChange={(e) => { this.handleInputChange(e.target.value) }}
@@ -107,8 +122,8 @@ class SearchField extends PureComponent {
 
 
 
-        {(searchInput || (searchFilters && searchFilters.length > 0)) && (
-          <IconButton className={classes.searchClear} onClick={this.props.resetFilters} >
+        {(userQuery || (searchFilters && searchFilters.length > 0)) && (
+          <IconButton className={classes.searchClear} onClick={this.reset} >
             <Clear fontSize='inherit' />
           </IconButton>
         )}
@@ -120,7 +135,7 @@ class SearchField extends PureComponent {
 
 SearchField = withSearchManagement(SearchField);
 
-export default inject('commonStore', 'recordStore', 'organisationStore')(
+export default inject('commonStore', 'recordStore', 'organisationStore', 'searchStore')(
   observer(
     injectIntl(withTheme()(withStyles(styles, { withTheme: true })(SearchField)))
   )

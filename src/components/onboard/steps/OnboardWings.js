@@ -60,6 +60,7 @@ class OnboardWings extends React.Component {
   }
 
   handleCreateWing = async (wing) => {
+    console.log(wing)
     let newWing = {name: wing.name, type: 'hashtag'};
     if(this.isFeaturedWings()) newWing.hashtags = [this.getFeaturedWings()];
     let newWingSaved = await this.props.recordStore.postRecord(newWing);

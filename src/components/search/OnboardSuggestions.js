@@ -4,6 +4,8 @@ import { inject, observer } from 'mobx-react';
 import Wings from '../utils/wing/Wings';
 import ProfileService from '../../services/profile.service';
 import SuggestionsService from '../../services/suggestions.service';
+import { injectIntl } from "react-intl";
+import { observe } from 'mobx';
 
 const styles = theme => ({
   title: {
@@ -36,10 +38,11 @@ class OnboardSuggestions extends React.Component {
 
   componentDidMount() {
     this.fetchSuggestions();
+    observe(this.props.searchStore.values, 'userQuery', () => {this.fetchSuggestions()})
   }
 
-  fetchSuggestions = async (lastSelected, query, wingsFamily) => {
-    this.setState({suggestions: await SuggestionsService.getOnboardSuggestions(lastSelected, query, wingsFamily )});
+  fetchSuggestions = async (lastSelected, wingsFamily) => {
+    this.setState({suggestions: await SuggestionsService.getOnboardSuggestions(lastSelected, this.props.searchStore.values.userQuery || '', wingsFamily )});
   }
 
   shouldDisplaySuggestion = (suggestion) => {
@@ -53,26 +56,32 @@ class OnboardSuggestions extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     return  (JSON.stringify(this.state.suggestions) !== JSON.stringify(nextState.suggestions)) || 
             (JSON.stringify(nextProps.wingsFamily) !== JSON.stringify(this.props.wingsFamily)) ||
-            (nextProps.userQuery !== this.props.userQuery)
+            (this.state.suggestions.length === 0 && nextState.suggestions.length === 0)
   }
 
   componentWillReceiveProps(nextProps) {
-    this.fetchSuggestions(null, nextProps.userQuery, nextProps.wingsFamily);
+    this.fetchSuggestions(null, nextProps.wingsFamily);
   }
 
   handleSelectSuggestion = (suggestion) => {
     this.setState({ lastSelected: suggestion }, () => {
+      this.props.searchStore.setUserQuery('');
       this.fetchSuggestions(suggestion);
       this.props.onSelect(suggestion);
     });
   }
 
+  handleCreateWing = () => {
+    this.props.handleCreateWing({name: this.props.searchStore.values.userQuery});
+    this.props.searchStore.setUserQuery('');
+  }
+
   render() {
-    const { classes, max, userQuery } = this.props;
+    const { classes, max } = this.props;
+    const { userQuery } = this.props.searchStore.values;
     const { locale } = this.props.commonStore;
     const { suggestions } = this.state;
     let suggestionsDisplayed = 0;
-    console.log(userQuery)
 
     return (
       <Grid container item xs={12} >
@@ -83,9 +92,9 @@ class OnboardSuggestions extends React.Component {
         <Grid item className={classes.suggestionsContainer}>
           {userQuery && (
             <Wings
-              label={"Create " + userQuery}
+              label={this.props.intl.formatHTMLMessage({id: "onboard.createWing"}, {wingName: userQuery})}
               mode="button"
-              onClick={() => this.props.handleCreateWing({name: userQuery})}
+              onClick={this.handleCreateWing}
             />
           )}
           {suggestions.map((suggestion, index) => {
@@ -103,7 +112,7 @@ class OnboardSuggestions extends React.Component {
                   label={ProfileService.getWingDisplayedName(suggestion, locale)}
                   src={ProfileService.getPicturePath(suggestion.picture)}
                   onClick={() => this.handleSelectSuggestion(suggestion)}
-                  mode="highlight"
+                  mode="suggestion"
                 />
               </div>
             );
@@ -115,6 +124,6 @@ class OnboardSuggestions extends React.Component {
   }
 }
 
-export default inject('commonStore', 'recordStore')(
-  observer(withStyles(styles)(OnboardSuggestions))
+export default inject('commonStore', 'recordStore', 'searchStore')(
+  observer(withStyles(styles)( injectIntl(OnboardSuggestions)))
 );

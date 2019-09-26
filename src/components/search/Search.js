@@ -9,8 +9,7 @@ class Search extends PureComponent {
     super(props);
 
     this.state = {
-      autocompleteSuggestions: [],
-      userQuery: ''
+      autocompleteSuggestions: []
     }
   }
 
@@ -24,24 +23,20 @@ class Search extends PureComponent {
     });
   }
 
-  updateUserQuery = (userQuery) => {
-    this.setState({userQuery: userQuery});
-  }
-
   render() {
-    const {autocompleteSuggestions, userQuery} = this.state;
+    const {autocompleteSuggestions} = this.state;
     const {onSelect, mode, max, wingsFamily} = this.props;
 
     return(
       <>
         <SearchField 
           fetchAutocompleteSuggestions={this.fetchAutocompleteSuggestions} 
-          updateUserQuery={this.updateUserQuery} 
+          mode={mode} handleCreateWing={this.props.handleCreateWing}
         />
         {mode !== 'onboard' ? (
           <SearchSuggestions autocompleteSuggestions={autocompleteSuggestions} />
         ): (
-          <OnboardSuggestions userQuery={userQuery} max={max} onSelect={onSelect} wingsFamily={wingsFamily} handleCreateWing={this.props.handleCreateWing} />
+          <OnboardSuggestions max={max} onSelect={onSelect} wingsFamily={wingsFamily} handleCreateWing={this.props.handleCreateWing} />
         )}
       </>
     );

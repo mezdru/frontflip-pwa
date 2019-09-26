@@ -44,11 +44,24 @@ export const styles = theme => ({
     backgroundColor: theme.palette.primary.hover,
     color: 'white'
   },
-  buttonMode: {
-    backgroundColor: theme.palette.secondary.main,
-    color: 'white',
+  suggestionMode: {
+    backgroundColor: theme.palette.primary.dark,
+    '& p': {
+      color: 'white !important'
+    },
     '&:hover': {
-      backgroundColor: theme.palette.secondary.dark
+      boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
+    }
+  },
+  buttonMode: {
+    backgroundColor: 'transparent',
+    border: '1px solid ' + theme.palette.secondary.dark,
+    '& p': {
+      color: theme.palette.secondary.dark,
+    },
+    '&:hover': {
+      backgroundColor: 'rgba(50,50,50,.15)',
+      boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
     }
   },
   applauseIcon: {
