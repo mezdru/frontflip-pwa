@@ -342,6 +342,13 @@ const HelpRequest = {
     )
 }
 
+const ConnectionLog = {
+    get: () => 
+      requests.get(
+        process.env.REACT_APP_API_ROOT_AUTH + '/api/connectionLogs'
+      )
+}
+
 /**
  * @description Test get user with secure call to API
  */
@@ -360,5 +367,6 @@ export default {
   Invitation,
   SearchLog,
   Clap,
-  HelpRequest
+  HelpRequest,
+  ConnectionLog
 }
