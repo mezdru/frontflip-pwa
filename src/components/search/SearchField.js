@@ -77,6 +77,7 @@ class SearchField extends PureComponent {
   }
 
   handleInputChange = (inputValue) => {
+    console.log(inputValue);
     this.props.searchStore.setUserQuery(inputValue);
     if (this.props.mode !== 'onboard')
       this.props.fetchAutocompleteSuggestions(inputValue);
@@ -85,6 +86,7 @@ class SearchField extends PureComponent {
   reset = () => {
     this.props.searchStore.reset();
     this.props.resetFilters();
+    this.forceUpdate();
   }
 
   render() {

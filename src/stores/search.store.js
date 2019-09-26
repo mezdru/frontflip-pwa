@@ -9,10 +9,8 @@ class SearchStore {
   };
 
   reset() {
-    this.values = {
-      userQuery: '',
-      searchFilters: [],
-    }
+    this.values.userQuery = '';
+    this.values.searchFilters = [];
   }
 
   setUserQuery(query){this.values.userQuery = query}
