@@ -87,7 +87,17 @@ class MainRouteOrganisationRedirect extends React.Component {
     }
   }
 
+  persistWantedPath = async () => {
+    try{
+      if(!await this.props.commonStore.getCookie('wantedPath') && !this.props.authStore.isAuth())
+        this.props.commonStore.setCookie('wantedPath', window.location.pathname, (new Date( (new Date).getTime() + 10*60000))); // expires in 10 minutes
+    } catch(e) {
+      console.error("Can't persists the wanted path.", e);
+    }
+  }
+
   componentDidMount() {
+    this.persistWantedPath();
     this.manageAccessRight().then(() => {
       this.setState({ renderComponent: true }, () => { this.forceUpdate() });
     }).catch((err) => {
@@ -187,10 +197,6 @@ class MainRouteOrganisationRedirect extends React.Component {
     }
   }
 
-  handleSigninRedirect = () => {
-    this.props.commonStore.setSessionStorage('signinSuccessRedirect', window.location.pathname);
-  }
-
   /**
    * @description Manage access right of the user and redirect him if needed.
    */
@@ -229,7 +235,6 @@ class MainRouteOrganisationRedirect extends React.Component {
         await this.redirectUserAuthWithAccess(organisation, false).catch(() => { return; });
       } else {
         // no auth
-        if (!this.props.commonStore.getSessionStorage('signinSuccessRedirect')) this.handleSigninRedirect();
       }
     } else if (this.props.authStore.isAuth()) {
       await this.redirectUserAuthWithoutAccess();
