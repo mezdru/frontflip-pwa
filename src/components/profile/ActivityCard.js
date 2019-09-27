@@ -2,9 +2,9 @@ import React from 'react';
 import { withStyles, Grid, Typography } from '@material-ui/core';
 import Logo from '../utils/logo/Logo';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
 import Applause from '../../resources/icons/Applause';
 import { FormattedMessage } from 'react-intl';
+import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 
 var MomentConfigs = require('../configs/moment.conf');
 MomentConfigs.setMomentFr();
@@ -18,6 +18,7 @@ const styles = theme => ({
     borderRadius: '0px 4px 4px 4px',
     marginTop: 16,
     padding: 8,
+    cursor: "pointer",
     [theme.breakpoints.down('md')]: {
       maxWidth: 350,
     }
@@ -44,12 +45,11 @@ const styles = theme => ({
   }
 })
 
-const ActivityCard = React.memo(withStyles(styles)(({ picture, authorName, link, message, created, hashtag, classes, locale, given }) => {
+const ActivityCard = React.memo(withProfileManagement(withStyles(styles)(({ picture, authorName, authorTag, message, created, hashtag, classes, locale, given, profileContext }) => {
   moment.locale(locale);
   let hashtagDisplayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name);
   return (
-    <Link push to={link} className={classes.rootLink}>
-    <Grid container className={classes.root} >
+    <Grid container className={classes.root} onClick={(e) => {profileContext.handleDisplayProfile(e, {tag: authorTag}, true)}}>
       <Grid item xs={2}>
         <Logo src={picture} type='person' className={classes.logo} />
       </Grid>
@@ -74,8 +74,7 @@ const ActivityCard = React.memo(withStyles(styles)(({ picture, authorName, link,
 
       </Grid>
     </Grid>
-    </Link>
   );
-}));
+})));
 
-export default ActivityCard;
+export default (ActivityCard);

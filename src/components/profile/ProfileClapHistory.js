@@ -46,8 +46,6 @@ class ProfileClapHistory extends React.Component {
   render() {
     const { classes, profileContext } = this.props;
     const { clapHistory } = this.state;
-    const { locale } = this.props.commonStore;
-    const { organisation } = this.props.organisationStore.values;
     const lastClapHistory = clapHistory.slice(0, 10);
 
     return (
@@ -63,11 +61,11 @@ class ProfileClapHistory extends React.Component {
               picture={clap.giver.picture ? clap.giver.picture.url : null}
               hashtag={clap.hashtag}
               authorName={clap.giver.name}
+              authorTag={clap.giver.tag}
               message={clap.message}
               given={clap.given}
               created={clap.created}
               locale={this.props.commonStore.locale}
-              link={'/' + locale + '/' + organisation.tag + '/' + clap.giver.tag}
             />
           }else return null;
         })}
@@ -83,7 +81,7 @@ class ProfileClapHistory extends React.Component {
   }
 }
 
-export default inject('recordStore', 'clapStore', 'commonStore', 'organisationStore')(
+export default inject('recordStore', 'clapStore', 'commonStore')(
   observer(
     withStyles(styles)( withProfileManagement(ProfileClapHistory))
   )
