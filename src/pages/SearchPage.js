@@ -2,7 +2,6 @@ import React, { Suspense, PureComponent } from 'react'
 import { withStyles, Grid } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import withWidth from '@material-ui/core/withWidth';
-import ReactGA from 'react-ga';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Redirect } from "react-router-dom";
 import { observe } from 'mobx';
@@ -30,8 +29,6 @@ const Intercom = React.lazy(() => import('react-intercom'));
 
 console.debug('Loading SearchPage');
 
-ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
-
 class SearchPage extends PureComponent {
   constructor(props) {
     super(props);
@@ -44,7 +41,7 @@ class SearchPage extends PureComponent {
       top: 16,
       headerHeight: 129,
       headerPosition: 'INITIAL',
-      visible: (this.getAskedHit() ? true : false),
+      // visible: (this.getAskedHit() ? true : false),
       transitionDuration: 800,
       showAskForHelp: false
     };
@@ -62,6 +59,7 @@ class SearchPage extends PureComponent {
   componentDidMount() {
     this.moveSearchInputListener();
     this.handleUrlSearchFilters();
+    this.unlisten = this.props.profileContext.subscribeToHistory(this.forceUpdate);
     try { if (this.props.match.params.profileTag === 'congrats') this.setState({ showCongratulation: true }) } catch{ }
 
     observe(this.props.commonStore, 'searchFilters', (change) => {
@@ -74,8 +72,11 @@ class SearchPage extends PureComponent {
     });
 
     observe(this.props.commonStore, 'searchResultsCount', (change) => { this.forceUpdate(); });
+    if (this.state.displayedHit) this.props.profileContext.handleDisplayProfile(null, this.state.displayedHit);
+  }
 
-    if (this.state.displayedHit) this.handleDisplayProfile(null, this.state.displayedHit);
+  componentWillUnmount() {
+    this.unlisten();
   }
 
   /**
@@ -188,34 +189,18 @@ class SearchPage extends PureComponent {
     this.setState({ showAskForHelp: false }, () => { this.setState({ showAskForHelp: true }) });
   }
 
-  handleDisplayProfile = (e, profileRecord) => {
-    ReactGA.event({ category: 'User', action: 'Display profile' });
-    this.props.profileContext.setProfileData(profileRecord || this.props.recordStore.values.record);
-    this.setState({ displayedHit: profileRecord || this.props.recordStore.values.record, visible: true });
-  }
-
-  handleCloseProfile = () => {
-    this.setState({ visible: false });
-    setTimeout(() => {
-      this.setState({ displayedHit: null, redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag }
-      )
-    },
-      this.state.transitionDuration / 2
-    );
-  }
-
   render() {
-    const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter, visible, transitionDuration, showAskForHelp } = this.state;
+    const { showCongratulation, actionInQueue, hashtagsFilter, transitionDuration, showAskForHelp } = this.state;
     const { classes } = this.props;
+    const { algoliaRecord } = this.props.profileContext;
     const { organisation } = this.props.organisationStore.values;
     const { searchResultsCount } = this.props.commonStore;
     let searchFilters = this.props.commonStore.getSearchFilters();
 
     return (
       <React.Fragment>
-        {(redirectTo && (window.location.pathname !== redirectTo)) && <Redirect to={redirectTo} />}
         <Suspense fallback={<></>}>
-          <Header handleDisplayProfile={this.handleDisplayProfile} />
+          <Header />
         </Suspense>
 
         <main className={'search-container'}>
@@ -255,7 +240,7 @@ class SearchPage extends PureComponent {
               <ErrorBoundary>
                 <Suspense fallback={<CircularProgress color='secondary' />}>
                   <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
-                    <SearchResults handleDisplayProfile={this.handleDisplayProfile} />
+                    <SearchResults />
                   </Grid>
                 </Suspense>
               </ErrorBoundary>
@@ -279,9 +264,9 @@ class SearchPage extends PureComponent {
           )} */}
         </main>
 
-        {displayedHit && (
+        {algoliaRecord && (
           <Suspense fallback={<></>}>
-            <ProfileLayout visible={visible} handleClose={this.handleCloseProfile} transitionDuration={transitionDuration} />
+            <ProfileLayout transitionDuration={transitionDuration} />
           </Suspense>
         )}
 
@@ -299,7 +284,7 @@ class SearchPage extends PureComponent {
 
         {hashtagsFilter.length > 0 && (actionInQueue === 'add') && (
           <Suspense fallback={<CircularProgress color='secondary' />}>
-            <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} handleDisplayProfile={this.handleDisplayProfile} />
+            <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} handleDisplayProfile={(e) => {this.props.profileContext.handleDisplayProfile(e, null, true)}} />
           </Suspense>
         )}
 
@@ -309,7 +294,7 @@ class SearchPage extends PureComponent {
               {(searchFilters.length > 0 && searchResultsCount <= 10) ? (
                 <AskForHelpFab className={classes.fab} onClick={this.handleDisplayAskForHelp} />
               ) : (
-                  <MyProfileFab className={classes.fab} onClick={this.handleDisplayProfile} />
+                  <MyProfileFab className={classes.fab} onClick={(e) => {this.props.profileContext.handleDisplayProfile(e, null, true)}} />
                 )}
             </>
           )
@@ -327,6 +312,6 @@ SearchPage = withSearchManagement(withProfileManagement(SearchPage));
 
 export default inject('commonStore', 'organisationStore', 'authStore', 'userStore', 'recordStore')(
   observer(
-    withWidth()(withStyles(styles)(SearchPage))
+    withWidth()(withStyles(styles)( SearchPage))
   )
 );

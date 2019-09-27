@@ -48,7 +48,7 @@ const ActivityCard = React.memo(withStyles(styles)(({ picture, authorName, link,
   moment.locale(locale);
   let hashtagDisplayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name);
   return (
-    <Link to={link} className={classes.rootLink}>
+    <Link push to={link} className={classes.rootLink}>
     <Grid container className={classes.root} >
       <Grid item xs={2}>
         <Logo src={picture} type='person' className={classes.logo} />

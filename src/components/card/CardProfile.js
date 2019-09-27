@@ -12,6 +12,7 @@ import ProfileService from '../../services/profile.service';
 import withSearchManagement from '../../hoc/SearchManagement.hoc';
 import {styles} from './CardProfile.css';
 import { injectIntl } from 'react-intl';
+import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 
 ProfileService.setExtraLinkLimit(5);
 const WINGS_DISPLAYED = 7;
@@ -45,7 +46,7 @@ class CardProfile extends React.PureComponent {
   }
   
   render() {
-    const {classes, hit, handleDisplayProfile} = this.props;
+    const {classes, hit} = this.props;
     const { addFilter } = this.props;
     const {locale} = this.props.commonStore;
     let currentWings = 0;
@@ -58,7 +59,7 @@ class CardProfile extends React.PureComponent {
       <Card className={classes.fullWidth} key={hit.objectID} >
         <Grid item container>
           <CardHeader
-            onClick={(e) => handleDisplayProfile(e, hit)}
+            onClick={(e) => this.props.profileContext.handleDisplayProfile(e, hit, true)}
             avatar={
               <Grid item container>
                 <Grid item style={{backgroundImage: `url(${ProfileService.getPicturePathResized(hit.picture, 'person ', this.getLogoSize()) || defaultPicture})`}} className={`${classes.logo} ${classes.backgroundLogo}`}/>
@@ -122,7 +123,7 @@ class CardProfile extends React.PureComponent {
                 <Wings label={this.props.intl.formatMessage({ id: 'card.moreWings' }, { counter: (hit.hashtags.length - WINGS_DISPLAYED)})}
                   enableClap={false} 
                   mode='card' 
-                  onClick={(e) => handleDisplayProfile(e, hit)}
+                  onClick={(e) => this.props.profileContext.handleDisplayProfile(e, hit, true)}
                 />
               )}
             </Grid>
@@ -141,6 +142,6 @@ CardProfile = withSearchManagement(CardProfile);
 
 export default inject('commonStore')(
   observer(
-    withWidth()(withStyles(styles)(injectIntl(CardProfile)))
+    withWidth()(withStyles(styles)(injectIntl( withProfileManagement(CardProfile))))
   )
 );

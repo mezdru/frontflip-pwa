@@ -153,7 +153,7 @@ class SearchResults extends React.Component {
 
   render() {
     const { hits, loadInProgress, hideShowMore, showNoResult } = this.state;
-    const { handleDisplayProfile, classes } = this.props;
+    const { classes } = this.props;
     let hitsResult = Array.from(hits);
 
     return (
@@ -163,7 +163,7 @@ class SearchResults extends React.Component {
             return (
               <li key={hit.objectID}>
                 <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
-                  <Card hit={hit} handleDisplayProfile={handleDisplayProfile} />
+                  <Card hit={hit} />
                 </Grid>
               </li>
             );

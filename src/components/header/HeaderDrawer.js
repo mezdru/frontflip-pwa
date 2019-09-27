@@ -15,6 +15,7 @@ import { Link, withRouter } from 'react-router-dom';
 import OrganisationsList from '../utils/orgsList/OrganisationsList';
 import InvitationDialog from '../utils/popup/Invitation';
 import LocaleSelector from '../utils/fields/LocaleSelector';
+import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
@@ -104,7 +105,7 @@ class HeaderDrawer extends Component {
                         <ListItemText primary={record.name || record.tag}
                           primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold', color: 'white', fontSize: '1rem' } }} />
                       </ListItem>
-                      <ListItem button component={Link} to={'/' + locale + '/' + organisation.tag + '/' + record.tag} onClick={(e) => { this.props.handleDisplayProfile(e, { tag: record.tag }) }}>
+                      <ListItem button onClick={() => { this.props.profileContext.handleDisplayProfile(null, { tag: record.tag }, true) }}>
                         <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.profile' })} />
                       </ListItem>
                       <ListItem>
@@ -231,7 +232,7 @@ HeaderDrawer.propTypes = {
 export default inject('authStore', 'organisationStore', 'recordStore', 'commonStore', 'userStore')(
   injectIntl(withRouter(observer(
     withStyles(styles)(
-      HeaderDrawer
+      withProfileManagement(HeaderDrawer)
     )
   )))
 );

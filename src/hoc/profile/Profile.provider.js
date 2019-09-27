@@ -3,6 +3,7 @@ import * as React from "react";
 import ProfileService from '../../services/profile.service';
 import { inject, observer } from "mobx-react";
 import { injectIntl } from "react-intl";
+import {withRouter} from 'react-router-dom';
 
 class ProfileProvider extends React.Component {
   constructor() {
@@ -15,10 +16,40 @@ class ProfileProvider extends React.Component {
       filterProfile: this.filterProfile,
       setProfileData: this.setProfileData,
       isWingsDisplayed: this.isWingsDisplayed,
+      handleDisplayProfile: this.handleDisplayProfile,
+      subscribeToHistory: this.subscribeToHistory,
+      reset: this.reset,
       getProp: this.getProp,
       getBaseUrl: this.getBaseUrl,
       wingsByFamilies: []
     };
+  }
+
+  reset = () => {
+    this.setState({
+      algoliaRecord: null,
+      wingzyRecord: null,
+      wingsByFamilies: [],
+      filteredWings: null,
+    }, () => {
+      this.props.history.push(
+        '/' + this.props.commonStore.locale + 
+        '/' + this.props.organisationStore.values.organisation.tag
+      );
+    });
+  }
+
+  handleDisplayProfile = (e, profileRecord, push) => {
+    this.setProfileData(profileRecord || this.props.recordStore.values.record);
+    if(push) this.props.history.push(
+      '/' + this.props.commonStore.locale + 
+      '/' + this.props.organisationStore.values.organisation.tag +
+      '/' + (profileRecord || this.props.recordStore.values.record).tag
+    );
+  }
+
+  subscribeToHistory = (cb) => {
+    return this.props.history.listen((location, action) => cb);
   }
 
   getProp = (propName) => {
@@ -139,5 +170,5 @@ class ProfileProvider extends React.Component {
 }
 
 export default inject('organisationStore', 'recordStore', 'userStore', 'commonStore', 'authStore')(
-  observer(injectIntl(ProfileProvider))
+  observer(injectIntl( withRouter(ProfileProvider)))
 );

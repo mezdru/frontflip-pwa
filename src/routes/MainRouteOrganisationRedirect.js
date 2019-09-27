@@ -53,15 +53,15 @@ class MainRouteOrganisationRedirect extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-
+    console.log(props.history)  
     if (props.history.action === 'POP' && props.location.pathname === this.props.location.pathname) return;
 
     //@todo Remake this statement...
     if (
         props.history.action === 'PUSH' &&
-        ((props.match.params && props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) ||
-        (!this.props.organisationStore.values.fullOrgFetch) ||
-        (props.match.params && props.match.params.profileTag)) ||
+        ((props.match.params && props.match.params.organisationTag !== this.props.organisationStore.values.orgTag)    ) ||
+        //(!this.props.organisationStore.values.fullOrgFetch) ||
+        // (props.match.params && props.match.params.profileTag)) ||
         (props.history.action === 'POP' && props.location.pathname !== this.props.location.pathname)
     ) {
       this.setState({ renderComponent: false }, () => {

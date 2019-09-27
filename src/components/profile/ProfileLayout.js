@@ -15,19 +15,34 @@ const ProfileClapHistory = React.lazy(() => import('./ProfileClapHistory'));
 
 class ProfileLayout extends React.Component {
 
-  render() {
-    const { classes, visible, transitionDuration } = this.props;
-    const rootUrl = '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag;
+  state = {
+    isVisible: false
+  }
 
+  componentDidMount() {
+    this.setState({isVisible: true})
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({isVisible: true})
+  }
+
+  handleClose = () => {
+    this.setState({isVisible: false}, () => {
+      setTimeout(() => {
+        this.props.profileContext.reset();
+      }, this.props.transitionDuration /2 );
+    })
+  }
+
+  render() {
+    const { classes, transitionDuration } = this.props;
+    const { isVisible } = this.state;
 
     return (
-      <Slide direction="up" in={visible} mountOnEnter unmountOnExit timeout={{ enter: transitionDuration, exit: transitionDuration / 2 }}>
+      <Slide direction="up" in={isVisible} mountOnEnter unmountOnExit timeout={{ enter: transitionDuration, exit: transitionDuration / 2 }}>
 
         <Grid container className={classes.root} alignContent="flex-start">
-
-          {(this.props.profileContext.getProp('tag') &&  window.location.pathname !== rootUrl + '/' + this.props.profileContext.getProp('tag')) && (
-            <Redirect to={rootUrl + '/' + this.props.profileContext.getProp('tag')} />
-          )}
 
           <BannerResizable
             type={'profile'}
@@ -39,7 +54,7 @@ class ProfileLayout extends React.Component {
           <Grid container alignContent="flex-start" style={{ height: '100vh', overflowY: 'auto', zIndex: 1 }} >
 
             <Grid container item xs={12} style={{ height: 116 }} alignContent="flex-start" justify="flex-start" className={classes.actions} >
-              <ProfileActions canPropose canFilter handleClose={this.props.handleClose} />
+              <ProfileActions canPropose canFilter handleClose={this.handleClose} />
             </Grid>
             <Grid item className={classes.thumbnail} xs={12} lg={3}>
               <ProfileThumbnail />
@@ -56,7 +71,6 @@ class ProfileLayout extends React.Component {
               </Grid>
             </Grid>
           </Grid>
-
 
         </Grid>
       </Slide>
