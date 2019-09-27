@@ -27,22 +27,6 @@ class Uploader extends Component {
     widget.onDialogOpen(dialog => this.dialog = dialog)
   }
 
-  componentWillUnmount() {
-    // if (this.dialog) {
-    //   this.dialog.reject()
-    // }
-    // if (this.files) {
-    //   uploadcare.jQuery.when.apply(null, this.files).cancel()
-    // }
-
-    // const widgetElement = uploadcare.jQuery(this.uploader).next('.uploadcare--widget')
-    // const widget = widgetElement.data('uploadcareWidget')
-
-    // if (widget && widget.inputElement === this.uploader) {
-    //   widgetElement.remove()
-    // }
-  }
-
   getInputAttributes() {
     const attributes = Object.assign({}, this.props)
 

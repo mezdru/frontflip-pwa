@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { withStyles, CircularProgress } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { injectIntl } from 'react-intl';
 
-import Uploader from '../uploadcare/Uploader';
 import defaultPicture from '../../../resources/images/placeholder_person.png';
 import './uploadcare_customize.css';
+
+const Uploader = React.lazy(() => import('../uploadcare/Uploader'));
 
 const styles = theme => ({
   pictureContainer: {
@@ -95,17 +96,20 @@ class PictureField extends React.Component {
             )}
           </div>
 
-          <Uploader
-            style={{maxWidth: '100%'}}
-            id='file'
-            name='file'
-            data-tabs='file camera url'
-            data-crop="180x180 upscale" 
-            data-image-shrink="1280x1280"
-            onChange={this.handleChange}
-            value={pictureUrl || (record.picture ? record.picture.url : null)}
-            onUploadComplete={this.handleUploadComplete} 
-            data-images-only />
+          <Suspense fallback={<CircularProgress color='secondary' />}>
+            <Uploader
+              style={{maxWidth: '100%'}}
+              id='file'
+              name='file'
+              data-tabs='file camera url'
+              data-crop="180x180 upscale" 
+              data-image-shrink="1280x1280"
+              onChange={this.handleChange}
+              value={pictureUrl || (record.picture ? record.picture.url : null)}
+              onUploadComplete={this.handleUploadComplete} 
+              data-images-only />
+          </Suspense>
+
       </div>
     );
   }
