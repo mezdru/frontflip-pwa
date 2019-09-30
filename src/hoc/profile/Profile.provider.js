@@ -87,7 +87,7 @@ class ProfileProvider extends React.Component {
 
       for(var index = 0; index < allWings.length; index++) {
         var wing = allWings[index];
-        if(wing.hashtags.find(hashtag => (hashtag._id || hashtag) === family._id)) {
+        if(wing && wing.hashtags && wing.hashtags.find(hashtag => (hashtag._id || hashtag) === family._id)) {
           familyWings.push(wing);
           otherWings = otherWings.filter(otherWing => otherWing._id !== wing._id);
         }
@@ -99,6 +99,20 @@ class ProfileProvider extends React.Component {
     wingsByFamilies.push({family: {intro: this.props.intl.formatMessage({id: 'profile.others'})}, wings: otherWings});
 
     this.setState({wingsByFamilies: wingsByFamilies});
+  }
+
+  isWingsDisplayed = (wingsId) => {
+    if(!this.state.filteredWings) return true;
+    if(this.state.filteredWings.length === 0 ) return false;
+
+    let res = false;
+
+    this.state.filteredWings.forEach(wing => {
+      if( JSON.stringify(wing._id) === JSON.stringify(wingsId)) {
+        res = true;
+      }
+    });
+    return res;
   }
 
   render() {
@@ -118,4 +132,4 @@ class ProfileProvider extends React.Component {
 
 export default inject('organisationStore', 'recordStore', 'userStore', 'commonStore', 'authStore')(
   observer(injectIntl(ProfileProvider))
-);
+  );

@@ -11,6 +11,7 @@ import Wings from '../wing/Wing';
 import ProfileService from '../../../services/profile.service';
 import SlackService from '../../../services/slack.service';
 import PopupLayout from './PopupLayout';
+import { getBaseUrl } from '../../../services/utils.service';
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
@@ -65,7 +66,7 @@ class AddWingPopup extends React.Component {
     if (process.env.NODE_ENV === 'production') SlackService.notify('#wingzy-events', 'QRCode - Search - ' +
       (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '') +
       ' - by ' + this.props.recordStore.values.record.name);
-    this.setState({ open: false, redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag });
+    this.setState({ open: false, redirectTo: getBaseUrl(this.props) });
   }
 
   componentDidMount() {

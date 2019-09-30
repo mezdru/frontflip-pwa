@@ -9,6 +9,7 @@ import ProfileWings from './ProfileWings';
 import ProfileActions from './ProfileActions';
 import { styles } from './ProfileLayout.css';
 import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
+import { getBaseUrl } from '../../services/utils.service';
 
 const ProfileClapHistory = React.lazy(() => import('./ProfileClapHistory'));
 
@@ -17,7 +18,7 @@ class ProfileLayout extends React.Component {
 
   render() {
     const { classes, visible, transitionDuration } = this.props;
-    const rootUrl = '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag;
+    const rootUrl = getBaseUrl(this.props);
 
 
     return (

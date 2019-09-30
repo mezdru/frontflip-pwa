@@ -38,11 +38,18 @@ class OnboardSuggestions extends React.Component {
 
   componentDidMount() {
     this.fetchSuggestions();
-    observe(this.props.searchStore.values, 'userQuery', () => {this.fetchSuggestions()})
+    this.unsubscribeUserQuery = observe(this.props.searchStore.values, 'userQuery', () => {this.fetchSuggestions()});
+  }
+  
+  componentWillUnmount() {
+    this.isUnmount = true;
+    this.unsubscribeUserQuery();
   }
 
   fetchSuggestions = async (lastSelected, wingsFamily) => {
-    this.setState({suggestions: await SuggestionsService.getOnboardSuggestions(lastSelected, this.props.searchStore.values.userQuery || '', wingsFamily )});
+    let suggestions = await SuggestionsService.getOnboardSuggestions(lastSelected, this.props.searchStore.values.userQuery || '', wingsFamily )
+    if(this.isUnmount) return;
+    this.setState({suggestions: suggestions});
   }
 
   shouldDisplaySuggestion = (suggestion) => {

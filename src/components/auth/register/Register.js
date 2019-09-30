@@ -8,6 +8,7 @@ import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import ReactGA from 'react-ga';
 import LogRocket from 'logrocket';
 import IntegrationButton from '../../utils/buttons/IntegrationButton';
+import { getBaseUrl } from '../../../services/utils.service';
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
@@ -49,7 +50,7 @@ class Register extends React.Component {
 
               if (cUser && cUser.email && cUser.email.validated) {
                 // User already validated, redirect to onboard.
-                this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag });
+                this.setState({ redirectTo: getBaseUrl(this.props) });
               } else {
                 // New User, shows success message.
                 this.setState(

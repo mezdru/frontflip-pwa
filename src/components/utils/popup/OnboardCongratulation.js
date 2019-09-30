@@ -7,6 +7,7 @@ import { FormattedMessage } from 'react-intl';
 
 import ColleagueImg from '../../../resources/images/colleagues.png';
 import PopupLayout from './PopupLayout';
+import { getBaseUrl } from '../../../services/utils.service';
 
 const styles = theme => ({
   picture: {
@@ -41,9 +42,7 @@ class OnboardCongratulation extends React.Component {
     this.setState({ open: nextProps.isOpen })
   }
 
-  handleOnboardEnd = () => {
-    this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag });
-  }
+  handleOnboardEnd = () => this.setState({ redirectTo: getBaseUrl(this.props) });
 
   render() {
     const { redirectTo } = this.state;

@@ -14,7 +14,6 @@ class UserWings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      observer: ()=> {},
       newTag: null,
       currentHashtagsLength: (this.props.recordStore.values.record && this.props.recordStore.values.record.hashtags ? this.props.recordStore.values.record.hashtags.length : 0),
     };
@@ -22,19 +21,19 @@ class UserWings extends React.Component {
 
   componentDidMount() {
     setTimeout(() => this.props.scrollUserWingsToBottom(), 100);
-    this.setState({observer: observe(this.props.recordStore.values, 'record', (change) => {
+
+    this.unsubscribeRecord = observe(this.props.recordStore.values, 'record', (change) => {
       if(change.newValue && change.newValue.hashtags && (change.newValue.hashtags.length > this.state.currentHashtagsLength)) {
         setTimeout(() => this.props.scrollUserWingsToBottom(), 100);
         this.setState({newTag: change.newValue.hashtags[change.newValue.hashtags.length - 1].tag, currentHashtagsLength: change.newValue.hashtags.length});
       } else {
         this.setState({newTag: null, currentHashtagsLength: (change.newValue && change.newValue.hashtags ? change.newValue.hashtags.length : 0)});
       }
-    }) });
+    });
   }
 
   componentWillUnmount() {
-    // destroy observe
-    this.state.observer();
+    this.unsubscribeRecord();
   }
 
   shoudlRenderWing = (hashtag) => {
