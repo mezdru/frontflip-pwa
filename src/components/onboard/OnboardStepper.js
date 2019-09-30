@@ -15,12 +15,10 @@ import SlackService from '../../services/slack.service';
 import { withSnackbar } from 'notistack';
 import LoaderFeedback from '../utils/buttons/LoaderFeedback';
 
-import SwipeableViews from 'react-swipeable-views';
-import { virtualize } from 'react-swipeable-views-utils';
-import {FormattedMessage} from "react-intl";
+import { FormattedMessage } from "react-intl";
 import classNames from 'classnames';
-
-const VirtualizeSwipeableViews = virtualize(SwipeableViews);
+import undefsafe from 'undefsafe';
+import {getBaseUrl} from '../../services/utils.service.js';
 
 let timeoutArray = [];
 
@@ -32,20 +30,20 @@ const styles = theme => ({
     background: 'none',
     boxShadow: 'none',
     padding: '8px 16px',
-    color:'white',
-    '&:hover' : {
+    color: 'white',
+    '&:hover': {
       background: 'rgba(255, 255, 255, 0.12)',
     },
     '&:first-child()': {
       width: 40,
     },
-    '&:disabled':{
-      color:theme.palette.primary.hover + '!important'
+    '&:disabled': {
+      color: theme.palette.primary.hover + '!important'
     }
   },
   stepperButtonHighlighted: {
     background: theme.palette.secondary.main,
-    '&:hover' : {
+    '&:hover': {
       background: theme.palette.secondary.dark,
     },
   }
@@ -55,80 +53,64 @@ class OnboardStepper extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeStep: this.props.initStep || 0,
+      activeStep: 0,
       canNext: true,
+      steps: []
     };
   }
 
   componentDidMount() {
-    this.initializeSuggestions(this.props.steps[this.state.activeStep]);
+    this.makeSteps(this.props.wantedStep);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.initStep !== this.props.initStep) {
-      this.setState({activeStep: nextProps.initStep}, () => {this.forceUpdate()});
-    }
-  }
 
-  initializeSuggestions = (currentStep) => {
-    if(currentStep && (currentStep === 'wings' || currentStep.charAt(0) === '#')) {
-      this.props.SuggestionsController.initSuggestions(currentStep, this.props.algoliaKey);
+  makeSteps = async (stepLabel) => {
+    let org = this.props.organisationStore.values.organisation;
+    let steps;
+
+    if (undefsafe(org, 'onboardSteps.length') > 0) {
+      steps = org.onboardSteps;
+    } else {
+      steps = ['intro', 'contacts'];
+      if (undefsafe(org, 'featuredWingsFamily.length') > 0)
+        org.featuredWingsFamily.forEach(fwf => {
+          if (!steps.find(elt => elt === fwf.tag) && fwf.tag)
+            steps.push(fwf.tag);
+        });
+      steps.push('wings');
     }
+    this.setState({ steps: steps, activeStep: stepLabel ? steps.indexOf(stepLabel.replace('%23', '#')) : 0 });
+
   }
 
   handleNext = () => {
-    if(this.props.edit){ 
+    if (this.props.edit) {
       this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
       this.props.recordStore.getRecordByUser().then().catch();
-      return this.setState({redirectTo: 
-                        '/' + this.props.commonStore.locale + 
-                        '/' + this.props.organisationStore.values.orgTag + 
-                        '/' + this.props.recordStore.values.record.tag }, () => {this.forceUpdate()});
+      return this.setState({redirectTo: getBaseUrl(this.props) + '/' + this.props.recordStore.values.record.tag});
     }
 
-    this.initializeSuggestions(this.props.steps[this.state.activeStep+1]);
-    
-    if ((this.state.activeStep === (this.props.steps.length - 1))) {
+    if ((this.state.activeStep === (this.state.steps.length - 1))) {
       // click on finish
       let user = this.props.userStore.values.currentUser;
       try {
-        if(process.env.NODE_ENV === 'production' && !process.env.REACT_APP_NOLOGS)
-          SlackService.notify('#alerts', 'We have a new User! ' +
-                            (user.email ? user.email.value : (user.google? user.google.email : user._id)) +
-                            ' in ' + this.props.organisationStore.values.organisation.tag);
-      }catch(e) {
-        // log
-      }
+        if (process.env.NODE_ENV === 'production' && !process.env.REACT_APP_NOLOGS)
+          SlackService.notify('#alerts', `We have a new User! ${undefsafe(user, 'email.value') || undefsafe(user, 'google.email') || user._id}` +
+            ' in ' + this.props.organisationStore.values.organisation.tag);
+      } catch (e) {}
 
-      this.welcomeUser();
-      this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.orgTag + '/congrats' }, ()=> {this.forceUpdate()});
+      this.props.userStore.welcomeCurrentUser(this.props.organisationStore.values.organisation._id);
+      this.setState({ redirectTo: getBaseUrl(this.props) + '/congrats' });
     } else {
-      this.setState(state => ({
-        activeStep: state.activeStep + 1,
-      }), () => {this.forceUpdate()});
+      this.setState({activeStep: this.state.activeStep + 1});
     }
   };
 
-  welcomeUser = () => {
-    this.props.userStore.welcomeCurrentUser(this.props.organisationStore.values.organisation._id);
-  }
-
-  shouldComponentUpdate(nextState) {
-    if(this.state.showFeedback !== nextState.showFeedback) return true;
-    return false;
-  }
-
   handleBack = () => {
-    if(this.props.edit) return this.setState({redirectTo: 
-      '/' + this.props.commonStore.locale + 
-      '/' + this.props.organisationStore.values.orgTag + 
-      '/' + this.props.recordStore.values.record.tag }, () => {this.forceUpdate()});
+    if (this.props.edit) 
+      return this.setState({redirectTo: getBaseUrl(this.props) + '/' + this.props.recordStore.values.record.tag});
 
-    this.initializeSuggestions(this.props.steps[this.state.activeStep-1])
-
-    this.setState(state => ({
-      activeStep: state.activeStep - 1,
-    }), () => {this.forceUpdate()});
+    this.setState({activeStep: this.state.activeStep - 1});
   };
 
   getStepComponent(steps, activeStep) {
@@ -144,9 +126,8 @@ class OnboardStepper extends React.Component {
 
   handleSave = async (arrayOfLabels) => {
     this.props.recordStore.setRecordId(this.props.recordStore.values.record._id);
-    this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);  
+    this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
     return await this.props.recordStore.updateRecord(arrayOfLabels).then((record) => {
-      //this.props.enqueueSnackbar('Your data has been saved successfully', {variant: 'success'});
       timeoutArray.forEach(tm => { clearTimeout(tm) });
       timeoutArray = [];
       this.setState({ showFeedback: true }, () => {
@@ -158,91 +139,67 @@ class OnboardStepper extends React.Component {
     });
   }
 
-  handleStepChange = activeStep => {
-    this.setState({ activeStep });
-  };
-
   getNextButtonText = () => {
-    if(this.props.edit) return <FormattedMessage id={'onboard.edit.save'}/>
-    else if (this.state.activeStep === (this.props.steps.length -1)) return <FormattedMessage id={'onboard.stepperFinish'}/>
-    else return <FormattedMessage id={'onboard.stepperNext'}/>
+    if (this.props.edit) return <FormattedMessage id={'onboard.edit.save'} />
+    else if (this.state.activeStep === (this.state.steps.length - 1)) return <FormattedMessage id={'onboard.stepperFinish'} />
+    else return <FormattedMessage id={'onboard.stepperNext'} />
   }
 
   shouldNextBeHighlighted = (activeStepLabel) => {
     let record = this.props.recordStore.values.record;
     switch (activeStepLabel) {
       case 'intro':
-        if(record.intro && record.intro.length > 1 && record.name && record.name.length > 1) return true;
-        else return false;
+        return (record.intro && record.intro.length > 1 && record.name && record.name.length > 1);
       case 'contacts':
-        if(record.links && record.links.length > 0) return true;
-        return false;
+        return (record.links && record.links.length > 0);
       case 'wings':
-        if(record.hashtags && record.hashtags.length > 9) return true;
-        return false;
+        return (record.hashtags && record.hashtags.length > 9);
       default:
         return false;
     }
   }
 
   render() {
-    const { theme, classes, edit, steps } = this.props;
+    const { theme, classes, edit } = this.props;
     const { organisation, orgTag } = this.props.organisationStore.values;
-    const {locale} = this.props.commonStore;
-    const { activeStep, canNext, showFeedback, redirectTo } = this.state;
+    const { locale } = this.props.commonStore;
+    const { activeStep, steps, canNext, showFeedback, redirectTo } = this.state;
+    let StepComponent = this.getStepComponent(steps, activeStep);
 
     let wantedUrl = '/' + locale + '/' + (organisation.tag || orgTag) + '/onboard/' + (steps[activeStep] ? steps[activeStep].replace('#', '%23') : '');
+
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
+
     return (
-      <Grid style={{ height: '100vh' }} item>
-        { ( (window.location.pathname !== wantedUrl) && (window.location.pathname !== wantedUrl + '/edit') && !edit ) && (
+      <Grid item>
+        {((window.location.pathname !== wantedUrl) && (window.location.pathname !== wantedUrl + '/edit') && !edit) && (
           <Redirect push to={wantedUrl} />
         )}
-        <div style={{ width: '100%', background: '#2B2D3C', borderBottom: '1px solid rgba(0, 0, 0, 0.12)'}}>
-          <Grid item xs={12} sm={8} md={6} lg={4} style={{ position: 'relative', left: 0, right: 0, margin: 'auto'}} >
-            <MobileStepper
-              variant="dots"
-              steps={steps.length}
-              position="static"
-              activeStep={(edit ? -1 : Math.min(activeStep, steps.length-1))}
-              style={{ maxWidth: '100%' }}
-              className={classes.root}
-              nextButton={
-                <Button size="small" onClick={this.handleNext} disabled={!canNext} 
-                        className={classNames(classes.stepperButton, (this.shouldNextBeHighlighted(steps[activeStep]) ? classes.stepperButtonHighlighted : null ))   } >
-                  {this.getNextButtonText()}
-                  {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-                </Button>
-              }
-              backButton={
-                <Button size="small" onClick={this.handleBack} disabled={activeStep === 0} className={classes.stepperButton} >
-                  {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-                  <FormattedMessage id={'onboard.stepperBack'}/>
-                </Button>
-              }
-            />
-          </Grid>
-        </div>
+        <Grid item xs={12}>
+          <MobileStepper
+            variant="dots"
+            steps={steps.length}
+            position="static"
+            activeStep={(edit ? -1 : Math.min(activeStep, steps.length - 1))}
+            className={classes.root}
+            nextButton={
+              <Button size="small" onClick={this.handleNext} disabled={!canNext}
+                className={classNames(classes.stepperButton, (this.shouldNextBeHighlighted(steps[activeStep]) ? classes.stepperButtonHighlighted : null))} >
+                {this.getNextButtonText()}
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+              </Button>
+            }
+            backButton={
+              <Button size="small" onClick={this.handleBack} disabled={activeStep === 0} className={classes.stepperButton} >
+                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                <FormattedMessage id={'onboard.stepperBack'} />
+              </Button>
+            }
+          />
+        </Grid>
 
-        <VirtualizeSwipeableViews
-          index={activeStep}
-          onChangeIndex={this.handleStepChange}
-          style={{height: 'calc(100vh - 73px)'}}
-          disabled={true}
-          slideRenderer={(params) => {
-            const { index } = params;
-            let StepComponent = this.getStepComponent(steps, index);
-            return(
-              <Grid item style={{ height: '100%' }} key={index} >
-                <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[index]} 
-                              SuggestionsController={this.props.SuggestionsController} />
-              </Grid>
-            )
-          }}
-        >
-        </VirtualizeSwipeableViews>
-
-
+        <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[activeStep]}
+          SuggestionsController={this.props.SuggestionsController} />
 
         {showFeedback && (
           <LoaderFeedback

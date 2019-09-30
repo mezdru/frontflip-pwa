@@ -2,7 +2,7 @@ import React, { Suspense } from 'react'
 import { withStyles, CircularProgress } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { injectIntl } from 'react-intl';
-
+import ProfileService from '../../../services/profile.service';
 import defaultPicture from '../../../resources/images/placeholder_person.png';
 import './uploadcare_customize.css';
 
@@ -11,7 +11,7 @@ const Uploader = React.lazy(() => import('../uploadcare/Uploader'));
 const styles = theme => ({
   pictureContainer: {
     position: 'relative',
-    margin: '8px 16px',
+    margin: '0px 16px',
     textAlign: 'center',
     [theme.breakpoints.down('xs')] : {
       margin: 8,
@@ -20,8 +20,8 @@ const styles = theme => ({
   picture: {
     position: 'relative',
     borderRadius: '50%',
-    width:300,
-    height:300,
+    width:250,
+    height:250,
     [theme.breakpoints.down('xs')] : {
       width: 180,
       height: 180,
@@ -92,7 +92,7 @@ class PictureField extends React.Component {
               <CircularProgress color='secondary' className={classes.picture} size={300} />
             )}
             {(!loading || pictureUrl) && (
-              <img src={pictureUrl || defaultPicture} alt="" className={classes.picture} />
+              <img src={ProfileService.getPicturePathResized({url: pictureUrl}, 'person', '250x250') || defaultPicture} alt="" className={classes.picture} />
             )}
           </div>
 

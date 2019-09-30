@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import SearchField from './SearchField';
 import SearchSuggestions from './SearchSuggestions';
 import AlgoliaService from '../../services/algolia.service';
+import OnboardSuggestions from './OnboardSuggestions';
 
 class Search extends PureComponent {
   constructor(props) {
@@ -24,11 +25,19 @@ class Search extends PureComponent {
 
   render() {
     const {autocompleteSuggestions} = this.state;
+    const {onSelect, mode, max, wingsFamily} = this.props;
 
     return(
       <>
-        <SearchField fetchAutocompleteSuggestions={this.fetchAutocompleteSuggestions} />
-        <SearchSuggestions autocompleteSuggestions={autocompleteSuggestions} />
+        <SearchField 
+          fetchAutocompleteSuggestions={this.fetchAutocompleteSuggestions} 
+          mode={mode} handleCreateWing={this.props.handleCreateWing}
+        />
+        {mode !== 'onboard' ? (
+          <SearchSuggestions autocompleteSuggestions={autocompleteSuggestions} />
+        ): (
+          <OnboardSuggestions max={max} onSelect={onSelect} wingsFamily={wingsFamily} handleCreateWing={this.props.handleCreateWing} />
+        )}
       </>
     );
   }

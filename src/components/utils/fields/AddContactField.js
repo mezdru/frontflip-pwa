@@ -107,12 +107,15 @@ class AddContactField extends React.Component {
           <Add fontSize="large"/>
         </Fab>
         
-        <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
+        <Popper open={open} 
+        anchorEl={this.anchorEl} 
+        transition 
+        disablePortal>
           {({TransitionProps}) => (
             <Grow
               {...TransitionProps}
               id="menu-list-grow"
-              style={{position:'abdsolute',left:0,right:0,margin:'auto'}}
+              style={{marginTop: -140}}
             >
               <Grid item container direction="column">
                 <Paper className={classes.paper}>

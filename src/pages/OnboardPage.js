@@ -1,11 +1,12 @@
 import React, { Suspense } from 'react'
 import { inject, observer } from "mobx-react";
-import { observe } from 'mobx';
 import OnboardWelcome from '../components/onboard/OnboardWelcome';
 import OnboardStepper from '../components/onboard/OnboardStepper';
-import { withStyles } from '@material-ui/core';
-import SuggestionsController from '../services/suggestionsController.service';
+import { withStyles, Grid } from '@material-ui/core';
+import undefsafe from 'undefsafe';
 import ReactGA from 'react-ga';
+import BannerResizable from '../components/utils/banner/BannerResizable';
+import Header from '../components/header/Header';
 
 const Intercom = React.lazy(() => import('react-intercom'));
 
@@ -13,7 +14,10 @@ console.debug('Loading OnboardPage');
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
-const styles = {
+const styles = theme => ({
+  root: {
+    height: '100vh',
+  },
   logo: {
     width: '6.5rem',
     height: '6.5rem',
@@ -21,19 +25,42 @@ const styles = {
     bottom: '3.6rem',
     marginBottom: '-7rem',
     zIndex: 2,
+  },
+  blackFilter: {
+    position: 'fixed',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'black',
+    opacity: 0.35,
+    overflow: 'hidden',
+  },
+  banner: {
+    position: 'fixed',
+  },
+  container: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    width: '100%',
+    zIndex: 2,
+    borderRadius: 5,
+    boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
+    overflow: 'hidden',
+    margin: 16,
+    [theme.breakpoints.down('xs')]: {
+      top: 48,
+      marginTop: 32,
+      maxWidth: 'calc(100% - 32px)'
+    }
   }
-};
+});
 
 class OnboardPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inOnboarding: false,
-      observer: () => { },
-      stepNumber: 0,
-      steps: [],
+      inOnboarding: undefsafe(this.props, 'match.params.step') !== undefined,
       editMode: this.props.edit || false,
-      renderComponent: (this.props.edit ? false : true)
+      renderComponent: !this.props.edit
     };
 
     // clear wings bank
@@ -41,29 +68,16 @@ class OnboardPage extends React.Component {
   }
 
   componentDidMount() {
-      this.makeStepOrder();
     this.props.history.listen((location, action) => {
       ReactGA.pageview(window.location.pathname);
-      // The react router dom params are updated async
-      setTimeout(() => this.populateStep(this.props.match.params.step), 10);
+      // setTimeout(() => this.makeSteps(this.props.match.params.step), 10);
     });
 
-    this.setState({
-      observer: observe(this.props.recordStore.values, 'record', (change) => {
-        // console.log('>> FORCE UPDATE');
-        // this.forceUpdate();
-      })
-    });
     if (this.props.match && this.props.match.params && this.props.match.params.recordId && this.props.edit) {
       this.props.recordStore.setRecordId(this.props.match.params.recordId);
-      this.props.recordStore.getRecord()
-        .then(() => { this.setState({ renderComponent: true }) }).catch(err => console.log(err));
+      this.props.recordStore.getRecord();
     } else {
-      this.getRecordForUser()
-        .then(() => { this.setState({ renderComponent: true }) }).catch(err => console.log(err));
-    }
-    if (this.props.match && this.props.match.params && this.props.match.params.step) {
-      this.populateStep(this.props.match.params.step);
+      this.getRecordForUser();
     }
   }
 
@@ -71,70 +85,46 @@ class OnboardPage extends React.Component {
     return (JSON.stringify(nextState) !== JSON.stringify(this.state))
   }
 
-  componentWillUnmount() {
-    this.state.observer();
-  }
-
-  makeStepOrder = async () => {
-    let org = this.props.organisationStore.values.organisation;
-    if (org && org.onboardSteps && org.onboardSteps.length > 0) {
-      await this.setState({ steps: org.onboardSteps });
-    } else {
-      var steps = ['intro', 'contacts', 'wings'];
-      if (org && org.featuredWingsFamily && org.featuredWingsFamily.length > 0)
-        org.featuredWingsFamily.forEach(fwf => {
-          if (!steps.find(elt => elt === fwf.tag) && fwf.tag)
-            steps.push(fwf.tag);
-        });
-      await this.setState({ steps: steps });
-    }
-  }
-
-  populateStep = (stepLabel) => {
-    this.makeStepOrder()
-      .then(() => {
-        this.setState({ stepNumber: this.state.steps.indexOf(stepLabel.replace('%23', '#')), inOnboarding: true });
-      });
-  }
-
   getRecordForUser = () => {
-    if (!this.props.recordStore.values.orgId) {
-      this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
-    }
+    this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
     return this.props.recordStore.getRecordByUser();
   }
 
-  handleEnterToOnboard = () => {
-    this.setState({ inOnboarding: true });
-  }
+  handleEnterToOnboard = () => this.setState({ inOnboarding: true });
 
   render() {
-    const { inOnboarding, stepNumber, steps, editMode, renderComponent } = this.state;
+    const { inOnboarding, editMode, renderComponent } = this.state;
+    const { classes } = this.props;
 
-    if (!renderComponent) return null;
+    if(!renderComponent) return null;
 
-    if (!inOnboarding) {
-      return (
-        <>
-          <OnboardWelcome handleEnterToOnboard={this.handleEnterToOnboard} />
+    return (
+      <Grid container className={classes.root} direction="row" justify="center" alignItems="center">
 
-          <Suspense fallback={<></>}>
-            <Intercom appID={"k7gprnv3"} />
-          </Suspense>
-        </>
-      );
-    } else {
-      return (
-        <React.Fragment>
-          <main>
-            <OnboardStepper initStep={stepNumber} steps={steps} SuggestionsController={SuggestionsController} edit={editMode} />
-            <Suspense fallback={<></>}>
-              <Intercom appID={"k7gprnv3"} />
-            </Suspense>
-          </main>
-        </React.Fragment>
-      );
-    }
+        <Suspense fallback={<></>}>
+          <Header handleDisplayProfile={this.handleDisplayProfile} />
+        </Suspense>
+
+        <BannerResizable
+          type={'organisation'}
+          initialHeight={100}
+          style={styles.banner}
+        />
+        <div className={classes.blackFilter} ></div>
+
+        <Grid item xs={12} sm={8} md={6} lg={6} className={classes.container}>
+          {inOnboarding ? (
+            <OnboardStepper edit={editMode} wantedStep={undefsafe(this.props, 'match.params.step')} />
+          ) : (
+              <OnboardWelcome handleEnterToOnboard={this.handleEnterToOnboard} />
+            )}
+        </Grid>
+
+        <Suspense fallback={<></>}>
+          <Intercom appID={"k7gprnv3"} />
+        </Suspense>
+      </Grid>
+    );
   }
 }
 

@@ -1,19 +1,15 @@
 import React from 'react'
 import { withStyles, Grid } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
-import SearchField from '../../algolia/SearchField';
+import Search from '../../search/Search';
 import UserWings from '../../utils/wing/UserWings';
-import WingsSuggestion from '../../algolia/WingsSuggestion';
 import Typography from '@material-ui/core/Typography';
 import { FormattedMessage } from "react-intl";
 
 const styles = theme => ({
   userWingsPosition: {
     paddingTop: 16,
-    height: 'calc(100% - 320px)',
-    [theme.breakpoints.down('sm')]: {
-      height: 'calc(100% - 280px)',
-    },
+    height: 300,
     overflowY: 'auto'
   }
 });
@@ -43,8 +39,7 @@ class OnboardWings extends React.Component {
     this.props.handleSave(['hashtags']);
   }
 
-  handleAddWing = (e, element) => {
-    if (e) e.preventDefault();
+  handleAddWing = (element) => {
     this.props.recordStore.setRecordTag(element.tag);
     this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
     if (this.props.recordStore.values.record.hashtags.find(elt => elt.tag === element.tag)) return Promise.resolve();
@@ -61,6 +56,13 @@ class OnboardWings extends React.Component {
             this.addAndSave(hashtagRecord);
           }).catch();
       });
+  }
+
+  handleCreateWing = async (wing) => {
+    let newWing = {name: wing.name, type: 'hashtag'};
+    if(this.isFeaturedWings()) newWing.hashtags = [this.getFeaturedWings()];
+    let newWingSaved = await this.props.recordStore.postRecord(newWing);
+    this.handleAddWing(newWingSaved);
   }
 
   handleRemoveWing = (e, tag) => {
@@ -89,35 +91,29 @@ class OnboardWings extends React.Component {
 
   render() {
     const { classes } = this.props;
+
     return (
-      <Grid container direction="column" style={{ height: 'calc(100vh - 73px)', background: 'white', overflow: 'hidden' }}>
+      <Grid container direction="column" style={{background: 'white', overflow: 'hidden' }}>
         <Grid item style={{
           background: this.props.theme.palette.primary.main, maxWidth: '100%', position: 'relative', zIndex: 2,
           boxShadow: 'rgba(0, 0, 0, 0.2) 0px 1px 8px 0px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.12) 0px 3px 3px -2px',
         }}
           justify="center" direction="row" container >
-          <Grid container item xs={12} sm={8} md={6} lg={4} >
+          <Grid container item xs={12} >
 
             <Grid item xs={12} style={{ padding: 8 }}>
               {this.renderTitleByStep()}
             </Grid>
 
-            <Grid item xs={12} style={{ padding: 16, paddingBottom: 0, paddingTop: 0 }}>
-              <SearchField hashtagOnly handleAddWing={this.handleAddWing}
-                wingsFamily={this.isFeaturedWings() ? this.props.activeStepLabel : null} />
-            </Grid>
-
-            <Grid item xs={12} >
-              <WingsSuggestion handleAddWing={this.handleAddWing} handleSave={this.props.handleSave}
-                wingsFamily={this.isFeaturedWings() ? this.props.activeStepLabel : null}
-                SuggestionsController={this.props.SuggestionsController} stepLabel={this.props.activeStepLabel} />
+            <Grid item xs={12} style={{padding: '0px 24px'}}>
+              <Search mode="onboard" onSelect={this.handleAddWing} max={10} wingsFamily={this.getFeaturedWings()} handleCreateWing={this.handleCreateWing} />
             </Grid>
 
           </Grid>          
         </Grid>
 
         <Grid item justify="center" direction="row" container className={classes.userWingsPosition} id={this.state.scrollableClass}>
-          <Grid container item xs={12} sm={8} md={6} lg={4}>
+          <Grid container item xs={12}>
             <Grid item xs={12} >
               <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? this.getFeaturedWings() : null}
                 scrollUserWingsToBottom={this.scrollUserWingsToBottom} />
