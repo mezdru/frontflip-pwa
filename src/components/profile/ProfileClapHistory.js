@@ -52,7 +52,6 @@ class ProfileClapHistory extends React.Component {
     const { organisation } = this.props.organisationStore.values;
     const lastClapHistory = clapHistory.slice(0, 10);
     let clapsDisplayed = 0;
-    console.log(lastClapHistory)
 
     return (
       <>
