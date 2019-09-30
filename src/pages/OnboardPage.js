@@ -49,6 +49,7 @@ const styles = theme => ({
     [theme.breakpoints.down('xs')]: {
       top: 48,
       marginTop: 32,
+      left: 0,
       maxWidth: 'calc(100% - 32px)'
     }
   }
