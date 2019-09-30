@@ -132,4 +132,4 @@ class ProfileProvider extends React.Component {
 
 export default inject('organisationStore', 'recordStore', 'userStore', 'commonStore', 'authStore')(
   observer(injectIntl(ProfileProvider))
-);
+  );

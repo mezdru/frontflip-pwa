@@ -2,7 +2,6 @@ import React from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import Slide from '@material-ui/core/Slide';
 import { withStyles } from '@material-ui/core/styles';
 import { IconButton } from '@material-ui/core';
@@ -51,9 +50,7 @@ class PopupLayout extends React.Component {
             <Close />
           </IconButton>
           {this.props.title}
-          <DialogContentText id="alert-dialog-slide-description">
-            {this.props.children}
-          </DialogContentText>
+          {this.props.children}
         </DialogContent>
         <DialogActions className={classes.actions}>
           {this.props.actions}

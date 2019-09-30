@@ -11,7 +11,7 @@ const withClapManagement = (ComponentToWrap) => {
     }
 
     observeClapCount = (cb) => {
-      observe(this.props.clapStore.values, 'currentRecordClapCount', cb);
+      return observe(this.props.clapStore.values, 'currentRecordClapCount', cb);
     }
 
     handleClap = (recipient, hashtag,  given) => {

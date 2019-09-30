@@ -23,10 +23,14 @@ class Wings extends React.PureComponent {
     this.setState({ canClap: this.props.canClap(this.props.recordId) });
 
     if(this.props.mode === 'profile') {
-      this.props.observeClapCount((change) => {
+      this.unsubscribeClapCount = this.props.observeClapCount((change) => {
         this.forceUpdate();
       });
     }
+  }
+
+  componentWillUnmount() {
+    if(this.unsubscribeClapCount) this.unsubscribeClapCount();
   }
 
   handleClapDown = (e) => {

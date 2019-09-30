@@ -50,9 +50,13 @@ const styles = theme => ({
 class ProfileWings extends React.PureComponent {
 
   componentDidMount() {
-    observe(this.props.recordStore.values, 'displayedRecord', (change) => {
+    this.unsubscribeDisplayedRecord =  observe(this.props.recordStore.values, 'displayedRecord', (change) => {
       this.getClapsCount(change.newValue ? change.newValue._id : null);
     });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeDisplayedRecord();
   }
 
   getClapsCount = (recordId) => {

@@ -41,7 +41,7 @@ class AskForHelp extends React.Component {
 
   state = {
     isOpen: this.props.isOpen,
-    message: null,
+    message: '',
     recipients: [],
     success: false,
     error: false
@@ -68,7 +68,7 @@ class AskForHelp extends React.Component {
     if (this.props.isOpen !== nextProps.isOpen) {
       this.setState({
         isOpen: nextProps.isOpen,
-        message: null,
+        message: '',
         success: false,
         error: false
       });
