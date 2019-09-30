@@ -71,12 +71,13 @@ class OnboardStepper extends React.Component {
     if (undefsafe(org, 'onboardSteps.length') > 0) {
       steps = org.onboardSteps;
     } else {
-      steps = ['intro', 'contacts', 'wings'];
+      steps = ['intro', 'contacts'];
       if (undefsafe(org, 'featuredWingsFamily.length') > 0)
         org.featuredWingsFamily.forEach(fwf => {
           if (!steps.find(elt => elt === fwf.tag) && fwf.tag)
             steps.push(fwf.tag);
         });
+      steps.push('wings');
     }
     this.setState({ steps: steps, activeStep: stepLabel ? steps.indexOf(stepLabel.replace('%23', '#')) : 0 });
 
