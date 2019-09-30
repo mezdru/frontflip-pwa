@@ -16,6 +16,7 @@ import withSearchManagement from '../hoc/SearchManagement.hoc';
 import { withProfileManagement } from '../hoc/profile/withProfileManagement';
 import AskForHelpFab from '../components/utils/buttons/AskForHelpFab';
 import MyProfileFab from '../components/utils/buttons/MyProfileFab';
+import { getBaseUrl } from '../services/utils.service';
 
 const OnboardCongratulation = React.lazy(() => import('../components/utils/popup/OnboardCongratulation'));
 const PromptIOsInstall = React.lazy(() => import('../components/utils/popup/PromptIOsInstall'));
@@ -197,7 +198,7 @@ class SearchPage extends PureComponent {
   handleCloseProfile = () => {
     this.setState({ visible: false });
     setTimeout(() => {
-      this.setState({ displayedHit: null, redirectTo: '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag }
+      this.setState({ displayedHit: null, redirectTo: getBaseUrl(this.props) }
       )
     },
       this.state.transitionDuration / 2

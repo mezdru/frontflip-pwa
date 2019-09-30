@@ -8,6 +8,7 @@ import SnackbarCustom from '../../utils/snackbars/SnackbarCustom';
 import ReactGA from 'react-ga';
 import LogRocket from 'logrocket';
 import IntegrationButton from '../../utils/buttons/IntegrationButton';
+import {getBaseUrl} from '../../../services/utils.service';
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
@@ -34,7 +35,7 @@ class Login extends React.Component {
           { id: 'signin.error.integration.notFound' },
           {
             integrationName: integrationName,
-            signupLink: this.props.getDefaultRedirectPath() + '/signup'
+            signupLink: getBaseUrl(this.props) + '/signup'
           }
         )
       });
@@ -53,7 +54,7 @@ class Login extends React.Component {
   };
 
   signinSuccessRedirect = () => {
-    let defaultRedirect = this.props.getDefaultRedirectPath();
+    let defaultRedirect = getBaseUrl(this.props);
     let wantedRedirect = this.props.commonStore.getCookie('wantedPath');
     if (wantedRedirect) this.props.commonStore.removeCookie('wantedPath');
     this.setState({ redirectTo: wantedRedirect || defaultRedirect });

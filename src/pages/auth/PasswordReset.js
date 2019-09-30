@@ -8,6 +8,7 @@ import UrlService from '../../services/url.service';
 import { Redirect } from 'react-router-dom';
 import ReactGA from 'react-ga';
 import AuthLayout from '../../components/auth/AuthLayout';
+import { getBaseUrl } from '../../services/utils.service';
 
 console.debug('Loading PasswordReset');
 
@@ -82,7 +83,7 @@ class PasswordReset extends React.Component {
     e.preventDefault();
     this.props.authStore.updatePassword(this.props.match.params.token, this.props.match.params.hash)
       .then(response => {
-        this.setState({ redirectTo: '/' + this.props.commonStore.locale + (this.props.organisationStore.values.orgTag ? '/' + this.props.organisationStore.values.orgTag : '') });
+        this.setState({ redirectTo: getBaseUrl(this.props) });
       }).catch(err => {
         let errorMessage;
         if (err.status === 422) {
