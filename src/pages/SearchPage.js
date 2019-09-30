@@ -197,9 +197,9 @@ class SearchPage extends PureComponent {
 
   handleCloseProfile = () => {
     this.setState({ visible: false });
+    // this.props.profileContext.reset();
     setTimeout(() => {
-      this.setState({ displayedHit: null, redirectTo: getBaseUrl(this.props) }
-      )
+      this.setState({ displayedHit: null, redirectTo: getBaseUrl(this.props) });
     },
       this.state.transitionDuration / 2
     );

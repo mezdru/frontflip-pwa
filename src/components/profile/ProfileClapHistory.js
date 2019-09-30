@@ -36,7 +36,9 @@ class ProfileClapHistory extends React.Component {
   }
 
   getClapHistory = (recordId) => {
-    this.props.clapStore.setCurrentRecordId(recordId || (this.props.recordStore.values.displayedRecord ? this.props.recordStore.values.displayedRecord._id : null));
+    let currentId = recordId || (this.props.recordStore.values.displayedRecord ? this.props.recordStore.values.displayedRecord._id : null);
+    if(!currentId) return this.setState({clapHistory: []});
+    this.props.clapStore.setCurrentRecordId(currentId);
     this.props.clapStore.getClapHistory()
       .then(clapHistory => {
         this.setState({ clapHistory: JSON.parse(JSON.stringify(clapHistory)) });
@@ -49,6 +51,8 @@ class ProfileClapHistory extends React.Component {
     const { locale } = this.props.commonStore;
     const { organisation } = this.props.organisationStore.values;
     const lastClapHistory = clapHistory.slice(0, 10);
+    let clapsDisplayed = 0;
+    console.log(lastClapHistory)
 
     return (
       <>
@@ -58,6 +62,7 @@ class ProfileClapHistory extends React.Component {
 
         {lastClapHistory && lastClapHistory.length > 0 && lastClapHistory.map((clap, index) => {
           if (clap.recipient === profileContext.getProp('_id') && profileContext.isWingsDisplayed(clap.hashtag._id || clap.hashtag)) {
+            clapsDisplayed ++;
             return <ActivityCard
               key={clap._id}
               picture={clap.giver.picture ? clap.giver.picture.url : null}
@@ -72,7 +77,7 @@ class ProfileClapHistory extends React.Component {
           }else return null;
         })}
 
-        {(!lastClapHistory || lastClapHistory.length === 0) ? (
+        {(!lastClapHistory || lastClapHistory.length === 0 || clapsDisplayed === 0) ? (
           <Grid item container xs={12} className={classes.activity} >
             <FormattedMessage id="profile.activity.empty" />
           </Grid>

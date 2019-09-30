@@ -28,7 +28,7 @@ class RecordStore {
   setRecord(record) {
     this.values.record = record;
   }
-  setdisplayedRecord(record) {
+  setDisplayedRecord(record) {
     this.values.displayedRecord = record;
   }
 
@@ -62,7 +62,7 @@ class RecordStore {
 
     return agent.Record.getByTag(this.values.recordTag, this.values.orgId)
       .then(res => {
-        this.setdisplayedRecord(res.data.length > 0 ? res.data[0] : res.data);
+        this.setDisplayedRecord(res.data.length > 0 ? res.data[0] : res.data);
         return this.values.displayedRecord;
       })
       .catch(action((err) => {
@@ -169,6 +169,7 @@ decorate(RecordStore, {
   reset: action,
   setRecordTag: action,
   setRecordId: action,
+  setDisplayedRecord: action,
   setRecord: action,
   getRecord: action,
   getRecordByTag: action,

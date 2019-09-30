@@ -17,7 +17,8 @@ class ProfileProvider extends React.Component {
       isWingsDisplayed: this.isWingsDisplayed,
       getProp: this.getProp,
       getBaseUrl: this.getBaseUrl,
-      wingsByFamilies: []
+      wingsByFamilies: [],
+      reset: this.reset
     };
   }
 
@@ -26,6 +27,17 @@ class ProfileProvider extends React.Component {
     if(!propValue) propValue = (this.state.algoliaRecord ? this.state.algoliaRecord[propName] : null );
     if(!propValue && propName === '_id') return this.getProp('objectID');
     return propValue;
+  }
+
+  reset = () => {
+    this.setState({
+      algoliaRecord: null,
+      wingzyRecord: null,
+      filteredWings: null,
+      wingsByFamilies: []
+    });
+    this.props.recordStore.setDisplayedRecord({});
+    this.props.clapStore.reset();
   }
 
   setProfileData = (algoliaRecord) => {
@@ -130,6 +142,6 @@ class ProfileProvider extends React.Component {
   }
 }
 
-export default inject('organisationStore', 'recordStore', 'userStore', 'commonStore', 'authStore')(
+export default inject('organisationStore', 'recordStore', 'userStore', 'commonStore', 'authStore', 'clapStore')(
   observer(injectIntl(ProfileProvider))
   );
