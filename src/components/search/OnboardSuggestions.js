@@ -37,8 +37,8 @@ class OnboardSuggestions extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchSuggestions();
-    this.unsubscribeUserQuery = observe(this.props.searchStore.values, 'userQuery', () => {this.fetchSuggestions()});
+    this.fetchSuggestions(null, this.props.wingsFamily);
+    this.unsubscribeUserQuery = observe(this.props.searchStore.values, 'userQuery', () => {this.fetchSuggestions(null, this.props.wingsFamily)});
   }
   
   componentWillUnmount() {
@@ -47,7 +47,10 @@ class OnboardSuggestions extends React.Component {
   }
 
   fetchSuggestions = async (lastSelected, wingsFamily) => {
-    let suggestions = await SuggestionsService.getOnboardSuggestions(lastSelected, this.props.searchStore.values.userQuery || '', wingsFamily )
+    if(lastSelected && lastSelected.tag) this.fetchSuggestionsAfterSelectInProgress = false;
+    if(this.fetchSuggestionsAfterSelectInProgress) return;
+    let suggestions = await SuggestionsService.getOnboardSuggestions(lastSelected, this.props.searchStore.values.userQuery || '', wingsFamily );
+    if(lastSelected) suggestions = suggestions.filter(suggestion => suggestion.tag !== lastSelected.tag);
     if(this.isUnmount) return;
     this.setState({suggestions: suggestions});
   }
@@ -71,9 +74,10 @@ class OnboardSuggestions extends React.Component {
   }
 
   handleSelectSuggestion = (suggestion) => {
+    this.fetchSuggestionsAfterSelectInProgress = true;
     this.setState({ lastSelected: suggestion }, () => {
       this.props.searchStore.setUserQuery('');
-      this.fetchSuggestions(suggestion);
+      this.fetchSuggestions(suggestion, this.props.wingsFamily);
       this.props.onSelect(suggestion);
     });
   }

@@ -59,8 +59,7 @@ class OnboardPage extends React.Component {
     super(props);
     this.state = {
       inOnboarding: undefsafe(this.props, 'match.params.step') !== undefined,
-      editMode: this.props.edit || false,
-      renderComponent: !this.props.edit
+      editMode: this.props.edit || false
     };
 
     // clear wings bank
@@ -93,10 +92,8 @@ class OnboardPage extends React.Component {
   handleEnterToOnboard = () => this.setState({ inOnboarding: true });
 
   render() {
-    const { inOnboarding, editMode, renderComponent } = this.state;
+    const { inOnboarding, editMode } = this.state;
     const { classes } = this.props;
-
-    if(!renderComponent) return null;
 
     return (
       <Grid container className={classes.root} direction="row" justify="center" alignItems="center">
