@@ -31,6 +31,7 @@ class ClapStore {
     this.values.clap = {};
     this.values.currentRecordId = null;
     this.values.currentRecordClapCount = [];
+    this.values.currentClapHistory = [];
   }
 
   postClap() {
