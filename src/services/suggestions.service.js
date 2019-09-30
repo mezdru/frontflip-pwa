@@ -30,14 +30,15 @@ class SuggestionsService {
     let suggestions = [];
     let algoliaRes;
 
-    if(lastSelection && !wingsFamily) {
+    if(lastSelection && !wingsFamily)
       algoliaRes = await AlgoliaService.fetchFacetValues(lastSelection, false, null, query);
-    } else {
+    
+    if(!algoliaRes || !algoliaRes.facetHits || (algoliaRes.facetHits.length === 0))
       algoliaRes = await AlgoliaService.fetchOptions(query, true, undefsafe(wingsFamily, 'tag'), 40);
-    }
+
     if(!algoliaRes) return [];
 
-    suggestions = await this.upgradeData(algoliaRes.facetHits || algoliaRes.hits); // can be algoliaRes.hits ?
+    suggestions = await this.upgradeData(algoliaRes.facetHits || algoliaRes.hits);
 
     return suggestions;
   }

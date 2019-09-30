@@ -109,7 +109,7 @@ class OnboardWings extends React.Component {
               <Search mode="onboard" onSelect={this.handleAddWing} max={10} wingsFamily={this.getFeaturedWings()} handleCreateWing={this.handleCreateWing} />
             </Grid>
 
-          </Grid>          
+          </Grid>
         </Grid>
 
         <Grid item justify="center" direction="row" container className={classes.userWingsPosition} id={this.state.scrollableClass}>
