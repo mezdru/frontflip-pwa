@@ -40,7 +40,6 @@ class OnboardWings extends React.Component {
   }
 
   handleAddWing = (element) => {
-    console.log(element)
     this.props.recordStore.setRecordTag(element.tag);
     this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
     if (this.props.recordStore.values.record.hashtags.find(elt => elt.tag === element.tag)) return Promise.resolve();
@@ -60,7 +59,6 @@ class OnboardWings extends React.Component {
   }
 
   handleCreateWing = async (wing) => {
-    console.log(wing)
     let newWing = {name: wing.name, type: 'hashtag'};
     if(this.isFeaturedWings()) newWing.hashtags = [this.getFeaturedWings()];
     let newWingSaved = await this.props.recordStore.postRecord(newWing);

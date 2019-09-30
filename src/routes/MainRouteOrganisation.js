@@ -32,7 +32,6 @@ class MainRouteOrganisation extends React.Component {
   updateUserLocale = () => {
     var currentUser = this.props.userStore.values.currentUser;
     if( this.props.commonStore.locale && currentUser && currentUser._id && this.props.commonStore.locale !== currentUser.locale) {
-      // console.log(JSON.stringify(this.props.userStore.values.currentUser))
       currentUser.locale = this.props.commonStore.locale;
       this.props.userStore.setCurrentUser(currentUser);
       this.props.userStore.updateCurrentUser();

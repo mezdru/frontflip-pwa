@@ -77,7 +77,6 @@ class SearchField extends PureComponent {
   }
 
   handleInputChange = (inputValue) => {
-    console.log(inputValue);
     this.props.searchStore.setUserQuery(inputValue);
     if (this.props.mode !== 'onboard')
       this.props.fetchAutocompleteSuggestions(inputValue);
@@ -93,8 +92,6 @@ class SearchField extends PureComponent {
     const { classes } = this.props;
     let { userQuery } = this.props.searchStore.values;
     const { searchFilters } = this.state;
-
-    console.log('RENDER with this user query : ', userQuery)
 
     return (
       <div className={classes.searchContainer} id="search-container">
