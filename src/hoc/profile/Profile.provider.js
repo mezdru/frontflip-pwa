@@ -22,38 +22,10 @@ class ProfileProvider extends React.Component {
   }
 
   getProp = (propName) => {
-    if(propName === 'hashtags' && this.state.filteredWings) return this.state.filteredWings;
     var propValue = (this.state.wingzyRecord ? this.state.wingzyRecord[propName] : null );
     if(!propValue) propValue = (this.state.algoliaRecord ? this.state.algoliaRecord[propName] : null );
     if(!propValue && propName === '_id') return this.getProp('objectID');
     return propValue;
-  }
-
-  isWingsDisplayed = (wingsId) => {
-    if(!this.state.filteredWings) return true;
-    if(this.state.filteredWings.length === 0 ) return false;
-
-    let res = false;
-
-    this.state.filteredWings.forEach(wing => {
-      if( JSON.stringify(wing._id) === JSON.stringify(wingsId)) {
-        res = true;
-      }
-    });
-    return res;
-  }
-
-  filterProfile = (wingsId) => {
-    if(!wingsId) return this.setState({filteredWings: null});
-
-    let hashtags = this.state.wingzyRecord.hashtags;
-    let filteredWings = [];
-
-    hashtags.forEach(wing => {
-      if(wing.hashtags && wing.hashtags.find(familyWingId => familyWingId === wingsId)) filteredWings.push(wing);
-    });
-
-    this.setState({filteredWings: filteredWings});
   }
 
   setProfileData = (algoliaRecord) => {
@@ -65,6 +37,7 @@ class ProfileProvider extends React.Component {
   }
 
   setWingzyRecord = () => {
+    this.buildWingsByFamilies();
     if(!this.props.authStore.isAuth()) return;
     this.props.recordStore.setRecordTag(this.state.algoliaRecord.tag);
     this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
@@ -100,11 +73,16 @@ class ProfileProvider extends React.Component {
    */
   buildWingsByFamilies = () => {
     let organisation = this.props.organisationStore.values.organisation;
-    let wingsByFamilies = [];
-    let otherWings = Array.from(this.getProp('hashtags'));
-    let allWings = Array.from(this.getProp('hashtags'));
+    let wingsByFamilies = [], otherWings = [], allWings = [];
 
-    organisation.featuredWingsFamily.forEach(family => {
+    try {
+      otherWings = Array.from(this.getProp('hashtags'));
+      allWings = Array.from(this.getProp('hashtags'));
+    }catch(e) {
+      return;
+    }
+
+  if(organisation.featuredWingsFamily) organisation.featuredWingsFamily.forEach(family => {
       let familyWings = [];
 
       for(var index = 0; index < allWings.length; index++) {

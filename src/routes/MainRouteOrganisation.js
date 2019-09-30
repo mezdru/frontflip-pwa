@@ -10,6 +10,7 @@ import PasswordReset from '../pages/auth/PasswordReset';
 // const AuthPage = React.lazy(() => import('../pages/auth/AuthPage'));
 const ErrorPage = React.lazy(() => import('../pages/ErrorPage'));
 const PasswordForgot = React.lazy(() => import('../pages/auth/PasswordForgot'));
+const ConnectionsMap = React.lazy(() => import('../components/admin/ConnectionsMap'));
 // const PasswordReset = React.lazy(() => import('../pages/auth/PasswordReset'));
 
 class MainRouteOrganisation extends React.Component {
@@ -53,6 +54,9 @@ class MainRouteOrganisation extends React.Component {
     return (
       <div>
         <Switch>
+
+          <Route exact path="/:locale(en|fr|en-UK)/connections/map" component={this.WaitingComponent(ConnectionsMap)} />
+
           {/* All routes without orgTag */}
           <Route exact path="/:locale(en|fr|en-UK)/password/forgot" component={this.WaitingComponent(PasswordForgot)} />
           <Route exact path="/:locale(en|fr|en-UK)/password/reset/:token/:hash" component={(PasswordReset)} />
