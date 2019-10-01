@@ -58,11 +58,11 @@ class AlgoliaService {
     });
   }
 
-  fetchHashtags() {
+  fetchHashtags(family) {
     if(!this.index) return Promise.resolve();
     return new Promise((resolve, reject) => {
       this.index.search({
-        facetFilters: ['type:hashtag'],
+        facetFilters: ['type:hashtag', 'hashtags.tag:'+family.tag],
         maxFacetHits: 40,
       }, (err, res) => {
         if(err) return resolve(res);
@@ -114,7 +114,7 @@ class AlgoliaService {
       this.index.search({
           query: inputValue,
           filters: this.makeOptionsFilters(hashtagOnly, wingsFamily),
-          attributesToRetrieve: ['type','name', 'name_translated', 'tag','picture'],
+          attributesToRetrieve: ['type','name', 'name_translated', 'tag','picture', 'hashtags'],
           restrictSearchableAttributes: ['name', 'name_translated', 'tag'],
           highlightPreTag: '<span>',
           highlightPostTag: '</span>',
