@@ -84,14 +84,21 @@ class OnboardStepper extends React.Component {
   }
 
   handleNext = () => {
-    if (this.props.edit) {
-      this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
-      this.props.recordStore.getRecordByUser().then().catch();
-      return this.setState({redirectTo: getBaseUrl(this.props) + '/' + this.props.recordStore.values.record.tag});
-    }
+    // if (this.props.edit) {
+    //   this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
+    //   this.props.recordStore.getRecordByUser().then().catch();
+    //   return this.setState({redirectTo: getBaseUrl(this.props) + '/' + this.props.recordStore.values.record.tag});
+    // }
 
     if ((this.state.activeStep === (this.state.steps.length - 1))) {
       // click on finish
+
+      if (this.props.edit) {
+        this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
+        this.props.recordStore.getRecordByUser().then().catch();
+        return this.setState({redirectTo: getBaseUrl(this.props) + '/' + this.props.recordStore.values.record.tag});
+      }
+
       let user = this.props.userStore.values.currentUser;
       try {
         if (process.env.NODE_ENV === 'production' && !process.env.REACT_APP_NOLOGS)
@@ -107,8 +114,8 @@ class OnboardStepper extends React.Component {
   };
 
   handleBack = () => {
-    if (this.props.edit) 
-      return this.setState({redirectTo: getBaseUrl(this.props) + '/' + this.props.recordStore.values.record.tag});
+    // if (this.props.edit) 
+    //   return this.setState({redirectTo: getBaseUrl(this.props) + '/' + this.props.recordStore.values.record.tag});
 
     this.setState({activeStep: this.state.activeStep - 1});
   };
@@ -140,8 +147,8 @@ class OnboardStepper extends React.Component {
   }
 
   getNextButtonText = () => {
-    if (this.props.edit) return <FormattedMessage id={'onboard.edit.save'} />
-    else if (this.state.activeStep === (this.state.steps.length - 1)) return <FormattedMessage id={'onboard.stepperFinish'} />
+    // if (this.props.edit) return <FormattedMessage id={'onboard.edit.save'} />
+    if (this.state.activeStep === (this.state.steps.length - 1)) return <FormattedMessage id={'onboard.stepperFinish'} />
     else return <FormattedMessage id={'onboard.stepperNext'} />
   }
 
@@ -170,6 +177,10 @@ class OnboardStepper extends React.Component {
 
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
 
+    console.log(this.props.wantedStep)
+    console.log(steps)
+    console.log(activeStep)
+
     return (
       <Grid item>
         {((window.location.pathname !== wantedUrl) && (window.location.pathname !== wantedUrl + '/edit') && !edit) && (
@@ -180,7 +191,7 @@ class OnboardStepper extends React.Component {
             variant="dots"
             steps={steps.length}
             position="static"
-            activeStep={(edit ? -1 : Math.min(activeStep, steps.length - 1))}
+            activeStep={Math.min(activeStep, steps.length - 1)}
             className={classes.root}
             nextButton={
               <Button size="small" onClick={this.handleNext} disabled={!canNext}
