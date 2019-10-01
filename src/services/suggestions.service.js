@@ -1,6 +1,5 @@
-import commonStore from '../stores/common.store';
-import recordStore from '../stores/record.store';
 import AlgoliaService from './algolia.service';
+import commonStore from '../stores/common.store';
 import { observable, decorate } from 'mobx';
 import undefsafe from 'undefsafe';
 
@@ -28,149 +27,41 @@ class SuggestionsService {
    */
   getOnboardSuggestions = async (lastSelection, query, wingsFamily) => {
     let suggestions = [];
-    let algoliaRes;
 
-    if(lastSelection && !wingsFamily)
-      algoliaRes = await AlgoliaService.fetchFacetValues(lastSelection, false, null, query);
+    try {
+      if(lastSelection && !wingsFamily) {
+        // get more common wings link to selected one
+        let commonHits = (await AlgoliaService.fetchFacetValues(lastSelection, false, null, query)).facetHits;
+  
+        // get children wings
+        let childrenHits = (await AlgoliaService.fetchHashtags(lastSelection)).hits;
+  
+        // get all wings in same family
+        let sameFamilyHits = [];
+        if(lastSelection.hashtags) {
+          for(var i = 0; i < lastSelection.hashtags.length; i++) {
+            let sameFamily = await AlgoliaService.fetchHashtags(lastSelection.hashtags[i]);
+            sameFamilyHits = sameFamilyHits.concat(sameFamily.hits);
+          }
+        }
+  
+        suggestions = suggestions.concat(childrenHits.slice(0, 3));
+        suggestions = suggestions.concat(sameFamilyHits.slice(0, 3));
+        suggestions = suggestions.concat(commonHits.slice(0, 3));
+      }
+    }catch(e) {
+      console.log("Can't customize suggestions.");
+      suggestions = [];
+    }
     
-    if(!algoliaRes || !algoliaRes.facetHits || (algoliaRes.facetHits.length === 0))
-      algoliaRes = await AlgoliaService.fetchOptions(query, true, undefsafe(wingsFamily, 'tag'), 40);
+    if(suggestions.length <= 6) {
+      let classicOptions = await AlgoliaService.fetchOptions(query, true, undefsafe(wingsFamily, 'tag'), 40);
+      if(classicOptions) suggestions = suggestions.concat(classicOptions.hits);
+    }
 
-    if(!algoliaRes) return [];
-
-    suggestions = await this.upgradeData(algoliaRes.facetHits || algoliaRes.hits);
+    suggestions = await this.upgradeData(suggestions);
 
     return suggestions;
-  }
-
-  /**
-   * @description Sync wings bank with current state bank
-   */
-  syncBank = async (filters) => AlgoliaService.loadBank(filters).then(() => { return commonStore.getLocalStorage('wingsBank', true) });
-
-
-  getCurrentSuggestions = () => {
-    this._currentSuggestions = this.removeUserWings(this._currentSuggestions);
-    return this._currentSuggestions;
-  }
-
-  makeInitialSuggestions = async (wingsFamily, id) => {
-    this._currentSuggestions = [];
-    this._newSuggestions = [];
-    if (!wingsFamily) {
-      await this.fetchSuggestions(null, true, 15);
-      await this.fetchSuggestions(null, false, 10);
-      if (this._currentSuggestions.length < 10) {
-        await this.fetchPublicHashtags(10);
-      }
-
-      this.populateSuggestionsData();
-      let query = this.formatHashtagsQuery();
-      if (query) {
-        await this.syncBank(query)
-          .then((bank) => {
-            this._bank = bank;
-            this.populateSuggestionsData();
-          }).catch(e => { console.log(e) })
-      }
-    } else {
-      await this.fetchWingsFamily(wingsFamily);
-    }
-  }
-
-  fetchWingsFamily = (wingsFamily) => {
-    return AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:' + wingsFamily, null, null, null, null, 100)
-      .then(content => {
-        if (content) {
-          this._currentSuggestions = content.hits;
-        }
-      }).catch();
-  }
-
-  addHitsToSuggestions = (hits, nbHitToAdd) => {
-    let suggestions = this._currentSuggestions;
-    for (let i = 0; i < nbHitToAdd; i++) {
-
-      let suggestionToAdd = hits.splice(i, 1)[0];
-      if (!suggestionToAdd) continue;
-
-      suggestionToAdd.tag = suggestionToAdd.value || suggestionToAdd.tag;
-      if (!this.isInSuggestions(suggestionToAdd.tag) && !this.isInUserWings(suggestionToAdd.tag)) {
-        // console.log('>>>>>>>>> ADD >>>>>>>>>> '  + suggestionToAdd.tag)
-        suggestions.push(suggestionToAdd);
-        this._newSuggestions.push(suggestionToAdd);
-      } else if (!this.isInUserWings(suggestionToAdd.tag)) {
-        this._newSuggestions.push(suggestionToAdd);
-      }
-      else i--;
-    }
-    return suggestions;
-  }
-
-  fetchPublicHashtags = (nbHitToAdd) => {
-    return AlgoliaService.fetchHashtags()
-      .then(content => {
-        if (!content.hits || content.hits.length === 0) return;
-        this._currentSuggestions = this.addHitsToSuggestions(this.removeUserWings(content.hits), nbHitToAdd);
-      }).catch((e) => { console.log(e) });
-  }
-
-  /**
-   * @description Fetch suggestions and add them to suggestions list thanks to Algolia
-   */
-  fetchSuggestions = (lastSelection, privateOnly, nbHitToAdd) => {
-    return AlgoliaService.fetchFacetValues(lastSelection, privateOnly, 'type:person', null)
-      .then(content => {
-        if (!content.facetHits || content.facetHits.length === 0) return;
-        this._currentSuggestions = this.addHitsToSuggestions(this.removeUserWings(content.facetHits), nbHitToAdd);
-      }).catch((e) => { console.log(e) });
-  }
-
-  isInSuggestions = (tag) => (this._currentSuggestions.filter(suggestion => suggestion.tag === tag).length > 0);
-
-  isInUserWings = (tag) => (recordStore.values.record.hashtags.filter(hashtag => hashtag.tag === tag).length > 0);
-
-  /**
-   * @description Remove user Wings for Wings suggestions
-   */
-  removeUserWings = (suggestions) => {
-    let suggestionsToReturn = suggestions;
-    suggestions.forEach(suggestion => {
-      let suggestionTag = suggestion.value || suggestion.tag;
-      try {
-        if (recordStore.values.record.hashtags.findIndex(hashtag => { return (hashtag.tag === (suggestionTag)) }) > -1) {
-          let index = suggestionsToReturn.findIndex(sugInRet => (sugInRet.tag === suggestionTag) || (sugInRet.value === suggestionTag));
-          if (index > -1) suggestionsToReturn.splice(index, 1);
-        }
-      } catch (e) {
-      }
-    });
-    return suggestionsToReturn;
-  }
-
-  /**
-   * @description Fetch and add new suggestions after user choose a Wing
-   * @param filters Record object selected
-   * @param index Index of the object in the suggestions displayed list
-   */
-  updateSuggestions = async (filters, index) => {
-    this._newSuggestions = [];
-    await this.fetchSuggestions(filters, true, 2, index);
-    await this.fetchSuggestions(null, true, 2, index);
-    await this.fetchSuggestions(filters, false, 2, index);
-    await this.fetchSuggestions(null, false, 1, index);
-    if (this._newSuggestions.length < 3) {
-      await this.fetchPublicHashtags(4);
-    }
-
-    this.populateSuggestionsData(true);
-    let query = this.formatHashtagsQuery();
-    if (query)
-      await this.syncBank(query)
-        .then((bank) => {
-          this._bank = bank;
-          this.populateSuggestionsData(true);
-        });
   }
 
   /**
@@ -182,6 +73,11 @@ class SuggestionsService {
     else
       return null;
   }
+
+  /**
+   * @description Sync wings bank with current state bank
+   */
+  syncBank = async (filters) => AlgoliaService.loadBank(filters).then(() => { return commonStore.getLocalStorage('wingsBank', true) });
 
   /**
    * @description Static : upgrade array of record data to fetch complete record data
@@ -222,32 +118,6 @@ class SuggestionsService {
     return query;
   }
 
-
-  /**
-   * @description Populate all suggestions data thanks to current Wings bank
-   */
-  populateSuggestionsData = (isNewSuggestions) => {
-    if (!isNewSuggestions) {
-      let suggestions = this._currentSuggestions;
-      // eslint-disable-next-line
-      for (var i = 0; i < this._currentSuggestions.length; i++) {
-        let suggestion = this._currentSuggestions[i];
-        suggestions[i] = this.getData(suggestion.tag) || suggestion;
-      }
-
-      this._currentSuggestions = suggestions;
-    } else {
-      let suggestions = this._newSuggestions;
-      // eslint-disable-next-line
-      for (var i = 0; i < this._newSuggestions.length; i++) {
-        let suggestion = this._newSuggestions[i];
-        suggestions[i] = this.getData(suggestion.tag) || suggestion;
-      }
-
-      this._newSuggestions = suggestions;
-    }
-  }
-
   /**
  * @description Format query to fetch missing Wings data with Algolia
  */
@@ -259,7 +129,6 @@ class SuggestionsService {
     });
     return query;
   }
-
 }
 
 decorate(SuggestionsService, {
