@@ -177,10 +177,6 @@ class OnboardStepper extends React.Component {
 
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
 
-    console.log(this.props.wantedStep)
-    console.log(steps)
-    console.log(activeStep)
-
     return (
       <Grid item>
         {((window.location.pathname !== wantedUrl) && (window.location.pathname !== wantedUrl + '/edit') && !edit) && (
