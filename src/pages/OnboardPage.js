@@ -111,7 +111,10 @@ class OnboardPage extends React.Component {
 
         <Grid item xs={12} sm={8} md={6} lg={6} className={classes.container}>
           {inOnboarding ? (
-            <OnboardStepper edit={editMode} wantedStep={undefsafe(this.props, 'match.params.step')} />
+            <OnboardStepper 
+              edit={editMode}
+              wantedStep={undefsafe(this.props, 'match.params.step')} 
+            />
           ) : (
               <OnboardWelcome handleEnterToOnboard={this.handleEnterToOnboard} />
             )}

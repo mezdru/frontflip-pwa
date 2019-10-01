@@ -1,11 +1,12 @@
 import React from 'react';
-import { withStyles, Typography } from '@material-ui/core';
+import { withStyles, Typography, IconButton } from '@material-ui/core';
 import Wings from '../utils/wing/Wings';
 import ProfileService from '../../services/profile.service';
 import { inject, observer } from 'mobx-react';
 import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 import { observe } from 'mobx';
-import { FormattedMessage } from 'react-intl';
+import { Add } from '@material-ui/icons';
+import { getBaseUrl } from '../../services/utils.service';
 
 const styles = theme => ({
   contactIcon: {
@@ -44,6 +45,16 @@ const styles = theme => ({
     fontWeight: 400,
     marginLeft: 16, 
     lineHeight: 1,
+  },
+  addWingsButton: {
+    color: 'white',
+    backgroundColor: theme.palette.secondary.main,
+    width: 32,
+    height: 32,
+    marginLeft: 8,
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.dark
+    }
   }
 });
 
@@ -75,11 +86,14 @@ class ProfileWings extends React.PureComponent {
     return clapEntry ? clapEntry.claps : null;
   }
 
+  handleOnboard = (step) => {
+    window.location.pathname = getBaseUrl(this.props) + `/onboard/${(step ? step.replace('#', '%23') : 'wings')}/edit/${this.props.profileContext.getProp('_id')}`;
+  }
+
   render() {
     const { classes, profileContext } = this.props;
     const { isEditable, wingsByFamilies } = this.props.profileContext;
     const { locale } = this.props.commonStore;
-    const { organisation } = this.props.organisationStore.values;
 
     return (
       <div className={classes.root} >
@@ -87,8 +101,8 @@ class ProfileWings extends React.PureComponent {
           if (wbf.wings.length === 0) return null;
           return (
             <div key={index} className={classes.wingsFamilyContainer}>
-              <Typography variant="body1" style={{color: (wingsByFamilies.length > 1) ? 'rgba(255, 255, 255, 1)' : 'rgba(0,0,0,0)' }} className={classes.wingsFamilyTitle}>
-                {(wingsByFamilies.length > 1) ? wbf.family.intro : '.'}
+              <Typography variant="body1" style={{color: (wingsByFamilies.length > 1 || isEditable) ? 'rgba(255, 255, 255, 1)' : 'rgba(0,0,0,0)' }} className={classes.wingsFamilyTitle}>
+                {(wingsByFamilies.length > 1 || isEditable) ? wbf.family.intro : '.'}
               </Typography>
               {wbf.wings.map((wing, index) => {
                 let displayedName = ProfileService.getWingDisplayedName(wing, locale);
@@ -100,16 +114,14 @@ class ProfileWings extends React.PureComponent {
                   />
                 )
               })}
+              {isEditable && (
+                <IconButton className={classes.addWingsButton} onClick={() => {this.handleOnboard(wbf.family.tag)}} >
+                  <Add/>
+                </IconButton>
+              )}
             </div>
           );
         })}
-
-        {isEditable && (
-          <a href={"/" + locale + "/" + organisation.tag + "/onboard/wings/edit/" + profileContext.getProp('_id')}
-            className={classes.buttonAddWings} >
-            <FormattedMessage id="profile.addWings" />
-          </a>
-        )}
       </div>
     );
   }
