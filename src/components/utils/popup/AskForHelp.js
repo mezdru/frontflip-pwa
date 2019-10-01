@@ -48,6 +48,7 @@ class AskForHelp extends React.Component {
   }
 
   componentDidMount() {
+    this.getSearchResults();
     observe(this.props.commonStore, 'searchFilters', (change) => {
       if (JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue))
         this.getSearchResults();
@@ -60,7 +61,8 @@ class AskForHelp extends React.Component {
     let reqObject = await this.props.makeFiltersRequest();
     AlgoliaService.fetchHits(reqObject.filterRequest, reqObject.queryRequest, null, null, false, 10)
       .then((content) => {
-        this.setState({ recipients: Array.from(content.hits) });
+        let hits = Array.from(content.hits).filter(hit => hit.tag !== this.props.recordStore.values.record.tag); // not user record
+        this.setState({ recipients: hits });
       });
   }
 
@@ -83,6 +85,7 @@ class AskForHelp extends React.Component {
   }
 
   handleSend = () => {
+    if(!this.isAvailable()) return;
 
     if (!this.state.message || this.state.message.length < 35)
       return this.setState({ errorMessage: this.props.intl.formatMessage({ id: "askForHelp.popup.missingMessage" }) });
@@ -127,6 +130,10 @@ class AskForHelp extends React.Component {
     this.setState({ recipients: recipients });
   }
 
+  isAvailable = () => {
+    return (this.state.recipients.length <= 10);
+  }
+
   render() {
     const { isOpen, message, error, success, errorMessage, recipients } = this.state;
     const { classes } = this.props;
@@ -140,15 +147,15 @@ class AskForHelp extends React.Component {
           </Typography>
         }
         actions={
-          <Button onClick={(error || success) ? this.handleClose : this.handleSend} color="secondary" type="submit">
+          <Button onClick={(error || success) ? this.handleClose : this.handleSend} color="secondary" type="submit" disabled={!this.isAvailable()} >
             {(error || success) ? (
-            <FormattedMessage id={"askForHelp.popup.close"} />
+              <FormattedMessage id={"askForHelp.popup.close"} />
             ) : (
-              <>
-                <Email /><span>&nbsp;&nbsp;</span>
-                <FormattedMessage id={"askForHelp.popup.send"} />
-              </>
-            )}
+                <>
+                  <Email /><span>&nbsp;&nbsp;</span>
+                  <FormattedMessage id={"askForHelp.popup.send"} />
+                </>
+              )}
           </Button>
         }
         onClose={this.handleClose}
@@ -158,6 +165,10 @@ class AskForHelp extends React.Component {
           <Typography variant="h6" className={classes.title}>
             <FormattedMessage id="askForHelp.popup.subtitle" values={{ resultsCount: recipients.length }} />
           </Typography>
+        )}
+
+        {(!this.isAvailable()) && (
+          <SnackbarCustom variant="warning" message={this.props.intl.formatMessage({ id: "askForHelp.popup.badConditions" })} />
         )}
 
         {!error && !success && (

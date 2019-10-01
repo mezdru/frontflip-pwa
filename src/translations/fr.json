@@ -118,5 +118,6 @@
     "askForHelp.popup.error": "Il y a eu un problème, veuillez essayer dans quelques instants.",
     "askForHelp.popup.close": "Fermer",
     "askForHelp.popup.missingMessage": "Detaillez votre question afin d'obtenir une réponse rapidement.",
-    "askForHelp.popup.placeholder": "Votre question ici."
+    "askForHelp.popup.placeholder": "Votre question ici.",
+    "askForHelp.popup.badConditions": "Veuillez supprimer des destinataires ou affiner votre recherche."
 }
