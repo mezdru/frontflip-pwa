@@ -1,4 +1,5 @@
 import AlgoliaService from './algolia.service';
+import commonStore from '../stores/common.store';
 import { observable, decorate } from 'mobx';
 import undefsafe from 'undefsafe';
 
@@ -72,6 +73,11 @@ class SuggestionsService {
     else
       return null;
   }
+
+  /**
+   * @description Sync wings bank with current state bank
+   */
+  syncBank = async (filters) => AlgoliaService.loadBank(filters).then(() => { return commonStore.getLocalStorage('wingsBank', true) });
 
   /**
    * @description Static : upgrade array of record data to fetch complete record data
