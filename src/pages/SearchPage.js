@@ -304,7 +304,7 @@ class SearchPage extends PureComponent {
         )}
 
         {this.props.authStore.isAuth() && (
-            <AskForHelpFab className={classes.fab} onClick={this.handleDisplayAskForHelp} highlighted={(searchFilters.length > 0 && searchResultsCount <= 10)} />
+            <AskForHelpFab className={classes.fab} onClick={this.handleDisplayAskForHelp} highlighted={(searchFilters && searchFilters.length > 0 && searchResultsCount <= 10)} />
         )}
 
         <Suspense fallback={<></>}>
