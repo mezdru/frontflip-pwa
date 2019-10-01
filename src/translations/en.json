@@ -118,6 +118,7 @@
   "askForHelp.popup.close": "Close",
   "askForHelp.popup.missingMessage": "Explain your question to your coworkers to get an answer quickly.",
   "askForHelp.popup.placeholder": "Your question here.",
-  "profile.others":"Others"
+  "profile.others":"Others",
+  "askForHelp.popup.badConditions": "Remove recipients or refine search."
 }
 

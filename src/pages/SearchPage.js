@@ -15,7 +15,6 @@ import SearchButton from '../components/search/SearchButton';
 import withSearchManagement from '../hoc/SearchManagement.hoc';
 import { withProfileManagement } from '../hoc/profile/withProfileManagement';
 import AskForHelpFab from '../components/utils/buttons/AskForHelpFab';
-import MyProfileFab from '../components/utils/buttons/MyProfileFab';
 import { getBaseUrl } from '../services/utils.service';
 
 const OnboardCongratulation = React.lazy(() => import('../components/utils/popup/OnboardCongratulation'));
@@ -304,17 +303,9 @@ class SearchPage extends PureComponent {
           </Suspense>
         )}
 
-        {
-          this.props.authStore.isAuth() && (
-            <>
-              {(searchFilters.length > 0 && searchResultsCount <= 10) ? (
-                <AskForHelpFab className={classes.fab} onClick={this.handleDisplayAskForHelp} />
-              ) : (
-                  <MyProfileFab className={classes.fab} onClick={this.handleDisplayProfile} />
-                )}
-            </>
-          )
-        }
+        {this.props.authStore.isAuth() && (
+            <AskForHelpFab className={classes.fab} onClick={this.handleDisplayAskForHelp} highlighted={(searchFilters.length > 0 && searchResultsCount <= 10)} />
+        )}
 
         <Suspense fallback={<></>}>
           <PromptIOsInstall />
