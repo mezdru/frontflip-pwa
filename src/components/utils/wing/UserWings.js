@@ -8,6 +8,12 @@ import ProfileService from '../../../services/profile.service';
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
 
 const styles = theme => ({
+  root: {
+    paddingTop: 16, paddingLeft: 24, paddingRight: 24, paddingBottom: 26,
+    [theme.breakpoints.down('xs')]: {
+      paddingTop: 0, paddingLeft: 8, paddingRight: 8, paddingBottom: 10
+    }
+  }
 });
 
 class UserWings extends React.Component {
@@ -50,15 +56,15 @@ class UserWings extends React.Component {
 
   render() {
     const {record} = this.props.recordStore.values;
-    const {theme} = this.props;
+    const {theme, classes} = this.props;
     const {locale} = this.props.commonStore;
 
     if(!record) return null;
 
     return (
-      <div>
+      <div className={classes.root}>
         <Typography variant="h4" style={{textAlign: 'center', color:theme.palette.primary.dark}} ><FormattedMessage id="onboard.userWings" values={{wingsCount: ( record.hashtags ? record.hashtags.length : 0)}} /></Typography>
-        <div className="" style={{padding: 8, paddingTop: 10}}>
+        <div className="" style={{paddingTop: 10}}>
           {record.hashtags && record.hashtags.length > 0 && record.hashtags.map((hashtag, i) => {
             if(!this.shoudlRenderWing(hashtag)) return null;
             let displayedName = ProfileService.getWingDisplayedName(hashtag, locale);

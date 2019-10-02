@@ -9,8 +9,24 @@ import { FormattedMessage } from "react-intl";
 const styles = theme => ({
   userWingsPosition: {
     paddingTop: 16,
-    height: 300,
-    overflowY: 'auto'
+    height: 200,
+    overflowY: 'auto',
+    [theme.breakpoints.down('xs')]:{
+      height: 150,
+    }
+  },
+  search: {
+    padding: '0px 32px',
+    [theme.breakpoints.down('xs')]:{
+      padding: '0px 16px',
+    }
+  },
+  title: {
+    padding: 24, 
+    paddingBottom: 8,
+    [theme.breakpoints.down('xs')]:{
+      padding: 8,
+    }
   }
 });
 
@@ -101,11 +117,11 @@ class OnboardWings extends React.Component {
           justify="center" direction="row" container >
           <Grid container item xs={12} >
 
-            <Grid item xs={12} style={{ padding: 8 }}>
+            <Grid item xs={12} className={classes.title}>
               {this.renderTitleByStep()}
             </Grid>
 
-            <Grid item xs={12} style={{padding: '0px 24px'}}>
+            <Grid item xs={12} className={classes.search}>
               <Search mode="onboard" onSelect={this.handleAddWing} max={10} wingsFamily={this.getFeaturedWings()} handleCreateWing={this.handleCreateWing} />
             </Grid>
 
