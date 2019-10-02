@@ -59,7 +59,7 @@ class AskForHelp extends React.Component {
   getSearchResults = async () => {
     // get request params
     let reqObject = await this.props.makeFiltersRequest();
-    AlgoliaService.fetchHits(reqObject.filterRequest, reqObject.queryRequest, null, null, false, 10)
+    AlgoliaService.fetchHits(reqObject.filterRequest, reqObject.queryRequest, null, null, false, 50)
       .then((content) => {
         let hits = Array.from(content.hits).filter(hit => hit.tag !== this.props.recordStore.values.record.tag); // not user record
         this.setState({ recipients: hits });
