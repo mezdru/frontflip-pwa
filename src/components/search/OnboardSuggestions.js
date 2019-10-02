@@ -6,6 +6,7 @@ import ProfileService from '../../services/profile.service';
 import SuggestionsService from '../../services/suggestions.service';
 import { injectIntl } from "react-intl";
 import { observe } from 'mobx';
+import { getUnique } from '../../services/utils.service';
 
 const styles = theme => ({
   title: {
@@ -52,7 +53,8 @@ class OnboardSuggestions extends React.Component {
     let suggestions = await SuggestionsService.getOnboardSuggestions(lastSelected, this.props.searchStore.values.userQuery || '', wingsFamily );
     if(lastSelected) suggestions = suggestions.filter(suggestion => suggestion.tag !== lastSelected.tag);
     if(this.isUnmount) return;
-    this.setState({suggestions: suggestions});
+    console.log(suggestions);
+    this.setState({suggestions: getUnique(suggestions, "tag")});
   }
 
   shouldDisplaySuggestion = (suggestion) => {
@@ -93,7 +95,7 @@ class OnboardSuggestions extends React.Component {
     const { locale } = this.props.commonStore;
     const { suggestions } = this.state;
     let suggestionsDisplayed = 0;
-
+    console.log(suggestions);
     return (
       <Grid container item xs={12} >
         <Typography variant="body2" className={classes.title}>
