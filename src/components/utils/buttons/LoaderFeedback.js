@@ -37,9 +37,13 @@ class LoaderFeedback extends React.Component {
     this.feedback();
   }
 
+  componentWillUnmount() {
+    this.isUnmount = true;
+  }
+
   feedback = async () => {
     this.setState({loading: true}, () => {
-      setTimeout(() => {this.setState({loading: false, success: true})}, 750);
+      setTimeout(() => {if(!this.isUnmount) this.setState({loading: false, success: true})}, 750);
     })
   }
 
