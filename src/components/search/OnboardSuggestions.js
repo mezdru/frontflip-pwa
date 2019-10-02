@@ -53,7 +53,6 @@ class OnboardSuggestions extends React.Component {
     let suggestions = await SuggestionsService.getOnboardSuggestions(lastSelected, this.props.searchStore.values.userQuery || '', wingsFamily );
     if(lastSelected) suggestions = suggestions.filter(suggestion => suggestion.tag !== lastSelected.tag);
     if(this.isUnmount) return;
-    console.log(suggestions);
     this.setState({suggestions: getUnique(suggestions, "tag")});
   }
 
@@ -95,7 +94,7 @@ class OnboardSuggestions extends React.Component {
     const { locale } = this.props.commonStore;
     const { suggestions } = this.state;
     let suggestionsDisplayed = 0;
-    console.log(suggestions);
+
     return (
       <Grid container item xs={12} >
         <Typography variant="body2" className={classes.title}>

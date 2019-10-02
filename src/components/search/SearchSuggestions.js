@@ -9,6 +9,7 @@ import ProfileService from '../../services/profile.service';
 import { ArrowLeft, ArrowRight } from '@material-ui/icons';
 import withScrollManagement from '../../hoc/ScrollManagement.hoc';
 import classNames from 'classnames';
+import { getUnique } from '../../services/utils.service';
 
 const styles = theme => ({
   suggestionsContainer: {
@@ -180,7 +181,7 @@ class SearchSuggestions extends React.Component {
             var results = (resultHitsFiltered.length > 19 ? resultHitsFiltered : resultHits);
 
             this.props.resetScroll("search-suggestions-container");
-            this.setState({ facetHits: results.splice(0, 20), shouldUpdate: true });
+            this.setState({ facetHits: getUnique(results.splice(0, 20), "tag"), shouldUpdate: true });
           });
       })
       .catch((e) => { console.log(e) });
