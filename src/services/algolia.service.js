@@ -12,13 +12,14 @@ class AlgoliaService {
   algoliaKey;
 
   constructor(algoliaKey) {
-    if(!algoliaKey) return;
-    this.algoliaKey = algoliaKey;
-    this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.algoliaKey);
-    this.index = this.client.initIndex(this.indexName);
+    if(algoliaKey) {
+      this.algoliaKey = algoliaKey;
+      this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.algoliaKey);
+      this.index = this.client.initIndex(this.indexName);
+    }
 
     observe(commonStore, 'algoliaKey', (change) => {
-      this.client.clearCache();
+      if(this.client) this.client.clearCache();
       if(!commonStore.algoliaKey) {
         organisationStore.getAlgoliaKey(true)
         .then(algoliaKey => {
