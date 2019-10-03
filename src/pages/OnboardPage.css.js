@@ -25,13 +25,13 @@ export const styles = theme => ({
     position: 'absolute',
     width: 'calc(100% - 32px)',
     zIndex: 2,
-    overflow: 'hidden',
+    overflowY: 'auto',
     margin: 16,
     [theme.breakpoints.down('xs')]: {
       top: 0,
       margin: 0,
       width: '100%',
-      height: '100%'
+      height: '100vh'
     }
   }
 });
