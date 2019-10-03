@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {Grid, withStyles, Typography, IconButton, CardActions, CardContent, CardHeader, Card, Tooltip} from '@material-ui/core';
 import withWidth from '@material-ui/core/withWidth';
 import {inject, observer} from 'mobx-react';
+import { LazyLoadComponent } from 'react-lazy-load-image-component';
 
 import '../../resources/stylesheets/font-awesome.min.css';
 import Availability from '../availabilityToggle/Availability';
@@ -55,6 +56,7 @@ class CardProfile extends React.PureComponent {
     ProfileService.orderHashtags(hit);
     
     return (
+      <LazyLoadComponent>
       <Card className={classes.fullWidth} key={hit.objectID} >
         <Grid item container>
           <CardHeader
@@ -129,6 +131,7 @@ class CardProfile extends React.PureComponent {
           </CardContent>
         </Grid>
       </Card>
+      </LazyLoadComponent>
     );
   }
 }

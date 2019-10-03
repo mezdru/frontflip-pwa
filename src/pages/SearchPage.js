@@ -47,7 +47,6 @@ class SearchPage extends PureComponent {
       visible: (this.getAskedHit() ? true : false),
       transitionDuration: 800,
       showAskForHelp: false,
-      showSearchResults: false
     };
   }
 
@@ -63,7 +62,6 @@ class SearchPage extends PureComponent {
   componentDidMount() {
     this.moveSearchInputListener();
     this.handleUrlSearchFilters();
-    this.createScrollObserver();
     try { if (this.props.match.params.profileTag === 'congrats') this.setState({ showCongratulation: true }) } catch{ }
 
     observe(this.props.commonStore, 'searchFilters', (change) => {
@@ -206,25 +204,8 @@ class SearchPage extends PureComponent {
     );
   }
 
-  createScrollObserver = () => {
-    try {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            if (!this.state.showSearchResults) this.setState({ showSearchResults: true });
-          }
-        });
-      });
-
-      let hitList = document.getElementById('search-content');
-      observer.observe(hitList);
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
   render() {
-    const { displayedHit, showSearchResults, redirectTo, showCongratulation, actionInQueue, hashtagsFilter, visible, transitionDuration, showAskForHelp } = this.state;
+    const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter, visible, transitionDuration, showAskForHelp } = this.state;
     const { classes } = this.props;
     const { organisation } = this.props.organisationStore.values;
     const { searchResultsCount } = this.props.commonStore;
@@ -271,11 +252,10 @@ class SearchPage extends PureComponent {
 
             {/* Search results part */}
             <div className={'search-content'} style={{ position: 'relative' }}>
-              <div id="search-content" style={{ position: 'absolute', top: 50 }}></div>
               <ErrorBoundary>
                 <Suspense fallback={<CircularProgress color='secondary' />}>
                   <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
-                    <SearchResults handleDisplayProfile={this.handleDisplayProfile} showSearchResults={showSearchResults} />
+                    <SearchResults handleDisplayProfile={this.handleDisplayProfile}/>
                   </Grid>
                 </Suspense>
               </ErrorBoundary>

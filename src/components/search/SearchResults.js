@@ -91,7 +91,7 @@ class SearchResults extends React.Component {
       }
     });
 
-    if(this.props.showSearchResults) this.createScrollObserver();
+    this.createScrollObserver();
   }
 
   componentWillUnmount() {
@@ -112,12 +112,6 @@ class SearchResults extends React.Component {
       observer.observe(hitList);
     } catch (e) {
       console.log(e);
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if(!prevProps.showSearchResults && this.props.showSearchResults){
-      this.createScrollObserver();
     }
   }
 
@@ -159,10 +153,9 @@ class SearchResults extends React.Component {
 
   render() {
     const { hits, loadInProgress, hideShowMore, showNoResult } = this.state;
-    const { handleDisplayProfile, classes, showSearchResults } = this.props;
+    const { handleDisplayProfile, classes } = this.props;
     let hitsResult = Array.from(hits);
 
-    if(!showSearchResults) return <div className={classes.hitList}></div>;
 
     return (
       <div className={classes.hitList}>
