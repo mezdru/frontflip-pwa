@@ -2,7 +2,7 @@ import React, { Suspense } from 'react'
 import { inject, observer } from "mobx-react";
 import OnboardWelcome from '../components/onboard/OnboardWelcome';
 import OnboardStepper from '../components/onboard/OnboardStepper';
-import { withStyles, Grid, withWidth } from '@material-ui/core';
+import { withStyles, Grid, withWidth, CircularProgress } from '@material-ui/core';
 import undefsafe from 'undefsafe';
 import ReactGA from 'react-ga';
 import BannerResizable from '../components/utils/banner/BannerResizable';
@@ -20,7 +20,8 @@ class OnboardPage extends React.Component {
     super(props);
     this.state = {
       inOnboarding: undefsafe(this.props, 'match.params.step') !== undefined,
-      editMode: this.props.edit || false
+      editMode: this.props.edit || false,
+      renderComponent: false // do not remove this!!
     };
 
     // clear wings bank
@@ -35,7 +36,12 @@ class OnboardPage extends React.Component {
 
     if (this.props.match && this.props.match.params && this.props.match.params.recordId && this.props.edit) {
       this.props.recordStore.setRecordId(this.props.match.params.recordId);
-      this.props.recordStore.getRecord();
+      this.props.recordStore.getRecord()
+      .then(() => {
+        this.setState({renderComponent: true});
+      }).catch(e => {
+        console.log(e);
+      })
     } else {
       this.getRecordForUser();
     }
@@ -53,8 +59,11 @@ class OnboardPage extends React.Component {
   handleEnterToOnboard = () => this.setState({ inOnboarding: true });
 
   render() {
-    const { inOnboarding, editMode } = this.state;
+    const { inOnboarding, editMode, renderComponent } = this.state;
     const { classes, width } = this.props;
+
+    if(!renderComponent) return <CircularProgress color="primary" style={{position: 'fixed', zIndex: '9', left:0, right:0, margin:0, top: '40%'}} />;
+
     return (
       <Grid container className={classes.root} direction="row" justify="center" alignItems="center">
 
