@@ -13,8 +13,12 @@ const styles = theme => ({
   root: {
     flexBasis: '100%',
     width: '100%',
+    height: '100%',
     background: theme.palette.primary.main,
     padding: 24
+  },
+  field: {
+    minWidth: '100% !important'
   }
 });
 
@@ -47,10 +51,11 @@ class OnboardIntro extends React.Component {
             <PictureField handleSave={this.props.handleSave} />
           </Grid>
 
-          <Grid item >
+          <Grid item className={classes.field}>
             <TextField
               label={this.props.intl.formatMessage({ id: 'onboard.intro.name' }, { organisationName: this.props.organisationStore.values.organisation.name })}
               type="text"
+              className={classes.field}
               fullWidth
               variant={"outlined"}
               value={record.name}
@@ -62,10 +67,11 @@ class OnboardIntro extends React.Component {
             />
           </Grid>
 
-          <Grid item >
+          <Grid item className={classes.field} >
             <TextField
               label={this.props.intl.formatMessage({ id: 'onboard.intro.intro' }, { organisationName: this.props.organisationStore.values.organisation.name })}
               type="text"
+              className={classes.field}
               fullWidth
               variant={"outlined"}
               value={record.intro}

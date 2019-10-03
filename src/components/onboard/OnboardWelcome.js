@@ -2,10 +2,7 @@ import React from 'react'
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
 import { inject, observer } from 'mobx-react';
 
-import { Button, Grid, Typography, withStyles, Hidden } from "@material-ui/core";
-import Banner from '../utils/banner/Banner';
-import Header from '../header/Header';
-import Logo from '../utils/logo/Logo';
+import { Button, Grid, Typography, withStyles } from "@material-ui/core";
 import UrlService from '../../services/url.service';
 
 const Entities = require('html-entities').XmlEntities;
@@ -13,7 +10,13 @@ const entities = new Entities();
 
 const styles = (theme) => ({
   root: {
-    padding: 24
+    padding: 24,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    [theme.breakpoints.down('xs')]: {
+      margin: 16,
+      marginTop: 80
+    }
   },
   logo: {
     width: 110,
@@ -92,7 +95,7 @@ class OnboardWelcome extends React.Component {
 
     return (
       <form onSubmit={this.props.handleEnterToOnboard}>
-        <Grid item container direction={'column'} xs={12} spacing={16} className={classes.root}>
+        <Grid item container direction={'column'} xs={12} sm={8} md={6} lg={6} spacing={16} className={classes.root}>
           <Typography variant="h2" className={classes.title} >
             <FormattedMessage id={'onboard.welcome'} /> {entities.decode(organisation.name)}
           </Typography>
