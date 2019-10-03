@@ -59,11 +59,14 @@ class AlgoliaService {
     });
   }
 
-  fetchHashtags(family) {
+  fetchHashtags(families) {
     if(!this.index) return Promise.resolve();
+    let filters = ['type:hashtag'];
+    families.forEach(family => { if(family) filters.push('hashtags.tag:'+family.tag)});
+
     return new Promise((resolve, reject) => {
       this.index.search({
-        facetFilters: ['type:hashtag', 'hashtags.tag:'+family.tag],
+        facetFilters: filters,
         maxFacetHits: 40,
       }, (err, res) => {
         if(err) return resolve(res);

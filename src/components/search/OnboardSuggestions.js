@@ -44,17 +44,23 @@ class OnboardSuggestions extends React.Component {
   componentDidMount() {
     this.fetchSuggestions(null, this.props.wingsFamily);
     this.unsubscribeUserQuery = observe(this.props.searchStore.values, 'userQuery', () => {this.fetchSuggestions(null, this.props.wingsFamily)});
+    this.unsubscribeUserRecord = observe(this.props.recordStore.values, 'record', (change) => {
+      if(change.oldValue.hashtags.length > change.newValue.hashtags.length) {
+        this.fetchSuggestions(null, this.props.wingsFamily);
+      }
+    });
   }
   
   componentWillUnmount() {
     this.isUnmount = true;
     this.unsubscribeUserQuery();
+    this.unsubscribeUserRecord();
   }
 
   fetchSuggestions = async (lastSelected, wingsFamily) => {
     if(lastSelected && lastSelected.tag) this.fetchSuggestionsAfterSelectInProgress = false;
     if(this.fetchSuggestionsAfterSelectInProgress) return;
-    let suggestions = await SuggestionsService.getOnboardSuggestions(lastSelected, this.props.searchStore.values.userQuery || '', wingsFamily );
+    let suggestions = await SuggestionsService.getSuggestions(lastSelected, this.props.searchStore.values.userQuery || '', wingsFamily );
     if(lastSelected) suggestions = suggestions.filter(suggestion => suggestion.tag !== lastSelected.tag);
     if(this.isUnmount) return;
     this.setState({suggestions: getUnique(suggestions, "tag")});
