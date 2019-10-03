@@ -13,6 +13,8 @@ const styles = (theme) => ({
     padding: 24,
     backgroundColor: 'white',
     borderRadius: 5,
+    margin: 16,
+    marginTop: 80
   },
   logo: {
     width: 110,

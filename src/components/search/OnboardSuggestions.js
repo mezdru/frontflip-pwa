@@ -25,7 +25,11 @@ const styles = theme => ({
   },
   suggestionsContainer: {
     height: 151,
-    marginBottom: 10,
+    marginBottom: 26,
+    [theme.breakpoints.down('xs')]: {
+      marginBottom: 10,
+    },
+    marginLeft: -8,
     overflow: 'hidden'
   }
 });
