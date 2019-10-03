@@ -45,11 +45,11 @@ export default createMuiTheme({
       },
       h2: {
         fontSize: '1.5rem',
-        fontWeight: 600,
+        fontWeight: 500,
       },
       h3: {
         fontSize: '1.2rem',
-        fontWeight: 600,
+        fontWeight: 500,
       },
       h4: {
         fontWeight: '400',
@@ -58,11 +58,10 @@ export default createMuiTheme({
         fontWeight: '700',
       },
       h6: {
-        // display: 'block',
         padding: 8,
       },
       body1: {
-        fontWeight: '600',
+        fontWeight: '500',
         fontSize: '1rem',
       },
       body2: {

@@ -68,12 +68,12 @@ class CardProfile extends React.PureComponent {
               </Grid>
             }
             title={
-              <Typography variant="h2" className={`${classes.name} ${classes.titleSmallestView}`} gutterBottom>
+              <Typography variant="h1" className={`${classes.name} ${classes.titleSmallestView}`} gutterBottom>
                 <span dangerouslySetInnerHTML={{__html: ProfileService.htmlDecode(((hit._highlightResult && hit._highlightResult.name) ? hit._highlightResult.name.value : null) || hit.name) || hit.tag}}></span>
               </Typography>
             }
             subheader={
-              <Typography variant="body1" className={`${classes.name} ${classes.intro}`} gutterBottom>
+              <Typography variant="h2" className={`${classes.name} ${classes.intro}`} gutterBottom>
                 <span dangerouslySetInnerHTML={{__html: ProfileService.htmlDecode(((hit._snippetResult && hit._snippetResult.intro) ? hit._snippetResult.intro.value : null) || hit.intro || '')}}></span>
               </Typography>
             }

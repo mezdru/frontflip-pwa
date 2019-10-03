@@ -14,6 +14,7 @@ export const styles = theme => ({
   },
   name: {
     color: 'white',
+    fontSize: '1.5rem',
     '& span em': {
       backgroundColor: theme.palette.primary.main,
       borderRadius: 30,
@@ -24,6 +25,7 @@ export const styles = theme => ({
     display: 'block',
   },
   intro: {
+    fontSize: '1rem',
     maxHeight: '3em',
     textOverflow: 'ellipsis',
     overflow: 'hidden',

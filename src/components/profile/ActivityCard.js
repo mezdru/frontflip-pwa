@@ -35,7 +35,8 @@ const styles = theme => ({
     height: 'auto'
   },
   author: {
-    maxWidth: '55%'
+    maxWidth: '55%',
+    fontSize: '1rem'
   },
   applauseIcon: {
     width: 20,
@@ -55,7 +56,7 @@ const ActivityCard = React.memo(withStyles(styles)(({ picture, authorName, link,
       </Grid>
       <Grid container item xs={10}>
         <Grid item xs={12} className={classes.textContainer}>
-          <Typography variant="body1" className={classes.author} >
+          <Typography variant="h1" className={classes.author} >
             {authorName}
           </Typography>
           <Typography variant="body2" className={classes.date} >

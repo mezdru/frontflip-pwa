@@ -55,7 +55,7 @@ class ProfileClapHistory extends React.Component {
 
     return (
       <>
-        <Typography variant="h3" style={{ textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.85)' }}>
+        <Typography variant="body1" style={{ textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.85)', fontSize: '0.8rem', fontWeight: 400 }}>
           <FormattedMessage id="profile.activity.title" />
         </Typography>
 

@@ -7,7 +7,7 @@ export const styles = theme => ({
     boxSizing: 'border-box',
     fontSize: '0.9125rem',
     display: 'inline-flex',
-    fontWeight: 600,
+    fontWeight: 500,
     height: 32,
     transition: 'background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
   },
