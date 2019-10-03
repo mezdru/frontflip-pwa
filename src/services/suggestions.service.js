@@ -33,12 +33,13 @@ class SuggestionsService {
       if (wingSelected && wingSelected.hashtags && wingSelected.hashtags.length > 0) {
         for (var i = 0; i < wingSelected.hashtags.length; i++) {
           let sameFamily = await AlgoliaService.fetchHashtags([wingSelected.hashtags[i], featuredWingFamily]);
+          console.log(sameFamily);
           sameFamiliesHits = sameFamiliesHits.concat(sameFamily.hits);
         }
       }
 
       // get common wings in organisation with wingSelected if there is
-      if (wingSelected)
+      if (wingSelected && ! featuredWingFamily)
         commonWithSelectedHits = (await AlgoliaService.fetchFacetValues(wingSelected, false, null, query)).facetHits;
 
     } catch (e) {
@@ -47,7 +48,7 @@ class SuggestionsService {
     }
 
     // get common wings in organisation
-    if(!query)
+    if(!query && ! featuredWingFamily)
       commonHits = (await AlgoliaService.fetchFacetValues(null, false, null, null)).facetHits;
 
     suggestions = suggestions.concat(sameFamiliesHits.slice(0, 6));
