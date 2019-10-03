@@ -44,6 +44,11 @@ export const styles = theme => ({
     backgroundColor: theme.palette.primary.hover,
     color: 'white'
   },
+  onboardMode: {
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.dark,
+
+  },
   suggestionMode: {
     backgroundColor: theme.palette.primary.dark,
     '& p': {

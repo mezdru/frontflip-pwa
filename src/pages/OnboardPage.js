@@ -82,9 +82,12 @@ class OnboardPage extends React.Component {
             )}
         </Grid>
 
-        <Suspense fallback={<></>}>
-          <Intercom appID={"k7gprnv3"} />
-        </Suspense>
+        {width !== 'xs' && (
+          <Suspense fallback={<></>}>
+            <Intercom appID={"k7gprnv3"} />
+          </Suspense>
+        )}
+
       </Grid>
     );
   }

@@ -74,6 +74,7 @@ class Wings extends React.PureComponent {
         return this.props.classes.personMode;
       case "suggestion":
         return this.props.classes.suggestionMode;
+      case "onboard": return this.props.classes.onboardMode;
       default:
         return null;
     }

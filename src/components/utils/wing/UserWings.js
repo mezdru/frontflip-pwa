@@ -83,6 +83,7 @@ class UserWings extends React.Component {
                   <Wings  src={ProfileService.getPicturePath(hashtag.picture)}
                     label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
                     className={'animated'} 
+                    mode="onboard"
                     style={{background: theme.palette.primary.main}}
                     onDelete={(e) => {this.props.handleRemoveWing(e, hashtag.tag)}} />
                 </div>

@@ -44,7 +44,7 @@
     "algolia.noOptions": "Pas de résultats pour {input}",
     "algolia.typeSomething": "Écrivez quelque-chose pour commencer ...",
     "algolia.search": "Recherchez dans {orgName}...",
-    "algolia.onboard": "Ajoutez des Wings",
+    "algolia.onboard": "Recherchez",
     "algolia.createOption": "Recherchez \"{input}\"",
     "algolia.createWing": "Créez la Wing \"{input}\"",
     "menu.organisation.welcome": "Bienvenue sur {name}",
