@@ -30,7 +30,20 @@ const styles = theme => ({
   container: {
     backgroundColor: 'white',
     borderRadius: 5,
-    overflow: 'hidden'
+    maxHeight: 'calc(100vh - 64px)',
+    [theme.breakpoints.down('xs')]: {
+      maxHeight: 'unset'
+    }
+    // overflowY: 'auto',
+  },
+  stepComponentContainer: {
+    maxHeight: 'calc(100% - 64px)',
+    overflowY: 'auto',
+    [theme.breakpoints.down('xs')]: {
+      height: 'calc(100vh - 72px)',
+      maxHeight: 'unset',
+      overflowY: 'auto',
+    }
   },
   stepperButton: {
     background: 'none',
@@ -217,8 +230,12 @@ class OnboardStepper extends React.Component {
           />
         </Grid>
 
+        <div className={classes.stepComponentContainer}>
         <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[activeStep]}
           SuggestionsController={this.props.SuggestionsController} />
+        </div>
+
+
 
         {showFeedback && (
           <LoaderFeedback
