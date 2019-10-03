@@ -13,7 +13,7 @@ export const styles = theme => ({
   blackFilter: {
     position: 'fixed',
     width: '100%',
-    height: '100%',
+    height: '100vh',
     backgroundColor: 'black',
     opacity: 0.35,
     overflow: 'hidden',
