@@ -46,7 +46,7 @@ class SearchField extends PureComponent {
   }
 
   getSearchFieldPlaceholder = () => {
-    if (this.props.hashtagOnly) {
+    if (this.props.mode === 'onboard') {
       return this.props.intl.formatMessage({ id: 'algolia.onboard' });
     } else {
       let organisation = this.props.organisationStore.values.organisation;

@@ -116,6 +116,12 @@ class OnboardStepper extends React.Component {
   };
 
   handleBack = () => {
+    if (this.props.edit && this.state.activeStep === 0) {
+      this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
+      this.props.recordStore.getRecordByUser().then().catch();
+      return this.setState({redirectTo: getBaseUrl(this.props) + '/' + this.props.recordStore.values.record.tag});
+    }
+
     this.slide(this.state.activeStep - 1, 'right', 'left');
   };
 
@@ -203,7 +209,7 @@ class OnboardStepper extends React.Component {
               </Button>
             }
             backButton={
-              <Button size="small" onClick={this.handleBack} disabled={activeStep === 0} className={classes.stepperButton} >
+              <Button size="small" onClick={this.handleBack} disabled={activeStep === 0 && !edit} className={classes.stepperButton} >
                 {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
                 <FormattedMessage id={'onboard.stepperBack'} />
               </Button>
