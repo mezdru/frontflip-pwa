@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles, Grid, IconButton, Button } from '@material-ui/core';
+import { withStyles, Grid, IconButton } from '@material-ui/core';
 import { ArrowBack, Edit } from '@material-ui/icons';
 import classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
@@ -9,7 +9,7 @@ import { getBaseUrl } from '../../services/utils.service.js';
 const styles = theme => ({
   button: {
     height: 40,
-    marginRight: 16,
+    width: 40,
   },
   returnButton: {
     background: 'white',
@@ -46,12 +46,12 @@ class ProfileActions extends React.PureComponent {
 
           {isEditable && (
             <Grid item >
-              <Button
+              <IconButton
                 className={classNames(classes.button, classes.returnButton)}
                 onClick={this.handleClickEdit}
               >
-                <Edit style={{marginRight: 8}} /> Edit my Profile
-              </Button>
+                <Edit />
+              </IconButton>
             </Grid>
           )}
         </Grid>

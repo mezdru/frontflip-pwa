@@ -112,12 +112,12 @@
     "profile.others": "Autres",
     "card.moreWings": "... {counter} en plus",
     "askForHelp.popup.title": "Posez une question",
-    "askForHelp.popup.subtitle": "Envoyez un email à {resultsCount} personnes :",
+    "askForHelp.popup.subtitle": "Envoyez un email à {resultsCount} personnes",
     "askForHelp.popup.send": "Envoyer ma question",
     "askForHelp.popup.success": "Nous avons envoyé votre question à {resultsCount} personnes ! Vérifiez votre boite mail pour savoir si quelqu'un vous a répondu.",
     "askForHelp.popup.error": "Il y a eu un problème, veuillez essayer dans quelques instants.",
     "askForHelp.popup.close": "Fermer",
     "askForHelp.popup.missingMessage": "Detaillez votre question afin d'obtenir une réponse rapidement.",
     "askForHelp.popup.placeholder": "Votre question ici.",
-    "askForHelp.popup.badConditions": "Veuillez supprimer des destinataires ou affiner votre recherche."
+    "askForHelp.popup.badConditions": "Vous ne pouvez pas envoyer votre question à plus de 10 personnes. Veuillez supprimer {recipientsToRemove} destinataires ou affiner votre recherche."
 }

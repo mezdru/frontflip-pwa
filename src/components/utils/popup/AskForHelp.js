@@ -168,7 +168,7 @@ class AskForHelp extends React.Component {
         )}
 
         {(!this.isAvailable()) && (
-          <SnackbarCustom variant="warning" message={this.props.intl.formatMessage({ id: "askForHelp.popup.badConditions" })} />
+          <SnackbarCustom variant="warning" message={this.props.intl.formatMessage({ id: "askForHelp.popup.badConditions" }, {recipientsToRemove: (recipients.length - 10)})} />
         )}
 
         {!error && !success && (
