@@ -210,9 +210,7 @@ class SearchPage extends PureComponent {
     try {
       const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
-          console.log('?');
           if (entry.isIntersecting) {
-            console.log('load search results')
             if (!this.state.showSearchResults) this.setState({ showSearchResults: true });
           }
         });
