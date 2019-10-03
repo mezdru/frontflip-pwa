@@ -48,12 +48,6 @@ class AskForHelp extends React.Component {
   }
 
   componentDidMount() {
-    this.getSearchResults();
-    observe(this.props.commonStore, 'searchFilters', (change) => {
-      if (JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue))
-        this.getSearchResults();
-    });
-
   }
 
   getSearchResults = async () => {
@@ -74,6 +68,11 @@ class AskForHelp extends React.Component {
         success: false,
         error: false
       });
+      this.getSearchResults();
+      observe(this.props.commonStore, 'searchFilters', (change) => {
+        if (JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue))
+          this.getSearchResults();
+      });
     }
   }
 
@@ -85,7 +84,7 @@ class AskForHelp extends React.Component {
   }
 
   handleSend = () => {
-    if(!this.isAvailable()) return;
+    if (!this.isAvailable()) return;
 
     if (!this.state.message || this.state.message.length < 35)
       return this.setState({ errorMessage: this.props.intl.formatMessage({ id: "askForHelp.popup.missingMessage" }) });
@@ -160,56 +159,58 @@ class AskForHelp extends React.Component {
         }
         onClose={this.handleClose}
       >
-
-        {!success && (
-          <Typography variant="h6" className={classes.title}>
-            <FormattedMessage id="askForHelp.popup.subtitle" values={{ resultsCount: recipients.length }} />
-          </Typography>
-        )}
-
-        {(!this.isAvailable()) && (
-          <SnackbarCustom variant="warning" message={this.props.intl.formatMessage({ id: "askForHelp.popup.badConditions" }, {recipientsToRemove: (recipients.length - 10)})} />
-        )}
-
-        {!error && !success && (
+        {this.props.isOpen && (
           <>
-            <div className={classes.recipients}>
-              {recipients.map((hit, index) =>
-                <Wings
-                  label={hit.name || hit.tag}
-                  src={profileService.getPicturePath(hit.picture) || profileService.getDefaultPictureByType(hit.type)}
-                  key={hit._id || hit.objectID}
-                  mode="person"
-                  onDelete={() => this.handleRemoveRecipient(hit._id || hit.objectID)}
-                />
-              )}
-            </div>
+            {!success && (
+              <Typography variant="h6" className={classes.title}>
+                <FormattedMessage id="askForHelp.popup.subtitle" values={{ resultsCount: recipients.length }} />
+              </Typography>
+            )}
 
-            <TextField
-              className={classes.textarea}
-              label={this.props.intl.formatMessage({ id: "askForHelp.popup.placeholder" })}
-              fullWidth
-              multiline
-              rows={5}
-              margin="none"
-              value={message}
-              onChange={this.handleMessageChange}
-              variant="outlined"
-              helperText={errorMessage}
-              error={errorMessage}
-              required
-            />
+            {(!this.isAvailable()) && (
+              <SnackbarCustom variant="warning" message={this.props.intl.formatMessage({ id: "askForHelp.popup.badConditions" }, { recipientsToRemove: (recipients.length - 10) })} />
+            )}
+
+            {!error && !success && (
+              <>
+                <div className={classes.recipients}>
+                  {recipients.map((hit, index) =>
+                    <Wings
+                      label={hit.name || hit.tag}
+                      src={profileService.getPicturePath(hit.picture) || profileService.getDefaultPictureByType(hit.type)}
+                      key={hit._id || hit.objectID}
+                      mode="person"
+                      onDelete={() => this.handleRemoveRecipient(hit._id || hit.objectID)}
+                    />
+                  )}
+                </div>
+
+                <TextField
+                  className={classes.textarea}
+                  label={this.props.intl.formatMessage({ id: "askForHelp.popup.placeholder" })}
+                  fullWidth
+                  multiline
+                  rows={5}
+                  margin="none"
+                  value={message}
+                  onChange={this.handleMessageChange}
+                  variant="outlined"
+                  helperText={errorMessage}
+                  error={errorMessage}
+                  required
+                />
+              </>
+            )}
+
+            {error && (
+              <SnackbarCustom variant="warning" message={this.props.intl.formatMessage({ id: "askForHelp.popup.error" })} />
+            )}
+
+            {success && (
+              <SnackbarCustom variant="success" message={this.props.intl.formatMessage({ id: "askForHelp.popup.success" }, { resultsCount: recipients.length })} />
+            )}
           </>
         )}
-
-        {error && (
-          <SnackbarCustom variant="warning" message={this.props.intl.formatMessage({ id: "askForHelp.popup.error" })} />
-        )}
-
-        {success && (
-          <SnackbarCustom variant="success" message={this.props.intl.formatMessage({ id: "askForHelp.popup.success" }, { resultsCount: recipients.length })} />
-        )}
-
       </PopupLayout >
     )
   }
