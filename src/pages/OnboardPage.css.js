@@ -1,6 +1,7 @@
 export const styles = theme => ({
   root: {
     height: '100vh',
+    overflow: 'hidden'
   },
   logo: {
     width: '6.5rem',
@@ -24,13 +25,16 @@ export const styles = theme => ({
   container: {
     position: 'absolute',
     width: 'calc(100% - 32px)',
+    maxHeight: 'calc(100% - 64px)',
     zIndex: 2,
-    overflowY: 'auto',
+    overflow: 'hidden',
     margin: 16,
     [theme.breakpoints.down('xs')]: {
       top: 0,
       margin: 0,
       width: '100%',
+      maxHeight: 'unset',
+      overflow: 'auto',
       height: '100vh'
     }
   }
