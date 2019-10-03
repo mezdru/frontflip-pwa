@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import { Redirect } from 'react-router-dom';
+import Slide from '@material-ui/core/Slide';
 
 import OnboardIntro from './steps/OnboardIntro';
 import OnboardContacts from './steps/OnboardContacts';
@@ -25,6 +26,11 @@ let timeoutArray = [];
 const styles = theme => ({
   root: {
     background: theme.palette.primary.dark
+  },
+  container: {
+    backgroundColor: 'white',
+    borderRadius: 5,
+    overflow: 'hidden'
   },
   stepperButton: {
     background: 'none',
@@ -55,7 +61,9 @@ class OnboardStepper extends React.Component {
     this.state = {
       activeStep: 0,
       canNext: true,
-      steps: []
+      steps: [],
+      slideDirection: 'left',
+      slideState: false
     };
   }
 
@@ -79,17 +87,11 @@ class OnboardStepper extends React.Component {
         });
       steps.push('wings');
     }
-    this.setState({ steps: steps, activeStep: stepLabel ? steps.indexOf(stepLabel.replace('%23', '#')) : 0 });
+    this.setState({ steps: steps, activeStep: (stepLabel ? steps.indexOf(stepLabel.replace('%23', '#')) : 0), slideState: true });
 
   }
 
   handleNext = () => {
-    // if (this.props.edit) {
-    //   this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
-    //   this.props.recordStore.getRecordByUser().then().catch();
-    //   return this.setState({redirectTo: getBaseUrl(this.props) + '/' + this.props.recordStore.values.record.tag});
-    // }
-
     if ((this.state.activeStep === (this.state.steps.length - 1))) {
       // click on finish
 
@@ -109,25 +111,27 @@ class OnboardStepper extends React.Component {
       this.props.userStore.welcomeCurrentUser(this.props.organisationStore.values.organisation._id);
       this.setState({ redirectTo: getBaseUrl(this.props) + '/congrats' });
     } else {
-      this.setState({activeStep: this.state.activeStep + 1});
+      this.slide(this.state.activeStep + 1, 'left', 'right')
     }
   };
 
   handleBack = () => {
-    // if (this.props.edit) 
-    //   return this.setState({redirectTo: getBaseUrl(this.props) + '/' + this.props.recordStore.values.record.tag});
-
-    this.setState({activeStep: this.state.activeStep - 1});
+    this.slide(this.state.activeStep - 1, 'right', 'left');
   };
+
+  slide = (nextActiveStep, enterDirection, exitDirection) => {
+    this.setState({slideDirection: exitDirection, slideState: false}, () => {
+      setTimeout(() => {
+        this.setState({slideDirection: enterDirection, activeStep: nextActiveStep, slideState: true});
+      }, 310);
+    });
+  }
 
   getStepComponent(steps, activeStep) {
     switch (steps[activeStep]) {
-      case 'intro':
-        return OnboardIntro;
-      case 'contacts':
-        return OnboardContacts;
-      default:
-        return OnboardWings;
+      case 'intro': return OnboardIntro;
+      case 'contacts': return OnboardContacts;
+      default: return OnboardWings;
     }
   }
 
@@ -170,7 +174,7 @@ class OnboardStepper extends React.Component {
     const { theme, classes, edit } = this.props;
     const { organisation, orgTag } = this.props.organisationStore.values;
     const { locale } = this.props.commonStore;
-    const { activeStep, steps, canNext, showFeedback, redirectTo } = this.state;
+    const { activeStep, steps, canNext, showFeedback, redirectTo, slideDirection, slideState } = this.state;
     let StepComponent = this.getStepComponent(steps, activeStep);
 
     let wantedUrl = '/' + locale + '/' + (organisation.tag || orgTag) + '/onboard/' + (steps[activeStep] ? steps[activeStep].replace('#', '%23') : '');
@@ -178,7 +182,9 @@ class OnboardStepper extends React.Component {
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
 
     return (
-      <Grid item>
+      <Slide direction={slideDirection} in={slideState} mountOnEnter unmountOnExit timeout={300}>
+
+      <Grid item xs={12} sm={8} md={6} lg={6} className={classes.container} >
         {((window.location.pathname !== wantedUrl) && (window.location.pathname !== wantedUrl + '/edit') && !edit) && (
           <Redirect push to={wantedUrl} />
         )}
@@ -224,6 +230,7 @@ class OnboardStepper extends React.Component {
         )}
 
       </Grid>
+      </Slide>
     );
   }
 }

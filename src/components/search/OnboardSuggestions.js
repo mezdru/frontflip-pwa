@@ -97,10 +97,6 @@ class OnboardSuggestions extends React.Component {
 
     return (
       <Grid container item xs={12} >
-        <Typography variant="body2" className={classes.title}>
-          Suggestions
-        </Typography>
-
         <Grid item className={classes.suggestionsContainer}>
           {userQuery && (
             <Wings

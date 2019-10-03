@@ -9,7 +9,7 @@ import { FormattedMessage } from "react-intl";
 const styles = theme => ({
   userWingsPosition: {
     paddingTop: 16,
-    height: 300,
+    maxHeight: 165,
     overflowY: 'auto'
   }
 });
@@ -19,7 +19,8 @@ class OnboardWings extends React.Component {
     super(props);
     this.state = {
       activeStepOne: this.props.activeStep,
-      scrollableClass: Math.floor(Math.random() * 99999)
+      scrollableClass: Math.floor(Math.random() * 99999),
+      boardHeight: 0
     };
   }
 
@@ -30,6 +31,15 @@ class OnboardWings extends React.Component {
     } catch (e) {
       // log
     }
+  }
+
+  componentDidMount() {
+    setTimeout(() => 
+    {
+      let elt = document.getElementById('onboard-wings-board');
+      this.setState({boardHeight: (elt ? elt.clientHeight : 0) + 72 });
+    }, 120);
+
   }
 
   addAndSave = (hashtagRecord) => {
@@ -91,6 +101,7 @@ class OnboardWings extends React.Component {
 
   render() {
     const { classes } = this.props;
+    const { boardHeight } = this.state;
 
     return (
       <Grid container direction="column" style={{background: 'white', overflow: 'hidden' }}>
@@ -98,7 +109,7 @@ class OnboardWings extends React.Component {
           background: this.props.theme.palette.primary.main, maxWidth: '100%', position: 'relative', zIndex: 2,
           boxShadow: 'rgba(0, 0, 0, 0.2) 0px 1px 8px 0px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.12) 0px 3px 3px -2px',
         }}
-          justify="center" direction="row" container >
+          justify="center" direction="row" container id="onboard-wings-board" >
           <Grid container item xs={12} >
 
             <Grid item xs={12} style={{ padding: 8 }}>
@@ -112,7 +123,7 @@ class OnboardWings extends React.Component {
           </Grid>
         </Grid>
 
-        <Grid item justify="center" direction="row" container className={classes.userWingsPosition} id={this.state.scrollableClass}>
+        <Grid item justify="center" direction="row" container style={{height: `calc(100vh - ${boardHeight}px)`}} className={classes.userWingsPosition} id={this.state.scrollableClass}>
           <Grid container item xs={12}>
             <Grid item xs={12} >
               <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? this.getFeaturedWings() : null}

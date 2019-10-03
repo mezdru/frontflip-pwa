@@ -20,11 +20,11 @@ class UserWings extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(() => this.props.scrollUserWingsToBottom(), 100);
+    setTimeout(() => this.props.scrollUserWingsToBottom(), 150);
 
     this.unsubscribeRecord = observe(this.props.recordStore.values, 'record', (change) => {
       if(change.newValue && change.newValue.hashtags && (change.newValue.hashtags.length > this.state.currentHashtagsLength)) {
-        setTimeout(() => this.props.scrollUserWingsToBottom(), 100);
+        setTimeout(() => this.props.scrollUserWingsToBottom(), 150);
         this.setState({newTag: change.newValue.hashtags[change.newValue.hashtags.length - 1].tag, currentHashtagsLength: change.newValue.hashtags.length});
       } else {
         this.setState({newTag: null, currentHashtagsLength: (change.newValue && change.newValue.hashtags ? change.newValue.hashtags.length : 0)});
@@ -52,7 +52,6 @@ class UserWings extends React.Component {
     const {record} = this.props.recordStore.values;
     const {theme} = this.props;
     const {locale} = this.props.commonStore;
-
     if(!record) return null;
 
     return (
