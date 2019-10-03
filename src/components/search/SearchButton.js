@@ -58,9 +58,13 @@ const styles = theme => ({
 class SearchButton extends React.Component {
 
   componentDidMount() {
-    this.setState({observer: observe(this.props.commonStore, 'searchResultsCount', (change) => {
+    this.unsubscribeSearchResultsCount = observe(this.props.commonStore, 'searchResultsCount', (change) => {
       this.forceUpdate();
-    })});
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeSearchResultsCount();
   }
 
   render() {
