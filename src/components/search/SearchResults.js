@@ -153,8 +153,10 @@ class SearchResults extends React.Component {
 
   render() {
     const { hits, loadInProgress, hideShowMore, showNoResult } = this.state;
-    const { handleDisplayProfile, classes } = this.props;
+    const { handleDisplayProfile, classes, showSearchResults } = this.props;
     let hitsResult = Array.from(hits);
+
+    if(!showSearchResults) return <div className={classes.hitList}></div>;
 
     return (
       <div className={classes.hitList}>
