@@ -20,6 +20,49 @@ class SuggestionsService {
     this._bank = await this.syncBank(null);
   }
 
+
+  getSuggestions = async (wingSelected, query, featuredWingFamily) => {
+    let suggestions = [];
+    let sameFamiliesHits = [];
+    let commonWithSelectedHits = [];
+    let commonHits = [];
+
+    try {
+
+      // get sisters wings & children
+      if (wingSelected && wingSelected.hashtags && wingSelected.hashtags.length > 0) {
+        for (var i = 0; i < wingSelected.hashtags.length; i++) {
+          let sameFamily = await AlgoliaService.fetchHashtags([wingSelected.hashtags[i], featuredWingFamily]);
+          sameFamiliesHits = sameFamiliesHits.concat(sameFamily.hits);
+        }
+      }
+
+      // get common wings in organisation with wingSelected if there is
+      if (wingSelected)
+        commonWithSelectedHits = (await AlgoliaService.fetchFacetValues(wingSelected, false, null, query)).facetHits;
+
+    } catch (e) {
+      console.log("Can't customize suggestions : ", e);
+      suggestions = [];
+    }
+
+    // get common wings in organisation
+    if(!query)
+      commonHits = (await AlgoliaService.fetchFacetValues(null, false, null, null)).facetHits;
+
+    suggestions = suggestions.concat(sameFamiliesHits.slice(0, 6));
+    suggestions = suggestions.concat(commonWithSelectedHits.slice(0, 3));
+    suggestions = suggestions.concat(commonHits.slice(0, (15 - suggestions.length)));
+
+    if (suggestions.length <= 15) {
+      let classicOptions = await AlgoliaService.fetchOptions(query, true, undefsafe(featuredWingFamily, 'tag'), 40);
+      if (classicOptions) suggestions = suggestions.concat(classicOptions.hits);
+    }
+
+    suggestions = await this.upgradeData(suggestions);
+    return suggestions;
+  }
+
   /**
    * @description Get suggestions for onboard
    * @param lastSelection can be the latest wings chosen
@@ -29,34 +72,34 @@ class SuggestionsService {
     let suggestions = [];
 
     try {
-      if(lastSelection && !wingsFamily) {
+      if (lastSelection && !wingsFamily) {
         // get more common wings link to selected one
         let commonHits = (await AlgoliaService.fetchFacetValues(lastSelection, false, null, query)).facetHits;
-  
+
         // get children wings
         let childrenHits = (await AlgoliaService.fetchHashtags(lastSelection)).hits;
-  
+
         // get all wings in same family
         let sameFamilyHits = [];
-        if(lastSelection.hashtags) {
-          for(var i = 0; i < lastSelection.hashtags.length; i++) {
+        if (lastSelection.hashtags) {
+          for (var i = 0; i < lastSelection.hashtags.length; i++) {
             let sameFamily = await AlgoliaService.fetchHashtags(lastSelection.hashtags[i]);
             sameFamilyHits = sameFamilyHits.concat(sameFamily.hits);
           }
         }
-  
+
         suggestions = suggestions.concat(childrenHits.slice(0, 3));
         suggestions = suggestions.concat(sameFamilyHits.slice(0, 3));
         suggestions = suggestions.concat(commonHits.slice(0, 3));
       }
-    }catch(e) {
+    } catch (e) {
       console.log("Can't customize suggestions.");
       suggestions = [];
     }
-    
-    if(suggestions.length <= 6) {
+
+    if (suggestions.length <= 6) {
       let classicOptions = await AlgoliaService.fetchOptions(query, true, undefsafe(wingsFamily, 'tag'), 40);
-      if(classicOptions) suggestions = suggestions.concat(classicOptions.hits);
+      if (classicOptions) suggestions = suggestions.concat(classicOptions.hits);
     }
 
     suggestions = await this.upgradeData(suggestions);
