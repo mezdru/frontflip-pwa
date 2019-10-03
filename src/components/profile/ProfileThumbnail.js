@@ -21,7 +21,7 @@ const ProfileThumbnail = React.memo(withProfileManagement(withStyles(styles)(({ 
           <Typography variant="h1" className={classes.text}>
             {ProfileService.htmlDecode(profileContext.getProp('name')) || profileContext.getProp('tag')}
           </Typography>
-          <Typography variant="h2" className={classes.text} style={{ color: '#555555', marginTop: 16 }} >
+          <Typography variant="h2" className={classes.text} style={{marginTop: 16 }} >
             {ProfileService.htmlDecode(profileContext.getProp('intro'))}
           </Typography>
         </Grid>

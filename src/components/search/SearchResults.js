@@ -91,7 +91,7 @@ class SearchResults extends React.Component {
       }
     });
 
-    this.createScrollObserver();
+    if(this.props.showSearchResults) this.createScrollObserver();
   }
 
   componentWillUnmount() {
@@ -112,6 +112,12 @@ class SearchResults extends React.Component {
       observer.observe(hitList);
     } catch (e) {
       console.log(e);
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(!prevProps.showSearchResults && this.props.showSearchResults){
+      this.createScrollObserver();
     }
   }
 
