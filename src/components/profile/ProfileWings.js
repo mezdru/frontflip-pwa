@@ -52,6 +52,9 @@ const styles = theme => ({
     width: 32,
     height: 32,
     marginLeft: 8,
+    '& span': {
+      marginTop: -4
+    },
     '&:hover': {
       backgroundColor: theme.palette.secondary.dark
     }
