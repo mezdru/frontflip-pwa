@@ -93,17 +93,17 @@ class WelcomePage extends React.Component {
             </Grid>
             <Grid container item xs={12} md={6} justify="space-around" className={classes.itemActions}>
               <Grid item className={classes.button}>
-                <Button color="secondary" >
-                  <FormattedMessage id="menu.drawer.homepage" />
+                <Button color="secondary" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/', undefined)} >
+                  <FormattedMessage id="menu.drawer.whyWingzy" />
                 </Button>
               </Grid>
               <Grid item className={classes.button}>
-                <Button>
+                <Button href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/terms', undefined)} >
                   <FormattedMessage id="menu.drawer.terms" />
                 </Button>
               </Grid>
               <Grid item className={classes.button}>
-                <Button>
+                <Button href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/protectingYourData', undefined)}>
                   <FormattedMessage id="menu.drawer.protectingYourData" />
                 </Button>
               </Grid>
