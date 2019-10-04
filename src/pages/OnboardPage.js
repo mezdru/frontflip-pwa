@@ -38,12 +38,16 @@ class OnboardPage extends React.Component {
       this.props.recordStore.setRecordId(this.props.match.params.recordId);
       this.props.recordStore.getRecord()
       .then(() => {
+        console.log('render compo')
         this.setState({renderComponent: true});
       }).catch(e => {
         console.log(e);
       })
     } else {
-      this.getRecordForUser();
+      this.getRecordForUser()
+      .then(() => {
+        this.setState({renderComponent: true});
+      })
     }
   }
 

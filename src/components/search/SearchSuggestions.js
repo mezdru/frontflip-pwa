@@ -33,6 +33,7 @@ const styles = theme => ({
     marginBottom: 20,
     background: 'rgba(42, 44, 60, 0.85)',
     color: 'white',
+    fontWeight: 500,
     '&:hover': {
       color: theme.palette.primary.dark,
       background: theme.palette.primary.main,
