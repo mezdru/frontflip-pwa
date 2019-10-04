@@ -54,6 +54,7 @@
     "menu.drawer.pricing": "Nos tarifs",
     "menu.drawer.terms": "Conditions d'utilisation",
     "menu.drawer.protectingYourData": "Protection des données",
+    "menu.drawer.homepage": "Page d'accueil",
     "menu.drawer.logout": "Déconnexion",
     "menu.drawer.organisationAdmin": "Configuration",
     "menu.drawer.contactUsPremium": "Contactez nous",
@@ -119,5 +120,7 @@
     "askForHelp.popup.close": "Fermer",
     "askForHelp.popup.missingMessage": "Detaillez votre question afin d'obtenir une réponse rapidement.",
     "askForHelp.popup.placeholder": "Votre question ici.",
-    "askForHelp.popup.badConditions": "Vous ne pouvez pas envoyer votre question à plus de 10 personnes. Veuillez supprimer {recipientsToRemove} destinataires ou affiner votre recherche."
+    "askForHelp.popup.badConditions": "Vous ne pouvez pas envoyer votre question à plus de 10 personnes. Veuillez supprimer {recipientsToRemove} destinataires ou affiner votre recherche.",
+    "welcome.page.title": "Nous ne connaissons pas encore votre entreprise",
+    "welcome.page.subtitle": "Pour le moment, vous n'êtes relié à aucune organisation. Nous avons reçu un message nous indiquant que vous voulez rejoindre Wingzy, nous vous recontacterons rapidement. Si vous souhaitez nous contacter, ça se passe par ici : <a href='mailto:contact@wingzy.com'>contact@wingzy.com</a>"
 }

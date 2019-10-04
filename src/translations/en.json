@@ -54,6 +54,7 @@
   "menu.drawer.pricing": "Pricing",
   "menu.drawer.terms": "Terms",
   "menu.drawer.protectingYourData": "Protecting your data",
+  "menu.drawer.homepage": "Home page",
   "menu.drawer.logout": "Sign Out",
   "menu.drawer.organisationAdmin": "Setup",
   "menu.drawer.contactUsPremium": "Contact us",
@@ -119,6 +120,8 @@
   "askForHelp.popup.missingMessage": "Explain your question to your coworkers to get an answer quickly.",
   "askForHelp.popup.placeholder": "Your question here.",
   "profile.others":"Others",
-  "askForHelp.popup.badConditions": "You can't ask more than 10 people. Remove {recipientsToRemove} recipients or refine search."
+  "askForHelp.popup.badConditions": "You can't ask more than 10 people. Remove {recipientsToRemove} recipients or refine search.",
+  "welcome.page.title": "We don't know your company yet",
+  "welcome.page.subtitle": "Pour le moment, vous n'êtes relié à aucune organisation. Nous avons reçu un message nous indiquant que vous voulez rejoindre Wingzy, nous vous recontacterons rapidement. Si vous souhaitez nous contacter, ça se passe par ici : <a href='mailto:contact@wingzy.com'>contact@wingzy.com</a>"
 }
 
