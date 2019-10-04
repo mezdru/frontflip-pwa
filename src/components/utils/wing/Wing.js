@@ -30,6 +30,7 @@ const styles = theme => ({
   suggestionWing: {
     backgroundColor: 'white',
     color: theme.palette.primary.dark,
+    fontWeight: 500,
     transition: 'background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
     '&:hover': {
       backgroundColor: 'rgba(0,0,0,.08)',
