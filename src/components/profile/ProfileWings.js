@@ -47,16 +47,22 @@ const styles = theme => ({
     lineHeight: 1,
   },
   addWingsButton: {
-    color: 'white',
-    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.dark,
+    transition: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+    backgroundColor: 'white',
     width: 32,
     height: 32,
     marginLeft: 8,
+    opacity: 0.7,
+    marginTop: 16,
+    verticalAlign: 'bottom !important',
     '& span': {
       marginTop: -4
     },
     '&:hover': {
-      backgroundColor: theme.palette.secondary.dark
+      color: theme.palette.secondary.main,
+      backgroundColor: 'white',
+      opacity: 1
     }
   }
 });
