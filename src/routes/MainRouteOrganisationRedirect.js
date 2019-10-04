@@ -170,8 +170,13 @@ class MainRouteOrganisationRedirect extends React.Component {
       EmailService.confirmLoginEmail(null);
       this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/error/403/email' });
     } else {
-      window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
-      await this.wait(3000);
+      /**
+       * User email validated
+       * User has no organisation
+       */
+      this.setState({redirectTo: '/' + this.props.commonStore.locale + '/welcome'});
+      // window.location.href = UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', undefined);
+      // await this.wait(3000);
     }
   }
 

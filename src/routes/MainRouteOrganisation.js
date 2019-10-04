@@ -11,6 +11,7 @@ import PasswordReset from '../pages/auth/PasswordReset';
 const ErrorPage = React.lazy(() => import('../pages/ErrorPage'));
 const PasswordForgot = React.lazy(() => import('../pages/auth/PasswordForgot'));
 const ConnectionsMap = React.lazy(() => import('../components/admin/ConnectionsMap'));
+const WelcomePage = React.lazy(() => import('../pages/WelcomePage'));
 // const PasswordReset = React.lazy(() => import('../pages/auth/PasswordReset'));
 
 class MainRouteOrganisation extends React.Component {
@@ -64,6 +65,7 @@ class MainRouteOrganisation extends React.Component {
           <Route path="/:locale(en|fr|en-UK)/signup" component={(props) => {return <AuthPage initialTab={1} {...props}/>}} />
           <Route path="/:locale(en|fr|en-UK)/signin" component={AuthPage} />
           <Route exact path="/:locale(en|fr|en-UK)/error/:errorCode/:errorType" component={this.WaitingComponent(ErrorPage)} />
+          <Route exact path="/:locale(en|fr|en-UK)/welcome" component={this.WaitingComponent(WelcomePage)} />
 
           {/* Route which will need organisationTag */}
 
