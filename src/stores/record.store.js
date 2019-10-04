@@ -7,46 +7,35 @@ class RecordStore {
   inProgress = false;
   errors = null;
   values = {
-    orgId: '',
-    recordId: '',
-    recordTag: '',
-    record: {},
-    displayedRecord: {},
+    records: []
   };
 
-  setOrgId(orgId) {
-    this.values.orgId = orgId;
-  }
-  setRecordTag(recordTag) {
-    if(recordTag)
-      recordTag = recordTag.replace('#', '%23');
-    this.values.recordTag = recordTag;
-  }
-  setRecordId(recordId) {
-    this.values.recordId = recordId;
-  }
-  setRecord(record) {
-    this.values.record = record;
-  }
-  setDisplayedRecord(record) {
-    this.values.displayedRecord = record;
+  findRecord(recordId, recordTag) {
+    if(!recordId && !recordTag) return null;
+    return this.values.records.find(record => {
+      if(recordId) return JSON.stringify(recordId) === JSON.stringify(record._id || record.objectID);
+      else return recordTag === record.tag;
+    });
   }
 
-  reset() {
-    this.values.orgId = '';
-    this.values.recordId = '';
-    this.values.record = {};
+  addRecord(inRecord) {
+    let index = this.values.records.findIndex(record => JSON.stringify(record._id) === JSON.stringify(inRecord._id || inRecord.objectID));
+    if(index > -1) {
+      this.values.records[index] = inRecord;
+    } else {
+      this.values.records.push(inRecord);
+    }
   }
 
-  getRecord() {
-    if (!this.values.recordId) return Promise.reject(new Error('No record Id'));
+  getRecord(recordId) {
+    if (!recordId) return Promise.reject(new Error('No record Id'));
     this.inProgress = true;
     this.errors = null;
 
-    return agent.Record.get(this.values.recordId)
+    return agent.Record.get(recordId)
       .then(res => {
-        this.values.record = (res ? res.data : {});
-        return this.values.record;
+        this.addRecord(res.data);
+        return res.data;
       })
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.errors;
@@ -55,15 +44,19 @@ class RecordStore {
       .finally(action(() => { this.inProgress = false; }));
   }
 
-  getRecordByTag() {
-    if (!this.values.recordTag) return Promise.reject(new Error('No record Tag'));
+  getRecordByTag(recordTag) {
+    if (!recordTag) return Promise.reject(new Error('No record Tag'));
     this.inProgress = true;
     this.errors = null;
 
-    return agent.Record.getByTag(this.values.recordTag, this.values.orgId)
+    return agent.Record.getByTag(recordTag, organisationStore.values.orgId)
       .then(res => {
-        this.setDisplayedRecord(res.data.length > 0 ? res.data[0] : res.data);
-        return this.values.displayedRecord;
+        if(res.data.length > 0){
+          this.addRecord(res.data[0]);
+          return res.data[0];
+        } 
+
+        return null;
       })
       .catch(action((err) => {
         console.log(err)
@@ -74,14 +67,14 @@ class RecordStore {
   }
 
   getRecordByUser() {
-    if (!userStore.values.currentUser._id || !this.values.orgId) return Promise.reject(new Error('Bad parameters'));
+    if (!userStore.values.currentUser._id || !organisationStore.values.orgId) return Promise.reject(new Error('Bad parameters'));
     this.inProgress = true;
     this.errors = null;
 
-    return agent.Record.getByUser(userStore.values.currentUser._id, this.values.orgId)
+    return agent.Record.getByUser(userStore.values.currentUser._id, organisationStore.values.orgId)
       .then(res => {
-        this.values.record = (res ? res.data : null);
-        return this.values.record;
+        this.addRecord(res.data);
+        return res.data;
       })
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.errors;
@@ -97,10 +90,9 @@ class RecordStore {
     this.inProgress = true;
     this.errors = null;
 
-    return agent.Record.post(organisationStore.values.organisation._id, record || this.values.record)
+    return agent.Record.post(organisationStore.values.organisation._id, record)
       .then(res => {
-        if(!record)
-          this.values.record = res.data;
+        this.addRecord(res.data);
         return res.data; 
       })
       .catch(action((err) => {
@@ -113,14 +105,17 @@ class RecordStore {
   /**
    * @description Update record
    */
-  updateRecord(arrayOfFields) {
+  updateRecord(arrayOfFields, record) {
     this.inProgress = true;
     this.errors = null;
 
-    let recordToUpdate = this.buildRecordToUpdate(arrayOfFields);
+    let recordToUpdate = this.buildRecordToUpdate(arrayOfFields, record);
 
-    return agent.Record.put(this.values.orgId, this.values.recordId, recordToUpdate)
-      .then(res => { this.values.record = (res ? res.data : {}); return this.values.record;})
+    return agent.Record.put(organisationStore.values.orgId, record._id, recordToUpdate)
+      .then(res => { 
+        this.addRecord(res.data);
+        return res.data;
+      })
       .catch(action((err) => {
         this.errors = err.response && err.response.body && err.response.body.errors;
         throw err;
@@ -128,13 +123,13 @@ class RecordStore {
       .finally(action(() => { this.inProgress = false; }));
   }
 
-  buildRecordToUpdate(arrayOfFields) {
+  buildRecordToUpdate(arrayOfFields, record) {
     let recordToUpdate = {};
     if (!arrayOfFields) {
-      recordToUpdate = this.values.record;
+      recordToUpdate = record;
     } else {
       arrayOfFields.forEach(field => {
-        recordToUpdate[field] = this.values.record[field];
+        recordToUpdate[field] = record[field];
       });
     }
     return recordToUpdate;
@@ -165,13 +160,9 @@ decorate(RecordStore, {
   inProgress: observable,
   errors: observable,
   values: observable,
-  setOrgId: action,
   reset: action,
-  setRecordTag: action,
-  setRecordId: action,
-  setDisplayedRecord: action,
-  setRecord: action,
   getRecord: action,
+  findRecord: action,
   getRecordByTag: action,
   postRecord: action,
   updateRecord: action,
