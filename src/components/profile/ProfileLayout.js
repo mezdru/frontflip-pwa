@@ -65,7 +65,7 @@ class ProfileLayout extends React.Component {
   }
 }
 
-export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore')(
+export default inject('commonStore', 'orgStore', 'authStore', 'recordStore', 'userStore')(
   observer(
     withStyles(styles)( withProfileManagement(ProfileLayout))
   )

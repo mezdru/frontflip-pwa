@@ -67,7 +67,7 @@ class OnboardWings extends React.Component {
 
   handleAddWing = (element) => {
     this.props.recordStore.setRecordTag(element.tag);
-    this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
+    this.props.recordStore.setOrgId(this.props.orgStore.values.organisation._id);
     if (this.props.recordStore.values.record.hashtags.find(elt => elt.tag === element.tag)) return Promise.resolve();
     return this.props.recordStore.getRecordByTag()
       .then(hashtagRecord => {
@@ -113,7 +113,7 @@ class OnboardWings extends React.Component {
   }
 
   isFeaturedWings = () => (this.props.activeStepLabel && this.props.activeStepLabel.charAt(0) === '#');
-  getFeaturedWings = () => this.props.organisationStore.values.organisation.featuredWingsFamily.filter(fam => fam.tag === this.props.activeStepLabel)[0];
+  getFeaturedWings = () => this.props.orgStore.values.organisation.featuredWingsFamily.filter(fam => fam.tag === this.props.activeStepLabel)[0];
 
   render() {
     const { classes } = this.props;
@@ -152,7 +152,7 @@ class OnboardWings extends React.Component {
   }
 }
 
-export default inject('commonStore', 'recordStore', 'organisationStore')(
+export default inject('commonStore', 'recordStore', 'orgStore')(
   observer(
     withStyles(styles, { withTheme: true })(OnboardWings)
   )

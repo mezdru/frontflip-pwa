@@ -5,6 +5,15 @@ const cookies = new Cookies();
 
 class CommonStore {
 
+  url = {
+    params: {
+      orgTag: null,
+      recordTag: null,
+      onboardStep: null,
+      recordId: null
+    }
+  };
+
   accessToken;
   refreshToken;
   algoliaKey;
@@ -141,6 +150,7 @@ class CommonStore {
 
 decorate(CommonStore, {
   appName: observable,
+  url: observable,
   accessToken: observable,
   refreshToken: observable,
   algoliaKey: observable,

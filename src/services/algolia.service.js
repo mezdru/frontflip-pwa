@@ -1,6 +1,6 @@
 import commonStore from '../stores/common.store';
 import algoliasearch  from 'algoliasearch';
-import organisationStore from '../stores/organisation.store';
+import orgStore from '../stores/organisation.store';
 import {observe} from 'mobx';
 import statisticsStore from '../stores/statistics.store';
 
@@ -21,7 +21,7 @@ class AlgoliaService {
     observe(commonStore, 'algoliaKey', (change) => {
       if(this.client) this.client.clearCache();
       if(!commonStore.algoliaKey) {
-        organisationStore.getAlgoliaKey(true)
+        orgStore.getAlgoliaKey(true)
         .then(algoliaKey => {
           this.algoliaKey = algoliaKey;
           this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.algoliaKey);
@@ -77,7 +77,7 @@ class AlgoliaService {
 
   makeFacetFilters(lastSelection, privateOnly) {
     let query = [];
-    if(privateOnly) query.push('organisation:'+organisationStore.values.organisation._id);
+    if(privateOnly) query.push('organisation:'+orgStore.values.organisation._id);
     if(lastSelection) query.push('hashtags.tag:'+lastSelection.tag);
     return query;
   }

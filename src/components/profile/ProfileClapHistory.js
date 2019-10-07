@@ -49,7 +49,7 @@ class ProfileClapHistory extends React.Component {
     const { classes, profileContext } = this.props;
     const { clapHistory } = this.state;
     const { locale } = this.props.commonStore;
-    const { organisation } = this.props.organisationStore.values;
+    const { organisation } = this.props.orgStore.values;
     const lastClapHistory = clapHistory.slice(0, 10);
     let clapsDisplayed = 0;
 
@@ -87,7 +87,7 @@ class ProfileClapHistory extends React.Component {
   }
 }
 
-export default inject('recordStore', 'clapStore', 'commonStore', 'organisationStore')(
+export default inject('recordStore', 'clapStore', 'commonStore', 'orgStore')(
   observer(
     withStyles(styles)( withProfileManagement(ProfileClapHistory))
   )

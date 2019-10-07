@@ -53,7 +53,7 @@ class OnboardIntro extends React.Component {
 
           <Grid item className={classes.field}>
             <TextField
-              label={this.props.intl.formatMessage({ id: 'onboard.intro.name' }, { organisationName: this.props.organisationStore.values.organisation.name })}
+              label={this.props.intl.formatMessage({ id: 'onboard.intro.name' }, { organisationName: this.props.orgStore.values.organisation.name })}
               type="text"
               className={classes.field}
               fullWidth
@@ -69,7 +69,7 @@ class OnboardIntro extends React.Component {
 
           <Grid item className={classes.field} >
             <TextField
-              label={this.props.intl.formatMessage({ id: 'onboard.intro.intro' }, { organisationName: this.props.organisationStore.values.organisation.name })}
+              label={this.props.intl.formatMessage({ id: 'onboard.intro.intro' }, { organisationName: this.props.orgStore.values.organisation.name })}
               type="text"
               className={classes.field}
               fullWidth
@@ -88,7 +88,7 @@ class OnboardIntro extends React.Component {
   }
 }
 
-export default inject('commonStore', 'recordStore', 'organisationStore')(
+export default inject('commonStore', 'recordStore', 'orgStore')(
   observer(
     injectIntl(withStyles(styles, { withTheme: true })(OnboardIntro))
   )

@@ -22,30 +22,28 @@ class MainRoute extends React.Component {
     super(props);
 
     this.state = {
-      renderComponent: !this.props.authStore.isAuth()
+      renderAuth: !this.props.authStore.isAuth()
     }
 
     // Remove for the moment, this cookie will be usefull to persist filters if needed
     this.props.commonStore.removeCookie('searchFilters');
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.getUser();
   }
 
-
-
   async getUser() {
     if (this.props.authStore.isAuth()) {
-      await this.props.userStore.getCurrentUser().catch(() => { return; });
-      if (!this.state.renderComponent) this.setState({ renderComponent: true });
+      await this.props.userStore.fetchCurrentUser();
+      if (!this.state.renderAuth) this.setState({ renderAuth: true });
     }
   }
 
   render() {
-    const { renderComponent } = this.state;
+    const { renderAuth } = this.state;
     const endUrl = window.location.pathname + window.location.search;
-    const { currentUser } = this.props.userStore.values;
+    const { currentUser } = this.props.userStore;
     const { locale } = this.props.commonStore;
 
 
@@ -54,7 +52,7 @@ class MainRoute extends React.Component {
     let defaultLocale = (currentUser ? currentUser.locale || locale : locale) || 'en';
     if(defaultLocale === 'en-UK') defaultLocale = 'en';
 
-    if (renderComponent) {
+    if (renderAuth) {
       return (
         <IntlProvider locale={defaultLocale} messages={messages[defaultLocale]}>
           <Switch>

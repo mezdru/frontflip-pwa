@@ -97,7 +97,7 @@ class Invitation extends React.Component {
 
   formatInvitationLink = (code) => {
     var locale = this.props.commonStore.locale;
-    var orgTag = this.props.organisationStore.values.organisation.tag;
+    var orgTag = this.props.orgStore.values.organisation.tag;
     if (process.env.NODE_ENV === 'development') {
       return 'http://' + process.env.REACT_APP_HOST + '/' + locale + '/' + orgTag + '/signup/' + code;
     }
@@ -118,7 +118,7 @@ class Invitation extends React.Component {
 
   requestInvitationCode = () => {
     return new Promise((resolve, reject) => {
-    var orgId = this.props.organisationStore.values.organisation._id;
+    var orgId = this.props.orgStore.values.organisation._id;
     if(orgId)
       this.props.authStore.getInvitationCode(orgId)
       .then(invitationCode => {
@@ -205,7 +205,7 @@ class Invitation extends React.Component {
   }
 }
 
-export default inject('organisationStore', 'authStore', 'commonStore')(
+export default inject('orgStore', 'authStore', 'commonStore')(
   injectIntl(observer(
     withStyles(styles, { withTheme: true })(Invitation)
   ))

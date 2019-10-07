@@ -60,7 +60,7 @@ class ProfileActions extends React.PureComponent {
   }
 }
 
-export default inject('commonStore', 'organisationStore')(
+export default inject('commonStore', 'orgStore')(
   observer(
     withStyles(styles)(withProfileManagement(ProfileActions))
   )

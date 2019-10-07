@@ -3,7 +3,7 @@ import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import MainRouteOrganisationRedirect from './MainRouteOrganisationRedirect';
+import MainRouteAccess from './MainRouteAccess';
 import AuthPage from '../pages/auth/AuthPage';
 import PasswordReset from '../pages/auth/PasswordReset';
 
@@ -32,11 +32,10 @@ class MainRouteOrganisation extends React.Component {
   }
 
   updateUserLocale = () => {
-    var currentUser = this.props.userStore.values.currentUser;
+    var currentUser = this.props.userStore.currentUser;
     if( this.props.commonStore.locale && currentUser && currentUser._id && this.props.commonStore.locale !== currentUser.locale) {
       currentUser.locale = this.props.commonStore.locale;
-      this.props.userStore.setCurrentUser(currentUser);
-      this.props.userStore.updateCurrentUser();
+      this.props.userStore.updateCurrentUser(currentUser);
     }
   }
 
@@ -70,20 +69,20 @@ class MainRouteOrganisation extends React.Component {
           {/* Route which will need organisationTag */}
 
           {/* Main route with orgTag */}
-          <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit/:recordId" component={MainRouteOrganisationRedirect} />
-          <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit" component={MainRouteOrganisationRedirect} />
-          <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step?" component={MainRouteOrganisationRedirect} />
+          <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit/:recordId" component={MainRouteAccess} />
+          <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit" component={MainRouteAccess} />
+          <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step?" component={MainRouteAccess} />
 
-          <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode" component={MainRouteOrganisationRedirect} />
-          <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode" component={MainRouteOrganisationRedirect} />
+          <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode" component={MainRouteAccess} />
+          <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode" component={MainRouteAccess} />
 
-          <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin" component={MainRouteOrganisationRedirect} />
-          <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup" component={MainRouteOrganisationRedirect} />
+          <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin" component={MainRouteAccess} />
+          <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup" component={MainRouteAccess} />
 
-          <Route path="/:locale(en|fr|en-UK)/:organisationTag/:hashtags/:action" component={(props) => <MainRouteOrganisationRedirect hashtagsFilter={true} {...props} />} />
+          <Route path="/:locale(en|fr|en-UK)/:organisationTag/:hashtags/:action" component={(props) => <MainRouteAccess hashtagsFilter={true} {...props} />} />
 
-          <Route path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={MainRouteOrganisationRedirect} />
-          <Route path="/:locale(en|fr|en-UK)" component={MainRouteOrganisationRedirect} />
+          <Route path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={MainRouteAccess} />
+          <Route path="/:locale(en|fr|en-UK)" component={MainRouteAccess} />
           {isAuth && (
             <Redirect to={"/" + locale} />
           )}

@@ -137,7 +137,7 @@ class ProfileWings extends React.PureComponent {
 
 }
 
-export default inject('commonStore', 'clapStore', 'recordStore', 'organisationStore')(
+export default inject('commonStore', 'clapStore', 'recordStore', 'orgStore')(
   observer(
     withStyles(styles)(withProfileManagement(ProfileWings))
   )

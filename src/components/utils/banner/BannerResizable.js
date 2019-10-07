@@ -35,7 +35,7 @@ class BannerResizable extends React.Component {
     if (this.props.type === 'organisation') {
       this.updateSource();
 
-      this.setState({observer: observe(this.props.organisationStore.values, 'organisation', (change) => {
+      this.setState({observer: observe(this.props.orgStore, 'currentOrganisation', (change) => {
         this.updateSource();
       })});
 
@@ -43,25 +43,25 @@ class BannerResizable extends React.Component {
       
     } else if (this.props.type === 'profile') {
 
-      if(!this.updateProfileSource()) this.updateSource();
+      // if(!this.updateProfileSource()) this.updateSource();
 
-      this.setState({observer: observe(this.props.recordStore.values, 'displayedRecord', (change) => {
-        this.updateProfileSource();
-        if(!this.state.source) this.updateSource();
-      })});
+      // this.setState({observer: observe(this.props.recordStore.values, 'displayedRecord', (change) => {
+      //   this.updateProfileSource();
+      //   if(!this.state.source) this.updateSource();
+      // })});
     }
   }
 
-  updateProfileSource = () => {
-    var profileCover = this.props.recordStore.values.displayedRecord.cover;
-    var profileCoverUrl = (profileCover && profileCover.url ? profileCover.url : null);
-    this.setState({source: profileCoverUrl});
-    return profileCoverUrl;
-  }
+  // updateProfileSource = () => {
+  //   var profileCover = this.props.recordStore.values.displayedRecord.cover;
+  //   var profileCoverUrl = (profileCover && profileCover.url ? profileCover.url : null);
+  //   this.setState({source: profileCoverUrl});
+  //   return profileCoverUrl;
+  // }
 
   updateSource = () => {
-    var orgCover = this.props.organisationStore.values.organisation.cover;
-    var orgCoverUrl = (orgCover && orgCover.url ? orgCover.url : defaultBanner);
+    var org = this.props.orgStore.currentOrganisation;
+    var orgCoverUrl = (org && org.cover && org.cover.url ? org.cover.url : defaultBanner);
     this.setState({source: orgCoverUrl});
   }
 
@@ -83,7 +83,7 @@ class BannerResizable extends React.Component {
   }
 }
 
-export default inject('organisationStore', 'recordStore')(
+export default inject('orgStore', 'recordStore')(
   observer(
     withStyles(styles, { withTheme: true })(withProfileManagement(BannerResizable))
   )

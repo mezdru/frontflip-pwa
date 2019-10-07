@@ -86,7 +86,7 @@ class OnboardStepper extends React.Component {
 
 
   makeSteps = async (stepLabel) => {
-    let org = this.props.organisationStore.values.organisation;
+    let org = this.props.orgStore.values.organisation;
     let steps;
 
     if (undefsafe(org, 'onboardSteps.length') > 0) {
@@ -109,19 +109,19 @@ class OnboardStepper extends React.Component {
       // click on finish
 
       if (this.props.edit) {
-        this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
+        this.props.recordStore.setOrgId(this.props.orgStore.values.organisation._id);
         this.props.recordStore.getRecordByUser().then().catch();
         return this.setState({redirectTo: getBaseUrl(this.props) + '/' + this.props.recordStore.values.record.tag});
       }
 
-      let user = this.props.userStore.values.currentUser;
+      let user = this.props.userStore.currentUser;
       try {
         if (process.env.NODE_ENV === 'production' && !process.env.REACT_APP_NOLOGS)
           SlackService.notify('#alerts', `We have a new User! ${undefsafe(user, 'email.value') || undefsafe(user, 'google.email') || user._id}` +
-            ' in ' + this.props.organisationStore.values.organisation.tag);
+            ' in ' + this.props.orgStore.values.organisation.tag);
       } catch (e) {}
 
-      this.props.userStore.welcomeCurrentUser(this.props.organisationStore.values.organisation._id);
+      this.props.userStore.welcomeCurrentUser(this.props.orgStore.values.organisation._id);
       this.setState({ redirectTo: getBaseUrl(this.props) + '/congrats' });
     } else {
       this.slide(this.state.activeStep + 1, 'left', 'right')
@@ -130,7 +130,7 @@ class OnboardStepper extends React.Component {
 
   handleBack = () => {
     if (this.props.edit && this.state.activeStep === 0) {
-      this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
+      this.props.recordStore.setOrgId(this.props.orgStore.values.organisation._id);
       this.props.recordStore.getRecordByUser().then().catch();
       return this.setState({redirectTo: getBaseUrl(this.props) + '/' + this.props.recordStore.values.record.tag});
     }
@@ -156,7 +156,7 @@ class OnboardStepper extends React.Component {
 
   handleSave = async (arrayOfLabels) => {
     this.props.recordStore.setRecordId(this.props.recordStore.values.record._id);
-    this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
+    this.props.recordStore.setOrgId(this.props.orgStore.values.organisation._id);
     return await this.props.recordStore.updateRecord(arrayOfLabels).then((record) => {
       timeoutArray.forEach(tm => { clearTimeout(tm) });
       timeoutArray = [];
@@ -191,7 +191,7 @@ class OnboardStepper extends React.Component {
 
   render() {
     const { theme, classes, edit } = this.props;
-    const { organisation, orgTag } = this.props.organisationStore.values;
+    const { organisation, orgTag } = this.props.orgStore.values;
     const { locale } = this.props.commonStore;
     const { activeStep, steps, canNext, showFeedback, redirectTo, slideDirection, slideState } = this.state;
     let StepComponent = this.getStepComponent(steps, activeStep);
@@ -258,7 +258,7 @@ class OnboardStepper extends React.Component {
   }
 }
 
-export default inject('commonStore', 'recordStore', 'organisationStore', 'userStore')(
+export default inject('commonStore', 'recordStore', 'orgStore', 'userStore')(
   observer(
     withSnackbar(
       withStyles(styles, { withTheme: true })(OnboardStepper)

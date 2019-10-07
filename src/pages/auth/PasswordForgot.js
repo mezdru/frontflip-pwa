@@ -45,8 +45,8 @@ class PasswordForgot extends React.Component {
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
     if (this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
-      this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
-      this.props.organisationStore.getOrganisationForPublic();
+      this.props.orgStore.setOrgTag(this.props.match.params.organisationTag);
+      this.props.orgStore.getOrganisationForPublic();
     }
   }
   
@@ -116,6 +116,6 @@ class PasswordForgot extends React.Component {
   }
 }
 
-export default inject('authStore', 'organisationStore')(
+export default inject('authStore', 'orgStore')(
   injectIntl(observer(withStyles(styles)(PasswordForgot)))
 );

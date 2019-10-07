@@ -54,13 +54,13 @@ class OrganisationsList extends React.Component {
   }
 
   componentDidMount() {
-    this.props.organisationStore.getCurrentUserOrganisations().then(() => {
+    this.props.orgStore.getCurrentUserOrganisations().then(() => {
       this.forceUpdate();
     });
   }
 
   render() {
-    const { currentUserOrganisations, orgTag } = this.props.organisationStore.values;
+    const { currentUserOrganisations, orgTag } = this.props.orgStore.values;
     const { locale } = this.props.commonStore;
     const { classes } = this.props;
 
@@ -86,7 +86,7 @@ class OrganisationsList extends React.Component {
   }
 }
 
-export default inject('organisationStore', 'commonStore')(
+export default inject('orgStore', 'commonStore')(
   observer(
     withStyles(style, { withTheme: true })(OrganisationsList)
   )

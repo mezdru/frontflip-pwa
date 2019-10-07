@@ -75,8 +75,8 @@ class AddWingPopup extends React.Component {
 
   populateWingsToAdd = async () => {
     let wingsPopulated = [];
-    let orgId = this.props.organisationStore.values.organisation._id ||
-      this.props.organisationStore.values.orgId;
+    let orgId = this.props.orgStore.values.organisation._id ||
+      this.props.orgStore.values.orgId;
 
     this.props.recordStore.setOrgId(orgId);
 
@@ -124,7 +124,7 @@ class AddWingPopup extends React.Component {
   render() {
     const { redirectTo, wingsPopulated, onLoad } = this.state;
     const { classes } = this.props;
-    const { organisation } = this.props.organisationStore.values;
+    const { organisation } = this.props.orgStore.values;
     const { locale } = this.props.commonStore;
 
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
@@ -180,7 +180,7 @@ class AddWingPopup extends React.Component {
   }
 }
 
-export default inject('commonStore', 'organisationStore', 'recordStore')(
+export default inject('commonStore', 'orgStore', 'recordStore')(
   observer(
     withStyles(styles, { withTheme: true })(AddWingPopup)
   )

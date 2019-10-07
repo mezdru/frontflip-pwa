@@ -90,7 +90,7 @@ class OnboardWelcome extends React.Component {
   }
 
   render() {
-    const { organisation } = this.props.organisationStore.values;
+    const { organisation } = this.props.orgStore.values;
     const { classes } = this.props;
 
     return (
@@ -123,7 +123,7 @@ class OnboardWelcome extends React.Component {
   }
 }
 
-export default inject('commonStore', 'organisationStore')(
+export default inject('commonStore', 'orgStore')(
   observer(
     withStyles(styles)(OnboardWelcome)
   )

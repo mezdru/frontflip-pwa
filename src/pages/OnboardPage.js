@@ -55,7 +55,7 @@ class OnboardPage extends React.Component {
   }
 
   getRecordForUser = () => {
-    this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
+    this.props.recordStore.setOrgId(this.props.orgStore.values.organisation._id);
     return this.props.recordStore.getRecordByUser();
   }
 
@@ -105,7 +105,7 @@ class OnboardPage extends React.Component {
   }
 }
 
-export default inject('commonStore', 'organisationStore', 'recordStore', 'userStore')(
+export default inject('commonStore', 'orgStore', 'recordStore', 'userStore')(
   observer(
     withStyles(styles, { withTheme: true })(withWidth()(OnboardPage))
   )

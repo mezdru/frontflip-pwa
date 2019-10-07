@@ -173,21 +173,21 @@ const Auth = {
 };
 
 const User = {
-  getCurrent: () =>
+  getOne: (userId) =>
     requests.get(
-      API_ROOT + '/api/users/me'
+      API_ROOT + '/api/users/' + userId
     ),
-  welcomeUser: (userId, organisationId) =>
+  welcomeUser: (params) =>
     requests.put(
       API_ROOT + '/api/users/me/orgsAndRecords',
       {
         orgAndRecord: {
-          organisation: organisationId,
+          organisation: params.orgId,
           welcomed: true
         }
       }
     ),
-  update: (userId, user) =>
+  put: (orgId, userId, user) =>
     requests.put(
       API_ROOT + '/api/users/' + userId,
       {
@@ -197,23 +197,19 @@ const User = {
 }
 
 const Record = {
-  get: (recordId) =>
+  getOne: (recordId) =>
     requests.get(
       API_ROOT + '/api/records/' + recordId
     ),
-  getByTag: (recordTag, orgId) =>
+  get: (query) =>
     requests.get(
-      `${API_ROOT}/api/records/?tag=${recordTag}&organisation=${orgId}`
+      `${API_ROOT}/api/records${query}`
     ),
-  getByUser: (userId, orgId) =>
-    requests.get(
-      `${API_ROOT}/api/records/populated?user=${userId}&organisation=${orgId}`
-    ),
-  post: (orgId, record) =>
+  post: (record) =>
     requests.post(
       API_ROOT + '/api/records/',
       {
-        orgId: orgId,
+        orgId: record.organisation,
         record: record
       }
     ),
@@ -233,17 +229,13 @@ const Record = {
 };
 
 const Organisation = {
-  getForPublic: (orgTag) =>
-    requests.get(
-      API_ROOT + '/api/organisations/forPublic?tag=' + orgTag
-    ),
-  getAlgoliaKey: (orgId, isPublic) =>
-    requests.get(
-      API_ROOT + '/api/organisations/' + orgId + '/algolia/' + (isPublic ? 'public' : 'private')
-    ),
-  get: (orgId) =>
+  getOne: (orgId) =>
     requests.get(
       API_ROOT + '/api/organisations/' + orgId
+    ),
+  get: (query) =>
+    requests.get(
+      API_ROOT + '/api/organisations' + query
     )
 }
 
@@ -349,17 +341,8 @@ const ConnectionLog = {
       )
 }
 
-/**
- * @description Test get user with secure call to API
- */
-const Test = {
-  getUser: () =>
-    requests.get('/test/secure')
-};
-
 export default {
   Auth,
-  Test,
   Record,
   Organisation,
   User,

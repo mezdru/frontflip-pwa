@@ -6,6 +6,7 @@ import { FormattedHTMLMessage } from 'react-intl';
 import ProfileService from '../services/profile.service';
 import UrlService from '../services/url.service';
 import ReactGA from 'react-ga';
+import undefsafe from 'undefsafe';
 
 console.debug('Loading ErrorPage');
 
@@ -35,7 +36,6 @@ class ErrorPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale,
       errorCode: null,
       errorType: null,
     };
@@ -51,8 +51,8 @@ class ErrorPage extends React.Component {
   render() {
     const { classes } = this.props;
     const { errorCode, errorType } = this.state;
-    const { currentUser } = this.props.userStore.values;
-    const { orgTag } = this.props.organisationStore.values;
+    const { currentUser } = this.props.userStore;
+    const { currentOrganisation } = this.props.orgStore;
 
     return (
       <div>
@@ -94,7 +94,7 @@ class ErrorPage extends React.Component {
                   )}
                   {(errorType === 'organisation' && errorCode === '404') && (
                     <Typography variant={'subheading'}>
-                      <FormattedHTMLMessage id="errorPage.organisationNotFound" values={{ newOrgLink: UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', null, null), orgTag: orgTag }} />
+                      <FormattedHTMLMessage id="errorPage.organisationNotFound" values={{ newOrgLink: UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', null, null), orgTag: undefsafe(currentOrganisation, 'tag') }} />
                     </Typography>
                   )}
                   {(errorCode === '500' && errorType === 'routes') && (
@@ -112,7 +112,7 @@ class ErrorPage extends React.Component {
   }
 }
 
-export default inject('commonStore', 'organisationStore', 'authStore', 'recordStore', 'userStore')(
+export default inject('commonStore', 'orgStore', 'authStore', 'recordStore', 'userStore')(
   observer(
     withStyles(styles, { withTheme: true })(ErrorPage)
   )

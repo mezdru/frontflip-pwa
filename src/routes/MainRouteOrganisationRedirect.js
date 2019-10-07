@@ -3,6 +3,7 @@ import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import ReactGA from 'react-ga';
 import { inject, observer } from 'mobx-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import undefsafe from 'undefsafe';
 
 import UrlService from '../services/url.service';
 // import PasswordForgot from "../pages/auth/PasswordForgot";
@@ -59,8 +60,8 @@ class MainRouteOrganisationRedirect extends React.Component {
     //@todo Remake this statement...
     if (
         props.history.action === 'PUSH' &&
-        ((props.match.params && props.match.params.organisationTag !== this.props.organisationStore.values.orgTag) ||
-        (!this.props.organisationStore.values.fullOrgFetch) ||
+        ((props.match.params && props.match.params.organisationTag !== this.props.orgStore.values.orgTag) ||
+        (!this.props.orgStore.values.fullOrgFetch) ||
         (props.match.params && props.match.params.profileTag)) ||
         (props.history.action === 'POP' && props.location.pathname !== this.props.location.pathname)
     ) {
@@ -98,6 +99,7 @@ class MainRouteOrganisationRedirect extends React.Component {
 
   componentDidMount() {
     this.persistWantedPath();
+    this.props.commonStore.url.params.orgTag = undefsafe(this.props, 'match.params.organisationTag');
     this.manageAccessRight().then(() => {
       this.setState({ renderComponent: true }, () => { this.forceUpdate() });
     }).catch((err) => {
@@ -118,11 +120,11 @@ class MainRouteOrganisationRedirect extends React.Component {
       return true;
     } else {
       if (!this.props.authStore.isAuth()) return false;
-      if (!this.props.userStore.values.currentUser) return false;
-      if (!this.props.userStore.values.currentUser._id) return false;
-      if (this.props.userStore.values.currentUser.superadmin) return true;
-      if (this.props.userStore.values.currentUser.orgsAndRecords.length === 0 || !this.props.userStore.values.currentUser.orgsAndRecords) return false;
-      return (this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id) !== undefined);
+      if (!this.props.userStore.currentUser) return false;
+      if (!this.props.userStore.currentUser._id) return false;
+      if (this.props.userStore.currentUser.superadmin) return true;
+      if (this.props.userStore.currentUser.orgsAndRecords.length === 0 || !this.props.userStore.currentUser.orgsAndRecords) return false;
+      return (this.props.userStore.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id) !== undefined);
     }
   }
 
@@ -136,11 +138,10 @@ class MainRouteOrganisationRedirect extends React.Component {
    * @description Redirect user who is auth but hasn't access to current organisation
    */
   async redirectUserAuthWithoutAccess() {
-    if (this.props.userStore.values.currentUser.orgsAndRecords && this.props.userStore.values.currentUser.orgsAndRecords.length > 0) {
-      let orgId = this.props.userStore.values.currentUser.orgsAndRecords[0].organisation;
+    if (this.props.userStore.currentUser.orgsAndRecords && this.props.userStore.currentUser.orgsAndRecords.length > 0) {
+      let orgId = this.props.userStore.currentUser.orgsAndRecords[0].organisation;
       if (orgId) {
-        this.props.organisationStore.setOrgId(orgId);
-        await this.props.organisationStore.getOrganisation()
+        await this.props.orgStore.fetchOrganisation(orgId)
           .then(organisation => {
             this.redirectUserAuthWithAccess(organisation, true);
           }).catch((err) => {
@@ -163,9 +164,9 @@ class MainRouteOrganisationRedirect extends React.Component {
   }
 
   redirectToValidateMailOrNewWingzy = async () => {
-    if (this.props.userStore.values.currentUser.email &&
-      this.props.userStore.values.currentUser.email.value &&
-      !this.props.userStore.values.currentUser.email.validated) {
+    if (this.props.userStore.currentUser.email &&
+      this.props.userStore.currentUser.email.value &&
+      !this.props.userStore.currentUser.email.validated) {
 
       EmailService.confirmLoginEmail(null);
       this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/error/403/email' });
@@ -186,8 +187,8 @@ class MainRouteOrganisationRedirect extends React.Component {
    * @param {Boolean} isNewOrg 
    */
   async redirectUserAuthWithAccess(organisation, isNewOrg) {
-    let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
-    if ((!currentOrgAndRecord && !this.props.userStore.values.currentUser.superadmin) || (currentOrgAndRecord && !currentOrgAndRecord.welcomed)) {
+    let currentOrgAndRecord = this.props.userStore.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
+    if ((!currentOrgAndRecord && !this.props.userStore.currentUser.superadmin) || (currentOrgAndRecord && !currentOrgAndRecord.welcomed)) {
       // user need to onboard in organisation
       let onboardStep = (this.props.match.params && this.props.match.params.step ? '/' + this.props.match.params.step : '');
       this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/' + organisation.tag + '/onboard' + onboardStep });
@@ -207,10 +208,10 @@ class MainRouteOrganisationRedirect extends React.Component {
    */
   manageAccessRight = async () => {
     if (this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
-      let organisation = this.props.organisationStore.values.organisation;
-      if (this.props.organisationStore.values.orgTag !== this.props.match.params.organisationTag) {
-        this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
-        organisation = await this.props.organisationStore.getOrganisationForPublic()
+      let organisation = this.props.orgStore.values.organisation;
+      if (this.props.orgStore.values.orgTag !== this.props.match.params.organisationTag) {
+        this.props.orgStore.setOrgTag(this.props.match.params.organisationTag);
+        organisation = await this.props.orgStore.getOrganisationForPublic()
           .catch((err) => {
             SlackService.notifyError('Someone try to access : ' + this.props.match.params.organisationTag + ' and got 404.',
               '110', 'quentin', 'MainRouteOrganisationRedirect.js');
@@ -228,8 +229,8 @@ class MainRouteOrganisationRedirect extends React.Component {
       if (!this.canUserAccessOrganisation(organisation) && this.props.authStore.isAuth()) {
         await this.redirectUserAuthWithoutAccess();
       } else if (this.props.authStore.isAuth()) {
-        this.props.organisationStore.setOrgId(organisation._id);
-        organisation = await this.props.organisationStore.getOrganisation()
+        this.props.orgStore.setOrgId(organisation._id);
+        organisation = await this.props.orgStore.getOrganisation()
           .catch((err) => {
             if (err.status === 403 && err.response.body.message === 'Email not validated') {
               EmailService.confirmLoginEmail(organisation.tag);
@@ -253,7 +254,7 @@ class MainRouteOrganisationRedirect extends React.Component {
   render() {
     const { redirectTo, renderComponent } = this.state;
     const { locale } = this.props.commonStore;
-    const { orgTag, organisation } = this.props.organisationStore.values;
+    const { currentOrganisation } = this.props.orgStore;
     let isAuth = this.props.authStore.isAuth();
 
     if (redirectTo && window.location.pathname !== redirectTo) {
@@ -295,13 +296,13 @@ class MainRouteOrganisationRedirect extends React.Component {
             <Route path="/:locale(en|fr|en-UK)/:organisationTag/signin/:invitationCode?" component={AuthPage} />
 
             {/* Main route with orgTag */}
-            {organisation && organisation.public && (
+            {currentOrganisation && currentOrganisation.public && (
               <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag" component={SearchPage} />
             )}
-            {organisation && organisation.public && (
+            {currentOrganisation && currentOrganisation.public && (
               <Route exact path="/:locale(en|fr|en-UK)/:organisationTag" component={SearchPage} />
             )}
-            <Redirect to={'/' + locale + (orgTag ? '/' + orgTag : '') + '/signin' + window.location.search} />
+            <Redirect to={'/' + locale + (currentOrganisation.tag ? '/' + currentOrganisation.tag : '') + '/signin' + window.location.search} />
           </Switch>
         </ProfileProvider>
       );
@@ -315,7 +316,7 @@ class MainRouteOrganisationRedirect extends React.Component {
   }
 }
 
-export default inject('commonStore', 'authStore', 'organisationStore', 'userStore', 'recordStore')(
+export default inject('commonStore', 'authStore', 'orgStore', 'userStore', 'recordStore')(
   withRouter(observer(
     MainRouteOrganisationRedirect
   ))

@@ -3,6 +3,7 @@ import { Avatar } from '@material-ui/core';
 import { observe } from 'mobx';
 import { inject, observer } from "mobx-react";
 import defaultPicture from '../../../resources/images/placeholder_person.png';
+import undefsafe from 'undefsafe';
 const defaultLogo = 'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg';
 
 class Logo extends React.Component {
@@ -18,14 +19,13 @@ class Logo extends React.Component {
   componentDidMount() {
     if (this.state.type === 'organisation') {
       this.setState({
-        source:
-          ((this.props.organisationStore.values.organisation.logo && this.props.organisationStore.values.organisation.logo.url) ?
-            this.props.organisationStore.values.organisation.logo.url : defaultLogo)
+        source: undefsafe(this.props.orgStore.currentOrganisation, 'logo.url') || defaultLogo
       });
 
-      this.setState({observer: observe(this.props.organisationStore.values, 'organisation', (change) => {
-        let org = this.props.organisationStore.values.organisation;
-        this.setState({ source: (org.logo && org.logo.url ? org.logo.url : defaultLogo) });
+      this.setState({observer: observe(this.props.orgStore, 'currentOrganisation', (change) => {
+        this.setState({
+          source: undefsafe(this.props.orgStore.currentOrganisation, 'logo.url') || defaultLogo
+        });
       })});
     } else if(this.state.type === 'wingzy') {
       this.setState({source: defaultLogo});
@@ -45,7 +45,7 @@ class Logo extends React.Component {
   }
 }
 
-export default inject('organisationStore')(
+export default inject('orgStore')(
   observer(
     Logo
   )

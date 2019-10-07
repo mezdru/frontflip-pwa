@@ -63,20 +63,20 @@ class OnboardCongratulation extends React.Component {
         }
         actions={
           <Button onClick={this.handleOnboardEnd} color="secondary">
-            <FormattedMessage id="onboard.end.cta" values={{ organisationName: this.props.organisationStore.values.organisation.name }} />
+            <FormattedMessage id="onboard.end.cta" values={{ organisationName: this.props.orgStore.values.organisation.name }} />
           </Button>
         }
         onClose={this.handleClose}
       >
         <Typography variant="h6" className={classes.text}>
-          <FormattedMessage id="onboard.end.text" values={{ organisationName: this.props.organisationStore.values.organisation.name }} />
+          <FormattedMessage id="onboard.end.text" values={{ organisationName: this.props.orgStore.values.organisation.name }} />
         </Typography>
       </PopupLayout>
     );
   }
 }
 
-export default inject('commonStore', 'organisationStore')(
+export default inject('commonStore', 'orgStore')(
   observer(
     withStyles(styles, { withTheme: true })(OnboardCongratulation)
   )

@@ -90,7 +90,7 @@ class AskForHelp extends React.Component {
       return this.setState({ errorMessage: this.props.intl.formatMessage({ id: "askForHelp.popup.missingMessage" }) });
 
     let helpRequest = {
-      organisation: this.props.organisationStore.values.organisation._id,
+      organisation: this.props.orgStore.values.organisation._id,
       sender: this.props.recordStore.values.record._id,
       recipients: this.buildRecipientsArray(this.state.recipients),
       results: this.props.commonStore.searchResultsCount,
@@ -216,7 +216,7 @@ class AskForHelp extends React.Component {
   }
 }
 
-export default inject('commonStore', 'helpRequestStore', 'recordStore', 'organisationStore')(
+export default inject('commonStore', 'helpRequestStore', 'recordStore', 'orgStore')(
   observer(
     withStyles(styles, { withTheme: true })(
       injectIntl(withSearchManagement(AskForHelp))

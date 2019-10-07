@@ -9,6 +9,7 @@ import AvailabilityToggle from '../availabilityToggle/AvailabilityToggle';
 import { styles } from './Header.css.js'
 import Logo from '../utils/logo/Logo';
 import { injectIntl } from 'react-intl';
+import undefsafe from 'undefsafe';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import UrlService from '../../services/url.service';
 import { Link, withRouter } from 'react-router-dom';
@@ -32,7 +33,7 @@ class HeaderDrawer extends Component {
     e.preventDefault();
     this.props.handleDrawerClose();
     this.props.authStore.logout().then(() => {
-      window.location.href = UrlService.createUrl(window.location.host, '/' + this.props.organisationStore.values.organisation.tag, null);
+      window.location.href = UrlService.createUrl(window.location.host, '/' + undefsafe(this.props.orgStore.currentOrganisation, 'tag'), null);
     });
   }
 
@@ -51,22 +52,22 @@ class HeaderDrawer extends Component {
   }
 
   handleLocaleChange = (e) => {
-    let { organisation } = this.props.organisationStore.values;
-    window.location.pathname = '/' + e.target.value + '/' + (organisation ? organisation.tag : '');
+    let { currentOrganisation } = this.props.orgStore;
+    window.location.pathname = '/' + e.target.value + '/' + (currentOrganisation ? currentOrganisation.tag : '');
   }
 
   render() {
     const { classes, auth, open, intl } = this.props;
-    const { record } = this.props.recordStore.values;
-    const { organisation } = this.props.organisationStore.values;
-    const { currentUser } = this.props.userStore.values;
+    const record = this.props.recordStore.currentUserRecord;
+    const { currentOrganisation } = this.props.orgStore;
+    const { currentUser } = this.props.userStore;
     const { locale } = this.props.commonStore;
 
-    const currentOrgAndRecord = ((currentUser && currentUser.orgsAndRecords) ?
-      currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id) : null);
+    const currentOrgAndRecord = currentOrganisation && ((currentUser && currentUser.orgsAndRecords) ?
+      currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === currentOrganisation._id) : null);
 
-    record.name = entities.decode(record.name)
-    organisation.name = entities.decode(organisation.name)
+    if(record) record.name = entities.decode(record.name)
+    if(currentOrganisation) currentOrganisation.name = entities.decode(currentOrganisation.name)
 
     return (
       <SwipeableDrawer
@@ -92,7 +93,7 @@ class HeaderDrawer extends Component {
           </div>
 
           <div className={'leftMenu'}>
-            {(auth && organisation._id) && (
+            {(auth && undefsafe(currentOrganisation , '_id')) && (
               <React.Fragment>
                 {record._id && (
                   <React.Fragment>
@@ -104,7 +105,7 @@ class HeaderDrawer extends Component {
                         <ListItemText primary={record.name || record.tag}
                           primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold', color: 'white', fontSize: '1rem' } }} />
                       </ListItem>
-                      <ListItem button component={Link} to={'/' + locale + '/' + organisation.tag + '/' + record.tag} onClick={(e) => { this.props.handleDisplayProfile(e, { tag: record.tag }) }}>
+                      <ListItem button component={Link} to={'/' + locale + '/' + currentOrganisation.tag + '/' + record.tag} onClick={(e) => { this.props.handleDisplayProfile(e, { tag: record.tag }) }}>
                         <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.profile' })} />
                       </ListItem>
                       <ListItem>
@@ -118,35 +119,35 @@ class HeaderDrawer extends Component {
                   </React.Fragment>
                 )}
                 <List className={'leftSubmenu'}>
-                  <ListItem onClick={this.props.handleDrawerClose} component={Link} to={'/' + locale + '/' + organisation.tag}>
+                  <ListItem onClick={this.props.handleDrawerClose} component={Link} to={'/' + locale + '/' + undefsafe(currentOrganisation, 'tag')}>
                     <ListItemAvatar>
-                      <Logo type={'organisation'} alt={organisation.name} className={classes.logoBorder} />
+                      <Logo type={'organisation'} alt={undefsafe(currentOrganisation, 'name')} className={classes.logoBorder} />
                     </ListItemAvatar>
-                    <ListItemText primary={organisation.name || organisation.tag}
+                    <ListItemText primary={currentOrganisation && (currentOrganisation.name || currentOrganisation.tag)}
                       primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold', color: 'white', fontSize: '1rem' } }} />
                   </ListItem>
 
-                  {(organisation.canInvite || currentUser.superadmin || (currentOrgAndRecord && currentOrgAndRecord.admin)) && (
+                  {( undefsafe(currentOrganisation, 'canInvite') || undefsafe(currentUser, 'superadmin') || (currentOrgAndRecord && currentOrgAndRecord.admin)) && (
                     <ListItem>
                       <InvitationDialog />
                     </ListItem>
                   )}
-                  {(currentUser.superadmin || (currentOrgAndRecord && currentOrgAndRecord.admin)) && (
-                    <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/organisation', organisation.tag)} target="_blank">
+                  {(undefsafe(currentUser, 'superadmin') || (currentOrgAndRecord && currentOrgAndRecord.admin)) && (
+                    <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/organisation', currentOrganisation.tag)} target="_blank">
                       <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.organisationAdmin' })} />
                     </ListItem>
                   )}
                   <ListItem>
                     <ListItemText primary={
-                      (organisation.premium ? intl.formatMessage({ id: 'menu.drawer.organisationInfoPremium' }) : intl.formatMessage({ id: 'menu.drawer.organisationInfo' }))
+                      (undefsafe(currentOrganisation, 'premium') ? intl.formatMessage({ id: 'menu.drawer.organisationInfoPremium' }) : intl.formatMessage({ id: 'menu.drawer.organisationInfo' }))
                     } />
                   </ListItem>
                   <ListItem button component="a" href={'mailto:premium@wingzy.io'} target="_blank" >
                     <ListItemText primary={
-                      (organisation.premium ? intl.formatMessage({ id: 'menu.drawer.contactUsPremium' }) : intl.formatMessage({ id: 'menu.drawer.contactUs' }))
+                      (undefsafe(currentOrganisation, 'premium') ? intl.formatMessage({ id: 'menu.drawer.contactUsPremium' }) : intl.formatMessage({ id: 'menu.drawer.contactUs' }))
                     } />
                   </ListItem>
-                  {(currentUser.orgsAndRecords && (currentUser.orgsAndRecords.length > 1)) && (
+                  {(currentUser && currentUser.orgsAndRecords && (currentUser.orgsAndRecords.length > 1)) && (
                     <React.Fragment>
                       <Divider className={classes.divider} />
                       <ListItem>
@@ -156,15 +157,15 @@ class HeaderDrawer extends Component {
                       <OrganisationsList />
                     </React.Fragment>
                   )}
-                  {currentUser.superadmin && (
+                  {undefsafe(currentUser, 'superadmin') && (
                     <React.Fragment>
                       <Divider className={classes.divider} />
-                      <ListItem button component="a" href={'/' + locale + '/' + organisation.tag + '/onboard'}>
+                      <ListItem button component="a" href={'/' + locale + '/' + currentOrganisation.tag + '/onboard'}>
                         <ListItemText primary={"Onboard"} />
                       </ListItem>
                     </React.Fragment>
                   )}
-                  {currentUser.superadmin && (
+                  {undefsafe(currentUser, 'superadmin') && (
                     <React.Fragment>
                       <Divider className={classes.divider} />
                       <ListItem button onClick={this.handleTestPushNotification}>
@@ -179,7 +180,7 @@ class HeaderDrawer extends Component {
             <List className={'leftSubmenu'}>
               {!auth && (
                 <React.Fragment>
-                  <ListItem button component={Link} to={"/" + locale + (organisation.tag ? '/' + organisation.tag : '') + '/signin'}>
+                  <ListItem button component={Link} to={"/" + locale + (currentOrganisation ? '/' + currentOrganisation.tag : '') + '/signin'}>
                     <ListItemText primary={intl.formatMessage({ id: 'Sign In' })} />
                   </ListItem>
                   <Divider className={classes.divider} />
@@ -196,7 +197,7 @@ class HeaderDrawer extends Component {
               <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/', undefined)} target="_blank">
                 <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.whyWingzy' })} />
               </ListItem>
-              {!organisation.premium && (
+              {currentOrganisation && !currentOrganisation.premium && (
                 <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/#pricing-a', undefined)} target="_blank">
                   <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.pricing' })} />
                 </ListItem>
@@ -205,7 +206,7 @@ class HeaderDrawer extends Component {
                 <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.terms' })} />
               </ListItem>
               <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/protectingYourData',
-                organisation.tag)} target="_blank">
+                undefsafe(currentOrganisation, 'tag'))} target="_blank">
                 <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.protectingYourData' })} />
               </ListItem>
               {auth && (
@@ -228,7 +229,7 @@ HeaderDrawer.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default inject('authStore', 'organisationStore', 'recordStore', 'commonStore', 'userStore')(
+export default inject('authStore', 'orgStore', 'recordStore', 'commonStore', 'userStore')(
   injectIntl(withRouter(observer(
     withStyles(styles)(
       HeaderDrawer

@@ -1,127 +1,93 @@
 import { observable, action, decorate } from "mobx";
 import agent from '../agent';
 import userStore from './user.store';
-import organisationStore from './organisation.store';
+import orgStore from './organisation.store';
+import Store from './store';
+import undefsafe from 'undefsafe';
 
-class RecordStore {
-  inProgress = false;
-  errors = null;
-  values = {
-    records: []
-  };
+class RecordStore extends Store {
+  records = [];
 
-  findRecord(recordId, recordTag) {
-    if(!recordId && !recordTag) return null;
-    return this.values.records.find(record => {
-      if(recordId) return JSON.stringify(recordId) === JSON.stringify(record._id || record.objectID);
+  constructor() {
+    super("Record");
+  }
+
+  get currentUserRecord() {
+    let orgAndRecord = userStore.currentUser && userStore.currentUser.orgsAndRecords.find(oar => oar.organisation === undefsafe(orgStore.currentOrganisation, '_id'));
+    if(!orgAndRecord) return null;
+    return this.getRecord(orgAndRecord.record._id || orgAndRecord.record);
+  }
+
+  getRecord(recordId, recordTag) {
+    if (!recordId && !recordTag) return null;
+    return this.records.find(record => {
+      if (recordId) return JSON.stringify(recordId) === JSON.stringify(record._id || record.objectID);
       else return recordTag === record.tag;
     });
   }
 
   addRecord(inRecord) {
-    let index = this.values.records.findIndex(record => JSON.stringify(record._id) === JSON.stringify(inRecord._id || inRecord.objectID));
-    if(index > -1) {
-      this.values.records[index] = inRecord;
+    let index = this.records.findIndex(record => JSON.stringify(record._id) === JSON.stringify(inRecord._id || inRecord.objectID));
+    if (index > -1) {
+      this.records[index] = inRecord;
     } else {
-      this.values.records.push(inRecord);
+      this.records.push(inRecord);
     }
   }
 
-  getRecord(recordId) {
-    if (!recordId) return Promise.reject(new Error('No record Id'));
-    this.inProgress = true;
-    this.errors = null;
-
-    return agent.Record.get(recordId)
-      .then(res => {
-        this.addRecord(res.data);
-        return res.data;
-      })
-      .catch(action((err) => {
-        this.errors = err.response && err.response.body && err.response.body.errors;
-        throw err;
-      }))
-      .finally(action(() => { this.inProgress = false; }));
+  async fetchRecord(recordId) {
+    let record = await super.fetchResource(recordId);
+    this.addRecord(record);
+    return record;
   }
 
-  getRecordByTag(recordTag) {
-    if (!recordTag) return Promise.reject(new Error('No record Tag'));
-    this.inProgress = true;
-    this.errors = null;
-
-    return agent.Record.getByTag(recordTag, organisationStore.values.orgId)
-      .then(res => {
-        if(res.data.length > 0){
-          this.addRecord(res.data[0]);
-          return res.data[0];
-        } 
-
-        return null;
-      })
-      .catch(action((err) => {
-        console.log(err)
-        this.errors = err.response && err.response.body && err.response.body.errors;
-        throw err;
-      }))
-      .finally(action(() => { this.inProgress = false; }));
+  async postRecord(recordToPost) {
+    let record = await super.postResource(recordToPost);
+    this.addRecord(record);
+    return record;
   }
 
-  getRecordByUser() {
-    if (!userStore.values.currentUser._id || !organisationStore.values.orgId) return Promise.reject(new Error('Bad parameters'));
-    this.inProgress = true;
-    this.errors = null;
-
-    return agent.Record.getByUser(userStore.values.currentUser._id, organisationStore.values.orgId)
-      .then(res => {
-        this.addRecord(res.data);
-        return res.data;
-      })
-      .catch(action((err) => {
-        this.errors = err.response && err.response.body && err.response.body.errors;
-        throw err;
-      }))
-      .finally(action(() => { this.inProgress = false; }));
+  async deleteRecord(recordId) {
+    await super.deleteResource(recordId);
   }
 
-  /**
-   * @description Post new record
-   */
-  postRecord(record) {
-    this.inProgress = true;
-    this.errors = null;
-
-    return agent.Record.post(organisationStore.values.organisation._id, record)
-      .then(res => {
-        this.addRecord(res.data);
-        return res.data; 
-      })
-      .catch(action((err) => {
-        this.errors = err.response && err.response.body && err.response.body.errors;
-        throw err;
-      }))
-      .finally(action(() => { this.inProgress = false; }));
+  async fetchByTag(recordTag, orgId) {
+    if (!recordTag || !orgId) return Promise.reject(new Error('No record Tag or no organisation ID'));
+    let records = await super.fetchResources(`?tag=${recordTag}&organisation=${orgId}`);
+    this.addRecord(records[0]);
+    return records[0];
   }
 
-  /**
-   * @description Update record
-   */
-  updateRecord(arrayOfFields, record) {
-    this.inProgress = true;
-    this.errors = null;
-
+  async updateRecord(recordId, arrayOfFields, record) {
     let recordToUpdate = this.buildRecordToUpdate(arrayOfFields, record);
-
-    return agent.Record.put(organisationStore.values.orgId, record._id, recordToUpdate)
-      .then(res => { 
-        this.addRecord(res.data);
-        return res.data;
-      })
-      .catch(action((err) => {
-        this.errors = err.response && err.response.body && err.response.body.errors;
-        throw err;
-      }))
-      .finally(action(() => { this.inProgress = false; }));
+    let recordUpdated = await super.updateResource(recordId, recordToUpdate, orgStore.values.orgId);
+    this.addRecord(recordUpdated);
+    return recordUpdated;
   }
+
+  async fetchPopulatedForUser(orgId) {
+    if(!orgId) throw new Error('Organisation id is required');
+    let record = await super.fetchResources(`/populated?user=${userStore.currentUser}&organisation=${orgId}`)
+    this.addRecord(record);
+    return record;
+  }
+
+  // fetchRecordByUser() {
+  //   if (!userStore.currentUser._id || !orgStore.values.orgId) return Promise.reject(new Error('Bad parameters'));
+  //   this.inProgress = true;
+  //   this.errors = null;
+
+  //   return agent.Record.getByUser(userStore.currentUser._id, orgStore.values.orgId)
+  //     .then(res => {
+  //       this.addRecord(res.data);
+  //       return res.data;
+  //     })
+  //     .catch(action((err) => {
+  //       this.errors = err.response && err.response.body && err.response.body.errors;
+  //       throw err;
+  //     }))
+  //     .finally(action(() => { this.inProgress = false; }));
+  // }
 
   buildRecordToUpdate(arrayOfFields, record) {
     let recordToUpdate = {};
@@ -133,25 +99,6 @@ class RecordStore {
       });
     }
     return recordToUpdate;
-  }
-
-  /**
-   * @description Delete my record
-   */
-  deleteRecord() {
-    this.inProgress = true;
-    this.errors = null;
-
-    return agent.Record.delete(this.values.recordId)
-      .then(res => {
-        this.values.record = {};
-        this.values.recordId = '';
-      })
-      .catch(action((err) => {
-        this.errors = err.response && err.response.body && err.response.body.errors;
-        throw err;
-      }))
-      .finally(action(() => { this.inProgress = false; }));
   }
 
 }

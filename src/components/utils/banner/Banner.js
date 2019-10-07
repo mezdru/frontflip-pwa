@@ -41,12 +41,12 @@ class Banner extends React.Component {
     if (this.state.type === 'organisation') {
       this.setState({
         source:
-          ((this.props.organisationStore.values.organisation.cover && this.props.organisationStore.values.organisation.cover.url) ?
-            this.props.organisationStore.values.organisation.cover.url : defaultBanner)
+          ((this.props.orgStore.values.organisation.cover && this.props.orgStore.values.organisation.cover.url) ?
+            this.props.orgStore.values.organisation.cover.url : defaultBanner)
       });
 
-      this.setState({observer: observe(this.props.organisationStore.values, 'organisation', (change) => {
-        let org = this.props.organisationStore.values.organisation;
+      this.setState({observer: observe(this.props.orgStore.values, 'organisation', (change) => {
+        let org = this.props.orgStore.values.organisation;
         this.setState({ source: (org.cover && org.cover.url ? org.cover.url : defaultBanner) });
       })});
     }
@@ -69,7 +69,7 @@ class Banner extends React.Component {
   }
 }
 
-export default inject('organisationStore')(
+export default inject('orgStore')(
   observer(
     withStyles(styles, { withTheme: true })(Banner)
   )

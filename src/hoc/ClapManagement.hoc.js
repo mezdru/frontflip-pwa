@@ -23,7 +23,7 @@ const withClapManagement = (ComponentToWrap) => {
         hashtag: hashtag,
         given: given || 1,
         giver: this.props.recordStore.values.record._id,
-        organisation: this.props.organisationStore.values.organisation._id
+        organisation: this.props.orgStore.values.organisation._id
       };
 
       this.props.clapStore.setClap(clap);
@@ -46,7 +46,7 @@ const withClapManagement = (ComponentToWrap) => {
     }
   }
 
-  ClapManagement = inject('clapStore', 'organisationStore', 'recordStore')(observer(ClapManagement));
+  ClapManagement = inject('clapStore', 'orgStore', 'recordStore')(observer(ClapManagement));
 
   return ClapManagement;
 }
