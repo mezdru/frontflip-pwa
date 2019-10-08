@@ -26,6 +26,12 @@ class OnboardPage extends React.Component {
 
     // clear wings bank
     this.props.commonStore.setLocalStorage('wingsBank', [], true);
+
+    this.props.commonStore.setUrlParams(this.props.match);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.props.commonStore.setUrlParams(nextProps.match);
   }
 
   componentDidMount() {

@@ -1,6 +1,5 @@
 import React, {Suspense} from 'react';
 import { withStyles, Grid, Slide, CircularProgress } from '@material-ui/core';
-import { Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
 import ProfileThumbnail from './ProfileThumbnail';
@@ -9,26 +8,18 @@ import ProfileWings from './ProfileWings';
 import ProfileActions from './ProfileActions';
 import { styles } from './ProfileLayout.css';
 import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
-import { getBaseUrl } from '../../services/utils.service';
 
 const ProfileClapHistory = React.lazy(() => import('./ProfileClapHistory'));
-
 
 class ProfileLayout extends React.Component {
 
   render() {
     const { classes, visible, transitionDuration } = this.props;
-    const rootUrl = getBaseUrl(this.props);
-
 
     return (
       <Slide direction="up" in={visible} mountOnEnter unmountOnExit timeout={{ enter: transitionDuration, exit: transitionDuration / 2 }}>
 
         <Grid container className={classes.root} alignContent="flex-start">
-
-          {(this.props.profileContext.getProp('tag') &&  window.location.pathname !== rootUrl + '/' + this.props.profileContext.getProp('tag')) && (
-            <Redirect to={rootUrl + '/' + this.props.profileContext.getProp('tag')} />
-          )}
 
           <BannerResizable
             type={'profile'}

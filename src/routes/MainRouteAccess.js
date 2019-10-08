@@ -6,6 +6,7 @@ import { inject, observer } from 'mobx-react';
 
 import { getBaseUrl } from '../services/utils.service';
 import ProfileProvider from "../hoc/profile/Profile.provider";
+import ProfileLayout from '../components/profile/ProfileLayout';
 
 const PasswordForgot = React.lazy(() => import('../pages/auth/PasswordForgot'));
 const PasswordReset = React.lazy(() => import('../pages/auth/PasswordReset'));
@@ -13,8 +14,7 @@ const OnboardPage = React.lazy(() => import('../pages/OnboardPage'));
 const SearchPage = React.lazy(() => import('../pages/SearchPage'));
 const AuthPage = React.lazy(() => import('../pages/auth/AuthPage'));
 
-class MainRouteAccess extends React.PureComponent {
-
+class MainRouteAccess extends React.Component {
   state = {
     isAuth: false,
     hasAccessToOrg: false,
@@ -46,6 +46,7 @@ class MainRouteAccess extends React.PureComponent {
   }
 
   updateState = async (orgTag) => {
+    console.log('update state')
     let state = {
       isAuth: this.props.authStore.isAuth(),
       render: true,
@@ -79,11 +80,19 @@ class MainRouteAccess extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log(nextProps)
     this.setUrlParams(nextProps);
     let orgTag = undefsafe(nextProps.match, 'params.organisationTag');
     if (orgTag !== undefsafe(this.props.match, 'params.organisationTag'))
       this.updateState(orgTag);
   }
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   console.log(nextProps);
+  //   console.log(nextState);
+  //   return ( ( (JSON.stringify(nextProps) !== JSON.stringify(this.props)) && nextProps.match.params.recordTag === this.props.match.params.recordTag ) ||
+  //       (JSON.stringify(nextState) !== JSON.stringify(this.state)) )
+  // }
 
   componentWillMount() {
     this.setUrlParams(this.props);
@@ -96,6 +105,11 @@ class MainRouteAccess extends React.PureComponent {
         <Component {...props} {...additionnalProps} />
       </React.Suspense>
     );
+  }
+
+  shouldComponentUpdate() {
+    console.log('should up ?');
+    return true;
   }
 
   render() {
@@ -120,9 +134,12 @@ class MainRouteAccess extends React.PureComponent {
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step?" component={this.WaitingComponent(OnboardPage)} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/:mode" component={this.WaitingComponent(OnboardPage)} />
             <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/:mode/:recordTag" component={this.WaitingComponent(OnboardPage)} />
-            <Route path="/:locale(en|fr|en-UK)/:organisationTag/:recordTag?" component={this.WaitingComponent(SearchPage)} />
             <Route path="/" render={() => <Redirect to={'/' + locale + (fallbackOrgTag ? '/' + fallbackOrgTag + '' : '') + window.location.search} />} />
           </Switch>
+          <Route path="/:locale(en|fr|en-UK)/:organisationTag" component={this.WaitingComponent(SearchPage)}>
+          <Route path="/:locale(en|fr|en-UK)/:organisationTag/:recordTag" component={(props) => <ProfileLayout visible={true} transitionDuration={300} {...props}/>} />
+
+          </Route>
         </ProfileProvider>
       )
     } else if (isAuth) {

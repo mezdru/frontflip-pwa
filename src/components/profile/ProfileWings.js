@@ -70,18 +70,11 @@ const styles = theme => ({
 class ProfileWings extends React.PureComponent {
 
   componentDidMount() {
-    this.unsubscribeDisplayedRecord =  observe(this.props.recordStore.values, 'displayedRecord', (change) => {
-      this.getClapsCount(change.newValue ? change.newValue._id : null);
-    });
-  }
-
-  componentWillUnmount() {
-    this.unsubscribeDisplayedRecord();
+    this.getClapsCount(this.props.profileContext.getProp('_id'));
   }
 
   getClapsCount = (recordId) => {
-    let displayedRecord = this.props.recordStore.values.displayedRecord;
-    this.props.clapStore.setCurrentRecordId(recordId || (displayedRecord ? displayedRecord._id : null));
+    this.props.clapStore.setCurrentRecordId(recordId);
     this.props.clapStore.getClapCountByProfile()
       .then(clapsCount => {
         this.forceUpdate();

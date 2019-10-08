@@ -22,7 +22,7 @@ if (process.env.NODE_ENV !== 'production') {
   whyDidYouRender(React, { hotReloadBufferMs: 1500 });
 }
 
-class MainRoute extends React.PureComponent {
+class MainRoute extends React.Component {
 
   constructor(props) {
     super(props);

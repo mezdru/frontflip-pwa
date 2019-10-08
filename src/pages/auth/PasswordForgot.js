@@ -40,6 +40,11 @@ class PasswordForgot extends React.Component {
       emailError: null,
       email: this.props.authStore.values.email
     }
+    this.props.commonStore.setUrlParams(this.props.match);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.props.commonStore.setUrlParams(nextProps.match);
   }
   
   componentDidMount() {

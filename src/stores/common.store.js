@@ -1,7 +1,8 @@
 import { observable, action, decorate } from 'mobx';
 import Cookies from 'universal-cookie';
-const cookies = new Cookies();
+import undefsafe from 'undefsafe';
 
+const cookies = new Cookies();
 
 class CommonStore {
 
@@ -37,6 +38,17 @@ class CommonStore {
     this.algoliaKeyOrganisation = this.getCookie('algoliaKeyOrganisation');
     this.searchFilters = this.getCookie('searchFilters');
     this.populateLocale();
+  }
+
+  setUrlParams(match) {
+    this.url.params = {
+      orgTag: undefsafe(match, 'params.orgTag') || null,
+      recordTag: undefsafe(match, 'params.recordTag') || null,
+      hashtags: undefsafe(match, 'params.hashtags') || null,
+      action: undefsafe(match, 'params.action') || null,
+      invitationCode: undefsafe(match, 'params.invitationCode') || null,
+      onboardMode: undefsafe(match, 'params.mode') || null
+    };
   }
 
   setLocale(locale) {
@@ -154,6 +166,7 @@ class CommonStore {
 decorate(CommonStore, {
   appName: observable,
   url: observable,
+  setUrlParams: action,
   accessToken: observable,
   refreshToken: observable,
   algoliaKey: observable,

@@ -22,13 +22,7 @@ class ProfileClapHistory extends React.Component {
   }
 
   componentDidMount() {
-    this.getClapHistory();
-
-    this.setState({
-      observer: observe(this.props.recordStore.values, 'displayedRecord', (change) => {
-        this.getClapHistory(change.newValue ? change.newValue._id : null);
-      })
-    });
+    this.getClapHistory(this.props.profileContext.getProp('_id'));
   }
 
   componentWillUnmount() {
@@ -36,7 +30,7 @@ class ProfileClapHistory extends React.Component {
   }
 
   getClapHistory = (recordId) => {
-    let currentId = recordId || (this.props.recordStore.values.displayedRecord ? this.props.recordStore.values.displayedRecord._id : null);
+    let currentId = recordId;
     if(!currentId) return this.setState({clapHistory: []});
     this.props.clapStore.setCurrentRecordId(currentId);
     this.props.clapStore.getClapHistory()
@@ -49,7 +43,7 @@ class ProfileClapHistory extends React.Component {
     const { classes, profileContext } = this.props;
     const { clapHistory } = this.state;
     const { locale } = this.props.commonStore;
-    const { organisation } = this.props.orgStore.values;
+    const { currentOrganisation } = this.props.orgStore;
     const lastClapHistory = clapHistory.slice(0, 10);
     let clapsDisplayed = 0;
 
@@ -71,7 +65,7 @@ class ProfileClapHistory extends React.Component {
               given={clap.given}
               created={clap.created}
               locale={this.props.commonStore.locale}
-              link={'/' + locale + '/' + organisation.tag + '/' + clap.giver.tag}
+              link={'/' + locale + '/' + currentOrganisation.tag + '/' + clap.giver.tag}
             />
           }else return null;
         })}

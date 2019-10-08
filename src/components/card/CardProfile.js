@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {Grid, withStyles, Typography, IconButton, CardActions, CardContent, CardHeader, Card, Tooltip} from '@material-ui/core';
 import withWidth from '@material-ui/core/withWidth';
 import {inject, observer} from 'mobx-react';
-
+import { Link} from 'react-router-dom';
 import '../../resources/stylesheets/font-awesome.min.css';
 import Availability from '../availabilityToggle/Availability';
 import Wings from '../utils/wing/Wings';
@@ -12,6 +12,7 @@ import ProfileService from '../../services/profile.service';
 import withSearchManagement from '../../hoc/SearchManagement.hoc';
 import {styles} from './CardProfile.css';
 import { injectIntl } from 'react-intl';
+import { getBaseUrl } from '../../services/utils.service';
 
 ProfileService.setExtraLinkLimit(5);
 const WINGS_DISPLAYED = 7;
@@ -55,10 +56,11 @@ class CardProfile extends React.PureComponent {
     ProfileService.orderHashtags(hit);
     
     return (
+      <Link to={getBaseUrl(this.props) + '/' + hit.tag}>
       <Card className={classes.fullWidth} key={hit.objectID} >
         <Grid item container>
           <CardHeader
-            onClick={(e) => handleDisplayProfile(e, hit)}
+            // onClick={(e) => handleDisplayProfile(e, hit)}
             avatar={
               <Grid item container>
                 <Grid item style={{backgroundImage: `url(${ProfileService.getPicturePathResized(hit.picture, 'person ', this.getLogoSize()) || defaultPicture})`}} className={`${classes.logo} ${classes.backgroundLogo}`}/>
@@ -129,6 +131,7 @@ class CardProfile extends React.PureComponent {
           </CardContent>
         </Grid>
       </Card>
+      </Link>
     );
   }
 }
@@ -139,7 +142,7 @@ CardProfile.propTypes = {
 
 CardProfile = withSearchManagement(CardProfile);
 
-export default inject('commonStore')(
+export default inject('commonStore', 'orgStore')(
   observer(
     withWidth()(withStyles(styles)(injectIntl(CardProfile)))
   )

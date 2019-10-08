@@ -65,6 +65,11 @@ class PasswordReset extends React.Component {
       userEmail: ((this.props.match.params && this.props.match.params.email) ? this.props.match.params.email : null),
       redirectTo: null
     }
+    this.props.commonStore.setUrlParams(this.props.match);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.props.commonStore.setUrlParams(nextProps.match);
   }
 
   componentDidMount() {
