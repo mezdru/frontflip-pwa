@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import undefsafe from 'undefsafe';
 
 import MainRouteAccess from './MainRouteAccess';
 import AuthPage from '../pages/auth/AuthPage';
@@ -14,7 +15,7 @@ const ConnectionsMap = React.lazy(() => import('../components/admin/ConnectionsM
 const WelcomePage = React.lazy(() => import('../pages/WelcomePage'));
 // const PasswordReset = React.lazy(() => import('../pages/auth/PasswordReset'));
 
-class MainRouteOrganisation extends React.Component {
+class MainRouteOrganisation extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -51,10 +52,17 @@ class MainRouteOrganisation extends React.Component {
     const { isAuth } = this.state;
     const { locale } = this.props.match.params;
 
+    if(isAuth && undefsafe(this.props.userStore.currentUser, 'orgsAndRecords.length') === 0 ) {
+      return(
+        <Switch>
+          <Redirect to={'/' + locale + '/welcome'} />
+        </Switch>
+      )
+    }
+
     return (
       <div>
         <Switch>
-
           <Route exact path="/:locale(en|fr|en-UK)/connections/map" component={this.WaitingComponent(ConnectionsMap)} />
 
           {/* All routes without orgTag */}
@@ -69,8 +77,8 @@ class MainRouteOrganisation extends React.Component {
           {/* Route which will need organisationTag */}
 
           {/* Main route with orgTag */}
-          <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit/:recordId" component={MainRouteAccess} />
-          <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/edit" component={MainRouteAccess} />
+          <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/:mode/:recordTag" component={MainRouteAccess} />
+          <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step/:mode" component={MainRouteAccess} />
           <Route exact path="/:locale(en|fr|en-UK)/:organisationTag/onboard/:step?" component={MainRouteAccess} />
 
           <Route path="/:locale(en|fr|en-UK)/:organisationTag/signup/:invitationCode" component={MainRouteAccess} />
@@ -81,7 +89,7 @@ class MainRouteOrganisation extends React.Component {
 
           <Route path="/:locale(en|fr|en-UK)/:organisationTag/:hashtags/:action" component={(props) => <MainRouteAccess hashtagsFilter={true} {...props} />} />
 
-          <Route path="/:locale(en|fr|en-UK)/:organisationTag/:profileTag?" component={MainRouteAccess} />
+          <Route path="/:locale(en|fr|en-UK)/:organisationTag/:recordTag?" component={MainRouteAccess} />
           <Route path="/:locale(en|fr|en-UK)" component={MainRouteAccess} />
           {isAuth && (
             <Redirect to={"/" + locale} />
@@ -95,8 +103,6 @@ class MainRouteOrganisation extends React.Component {
   }
 }
 
-export default inject('commonStore', 'authStore', 'userStore')(
-  withRouter(observer(
-    MainRouteOrganisation
-  ))
+export default withRouter(inject('commonStore', 'authStore', 'userStore')(
+  observer(MainRouteOrganisation))
 );

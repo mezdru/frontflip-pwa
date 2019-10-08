@@ -207,13 +207,13 @@ class SearchPage extends PureComponent {
   render() {
     const { displayedHit, redirectTo, showCongratulation, actionInQueue, hashtagsFilter, visible, transitionDuration, showAskForHelp } = this.state;
     const { classes } = this.props;
-    const { organisation } = this.props.orgStore.values;
+    const { currentOrganisation } = this.props.orgStore;
     const { searchResultsCount } = this.props.commonStore;
     let searchFilters = this.props.commonStore.getSearchFilters();
 
     return (
       <React.Fragment>
-        {(redirectTo && (window.location.pathname !== redirectTo)) && <Redirect to={redirectTo} />}
+        {/* {(redirectTo && (window.location.pathname !== redirectTo)) && <Redirect to={redirectTo} />} */}
         <Suspense fallback={<></>}>
           <Header handleDisplayProfile={this.handleDisplayProfile} />
         </Suspense>
@@ -262,7 +262,7 @@ class SearchPage extends PureComponent {
             </div>
 
           </div>
-          {organisation && !this.props.authStore.isAuth() && (
+          {currentOrganisation && !this.props.authStore.isAuth() && (
             <Suspense fallback={<></>}>
               <Intercom appID={"k7gprnv3"} />
             </Suspense>

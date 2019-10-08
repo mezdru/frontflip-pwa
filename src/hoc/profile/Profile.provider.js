@@ -36,7 +36,6 @@ class ProfileProvider extends React.Component {
       filteredWings: null,
       wingsByFamilies: []
     });
-    this.props.recordStore.setDisplayedRecord({});
     this.props.clapStore.reset();
   }
 
@@ -51,9 +50,7 @@ class ProfileProvider extends React.Component {
   setWingzyRecord = () => {
     this.buildWingsByFamilies();
     if(!this.props.authStore.isAuth()) return;
-    this.props.recordStore.setRecordTag(this.state.algoliaRecord.tag);
-    this.props.recordStore.setOrgId(this.props.orgStore.values.organisation._id);
-    this.props.recordStore.getRecordByTag()
+    this.props.recordStore.getOrFetchRecord(null, this.state.algoliaRecord.tag, this.props.orgStore.currentOrganisation._id)
       .then((record) => {
         record.objectID = record._id;
 
@@ -77,14 +74,14 @@ class ProfileProvider extends React.Component {
 
   //@todo Nothing to do here, it's a common method
   getBaseUrl = () => {
-    return '/' + this.props.commonStore.locale + '/' + this.props.orgStore.values.organisation.tag;
+    return '/' + this.props.commonStore.locale + '/' + this.props.orgStore.currentOrganisation.tag;
   }
 
   /**
    * @description Create an array of link between : Family and Profile Wings
    */
   buildWingsByFamilies = () => {
-    let organisation = this.props.orgStore.values.organisation;
+    let organisation = this.props.orgStore.currentOrganisation;
     let wingsByFamilies = [], otherWings = [], allWings = [];
 
     try {

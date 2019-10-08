@@ -1,5 +1,4 @@
-import { observable, action, decorate } from "mobx";
-import agent from '../agent';
+import { observable, action, decorate, computed } from "mobx";
 import userStore from './user.store';
 import orgStore from './organisation.store';
 import Store from './store';
@@ -24,6 +23,13 @@ class RecordStore extends Store {
       if (recordId) return JSON.stringify(recordId) === JSON.stringify(record._id || record.objectID);
       else return recordTag === record.tag;
     });
+  }
+
+  async getOrFetchRecord(recordId, recordTag, orgId) {
+    let record = this.getRecord(recordId, recordTag);
+    if (!record && recordId) record = await this.fetchRecord(recordId);
+    if (!record && recordTag) record = await this.fetchByTag(recordTag, orgId);
+    return record;
   }
 
   addRecord(inRecord) {
@@ -72,23 +78,6 @@ class RecordStore extends Store {
     return record;
   }
 
-  // fetchRecordByUser() {
-  //   if (!userStore.currentUser._id || !orgStore.values.orgId) return Promise.reject(new Error('Bad parameters'));
-  //   this.inProgress = true;
-  //   this.errors = null;
-
-  //   return agent.Record.getByUser(userStore.currentUser._id, orgStore.values.orgId)
-  //     .then(res => {
-  //       this.addRecord(res.data);
-  //       return res.data;
-  //     })
-  //     .catch(action((err) => {
-  //       this.errors = err.response && err.response.body && err.response.body.errors;
-  //       throw err;
-  //     }))
-  //     .finally(action(() => { this.inProgress = false; }));
-  // }
-
   buildRecordToUpdate(arrayOfFields, record) {
     let recordToUpdate = {};
     if (!arrayOfFields) {
@@ -104,16 +93,14 @@ class RecordStore extends Store {
 }
 
 decorate(RecordStore, {
-  inProgress: observable,
-  errors: observable,
-  values: observable,
-  reset: action,
-  getRecord: action,
-  findRecord: action,
-  getRecordByTag: action,
+  records: observable,
+  currentUserRecord: computed,
   postRecord: action,
   updateRecord: action,
-  deleteRecord: action
+  deleteRecord: action,
+  fetchPopulatedForUser: action,
+  fetchByTag: action,
+  fetchRecord: action
 });
 
 export default new RecordStore();

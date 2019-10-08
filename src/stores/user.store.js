@@ -38,16 +38,6 @@ class UserStore extends Store {
     return user;
   }
 
-  // syncRecord() {
-  //   if (!recordStore.values.record._id && orgStore.values.organisation._id) {
-  //     let currentOrgAndRecord = this.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === orgStore.values.organisation._id);
-  //     if (currentOrgAndRecord && currentOrgAndRecord.record) {
-  //       recordStore.setRecordId(currentOrgAndRecord.record);
-  //       recordStore.getRecord();
-  //     }
-  //   }
-  // }
-
   forgetUser() {
     this.currentUser = undefined;
   }

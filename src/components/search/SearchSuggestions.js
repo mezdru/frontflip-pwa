@@ -108,7 +108,7 @@ class SearchSuggestions extends React.Component {
   }
 
   componentDidMount() {
-    AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
+    AlgoliaService.setAlgoliaKey(this.props.orgStore.currentAlgoliaKey);
     AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:#Wings', null, null, null)
       .then(content => {
 
@@ -121,8 +121,8 @@ class SearchSuggestions extends React.Component {
       });
 
     this.setState({
-      observer: observe(this.props.commonStore, 'algoliaKey', (change) => {
-        AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
+      observer: observe(this.props.orgStore, 'currentAlgoliaKey', (change) => {
+        AlgoliaService.setAlgoliaKey(this.props.orgStore.currentAlgoliaKey);
         AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:#Wings', null, null, null)
           .then(content => {
             this.setState({ firstWings: ((content && content.hits) ? content.hits : []) }, () => {
@@ -264,6 +264,6 @@ class SearchSuggestions extends React.Component {
 
 SearchSuggestions = withScrollManagement(withSearchManagement(SearchSuggestions));
 
-export default inject('commonStore')(
+export default inject('commonStore', 'orgStore')(
   observer(withStyles(styles)(SearchSuggestions))
 );

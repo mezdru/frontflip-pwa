@@ -58,7 +58,7 @@ class HeaderDrawer extends Component {
 
   render() {
     const { classes, auth, open, intl } = this.props;
-    const record = this.props.recordStore.currentUserRecord;
+    const {currentUserRecord} = this.props.recordStore;
     const { currentOrganisation } = this.props.orgStore;
     const { currentUser } = this.props.userStore;
     const { locale } = this.props.commonStore;
@@ -66,7 +66,7 @@ class HeaderDrawer extends Component {
     const currentOrgAndRecord = currentOrganisation && ((currentUser && currentUser.orgsAndRecords) ?
       currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === currentOrganisation._id) : null);
 
-    if(record) record.name = entities.decode(record.name)
+    if(currentUserRecord) currentUserRecord.name = entities.decode(currentUserRecord.name)
     if(currentOrganisation) currentOrganisation.name = entities.decode(currentOrganisation.name)
 
     return (
@@ -95,17 +95,17 @@ class HeaderDrawer extends Component {
           <div className={'leftMenu'}>
             {(auth && undefsafe(currentOrganisation , '_id')) && (
               <React.Fragment>
-                {record._id && (
+                {currentUserRecord && (
                   <React.Fragment>
                     <List className={'leftSubmenu'}>
                       <ListItem >
                         <ListItemAvatar>
-                          <Logo type={'person'} src={this.getPicturePath(record.picture) || defaultPicture} alt={record.name || record.tag} className={classes.logoBorder} />
+                          <Logo type={'person'} src={this.getPicturePath(currentUserRecord.picture) || defaultPicture} alt={currentUserRecord.name || currentUserRecord.tag} className={classes.logoBorder} />
                         </ListItemAvatar>
-                        <ListItemText primary={record.name || record.tag}
+                        <ListItemText primary={currentUserRecord.name || currentUserRecord.tag}
                           primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold', color: 'white', fontSize: '1rem' } }} />
                       </ListItem>
-                      <ListItem button component={Link} to={'/' + locale + '/' + currentOrganisation.tag + '/' + record.tag} onClick={(e) => { this.props.handleDisplayProfile(e, { tag: record.tag }) }}>
+                      <ListItem button component={Link} to={'/' + locale + '/' + currentOrganisation.tag + '/' + currentUserRecord.tag} onClick={(e) => { this.props.handleDisplayProfile(e, { tag: currentUserRecord.tag }) }}>
                         <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.profile' })} />
                       </ListItem>
                       <ListItem>

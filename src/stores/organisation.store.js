@@ -5,7 +5,7 @@ import userStore from "./user.store";
 import Store from './store';
 import { asyncForEach } from '../services/utils.service';
 
-class orgStore extends Store{
+class orgStore extends Store {
 
   organisations = [];
   algoliaKeys = [];
@@ -15,9 +15,19 @@ class orgStore extends Store{
   }
 
   get currentOrganisation() {
-    console.log(JSON.parse(JSON.stringify(this.organisations)))
     let orgTag = commonStore.url.params.orgTag;
     return this.getOrganisation(null, orgTag);
+  }
+
+  get currentAlgoliaKey() {
+    try { return this.getAlgoliaKey(this.currentOrganisation._id).value } catch (e) { return null; };
+  }
+
+  async getOrFetchOrganisation(orgId, orgTag) {
+    let org = this.getOrganisation(orgId, orgTag);
+    if (!org && orgId) org = await this.fetchOrganisation(orgId);
+    if (!org && orgTag) org = await this.fetchForPublic(orgTag);
+    return org;
   }
 
   addOrg(inOrg) {
@@ -30,9 +40,9 @@ class orgStore extends Store{
   }
 
   addAlgoliaKey(key, orgId, expirationDate) {
-    let newAlgoliaKey = {value: key, organisation: orgId, expires: expirationDate}
+    let newAlgoliaKey = { value: key, organisation: orgId, expires: expirationDate }
     let index = this.algoliaKeys.findIndex(algoliaKey => JSON.stringify(algoliaKey.organisation) === JSON.stringify(orgId));
-    if(index > -1) {
+    if (index > -1) {
       this.algoliaKeys[index] = newAlgoliaKey;
     } else {
       this.algoliaKeys.push(newAlgoliaKey);
@@ -48,9 +58,9 @@ class orgStore extends Store{
   }
 
   getAlgoliaKey(orgId) {
-    if(!orgId) return null;
+    if (!orgId) return null;
     return this.algoliaKeys.find(aKey =>
-      (aKey.organisation === orgId) && (aKey.expires.getTime() > (new Date()).getTime() )
+      (aKey.organisation === orgId) && (aKey.expires.getTime() > (new Date()).getTime())
     );
   }
 
@@ -61,7 +71,7 @@ class orgStore extends Store{
   }
 
   async fetchForPublic(orgTag) {
-    if(!orgTag) throw new Error('Organisation tag is required.');
+    if (!orgTag) throw new Error('Organisation tag is required.');
 
     let organisation = await super.fetchResources('/forPublic?tag=' + orgTag);
     this.addOrg(organisation);
@@ -69,29 +79,12 @@ class orgStore extends Store{
   }
 
   async fetchAlgoliaKey(orgId, isPublic) {
-    if(!orgId) throw new Error('Organisation id is required.');
+    if (!orgId) throw new Error('Organisation id is required.');
 
     let algoliaKey = await super.fetchResources(`/${orgId}/algolia/${isPublic ? 'public' : 'private'}`);
     this.addAlgoliaKey(algoliaKey.value, orgId, new Date(algoliaKey.valid_until));
     return algoliaKey.value;
   }
-
-
-
-  // async getCurrentUserOrganisations() {
-  //   if(userStore.currentUser && (this.values.currentUserOrganisations.length === userStore.currentUser.orgsAndRecords.length) )
-  //     return Promise.resolve();
-    
-  //   if (userStore.currentUser && userStore.currentUser.orgsAndRecords.length > 0) {
-  //     this.values.currentUserOrganisations = [];
-  //     await asyncForEach(userStore.currentUser.orgsAndRecords, async (orgAndRecord) => {
-  //       let response = await agent.Organisation.get(orgAndRecord.organisation).catch();
-  //       if(response && response.data && !this.values.currentUserOrganisations.some(currentOrg => currentOrg.tag === response.data.tag)) {
-  //         this.values.currentUserOrganisations.push(response.data);
-  //       }
-  //     });
-  //   }
-  // }
 
   // getAlgoliaKey(organisation, forceUpdate) {
   //   this.inProgress = true;
@@ -127,10 +120,13 @@ class orgStore extends Store{
 
 decorate(orgStore, {
   currentOrganisation: computed,
+  currentAlgoliaKey: computed,
   organisations: observable,
+  algoliaKeys: observable,
   fetchForPublic: action,
   fetchOrganisation: action,
-  getAlgoliaKey: action,
+  fetchAlgoliaKey: action,
+  getOrFetchOrganisation: action
 });
 
 export default new orgStore();

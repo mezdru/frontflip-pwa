@@ -16,19 +16,17 @@ class AlgoliaService {
       this.algoliaKey = algoliaKey;
       this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.algoliaKey);
       this.index = this.client.initIndex(this.indexName);
+    } else {
+      let org = orgStore.currentOrganisation;
+      if(org) orgStore.fetchAlgoliaKey(org._id, org.public);
     }
 
-    observe(commonStore, 'algoliaKey', (change) => {
+    observe(orgStore, 'currentAlgoliaKey', (change) => {
       if(this.client) this.client.clearCache();
-      if(!commonStore.algoliaKey) {
-        orgStore.getAlgoliaKey(true)
-        .then(algoliaKey => {
-          this.algoliaKey = algoliaKey;
-          this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.algoliaKey);
-          this.index = this.client.initIndex(this.indexName);
-        }).catch();
+      if(!orgStore.currentAlgoliaKey && orgStore.currentOrganisation) {
+        orgStore.fetchAlgoliaKey(orgStore.currentOrganisation._id, orgStore.currentOrganisation.public);
       } else {
-        this.algoliaKey = commonStore.algoliaKey;
+        this.algoliaKey = orgStore.currentAlgoliaKey;
         this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.algoliaKey);
         this.index = this.client.initIndex(this.indexName);
       }

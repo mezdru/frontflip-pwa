@@ -18,10 +18,11 @@ let AvailabilityToggle = inject("recordStore")(observer(class AvailabilityToggle
   }
 
   componentDidMount() {
-    if (this.props.recordStore.values.record && this.props.recordStore.values.record.personAvailability) 
-      this.setState({ current: this.props.recordStore.values.record.personAvailability });
+    const { currentUserRecord } = this.props.recordStore;
+    if (currentUserRecord && currentUserRecord.personAvailability) 
+      this.setState({ current: currentUserRecord.personAvailability });
     else this.setState({ current: this.state.labels.middle });
-      this.setState({observer : observe(this.props.recordStore.values, 'record', (change) => {
+      this.setState({observer : observe(this.props.recordStore, 'currentUserRecord', (change) => {
         this.setState({ current: change.newValue.personAvailability || 'unspecified' });
       })});
   }
@@ -32,9 +33,9 @@ let AvailabilityToggle = inject("recordStore")(observer(class AvailabilityToggle
 
   handleAvailabilityClick(newCurrent) {
     this.setState({ current: newCurrent });
-    if(this.props.recordStore.values.record) {
-      this.props.recordStore.values.record.personAvailability = newCurrent;
-      this.props.recordStore.updateRecord();
+    const { currentUserRecord} = this.props.recordStore;
+    if(currentUserRecord) {
+      this.props.recordStore.updateRecord(currentUserRecord._id, ['personAvailability'], {personAvailability: newCurrent});
     }
   }
 

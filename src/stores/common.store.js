@@ -10,7 +10,10 @@ class CommonStore {
       orgTag: null,
       recordTag: null,
       onboardStep: null,
-      recordId: null
+      hashtags: null,
+      action: null,
+      invitationCode: null,
+      onboardMode: null
     }
   };
 

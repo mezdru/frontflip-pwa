@@ -16,7 +16,7 @@ class StatisticsStore {
     if(!authStore.isAuth()) return Promise.resolve();
     this.inProgress = true;
     this.errors = null;
-    let storedOrgId =  orgStore.values.organisation._id;
+    let storedOrgId =  orgStore.currentOrganisation._id;
 
     return agent.SearchLog.postSearchLog(orgId || storedOrgId, tagsArray || [], query || null, resultsCount)
       .then(res => {

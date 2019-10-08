@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
+    "@welldone-software/why-did-you-render": "^3.3.7",
     "algoliasearch": "^3.32.0",
     "compression": "^1.7.4",
     "core-js": "^2.6.5",

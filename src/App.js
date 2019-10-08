@@ -15,10 +15,10 @@ if(process.env.NODE_ENV !== 'development' && process.env.REACT_APP_LOGROCKET) {
   setupLogRocketReact(LogRocket);
 }
 
-
 class App extends Component {
 
   render() {
+    console.debug('Render APP');
     return (
       <BrowserRouter>
         <SnackbarProvider maxSnack={3}>
