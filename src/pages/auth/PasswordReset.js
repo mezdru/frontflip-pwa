@@ -74,9 +74,8 @@ class PasswordReset extends React.Component {
 
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
-    if (this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
-      this.props.orgStore.setOrgTag(this.props.match.params.organisationTag);
-      this.props.orgStore.getOrganisationForPublic();
+    if (this.props.commonStore.url.params.orgTag) {
+      this.props.orgStore.fetchForPublic(this.props.commonStore.url.params.orgTag);
     }
   }
 
@@ -126,10 +125,9 @@ class PasswordReset extends React.Component {
               <div>
                 <Grid item>
                   <Typography variant="h4" className={classes.title}>
-                    {this.props.orgStore.values.orgTag && (
-                      <FormattedHTMLMessage id="password.create.title.orgTag" values={{ orgTag: this.props.orgStore.values.orgTag }} />
-                    )}
-                    {!this.props.orgStore.values.orgTag && (
+                    {this.props.orgStore.currentOrganisation.tag ? (
+                      <FormattedHTMLMessage id="password.create.title.orgTag" values={{ orgTag: this.props.orgStore.currentOrganisation.tag }} />
+                    ) : (
                       <FormattedHTMLMessage id="password.create.title.noOrgTag" />
                     )}
                   </Typography>

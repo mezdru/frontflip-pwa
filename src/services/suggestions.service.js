@@ -33,7 +33,6 @@ class SuggestionsService {
       if (wingSelected && wingSelected.hashtags && wingSelected.hashtags.length > 0) {
         for (var i = 0; i < wingSelected.hashtags.length; i++) {
           let sameFamily = await AlgoliaService.fetchHashtags([wingSelected.hashtags[i], featuredWingFamily]);
-          console.log(sameFamily);
           sameFamiliesHits = sameFamiliesHits.concat(sameFamily.hits);
         }
       }

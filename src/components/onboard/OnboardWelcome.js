@@ -83,24 +83,19 @@ const styles = (theme) => ({
 });
 
 class OnboardWelcome extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
 
   render() {
-    const { organisation } = this.props.orgStore.values;
+    const { currentOrganisation } = this.props.orgStore;
     const { classes } = this.props;
 
     return (
       <form onSubmit={this.props.handleEnterToOnboard}>
         <Grid item container direction={'column'} xs={12} sm={8} md={6} lg={6} spacing={16} className={classes.root}>
           <Typography variant="h2" className={classes.title} >
-            <FormattedMessage id={'onboard.welcome'} /> {entities.decode(organisation.name)}
+            <FormattedMessage id={'onboard.welcome'} /> {entities.decode(currentOrganisation.name)}
           </Typography>
           <Grid item>
-            <FormattedHTMLMessage id="onboard.welcome.text" values={{ organisationName: entities.decode(organisation.name) }} />
+            <FormattedHTMLMessage id="onboard.welcome.text" values={{ organisationName: entities.decode(currentOrganisation.name) }} />
           </Grid>
           <Grid item>
             <Button onClick={this.props.handleEnterToOnboard} fullWidth color="secondary" ><FormattedMessage id={'onboard.start'} /></Button>

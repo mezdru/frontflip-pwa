@@ -43,9 +43,11 @@ class OnboardSuggestions extends React.Component {
 
   componentDidMount() {
     this.fetchSuggestions(null, this.props.wingsFamily);
+    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
+
     this.unsubscribeUserQuery = observe(this.props.searchStore.values, 'userQuery', () => {this.fetchSuggestions(null, this.props.wingsFamily)});
-    this.unsubscribeUserRecord = observe(this.props.recordStore.values, 'record', (change) => {
-      if(change.oldValue.hashtags.length > change.newValue.hashtags.length) {
+    this.unsubscribeUserRecord = observe(record, (change) => {
+      if(change.name === 'hashtags' && change.oldValue.length > change.newValue.length) {
         this.fetchSuggestions(null, this.props.wingsFamily);
       }
     });
@@ -67,9 +69,9 @@ class OnboardSuggestions extends React.Component {
   }
 
   shouldDisplaySuggestion = (suggestion) => {
-    let recordWings = this.props.recordStore.values.record.hashtags;
+    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
     return (
-      (recordWings.find(wing => wing.tag === (suggestion.tag || suggestion.value)) === undefined) &&
+      (record.hashtags.find(wing => wing.tag === (suggestion.tag || suggestion.value)) === undefined) &&
       (suggestion.tag !== this.state.lastSelected.tag)
     );
   }

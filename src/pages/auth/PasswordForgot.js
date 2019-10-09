@@ -49,9 +49,8 @@ class PasswordForgot extends React.Component {
   
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
-    if (this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
-      this.props.orgStore.setOrgTag(this.props.match.params.organisationTag);
-      this.props.orgStore.getOrganisationForPublic();
+    if (this.props.commonStore.url.params.orgTag) {
+      this.props.orgStore.fetchForPublic(this.props.commonStore.url.params.orgTag);
     }
   }
   

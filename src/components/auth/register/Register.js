@@ -39,7 +39,7 @@ class Register extends React.Component {
         ReactGA.event({ category: 'User', action: 'Register with password' });
         LogRocket.info('User register with password.');
 
-        if (this.props.orgStore.values.orgTag) {
+        if (this.props.commonStore.url.params.orgTag) {
 
           this.props.authStore.registerToOrg()
             .then((data) => {
@@ -64,7 +64,7 @@ class Register extends React.Component {
             }).catch((err) => {
 
               this.setState({ registerSuccess: true });
-              this.setState({ registerSuccessMessage: this.props.intl.formatMessage({ id: 'signup.warning.forbiddenOrg' }, { orgName: this.props.orgStore.values.organisation.name }) });
+              this.setState({ registerSuccessMessage: this.props.intl.formatMessage({ id: 'signup.warning.forbiddenOrg' }, { orgName: this.props.orgStore.currentOrganisation.name }) });
 
             });
         } else {

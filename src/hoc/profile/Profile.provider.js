@@ -39,15 +39,14 @@ class ProfileProvider extends React.Component {
     this.props.clapStore.reset();
   }
 
-  setProfileData = (algoliaRecord) => {
-    algoliaRecord = JSON.parse(JSON.stringify(algoliaRecord));
-    ProfileService.transformLinks(algoliaRecord);
-    ProfileService.makeHightlighted(algoliaRecord);
-    ProfileService.orderHashtags(algoliaRecord);
-    this.setState({algoliaRecord, filteredWings: null}, this.setWingzyRecord);
+  setProfileData = (recordTag) => {
+    console.log('set profile data for : ' + recordTag);
+    let algoliaRecord = JSON.parse(JSON.stringify(this.props.recordStore.getRecord(null, recordTag) || {tag: recordTag}));
+    this.setState({algoliaRecord: algoliaRecord, filteredWings: null}, this.setWingzyRecord);
   }
 
   setWingzyRecord = () => {
+    console.log('profile data set.')
     this.buildWingsByFamilies();
     if(!this.props.authStore.isAuth()) return;
     this.props.recordStore.getOrFetchRecord(null, this.state.algoliaRecord.tag, this.props.orgStore.currentOrganisation._id)

@@ -4,6 +4,7 @@ import { inject, observer } from "mobx-react";
 import defaultBanner from '../../../resources/images/fly_away.jpg';
 import { withStyles } from '@material-ui/core';
 import { withProfileManagement } from '../../../hoc/profile/withProfileManagement';
+import undefsafe from 'undefsafe'; 
 
 const styles = theme => ({
   root: {
@@ -43,21 +44,21 @@ class BannerResizable extends React.Component {
       
     } else if (this.props.type === 'profile') {
 
-      // if(!this.updateProfileSource()) this.updateSource();
+      if(!this.updateProfileSource()) this.updateSource();
 
-      // this.setState({observer: observe(this.props.recordStore.values, 'displayedRecord', (change) => {
-      //   this.updateProfileSource();
-      //   if(!this.state.source) this.updateSource();
-      // })});
+      this.setState({observer: observe(this.props.recordStore, 'currentUrlRecord', (change) => {
+        this.updateProfileSource();
+        if(!this.state.source) this.updateSource();
+      })});
     }
   }
 
-  // updateProfileSource = () => {
-  //   var profileCover = this.props.recordStore.values.displayedRecord.cover;
-  //   var profileCoverUrl = (profileCover && profileCover.url ? profileCover.url : null);
-  //   this.setState({source: profileCoverUrl});
-  //   return profileCoverUrl;
-  // }
+  updateProfileSource = () => {
+    var profileCover = undefsafe(this.props.recordStore.currentUrlRecord, 'cover');
+    var profileCoverUrl = (profileCover && profileCover.url ? profileCover.url : null);
+    this.setState({source: profileCoverUrl});
+    return profileCoverUrl;
+  }
 
   updateSource = () => {
     var org = this.props.orgStore.currentOrganisation;

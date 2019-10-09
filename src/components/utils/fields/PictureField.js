@@ -48,13 +48,12 @@ class PictureField extends React.Component {
   handleChange = (file) => {
     if(!this._ismounted) return;
     if(!file) {
-      let record = this.props.recordStore.values.record;
+      let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
       record.picture = {
         url: null
       };
-      this.props.recordStore.setRecord(record);
       this.setState({pictureUrl: null, loading: false});
-      this.props.handleSave();
+      this.props.handleSave(['picture']);
     } else {
       this.setState({loading: true});
     }
@@ -66,11 +65,10 @@ class PictureField extends React.Component {
 
   handleUploadComplete = (file) => {
     if(!this._ismounted) return;
-    let record = this.props.recordStore.values.record;
+    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
     record.picture = {
       url: file.cdnUrl
     };
-    this.props.recordStore.setRecord(record);
     this.setState({pictureUrl: file.cdnUrl, loading: false});
     this.props.handleSave(['picture']);
   }
@@ -80,9 +78,9 @@ class PictureField extends React.Component {
   }
 
   render() {
-    const {record} = this.props.recordStore.values;
     const {pictureUrl, loading} = this.state;
     const {classes} = this.props;
+    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
 
     return (
       <div>

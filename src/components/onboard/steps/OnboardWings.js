@@ -59,33 +59,31 @@ class OnboardWings extends React.Component {
   }
 
   addAndSave = (hashtagRecord) => {
-    let record = this.props.recordStore.values.record;
-    record.hashtags.push(hashtagRecord);
-    this.props.recordStore.setRecord(record);
+    if(!hashtagRecord) return;
+    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
+    record.hashtags = record.hashtags.concat([hashtagRecord]);
     this.props.handleSave(['hashtags']);
   }
 
-  handleAddWing = (element) => {
-    this.props.recordStore.setRecordTag(element.tag);
-    this.props.recordStore.setOrgId(this.props.orgStore.values.organisation._id);
-    if (this.props.recordStore.values.record.hashtags.find(elt => elt.tag === element.tag)) return Promise.resolve();
-    return this.props.recordStore.getRecordByTag()
-      .then(hashtagRecord => {
-        this.addAndSave(hashtagRecord);
-      }).catch(() => {
-        let newRecord = {
-          tag: element.tag,
-          name: element.name || (element.tag).substr(1)
-        };
-        this.props.recordStore.postRecord(newRecord)
-          .then((hashtagRecord) => {
-            this.addAndSave(hashtagRecord);
-          }).catch();
-      });
+  handleAddWing =async (element) => {
+    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
+    if (record.hashtags.find(elt => elt.tag === element.tag)) return Promise.resolve();
+
+    let hashtagRecord = await this.props.recordStore.fetchByTag(element.tag, this.props.orgStore.currentOrganisation._id);
+
+    if(hashtagRecord) this.addAndSave(hashtagRecord);
+    else {
+      let newRecord = {
+        tag: element.tag,
+        name: element.name || (element.tag).substr(1),
+        organisation: this.props.orgStore.currentOrganisation._id
+      };
+      this.addAndSave(await this.props.recordStore.postRecord(newRecord));
+    }
   }
 
   handleCreateWing = async (wing) => {
-    let newWing = {name: wing.name, type: 'hashtag'};
+    let newWing = {name: wing.name, type: 'hashtag', organisation: this.props.orgStore.currentOrganisation._id};
     if(this.isFeaturedWings()) newWing.hashtags = [this.getFeaturedWings()];
     let newWingSaved = await this.props.recordStore.postRecord(newWing);
     this.handleAddWing(newWingSaved);
@@ -93,10 +91,9 @@ class OnboardWings extends React.Component {
 
   handleRemoveWing = (e, tag) => {
     e.preventDefault();
-    let record = JSON.parse(JSON.stringify(this.props.recordStore.values.record));
-    let newHashtags = record.hashtags.filter(hashtag => hashtag.tag !== tag);
-    record.hashtags = newHashtags;
-    this.props.recordStore.setRecord(record);
+    // should clone record ?
+    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
+    record.hashtags = record.hashtags.filter(hashtag => hashtag.tag !== tag);
     this.props.handleSave(['hashtags']);
   }
 
@@ -113,7 +110,7 @@ class OnboardWings extends React.Component {
   }
 
   isFeaturedWings = () => (this.props.activeStepLabel && this.props.activeStepLabel.charAt(0) === '#');
-  getFeaturedWings = () => this.props.orgStore.values.organisation.featuredWingsFamily.filter(fam => fam.tag === this.props.activeStepLabel)[0];
+  getFeaturedWings = () => this.props.orgStore.currentOrganisation.featuredWingsFamily.filter(fam => fam.tag === this.props.activeStepLabel)[0];
 
   render() {
     const { classes } = this.props;

@@ -7,7 +7,7 @@ const withClapManagement = (ComponentToWrap) => {
 
     getClapCount = (hashtagId) => {
       var clapCountEntry = this.props.clapStore.values.currentRecordClapCount.find(entry => entry._id === hashtagId);
-      return (clapCountEntry ? clapCountEntry.claps : 0);
+      return (clapCountEntry ? clapCountEntry.claps : null);
     }
 
     observeClapCount = (cb) => {
@@ -15,15 +15,15 @@ const withClapManagement = (ComponentToWrap) => {
     }
 
     handleClap = (recipient, hashtag,  given) => {
-      if(!recipient || !hashtag || !this.props.recordStore.values.record._id) return;
+      if(!recipient || !hashtag || !this.props.recordStore.currentUserRecord) return;
       this.props.clapStore.setCurrentRecordId(recipient);
 
       var clap = {
         recipient: recipient,
         hashtag: hashtag,
         given: given || 1,
-        giver: this.props.recordStore.values.record._id,
-        organisation: this.props.orgStore.values.organisation._id
+        giver: this.props.recordStore.currentUserRecord._id,
+        organisation: this.props.orgStore.currentOrganisation._id
       };
 
       this.props.clapStore.setClap(clap);

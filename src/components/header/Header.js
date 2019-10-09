@@ -62,13 +62,9 @@ class App extends Component {
         {!auth && !isSigninOrSignupPage && (
             <Button variant="text" to={"/" + locale + (orgTag ? '/' + orgTag : '') + '/signin'} component={Link} className={classes.menuLink}><FormattedMessage id="Sign In" /></Button>
         )}
-        {/* <HeaderAppBar handleDrawerOpen={this.handleDrawerOpen}
-          open={open} auth={auth}
-        /> */}
         <HeaderDrawer handleDrawerOpen={this.handleDrawerOpen}
           handleDrawerClose={this.handleDrawerClose}
           open={open} auth={auth}
-          handleDisplayProfile={this.handleDisplayProfile}
         />
         <div className={classes.drawerHeader}/>
       </div>

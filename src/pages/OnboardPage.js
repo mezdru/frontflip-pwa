@@ -15,7 +15,7 @@ console.debug('Loading OnboardPage');
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
-class OnboardPage extends React.Component {
+class OnboardPage extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -34,35 +34,20 @@ class OnboardPage extends React.Component {
     this.props.commonStore.setUrlParams(nextProps.match);
   }
 
-  componentDidMount() {
+  async componentWillMount() {
+    console.log('will mount onboard page');
+    let orgId = this.props.orgStore.currentOrganisation._id;
+    let onboardRecord;
     this.props.history.listen((location, action) => {
       ReactGA.pageview(window.location.pathname);
-      // setTimeout(() => this.makeSteps(this.props.match.params.step), 10);
     });
 
-    if (this.props.match && this.props.match.params && this.props.match.params.recordId && this.props.edit) {
-      this.props.recordStore.setRecordId(this.props.match.params.recordId);
-      this.props.recordStore.getRecord()
-      .then(() => {
-        this.setState({renderComponent: true});
-      }).catch(e => {
-        console.log(e);
-      })
+    if(this.props.commonStore.url.params.onboardMode === 'edit') {
+      onboardRecord = await this.props.recordStore.getOrFetchRecord(null, this.props.commonStore.url.params.recordTag, orgId);
     } else {
-      this.getRecordForUser()
-      .then(() => {
-        this.setState({renderComponent: true});
-      })
+      onboardRecord = await this.props.recordStore.fetchPopulatedForUser(orgId);
     }
-  }
-
-  shouldComponentUpdate(nextProp, nextState) {
-    return (JSON.stringify(nextState) !== JSON.stringify(this.state))
-  }
-
-  getRecordForUser = () => {
-    this.props.recordStore.setOrgId(this.props.orgStore.values.organisation._id);
-    return this.props.recordStore.getRecordByUser();
+    this.setState({renderComponent: true});
   }
 
   handleEnterToOnboard = () => this.setState({ inOnboarding: true });
@@ -78,7 +63,7 @@ class OnboardPage extends React.Component {
 
         {!(inOnboarding && width === "xs") && (
           <Suspense fallback={<></>}>
-            <Header handleDisplayProfile={this.handleDisplayProfile} />
+            <Header />
           </Suspense>
         )}
 
@@ -111,7 +96,7 @@ class OnboardPage extends React.Component {
   }
 }
 
-export default inject('commonStore', 'orgStore', 'recordStore', 'userStore')(
+export default inject('commonStore', 'orgStore', 'recordStore')(
   observer(
     withStyles(styles, { withTheme: true })(withWidth()(OnboardPage))
   )

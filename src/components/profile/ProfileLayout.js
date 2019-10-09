@@ -1,4 +1,4 @@
-import React, {Suspense} from 'react';
+import React, { Suspense } from 'react';
 import { withStyles, Grid, Slide, CircularProgress } from '@material-ui/core';
 import { inject, observer } from 'mobx-react';
 
@@ -42,9 +42,11 @@ class ProfileLayout extends React.Component {
               </Grid>
 
               <Grid item xs={12} lg={4} className={classes.clapHistory}>
-                <Suspense fallback={<CircularProgress color='secondary' />}>
-                  <ProfileClapHistory />
-                </Suspense>
+                {visible && (
+                  <Suspense fallback={<CircularProgress color='secondary' />}>
+                    <ProfileClapHistory />
+                  </Suspense>
+                )}
               </Grid>
             </Grid>
           </Grid>
@@ -58,6 +60,6 @@ class ProfileLayout extends React.Component {
 
 export default inject('commonStore', 'orgStore', 'authStore', 'recordStore', 'userStore')(
   observer(
-    withStyles(styles)( withProfileManagement(ProfileLayout))
+    withStyles(styles)(withProfileManagement(ProfileLayout))
   )
 );

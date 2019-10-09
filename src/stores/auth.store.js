@@ -144,11 +144,11 @@ class AuthStore {
    * @param {access_token} needed.
    */
   registerToOrg() {
-    if (!orgStore.values.organisation._id) return;
+    if (!orgStore.currentOrganisation) return;
     this.inProgress = true;
     this.errors = null;
 
-    return agent.Auth.registerToOrg(orgStore.values.organisation._id, this.values.invitationCode)
+    return agent.Auth.registerToOrg(orgStore.currentOrganisation._id, this.values.invitationCode)
       .then((data) => {
         return userStore.fetchCurrentUser()
           .then(() => { return data; });
@@ -176,9 +176,10 @@ class AuthStore {
   }
 
   confirmationInvitation(invitationUrl) {
+    if(!orgStore.currentOrganisation) return;
     this.inProgress = true;
     this.errors = null;
-    return agent.Email.confirmationInvitation(orgStore.values.organisation._id, invitationUrl)
+    return agent.Email.confirmationInvitation(orgStore.currentOrganisation._id, invitationUrl)
       .then((data) => {
         return data
       })

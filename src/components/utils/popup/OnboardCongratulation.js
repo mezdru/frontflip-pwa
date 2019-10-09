@@ -47,6 +47,7 @@ class OnboardCongratulation extends React.Component {
   render() {
     const { redirectTo } = this.state;
     const { classes } = this.props;
+    const { currentOrganisation} = this.props.orgStore;
 
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
 
@@ -63,13 +64,13 @@ class OnboardCongratulation extends React.Component {
         }
         actions={
           <Button onClick={this.handleOnboardEnd} color="secondary">
-            <FormattedMessage id="onboard.end.cta" values={{ organisationName: this.props.orgStore.values.organisation.name }} />
+            <FormattedMessage id="onboard.end.cta" values={{ organisationName: currentOrganisation.name }} />
           </Button>
         }
         onClose={this.handleClose}
       >
         <Typography variant="h6" className={classes.text}>
-          <FormattedMessage id="onboard.end.text" values={{ organisationName: this.props.orgStore.values.organisation.name }} />
+          <FormattedMessage id="onboard.end.text" values={{ organisationName: currentOrganisation.name }} />
         </Typography>
       </PopupLayout>
     );

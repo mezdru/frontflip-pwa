@@ -83,8 +83,6 @@ class HeaderDrawer extends Component {
         <div
           tabIndex={0}
           role="button"
-          onClick={this.handleDrawerClose}
-          onKeyDown={this.handleDrawerClose}
         >
           <div className={classes.drawerHeader}>
             <IconButton onClick={this.props.handleDrawerClose} className={classes.drawerIconButton} >
@@ -105,7 +103,7 @@ class HeaderDrawer extends Component {
                         <ListItemText primary={currentUserRecord.name || currentUserRecord.tag}
                           primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold', color: 'white', fontSize: '1rem' } }} />
                       </ListItem>
-                      <ListItem button component={Link} to={'/' + locale + '/' + currentOrganisation.tag + '/' + currentUserRecord.tag} onClick={(e) => { this.props.handleDisplayProfile(e, { tag: currentUserRecord.tag }) }}>
+                      <ListItem button component={Link} to={'/' + locale + '/' + currentOrganisation.tag + '/' + currentUserRecord.tag} onClick={this.props.handleDrawerClose}>
                         <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.profile' })} />
                       </ListItem>
                       <ListItem>

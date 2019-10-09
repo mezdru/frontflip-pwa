@@ -55,7 +55,7 @@ class SearchPage extends PureComponent {
     console.log('mount!!!!!!')
     this.moveSearchInputListener();
     this.handleUrlSearchFilters();
-    try { if (this.props.match.params.profileTag === 'congrats') this.setState({ showCongratulation: true }) } catch{ }
+    try { if (this.props.match.params.recordTag === 'congrats') this.setState({ showCongratulation: true }) } catch{ }
 
     observe(this.props.commonStore, 'searchFilters', (change) => {
       if (JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
@@ -69,12 +69,15 @@ class SearchPage extends PureComponent {
     observe(this.props.commonStore, 'searchResultsCount', (change) => { this.forceUpdate(); });
 
     if (this.props.commonStore.url.params.recordTag) {
-      this.handleDisplayProfile(null, { tag: this.props.commonStore.url.params.recordTag });
+      this.handleDisplayProfile(null, this.props.commonStore.url.params.recordTag);
     }
 
     this.unsubscribeRecordTag = observe(this.props.commonStore.url, 'params', (change) => {
-      if(change.oldValue.recordTag !== change.newValue.recordTag && change.newValue.recordTag)
-        this.handleDisplayProfile(null, { tag: change.newValue.recordTag });
+      console.log('url change')
+      if (change.oldValue.recordTag !== change.newValue.recordTag && change.newValue.recordTag)
+        this.handleDisplayProfile(null, change.newValue.recordTag);
+      if (!change.newValue.recordTag && change.oldValue.recordTag)
+        this.handleCloseProfile();
     });
   }
 
@@ -188,16 +191,18 @@ class SearchPage extends PureComponent {
     this.setState({ showAskForHelp: false }, () => { this.setState({ showAskForHelp: true }) });
   }
 
-  handleDisplayProfile = (e, profileRecord) => {
+  handleDisplayProfile = (e, recordTag) => {
     ReactGA.event({ category: 'User', action: 'Display profile' });
-    this.props.profileContext.setProfileData(profileRecord);
-    this.setState({ visible: true, redirectTo: getBaseUrl(this.props) + '/' + profileRecord.tag });
+    this.props.profileContext.setProfileData(recordTag);
+    this.setState({ visible: true, redirectTo: getBaseUrl(this.props) + '/' + recordTag }, () => { console.log('link OK') });
   }
 
   handleCloseProfile = () => {
+    console.log('close')
     this.setState({ visible: false });
-    // this.props.profileContext.reset();
     setTimeout(() => {
+      console.log('eee')
+      this.props.profileContext.reset();
       this.setState({ redirectTo: getBaseUrl(this.props) });
     },
       this.state.transitionDuration / 2
@@ -219,7 +224,7 @@ class SearchPage extends PureComponent {
       <React.Fragment>
         {(redirectTo && (window.location.pathname !== redirectTo)) && <Redirect push to={redirectTo} />}
         <Suspense fallback={<></>}>
-          <Header handleDisplayProfile={this.handleDisplayProfile} />
+          <Header />
         </Suspense>
 
         <main className={'search-container'}>
@@ -259,7 +264,7 @@ class SearchPage extends PureComponent {
               <ErrorBoundary>
                 <Suspense fallback={<CircularProgress color='secondary' />}>
                   <Grid container direction={"column"} justify={"space-around"} alignItems={"center"}>
-                    <SearchResults handleDisplayProfile={this.handleDisplayProfile} />
+                    <SearchResults />
                   </Grid>
                 </Suspense>
               </ErrorBoundary>
@@ -299,7 +304,7 @@ class SearchPage extends PureComponent {
 
         {hashtagsFilter.length > 0 && (actionInQueue === 'add') && (
           <Suspense fallback={<CircularProgress color='secondary' />}>
-            <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} handleDisplayProfile={this.handleDisplayProfile} />
+            <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} />
           </Suspense>
         )}
 

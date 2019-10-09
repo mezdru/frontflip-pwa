@@ -7,6 +7,7 @@ import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 import { observe } from 'mobx';
 import { Add } from '@material-ui/icons';
 import { getBaseUrl } from '../../services/utils.service';
+import undefsafe from 'undefsafe';
 
 const styles = theme => ({
   contactIcon: {
@@ -69,8 +70,15 @@ const styles = theme => ({
 
 class ProfileWings extends React.PureComponent {
 
-  componentDidMount() {
-    this.getClapsCount(this.props.profileContext.getProp('_id'));
+  async componentWillMount() {
+    this.unsubscribeUrlRecord = observe(this.props.recordStore, 'currentUrlRecord', (change) => {
+      if(change.newValue && change.newValue._id)
+      this.getClapsCount(change.newValue._id);
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeUrlRecord();
   }
 
   getClapsCount = (recordId) => {

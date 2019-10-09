@@ -75,7 +75,7 @@ class AlgoliaService {
 
   makeFacetFilters(lastSelection, privateOnly) {
     let query = [];
-    if(privateOnly) query.push('organisation:'+orgStore.values.organisation._id);
+    if(privateOnly) query.push('organisation:'+orgStore.currentOrganisation._id);
     if(lastSelection) query.push('hashtags.tag:'+lastSelection.tag);
     return query;
   }
