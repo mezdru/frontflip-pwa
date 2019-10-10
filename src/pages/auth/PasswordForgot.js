@@ -97,7 +97,7 @@ class PasswordForgot extends React.Component {
                     <SnackbarCustom variant="warning" message={emailError} />
                   </Grid>
                 )}
-                <Grid item>
+                <Grid item style={{width: '100%'}}>
                   <TextField  label="Email"
                               type="email"
                               autoComplete="email"
@@ -120,6 +120,6 @@ class PasswordForgot extends React.Component {
   }
 }
 
-export default inject('authStore', 'orgStore')(
+export default inject('authStore', 'orgStore', 'commonStore')(
   injectIntl(observer(withStyles(styles)(PasswordForgot)))
 );

@@ -5,8 +5,10 @@
   <meta charset="utf-8">
   <!-- <link rel="icon" type="image/x-icon" href="%PUBLIC_URL%/favicon.ico" /> -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, minimum-scale=1,maximum-scale=1,user-scalable=no">
-  <meta name="description" content="Wingzy is an intuitive app to find the coworkers you need according to what they love and know">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no, minimum-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="description"
+    content="Wingzy is an intuitive app to find the coworkers you need according to what they love and know">
   <meta name="theme-color" content="#FFFFFF">
   <title>Wingzy</title>
 
@@ -52,14 +54,16 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="https://wingzy.com/">
   <meta name="twitter:title" content="Wingzy">
-  <meta name="twitter:description" content="Wingzy is an intuitive app to find the coworkers you need according to what they love and know">
+  <meta name="twitter:description"
+    content="Wingzy is an intuitive app to find the coworkers you need according to what they love and know">
   <!-- Twitter summary card with large image must be at least 280x150px -->
   <meta name="twitter:image:src" content="https://wingzy.com/wingzy_full.png">
   <!-- Open Graph data -->
   <meta property="og:title" content="Wingzy" />
-  <meta property="og:url" content="https://wingzy.com/"/>
+  <meta property="og:url" content="https://wingzy.com/" />
   <meta property="og:image" content="https://wingzy.com/wingzy_full.png" />
-  <meta property="og:description" content="Wingzy is an intuitive app to find the coworkers you need according to what they love and know" />
+  <meta property="og:description"
+    content="Wingzy is an intuitive app to find the coworkers you need according to what they love and know" />
   <meta property="og:site_name" content="Wingzy" />
   <!--
       manifest.json provides metadata used when your web app is added to the
@@ -75,27 +79,27 @@
 
     if (window.location.href.search('test') !== -1) {
       manifestLink.href = '%PUBLIC_URL%/test/manifest.json';
-      faviconLink.href= '%PUBLIC_URL%/test/favicon.ico';
+      faviconLink.href = '%PUBLIC_URL%/test/favicon.ico';
       document.title = 'Les Testeurs';
     } else if (window.location.href.search('meridiam') !== -1) {
       manifestLink.href = '%PUBLIC_URL%/meridiam/manifest.json';
-      faviconLink.href= '%PUBLIC_URL%/meridiam/favicon.ico';
+      faviconLink.href = '%PUBLIC_URL%/meridiam/favicon.ico';
       document.title = 'Meridiam Network';
     } else if (window.location.href.search('circularity') !== -1) {
       manifestLink.href = '%PUBLIC_URL%/circularity/manifest.json';
-      faviconLink.href= '%PUBLIC_URL%/circularity/favicon.ico';
+      faviconLink.href = '%PUBLIC_URL%/circularity/favicon.ico';
       document.title = 'Circularity';
     } else {
       manifestLink.href = '%PUBLIC_URL%/manifest.json';
-      faviconLink.href= '%PUBLIC_URL%/favicon.ico';
+      faviconLink.href = '%PUBLIC_URL%/favicon.ico';
     }
     document.head.appendChild(faviconLink);
     document.head.appendChild(manifestLink);
   </script>
-  
+
   <!-- <link rel="manifest" href="%PUBLIC_URL%/manifest.json"> -->
   <!-- <link rel="manifest" href="meridiam/manifest.json" /> -->
-  
+
   <!-- PWACompat to bring Web App Manifest to older browsers  -->
   <script async src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.8/pwacompat.min.js"
     integrity="sha384-uONtBTCBzHKF84F6XvyC8S0gL8HTkAPeCyBNvfLfsqHh+Kd6s/kaS4BdmNQ5ktp1"
@@ -119,7 +123,7 @@
     UPLOADCARE_PREVIEW_STEP = true;
     UPLOADCARE_CLEARABLE = true;
 
-    try{
+    try {
       var locale = window.location.pathname.split('/')[1];
 
       switch (locale) {
@@ -137,36 +141,36 @@
             dialog: {
               tabs: {
                 file: {
-                button: 'Choisissez un fichier',
-                drag: 'Glissez-déposez un fichier',
-                or: 'ou'
-              },
-              url: {
-                title: 'Photo provenant d\'un site Web',
-                line1: 'Indiquez le lien vers la photo',
-                line2: '',
-                input: 'Collez votre lien ici...',
-                button: 'Chargez la photo'
-              },
-              camera: {
-                title: 'Photo provenant de la caméra',
-                capture: 'Prendre une photo',
-                pleaseAllow: {
-                  title: 'Veuillez accorder l\'accès à votre caméra.',
-                  text: 'Nous vous avons demandé l\'accès à votre caméra.<br>'+
-                        'Pour prendre une photo avec votre caméra, vous devez nous accorder cet accès'
+                  button: 'Choisissez un fichier',
+                  drag: 'Glissez-déposez un fichier',
+                  or: 'ou'
+                },
+                url: {
+                  title: 'Photo provenant d\'un site Web',
+                  line1: 'Indiquez le lien vers la photo',
+                  line2: '',
+                  input: 'Collez votre lien ici...',
+                  button: 'Chargez la photo'
+                },
+                camera: {
+                  title: 'Photo provenant de la caméra',
+                  capture: 'Prendre une photo',
+                  pleaseAllow: {
+                    title: 'Veuillez accorder l\'accès à votre caméra.',
+                    text: 'Nous vous avons demandé l\'accès à votre caméra.<br>' +
+                      'Pour prendre une photo avec votre caméra, vous devez nous accorder cet accès'
+                  }
+                },
+                preview: {
+                  change: 'Annuler',
+                  crop: {
+                    title: 'Rognez et ajoutez cette photo',
+                    done: 'Terminer',
+                  },
+                  image: {
+                    cancel: 'Annuler'
+                  },
                 }
-              },
-              preview: {
-                change: 'Annuler',
-                crop: {
-                  title: 'Rognez et ajoutez cette photo',
-                  done: 'Terminer',
-                },
-                image: {
-                  cancel: 'Annuler'
-                },
-              }
               },
             }
           };
@@ -176,11 +180,11 @@
         default:
           break;
       }
-    }catch(e) {
+    } catch (e) {
 
     }
 
-  </script>  
+  </script>
 </head>
 
 <body>
@@ -194,20 +198,24 @@
     <img src="%PUBLIC_URL%/wingzy_full_160.png" alt="Wingzy" />
     <!-- <h1>Wingzy</h1> -->
     <p>The app is loading...</p>
-    <p>If the app does not work, please clear your cache and reload this page.<br/>
-    <a href="mailto:contact@wingzy.com">Contact us</a> if the problem persists.</p>
-    <img src="%PUBLIC_URL%/loading.gif" alt="loader gif" width="50" height="50"/>
+    <p>If the app does not work, please clear your cache and reload this page.<br />
+      <a href="mailto:contact@wingzy.com">Contact us</a> if the problem persists.</p>
+    <img src="%PUBLIC_URL%/loading.gif" alt="loader gif" width="50" height="50" />
   </div>
 
   <script>
-    setTimeout(function() {
+    setTimeout(function () {
       var root = document.getElementById("root");
-      var rootChildren = root.childElementCount; 
-      if(rootChildren === 0) {
+      var rootChildren = root.childElementCount;
+      if (rootChildren === 0) {
         // add error
-        var errorMessage = document.getElementById('errorMessage');
-        root.appendChild(errorMessage);
-        errorMessage.style.display = 'block';
+        try {
+          var errorMessage = document.getElementById('errorMessage');
+          root.appendChild(errorMessage);
+          errorMessage.style.display = 'block';
+        } catch (e) {
+        }
+
       }
     }, 200);
   </script>
@@ -217,12 +225,17 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      left:0; right:0; margin: auto;
+      left: 0;
+      right: 0;
+      margin: auto;
       max-width: calc(100% - 32px);
       text-align: center;
       display: none;
     }
-    #errorMessage h1, #errorMessage p, #errorMessage img {
+
+    #errorMessage h1,
+    #errorMessage p,
+    #errorMessage img {
       margin: 16px;
     }
   </style>
@@ -237,4 +250,5 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
 </body>
+
 </html>

@@ -22,14 +22,11 @@ class ProfileClapHistory extends React.Component {
   }
 
   componentDidMount() {
-    console.log('MOUNT CLAP HISTORY')
-    console.log(this.props.profileContext.algoliaRecord);
     setTimeout(() => {
       this.getClapHistory(this.props.profileContext.getProp('_id'));
     }, 50);
 
     this.unsubUrlRecord = observe(this.props.commonStore.url, 'params', (change) => {
-      console.log('current url record change');
       if (change.oldValue.recordTag !== change.newValue.recordTag && change.newValue.recordTag)
         setTimeout(() => {
           this.getClapHistory(this.props.profileContext.getProp('_id'));
@@ -57,8 +54,6 @@ class ProfileClapHistory extends React.Component {
     const { currentOrganisation } = this.props.orgStore;
     const lastClapHistory = clapHistory.slice(0, 10);
     let clapsDisplayed = 0;
-
-    console.log(clapHistory.length);
 
     return (
       <>

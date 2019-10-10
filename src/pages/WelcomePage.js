@@ -59,7 +59,7 @@ class WelcomePage extends React.Component {
 
   componentWillMount() {
     console.log('user : ')
-    console.log(this.props.userStore.currentUser);
+    console.log(JSON.parse(JSON.stringify(this.props.userStore.currentUser)));
     if (!this.props.userStore.currentUser) return this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/signin' });
     let { email, _id } = this.props.userStore.currentUser;
     let { locale } = this.props.commonStore;

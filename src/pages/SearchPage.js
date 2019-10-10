@@ -52,7 +52,6 @@ class SearchPage extends PureComponent {
   }
 
   componentDidMount() {
-    console.log('mount!!!!!!')
     this.moveSearchInputListener();
     this.handleUrlSearchFilters();
     try { if (this.props.match.params.recordTag === 'congrats') this.setState({ showCongratulation: true }) } catch{ }
@@ -73,7 +72,6 @@ class SearchPage extends PureComponent {
     }
 
     this.unsubscribeRecordTag = observe(this.props.commonStore.url, 'params', (change) => {
-      console.log('url change')
       if (change.oldValue.recordTag !== change.newValue.recordTag && change.newValue.recordTag)
         this.handleDisplayProfile(null, change.newValue.recordTag);
       if (!change.newValue.recordTag && change.oldValue.recordTag)
@@ -194,14 +192,12 @@ class SearchPage extends PureComponent {
   handleDisplayProfile = (e, recordTag) => {
     ReactGA.event({ category: 'User', action: 'Display profile' });
     this.props.profileContext.setProfileData(recordTag);
-    this.setState({ visible: true, redirectTo: getBaseUrl(this.props) + '/' + recordTag }, () => { console.log('link OK') });
+    this.setState({ visible: true, redirectTo: getBaseUrl(this.props) + '/' + recordTag });
   }
 
   handleCloseProfile = () => {
-    console.log('close')
     this.setState({ visible: false });
     setTimeout(() => {
-      console.log('eee')
       this.props.profileContext.reset();
       this.setState({ redirectTo: getBaseUrl(this.props) });
     },

@@ -43,4 +43,4 @@ class AuthPage extends React.Component {
   }
 }
 
-export default inject('authStore')(observer(AuthPage));
+export default inject('authStore', 'commonStore')(observer(AuthPage));

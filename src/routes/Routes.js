@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { Route, Switch, withRouter, Link, Redirect } from 'react-router-dom';
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { addLocaleData, IntlProvider } from "react-intl";
@@ -17,6 +17,8 @@ const PasswordReset = React.lazy(() => import('../pages/auth/PasswordReset'));
 const OnboardPage = React.lazy(() => import('../pages/OnboardPage'));
 const SearchPage = React.lazy(() => import('../pages/SearchPage'));
 const AuthPage = React.lazy(() => import('../pages/auth/AuthPage'));
+const ErrorPage = React.lazy(() => import('../pages/ErrorPage'));
+const WelcomePage = React.lazy(() => import('../pages/WelcomePage'));
 
 addLocaleData([...locale_en, ...locale_fr]);
 
@@ -25,10 +27,7 @@ const messages = {
   'en': messages_en
 };
 
-if (process.env.NODE_ENV !== 'production') {
-  const whyDidYouRender = require('@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js');
-  whyDidYouRender(React, { hotReloadBufferMs: 1500 });
-}
+const PROTECTED_TAG = ['signin', 'signup', 'welcome', 'error', 'password'];
 
 class Routes extends React.Component {
   constructor(props) {
@@ -46,11 +45,26 @@ class Routes extends React.Component {
       render: false,
       orgNotFound: false,
       fallbackOrgTag: null,
+      redirectTo: null,
+      shouldPushRedirectTo: false
     }
 
     // Remove for the moment, this cookie will be usefull to persist filters if needed
     this.props.commonStore.removeCookie('searchFilters');
-    this.getUserAndOrgs();
+  }
+
+  async componentDidMount() {
+    try {document.getElementById('errorMessage').remove();}catch(e){};
+    await this.getUserAndOrgs();
+    await this.getNeededData();
+  }
+  componentWillReceiveProps(nextProps) {
+    let path = nextProps.history.location.pathname;
+    let params = path.split('/');
+    if(this.state.lastCheckedOrgTag && params[2] === this.state.lastCheckedOrgTag) return;
+
+    if(nextProps.history.action !== 'REPLACE')
+      this.getNeededData();
   }
 
   async getUserAndOrgs() {
@@ -60,7 +74,6 @@ class Routes extends React.Component {
         await this.props.orgStore.fetchOrganisation(orgAndRecord.organisation);
         await this.props.recordStore.fetchRecord(orgAndRecord.record);
       });
-      await this.updateAuthorizations();
     }
   }
 
@@ -71,61 +84,80 @@ class Routes extends React.Component {
     return (user.superadmin || this.props.userStore.currentOrgAndRecord != null);
   }
 
-  updateAuthorizations = async () => {
+  getNeededData = async () => {
     let params = window.location.pathname.split('/');
-    let orgTag = params[2];
-    this.props.commonStore.url.params.orgTag = orgTag;
+    let orgTag = params[2] || null;
     let state = this.state;
 
     state.isAuth = this.props.authStore.isAuth();
     state.render = true;
     state.authorizations.hasEmailValidated = undefsafe(this.props.userStore.currentUser, 'email.validated') || false;
+    state.authorizations.canAccessOrg = false;
+    state.authorizations.belongsToOrg = false;
+    state.authorizations.isOnboarded = false;
+    state.lastCheckedOrgTag = null;
+
 
     try {
-      state.fallbackOrgTag = this.props.orgStore.getOrganisation(this.props.userStore.currentUser.orgsAndRecords[0].organisation).tag;
-    } catch (e) { }
+      state.fallbackOrgTag = (await this.props.orgStore.getOrFetchOrganisation(this.props.userStore.currentUser.orgsAndRecords[0].organisation)).tag;
+    } catch (e) {}
 
-    if (orgTag) {
+    if (orgTag && !PROTECTED_TAG.find(t => t === orgTag)) { 
       try {
         await this.props.orgStore.getOrFetchOrganisation(null, orgTag).catch(e => { state.orgNotFound = true });
-
         if (!state.orgNotFound) {
+          this.props.commonStore.url.params.orgTag = orgTag;
           state.authorizations.canAccessOrg = this.hasAccessToOrg(this.props.userStore.currentUser, this.props.orgStore.currentOrganisation);
           state.authorizations.belongsToOrg = (this.props.userStore.currentOrgAndRecord != null);
           state.authorizations.isOnboarded = (this.props.userStore.currentOrgAndRecord && this.props.userStore.currentOrgAndRecord.welcomed) != null;
           state.lastCheckedOrgTag = this.props.orgStore.currentOrganisation.tag;
         }
-      } catch (e) {
-        console.error(e);
-        state.authorizations.canAccessOrg = false;
-        state.authorizations.belongsToOrg = false;
-        state.authorizations.isOnboarded = false;
-        state.lastCheckedOrgTag = null;
-      }
+      } catch (e) {}
     }
+    [state.redirectTo, state.shouldPushRedirectTo] = this.getRedirectTo();
     this.setState(state);
   }
 
+  // prepare state.redirectTo ?
+  // redirection to /welcome doesn't display the page + sometimes infinity redirect loop
+  getRedirectTo = () => {
+    const { isAuth, orgNotFound, authorizations, lastCheckedOrgTag, fallbackOrgTag } = this.state;
+    let redirect;
+    let shouldPush = false;
+    let localeUrl = '/' + this.props.commonStore.locale + '/';
+    let baseUrl = localeUrl + lastCheckedOrgTag;
+
+    if (!lastCheckedOrgTag && isAuth && !fallbackOrgTag) redirect = localeUrl + 'welcome';
+    else if (fallbackOrgTag){redirect = localeUrl + fallbackOrgTag; shouldPush = true;}
+    if (orgNotFound && lastCheckedOrgTag) redirect = localeUrl + 'error/404/organisation';
+    if (isAuth && !authorizations.hasEmailValidated) redirect = localeUrl + 'error/403/email';
+    if (isAuth && lastCheckedOrgTag && !authorizations.canAccessOrg) redirect = localeUrl + 'error/403/organisation';
+    if (isAuth && authorizations.belongsToOrg && !authorizations.isOnboarded){redirect = baseUrl + '/onboard'; shouldPush=true;}
+
+    return [redirect, shouldPush];
+  }
+
+  componentDidUpdate() {
+    if(this.state.redirectTo)
+      this.setState({redirectTo: null});
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return true;
+  }
+
+  // SEARch profile sync issues/ load take too much time : component await data load before display him ?
+  // ClapHistory component data load very weird : timeout needed. because sync issue
+  // REDIRECTIONS doesn't work.
   render() {
-    const { render, isAuth, orgNotFound, authorizations, lastCheckedOrgTag } = this.state;
-    const endUrl = window.location.pathname + window.location.search;
+    const { redirectTo, render, isAuth, orgNotFound, authorizations, lastCheckedOrgTag, fallbackOrgTag, shouldPushRedirectTo } = this.state;
     const { currentUser } = this.props.userStore;
     const { locale } = this.props.commonStore;
     let defaultLocale = (currentUser ? currentUser.locale || locale : locale) || 'en';
     if (defaultLocale === 'en-UK') defaultLocale = 'en';
-    let baseUrl = '/' + locale + '/' + lastCheckedOrgTag;
-
-    // don't forget redirections !
-    console.table(this.state);  
-    console.log(baseUrl)
 
     if (!render) return null;
-
-    if (orgNotFound) return <Redirect to={'/' + locale + '/error/404/organisation'} />;
-    if (isAuth && !authorizations.hasEmailValidated) return <Redirect to={'/' + locale + '/error/403/email'} />;
-    if (isAuth && lastCheckedOrgTag && !authorizations.canAccessOrg) return <Redirect to={'/' + locale + '/error/403/organisation'} />;
-    if (isAuth && authorizations.belongsToOrg && !authorizations.isOnboarded) return <Redirect to={baseUrl + '/onboard'} />;
-
+    if (redirectTo && redirectTo !== window.location.pathname) return <Redirect to={redirectTo} push={shouldPushRedirectTo} />;
     return (
       <IntlProvider locale={defaultLocale} messages={messages[defaultLocale]}>
         <ProfileProvider>
@@ -133,6 +165,10 @@ class Routes extends React.Component {
             <Switch>
 
               {/* DONT FORGET failRedirect param on each custom route */}
+              {/* TEST all routes  with user / user no auth / user admin / superadmin? */}
+
+              <Route exact path="/:locale(en|fr|en-UK)/welcome" component={WelcomePage} />
+              <Route exact path="/:locale(en|fr|en-UK)/error/:errorCode/:errorType" component={ErrorPage} />
 
               <Route
                 exact
@@ -175,11 +211,20 @@ class Routes extends React.Component {
                 component={(OnboardPage)}
               />
 
-              <ConditionnalRoute 
+              <ConditionnalRoute
                 condition={authorizations.canAccessOrg}
-                failRedirect={'/'}
-                path="/:locale(en|fr|en-UK)/:orgTag/:recordTag?" 
-                component={SearchPage} 
+                failRedirect={'/failed'}
+                path={[
+                  "/:locale(en|fr|en-UK)/:orgTag/congrats",
+                  "/:locale(en|fr|en-UK)/:orgTag/:hashtags/:action",
+                  "/:locale(en|fr|en-UK)/:orgTag/:recordTag?"
+                ]}
+                component={SearchPage}
+              />
+
+              <Route path="/" render={
+                () => <Redirect to={'/' + locale + (fallbackOrgTag ? '/' + fallbackOrgTag + '' : '') + window.location.search} />
+              }
               />
 
             </Switch>

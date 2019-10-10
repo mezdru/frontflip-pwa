@@ -31,7 +31,8 @@ const withClapManagement = (ComponentToWrap) => {
     }
 
     canClap = (recipient) => {
-      return this.props.recordStore.currentUserRecord._id !== recipient;
+      let record = this.props.recordStore.currentUserRecord;
+      return record && record._id !== recipient;
     }
 
     render() {
