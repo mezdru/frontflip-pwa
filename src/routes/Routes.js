@@ -53,20 +53,6 @@ class Routes extends React.Component {
     this.props.commonStore.removeCookie('searchFilters');
   }
 
-  async componentDidMount() {
-    try {document.getElementById('errorMessage').remove();}catch(e){};
-    await this.getUserAndOrgs();
-    await this.getNeededData();
-  }
-  componentWillReceiveProps(nextProps) {
-    let path = nextProps.history.location.pathname;
-    let params = path.split('/');
-    if(this.state.lastCheckedOrgTag && params[2] === this.state.lastCheckedOrgTag) return;
-
-    if(nextProps.history.action !== 'REPLACE')
-      this.getNeededData();
-  }
-
   async getUserAndOrgs() {
     if (this.props.authStore.isAuth()) {
       let cUser = await this.props.userStore.fetchCurrentUser();
@@ -84,25 +70,18 @@ class Routes extends React.Component {
     return (user.superadmin || this.props.userStore.currentOrgAndRecord != null);
   }
 
-  getNeededData = async () => {
-    let params = window.location.pathname.split('/');
-    let orgTag = params[2] || null;
-    let state = this.state;
+  // SEARch profile sync issues/ load take too much time : component await data load before display him ?
+  // ClapHistory component data load very weird : timeout needed. because sync issue
+  // REDIRECTIONS doesn't work.
 
-    state.isAuth = this.props.authStore.isAuth();
-    state.render = true;
-    state.authorizations.hasEmailValidated = undefsafe(this.props.userStore.currentUser, 'email.validated') || false;
-    state.authorizations.canAccessOrg = false;
-    state.authorizations.belongsToOrg = false;
-    state.authorizations.isOnboarded = false;
-    state.lastCheckedOrgTag = null;
+  getAuthorizations = async (orgTag) => {
+    let state = {isAuth: this.props.authStore.isAuth(), render: true, authorizations: {
+      hasEmailValidated: (undefsafe(this.props.userStore.currentUser, 'email.validated') || false)
+    }};
 
+    try { state.fallbackOrgTag = (await this.props.orgStore.getOrFetchOrganisation(this.props.userStore.currentUser.orgsAndRecords[0].organisation)).tag } catch (e) { };
 
-    try {
-      state.fallbackOrgTag = (await this.props.orgStore.getOrFetchOrganisation(this.props.userStore.currentUser.orgsAndRecords[0].organisation)).tag;
-    } catch (e) {}
-
-    if (orgTag && !PROTECTED_TAG.find(t => t === orgTag)) { 
+    if (orgTag && !PROTECTED_TAG.find(t => t === orgTag)) {
       try {
         await this.props.orgStore.getOrFetchOrganisation(null, orgTag).catch(e => { state.orgNotFound = true });
         if (!state.orgNotFound) {
@@ -112,43 +91,54 @@ class Routes extends React.Component {
           state.authorizations.isOnboarded = (this.props.userStore.currentOrgAndRecord && this.props.userStore.currentOrgAndRecord.welcomed) != null;
           state.lastCheckedOrgTag = this.props.orgStore.currentOrganisation.tag;
         }
-      } catch (e) {}
+      } catch (e) { }
     }
-    [state.redirectTo, state.shouldPushRedirectTo] = this.getRedirectTo();
-    this.setState(state);
+    return state;
   }
 
-  // prepare state.redirectTo ?
-  // redirection to /welcome doesn't display the page + sometimes infinity redirect loop
-  getRedirectTo = () => {
-    const { isAuth, orgNotFound, authorizations, lastCheckedOrgTag, fallbackOrgTag } = this.state;
-    let redirect;
+  getRedirectTo = (state, locale) => {
+    const { isAuth, orgNotFound, authorizations, lastCheckedOrgTag, fallbackOrgTag } = state;
+    let redirect = null;
     let shouldPush = false;
-    let localeUrl = '/' + this.props.commonStore.locale + '/';
+    let localeUrl = '/' + (locale || this.props.commonStore.locale) + '/';
     let baseUrl = localeUrl + lastCheckedOrgTag;
 
     if (!lastCheckedOrgTag && isAuth && !fallbackOrgTag) redirect = localeUrl + 'welcome';
-    else if (fallbackOrgTag){redirect = localeUrl + fallbackOrgTag; shouldPush = true;}
+    else if (fallbackOrgTag) { redirect = localeUrl + fallbackOrgTag; shouldPush = true; }
     if (orgNotFound && lastCheckedOrgTag) redirect = localeUrl + 'error/404/organisation';
     if (isAuth && !authorizations.hasEmailValidated) redirect = localeUrl + 'error/403/email';
     if (isAuth && lastCheckedOrgTag && !authorizations.canAccessOrg) redirect = localeUrl + 'error/403/organisation';
-    if (isAuth && authorizations.belongsToOrg && !authorizations.isOnboarded){redirect = baseUrl + '/onboard'; shouldPush=true;}
+    if (isAuth && authorizations.belongsToOrg && !authorizations.isOnboarded) { redirect = baseUrl + '/onboard'; shouldPush = true; }
 
     return [redirect, shouldPush];
   }
 
-  componentDidUpdate() {
-    if(this.state.redirectTo)
-      this.setState({redirectTo: null});
+  handleRouter = async (orgTag, locale) => {
+    let state = await this.getAuthorizations(orgTag);
+    [state.redirectTo, state.shouldPushRedirectTo] = this.getRedirectTo(state, locale);
+    this.setState(state, () => {console.log(this.state)});
+  }
+
+
+  componentDidMount() {
+    try { document.getElementById('errorMessage').remove(); } catch (e) { };
+    let path = this.props.history.location.pathname;
+    let [emptyParam, locale, orgTag] = path.split('/');
+    this.getUserAndOrgs()
+    .then(() => this.handleRouter(orgTag, locale));
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return true;
+    if (JSON.stringify(nextState) !== JSON.stringify(this.state)) return true;
+
+    let path = nextProps.history.location.pathname;
+    let [emptyParam, locale, orgTag] = path.split('/');
+    if(orgTag !== this.state.lastCheckedOrgTag)
+      this.handleRouter(orgTag, locale);
+
+    return false;
   }
 
-  // SEARch profile sync issues/ load take too much time : component await data load before display him ?
-  // ClapHistory component data load very weird : timeout needed. because sync issue
-  // REDIRECTIONS doesn't work.
   render() {
     const { redirectTo, render, isAuth, orgNotFound, authorizations, lastCheckedOrgTag, fallbackOrgTag, shouldPushRedirectTo } = this.state;
     const { currentUser } = this.props.userStore;
@@ -161,7 +151,7 @@ class Routes extends React.Component {
     return (
       <IntlProvider locale={defaultLocale} messages={messages[defaultLocale]}>
         <ProfileProvider>
-          <Suspense fallback={<></>}>
+          <Suspense fallback={<div style={{ position: 'fixed', top: '45%', width: '100%', textAlign: 'center' }}><CircularProgress color="secondary" /></div>}>
             <Switch>
 
               {/* DONT FORGET failRedirect param on each custom route */}
@@ -223,7 +213,7 @@ class Routes extends React.Component {
               />
 
               <Route path="/" render={
-                () => <Redirect to={'/' + locale + (fallbackOrgTag ? '/' + fallbackOrgTag + '' : '') + window.location.search} />
+                () => <Redirect push to={'/' + locale + (fallbackOrgTag ? '/' + fallbackOrgTag + '' : '') + window.location.search} />
               }
               />
 

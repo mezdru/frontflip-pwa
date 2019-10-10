@@ -10,6 +10,7 @@ export const ConditionnalRoute = function PrivateRoute({component: Component, co
           <Component {...props} />
         ) : (
           <Redirect
+            push
             to={{
               pathname: failRedirect,
               state: { from: props.location }
