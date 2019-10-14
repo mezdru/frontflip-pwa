@@ -44,7 +44,7 @@ class OnboardPage extends React.PureComponent {
       await this.props.recordStore.getOrFetchRecord(null, this.props.commonStore.url.params.recordTag, orgId);
     } else {
       await this.props.recordStore.fetchPopulatedForUser(orgId);
-      await this.props.userStore.fetchCurrentUser(); // update user
+      await this.props.userStore.fetchCurrentUser(); // get updated user
     }
     this.setState({renderComponent: true});
   }
