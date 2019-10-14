@@ -7,6 +7,7 @@ import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 import { observe } from 'mobx';
 import { Add } from '@material-ui/icons';
 import { getBaseUrl } from '../../services/utils.service';
+import {Link} from 'react-router-dom';
 import undefsafe from 'undefsafe';
 
 const styles = theme => ({
@@ -41,10 +42,10 @@ const styles = theme => ({
     paddingBottom: 24
   },
   wingsFamilyTitle: {
-    textTransform: 'uppercase', 
-    fontSize: '0.8rem', 
+    textTransform: 'uppercase',
+    fontSize: '0.8rem',
     fontWeight: 400,
-    marginLeft: 16, 
+    marginLeft: 16,
     lineHeight: 1,
   },
   addWingsButton: {
@@ -72,8 +73,8 @@ class ProfileWings extends React.PureComponent {
 
   async componentWillMount() {
     this.unsubscribeUrlRecord = observe(this.props.recordStore, 'currentUrlRecord', (change) => {
-      if(change.newValue && change.newValue._id)
-      this.getClapsCount(change.newValue._id);
+      if (change.newValue && change.newValue._id)
+        this.getClapsCount(change.newValue._id);
     });
   }
 
@@ -96,10 +97,6 @@ class ProfileWings extends React.PureComponent {
     return clapEntry ? clapEntry.claps : null;
   }
 
-  handleOnboard = (step) => {
-    window.location.pathname = getBaseUrl(this.props) + `/onboard/${(step ? step.replace('#', '%23') : 'wings')}/edit/${this.props.profileContext.getProp('_id')}`;
-  }
-
   render() {
     const { classes, profileContext } = this.props;
     const { isEditable, wingsByFamilies } = this.props.profileContext;
@@ -111,7 +108,7 @@ class ProfileWings extends React.PureComponent {
           if (wbf.wings.length === 0) return null;
           return (
             <div key={index} className={classes.wingsFamilyContainer}>
-              <Typography variant="body1" style={{color: (wingsByFamilies.length > 1 || isEditable) ? 'rgba(255, 255, 255, 1)' : 'rgba(0,0,0,0)' }} className={classes.wingsFamilyTitle}>
+              <Typography variant="body1" style={{ color: (wingsByFamilies.length > 1 || isEditable) ? 'rgba(255, 255, 255, 1)' : 'rgba(0,0,0,0)' }} className={classes.wingsFamilyTitle}>
                 {(wingsByFamilies.length > 1 || isEditable) ? wbf.family.intro : '.'}
               </Typography>
               {wbf.wings.map((wing, index) => {
@@ -125,8 +122,12 @@ class ProfileWings extends React.PureComponent {
                 )
               })}
               {isEditable && (
-                <IconButton className={classes.addWingsButton} onClick={() => {this.handleOnboard(wbf.family.tag)}} >
-                  <Add/>
+                <IconButton
+                  className={classes.addWingsButton}
+                  component={Link}
+                  to={getBaseUrl(this.props) + `/onboard/${(wbf.family.tag ? wbf.family.tag.replace('#', '%23') : 'wings')}/edit/${this.props.profileContext.getProp('tag')}`}
+                >
+                  <Add />
                 </IconButton>
               )}
             </div>

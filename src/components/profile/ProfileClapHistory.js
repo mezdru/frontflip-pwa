@@ -22,20 +22,22 @@ class ProfileClapHistory extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this.getClapHistory(this.props.profileContext.getProp('_id'));
-    }, 50);
+    if (this.props.authStore.isAuth()) {
+      setTimeout(() => {
+        this.getClapHistory(this.props.profileContext.getProp('_id'));
+      }, 50);
 
-    this.unsubUrlRecord = observe(this.props.commonStore.url, 'params', (change) => {
-      if (change.oldValue.recordTag !== change.newValue.recordTag && change.newValue.recordTag)
-        setTimeout(() => {
-          this.getClapHistory(this.props.profileContext.getProp('_id'));
-        }, 50);
-    })
+      this.unsubUrlRecord = observe(this.props.commonStore.url, 'params', (change) => {
+        if (change.oldValue.recordTag !== change.newValue.recordTag && change.newValue.recordTag)
+          setTimeout(() => {
+            this.getClapHistory(this.props.profileContext.getProp('_id'));
+          }, 50);
+      })
+    }
   }
 
   componentWillUnmount() {
-    this.unsubUrlRecord();
+    if(this.unsubUrlRecord) this.unsubUrlRecord();
   }
 
   getClapHistory = (recordId) => {
@@ -89,7 +91,7 @@ class ProfileClapHistory extends React.Component {
   }
 }
 
-export default inject('recordStore', 'clapStore', 'commonStore', 'orgStore')(
+export default inject('recordStore', 'clapStore', 'commonStore', 'orgStore', 'authStore')(
   observer(
     withStyles(styles)(withProfileManagement(ProfileClapHistory))
   )

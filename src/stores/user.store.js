@@ -1,7 +1,9 @@
 import { observable, action, decorate, computed } from 'mobx';
 import orgStore from './organisation.store';
+import recordStore from './record.store';
 import LogRocket from 'logrocket';
 import Store from './store';
+import {asyncForEach} from '../services/utils.service';
 
 class UserStore extends Store {
 
@@ -19,6 +21,11 @@ class UserStore extends Store {
   async fetchCurrentUser() {
     let user = await super.fetchResource('me');
     this.currentUser = user;
+
+    await asyncForEach(user.orgsAndRecords, async (orgAndRecord) => {
+      await orgStore.getOrFetchOrganisation(orgAndRecord.organisation).catch(e => {return;});
+      await recordStore.getOrFetchRecord(orgAndRecord.record, null, orgAndRecord.organisation).catch(e => {return;});
+    });
 
     LogRocket.identify(user._id, {   
       env: process.env.NODE_ENV,

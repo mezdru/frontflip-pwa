@@ -16,6 +16,7 @@ import withSearchManagement from '../hoc/SearchManagement.hoc';
 import { withProfileManagement } from '../hoc/profile/withProfileManagement';
 import AskForHelpFab from '../components/utils/buttons/AskForHelpFab';
 import { getBaseUrl } from '../services/utils.service';
+import withAuthorizationManagement from '../hoc/AuthorizationManagement.hoc';
 
 const OnboardCongratulation = React.lazy(() => import('../components/utils/popup/OnboardCongratulation'));
 const PromptIOsInstall = React.lazy(() => import('../components/utils/popup/PromptIOsInstall'));
@@ -52,6 +53,7 @@ class SearchPage extends PureComponent {
   }
 
   componentDidMount() {
+    console.log('Search did Mount.');
     this.moveSearchInputListener();
     this.handleUrlSearchFilters();
     try { if (this.props.match.params.recordTag === 'congrats') this.setState({ showCongratulation: true }) } catch{ }
@@ -316,7 +318,7 @@ class SearchPage extends PureComponent {
   }
 }
 
-SearchPage = withSearchManagement(withProfileManagement(SearchPage));
+SearchPage = withAuthorizationManagement(withSearchManagement(withProfileManagement(SearchPage)), 'search');
 
 export default inject('commonStore', 'orgStore', 'authStore', 'userStore', 'recordStore')(
   observer(

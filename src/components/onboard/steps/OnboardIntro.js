@@ -31,11 +31,12 @@ class OnboardIntro extends React.Component {
   }
 
   render() {
-    const { currentUserRecord } = this.props.recordStore;
     const { classes } = this.props;
+    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
 
-    currentUserRecord.intro = entities.decode(currentUserRecord.intro);
-    currentUserRecord.name = entities.decode(currentUserRecord.name);
+
+    record.intro = entities.decode(record.intro);
+    record.name = entities.decode(record.name);
 
     return (
         <Grid container item xs={12} spacing={16} direction="column" className={classes.root} >
@@ -57,11 +58,11 @@ class OnboardIntro extends React.Component {
               className={classes.field}
               fullWidth
               variant={"outlined"}
-              value={currentUserRecord.name}
+              value={record.name}
               onChange={(e) => this.handleChange(e, 'name')}
               onBlur={(e) => { this.props.handleSave(['name']) }}
-              error={(currentUserRecord.name && (currentUserRecord.name.length > 64)) === true}
-              helperText={(currentUserRecord.name && currentUserRecord.name.length > 64) ? '64 characters max' : ''}
+              error={(record.name && (record.name.length > 64)) === true}
+              helperText={(record.name && record.name.length > 64) ? '64 characters max' : ''}
               required
             />
           </Grid>
@@ -73,11 +74,11 @@ class OnboardIntro extends React.Component {
               className={classes.field}
               fullWidth
               variant={"outlined"}
-              value={currentUserRecord.intro}
+              value={record.intro}
               onChange={(e) => this.handleChange(e, 'intro')}
               onBlur={(e) => this.props.handleSave(['intro'])}
-              error={(currentUserRecord.intro && (currentUserRecord.intro.length > 256)) === true}
-              helperText={(currentUserRecord.intro && currentUserRecord.intro.length > 256) ? '256 characters max' : ''}
+              error={(record.intro && (record.intro.length > 256)) === true}
+              helperText={(record.intro && record.intro.length > 256) ? '256 characters max' : ''}
               required
             />
           </Grid>

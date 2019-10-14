@@ -18,53 +18,9 @@ import { FormattedMessage } from "react-intl";
 import classNames from 'classnames';
 import undefsafe from 'undefsafe';
 import { getBaseUrl } from '../../services/utils.service.js';
+import {styles} from './OnboardStepper.css';
 
 let timeoutArray = [];
-
-const styles = theme => ({
-  root: {
-    background: theme.palette.primary.dark
-  },
-  container: {
-    backgroundColor: 'white',
-    borderRadius: 5,
-    maxHeight: 'calc(100vh - 64px)',
-    [theme.breakpoints.down('xs')]: {
-      maxHeight: 'unset'
-    }
-    // overflowY: 'auto',
-  },
-  stepComponentContainer: {
-    maxHeight: 'calc(100% - 64px)',
-    overflowY: 'auto',
-    [theme.breakpoints.down('xs')]: {
-      height: 'calc(100vh - 72px)',
-      maxHeight: 'unset',
-      overflowY: 'auto',
-    }
-  },
-  stepperButton: {
-    background: 'none',
-    boxShadow: 'none',
-    padding: '8px 16px',
-    color: 'white',
-    '&:hover': {
-      background: 'rgba(255, 255, 255, 0.12)',
-    },
-    '&:first-child()': {
-      width: 40,
-    },
-    '&:disabled': {
-      color: theme.palette.primary.hover + '!important'
-    }
-  },
-  stepperButtonHighlighted: {
-    background: theme.palette.secondary.main,
-    '&:hover': {
-      background: theme.palette.secondary.dark,
-    },
-  }
-});
 
 class OnboardStepper extends React.Component {
   constructor(props) {
@@ -159,7 +115,6 @@ class OnboardStepper extends React.Component {
       throw new Error('test');
     }).catch((e) => {
       console.error(e);
-      alert('Your data can\'t be saved, please contact us at contact@wingzy.com.');
     });
   }
 
@@ -184,19 +139,17 @@ class OnboardStepper extends React.Component {
 
   render() {
     const { theme, classes, edit } = this.props;
+    const { recordTag } = this.props.commonStore.url.params;
     const { activeStep, steps, canNext, showFeedback, redirectTo, slideDirection, slideState } = this.state;
     let StepComponent = this.getStepComponent(steps, activeStep);
-    let wantedUrl = getBaseUrl(this.props) + '/onboard/' + (steps[activeStep] ? steps[activeStep].replace('#', '%23') : '');
-
+    let wantedUrl = getBaseUrl(this.props) + '/onboard/' + (steps[activeStep] ? steps[activeStep].replace('#', '%23') : '') + (edit ? '/edit': '') + (recordTag ? '/' + recordTag : '');
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
 
     return (
       <Slide direction={slideDirection} in={slideState} mountOnEnter unmountOnExit timeout={300}>
 
         <Grid item xs={12} sm={8} md={6} lg={6} className={classes.container} >
-          {((window.location.pathname !== wantedUrl) && (window.location.pathname !== wantedUrl + '/edit') && !edit) && (
-            <Redirect push to={wantedUrl} />
-          )}
+          {window.location.pathname !== wantedUrl && (<Redirect push to={wantedUrl} />)}
           <Grid item xs={12}>
             <MobileStepper
               variant="dots"

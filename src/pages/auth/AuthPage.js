@@ -23,6 +23,7 @@ class AuthPage extends React.Component {
   }
 
   componentDidMount() {
+    console.log('mount auth page');
     if (this.props.match && this.props.match.params && this.props.match.params.invitationCode) {
       this.props.authStore.setInvitationCode(this.props.match.params.invitationCode);
       this.setState({initialTabState: 1});

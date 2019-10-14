@@ -71,7 +71,7 @@ class OnboardSuggestions extends React.Component {
   shouldDisplaySuggestion = (suggestion) => {
     let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
     return (
-      (record.hashtags.find(wing => wing.tag === (suggestion.tag || suggestion.value)) === undefined) &&
+      (!record.hashtags.find(wing => wing.tag === (suggestion.tag || suggestion.value))) &&
       (suggestion.tag !== this.state.lastSelected.tag)
     );
   }

@@ -15,7 +15,7 @@ class UrlService {
   }
 
   checkLocale() {
-    this.locale = ((this.env === 'production' || this.env === 'staging') ? (commonStore.getCookie('locale') || commonStore.locale) : 'en-UK');
+    this.locale = ((this.env === 'production' || this.env === 'staging') ? commonStore.locale : 'en-UK');
   }
 
   checkHttp() {

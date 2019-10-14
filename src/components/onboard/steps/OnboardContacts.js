@@ -49,7 +49,7 @@ class OnboardContacts extends React.Component {
   
   componentWillMount() {
     this.setState({
-      links: undefsafe( (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord), 'links' )
+      links: undefsafe( (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord), 'links' ) || []
     },()=> {
       this.setDefaultLinks();
     })

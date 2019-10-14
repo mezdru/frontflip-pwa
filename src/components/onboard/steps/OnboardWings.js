@@ -44,9 +44,7 @@ class OnboardWings extends React.Component {
     try {
       var elt = document.getElementById(this.state.scrollableClass);
       elt.scrollTop = elt.scrollHeight;
-    } catch (e) {
-      // log
-    }
+    } catch (e) {}
   }
 
   componentDidMount() {
@@ -130,7 +128,7 @@ class OnboardWings extends React.Component {
             </Grid>
 
             <Grid item xs={12} className={classes.search}>
-              <Search mode="onboard" onSelect={this.handleAddWing} max={10} wingsFamily={this.getFeaturedWings()} handleCreateWing={this.handleCreateWing} />
+              <Search mode="onboard" edit={this.props.edit} onSelect={this.handleAddWing} max={10} wingsFamily={this.getFeaturedWings()} handleCreateWing={this.handleCreateWing} />
             </Grid>
 
           </Grid>
@@ -140,7 +138,7 @@ class OnboardWings extends React.Component {
           <Grid container item xs={12}>
             <Grid item xs={12} >
               <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? this.getFeaturedWings() : null}
-                scrollUserWingsToBottom={this.scrollUserWingsToBottom} />
+                scrollUserWingsToBottom={this.scrollUserWingsToBottom} edit={this.props.edit} />
             </Grid>
           </Grid>
         </Grid>

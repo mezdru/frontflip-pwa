@@ -14,7 +14,7 @@ class RecordStore extends Store {
 
   get currentUserRecord() {
     let orgAndRecord = userStore.currentUser && userStore.currentUser.orgsAndRecords.find(oar => oar.organisation === undefsafe(orgStore.currentOrganisation, '_id'));
-    if(!orgAndRecord) return null;
+    if(!orgAndRecord || !orgAndRecord.record) return null;
     return this.getRecord(orgAndRecord.record._id || orgAndRecord.record);
   }
 
@@ -26,7 +26,7 @@ class RecordStore extends Store {
     if (!recordId && !recordTag) return null;
     return this.records.find(record => {
       if (recordId) return JSON.stringify(recordId) === JSON.stringify(record._id || record.objectID);
-      else return recordTag === record.tag;
+      else return ((recordTag === record.tag) && (record.organisation === orgStore.currentOrganisation._id) );
     });
   }
 

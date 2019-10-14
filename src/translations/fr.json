@@ -110,7 +110,7 @@
     "profile.activity.empty": "Il n'y a pas encore d'acitivités sur ce profil",
     "profile.filter.title": "Filtre",
     "profile.filter.default": "Pas de filtre",
-    "profile.others": "Autres",
+    "profile.others": "Je peux aussi aider avec",
     "card.moreWings": "... {counter} en plus",
     "askForHelp.popup.title": "Posez une question",
     "askForHelp.popup.subtitle": "Envoyez un email à {resultsCount} personnes",

@@ -8,6 +8,7 @@ import ReactGA from 'react-ga';
 import BannerResizable from '../components/utils/banner/BannerResizable';
 import Header from '../components/header/Header';
 import { styles } from './OnboardPage.css';
+import withAuthorizationManagement from '../hoc/AuthorizationManagement.hoc';
 
 const Intercom = React.lazy(() => import('react-intercom'));
 
@@ -20,7 +21,6 @@ class OnboardPage extends React.PureComponent {
     super(props);
     this.state = {
       inOnboarding: undefsafe(this.props, 'match.params.step') !== undefined,
-      editMode: this.props.edit || false,
       renderComponent: false // do not remove this!!
     };
 
@@ -35,7 +35,6 @@ class OnboardPage extends React.PureComponent {
   }
 
   async componentWillMount() {
-    console.log('will mount onboard page');
     let orgId = this.props.orgStore.currentOrganisation._id;
     let onboardRecord;
     this.props.history.listen((location, action) => {
@@ -53,8 +52,9 @@ class OnboardPage extends React.PureComponent {
   handleEnterToOnboard = () => this.setState({ inOnboarding: true });
 
   render() {
-    const { inOnboarding, editMode, renderComponent } = this.state;
+    const { inOnboarding, renderComponent } = this.state;
     const { classes, width } = this.props;
+    let editMode = (this.props.commonStore.url.params.onboardMode === 'edit');
 
     if(!renderComponent) return <CircularProgress color="primary" style={{position: 'fixed', zIndex: '9', left:0, right:0, margin:0, top: '40%'}} />;
 
@@ -95,6 +95,8 @@ class OnboardPage extends React.PureComponent {
     );
   }
 }
+
+OnboardPage = withAuthorizationManagement(OnboardPage, 'onboard');
 
 export default inject('commonStore', 'orgStore', 'recordStore')(
   observer(
