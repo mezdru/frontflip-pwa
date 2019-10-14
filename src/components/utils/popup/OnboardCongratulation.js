@@ -42,7 +42,11 @@ class OnboardCongratulation extends React.Component {
     this.setState({ open: nextProps.isOpen })
   }
 
-  handleOnboardEnd = () => this.setState({ redirectTo: getBaseUrl(this.props) });
+  handleOnboardEnd = () => {
+    this.setState({ redirectTo: getBaseUrl(this.props) }, () => {
+      this.props.handleClose();
+    }); 
+  }
 
   render() {
     const { redirectTo } = this.state;
@@ -67,7 +71,7 @@ class OnboardCongratulation extends React.Component {
             <FormattedMessage id="onboard.end.cta" values={{ organisationName: currentOrganisation.name }} />
           </Button>
         }
-        onClose={this.handleClose}
+        onClose={this.handleOnboardEnd}
       >
         <Typography variant="h6" className={classes.text}>
           <FormattedMessage id="onboard.end.text" values={{ organisationName: currentOrganisation.name }} />

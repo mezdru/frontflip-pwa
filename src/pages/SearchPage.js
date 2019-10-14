@@ -53,10 +53,10 @@ class SearchPage extends PureComponent {
   }
 
   componentDidMount() {
-    console.log('Search did Mount.');
     this.moveSearchInputListener();
     this.handleUrlSearchFilters();
-    try { if (this.props.match.params.recordTag === 'congrats') this.setState({ showCongratulation: true }) } catch{ }
+
+    if(this.props.match.path.search('congrats') > -1) this.setState({ showCongratulation: true });
 
     observe(this.props.commonStore, 'searchFilters', (change) => {
       if (JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
@@ -207,6 +207,8 @@ class SearchPage extends PureComponent {
     );
   }
 
+  handleCloseCongrats = () => this.setState({showCongratulation: false});
+
   componentWillReceiveProps(nextProps) {
     this.props.commonStore.setUrlParams(nextProps.match);
   }
@@ -296,7 +298,7 @@ class SearchPage extends PureComponent {
 
         {showCongratulation && (
           <Suspense fallback={<CircularProgress color='secondary' />}>
-            <OnboardCongratulation isOpen={showCongratulation} />
+            <OnboardCongratulation isOpen={showCongratulation} handleClose={this.handleCloseCongrats}/>
           </Suspense>
         )}
 
