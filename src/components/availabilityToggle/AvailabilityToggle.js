@@ -23,7 +23,7 @@ let AvailabilityToggle = inject("recordStore")(observer(class AvailabilityToggle
       this.setState({ current: currentUserRecord.personAvailability });
     else this.setState({ current: this.state.labels.middle });
       this.setState({observer : observe(this.props.recordStore, 'currentUserRecord', (change) => {
-        this.setState({ current: change.newValue.personAvailability || 'unspecified' });
+        this.setState({ current: (change.newValue && change.newValue.personAvailability) || 'unspecified' });
       })});
   }
 

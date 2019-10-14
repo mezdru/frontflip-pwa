@@ -18,16 +18,18 @@ const withAuthorizationManagement = (ComponentToWrap, componentName) => {
       return (user.superadmin || this.props.userStore.currentOrgAndRecord != null);
     }
 
-    belongsToOrg = () => (this.props.userStore.currentOrgAndRecord != null);
-    needOnboarding = () => !(this.props.userStore.currentOrgAndRecord && this.props.userStore.currentOrgAndRecord.welcomed);
+    belongsToOrg = () => (this.props.userStore.currentOrgAndRecord != null) || (this.props.userStore.currentUser.superadmin);
+    needOnboarding = () => !this.props.userStore.currentUser.superadmin && !(this.props.userStore.currentOrgAndRecord && this.props.userStore.currentOrgAndRecord.welcomed);
     hasValidatedEmail = () => (this.props.userStore.currentUser.email.validated || false);
 
     render() {
       const {locale} = this.props.commonStore;
       const baseUrl = getBaseUrl(this.props);
-      if(!this.hasValidatedEmail()) return <Redirect push to={'/' + locale + '/error/403/email'} />;
-      if(!this.hasAccessToOrg()) return <Redirect push to={'/' + locale + '/error/403/organisation'} />;
-      if(componentName === COMPONENTS[1] && this.needOnboarding()) return <Redirect push to={baseUrl + '/onboard'} />;
+      const isAuth = this.props.authStore.isAuth();
+      if(isAuth && !this.hasValidatedEmail()) return <Redirect push to={'/' + locale + '/error/403/email'} />;
+      if(isAuth && !this.hasAccessToOrg()) return <Redirect push to={'/' + locale + '/error/403/organisation'} />;
+      if(!isAuth && !this.hasAccessToOrg()) return <Redirect push to={baseUrl + '/signin'} />;
+      if(isAuth && componentName === COMPONENTS[1] && this.needOnboarding()) return <Redirect push to={baseUrl + '/onboard'} />;
       if(componentName === COMPONENTS[0] && !this.belongsToOrg()) return <Redirect push to={baseUrl} />;
 
       return <ComponentToWrap {...this.props} />;
