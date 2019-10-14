@@ -36,15 +36,15 @@ class OnboardPage extends React.PureComponent {
 
   async componentWillMount() {
     let orgId = this.props.orgStore.currentOrganisation._id;
-    let onboardRecord;
     this.props.history.listen((location, action) => {
       ReactGA.pageview(window.location.pathname);
     });
 
     if(this.props.commonStore.url.params.onboardMode === 'edit') {
-      onboardRecord = await this.props.recordStore.getOrFetchRecord(null, this.props.commonStore.url.params.recordTag, orgId);
+      await this.props.recordStore.getOrFetchRecord(null, this.props.commonStore.url.params.recordTag, orgId);
     } else {
-      onboardRecord = await this.props.recordStore.fetchPopulatedForUser(orgId);
+      await this.props.recordStore.fetchPopulatedForUser(orgId);
+      await this.props.userStore.fetchCurrentUser(); // update user
     }
     this.setState({renderComponent: true});
   }

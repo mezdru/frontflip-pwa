@@ -22,6 +22,17 @@ class UserStore extends Store {
     let user = await super.fetchResource('me');
     this.currentUser = user;
 
+    LogRocket.identify(user._id, {   
+      env: process.env.NODE_ENV,
+    });
+
+    return user;
+  }
+
+  async fetchCurrentUserAndData() {
+    let user = await super.fetchResource('me');
+    this.currentUser = user;
+
     await asyncForEach(user.orgsAndRecords, async (orgAndRecord) => {
       await orgStore.getOrFetchOrganisation(orgAndRecord.organisation).catch(e => {return;});
       await recordStore.getOrFetchRecord(orgAndRecord.record, null, orgAndRecord.organisation).catch(e => {return;});
@@ -53,7 +64,7 @@ class UserStore extends Store {
 decorate(UserStore, {
   currentUser: observable,
   currentOrgAndRecord: computed,
-  fetchCurrentUser: action,
+  fetchCurrentUserAndData: action,
   updateCurrentUser: action,
   welcomeCurrentUser: action
 });

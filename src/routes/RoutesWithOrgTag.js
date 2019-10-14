@@ -36,7 +36,7 @@ class RoutesWithOrgTag extends React.Component {
   }
 }
 
-export default (inject('authStore', 'userStore', 'commonStore', 'orgStore', 'recordStore')(
+export default (inject('commonStore', 'orgStore')(
   (observer(
     RoutesWithOrgTag
   )))

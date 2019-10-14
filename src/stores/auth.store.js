@@ -65,7 +65,7 @@ class AuthStore {
         if (response && response.access_token) {
           commonStore.setAuthTokens(response);
           if (response.integrationState && (response.integrationState.linkedin === 'true')) emailService.sendConfirmIntegrationEmail('LinkedIn').catch(e => console.error(e));
-          return userStore.fetchCurrentUser()
+          return userStore.fetchCurrentUserAndData()
             .then(() => { return 200; })
             .catch((err) => { console.log(err); })
         }
@@ -90,7 +90,7 @@ class AuthStore {
       .then((response) => {
         if (response && response.access_token) {
           commonStore.setAuthTokens(response);
-          return userStore.fetchCurrentUser()
+          return userStore.fetchCurrentUserAndData()
             .then(() => { return 200; });
         }
         else return 403;
@@ -150,7 +150,7 @@ class AuthStore {
 
     return agent.Auth.registerToOrg(orgStore.currentOrganisation._id, this.values.invitationCode)
       .then((data) => {
-        return userStore.fetchCurrentUser()
+        return userStore.fetchCurrentUserAndData()
           .then(() => { return data; });
       })
       .catch(action((err) => {

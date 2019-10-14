@@ -66,7 +66,7 @@ class Auth extends React.Component {
       .then(() => {
         let integrationState = (this.state.queryParams.state ? JSON.parse(this.state.queryParams.state) : null);
         if (integrationState && integrationState.integrationState && (integrationState.integrationState.linkedin === 'true')) emailService.sendConfirmIntegrationEmail('LinkedIn').catch(e => console.error(e));
-        this.props.userStore.fetchCurrentUser()
+        this.props.userStore.fetchCurrentUserAndData()
           .then((user) => {
             ReactGA.event({ category: 'User', action: 'Login with Google' });
             if (integrationState && integrationState.invitationCode) this.props.authStore.setInvitationCode(integrationState.invitationCode);

@@ -11,7 +11,7 @@ class RoutesWithLocale extends React.Component {
 
   componentDidMount() {
     if(this.props.authStore.isAuth()) {
-      this.props.userStore.fetchCurrentUser()
+      this.props.userStore.fetchCurrentUserAndData()
       .then(()=> {this.setState({render: true})})
       .catch(()=> {this.setState({render: true})})
     }else {
@@ -35,7 +35,7 @@ class RoutesWithLocale extends React.Component {
   }
 }
 
-export default (inject('authStore', 'userStore', 'commonStore', 'orgStore', 'recordStore')(
+export default (inject('authStore', 'userStore', 'commonStore')(
   (observer(
     RoutesWithLocale
   )))

@@ -38,7 +38,6 @@ class OnboardStepper extends React.Component {
     this.makeSteps(this.props.wantedStep);
   }
 
-
   makeSteps = async (stepLabel) => {
     let org = this.props.orgStore.currentOrganisation;
     let steps;
@@ -63,7 +62,7 @@ class OnboardStepper extends React.Component {
       // click on finish
 
       if (this.props.edit) {
-        return this.setState({ redirectTo: getBaseUrl(this.props) + '/' + this.props.commonStore.url.params.recordTag });
+          return this.setState({ redirectTo: getBaseUrl(this.props) + '/' + this.props.commonStore.url.params.recordTag });
       }
 
       let user = this.props.userStore.currentUser;
@@ -73,8 +72,10 @@ class OnboardStepper extends React.Component {
             ' in ' + this.props.orgStore.currentOrganisation.tag);
       } catch (e) { }
 
-      this.props.userStore.welcomeCurrentUser(this.props.orgStore.currentOrganisation._id);
-      this.setState({ redirectTo: getBaseUrl(this.props) + '/congrats' });
+      this.props.userStore.welcomeCurrentUser(this.props.orgStore.currentOrganisation._id)
+      .then(() => {
+        this.setState({ redirectTo: getBaseUrl(this.props) + '/congrats' });
+      });
     } else {
       this.slide(this.state.activeStep + 1, 'left', 'right')
     }

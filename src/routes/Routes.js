@@ -49,7 +49,7 @@ class Routes extends React.Component {
   }
 }
 
-export default withRouter(inject('authStore', 'userStore', 'commonStore', 'orgStore', 'recordStore')(
+export default withRouter(inject('userStore', 'commonStore')(
   (observer(
     Routes
   )))
