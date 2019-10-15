@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { withStyles } from "@material-ui/core";
+import { withStyles, Hidden } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import PropTypes from 'prop-types';
-import { CssBaseline, Fab, Button} from '@material-ui/core';
+import { CssBaseline, Fab, Button } from '@material-ui/core';
 import { Redirect } from "react-router-dom";
 import './header.css';
 import { styles } from './Header.css.js'
@@ -11,6 +11,7 @@ import Logo from '../utils/logo/Logo';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import undefsafe from 'undefsafe';
+import classNames from 'classnames';
 
 class App extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ class App extends Component {
   }
 
   isSigninOrSignup = () => {
-    return ( (window.location.pathname.indexOf('signin') !== -1) || (window.location.pathname.indexOf('signup') !== -1)  );
+    return ((window.location.pathname.indexOf('signin') !== -1) || (window.location.pathname.indexOf('signup') !== -1));
   }
 
   handleDrawerOpen = () => {
@@ -34,7 +35,7 @@ class App extends Component {
   handleDrawerClose = () => {
     this.setState({ open: false });
   };
-  
+
   handleLogout = () => {
     this.props.authStore.logout()
       .then(this.setState({ successLogout: true }));
@@ -46,27 +47,39 @@ class App extends Component {
   }
 
   render() {
-    const {open, successLogout, auth, isSigninOrSignupPage } = this.state;
+    const { open, successLogout, auth, isSigninOrSignupPage } = this.state;
     const { classes } = this.props;
     const { locale } = this.props.commonStore;
     const orgTag = undefsafe(this.props.orgStore.currentOrganisation, 'tag');
 
     if (successLogout) return <Redirect to='/' />;
-    
+
     return (
       <div className={classes.root}>
         <CssBaseline />
         <Fab variant="extended" className={classes.menuButton}
-                    onClick={this.handleDrawerOpen} 
-                    children={<Logo type={'organisation'} />} id="header-button" />
+          onClick={this.handleDrawerOpen}
+          children={<Logo type={'organisation'} />} id="header-button" />
         {!auth && !isSigninOrSignupPage && (
-            <Button variant="text" to={"/" + locale + (orgTag ? '/' + orgTag : '') + '/signin'} component={Link} className={classes.menuLink}><FormattedMessage id="Sign In" /></Button>
+          <Button variant="text" to={"/" + locale + (orgTag ? '/' + orgTag : '') + '/signin'} component={Link} className={classes.menuLink}><FormattedMessage id="Sign In" /></Button>
         )}
         <HeaderDrawer handleDrawerOpen={this.handleDrawerOpen}
           handleDrawerClose={this.handleDrawerClose}
           open={open} auth={auth}
         />
-        <div className={classes.drawerHeader}/>
+
+        {this.props.withProfileLogo && (
+          <Hidden xsDown>
+            {this.props.authStore.isAuth() && this.props.userStore.currentOrgAndRecord && this.props.userStore.currentOrgAndRecord.record && (
+              <Fab variant="extended" className={classNames(classes.menuButton, classes.right)}
+                component={Link}
+                to={'/' + locale + '/' + orgTag + '/' + this.props.recordStore.currentUserRecord.tag}
+                children={<Logo type={'person'} src={undefsafe(this.props.recordStore.currentUserRecord, 'picture.url') || null} />} />
+            )}
+          </Hidden>
+        )}
+
+        <div className={classes.drawerHeader} />
       </div>
     );
   }
@@ -76,7 +89,7 @@ App.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default inject('commonStore', 'userStore', 'authStore', 'orgStore')(
+export default inject('commonStore', 'userStore', 'authStore', 'orgStore', 'recordStore')(
   observer(
     withStyles(styles)(
       App
