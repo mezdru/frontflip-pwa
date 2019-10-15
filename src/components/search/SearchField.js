@@ -17,22 +17,26 @@ class SearchField extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      searchFilters: this.props.commonStore.getSearchFilters() || []
+      searchFilters: this.props.mode !== 'onboard' ? this.props.commonStore.getSearchFilters() || [] : []
     };
   }
 
   componentDidMount() {
-    this.unsubscribeSearchFilters = observe(this.props.commonStore, 'searchFilters', (change) => {
-      var currentSearchFilters = this.props.commonStore.getSearchFilters();
-      this.props.searchStore.setUserQuery(currentSearchFilters.length > 0 ? ' ' : '');
-      this.setState({ searchFilters: currentSearchFilters }, this.scrollToRight);
-    });
+    if(this.props.mode !== 'onboard') {
+      this.unsubscribeSearchFilters = observe(this.props.commonStore, 'searchFilters', (change) => {
+        var currentSearchFilters = this.props.commonStore.getSearchFilters();
+        this.props.searchStore.setUserQuery(currentSearchFilters.length > 0 ? ' ' : '');
+        this.setState({ searchFilters: currentSearchFilters }, this.scrollToRight);
+      });
+    } else {
+      this.props.searchStore.setUserQuery('');
+    }
 
     this.unsubscribeUserQuery = observe(this.props.searchStore.values, 'userQuery', (change) => {this.forceUpdate()});
   }
 
   componentWillUnmount() {
-    this.unsubscribeSearchFilters();
+    if( this.unsubscribeSearchFilters ) this.unsubscribeSearchFilters();
     this.unsubscribeUserQuery();
   }
 
