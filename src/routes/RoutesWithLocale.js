@@ -1,13 +1,14 @@
+import { inject, observer } from 'mobx-react';
 import React from 'react';
-import { observer, inject } from 'mobx-react';
-import { Switch } from 'react-router-dom';
-import RouteWithSubRoutes from './RouteWithSubRoutes';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { addLocaleData, IntlProvider } from "react-intl";
 import locale_en from 'react-intl/locale-data/en';
 import locale_fr from 'react-intl/locale-data/fr';
-import messages_fr from "../translations/fr.json";
-import messages_en from "../translations/en.json";
-import { addLocaleData, IntlProvider } from "react-intl";
+import { Switch } from 'react-router-dom';
 import ProfileProvider from "../hoc/profile/Profile.provider.js";
+import messages_en from "../translations/en.json";
+import messages_fr from "../translations/fr.json";
+import RouteWithSubRoutes from './RouteWithSubRoutes';
 
 addLocaleData([...locale_en, ...locale_fr]);
 const messages = {
@@ -41,7 +42,7 @@ class RoutesWithLocale extends React.Component {
   render() {
     const { routes, match } = this.props;
     const { render } = this.state;
-    if (!render) return null;
+    if (!render) return <CircularProgress color="secondary" style={{position: 'fixed', top: '45%', left:0, right:0, margin: 'auto'}} />;
 
     let locale = match.params.locale.replace('-UK', '');
 
