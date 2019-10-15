@@ -26,7 +26,6 @@ class Search extends PureComponent {
   render() {
     const {autocompleteSuggestions} = this.state;
     const {onSelect, mode, max, wingsFamily, edit} = this.props;
-
     return(
       <>
         <SearchField 
