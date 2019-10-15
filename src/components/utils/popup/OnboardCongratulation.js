@@ -42,11 +42,16 @@ class OnboardCongratulation extends React.Component {
     this.setState({ open: nextProps.isOpen })
   }
 
-  handleOnboardEnd = () => this.setState({ redirectTo: getBaseUrl(this.props) });
+  handleOnboardEnd = () => {
+    this.setState({ redirectTo: getBaseUrl(this.props) }, () => {
+      this.props.handleClose();
+    }); 
+  }
 
   render() {
     const { redirectTo } = this.state;
     const { classes } = this.props;
+    const { currentOrganisation} = this.props.orgStore;
 
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
 
@@ -63,20 +68,20 @@ class OnboardCongratulation extends React.Component {
         }
         actions={
           <Button onClick={this.handleOnboardEnd} color="secondary">
-            <FormattedMessage id="onboard.end.cta" values={{ organisationName: this.props.organisationStore.values.organisation.name }} />
+            <FormattedMessage id="onboard.end.cta" values={{ organisationName: currentOrganisation.name }} />
           </Button>
         }
-        onClose={this.handleClose}
+        onClose={this.handleOnboardEnd}
       >
         <Typography variant="h6" className={classes.text}>
-          <FormattedMessage id="onboard.end.text" values={{ organisationName: this.props.organisationStore.values.organisation.name }} />
+          <FormattedMessage id="onboard.end.text" values={{ organisationName: currentOrganisation.name }} />
         </Typography>
       </PopupLayout>
     );
   }
 }
 
-export default inject('commonStore', 'organisationStore')(
+export default inject('commonStore', 'orgStore')(
   observer(
     withStyles(styles, { withTheme: true })(OnboardCongratulation)
   )

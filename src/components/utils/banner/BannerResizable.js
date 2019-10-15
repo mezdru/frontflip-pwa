@@ -4,6 +4,7 @@ import { inject, observer } from "mobx-react";
 import defaultBanner from '../../../resources/images/fly_away.jpg';
 import { withStyles } from '@material-ui/core';
 import { withProfileManagement } from '../../../hoc/profile/withProfileManagement';
+import undefsafe from 'undefsafe'; 
 
 const styles = theme => ({
   root: {
@@ -35,7 +36,7 @@ class BannerResizable extends React.Component {
     if (this.props.type === 'organisation') {
       this.updateSource();
 
-      this.setState({observer: observe(this.props.organisationStore.values, 'organisation', (change) => {
+      this.setState({observer: observe(this.props.orgStore, 'currentOrganisation', (change) => {
         this.updateSource();
       })});
 
@@ -45,7 +46,7 @@ class BannerResizable extends React.Component {
 
       if(!this.updateProfileSource()) this.updateSource();
 
-      this.setState({observer: observe(this.props.recordStore.values, 'displayedRecord', (change) => {
+      this.setState({observer: observe(this.props.recordStore, 'currentUrlRecord', (change) => {
         this.updateProfileSource();
         if(!this.state.source) this.updateSource();
       })});
@@ -53,15 +54,15 @@ class BannerResizable extends React.Component {
   }
 
   updateProfileSource = () => {
-    var profileCover = this.props.recordStore.values.displayedRecord.cover;
+    var profileCover = undefsafe(this.props.recordStore.currentUrlRecord, 'cover');
     var profileCoverUrl = (profileCover && profileCover.url ? profileCover.url : null);
     this.setState({source: profileCoverUrl});
     return profileCoverUrl;
   }
 
   updateSource = () => {
-    var orgCover = this.props.organisationStore.values.organisation.cover;
-    var orgCoverUrl = (orgCover && orgCover.url ? orgCover.url : defaultBanner);
+    var org = this.props.orgStore.currentOrganisation;
+    var orgCoverUrl = (org && org.cover && org.cover.url ? org.cover.url : defaultBanner);
     this.setState({source: orgCoverUrl});
   }
 
@@ -83,7 +84,7 @@ class BannerResizable extends React.Component {
   }
 }
 
-export default inject('organisationStore', 'recordStore')(
+export default inject('orgStore', 'recordStore')(
   observer(
     withStyles(styles, { withTheme: true })(withProfileManagement(BannerResizable))
   )

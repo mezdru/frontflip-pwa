@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
 import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 import { getBaseUrl } from '../../services/utils.service.js';
+import {Link} from 'react-router-dom';
 
 const styles = theme => ({
   button: {
@@ -25,11 +26,6 @@ const styles = theme => ({
 });
 
 class ProfileActions extends React.PureComponent {
-
-  handleClickEdit = () => {
-    window.location.pathname =  getBaseUrl(this.props) + '/onboard/intro/edit/' + this.props.profileContext.getProp('_id');
-  }
-
   render() {
     const { classes } = this.props;
     const { isEditable } = this.props.profileContext;
@@ -48,7 +44,8 @@ class ProfileActions extends React.PureComponent {
             <Grid item >
               <IconButton
                 className={classNames(classes.button, classes.returnButton)}
-                onClick={this.handleClickEdit}
+                component={Link}
+                to={getBaseUrl(this.props) + '/onboard/intro/edit/' + this.props.profileContext.getProp('tag')}
               >
                 <Edit />
               </IconButton>
@@ -60,7 +57,7 @@ class ProfileActions extends React.PureComponent {
   }
 }
 
-export default inject('commonStore', 'organisationStore')(
+export default inject('commonStore', 'orgStore')(
   observer(
     withStyles(styles)(withProfileManagement(ProfileActions))
   )

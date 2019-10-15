@@ -119,7 +119,7 @@
   "askForHelp.popup.close": "Close",
   "askForHelp.popup.missingMessage": "Explain your question to your coworkers to get an answer quickly.",
   "askForHelp.popup.placeholder": "Your question here.",
-  "profile.others":"Others",
+  "profile.others":"I can also help with",
   "askForHelp.popup.badConditions": "You can't ask more than 10 people. Remove {recipientsToRemove} recipients or refine search.",
   "welcome.page.title": "We don't yet know your company",
   "welcome.page.subtitle": "Wingzy is the smart directory for your smart company.<br/> To create or join your company directory: <a href='mailto:contact@wingzy.com'>contact us.</a>"

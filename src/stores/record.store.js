@@ -1,181 +1,114 @@
-import { observable, action, decorate } from "mobx";
-import agent from '../agent';
+import { observable, action, decorate, computed } from "mobx";
 import userStore from './user.store';
-import organisationStore from './organisation.store';
+import orgStore from './organisation.store';
+import Store from './store';
+import undefsafe from 'undefsafe';
+import commonStore from "./common.store";
 
-class RecordStore {
-  inProgress = false;
-  errors = null;
-  values = {
-    orgId: '',
-    recordId: '',
-    recordTag: '',
-    record: {},
-    displayedRecord: {},
-  };
+class RecordStore extends Store {
+  records = [];
 
-  setOrgId(orgId) {
-    this.values.orgId = orgId;
-  }
-  setRecordTag(recordTag) {
-    if(recordTag)
-      recordTag = recordTag.replace('#', '%23');
-    this.values.recordTag = recordTag;
-  }
-  setRecordId(recordId) {
-    this.values.recordId = recordId;
-  }
-  setRecord(record) {
-    this.values.record = record;
-  }
-  setDisplayedRecord(record) {
-    this.values.displayedRecord = record;
+  constructor() {
+    super("Record");
   }
 
-  reset() {
-    this.values.orgId = '';
-    this.values.recordId = '';
-    this.values.record = {};
+  get currentUserRecord() {
+    let orgAndRecord = userStore.currentUser && userStore.currentUser.orgsAndRecords.find(oar => oar.organisation === undefsafe(orgStore.currentOrganisation, '_id'));
+    if(!orgAndRecord || !orgAndRecord.record) return null;
+    return this.getRecord(orgAndRecord.record._id || orgAndRecord.record);
   }
 
-  getRecord() {
-    if (!this.values.recordId) return Promise.reject(new Error('No record Id'));
-    this.inProgress = true;
-    this.errors = null;
-
-    return agent.Record.get(this.values.recordId)
-      .then(res => {
-        this.values.record = (res ? res.data : {});
-        return this.values.record;
-      })
-      .catch(action((err) => {
-        this.errors = err.response && err.response.body && err.response.body.errors;
-        throw err;
-      }))
-      .finally(action(() => { this.inProgress = false; }));
+  get currentUrlRecord() {
+    return this.getRecord(null, commonStore.url.params.recordTag);
   }
 
-  getRecordByTag() {
-    if (!this.values.recordTag) return Promise.reject(new Error('No record Tag'));
-    this.inProgress = true;
-    this.errors = null;
-
-    return agent.Record.getByTag(this.values.recordTag, this.values.orgId)
-      .then(res => {
-        this.setDisplayedRecord(res.data.length > 0 ? res.data[0] : res.data);
-        return this.values.displayedRecord;
-      })
-      .catch(action((err) => {
-        console.log(err)
-        this.errors = err.response && err.response.body && err.response.body.errors;
-        throw err;
-      }))
-      .finally(action(() => { this.inProgress = false; }));
+  getRecord(recordId, recordTag) {
+    if (!recordId && !recordTag) return null;
+    return this.records.find(record => {
+      if (recordId) return JSON.stringify(recordId) === JSON.stringify(record._id || record.objectID);
+      else return ((recordTag === record.tag) && (record.organisation === orgStore.currentOrganisation._id) );
+    });
   }
 
-  getRecordByUser() {
-    if (!userStore.values.currentUser._id || !this.values.orgId) return Promise.reject(new Error('Bad parameters'));
-    this.inProgress = true;
-    this.errors = null;
-
-    return agent.Record.getByUser(userStore.values.currentUser._id, this.values.orgId)
-      .then(res => {
-        this.values.record = (res ? res.data : null);
-        return this.values.record;
-      })
-      .catch(action((err) => {
-        this.errors = err.response && err.response.body && err.response.body.errors;
-        throw err;
-      }))
-      .finally(action(() => { this.inProgress = false; }));
+  async getOrFetchRecord(recordId, recordTag, orgId) {
+    let record = this.getRecord(recordId, recordTag);
+    if (!record && recordId) record = await this.fetchRecord(recordId);
+    if (!record && recordTag) record = await this.fetchByTag(recordTag, orgId);
+    return record;
   }
 
-  /**
-   * @description Post new record
-   */
-  postRecord(record) {
-    this.inProgress = true;
-    this.errors = null;
-
-    return agent.Record.post(organisationStore.values.organisation._id, record || this.values.record)
-      .then(res => {
-        if(!record)
-          this.values.record = res.data;
-        return res.data; 
-      })
-      .catch(action((err) => {
-        this.errors = err.response && err.response.body && err.response.body.errors;
-        throw err;
-      }))
-      .finally(action(() => { this.inProgress = false; }));
+  addRecord(inRecord) {
+    let index = this.records.findIndex(record => JSON.stringify(record._id) === JSON.stringify(inRecord._id || inRecord.objectID));
+    if (index > -1) {
+      let record = this.records[index];
+      record = inRecord;
+    } else {
+      this.records.push(inRecord);
+    }
   }
 
-  /**
-   * @description Update record
-   */
-  updateRecord(arrayOfFields) {
-    this.inProgress = true;
-    this.errors = null;
-
-    let recordToUpdate = this.buildRecordToUpdate(arrayOfFields);
-
-    return agent.Record.put(this.values.orgId, this.values.recordId, recordToUpdate)
-      .then(res => { this.values.record = (res ? res.data : {}); return this.values.record;})
-      .catch(action((err) => {
-        this.errors = err.response && err.response.body && err.response.body.errors;
-        throw err;
-      }))
-      .finally(action(() => { this.inProgress = false; }));
+  async fetchRecord(recordId) {
+    let record = await super.fetchResource(recordId);
+    this.addRecord(record);
+    return record;
   }
 
-  buildRecordToUpdate(arrayOfFields) {
+  async postRecord(recordToPost) {
+    let record = await super.postResource(recordToPost);
+    this.addRecord(record);
+    return record;
+  }
+
+  async deleteRecord(recordId) {
+    await super.deleteResource(recordId);
+  }
+
+  async fetchByTag(recordTag, orgId) {
+    if (!recordTag || !orgId) return Promise.reject(new Error('No record Tag or no organisation ID'));
+    let records = await super.fetchResources(`?tag=${recordTag.replace('#', '%23')}&organisation=${orgId}`);
+    this.addRecord(records[0]);
+    return records[0];
+  }
+
+  async updateRecord(recordId, arrayOfFields, record) {
+    let recordToUpdate = this.buildRecordToUpdate(arrayOfFields, record);
+    let recordUpdated = await super.updateResource(recordId, recordToUpdate, orgStore.currentOrganisation._id);
+    this.addRecord(recordUpdated);
+    return recordUpdated;
+  }
+
+  async fetchPopulatedForUser(orgId) {
+    if(!orgId) throw new Error('Organisation id is required');
+    let record = await super.fetchResources(`/populated?user=${userStore.currentUser._id}&organisation=${orgId}`)
+    this.addRecord(record);
+    return record;
+  }
+
+  buildRecordToUpdate(arrayOfFields, record) {
     let recordToUpdate = {};
     if (!arrayOfFields) {
-      recordToUpdate = this.values.record;
+      recordToUpdate = record;
     } else {
       arrayOfFields.forEach(field => {
-        recordToUpdate[field] = this.values.record[field];
+        recordToUpdate[field] = record[field];
       });
     }
     return recordToUpdate;
   }
 
-  /**
-   * @description Delete my record
-   */
-  deleteRecord() {
-    this.inProgress = true;
-    this.errors = null;
-
-    return agent.Record.delete(this.values.recordId)
-      .then(res => {
-        this.values.record = {};
-        this.values.recordId = '';
-      })
-      .catch(action((err) => {
-        this.errors = err.response && err.response.body && err.response.body.errors;
-        throw err;
-      }))
-      .finally(action(() => { this.inProgress = false; }));
-  }
-
 }
 
 decorate(RecordStore, {
-  inProgress: observable,
-  errors: observable,
-  values: observable,
-  setOrgId: action,
-  reset: action,
-  setRecordTag: action,
-  setRecordId: action,
-  setDisplayedRecord: action,
-  setRecord: action,
-  getRecord: action,
-  getRecordByTag: action,
+  records: observable,
+  currentUserRecord: computed,
+  currentUrlRecord: computed,
   postRecord: action,
+  addRecord: action,
   updateRecord: action,
-  deleteRecord: action
+  deleteRecord: action,
+  fetchPopulatedForUser: action,
+  fetchByTag: action,
+  fetchRecord: action
 });
 
 export default new RecordStore();

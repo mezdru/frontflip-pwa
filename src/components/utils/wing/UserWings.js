@@ -2,7 +2,7 @@ import React from 'react'
 import { withStyles, Typography } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { observe } from 'mobx';
-
+import undefsafe from 'undefsafe';
 import Wings from './Wing';
 import ProfileService from '../../../services/profile.service';
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
@@ -21,19 +21,20 @@ class UserWings extends React.Component {
     super(props);
     this.state = {
       newTag: null,
-      currentHashtagsLength: (this.props.recordStore.values.record && this.props.recordStore.values.record.hashtags ? this.props.recordStore.values.record.hashtags.length : 0),
+      currentHashtagsLength: undefsafe((this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord), 'hashtags.length') || 0
     };
   }
 
   componentDidMount() {
     setTimeout(() => this.props.scrollUserWingsToBottom(), 150);
+    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
 
-    this.unsubscribeRecord = observe(this.props.recordStore.values, 'record', (change) => {
-      if(change.newValue && change.newValue.hashtags && (change.newValue.hashtags.length > this.state.currentHashtagsLength)) {
+    this.unsubscribeRecord = observe(record, (change) => {
+      if(change.name === 'hashtags' && (change.newValue.length > this.state.currentHashtagsLength)) {
         setTimeout(() => this.props.scrollUserWingsToBottom(), 150);
-        this.setState({newTag: change.newValue.hashtags[change.newValue.hashtags.length - 1].tag, currentHashtagsLength: change.newValue.hashtags.length});
+        this.setState({newTag: change.newValue[change.newValue.length - 1].tag, currentHashtagsLength: change.newValue.length});
       } else {
-        this.setState({newTag: null, currentHashtagsLength: (change.newValue && change.newValue.hashtags ? change.newValue.hashtags.length : 0)});
+        this.setState({newTag: null, currentHashtagsLength: (change.newValue ? change.newValue.length : 0)});
       }
     });
   }
@@ -55,7 +56,7 @@ class UserWings extends React.Component {
   }
 
   render() {
-    const {record} = this.props.recordStore.values;
+    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
     const {theme, classes} = this.props;
     const {locale} = this.props.commonStore;
     if(!record) return null;

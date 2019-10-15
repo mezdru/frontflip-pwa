@@ -57,9 +57,9 @@ class WelcomePage extends React.Component {
     redirectTo: null
   }
 
-  componentDidMount() {
-    if (!this.props.userStore.values.currentUser) return this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/signin' });
-    let { email, _id } = this.props.userStore.values.currentUser;
+  componentWillMount() {
+    if (!this.props.userStore.currentUser) return this.setState({ redirectTo: '/' + this.props.commonStore.locale + '/signin' });
+    let { email, _id } = this.props.userStore.currentUser;
     let { locale } = this.props.commonStore;
 
     ReactGA.pageview(window.location.pathname);
@@ -69,7 +69,7 @@ class WelcomePage extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { currentUser } = this.props.userStore.values;
+    const { currentUser } = this.props.userStore;
 
     if (this.state.redirectTo) return (<Redirect to={this.state.redirectTo} />);
 

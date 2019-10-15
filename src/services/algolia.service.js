@@ -1,6 +1,6 @@
 import commonStore from '../stores/common.store';
 import algoliasearch  from 'algoliasearch';
-import organisationStore from '../stores/organisation.store';
+import orgStore from '../stores/organisation.store';
 import {observe} from 'mobx';
 import statisticsStore from '../stores/statistics.store';
 
@@ -16,19 +16,17 @@ class AlgoliaService {
       this.algoliaKey = algoliaKey;
       this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.algoliaKey);
       this.index = this.client.initIndex(this.indexName);
+    } else {
+      let org = orgStore.currentOrganisation;
+      if(org) orgStore.fetchAlgoliaKey(org._id, org.public);
     }
 
-    observe(commonStore, 'algoliaKey', (change) => {
+    observe(orgStore, 'currentAlgoliaKey', (change) => {
       if(this.client) this.client.clearCache();
-      if(!commonStore.algoliaKey) {
-        organisationStore.getAlgoliaKey(true)
-        .then(algoliaKey => {
-          this.algoliaKey = algoliaKey;
-          this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.algoliaKey);
-          this.index = this.client.initIndex(this.indexName);
-        }).catch();
+      if(!orgStore.currentAlgoliaKey && orgStore.currentOrganisation) {
+        orgStore.fetchAlgoliaKey(orgStore.currentOrganisation._id, orgStore.currentOrganisation.public);
       } else {
-        this.algoliaKey = commonStore.algoliaKey;
+        this.algoliaKey = orgStore.currentAlgoliaKey;
         this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.algoliaKey);
         this.index = this.client.initIndex(this.indexName);
       }
@@ -77,7 +75,7 @@ class AlgoliaService {
 
   makeFacetFilters(lastSelection, privateOnly) {
     let query = [];
-    if(privateOnly) query.push('organisation:'+organisationStore.values.organisation._id);
+    if(privateOnly) query.push('organisation:'+orgStore.currentOrganisation._id);
     if(lastSelection) query.push('hashtags.tag:'+lastSelection.tag);
     return query;
   }

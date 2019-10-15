@@ -10,6 +10,7 @@ import HeaderDrawer from './HeaderDrawer';
 import Logo from '../utils/logo/Logo';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+import undefsafe from 'undefsafe';
 
 class App extends Component {
   constructor(props) {
@@ -48,7 +49,7 @@ class App extends Component {
     const {open, successLogout, auth, isSigninOrSignupPage } = this.state;
     const { classes } = this.props;
     const { locale } = this.props.commonStore;
-    const orgTag = this.props.organisationStore.values.orgTag || this.props.organisationStore.values.organisation.tag;
+    const orgTag = undefsafe(this.props.orgStore.currentOrganisation, 'tag');
 
     if (successLogout) return <Redirect to='/' />;
     
@@ -61,13 +62,9 @@ class App extends Component {
         {!auth && !isSigninOrSignupPage && (
             <Button variant="text" to={"/" + locale + (orgTag ? '/' + orgTag : '') + '/signin'} component={Link} className={classes.menuLink}><FormattedMessage id="Sign In" /></Button>
         )}
-        {/* <HeaderAppBar handleDrawerOpen={this.handleDrawerOpen}
-          open={open} auth={auth}
-        /> */}
         <HeaderDrawer handleDrawerOpen={this.handleDrawerOpen}
           handleDrawerClose={this.handleDrawerClose}
           open={open} auth={auth}
-          handleDisplayProfile={this.handleDisplayProfile}
         />
         <div className={classes.drawerHeader}/>
       </div>
@@ -79,7 +76,7 @@ App.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default inject('commonStore', 'userStore', 'authStore', 'organisationStore')(
+export default inject('commonStore', 'userStore', 'authStore', 'orgStore')(
   observer(
     withStyles(styles)(
       App

@@ -66,15 +66,15 @@ class SearchResults extends React.Component {
     this.props.makeFiltersRequest()
       .then((req) => {
         this.setState({ filterRequest: req.filterRequest, queryRequest: req.queryRequest }, () => {
-          AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
+          AlgoliaService.setAlgoliaKey(this.props.orgStore.currentAlgoliaKey);
           this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
         });
       });
 
 
     this.setState({
-      observer: observe(this.props.commonStore, 'algoliaKey', (change) => {
-        AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
+      observer: observe(this.props.orgStore, 'currentAlgoliaKey', (change) => {
+        AlgoliaService.setAlgoliaKey(this.props.orgStore.currentAlgoliaKey);
         this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
       })
     });
@@ -84,7 +84,7 @@ class SearchResults extends React.Component {
         this.props.makeFiltersRequest()
           .then((req) => {
             this.setState({ filterRequest: req.filterRequest, queryRequest: req.queryRequest, page: 0 }, () => {
-              AlgoliaService.setAlgoliaKey(this.props.commonStore.algoliaKey);
+              AlgoliaService.setAlgoliaKey(this.props.orgStore.currentAlgoliaKey);
               this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
             });
           });
@@ -193,7 +193,7 @@ class SearchResults extends React.Component {
 
 SearchResults = withSearchManagement(SearchResults);
 
-export default inject('commonStore')(
+export default inject('commonStore', 'orgStore')(
   observer(
     withStyles(styles)(SearchResults)
   )

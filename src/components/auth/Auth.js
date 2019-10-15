@@ -66,7 +66,7 @@ class Auth extends React.Component {
       .then(() => {
         let integrationState = (this.state.queryParams.state ? JSON.parse(this.state.queryParams.state) : null);
         if (integrationState && integrationState.integrationState && (integrationState.integrationState.linkedin === 'true')) emailService.sendConfirmIntegrationEmail('LinkedIn').catch(e => console.error(e));
-        this.props.userStore.getCurrentUser()
+        this.props.userStore.fetchCurrentUserAndData()
           .then((user) => {
             ReactGA.event({ category: 'User', action: 'Login with Google' });
             if (integrationState && integrationState.invitationCode) this.props.authStore.setInvitationCode(integrationState.invitationCode);
@@ -77,7 +77,7 @@ class Auth extends React.Component {
             this.props.authStore.registerToOrg()
               .then((data) => {
                 let organisation = data.organisation;
-                let currentOrgAndRecord = this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
+                let currentOrgAndRecord = this.props.userStore.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
                 if (currentOrgAndRecord) this.props.recordStore.setRecordId(currentOrgAndRecord.record);
 
                 this.props.recordStore.getRecord()
@@ -137,7 +137,7 @@ class Auth extends React.Component {
   }
 }
 
-export default inject('authStore', 'organisationStore', 'commonStore', 'userStore', 'recordStore')(
+export default inject('authStore', 'orgStore', 'commonStore', 'userStore', 'recordStore')(
   withTheme()(
     withStyles(styles, { withTheme: true })(
       injectIntl(observer((Auth)))

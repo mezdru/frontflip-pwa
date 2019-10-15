@@ -36,24 +36,18 @@ class ProfileProvider extends React.Component {
       filteredWings: null,
       wingsByFamilies: []
     });
-    this.props.recordStore.setDisplayedRecord({});
     this.props.clapStore.reset();
   }
 
-  setProfileData = (algoliaRecord) => {
-    algoliaRecord = JSON.parse(JSON.stringify(algoliaRecord));
-    ProfileService.transformLinks(algoliaRecord);
-    ProfileService.makeHightlighted(algoliaRecord);
-    ProfileService.orderHashtags(algoliaRecord);
-    this.setState({algoliaRecord, filteredWings: null}, this.setWingzyRecord);
+  setProfileData = (recordTag) => {
+    let algoliaRecord = JSON.parse(JSON.stringify(this.props.recordStore.getRecord(null, recordTag) || {tag: recordTag}));
+    this.setState({algoliaRecord: algoliaRecord, filteredWings: null}, this.setWingzyRecord);
   }
 
   setWingzyRecord = () => {
     this.buildWingsByFamilies();
     if(!this.props.authStore.isAuth()) return;
-    this.props.recordStore.setRecordTag(this.state.algoliaRecord.tag);
-    this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
-    this.props.recordStore.getRecordByTag()
+    this.props.recordStore.getOrFetchRecord(null, this.state.algoliaRecord.tag, this.props.orgStore.currentOrganisation._id)
       .then((record) => {
         record.objectID = record._id;
 
@@ -68,23 +62,23 @@ class ProfileProvider extends React.Component {
   }
 
   canEdit = (workingRecord) => {
-    if (!(this.props.userStore.values.currentUser && this.props.userStore.values.currentUser._id)) return false;
-    if (this.props.userStore.values.currentUser.superadmin) return true;
-    else if (this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.record === workingRecord.objectID)) return true;
-    else if (this.props.userStore.values.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === workingRecord.organisation && orgAndRecord.admin)) return true;
+    if (!(this.props.userStore.currentUser && this.props.userStore.currentUser._id)) return false;
+    if (this.props.userStore.currentUser.superadmin) return true;
+    else if (this.props.userStore.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.record === workingRecord.objectID)) return true;
+    else if (this.props.userStore.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === workingRecord.organisation && orgAndRecord.admin)) return true;
     else return false;
   }
 
   //@todo Nothing to do here, it's a common method
   getBaseUrl = () => {
-    return '/' + this.props.commonStore.locale + '/' + this.props.organisationStore.values.organisation.tag;
+    return '/' + this.props.commonStore.locale + '/' + this.props.orgStore.currentOrganisation.tag;
   }
 
   /**
    * @description Create an array of link between : Family and Profile Wings
    */
   buildWingsByFamilies = () => {
-    let organisation = this.props.organisationStore.values.organisation;
+    let organisation = this.props.orgStore.currentOrganisation;
     let wingsByFamilies = [], otherWings = [], allWings = [];
 
     try {
@@ -142,6 +136,6 @@ class ProfileProvider extends React.Component {
   }
 }
 
-export default inject('organisationStore', 'recordStore', 'userStore', 'commonStore', 'authStore', 'clapStore')(
+export default inject('orgStore', 'recordStore', 'userStore', 'commonStore', 'authStore', 'clapStore')(
   observer(injectIntl(ProfileProvider))
   );

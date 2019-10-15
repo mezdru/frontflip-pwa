@@ -25,7 +25,7 @@ class Search extends PureComponent {
 
   render() {
     const {autocompleteSuggestions} = this.state;
-    const {onSelect, mode, max, wingsFamily} = this.props;
+    const {onSelect, mode, max, wingsFamily, edit} = this.props;
 
     return(
       <>
@@ -36,7 +36,7 @@ class Search extends PureComponent {
         {mode !== 'onboard' ? (
           <SearchSuggestions autocompleteSuggestions={autocompleteSuggestions} />
         ): (
-          <OnboardSuggestions max={max} onSelect={onSelect} wingsFamily={wingsFamily} handleCreateWing={this.props.handleCreateWing} />
+          <OnboardSuggestions max={max} onSelect={onSelect} wingsFamily={wingsFamily} handleCreateWing={this.props.handleCreateWing} edit={edit} />
         )}
       </>
     );

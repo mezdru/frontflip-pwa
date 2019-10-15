@@ -47,27 +47,19 @@ const style = theme => ({
 });
 
 class OrganisationsList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    }
-  }
-
-  componentDidMount() {
-    this.props.organisationStore.getCurrentUserOrganisations().then(() => {
-      this.forceUpdate();
-    });
-  }
 
   render() {
-    const { currentUserOrganisations, orgTag } = this.props.organisationStore.values;
+    const { organisations, currentOrganisation } = this.props.orgStore;
+    const { currentUser } = this.props.userStore;
     const { locale } = this.props.commonStore;
     const { classes } = this.props;
+
+    let currentUserOrganisations = organisations.filter(org => currentUser.orgsAndRecords.find(oar => oar.organisation === org._id));
 
     return (
       <List className={classes.orgsContainer}>
         {currentUserOrganisations.map((org, i) => {
-          if (org && (org.tag !== orgTag)) {
+          if (org && (org.tag !== currentOrganisation.tag)) {
             return (
               <ListItem button component={Link} to={'/' + locale + '/' + org.tag} key={org._id} className={classes.orgItem}>
                 <Logo type={'smallOrg'} alt={entities.decode(org.name)} src={(org.logo ? org.logo.url : null) || defaultLogo} className={classes.itemLogo} />
@@ -86,7 +78,7 @@ class OrganisationsList extends React.Component {
   }
 }
 
-export default inject('organisationStore', 'commonStore')(
+export default inject('orgStore', 'commonStore', 'userStore')(
   observer(
     withStyles(style, { withTheme: true })(OrganisationsList)
   )

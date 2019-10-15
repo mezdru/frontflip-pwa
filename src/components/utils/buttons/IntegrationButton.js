@@ -32,8 +32,8 @@ class IntegrationButton extends React.Component {
 
   getAuthState = () => {
     let state = {};
-    if (this.props.organisationStore.values.orgTag) state.orgTag = this.props.organisationStore.values.orgTag;
-    if (this.props.organisationStore.values.organisation.tag) state.orgTag = this.props.organisationStore.values.organisation.tag;
+    let {currentOrganisation} = this.props.orgStore;
+    if (currentOrganisation) state.orgTag = currentOrganisation.tag;
     if (this.props.authStore.values.invitationCode) state.invitationCode = this.props.authStore.values.invitationCode;
     if (this.props.authStore.values.temporaryToken) state.integrationToken = this.props.authStore.values.temporaryToken;
     if (this.props.currentAction) state.action = this.props.currentAction;
@@ -69,7 +69,7 @@ class IntegrationButton extends React.Component {
   }
 }
 
-export default inject('authStore', 'organisationStore', 'commonStore')(
+export default inject('authStore', 'orgStore', 'commonStore')(
     withStyles(styles)(
       observer((IntegrationButton))
     )

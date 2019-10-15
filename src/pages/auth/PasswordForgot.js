@@ -40,13 +40,17 @@ class PasswordForgot extends React.Component {
       emailError: null,
       email: this.props.authStore.values.email
     }
+    this.props.commonStore.setUrlParams(this.props.match);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.props.commonStore.setUrlParams(nextProps.match);
   }
   
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
-    if (this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
-      this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
-      this.props.organisationStore.getOrganisationForPublic();
+    if (this.props.commonStore.url.params.orgTag) {
+      this.props.orgStore.fetchForPublic(this.props.commonStore.url.params.orgTag);
     }
   }
   
@@ -93,7 +97,7 @@ class PasswordForgot extends React.Component {
                     <SnackbarCustom variant="warning" message={emailError} />
                   </Grid>
                 )}
-                <Grid item>
+                <Grid item style={{width: '100%'}}>
                   <TextField  label="Email"
                               type="email"
                               autoComplete="email"
@@ -116,6 +120,6 @@ class PasswordForgot extends React.Component {
   }
 }
 
-export default inject('authStore', 'organisationStore')(
+export default inject('authStore', 'orgStore', 'commonStore')(
   injectIntl(observer(withStyles(styles)(PasswordForgot)))
 );

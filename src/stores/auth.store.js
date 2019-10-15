@@ -2,7 +2,7 @@ import { action, decorate, observable } from "mobx";
 import agent from '../agent';
 import commonStore from "./common.store";
 import userStore from "./user.store";
-import organisationStore from "./organisation.store";
+import orgStore from "./organisation.store";
 import emailService from "../services/email.service";
 
 class AuthStore {
@@ -65,7 +65,7 @@ class AuthStore {
         if (response && response.access_token) {
           commonStore.setAuthTokens(response);
           if (response.integrationState && (response.integrationState.linkedin === 'true')) emailService.sendConfirmIntegrationEmail('LinkedIn').catch(e => console.error(e));
-          return userStore.getCurrentUser()
+          return userStore.fetchCurrentUserAndData()
             .then(() => { return 200; })
             .catch((err) => { console.log(err); })
         }
@@ -90,7 +90,7 @@ class AuthStore {
       .then((response) => {
         if (response && response.access_token) {
           commonStore.setAuthTokens(response);
-          return userStore.getCurrentUser()
+          return userStore.fetchCurrentUserAndData()
             .then(() => { return 200; });
         }
         else return 403;
@@ -144,13 +144,13 @@ class AuthStore {
    * @param {access_token} needed.
    */
   registerToOrg() {
-    if (!organisationStore.values.organisation._id) return;
+    if (!orgStore.currentOrganisation) return;
     this.inProgress = true;
     this.errors = null;
 
-    return agent.Auth.registerToOrg(organisationStore.values.organisation._id, this.values.invitationCode)
+    return agent.Auth.registerToOrg(orgStore.currentOrganisation._id, this.values.invitationCode)
       .then((data) => {
-        return userStore.getCurrentUser()
+        return userStore.fetchCurrentUserAndData()
           .then(() => { return data; });
       })
       .catch(action((err) => {
@@ -176,9 +176,10 @@ class AuthStore {
   }
 
   confirmationInvitation(invitationUrl) {
+    if(!orgStore.currentOrganisation) return;
     this.inProgress = true;
     this.errors = null;
-    return agent.Email.confirmationInvitation(organisationStore.values.organisation._id, invitationUrl)
+    return agent.Email.confirmationInvitation(orgStore.currentOrganisation._id, invitationUrl)
       .then((data) => {
         return data
       })
@@ -226,7 +227,6 @@ class AuthStore {
     commonStore.removeAuthTokens();
     commonStore.removeCookie('algoliaKey');
     commonStore.removeCookie('algoliaKeyOrganisation');
-    userStore.forgetUser();
     return Promise.resolve();
   }
 

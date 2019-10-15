@@ -18,10 +18,14 @@ export const shuffleArray = (array) => {
 
 /**
  * 
- * @param {*} props which contains commonStore & organisationStore
+ * @param {*} props which contains commonStore & orgStore
  */
 export const getBaseUrl = (props) => {
-  return '/' + props.commonStore.locale + '/' + props.organisationStore.values.organisation.tag;
+  try{
+    return '/' + props.commonStore.locale + '/' + props.orgStore.currentOrganisation.tag;
+  } catch(e) {
+    return '/' + props.commonStore.locale;
+  }
 }
 
 export const getUnique = (arr, comp) => {
@@ -36,4 +40,10 @@ export const getUnique = (arr, comp) => {
     .filter(e => arr[e]).map(e => arr[e]);
 
   return unique;
+}
+
+export const asyncForEach = async (array, callback) => {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
 }

@@ -55,7 +55,7 @@ class AskForHelp extends React.Component {
     let reqObject = await this.props.makeFiltersRequest();
     AlgoliaService.fetchHits(reqObject.filterRequest, reqObject.queryRequest, null, null, false, 50)
       .then((content) => {
-        let hits = Array.from(content.hits).filter(hit => hit.tag !== this.props.recordStore.values.record.tag); // not user record
+        let hits = Array.from(content.hits).filter(hit => hit.tag !== this.props.recordStore.currentUserRecord.tag); // not user record
         this.setState({ recipients: hits });
       });
   }
@@ -90,8 +90,8 @@ class AskForHelp extends React.Component {
       return this.setState({ errorMessage: this.props.intl.formatMessage({ id: "askForHelp.popup.missingMessage" }) });
 
     let helpRequest = {
-      organisation: this.props.organisationStore.values.organisation._id,
-      sender: this.props.recordStore.values.record._id,
+      organisation: this.props.orgStore.currentOrganisation._id,
+      sender: this.props.recordStore.currentUserRecord._id,
       recipients: this.buildRecipientsArray(this.state.recipients),
       results: this.props.commonStore.searchResultsCount,
       tags: this.buildTagsArray(this.props.commonStore.searchFilters),
@@ -216,7 +216,7 @@ class AskForHelp extends React.Component {
   }
 }
 
-export default inject('commonStore', 'helpRequestStore', 'recordStore', 'organisationStore')(
+export default inject('commonStore', 'helpRequestStore', 'recordStore', 'orgStore')(
   observer(
     withStyles(styles, { withTheme: true })(
       injectIntl(withSearchManagement(AskForHelp))

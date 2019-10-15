@@ -15,7 +15,11 @@ class AuthPage extends React.Component {
     this.state = {
       initialTabState: 0
     };
-    console.debug('Construct AuthPage.js', this.props)
+    this.props.commonStore.setUrlParams(this.props.match);
+  }
+  
+  componentWillReceiveProps(nextProps) {
+    this.props.commonStore.setUrlParams(nextProps.match);
   }
 
   componentDidMount() {
@@ -39,4 +43,4 @@ class AuthPage extends React.Component {
   }
 }
 
-export default inject('authStore')(observer(AuthPage));
+export default inject('authStore', 'commonStore')(observer(AuthPage));

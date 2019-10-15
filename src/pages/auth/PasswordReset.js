@@ -65,13 +65,17 @@ class PasswordReset extends React.Component {
       userEmail: ((this.props.match.params && this.props.match.params.email) ? this.props.match.params.email : null),
       redirectTo: null
     }
+    this.props.commonStore.setUrlParams(this.props.match);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.props.commonStore.setUrlParams(nextProps.match);
   }
 
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
-    if (this.props.match && this.props.match.params && this.props.match.params.organisationTag) {
-      this.props.organisationStore.setOrgTag(this.props.match.params.organisationTag);
-      this.props.organisationStore.getOrganisationForPublic();
+    if (this.props.commonStore.url.params.orgTag) {
+      this.props.orgStore.fetchForPublic(this.props.commonStore.url.params.orgTag);
     }
   }
 
@@ -121,10 +125,9 @@ class PasswordReset extends React.Component {
               <div>
                 <Grid item>
                   <Typography variant="h4" className={classes.title}>
-                    {this.props.organisationStore.values.orgTag && (
-                      <FormattedHTMLMessage id="password.create.title.orgTag" values={{ orgTag: this.props.organisationStore.values.orgTag }} />
-                    )}
-                    {!this.props.organisationStore.values.orgTag && (
+                    {this.props.orgStore.currentOrganisation.tag ? (
+                      <FormattedHTMLMessage id="password.create.title.orgTag" values={{ orgTag: this.props.orgStore.currentOrganisation.tag }} />
+                    ) : (
                       <FormattedHTMLMessage id="password.create.title.noOrgTag" />
                     )}
                   </Typography>
@@ -194,7 +197,7 @@ class PasswordReset extends React.Component {
   }
 }
 
-export default inject("authStore", "organisationStore", "commonStore")(
+export default inject("authStore", "orgStore", "commonStore")(
   injectIntl(
     observer(
       withStyles(styles)(PasswordReset)

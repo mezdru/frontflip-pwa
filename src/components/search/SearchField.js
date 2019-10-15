@@ -49,11 +49,11 @@ class SearchField extends PureComponent {
     if (this.props.mode === 'onboard') {
       return this.props.intl.formatMessage({ id: 'algolia.onboard' });
     } else {
-      let organisation = this.props.organisationStore.values.organisation;
+      let organisation = this.props.orgStore.currentOrganisation;
       if (organisation.intro && organisation.intro[this.props.commonStore.locale] && organisation.intro[this.props.commonStore.locale] !== '') {
         return organisation.intro[this.props.commonStore.locale];
       }
-      return this.props.intl.formatMessage({ id: 'algolia.search' }, { orgName: this.props.organisationStore.values.organisation.name });
+      return this.props.intl.formatMessage({ id: 'algolia.search' }, { orgName: organisation.name });
     }
   }
 
@@ -132,7 +132,7 @@ class SearchField extends PureComponent {
 
 SearchField = withSearchManagement(SearchField);
 
-export default inject('commonStore', 'recordStore', 'organisationStore', 'searchStore')(
+export default inject('commonStore', 'recordStore', 'orgStore', 'searchStore')(
   observer(
     injectIntl(withTheme()(withStyles(styles, { withTheme: true })(SearchField)))
   )

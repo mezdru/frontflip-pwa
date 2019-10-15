@@ -53,8 +53,7 @@ class AddWingPopup extends React.Component {
     open: this.props.isOpen,
     redirectTo: null,
     wingsPopulated: [],
-    onLoad: true,
-    locale: this.props.commonStore.getCookie('locale') || this.props.commonStore.locale
+    onLoad: true
   };
 
   componentWillReceiveProps(nextProps) {
@@ -63,9 +62,11 @@ class AddWingPopup extends React.Component {
 
   handleClose = () => {
     ReactGA.event({ category: 'User', action: 'QRCode - Search' });
+
     if (process.env.NODE_ENV === 'production') SlackService.notify('#wingzy-events', 'QRCode - Search - ' +
       (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '') +
-      ' - by ' + this.props.recordStore.values.record.name);
+      ' - by ' + this.props.recordStore.currentUserRecord.name);
+
     this.setState({ open: false, redirectTo: getBaseUrl(this.props) });
   }
 
@@ -75,26 +76,17 @@ class AddWingPopup extends React.Component {
 
   populateWingsToAdd = async () => {
     let wingsPopulated = [];
-    let orgId = this.props.organisationStore.values.organisation._id ||
-      this.props.organisationStore.values.orgId;
-
-    this.props.recordStore.setOrgId(orgId);
+    let orgId = this.props.orgStore.currentOrganisation._id;
 
     await this.asyncForEach(this.props.wingsToAdd, async (wing) => {
-      this.props.recordStore.setRecordTag('#' + wing);
-      await this.props.recordStore.getRecordByTag()
-        .then((hashtagToAdd => {
-          wingsPopulated.push(hashtagToAdd);
-        })).catch(e => { console.log(e) });
+      let recordToAdd = await this.props.recordStore.fetchByTag('#' + wing, orgId);
+      wingsPopulated.push(recordToAdd);
     });
 
     this.setState({ wingsPopulated: wingsPopulated, onLoad: false });
   }
 
-  recordHasHashtag = (tag) => {
-    let resp = (this.props.recordStore.values.record.hashtags.find(hashtag => hashtag.tag === tag) ? true : false);
-    return resp;
-  }
+  recordHasHashtag = (tag) => this.props.recordStore.currentUserRecord.hashtags.find(hashtag => hashtag.tag === tag) ? true: false;
 
   async asyncForEach(array, callback) {
     for (let index = 0; index < array.length; index++) {
@@ -106,25 +98,23 @@ class AddWingPopup extends React.Component {
     ReactGA.event({ category: 'User', action: 'QRCode - Add Wings' });
     if (process.env.NODE_ENV === 'production') SlackService.notify('#wingzy-events', 'QRCode - Add Wings - ' +
       (this.state.wingsPopulated[0] ? this.state.wingsPopulated[0].tag : '') +
-      ' - by ' + this.props.recordStore.values.record.name);
+      ' - by ' + this.props.recordStore.currentUserRecord.name);
 
-    let record = this.props.recordStore.values.record;
+    let record = this.props.recordStore.currentUserRecord;
     let wingsToAdd = [];
     this.state.wingsPopulated.forEach(wing => {
       if (!this.recordHasHashtag(wing.tag)) {
         wingsToAdd.push(wing);
       }
     })
-    record.hashtags = record.hashtags.concat(wingsToAdd);
-    await this.props.recordStore.updateRecord(['hashtags']);
-    this.props.handleDisplayProfile(null, record);
-    this.setState({ open: false });
+    await this.props.recordStore.updateRecord(record._id, ['hashtags'], {hashtags: record.hashtags.concat(wingsToAdd)});
+    this.setState({ open: false, redirectTo: getBaseUrl(this.props) + '/' + record.tag});
   }
 
   render() {
     const { redirectTo, wingsPopulated, onLoad } = this.state;
     const { classes } = this.props;
-    const { organisation } = this.props.organisationStore.values;
+    const { currentOrganisation } = this.props.orgStore;
     const { locale } = this.props.commonStore;
 
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
@@ -151,7 +141,7 @@ class AddWingPopup extends React.Component {
             </Hidden>
             <Button onClick={this.handleClose} color="secondary" variant="contained" size="medium" className={classes.buttons}  >
               <Search />
-              <FormattedMessage id="action.addWings.search" values={{ organisationName: organisation.name }} />
+              <FormattedMessage id="action.addWings.search" values={{ organisationName: currentOrganisation.name }} />
             </Button>
           </div>
         }
@@ -180,7 +170,7 @@ class AddWingPopup extends React.Component {
   }
 }
 
-export default inject('commonStore', 'organisationStore', 'recordStore')(
+export default inject('commonStore', 'orgStore', 'recordStore')(
   observer(
     withStyles(styles, { withTheme: true })(AddWingPopup)
   )

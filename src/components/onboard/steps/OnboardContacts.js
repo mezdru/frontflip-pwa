@@ -1,6 +1,7 @@
 import React from 'react'
 import {inject, observer} from "mobx-react";
 import {FormattedMessage} from "react-intl";
+import undefsafe from 'undefsafe';
 
 import {withStyles, Grid, TextField, InputAdornment, IconButton, Typography} from '@material-ui/core';
 import {Clear} from '@material-ui/icons';
@@ -41,26 +42,32 @@ class OnboardContacts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      links: this.props.recordStore.values.record.links || [],
+      links: [],
       newLinkIndex: null,
     }
   }
   
-  componentDidMount() {
-    this.setDefaultLinks();
+  componentWillMount() {
+    this.setState({
+      links: undefsafe( (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord), 'links' ) || []
+    },()=> {
+      this.setDefaultLinks();
+    })
   }
   
   handleLinksChange = (e, link, index) => {
+    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
     link.value = e.target.value;
-    
     let links = this.state.links;
     links[index].value = e.target.value;
-    this.props.recordStore.values.record.links = links;
+    record.links = links;
     this.setState({links});
   }
   
   deleteLink = (linkToRemove) => {
-    this.props.recordStore.values.record.links = this.props.recordStore.values.record.links.filter(item => {
+    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
+
+    record.links = record.links.filter(item => {
       return !(item.type === linkToRemove.type && item.value === linkToRemove.value);
     });
     this.setState({links: this.state.links.filter(item => !(item.type === linkToRemove.type && item.value === linkToRemove.value) )});
@@ -76,8 +83,9 @@ class OnboardContacts extends React.Component {
   }
 
   getLinkByType = (typeWanted) => {
+    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
     try{
-      return (this.props.recordStore.values.record.links.find(link => link.type === typeWanted));
+      return (record.links.find(link => link.type === typeWanted));
     }catch(e) {
       console.log(e);
       return null;

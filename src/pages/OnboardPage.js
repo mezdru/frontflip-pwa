@@ -8,6 +8,7 @@ import ReactGA from 'react-ga';
 import BannerResizable from '../components/utils/banner/BannerResizable';
 import Header from '../components/header/Header';
 import { styles } from './OnboardPage.css';
+import withAuthorizationManagement from '../hoc/AuthorizationManagement.hoc';
 
 const Intercom = React.lazy(() => import('react-intercom'));
 
@@ -15,55 +16,45 @@ console.debug('Loading OnboardPage');
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
-class OnboardPage extends React.Component {
+class OnboardPage extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       inOnboarding: undefsafe(this.props, 'match.params.step') !== undefined,
-      editMode: this.props.edit || false,
       renderComponent: false // do not remove this!!
     };
 
     // clear wings bank
     this.props.commonStore.setLocalStorage('wingsBank', [], true);
+
+    this.props.commonStore.setUrlParams(this.props.match);
   }
 
-  componentDidMount() {
+  componentWillReceiveProps(nextProps) {
+    this.props.commonStore.setUrlParams(nextProps.match);
+  }
+
+  async componentWillMount() {
+    let orgId = this.props.orgStore.currentOrganisation._id;
     this.props.history.listen((location, action) => {
       ReactGA.pageview(window.location.pathname);
-      // setTimeout(() => this.makeSteps(this.props.match.params.step), 10);
     });
 
-    if (this.props.match && this.props.match.params && this.props.match.params.recordId && this.props.edit) {
-      this.props.recordStore.setRecordId(this.props.match.params.recordId);
-      this.props.recordStore.getRecord()
-      .then(() => {
-        this.setState({renderComponent: true});
-      }).catch(e => {
-        console.log(e);
-      })
+    if(this.props.commonStore.url.params.onboardMode === 'edit') {
+      await this.props.recordStore.getOrFetchRecord(null, this.props.commonStore.url.params.recordTag, orgId);
     } else {
-      this.getRecordForUser()
-      .then(() => {
-        this.setState({renderComponent: true});
-      })
+      await this.props.recordStore.fetchPopulatedForUser(orgId);
+      await this.props.userStore.fetchCurrentUser(); // get updated user
     }
-  }
-
-  shouldComponentUpdate(nextProp, nextState) {
-    return (JSON.stringify(nextState) !== JSON.stringify(this.state))
-  }
-
-  getRecordForUser = () => {
-    this.props.recordStore.setOrgId(this.props.organisationStore.values.organisation._id);
-    return this.props.recordStore.getRecordByUser();
+    this.setState({renderComponent: true});
   }
 
   handleEnterToOnboard = () => this.setState({ inOnboarding: true });
 
   render() {
-    const { inOnboarding, editMode, renderComponent } = this.state;
+    const { inOnboarding, renderComponent } = this.state;
     const { classes, width } = this.props;
+    let editMode = (this.props.commonStore.url.params.onboardMode === 'edit');
 
     if(!renderComponent) return <CircularProgress color="primary" style={{position: 'fixed', zIndex: '9', left:0, right:0, margin:0, top: '40%'}} />;
 
@@ -72,7 +63,7 @@ class OnboardPage extends React.Component {
 
         {!(inOnboarding && width === "xs") && (
           <Suspense fallback={<></>}>
-            <Header handleDisplayProfile={this.handleDisplayProfile} />
+            <Header />
           </Suspense>
         )}
 
@@ -105,7 +96,9 @@ class OnboardPage extends React.Component {
   }
 }
 
-export default inject('commonStore', 'organisationStore', 'recordStore', 'userStore')(
+OnboardPage = withAuthorizationManagement(OnboardPage, 'onboard');
+
+export default inject('commonStore', 'orgStore', 'recordStore')(
   observer(
     withStyles(styles, { withTheme: true })(withWidth()(OnboardPage))
   )

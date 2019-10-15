@@ -95,7 +95,7 @@ class Login extends React.Component {
 
   render() {
     const { values, inProgress } = this.props.authStore;
-    const { orgTag } = this.props.organisationStore.values;
+    const { currentOrganisation } = this.props.orgStore;
     let { loginErrors, redirectTo, isAuth } = this.state;
     const { locale } = this.props.commonStore;
     let intl = this.props.intl;
@@ -106,7 +106,7 @@ class Login extends React.Component {
       return <Redirect push to={redirectTo} />;
     }
     else if (isAuth) {
-      return <Redirect push to={'/' + locale + (orgTag ? '/' + orgTag : '')} />;
+      return <Redirect push to={'/' + locale + (currentOrganisation ? '/' + currentOrganisation.tag : '')} />;
     }
     else {
       return (
@@ -163,7 +163,7 @@ class Login extends React.Component {
             </Grid>
             <Grid item container justify="center">
               <Button component={Link}
-                to={"/" + locale + (orgTag ? '/' + orgTag : '') + "/password/forgot"}
+                to={"/" + locale + (currentOrganisation ? '/' + currentOrganisation.tag : '') + "/password/forgot"}
                 variant="text"
               >
                 <FormattedMessage id="I don't have my password" />
@@ -189,7 +189,7 @@ class Login extends React.Component {
   };
 }
 
-export default inject('authStore', 'userStore', 'organisationStore', 'commonStore')(
+export default inject('authStore', 'userStore', 'orgStore', 'commonStore')(
   injectIntl(observer(
     withRouter(Login)
   ))

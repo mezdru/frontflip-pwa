@@ -25,15 +25,15 @@ const styles = theme => ({
 class OnboardIntro extends React.Component {
 
   handleChange = (e, field) => {
-    let record = this.props.recordStore.values.record;
+    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
     record[field] = e.target.value;
-    this.props.recordStore.setRecord(record);
     this.forceUpdate(); // why component do not update auto like Login fields ?
   }
 
   render() {
-    const { record } = this.props.recordStore.values;
     const { classes } = this.props;
+    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
+
 
     record.intro = entities.decode(record.intro);
     record.name = entities.decode(record.name);
@@ -48,12 +48,12 @@ class OnboardIntro extends React.Component {
           </Grid>
 
           <Grid item >
-            <PictureField handleSave={this.props.handleSave} />
+            <PictureField handleSave={this.props.handleSave} edit={this.props.edit} />
           </Grid>
 
           <Grid item className={classes.field}>
             <TextField
-              label={this.props.intl.formatMessage({ id: 'onboard.intro.name' }, { organisationName: this.props.organisationStore.values.organisation.name })}
+              label={this.props.intl.formatMessage({ id: 'onboard.intro.name' }, { organisationName: this.props.orgStore.currentOrganisation.name })}
               type="text"
               className={classes.field}
               fullWidth
@@ -69,7 +69,7 @@ class OnboardIntro extends React.Component {
 
           <Grid item className={classes.field} >
             <TextField
-              label={this.props.intl.formatMessage({ id: 'onboard.intro.intro' }, { organisationName: this.props.organisationStore.values.organisation.name })}
+              label={this.props.intl.formatMessage({ id: 'onboard.intro.intro' }, { organisationName: this.props.orgStore.currentOrganisation.name })}
               type="text"
               className={classes.field}
               fullWidth
@@ -88,7 +88,7 @@ class OnboardIntro extends React.Component {
   }
 }
 
-export default inject('commonStore', 'recordStore', 'organisationStore')(
+export default inject('commonStore', 'recordStore', 'orgStore')(
   observer(
     injectIntl(withStyles(styles, { withTheme: true })(OnboardIntro))
   )

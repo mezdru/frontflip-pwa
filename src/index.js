@@ -13,7 +13,7 @@ import recordStore from './stores/record.store';
 import commonStore from './stores/common.store';
 import searchStore from './stores/search.store';
 import statisticsStore from './stores/statistics.store';
-import organisationStore from './stores/organisation.store';
+import orgStore from './stores/organisation.store';
 import clapStore from './stores/clap.store';
 import helpRequestStore from './stores/helpRequest.store';
 import HttpsRedirect from 'react-https-redirect';
@@ -25,7 +25,7 @@ const stores = {
   userStore,
   recordStore,
   commonStore,
-  organisationStore,
+  orgStore,
   statisticsStore,
   clapStore,
   helpRequestStore,
