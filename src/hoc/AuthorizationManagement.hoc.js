@@ -19,7 +19,7 @@ const withAuthorizationManagement = (ComponentToWrap, componentName) => {
     }
 
     belongsToOrg = () => (this.props.userStore.currentOrgAndRecord != null) || (this.props.userStore.currentUser.superadmin);
-    needOnboarding = () => !this.props.userStore.currentUser.superadmin && !(this.props.userStore.currentOrgAndRecord && this.props.userStore.currentOrgAndRecord.welcomed);
+    needOnboarding = () => !this.props.userStore.currentUser.superadmin && this.props.userStore.currentOrgAndRecord && !this.props.userStore.currentOrgAndRecord.welcomed;
     hasValidatedEmail = () => (this.props.userStore.currentUser.email.validated || false);
 
     render() {

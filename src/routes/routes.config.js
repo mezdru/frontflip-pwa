@@ -79,16 +79,16 @@ export const routes = [
           },
           {
             path: [
-              "/:locale(en|fr|en-UK)/:orgTag/onboard/:step?",
-              "/:locale(en|fr|en-UK)/:orgTag/onboard/:step/:mode/:recordTag"
+              "/:locale(en|fr|en-UK)/:orgTag/onboard/:step/:mode/:recordTag",
+              "/:locale(en|fr|en-UK)/:orgTag/onboard/:step?"
             ],
             component: OnboardPage,
             exact: true
           },
           {
             path: [
-              "/:locale(en|fr|en-UK)/:orgTag/congrats",
               "/:locale(en|fr|en-UK)/:orgTag/:hashtags/:action",
+              "/:locale(en|fr|en-UK)/:orgTag/congrats",
               "/:locale(en|fr|en-UK)/:orgTag/:recordTag?"
             ],
             component: SearchPage,

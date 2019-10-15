@@ -7,6 +7,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { Redirect } from "react-router-dom";
 import { observe } from 'mobx';
 import { animateScroll as scroll } from 'react-scroll';
+import undefsafe from 'undefsafe';
 
 import { styles } from './SearchPage.css';
 import ErrorBoundary from '../components/utils/errors/ErrorBoundary';
@@ -163,8 +164,7 @@ class SearchPage extends PureComponent {
    * @description Get action in queue is used for Add Wings via URL
    */
   getActionInQueue = () => {
-    let action = this.props.commonStore.getCookie('actionInQueue');
-    this.props.commonStore.removeCookie('actionInQueue');
+    let action = undefsafe(this.props.match, 'params.action');
     return action;
   }
 
@@ -172,8 +172,7 @@ class SearchPage extends PureComponent {
    * @description Fetch Wings filters passed as URL params
    */
   getHashtagsFilter = () => {
-    let wings = this.props.commonStore.getCookie('hashtagsFilter');
-    this.props.commonStore.removeCookie('hashtagsFilter');
+    let wings = undefsafe(this.props.match, 'params.hashtags');
     if (wings) {
       return wings.split(',');
     } else {

@@ -64,13 +64,14 @@ class OnboardWings extends React.Component {
   }
 
   handleAddWing =async (element) => {
+    if(!element) return Promise.resolve();
     let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
     if (record.hashtags.find(elt => elt.tag === element.tag)) return Promise.resolve();
 
-    let hashtagRecord = await this.props.recordStore.fetchByTag(element.tag, this.props.orgStore.currentOrganisation._id);
+    let hashtagRecord = await this.props.recordStore.fetchByTag(element.tag, this.props.orgStore.currentOrganisation._id).catch(e => {return null});
 
     if(hashtagRecord) this.addAndSave(hashtagRecord);
-    else {
+    else if(element.tag) {
       let newRecord = {
         tag: element.tag,
         name: element.name || (element.tag).substr(1),
@@ -108,7 +109,13 @@ class OnboardWings extends React.Component {
   }
 
   isFeaturedWings = () => (this.props.activeStepLabel && this.props.activeStepLabel.charAt(0) === '#');
-  getFeaturedWings = () => this.props.orgStore.currentOrganisation.featuredWingsFamily.filter(fam => fam.tag === this.props.activeStepLabel)[0];
+  getFeaturedWings = () => {
+    try{
+      return this.props.orgStore.currentOrganisation.featuredWingsFamily.filter(fam => fam.tag === this.props.activeStepLabel)[0];
+    }catch(e) {
+      return null;
+    }
+  }
 
   render() {
     const { classes } = this.props;

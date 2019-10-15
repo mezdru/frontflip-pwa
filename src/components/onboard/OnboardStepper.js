@@ -37,6 +37,9 @@ class OnboardStepper extends React.Component {
   componentWillMount() {
     this.makeSteps(this.props.wantedStep);
   }
+  componentWillUnmount() {
+    this.isUnmount = true;
+  }
 
   makeSteps = async (stepLabel) => {
     let org = this.props.orgStore.currentOrganisation;
@@ -93,7 +96,7 @@ class OnboardStepper extends React.Component {
     this.setState({ slideDirection: exitDirection, slideState: false }, () => {
       setTimeout(() => {
         this.setState({ slideDirection: enterDirection, activeStep: nextActiveStep, slideState: true });
-      }, 310);
+      }, 320);
     });
   }
 
@@ -110,10 +113,11 @@ class OnboardStepper extends React.Component {
     return await this.props.recordStore.updateRecord(record._id, arrayOfLabels, record).then((record) => {
       timeoutArray.forEach(tm => { clearTimeout(tm) });
       timeoutArray = [];
-      this.setState({ showFeedback: true }, () => {
-        timeoutArray.push(setTimeout(() => { this.setState({ showFeedback: false }) }, 2000));
-      })
-      throw new Error('test');
+      if(!this.isUnmount) {
+        this.setState({ showFeedback: true }, () => {
+          timeoutArray.push(setTimeout(() => { if(!this.isUnmount) this.setState({ showFeedback: false }) }, 2000));
+        })
+      }
     }).catch((e) => {
       console.error(e);
     });
