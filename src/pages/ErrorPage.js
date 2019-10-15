@@ -97,6 +97,11 @@ class ErrorPage extends React.Component {
                       <FormattedHTMLMessage id="errorPage.organisationNotFound" values={{ newOrgLink: UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/new/presentation', null, null), orgTag: undefsafe(currentOrganisation, 'tag') }} />
                     </Typography>
                   )}
+                  {(errorType === 'organisation' && errorCode === '403') && (
+                    <Typography variant="subheading">
+                      <FormattedHTMLMessage id="errorPage.organisationForbidden" />
+                    </Typography>
+                  )}
                   {(errorCode === '500' && errorType === 'routes') && (
                     <Typography variant={'subheading'}>
                       <FormattedHTMLMessage id="errorPage.unhandledError" />
