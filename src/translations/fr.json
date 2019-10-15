@@ -122,5 +122,6 @@
     "askForHelp.popup.placeholder": "Votre question ici.",
     "askForHelp.popup.badConditions": "Vous ne pouvez pas envoyer votre question à plus de 10 personnes. Veuillez supprimer {recipientsToRemove} destinataires ou affiner votre recherche.",
     "welcome.page.title": "Nous ne connaissons pas encore votre entreprise",
-    "welcome.page.subtitle": "Wingzy c'est l'annuaire intelligent de votre entreprise.<br/> Pour créer ou rejoindre l'annuaire de votre entreprise : <a href='mailto:contact@wingzy.com'>contactez-nous.</a>"
+    "welcome.page.subtitle": "Wingzy c'est l'annuaire intelligent de votre entreprise.<br/> Pour créer ou rejoindre l'annuaire de votre entreprise : <a href='mailto:contact@wingzy.com'>contactez-nous.</a>",
+    "errorPage.organisationForbidden": "Vous n'avez pas accès à cette organisation. Veuillez demander un lien d'invitation ou <a href='mailto:contact@wingzy.com'>contactez-nous.</a>"
 }
