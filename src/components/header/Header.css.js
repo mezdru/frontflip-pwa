@@ -141,6 +141,10 @@ export const styles = theme => ({
       backgroundColor: 'white',
     }
   },
+  right: {
+    right: '16px !important',
+    left: 'unset',
+  },
   logoBorder: {
     backgroundCOlor: 'white',
     border: '2px solid white',

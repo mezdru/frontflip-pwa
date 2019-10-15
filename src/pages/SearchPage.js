@@ -223,7 +223,7 @@ class SearchPage extends PureComponent {
       <React.Fragment>
         {(redirectTo && (window.location.pathname !== redirectTo)) && <Redirect push to={redirectTo} />}
         <Suspense fallback={<></>}>
-          <Header />
+          <Header withProfileLogo />
         </Suspense>
 
         <main className={'search-container'}>
