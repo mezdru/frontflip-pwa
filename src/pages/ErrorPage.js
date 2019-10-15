@@ -7,7 +7,7 @@ import ProfileService from '../services/profile.service';
 import UrlService from '../services/url.service';
 import ReactGA from 'react-ga';
 import undefsafe from 'undefsafe';
-
+import SlackService from '../services/slack.service';
 console.debug('Loading ErrorPage');
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
@@ -46,6 +46,11 @@ class ErrorPage extends React.Component {
     if (this.props.match && this.props.match.params) {
       this.setState({ errorCode: this.props.match.params.errorCode, errorType: this.props.match.params.errorType });
     }
+
+    try {
+      SlackService.notifyError(` ${this.props.match.params.errorCode} (${this.props.match.params.errorType}) (userId:${undefsafe(this.props.userStore.currentUser, '_id')})`, 51, 'quentin', 'ErrorPage.js')
+    }catch(e) {}
+
   }
 
   render() {
