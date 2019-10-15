@@ -152,7 +152,7 @@ class HeaderDrawer extends Component {
                         <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.listOrgTitle' })}
                           primaryTypographyProps={{ noWrap: true, style: { fontWeight: 'bold' } }} />
                       </ListItem>
-                      <OrganisationsList />
+                      <OrganisationsList onClick={this.props.handleDrawerClose} />
                     </React.Fragment>
                   )}
                   {undefsafe(currentUser, 'superadmin') && (

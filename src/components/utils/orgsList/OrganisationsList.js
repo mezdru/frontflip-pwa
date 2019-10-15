@@ -61,7 +61,7 @@ class OrganisationsList extends React.Component {
         {currentUserOrganisations.map((org, i) => {
           if (org && (org.tag !== currentOrganisation.tag)) {
             return (
-              <ListItem button component={Link} to={'/' + locale + '/' + org.tag} key={org._id} className={classes.orgItem}>
+              <ListItem button component={Link} to={'/' + locale + '/' + org.tag} key={org._id} className={classes.orgItem} onClick={this.props.onClick}>
                 <Logo type={'smallOrg'} alt={entities.decode(org.name)} src={(org.logo ? org.logo.url : null) || defaultLogo} className={classes.itemLogo} />
                 <div className={classes.itemName} >{entities.decode(org.name)}</div>
               </ListItem>
