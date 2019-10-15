@@ -202,7 +202,7 @@ class SearchPage extends PureComponent {
       this.props.profileContext.reset();
       this.setState({ redirectTo: getBaseUrl(this.props) });
     },
-      this.state.transitionDuration / 2
+      (this.state.transitionDuration / 2)*0.9
     );
   }
 
