@@ -7,7 +7,7 @@ import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 import { observe } from 'mobx';
 import { Add } from '@material-ui/icons';
 import { getBaseUrl } from '../../services/utils.service';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import undefsafe from 'undefsafe';
 
 const styles = theme => ({
@@ -72,22 +72,31 @@ const styles = theme => ({
 class ProfileWings extends React.PureComponent {
 
   async componentWillMount() {
-    this.unsubscribeUrlRecord = observe(this.props.recordStore, 'currentUrlRecord', (change) => {
-      if (change.newValue && change.newValue._id)
-        this.getClapsCount(change.newValue._id);
+    if(this.props.commonStore.url.params.recordTag) {
+      let record = await this.props.recordStore.getOrFetchRecord(null, this.props.commonStore.url.params.recordTag, this.props.orgStore.currentOrganisation._id);
+      await this.getClapsCount(record._id || record.objectID);
+    }
+
+    let inProgress = false;
+    this.unsubscribeUrlRecord = observe(this.props.commonStore.url, 'params', async (change) => {
+      if (change.newValue.recordTag && !inProgress) {
+        inProgress = true;
+        let record = await this.props.recordStore.getOrFetchRecord(null, change.newValue.recordTag, this.props.orgStore.currentOrganisation._id);
+        await this.getClapsCount(record._id || record.objectID);
+        inProgress = false;
+      }
     });
   }
 
   componentWillUnmount() {
+    this.isUnmount = true;
     this.unsubscribeUrlRecord();
   }
 
-  getClapsCount = (recordId) => {
+  getClapsCount = async (recordId) => {
     this.props.clapStore.setCurrentRecordId(recordId);
-    this.props.clapStore.getClapCountByProfile()
-      .then(clapsCount => {
-        this.forceUpdate();
-      }).catch(e => { console.log(e); return; });
+    await this.props.clapStore.getClapCountByProfile().catch(e => { return; });
+    if(!this.isUnmount) this.forceUpdate();
   }
 
   getClaps = (hashtagId) => {
