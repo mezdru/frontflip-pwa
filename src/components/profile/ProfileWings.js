@@ -90,7 +90,7 @@ class ProfileWings extends React.PureComponent {
 
   componentWillUnmount() {
     this.isUnmount = true;
-    this.unsubscribeUrlRecord();
+    if(this.unsubscribeUrlRecord) this.unsubscribeUrlRecord();
   }
 
   getClapsCount = async (recordId) => {

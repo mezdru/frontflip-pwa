@@ -58,7 +58,6 @@ class ErrorPage extends React.Component {
     const { errorCode, errorType } = this.state;
     const { currentUser } = this.props.userStore;
     const { currentOrganisation } = this.props.orgStore;
-
     return (
       <div>
         <Header />

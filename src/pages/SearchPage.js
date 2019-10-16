@@ -136,6 +136,7 @@ class SearchPage extends PureComponent {
    */
   handleShowSearchResults = (offset) => {
     var contentPart = document.getElementById('content-container');
+    if(!contentPart) return;
     var scrollMax = Math.min(contentPart.scrollHeight, window.innerHeight - 120);
     scroll.scrollTo(scrollMax, {
       duration: this.state.transitionDuration,

@@ -33,7 +33,7 @@ class HeaderDrawer extends Component {
     e.preventDefault();
     this.props.handleDrawerClose();
     this.props.authStore.logout().then(() => {
-      window.location.href = UrlService.createUrl(window.location.host, this.props.orgStore.currentOrganisation ?  '/' + this.props.orgStore.currentOrganisation.tag : '' , null);
+      window.location.href = UrlService.createUrl(window.location.host, this.props.orgStore.currentOrganisation ? '/' + this.props.orgStore.currentOrganisation.tag : '', null);
     });
   }
 
@@ -58,16 +58,15 @@ class HeaderDrawer extends Component {
 
   render() {
     const { classes, auth, open, intl } = this.props;
-    const {currentUserRecord} = this.props.recordStore;
+    const { currentUserRecord } = this.props.recordStore;
     const { currentOrganisation } = this.props.orgStore;
     const { currentUser } = this.props.userStore;
     const { locale } = this.props.commonStore;
-
     const currentOrgAndRecord = currentOrganisation && ((currentUser && currentUser.orgsAndRecords) ?
       currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === currentOrganisation._id) : null);
 
-    if(currentUserRecord) currentUserRecord.name = entities.decode(currentUserRecord.name)
-    if(currentOrganisation) currentOrganisation.name = entities.decode(currentOrganisation.name)
+    if (currentUserRecord) currentUserRecord.name = entities.decode(currentUserRecord.name)
+    if (currentOrganisation) currentOrganisation.name = entities.decode(currentOrganisation.name)
 
     return (
       <SwipeableDrawer
@@ -91,7 +90,7 @@ class HeaderDrawer extends Component {
           </div>
 
           <div className={'leftMenu'}>
-            {(auth && undefsafe(currentOrganisation , '_id')) && (
+            {(auth && undefsafe(currentOrganisation, '_id')) && (
               <React.Fragment>
                 {currentUserRecord && (
                   <React.Fragment>
@@ -125,7 +124,7 @@ class HeaderDrawer extends Component {
                       primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold', color: 'white', fontSize: '1rem' } }} />
                   </ListItem>
 
-                  {( undefsafe(currentOrganisation, 'canInvite') || undefsafe(currentUser, 'superadmin') || (currentOrgAndRecord && currentOrgAndRecord.admin)) && (
+                  {(undefsafe(currentOrganisation, 'canInvite') || undefsafe(currentUser, 'superadmin') || (currentOrgAndRecord && currentOrgAndRecord.admin)) && (
                     <ListItem>
                       <InvitationDialog />
                     </ListItem>
@@ -175,6 +174,17 @@ class HeaderDrawer extends Component {
                 <Divider className={classes.divider} />
               </React.Fragment>
             )}
+            {(auth && !undefsafe(currentOrganisation, '_id')) && currentUser && currentUser.orgsAndRecords && (
+              <React.Fragment>
+                <Divider className={classes.divider} />
+                <ListItem>
+                  <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.listOrgTitle' })}
+                    primaryTypographyProps={{ noWrap: true, style: { fontWeight: 'bold' } }} />
+                </ListItem>
+                <OrganisationsList onClick={this.props.handleDrawerClose} />
+                <Divider className={classes.divider} />
+              </React.Fragment>
+            )}
             <List className={'leftSubmenu'}>
               {!auth && (
                 <React.Fragment>
@@ -188,7 +198,7 @@ class HeaderDrawer extends Component {
               <ListItem>
                 <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.locale' })} />
                 <ListItemSecondaryAction>
-                < LocaleSelector currentLocale={locale} handleChange={this.handleLocaleChange} />
+                  < LocaleSelector currentLocale={locale} handleChange={this.handleLocaleChange} />
                 </ListItemSecondaryAction>
               </ListItem>
 
