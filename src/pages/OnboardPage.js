@@ -44,7 +44,7 @@ class OnboardPage extends React.PureComponent {
     });
 
     if(this.props.commonStore.url.params.onboardMode === 'edit') {
-      await this.props.recordStore.getOrFetchRecord(null, this.props.commonStore.url.params.recordTag, orgId)
+      await this.props.recordStore.fetchByTag(this.props.commonStore.url.params.recordTag, orgId)
       .catch(e => {
         this.setState({redirectTo: getBaseUrl(this.props)});
         console.log(e);
