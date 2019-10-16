@@ -59,14 +59,13 @@ class OrganisationsList extends React.Component {
     return (
       <List className={classes.orgsContainer}>
         {currentUserOrganisations.map((org, i) => {
-          if (org && (org.tag !== currentOrganisation.tag)) {
-            return (
-              <ListItem button component={Link} to={'/' + locale + '/' + org.tag} key={org._id} className={classes.orgItem} onClick={this.props.onClick}>
-                <Logo type={'smallOrg'} alt={entities.decode(org.name)} src={(org.logo ? org.logo.url : null) || defaultLogo} className={classes.itemLogo} />
-                <div className={classes.itemName} >{entities.decode(org.name)}</div>
-              </ListItem>
-            );
-          } else { return null; }
+          if (currentOrganisation && org.tag === currentOrganisation.tag) return null;
+          return (
+            <ListItem button component={Link} to={'/' + locale + '/' + org.tag} key={org._id} className={classes.orgItem} onClick={this.props.onClick}>
+              <Logo type={'smallOrg'} alt={entities.decode(org.name)} src={(org.logo ? org.logo.url : null) || defaultLogo} className={classes.itemLogo} />
+              <div className={classes.itemName} >{entities.decode(org.name)}</div>
+            </ListItem>
+          );
         })}
         {(currentUserOrganisations.length === 0) && (
           <div className={classes.circularProgressContainer} >
