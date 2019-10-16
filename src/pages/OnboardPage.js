@@ -5,10 +5,12 @@ import OnboardStepper from '../components/onboard/OnboardStepper';
 import { withStyles, Grid, withWidth, CircularProgress } from '@material-ui/core';
 import undefsafe from 'undefsafe';
 import ReactGA from 'react-ga';
+import {Redirect} from 'react-router-dom';
 import BannerResizable from '../components/utils/banner/BannerResizable';
 import Header from '../components/header/Header';
 import { styles } from './OnboardPage.css';
 import withAuthorizationManagement from '../hoc/AuthorizationManagement.hoc';
+import { getBaseUrl } from '../services/utils.service';
 
 const Intercom = React.lazy(() => import('react-intercom'));
 
@@ -21,6 +23,7 @@ class OnboardPage extends React.PureComponent {
     super(props);
     this.state = {
       inOnboarding: undefsafe(this.props, 'match.params.step') !== undefined,
+      redirectTo: null,
       renderComponent: false // do not remove this!!
     };
 
@@ -41,7 +44,11 @@ class OnboardPage extends React.PureComponent {
     });
 
     if(this.props.commonStore.url.params.onboardMode === 'edit') {
-      await this.props.recordStore.getOrFetchRecord(null, this.props.commonStore.url.params.recordTag, orgId);
+      await this.props.recordStore.getOrFetchRecord(null, this.props.commonStore.url.params.recordTag, orgId)
+      .catch(e => {
+        this.setState({redirectTo: getBaseUrl(this.props)});
+        console.log(e);
+      })
     } else {
       await this.props.recordStore.fetchPopulatedForUser(orgId);
       await this.props.userStore.fetchCurrentUser(); // get updated user
@@ -52,11 +59,12 @@ class OnboardPage extends React.PureComponent {
   handleEnterToOnboard = () => this.setState({ inOnboarding: true });
 
   render() {
-    const { inOnboarding, renderComponent } = this.state;
+    const { inOnboarding, renderComponent, redirectTo } = this.state;
     const { classes, width } = this.props;
     let editMode = (this.props.commonStore.url.params.onboardMode === 'edit');
 
-    if(!renderComponent) return <CircularProgress color="primary" style={{position: 'fixed', zIndex: '9', left:0, right:0, margin:0, top: '40%'}} />;
+    if(redirectTo) return <Redirect to={redirectTo} />;
+    if(!renderComponent) return <CircularProgress color="secondary" style={{position: 'fixed', zIndex: '9', left:0, right:0, margin:'auto', top: '40%'}} />;
 
     return (
       <Grid container className={classes.root} direction="row" justify="center" alignItems="center">
