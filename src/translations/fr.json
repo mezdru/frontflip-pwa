@@ -91,7 +91,7 @@
     "onboard.start": "Créez votre profil",
     "onboard.intro.name": "Prénom et nom",
     "onboard.intro.intro": "Votre rôle chez {organisationName}",
-    "onboard.userWings": "Vos {wingsCount} {familyName}",
+    "onboard.userWings": "Mes {wingsCount} {familyName}",
     "onboard.noWings": "Vos Wings sont tous vos talents, compétences, énergies que vous voulez partagez avec vos collègues. Sélectionnez des Wings existantes ou créez vos propres Wings !",
     "onboard.welcome.text": "Wingzy est l'annuaire des talents de {organisationName}. Une app minimaliste pour trouver vos collègues grâce à leurs Wings : leurs talents, compétences et énergies. Créez votre profil et révélez vos Wings en juste 3 minutes !",
     "wingsSuggestions": "Suggestions",
