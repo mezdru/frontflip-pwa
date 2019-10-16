@@ -38,6 +38,7 @@ class RecordStore extends Store {
   }
 
   addRecord(inRecord) {
+    if(inRecord.objectID) inRecord._id = inRecord.objectID;
     let index = this.records.findIndex(record => JSON.stringify(record._id) === JSON.stringify(inRecord._id || inRecord.objectID));
     if (index > -1) {
       let record = this.records[index];
