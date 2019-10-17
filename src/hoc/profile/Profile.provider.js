@@ -47,7 +47,7 @@ class ProfileProvider extends React.Component {
   setWingzyRecord = () => {
     this.buildWingsByFamilies();
     if(!this.props.authStore.isAuth()) return;
-    this.props.recordStore.getOrFetchRecord(null, this.state.algoliaRecord.tag, this.props.orgStore.currentOrganisation._id)
+    this.props.recordStore.fetchByTag(this.state.algoliaRecord.tag, this.props.orgStore.currentOrganisation._id)
       .then((record) => {
         record.objectID = record._id;
 
@@ -64,8 +64,8 @@ class ProfileProvider extends React.Component {
   canEdit = (workingRecord) => {
     if (!(this.props.userStore.currentUser && this.props.userStore.currentUser._id)) return false;
     if (this.props.userStore.currentUser.superadmin) return true;
-    else if (this.props.userStore.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.record === workingRecord.objectID)) return true;
-    else if (this.props.userStore.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === workingRecord.organisation && orgAndRecord.admin)) return true;
+    else if (this.props.userStore.currentUser.orgsAndRecords.find(orgAndRecord => (orgAndRecord.record._id || orgAndRecord.record) === workingRecord.objectID)) return true;
+    else if (this.props.userStore.currentUser.orgsAndRecords.find(orgAndRecord => (orgAndRecord.organisation._id || orgAndRecord.organisation) === workingRecord.organisation && orgAndRecord.admin)) return true;
     else return false;
   }
 

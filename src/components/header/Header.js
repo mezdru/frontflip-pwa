@@ -70,14 +70,12 @@ class App extends Component {
             open={open} auth={auth}
           />
 
-          {this.props.withProfileLogo && (
+          {this.props.withProfileLogo && this.props.authStore.isAuth() && this.props.userStore.currentOrgAndRecord && this.props.userStore.currentOrgAndRecord.record && (
             <Hidden xsDown>
-              {this.props.authStore.isAuth() && this.props.userStore.currentOrgAndRecord && this.props.userStore.currentOrgAndRecord.record && (
-                <Fab variant="extended" className={classNames(classes.menuButton, classes.right)}
-                  component={Link}
-                  to={'/' + locale + '/' + orgTag + '/' + undefsafe(this.props.recordStore.currentUserRecord, 'tag')}
-                  children={<Logo type={'person'} src={undefsafe(this.props.recordStore.currentUserRecord, 'picture.url') || null} />} />
-              )}
+              <Fab variant="extended" className={classNames(classes.menuButton, classes.right)}
+                component={Link}
+                to={'/' + locale + '/' + orgTag + '/' + undefsafe(this.props.recordStore.currentUserRecord, 'tag')}
+                children={<Logo type={'person'} src={undefsafe(this.props.recordStore.currentUserRecord, 'picture.url') || null} />} />
             </Hidden>
           )}
 

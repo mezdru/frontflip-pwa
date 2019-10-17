@@ -54,7 +54,7 @@ class OrganisationsList extends React.Component {
     const { locale } = this.props.commonStore;
     const { classes } = this.props;
 
-    let currentUserOrganisations = organisations.filter(org => currentUser.orgsAndRecords.find(oar => oar.organisation === org._id));
+    let currentUserOrganisations = organisations.filter(org => currentUser.orgsAndRecords.find(oar => (oar.organisation._id || oar.organisation) === org._id));
 
     return (
       <List className={classes.orgsContainer}>

@@ -62,9 +62,7 @@ class HeaderDrawer extends Component {
     const { currentOrganisation } = this.props.orgStore;
     const { currentUser } = this.props.userStore;
     const { locale } = this.props.commonStore;
-    const currentOrgAndRecord = currentOrganisation && ((currentUser && currentUser.orgsAndRecords) ?
-      currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === currentOrganisation._id) : null);
-
+    const currentOrgAndRecord = this.props.userStore.currentOrgAndRecord;
     if (currentUserRecord) currentUserRecord.name = entities.decode(currentUserRecord.name)
     if (currentOrganisation) currentOrganisation.name = entities.decode(currentOrganisation.name)
     return (

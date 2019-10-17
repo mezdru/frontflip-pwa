@@ -77,10 +77,9 @@ class Auth extends React.Component {
             this.props.authStore.registerToOrg()
               .then((data) => {
                 let organisation = data.organisation;
-                let currentOrgAndRecord = this.props.userStore.currentUser.orgsAndRecords.find(orgAndRecord => orgAndRecord.organisation === organisation._id);
-                if (currentOrgAndRecord) this.props.recordStore.setRecordId(currentOrgAndRecord.record);
+                let currentOrgAndRecord = this.props.userStore.currentUser.orgsAndRecords.find(orgAndRecord => (orgAndRecord.organisation._id || orgAndRecord.organisation)  === organisation._id);
 
-                this.props.recordStore.getRecord()
+                this.props.recordStore.fetchRecord(currentOrgAndRecord.record._id || currentOrgAndRecord.record)
                   .then(() => this.signinSuccessRedirect())
                   .catch(() => this.setState({ redirectTo: getBaseUrl(this.props) + '/onboard' }));
               }).catch((err) => this.setState({ redirectTo: getBaseUrl(this.props) }));

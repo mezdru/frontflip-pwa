@@ -13,7 +13,7 @@ class RecordStore extends Store {
   }
 
   get currentUserRecord() {
-    let orgAndRecord = userStore.currentUser && userStore.currentUser.orgsAndRecords.find(oar => oar.organisation === undefsafe(orgStore.currentOrganisation, '_id'));
+    let orgAndRecord = userStore.currentUser && userStore.currentUser.orgsAndRecords.find(oar => (oar.organisation._id || oar.organisation) === undefsafe(orgStore.currentOrganisation, '_id'));
     if(!orgAndRecord || !orgAndRecord.record) return null;
     return this.getRecord(orgAndRecord.record._id || orgAndRecord.record);
   }

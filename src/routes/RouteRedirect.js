@@ -13,7 +13,8 @@ export const RedirectNoMatch = inject("authStore", "userStore", "orgStore")(obse
       if(!userStore.currentUser) return <Redirect to={'/' + props.locale + '/error/500/routes'} push />
       if(!userStore.currentUser.email.validated) return <Redirect to={'/' + props.locale + '/error/403/email'} push />
       if (undefsafe(userStore.currentUser, 'orgsAndRecords.length') > 0) {
-        let org = orgStore.getOrganisation(userStore.currentUser.orgsAndRecords[0].organisation, null);
+        let oar = userStore.currentUser.orgsAndRecords[0];
+        let org = orgStore.getOrganisation((oar.organisation._id || oar.organisation), null);
         if(org) return <Redirect to={'/' + props.locale + '/' + org.tag} push />
         else return <Redirect to={'/' + props.locale + '/welcome'} push />
       } else {

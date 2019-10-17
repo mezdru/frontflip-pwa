@@ -15,7 +15,7 @@ class UserStore extends Store {
 
   get currentOrgAndRecord() {
     let {currentOrganisation} = orgStore;
-    return this.currentUser && currentOrganisation && this.currentUser.orgsAndRecords.find(oar => oar.organisation === currentOrganisation._id);
+    return this.currentUser && currentOrganisation && this.currentUser.orgsAndRecords.find(oar => (oar.organisation._id || oar.organisation) === currentOrganisation._id);
   }
 
   async fetchCurrentUser() {
@@ -33,9 +33,12 @@ class UserStore extends Store {
     let user = await super.fetchResource('me');
     this.currentUser = user;
 
+
     await asyncForEach(user.orgsAndRecords, async (orgAndRecord) => {
-      await orgStore.getOrFetchOrganisation(orgAndRecord.organisation).catch(e => {return;});
-      await recordStore.getOrFetchRecord(orgAndRecord.record, null, orgAndRecord.organisation).catch(e => {return;});
+      orgStore.addOrg(orgAndRecord.organisation);
+      recordStore.addRecord(orgAndRecord.record);
+      // await orgStore.getOrFetchOrganisation(orgAndRecord.organisation).catch(e => {return;});
+      // await recordStore.getOrFetchRecord(orgAndRecord.record, null, orgAndRecord.organisation).catch(e => {return;});
     });
 
     LogRocket.identify(user._id, {   

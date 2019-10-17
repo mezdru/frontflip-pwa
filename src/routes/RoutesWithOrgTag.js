@@ -14,7 +14,12 @@ class RoutesWithOrgTag extends React.Component {
 
   componentDidMount() {
     this.props.orgStore.getOrFetchOrganisation(null, this.props.match.params.orgTag)
-    .then(() => {this.setState({render: true})})
+    .then((org) => {
+      if(org && org.featuredWingsFamily && org.featuredWingsFamily.length > 0 && ! org.featuredWingsFamily[0]._id) {
+        this.props.orgStore.fetchOrganisation(org._id);
+      }
+      this.setState({render: true})
+    })
     .catch(() => {this.setState({redirect404: true})})
     this.props.commonStore.setUrlParams(this.props.match);
   }
