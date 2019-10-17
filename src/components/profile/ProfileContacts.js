@@ -11,7 +11,7 @@ const styles = theme => ({
     position: 'relative',
     textAlign: 'center',
     width: 48,
-    fontSize: 32,
+    fontSize: '32px !important',
     display: 'inline-block',
   },
 });
