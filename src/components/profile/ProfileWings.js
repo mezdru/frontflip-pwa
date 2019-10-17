@@ -94,6 +94,7 @@ class ProfileWings extends React.PureComponent {
   }
 
   getClapsCount = async (recordId) => {
+    if(!this.props.authStore.isAuth()) return;
     this.props.clapStore.setCurrentRecordId(recordId);
     await this.props.clapStore.getClapCountByProfile().catch(e => { return; });
     if(!this.isUnmount) this.forceUpdate();
@@ -148,7 +149,7 @@ class ProfileWings extends React.PureComponent {
 
 }
 
-export default inject('commonStore', 'clapStore', 'recordStore', 'orgStore')(
+export default inject('commonStore', 'clapStore', 'recordStore', 'orgStore', 'authStore')(
   observer(
     withStyles(styles)(withProfileManagement(ProfileWings))
   )
