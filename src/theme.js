@@ -44,7 +44,7 @@ export default createMuiTheme({
         fontWeight: 600,
       },
       h2: {
-        fontSize: '1.5rem',
+        fontSize: '1.3rem',
         fontWeight: 500,
       },
       h3: {
