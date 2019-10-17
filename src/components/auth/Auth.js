@@ -64,6 +64,7 @@ class Auth extends React.Component {
     // HANDLE INTEGRATION AUTH CALLBACK
     this.handleIntegrationCallback(this.state.queryParams)
       .then(() => {
+        console.log('a')
         let integrationState = (this.state.queryParams.state ? JSON.parse(this.state.queryParams.state) : null);
         if (integrationState && integrationState.integrationState && (integrationState.integrationState.linkedin === 'true')) emailService.sendConfirmIntegrationEmail('LinkedIn').catch(e => console.error(e));
         this.props.userStore.fetchCurrentUserAndData()
@@ -74,6 +75,7 @@ class Auth extends React.Component {
               this.setState({ redirectTo: getBaseUrl(this.props) });
               return;
             }
+            console.log('here');
             this.props.authStore.registerToOrg()
               .then((data) => {
                 let organisation = data.organisation;
@@ -84,7 +86,7 @@ class Auth extends React.Component {
                   .catch(() => this.setState({ redirectTo: getBaseUrl(this.props) + '/onboard' }));
               }).catch((err) => this.setState({ redirectTo: getBaseUrl(this.props) }));
           }).catch((err) => this.setState({ redirectTo: '/' + this.props.commonStore.locale }));
-      }).catch((err) => { return; });
+      }).catch((err) => { console.log(err); return; });
   }
 
   signinSuccessRedirect = () => {
@@ -116,7 +118,6 @@ class Auth extends React.Component {
   render() {
     const { redirectTo } = this.state;
     let authState = JSON.parse(this.state.queryParams.state || "{}");
-
     console.debug('%c Render Auth.js', 'background-color: grey; padding: 6px 12px; border-radius: 5px; color: white;');
 
     if (redirectTo) return (<Redirect push to={redirectTo} />);

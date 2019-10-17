@@ -36,9 +36,7 @@ class UserStore extends Store {
 
     await asyncForEach(user.orgsAndRecords, async (orgAndRecord) => {
       orgStore.addOrg(orgAndRecord.organisation);
-      recordStore.addRecord(orgAndRecord.record);
-      // await orgStore.getOrFetchOrganisation(orgAndRecord.organisation).catch(e => {return;});
-      // await recordStore.getOrFetchRecord(orgAndRecord.record, null, orgAndRecord.organisation).catch(e => {return;});
+      if(orgAndRecord.record) recordStore.addRecord(orgAndRecord.record);
     });
 
     LogRocket.identify(user._id, {   
