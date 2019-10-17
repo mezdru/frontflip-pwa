@@ -95,7 +95,9 @@ class CardProfile extends React.PureComponent {
                 if (link.class !== 'extraLink') {
                   return (
                     <Grid item key={link._id} className={classes.contact}>
-                      <Tooltip title={ProfileService.htmlDecode(link.display) || ProfileService.htmlDecode(link.value) || ProfileService.htmlDecode(link.url)}>
+                      <Tooltip 
+                      style={{zIndex: 9999999999}}
+                      title={ProfileService.htmlDecode(link.display) || ProfileService.htmlDecode(link.value) || ProfileService.htmlDecode(link.url)}>
                         <IconButton href={link.url} rel="noopener" target="_blank" className={classes.contactButton + " fa fa-" + link.icon} />
                       </Tooltip>
                     </Grid>

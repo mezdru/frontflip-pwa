@@ -35,6 +35,12 @@ export default createMuiTheme({
         margin: "auto",
       },
     },
+    MuiTooltip: {
+      popper: {
+        zIndex: 9999999999,
+        marginTop: -8
+      }
+    },
     MuiTypography: {
       root: {
         color: palette.primary.dark
