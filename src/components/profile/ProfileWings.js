@@ -59,7 +59,7 @@ const styles = theme => ({
     marginTop: 16,
     verticalAlign: 'bottom !important',
     '& span': {
-      marginTop: -4
+      // marginTop: -4
     },
     '&:hover': {
       color: theme.palette.secondary.main,

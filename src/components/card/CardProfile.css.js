@@ -89,9 +89,11 @@ export const styles = theme => ({
   contactButton: {
     width: 37,
     height: 37,
+    fontSize: '20px !important',
     [theme.breakpoints.down('xs')]: {
       width: 30,
       height: 30,
+      fontSize: '14px !important'
     },
     '&::before': {
       position: 'absolute',
