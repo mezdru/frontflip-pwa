@@ -4,7 +4,7 @@ import { observe } from 'mobx';
 import { inject, observer } from "mobx-react";
 import defaultPicture from '../../../resources/images/placeholder_person.png';
 import undefsafe from 'undefsafe';
-const defaultLogo = 'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg';
+import defaultLogo from '../../../resources/images/wingzy_512.png';
 
 class Logo extends React.Component {
   constructor(props) {
