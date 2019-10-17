@@ -67,7 +67,6 @@ class HeaderDrawer extends Component {
 
     if (currentUserRecord) currentUserRecord.name = entities.decode(currentUserRecord.name)
     if (currentOrganisation) currentOrganisation.name = entities.decode(currentOrganisation.name)
-
     return (
       <SwipeableDrawer
         className={classes.drawer}
