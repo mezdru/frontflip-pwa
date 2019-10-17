@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import undefsafe from 'undefsafe';
 import classNames from 'classnames';
+import ErrorBoundary from '../utils/errors/ErrorBoundary';
 
 class App extends Component {
   constructor(props) {
@@ -55,32 +56,34 @@ class App extends Component {
     if (successLogout) return <Redirect to='/' />;
 
     return (
-      <div className={classes.root}>
-        <CssBaseline />
-        <Fab variant="extended" className={classes.menuButton}
-          onClick={this.handleDrawerOpen}
-          children={<Logo type={'organisation'} />} id="header-button" />
-        {!auth && !isSigninOrSignupPage && (
-          <Button variant="text" to={"/" + locale + (orgTag ? '/' + orgTag : '') + '/signin'} component={Link} className={classes.menuLink}><FormattedMessage id="Sign In" /></Button>
-        )}
-        <HeaderDrawer handleDrawerOpen={this.handleDrawerOpen}
-          handleDrawerClose={this.handleDrawerClose}
-          open={open} auth={auth}
-        />
+      <ErrorBoundary>
+        <div className={classes.root}>
+          <CssBaseline />
+          <Fab variant="extended" className={classes.menuButton}
+            onClick={this.handleDrawerOpen}
+            children={<Logo type={'organisation'} />} id="header-button" />
+          {!auth && !isSigninOrSignupPage && (
+            <Button variant="text" to={"/" + locale + (orgTag ? '/' + orgTag : '') + '/signin'} component={Link} className={classes.menuLink}><FormattedMessage id="Sign In" /></Button>
+          )}
+          <HeaderDrawer handleDrawerOpen={this.handleDrawerOpen}
+            handleDrawerClose={this.handleDrawerClose}
+            open={open} auth={auth}
+          />
 
-        {this.props.withProfileLogo && (
-          <Hidden xsDown>
-            {this.props.authStore.isAuth() && this.props.userStore.currentOrgAndRecord && this.props.userStore.currentOrgAndRecord.record && (
-              <Fab variant="extended" className={classNames(classes.menuButton, classes.right)}
-                component={Link}
-                to={'/' + locale + '/' + orgTag + '/' + this.props.recordStore.currentUserRecord.tag}
-                children={<Logo type={'person'} src={undefsafe(this.props.recordStore.currentUserRecord, 'picture.url') || null} />} />
-            )}
-          </Hidden>
-        )}
+          {this.props.withProfileLogo && (
+            <Hidden xsDown>
+              {this.props.authStore.isAuth() && this.props.userStore.currentOrgAndRecord && this.props.userStore.currentOrgAndRecord.record && (
+                <Fab variant="extended" className={classNames(classes.menuButton, classes.right)}
+                  component={Link}
+                  to={'/' + locale + '/' + orgTag + '/' + undefsafe(this.props.recordStore.currentUserRecord, 'tag')}
+                  children={<Logo type={'person'} src={undefsafe(this.props.recordStore.currentUserRecord, 'picture.url') || null} />} />
+              )}
+            </Hidden>
+          )}
 
-        <div className={classes.drawerHeader} />
-      </div>
+          <div className={classes.drawerHeader} />
+        </div>
+      </ErrorBoundary>
     );
   }
 }
