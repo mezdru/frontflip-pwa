@@ -22,7 +22,7 @@ class SearchField extends PureComponent {
   }
 
   componentDidMount() {
-    if(this.props.mode !== 'onboard') {
+    if (this.props.mode !== 'onboard') {
       this.unsubscribeSearchFilters = observe(this.props.commonStore, 'searchFilters', (change) => {
         var currentSearchFilters = this.props.commonStore.getSearchFilters();
         this.props.searchStore.setUserQuery(currentSearchFilters.length > 0 ? ' ' : '');
@@ -32,11 +32,13 @@ class SearchField extends PureComponent {
       this.props.searchStore.setUserQuery('');
     }
 
-    this.unsubscribeUserQuery = observe(this.props.searchStore.values, 'userQuery', (change) => {this.forceUpdate()});
+    this.unsubscribeUserQuery = observe(this.props.searchStore.values, 'userQuery', (change) => { this.forceUpdate() });
+    this.unsubscribeOrganisation = observe(this.props.orgStore, 'currentOrganisation', (change) => { this.forceUpdate() });
   }
 
   componentWillUnmount() {
-    if( this.unsubscribeSearchFilters ) this.unsubscribeSearchFilters();
+    if (this.unsubscribeSearchFilters) this.unsubscribeSearchFilters();
+    if (this.unsubscribeOrganisation) this.unsubscribeOrganisation();
     this.unsubscribeUserQuery();
   }
 

@@ -3,10 +3,10 @@ import { withStyles, ListItem, List, CircularProgress } from '@material-ui/core'
 import { inject, observer } from "mobx-react";
 import Logo from '../logo/Logo';
 import { Link } from 'react-router-dom';
+import defaultLogo from '../../../resources/images/wingzy_512.png';
 
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
-const defaultLogo = 'https://pbs.twimg.com/profile_images/981455890342694912/fXaclV2Y_400x400.jpg';
 
 const style = theme => ({
   orgItem: {
