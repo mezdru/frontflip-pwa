@@ -47,3 +47,20 @@ export const asyncForEach = async (array, callback) => {
     await callback(array[index], index, array);
   }
 }
+
+/**
+ * @description Replace an object by new obj values and keys, but keep the initial object reference.
+ * @param {*} obj 
+ * @param {*} newObj 
+ */
+export const replaceAndKeepReference = (obj, newObj) => {
+  
+  Object.keys(obj).forEach(function(key) {
+    if(!newObj[key]) delete obj[key];
+  });
+
+  Object.keys(newObj).forEach(function(key) {
+    obj[key] = newObj[key];
+  });
+
+}

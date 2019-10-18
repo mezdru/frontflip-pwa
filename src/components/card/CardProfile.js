@@ -47,7 +47,7 @@ class CardProfile extends React.PureComponent {
   }
 
   render() {
-    const { classes, hit, handleDisplayProfile } = this.props;
+    const { classes, hit } = this.props;
     const { addFilter } = this.props;
     const { locale } = this.props.commonStore;
     let currentWings = 0;
@@ -62,7 +62,7 @@ class CardProfile extends React.PureComponent {
     return (
       <Card className={classes.fullWidth} key={hit.objectID} >
         <Grid item container>
-          <Link to={getBaseUrl(this.props) + '/' + hit.tag} style={{width: '100%', textDecoration: 'none'}}>
+          <Link to={getBaseUrl(this.props) + '/' + hit.tag} style={{ width: '100%', textDecoration: 'none' }}>
             <CardHeader
               avatar={
                 <Grid item container>
@@ -125,11 +125,12 @@ class CardProfile extends React.PureComponent {
                 )
               })}
               {hit.hashtags && hit.hashtags.length > WINGS_DISPLAYED && (
-                <Wings label={this.props.intl.formatMessage({ id: 'card.moreWings' }, { counter: (hit.hashtags.length - WINGS_DISPLAYED) })}
-                  enableClap={false}
-                  mode='card'
-                  onClick={(e) => handleDisplayProfile(e, hit)}
-                />
+                <Link to={getBaseUrl(this.props) + '/' + hit.tag}>
+                  <Wings label={this.props.intl.formatMessage({ id: 'card.moreWings' }, { counter: (hit.hashtags.length - WINGS_DISPLAYED) })}
+                    enableClap={false}
+                    mode='card'
+                  />
+                </Link>
               )}
             </Grid>
           </CardContent>
