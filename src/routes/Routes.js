@@ -17,10 +17,10 @@ class Routes extends React.Component {
 
     // listen to install app event
     try {
-      window.addEventListener('appinstalled', (evt) => {
+      window.addEventListener('appinstalled', (evt) => { // deepscan-disable-line
         console.log('App installed.');
-        SlackService.notify('#alerts', `Someone has installed the PWA (userId:${undefsafe(this.props.userStore.currentUser, '_id')}`);
-      });
+        SlackService.notify('#alerts', `Someone has installed the PWA (userId:${undefsafe(this.props.userStore.currentUser, '_id')}) (orgTag:${undefsafe(this.props.orgStore.currentOrganisation, 'tag')})`); 
+      }); 
     }catch(e) {
       console.log(e);
     }
@@ -45,7 +45,7 @@ class Routes extends React.Component {
   }
 }
 
-export default withRouter(inject('userStore', 'commonStore')(
+export default withRouter(inject('userStore', 'commonStore', 'orgStore')(
   (observer(
     Routes
   )))
