@@ -4,6 +4,8 @@ import { inject, observer } from 'mobx-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { routes } from "./routes.config";
 import RouteWithSubRoutes from './RouteWithSubRoutes';
+import SlackService from "../services/slack.service";
+import undefsafe from 'undefsafe';
 
 class Routes extends React.Component {
   constructor(props) {
@@ -12,6 +14,17 @@ class Routes extends React.Component {
     // Remove for the moment, this cookie will be usefull to persist filters if needed
     this.props.commonStore.removeCookie('searchFilters');
     try { document.getElementById('errorMessage').remove(); } catch (e) { };
+
+    // listen to install app event
+    try {
+      window.addEventListener('appinstalled', (evt) => {
+        console.log('App installed.');
+        SlackService.notify('#alerts', `Someone has installed the PWA (userId:${undefsafe(this.props.userStore.currentUser, '_id')}`);
+      });
+    }catch(e) {
+      console.log(e);
+    }
+
   }
 
   render() {
