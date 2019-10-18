@@ -4,6 +4,7 @@ import orgStore from './organisation.store';
 import Store from './store';
 import undefsafe from 'undefsafe';
 import commonStore from "./common.store";
+import {replaceAndKeepReference } from '../services/utils.service';
 
 class RecordStore extends Store {
   records = [];
@@ -38,11 +39,11 @@ class RecordStore extends Store {
   }
 
   addRecord(inRecord) {
+    if(!inRecord) return null;
     if(inRecord.objectID) inRecord._id = inRecord.objectID;
     let index = this.records.findIndex(record => JSON.stringify(record._id) === JSON.stringify(inRecord._id || inRecord.objectID));
     if (index > -1) {
-      let record = this.records[index];
-      record = inRecord;
+      replaceAndKeepReference(this.records[index], inRecord);
     } else {
       this.records.push(inRecord);
     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Typography, withStyles } from '@material-ui/core';
+import { Grid, withStyles } from '@material-ui/core';
 import { inject, observer } from 'mobx-react';
 import Wings from '../utils/wing/Wings';
 import ProfileService from '../../services/profile.service';
@@ -48,7 +48,8 @@ class OnboardSuggestions extends React.Component {
     this.unsubscribeUserQuery = observe(this.props.searchStore.values, 'userQuery', () => {this.fetchSuggestions(null, this.props.wingsFamily)});
     this.unsubscribeUserRecord = observe(record, (change) => {
       if(change.name === 'hashtags' && change.oldValue.length > change.newValue.length) {
-        this.fetchSuggestions(null, this.props.wingsFamily);
+        let lastRemoved = change.oldValue[change.oldValue.length - 1];
+        this.fetchSuggestions(lastRemoved, this.props.wingsFamily, true);
       }
     });
   }
@@ -59,13 +60,13 @@ class OnboardSuggestions extends React.Component {
     this.unsubscribeUserRecord();
   }
 
-  fetchSuggestions = async (lastSelected, wingsFamily) => {
+  fetchSuggestions = async (lastSelected, wingsFamily, includeLastSelected) => {
     if(lastSelected && lastSelected.tag) this.fetchSuggestionsAfterSelectInProgress = false;
     if(this.fetchSuggestionsAfterSelectInProgress) return;
     let suggestions = await SuggestionsService.getSuggestions(lastSelected, this.props.searchStore.values.userQuery || '', wingsFamily );
-    if(lastSelected) suggestions = suggestions.filter(suggestion => suggestion.tag !== lastSelected.tag);
+    if(lastSelected && !includeLastSelected) suggestions = suggestions.filter(suggestion => suggestion.tag !== lastSelected.tag);
     if(this.isUnmount) return;
-    this.setState({suggestions: getUnique(suggestions, "tag")});
+    this.setState({suggestions: getUnique(suggestions, "tag"), lastSelected: (includeLastSelected ? {} : this.state.lastSelected)});
   }
 
   shouldDisplaySuggestion = (suggestion) => {

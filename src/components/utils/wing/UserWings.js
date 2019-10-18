@@ -2,7 +2,6 @@ import React from 'react'
 import { withStyles, Typography } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { observe } from 'mobx';
-import undefsafe from 'undefsafe';
 import Wings from './Wing';
 import ProfileService from '../../../services/profile.service';
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
@@ -20,8 +19,7 @@ class UserWings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      newTag: null,
-      currentHashtagsLength: undefsafe((this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord), 'hashtags.length') || 0
+      newTag: null
     };
   }
 
@@ -30,11 +28,11 @@ class UserWings extends React.Component {
     let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
 
     this.unsubscribeRecord = observe(record, (change) => {
-      if(change.name === 'hashtags' && (change.newValue.length > this.state.currentHashtagsLength)) {
+      if(change.name === 'hashtags' && (change.newValue.length > change.oldValue.length)) { // add wings
         setTimeout(() => this.props.scrollUserWingsToBottom(), 150);
-        this.setState({newTag: change.newValue[change.newValue.length - 1].tag, currentHashtagsLength: change.newValue.length});
-      } else {
-        this.setState({newTag: null, currentHashtagsLength: (change.newValue ? change.newValue.length : 0)});
+        this.setState({newTag: change.newValue[change.newValue.length - 1].tag});
+      } else if(change.name === 'hashtags' && (change.newValue.length < change.oldValue.length)) { // remove wings
+        this.setState({newTag: null});
       }
     });
   }
