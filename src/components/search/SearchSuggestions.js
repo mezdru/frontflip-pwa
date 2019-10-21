@@ -125,6 +125,8 @@ class SearchSuggestions extends React.Component {
         AlgoliaService.setAlgoliaKey(this.props.orgStore.currentAlgoliaKey);
         AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:#Wings', null, null, null)
           .then(content => {
+            let firstWings = ((content && content.hits) ? content.hits : []);
+            this.props.commonStore.hiddenWings = firstWings;
             this.setState({ firstWings: ((content && content.hits) ? content.hits : []) }, () => {
               this.fetchSuggestions(this.state.filterRequest, this.state.queryRequest);
             });
