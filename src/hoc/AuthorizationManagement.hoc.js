@@ -26,7 +26,7 @@ const withAuthorizationManagement = (ComponentToWrap, componentName) => {
       const {locale} = this.props.commonStore;
       const baseUrl = getBaseUrl(this.props);
       const isAuth = this.props.authStore.isAuth();
-      if(isAuth && !this.hasValidatedEmail()) return <Redirect push to={'/' + locale + '/error/403/email'} />;
+      if(isAuth && !this.hasValidatedEmail() && !this.props.userStore.currentUser.googleUser && !this.props.userStore.currentUser.linkedinUser ) return <Redirect push to={'/' + locale + '/error/403/email'} />;
       if(isAuth && !this.hasAccessToOrg()) return <Redirect push to={'/' + locale + '/error/403/organisation'} />;
       if(!isAuth && !this.hasAccessToOrg()) return <Redirect push to={baseUrl + '/signin'} />;
       if(isAuth && componentName === COMPONENTS[1] && this.needOnboarding()) return <Redirect push to={baseUrl + '/onboard'} />;
