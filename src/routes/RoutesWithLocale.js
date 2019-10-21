@@ -1,5 +1,13 @@
 import { inject, observer } from 'mobx-react';
 import React from 'react';
+
+import '@formatjs/intl-pluralrules/polyfill';
+import '@formatjs/intl-pluralrules/dist/locale-data/en';
+import '@formatjs/intl-pluralrules/dist/locale-data/fr';
+import '@formatjs/intl-relativetimeformat/polyfill';
+import '@formatjs/intl-relativetimeformat/dist/locale-data/fr';
+import '@formatjs/intl-relativetimeformat/dist/locale-data/en';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { addLocaleData, IntlProvider } from "react-intl";
 import locale_en from 'react-intl/locale-data/en';
