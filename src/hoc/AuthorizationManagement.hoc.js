@@ -18,9 +18,9 @@ const withAuthorizationManagement = (ComponentToWrap, componentName) => {
       return (user.superadmin || this.props.userStore.currentOrgAndRecord != null);
     }
 
-    belongsToOrg = () => (this.props.userStore.currentOrgAndRecord != null) || (this.props.userStore.currentUser.superadmin);
-    needOnboarding = () => !this.props.userStore.currentUser.superadmin && this.props.userStore.currentOrgAndRecord && !this.props.userStore.currentOrgAndRecord.welcomed;
-    hasValidatedEmail = () => (this.props.userStore.currentUser.email.validated || false);
+    belongsToOrg = () => (this.props.userStore.currentOrgAndRecord != null) || (this.props.userStore.currentUser && this.props.userStore.currentUser.superadmin);
+    needOnboarding = () => this.props.userStore.currentUser && !this.props.userStore.currentUser.superadmin && this.props.userStore.currentOrgAndRecord && !this.props.userStore.currentOrgAndRecord.welcomed;
+    hasValidatedEmail = () => this.props.userStore.currentUser && (this.props.userStore.currentUser.email.validated || false);
 
     render() {
       const {locale} = this.props.commonStore;
