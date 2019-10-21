@@ -16,8 +16,6 @@ class Routes extends React.Component {
     try { document.getElementById('errorMessage').remove(); } catch (e) { };
 
     // get wanted path in case user is redirected to signin
-    console.log('current path')
-    console.log(window.location.pathname)
     if(!this.props.commonStore.getCookie('wantedPath'))
       this.props.commonStore.setCookie("wantedPath", window.location.pathname, (new Date((new Date()).getTime() + 10*60000)));
 
