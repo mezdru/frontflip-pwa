@@ -65,7 +65,6 @@ class UserWings extends React.Component {
         <Typography variant="h4" style={{ textAlign: 'center', color: theme.palette.primary.dark }} ><FormattedMessage id="onboard.userWings" values={{ wingsCount: filteredHashtags.length, familyName: (wingsFamily ? wingsFamily.name : 'Wings') }} /></Typography>
         <div className="" style={{ paddingTop: 10 }}>
           {filteredHashtags.length > 0 && filteredHashtags.map((hashtag, i) => {
-            console.log(hashtag.tag);
             if (!this.shoudlRenderWing(hashtag)) return null;
             let displayedName = ProfileService.getWingDisplayedName(hashtag, locale);
 
