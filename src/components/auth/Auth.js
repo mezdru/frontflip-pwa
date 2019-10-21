@@ -71,7 +71,7 @@ class Auth extends React.Component {
             ReactGA.event({ category: 'User', action: 'Login with Google' });
             if (integrationState && integrationState.invitationCode) this.props.authStore.setInvitationCode(integrationState.invitationCode);
             if (user.superadmin) {
-              this.setState({ redirectTo: getBaseUrl(this.props) });
+              this.signinSuccessRedirect();
               return;
             }
             this.props.authStore.registerToOrg()
@@ -117,7 +117,7 @@ class Auth extends React.Component {
     const { redirectTo } = this.state;
     let authState = JSON.parse(this.state.queryParams.state || "{}");
     console.debug('%c Render Auth.js', 'background-color: grey; padding: 6px 12px; border-radius: 5px; color: white;');
-
+    if(redirectTo) console.log('Auth.js : redirect to : ' + redirectTo);
     if (redirectTo) return (<Redirect push to={redirectTo} />);
 
     return (

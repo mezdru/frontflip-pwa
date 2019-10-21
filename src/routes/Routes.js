@@ -15,6 +15,12 @@ class Routes extends React.Component {
     this.props.commonStore.removeCookie('searchFilters');
     try { document.getElementById('errorMessage').remove(); } catch (e) { };
 
+    // get wanted path in case user is redirected to signin
+    console.log('current path')
+    console.log(window.location.pathname)
+    if(!this.props.commonStore.getCookie('wantedPath'))
+      this.props.commonStore.setCookie("wantedPath", window.location.pathname, (new Date((new Date()).getTime() + 10*60000)));
+
     // listen to install app event
     try {
       window.addEventListener('appinstalled', (evt) => { // deepscan-disable-line
