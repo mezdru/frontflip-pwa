@@ -4,6 +4,7 @@ import { inject, observer } from "mobx-react";
 import Header from '../components/header/Header';
 import { FormattedHTMLMessage } from 'react-intl';
 import ProfileService from '../services/profile.service';
+import EmailService from'../services/email.service';
 import UrlService from '../services/url.service';
 import ReactGA from 'react-ga';
 import undefsafe from 'undefsafe';
@@ -44,7 +45,11 @@ class ErrorPage extends React.Component {
   componentDidMount() {
     ReactGA.pageview(window.location.pathname);
     if (this.props.match && this.props.match.params) {
-      this.setState({ errorCode: this.props.match.params.errorCode, errorType: this.props.match.params.errorType });
+      this.setState({ errorCode: this.props.match.params.errorCode, errorType: this.props.match.params.errorType }, () => {
+        if(this.state.errorCode == 403 && this.state.errorType === 'email' && this.props.authStore.isAuth() ) {
+          EmailService.confirmLoginEmail();
+        }
+      });
     }
 
     try {
