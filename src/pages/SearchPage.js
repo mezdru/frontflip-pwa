@@ -276,16 +276,16 @@ class SearchPage extends PureComponent {
               <Intercom appID={"k7gprnv3"} />
             </Suspense>
           )}
-          {/* {organisation && (organisation.tag !== 'quecbio' && organisation.tag !== 'team') && this.props.authStore.isAuth() && (
+          {currentOrganisation && (currentOrganisation.tag === 'demo') && this.props.authStore.isAuth() && (
             <Suspense fallback={<></>}>
               <Intercom 
                 appID={"k7gprnv3"} 
-                user_id={this.props.userStore.currentUser._id}
-                name={this.props.recordStore.values.record ? this.props.recordStore.values.record.name : null}
-                email={currentUser.email ? currentUser.email.value : (currentUser.google ? currentUser.google.email : null)}
+                user_id={undefsafe(this.props.userStore.currentUser, '_id')}
+                name={undefsafe(this.props.recordStore.currentUserRecord, 'name')}
+                email={undefsafe(this.props.userStore.currentUser, 'email.value') || undefsafe(this.props.userStore.currentUser, 'google.email')}
               />
             </Suspense>
-          )} */}
+          )}
         </main>
 
         <Suspense fallback={<></>}>
