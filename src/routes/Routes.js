@@ -16,8 +16,9 @@ class Routes extends React.Component {
     try { document.getElementById('errorMessage').remove(); } catch (e) { };
 
     // get wanted path in case user is redirected to signin
-    if(!this.props.commonStore.getCookie('wantedPath'))
+    if(!this.props.commonStore.getCookie('wantedPath') && window.location.pathname.search('signin') === -1 && window.location.pathname.search('signup') === -1) {
       this.props.commonStore.setCookie("wantedPath", window.location.pathname, (new Date((new Date()).getTime() + 10*60000)));
+    }
 
     // listen to install app event
     try {
