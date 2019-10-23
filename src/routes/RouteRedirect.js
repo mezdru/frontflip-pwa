@@ -4,7 +4,11 @@ import {inject, observer} from 'mobx-react';
 import undefsafe from 'undefsafe';
 
 export const RedirectMissingLocale = function () {
-  return <Redirect to={"/en" + window.location.pathname + window.location.search} push />
+  let locale = navigator.language || navigator.browserLanguage;
+  if(locale.includes('fr')) locale = 'fr';
+  else locale = 'en';
+
+  return <Redirect to={"/" + locale + window.location.pathname + window.location.search} push />
 }
 
 export const RedirectNoMatch = inject("authStore", "userStore", "orgStore")(observer(
