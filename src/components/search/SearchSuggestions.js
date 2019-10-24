@@ -10,6 +10,7 @@ import { ArrowLeft, ArrowRight } from '@material-ui/icons';
 import withScrollManagement from '../../hoc/ScrollManagement.hoc';
 import classNames from 'classnames';
 import { getUnique } from '../../services/utils.service';
+import undefsafe from 'undefsafe';
 
 const styles = theme => ({
   suggestionsContainer: {
@@ -108,7 +109,7 @@ class SearchSuggestions extends React.Component {
   }
 
   componentDidMount() {
-    AlgoliaService.setAlgoliaKey(this.props.orgStore.currentAlgoliaKey);
+    AlgoliaService.setAlgoliaKey(undefsafe(this.props.orgStore.currentAlgoliaKey, 'value'));
     AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:#Wings', null, null, null)
       .then(content => {
 
@@ -122,7 +123,7 @@ class SearchSuggestions extends React.Component {
 
     this.setState({
       observer: observe(this.props.orgStore, 'currentAlgoliaKey', (change) => {
-        AlgoliaService.setAlgoliaKey(this.props.orgStore.currentAlgoliaKey);
+        AlgoliaService.setAlgoliaKey(undefsafe(this.props.orgStore.currentAlgoliaKey, 'value'));
         AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:#Wings', null, null, null)
           .then(content => {
             let firstWings = ((content && content.hits) ? content.hits : []);

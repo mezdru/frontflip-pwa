@@ -2,6 +2,7 @@ import React, { Suspense } from 'react'
 import { Grid, withStyles } from '@material-ui/core';
 import { inject, observer } from 'mobx-react';
 import { observe } from 'mobx';
+import undefsafe from 'undefsafe';
 
 import AlgoliaService from '../../services/algolia.service';
 import { shuffleArray } from '../../services/utils.service';
@@ -63,19 +64,21 @@ class SearchResults extends React.Component {
   }
 
   componentDidMount() {
-    this.props.makeFiltersRequest()
+
+    if(undefsafe(this.props.orgStore.currentAlgoliaKey, 'initialized')) {
+      this.props.makeFiltersRequest()
       .then((req) => {
         this.setState({ filterRequest: req.filterRequest, queryRequest: req.queryRequest }, () => {
-          AlgoliaService.setAlgoliaKey(this.props.orgStore.currentAlgoliaKey);
           this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
         });
       });
-
+    }
 
     this.setState({
       observer: observe(this.props.orgStore, 'currentAlgoliaKey', (change) => {
-        AlgoliaService.setAlgoliaKey(this.props.orgStore.currentAlgoliaKey);
-        this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
+        if(undefsafe(change.newValue, 'initialized')) {
+          this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
+        }
       })
     });
 
@@ -84,8 +87,7 @@ class SearchResults extends React.Component {
         this.props.makeFiltersRequest()
           .then((req) => {
             this.setState({ filterRequest: req.filterRequest, queryRequest: req.queryRequest, page: 0 }, () => {
-              AlgoliaService.setAlgoliaKey(this.props.orgStore.currentAlgoliaKey);
-              this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
+              this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, this.state.page);
             });
           });
       }
@@ -146,6 +148,7 @@ class SearchResults extends React.Component {
   }
 
   handleShowMore = (e) => {
+    if(! undefsafe(this.props.orgStore.currentAlgoliaKey, 'initialized')) return;
     this.setState({ page: this.state.page + 1, loadInProgress: true }, () => {
       this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, this.state.page);
     });
@@ -155,7 +158,6 @@ class SearchResults extends React.Component {
     const { hits, loadInProgress, hideShowMore, showNoResult } = this.state;
     const { handleDisplayProfile, classes } = this.props;
     let hitsResult = Array.from(hits);
-
 
     return (
       <div className={classes.hitList}>

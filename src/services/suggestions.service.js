@@ -15,6 +15,7 @@ class SuggestionsService {
     this._newSuggestions = [];
   }
 
+  //todo useless?
   async init(algoliaKey) {
     await AlgoliaService.setAlgoliaKey(algoliaKey);
     this._bank = await this.syncBank(null);
