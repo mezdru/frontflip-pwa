@@ -113,7 +113,7 @@ class ProfileWings extends React.PureComponent {
     const { locale } = this.props.commonStore;
 
     return (
-      <div className={classes.root} >
+      <div className={classes.root} id="profile-wings">
         {wingsByFamilies && wingsByFamilies.length > 0 && wingsByFamilies.map((wbf, index) => {
           if (wbf.wings.length === 0) return null;
           return (
