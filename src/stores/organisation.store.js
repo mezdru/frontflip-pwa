@@ -20,7 +20,7 @@ class orgStore extends Store {
   }
 
   get currentAlgoliaKey() {
-    try { return this.getAlgoliaKey(this.currentOrganisation._id).value } catch (e) { return null; };
+    try { return this.getAlgoliaKey(this.currentOrganisation._id) } catch (e) { return null; };
   }
 
   async getOrFetchOrganisation(orgId, orgTag) {
@@ -40,7 +40,7 @@ class orgStore extends Store {
   }
 
   addAlgoliaKey(key, orgId, expirationDate) {
-    let newAlgoliaKey = { value: key, organisation: orgId, expires: expirationDate }
+    let newAlgoliaKey = { value: key, organisation: orgId, expires: expirationDate, initialized: false }
     let index = this.algoliaKeys.findIndex(algoliaKey => JSON.stringify(algoliaKey.organisation) === JSON.stringify(orgId));
     if (index > -1) {
       this.algoliaKeys[index] = newAlgoliaKey;

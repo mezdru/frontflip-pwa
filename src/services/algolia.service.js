@@ -16,6 +16,8 @@ class AlgoliaService {
       this.algoliaKey = algoliaKey;
       this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.algoliaKey);
       this.index = this.client.initIndex(this.indexName);
+      let aKeyObject = orgStore.getAlgoliaKey(orgStore.currentOrganisation._id);
+      aKeyObject.initialized = true;
     } else {
       let org = orgStore.currentOrganisation;
       if(org) orgStore.fetchAlgoliaKey(org._id, org.public);
@@ -26,9 +28,11 @@ class AlgoliaService {
       if(!orgStore.currentAlgoliaKey && orgStore.currentOrganisation) {
         orgStore.fetchAlgoliaKey(orgStore.currentOrganisation._id, orgStore.currentOrganisation.public);
       } else {
-        this.algoliaKey = orgStore.currentAlgoliaKey;
+        this.algoliaKey = orgStore.currentAlgoliaKey.value;
         this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, this.algoliaKey);
         this.index = this.client.initIndex(this.indexName);
+        let aKeyObject = orgStore.getAlgoliaKey(orgStore.currentOrganisation._id);
+        aKeyObject.initialized = true;
       }
     });
   }
@@ -38,6 +42,8 @@ class AlgoliaService {
     this.algoliaKey = algoliaKey;
     this.client = algoliasearch(process.env.REACT_APP_ALGOLIA_APPLICATION_ID, algoliaKey);
     this.index = this.client.initIndex(this.indexName);
+    let aKeyObject = orgStore.getAlgoliaKey(orgStore.currentOrganisation._id);
+    aKeyObject.initialized = true;
   }
 
   fetchFacetValues(lastSelection, privateOnly, filters, query) {
