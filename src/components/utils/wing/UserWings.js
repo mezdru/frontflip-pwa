@@ -59,7 +59,7 @@ class UserWings extends React.Component {
     const { locale } = this.props.commonStore;
     if (!record) return null;
 
-    let filteredHashtags = wingsFamily ? record.hashtags.filter(elt => elt.hashtags.find(elt2 => (elt2._id || elt2) === wingsFamily._id)) : record.hashtags || [];
+    let filteredHashtags = wingsFamily && record.hashtags ? record.hashtags.filter(elt => elt && elt.hashtags && elt.hashtags.find(elt2 => (elt2._id || elt2) === wingsFamily._id)) : record.hashtags || [];
     return (
       <div className={classes.root}>
         <Typography variant="h4" style={{ textAlign: 'center', color: theme.palette.primary.dark }} ><FormattedMessage id="onboard.userWings" values={{ wingsCount: filteredHashtags.length, familyName: (wingsFamily ? wingsFamily.name : 'Wings') }} /></Typography>
