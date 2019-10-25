@@ -68,7 +68,10 @@ class SearchPage extends PureComponent {
       }
     });
 
-    observe(this.props.commonStore, 'searchResultsCount', (change) => { this.forceUpdate(); });
+    this.unsubResultsCount = observe(this.props.commonStore, 'searchResultsCount', (change) => {
+      this.props.keenStore.recordEvent('search', {results: change.newValue, filters: []});
+      this.unsubResultsCount();
+    });
 
     if (this.props.commonStore.url.params.recordTag) {
       this.handleDisplayProfile(null, this.props.commonStore.url.params.recordTag);
@@ -322,7 +325,7 @@ class SearchPage extends PureComponent {
 
 SearchPage = withAuthorizationManagement(withSearchManagement(withProfileManagement(SearchPage)), 'search');
 
-export default inject('commonStore', 'orgStore', 'authStore', 'userStore', 'recordStore')(
+export default inject('commonStore', 'orgStore', 'authStore', 'userStore', 'recordStore', 'keenStore')(
   observer(
     withWidth()(withStyles(styles)(SearchPage))
   )

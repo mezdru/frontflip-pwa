@@ -7,7 +7,6 @@ import undefsafe from 'undefsafe';
 import AlgoliaService from '../../services/algolia.service';
 import { shuffleArray } from '../../services/utils.service';
 import Card from '../card/CardProfile';
-
 import withSearchManagement from '../../hoc/SearchManagement.hoc';
 
 const SearchShowMore = React.lazy(() => import('./SearchShowMore'));
@@ -87,7 +86,10 @@ class SearchResults extends React.Component {
         this.props.makeFiltersRequest()
           .then((req) => {
             this.setState({ filterRequest: req.filterRequest, queryRequest: req.queryRequest, page: 0 }, () => {
-              this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, this.state.page);
+              this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, this.state.page)
+              .then(() => {
+                this.props.keenStore.recordEvent('search', {results: this.props.commonStore.searchResultsCount, filters: change.newValue})
+              });
             });
           });
       }
@@ -117,8 +119,8 @@ class SearchResults extends React.Component {
     }
   }
 
-  fetchHits = (filters, query, facetFilters, page) => {
-    AlgoliaService.fetchHits(filters, query, facetFilters, page, true, 5)
+  fetchHits = async (filters, query, facetFilters, page) => {
+    await AlgoliaService.fetchHits(filters, query, facetFilters, page, true, 5)
       .then((content) => {
 
         if(!content) return;
@@ -195,7 +197,7 @@ class SearchResults extends React.Component {
 
 SearchResults = withSearchManagement(SearchResults);
 
-export default inject('commonStore', 'orgStore')(
+export default inject('commonStore', 'orgStore', 'keenStore')(
   observer(
     withStyles(styles)(SearchResults)
   )

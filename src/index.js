@@ -16,6 +16,7 @@ import statisticsStore from './stores/statistics.store';
 import orgStore from './stores/organisation.store';
 import clapStore from './stores/clap.store';
 import helpRequestStore from './stores/helpRequest.store';
+import keenStore from './stores/keen.store';
 import HttpsRedirect from 'react-https-redirect';
 import { MuiThemeProvider } from "@material-ui/core";
 import theme from "./theme";
@@ -29,7 +30,8 @@ const stores = {
   statisticsStore,
   clapStore,
   helpRequestStore,
-  searchStore
+  searchStore,
+  keenStore
 };
 
 ReactDOM.render(

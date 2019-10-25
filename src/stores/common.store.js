@@ -97,8 +97,14 @@ class CommonStore {
 
   setLocalStorage(name, value, isObject) {
     return Promise.resolve().then(function () {
-      if (isObject) localStorage.setItem(name, JSON.stringify(value));
-      else localStorage.setItem(name, value);
+      try {
+        if (isObject) localStorage.setItem(name, JSON.stringify(value));
+        else localStorage.setItem(name, value);
+      }catch(e) {
+        console.error(e);
+        console.log(`setLocalStorage : ${name} : ${value} : ${isObject}`);
+      }
+
     });
   }
 
