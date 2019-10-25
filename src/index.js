@@ -12,7 +12,6 @@ import userStore from './stores/user.store';
 import recordStore from './stores/record.store';
 import commonStore from './stores/common.store';
 import searchStore from './stores/search.store';
-import statisticsStore from './stores/statistics.store';
 import orgStore from './stores/organisation.store';
 import clapStore from './stores/clap.store';
 import helpRequestStore from './stores/helpRequest.store';
@@ -27,7 +26,6 @@ const stores = {
   recordStore,
   commonStore,
   orgStore,
-  statisticsStore,
   clapStore,
   helpRequestStore,
   searchStore,

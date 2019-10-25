@@ -3,6 +3,7 @@ import * as React from "react";
 import ProfileService from '../../services/profile.service';
 import { inject, observer } from "mobx-react";
 import { injectIntl } from "react-intl";
+import undefsafe from 'undefsafe';
 
 class ProfileProvider extends React.Component {
   constructor() {
@@ -46,10 +47,13 @@ class ProfileProvider extends React.Component {
 
   setWingzyRecord = () => {
     this.buildWingsByFamilies();
-    if(!this.props.authStore.isAuth()) return;
+    if(!this.props.authStore.isAuth()) {
+      this.props.keenStore.recordEvent('view', {page: 'profile', recordEmitter: null, recordTarget: this.state.algoliaRecord.objectID || this.state.algoliaRecord.tag})
+      return;
+    }
     this.props.recordStore.fetchByTag(this.state.algoliaRecord.tag, this.props.orgStore.currentOrganisation._id)
       .then((record) => {
-        this.props.keenStore.recordEvent('view', {page: 'profile', recordEmitter: this.props.recordStore.currentUserRecord._id, recordTarget: record._id})
+        this.props.keenStore.recordEvent('view', {page: 'profile', recordEmitter: undefsafe(this.props.recordStore.currentUserRecord, '_id'), recordTarget: record._id})
 
         record.objectID = record._id;
 

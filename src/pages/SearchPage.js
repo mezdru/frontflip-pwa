@@ -69,7 +69,7 @@ class SearchPage extends PureComponent {
     });
 
     this.unsubResultsCount = observe(this.props.commonStore, 'searchResultsCount', (change) => {
-      this.props.keenStore.recordEvent('search', {results: change.newValue, filters: []});
+      this.props.keenStore.recordEvent('search', {results: change.newValue, filters: [], recordEmitter: undefsafe(this.props.recordStore.currentUserRecord, '_id')});
       this.unsubResultsCount();
     });
 

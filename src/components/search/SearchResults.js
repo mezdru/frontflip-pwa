@@ -88,7 +88,7 @@ class SearchResults extends React.Component {
             this.setState({ filterRequest: req.filterRequest, queryRequest: req.queryRequest, page: 0 }, () => {
               this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, this.state.page)
               .then(() => {
-                this.props.keenStore.recordEvent('search', {results: this.props.commonStore.searchResultsCount, filters: change.newValue})
+                this.props.keenStore.recordEvent('search', {results: this.props.commonStore.searchResultsCount, filters: change.newValue, recordEmitter: undefsafe(this.props.recordStore.currentUserRecord, '_id') })
               });
             });
           });
@@ -197,7 +197,7 @@ class SearchResults extends React.Component {
 
 SearchResults = withSearchManagement(SearchResults);
 
-export default inject('commonStore', 'orgStore', 'keenStore')(
+export default inject('commonStore', 'orgStore', 'keenStore', 'recordStore')(
   observer(
     withStyles(styles)(SearchResults)
   )

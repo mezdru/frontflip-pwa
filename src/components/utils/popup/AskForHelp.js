@@ -12,6 +12,7 @@ import SnackbarCustom from '../snackbars/SnackbarCustom';
 import withSearchManagement from '../../../hoc/SearchManagement.hoc';
 import AlgoliaService from '../../../services/algolia.service';
 import { Email } from '@material-ui/icons';
+import undefsafe from 'undefsafe';
 
 const styles = theme => ({
   text: {
@@ -105,7 +106,7 @@ class AskForHelp extends React.Component {
         EmailService.sendHelpRequest(hr._id)
           .then(() => {
             this.setState({ success: true });
-            this.props.keenStore.recordEvent('askForHelp', {helpRequest: helpRequest});
+            this.props.keenStore.recordEvent('askForHelp', {helpRequest: helpRequest, recordEmitter: undefsafe(this.props.recordStore.currentUserRecord, '_id')});
           }).catch(this.handleError);
       }).catch(this.handleError);
 
