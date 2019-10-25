@@ -4,7 +4,7 @@ import Store from "./store";
 import orgStore from './organisation.store';
 import undefsafe from 'undefsafe';
 
-class KeenStore extends Store{
+class KeenStore extends Store {
 
   constructor() {
     super("Organisation");
@@ -13,22 +13,27 @@ class KeenStore extends Store{
     this.client = null;
 
     this.unsubOrg = observe(orgStore, 'currentOrganisation', (change) => {
-      if(change.newValue && undefsafe(change.oldValue, '_id') !== undefsafe(change.newValue, '_id')) {
-        this.client = null;
-        this.fetchKeenWritesKey(change.newValue._id, change.newValue.public)
-        .then((key) => {
-          if(key) {
-            this.client = new KeenTracking({
-              projectId: process.env.REACT_APP_KEEN_PROJECT_ID,
-              writeKey: key
-            });
+      try {
+        if (change.newValue && undefsafe(change.oldValue, '_id') !== undefsafe(change.newValue, '_id')) {
+          this.client = null;
+          this.fetchKeenWritesKey(change.newValue._id, change.newValue.public)
+            .then((key) => {
+              if (key) {
+                this.client = new KeenTracking({
+                  projectId: process.env.REACT_APP_KEEN_PROJECT_ID,
+                  writeKey: key
+                });
 
-            for(var i = 0; i < this.queue.length; i++) {
-              this.recordEvent(this.queue[i].eventFamily, this.queue[i].object);
-            }
-            this.queue = [];
-          }
-        }).catch(e => console.log(e));
+                for (var i = 0; i < this.queue.length; i++) {
+                  this.recordEvent(this.queue[i].eventFamily, this.queue[i].object);
+                }
+                this.queue = [];
+              }
+            }).catch(e => console.log(e));
+        }
+      } catch (e) {
+        console.log("Error during keen store initialization.");
+        console.error(e);
       }
     });
   }
@@ -49,7 +54,7 @@ class KeenStore extends Store{
 
   getKeenWritesKey(orgId) {
     if (!orgId) return null;
-    return this.writesKeys.find(key =>key.organisation === orgId);
+    return this.writesKeys.find(key => key.organisation === orgId);
   }
 
   async fetchKeenWritesKey(orgId, isPublic) {
@@ -61,10 +66,14 @@ class KeenStore extends Store{
   }
 
   recordEvent = (eventFamily, object) => {
-    if(!this.client) return this.queue.push({eventFamily: eventFamily, object: object});
-    return this.client.recordEvent(eventFamily, {
-      item: object
-    });
+    try {
+      if (!this.client) return this.queue.push({ eventFamily: eventFamily, object: object });
+      return this.client.recordEvent(eventFamily, {
+        item: object
+      });
+    } catch (e) {
+      console.error(e);
+    }
   }
 
 }
