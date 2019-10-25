@@ -3,6 +3,7 @@ import KeenTracking from 'keen-tracking';
 import Store from "./store";
 import orgStore from './organisation.store';
 import undefsafe from 'undefsafe';
+import authStore from "./auth.store";
 
 class KeenStore extends Store {
 
@@ -59,7 +60,8 @@ class KeenStore extends Store {
 
   async fetchKeenWritesKey(orgId, isPublic) {
     if (!orgId) throw new Error('Organisation id is required.');
-
+    if(!isPublic && !authStore.isAuth()) return null;
+    
     let keenKey = await super.fetchResources(`/${orgId}/keen/${isPublic ? 'public' : 'private'}`);
     this.addKeenWritesKey(keenKey, orgId);
     return keenKey;
