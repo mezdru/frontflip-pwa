@@ -78,8 +78,9 @@ class SearchPage extends PureComponent {
     }
 
     this.unsubscribeRecordTag = observe(this.props.commonStore.url, 'params', (change) => {
-      if (change.oldValue.recordTag !== change.newValue.recordTag && change.newValue.recordTag)
+      if (change.oldValue.recordTag !== change.newValue.recordTag && change.newValue.recordTag) {
         this.handleDisplayProfile(null, change.newValue.recordTag);
+      }
       if (!change.newValue.recordTag && change.oldValue.recordTag)
         this.handleCloseProfile();
     });

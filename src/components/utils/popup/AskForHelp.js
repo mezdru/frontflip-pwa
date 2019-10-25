@@ -105,6 +105,7 @@ class AskForHelp extends React.Component {
         EmailService.sendHelpRequest(hr._id)
           .then(() => {
             this.setState({ success: true });
+            this.props.keenStore.recordEvent('askForHelp', {helpRequest: helpRequest});
           }).catch(this.handleError);
       }).catch(this.handleError);
 
@@ -216,7 +217,7 @@ class AskForHelp extends React.Component {
   }
 }
 
-export default inject('commonStore', 'helpRequestStore', 'recordStore', 'orgStore')(
+export default inject('commonStore', 'helpRequestStore', 'recordStore', 'orgStore', 'keenStore')(
   observer(
     withStyles(styles, { withTheme: true })(
       injectIntl(withSearchManagement(AskForHelp))

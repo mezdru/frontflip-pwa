@@ -49,6 +49,8 @@ class ProfileProvider extends React.Component {
     if(!this.props.authStore.isAuth()) return;
     this.props.recordStore.fetchByTag(this.state.algoliaRecord.tag, this.props.orgStore.currentOrganisation._id)
       .then((record) => {
+        this.props.keenStore.recordEvent('view', {page: 'profile', recordEmitter: this.props.recordStore.currentUserRecord._id, recordTarget: record._id})
+
         record.objectID = record._id;
 
         ProfileService.transformLinks(record);
@@ -136,6 +138,6 @@ class ProfileProvider extends React.Component {
   }
 }
 
-export default inject('orgStore', 'recordStore', 'userStore', 'commonStore', 'authStore', 'clapStore')(
+export default inject('orgStore', 'recordStore', 'userStore', 'commonStore', 'authStore', 'clapStore', 'keenStore')(
   observer(injectIntl(ProfileProvider))
   );
