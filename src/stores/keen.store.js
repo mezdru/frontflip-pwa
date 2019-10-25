@@ -13,22 +13,22 @@ class KeenStore extends Store{
     this.client = null;
 
     this.unsubOrg = observe(orgStore, 'currentOrganisation', (change) => {
-      if(undefsafe(change.oldValue, '_id') !== undefsafe(change.newValue, '_id')) {
+      if(change.newValue && undefsafe(change.oldValue, '_id') !== undefsafe(change.newValue, '_id')) {
+        this.client = null;
         this.fetchKeenWritesKey(change.newValue._id, change.newValue.public)
         .then((key) => {
           if(key) {
             this.client = new KeenTracking({
               projectId: process.env.REACT_APP_KEEN_PROJECT_ID,
-              writeKey: this.currentKeenWritesKey.value
+              writeKey: key
             });
-            this.currentKeenWritesKey.initialized = true;
 
             for(var i = 0; i < this.queue.length; i++) {
               this.recordEvent(this.queue[i].eventFamily, this.queue[i].object);
             }
             this.queue = [];
           }
-        })
+        }).catch(e => console.log(e));
       }
     });
   }
@@ -62,8 +62,6 @@ class KeenStore extends Store{
 
   recordEvent = (eventFamily, object) => {
     if(!this.client) return this.queue.push({eventFamily: eventFamily, object: object});
-    // object.organisation = orgStore.currentOrganisation._id;
-    // object.owner = undefsafe(userStore.currentUser, '_id') || null;
     return this.client.recordEvent(eventFamily, {
       item: object
     });
