@@ -24,6 +24,7 @@ class Routes extends React.Component {
     try {
       window.addEventListener('appinstalled', (evt) => { // deepscan-disable-line
         console.log('App installed.');
+        this.props.keenStore.recordEvent('pwa-install', {owner: undefsafe(this.props.userStore.currentUser, '_id')});
         SlackService.notify('#alerts', `Someone has installed the PWA (userId:${undefsafe(this.props.userStore.currentUser, '_id')}) (orgTag:${undefsafe(this.props.orgStore.currentOrganisation, 'tag')})`); 
       }); 
     }catch(e) {
@@ -50,7 +51,7 @@ class Routes extends React.Component {
   }
 }
 
-export default withRouter(inject('userStore', 'commonStore', 'orgStore')(
+export default withRouter(inject('userStore', 'commonStore', 'orgStore', 'keenStore')(
   (observer(
     Routes
   )))

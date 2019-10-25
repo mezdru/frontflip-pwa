@@ -17,7 +17,7 @@ const styles = theme => ({
   },
 });
 
-const ProfileContacts = React.memo(withProfileManagement(withStyles(styles)(({ classes, profileContext, ...props }) => {
+const ProfileContacts = React.memo( inject('keenStore', 'recordStore')(observer(withProfileManagement(withStyles(styles)(({ classes, profileContext, ...props }) => {  
   var contacts = profileContext.getProp('links');
   return (
     <>
@@ -25,7 +25,7 @@ const ProfileContacts = React.memo(withProfileManagement(withStyles(styles)(({ c
         if (!contact.value || contact.value === '') return null;
         if (contact.type === 'workchat') return null; // hide workchat
         return (
-          <Grid item key={contact._id} style={{ position: 'relative' }}>
+          <Grid item key={contact._id} style={{ position: 'relative' }} onClick={e => this.props.keenStore.recordEvent('contact', {type: contact.type, value: contact.value, recordEmitter: this.props.recordStore.currentUserRecord._id, recordTarget: profileContext.getProp('_id')})}>
             <Tooltip title={ProfileService.htmlDecode(contact.display) || ProfileService.htmlDecode(contact.value) || ProfileService.htmlDecode(contact.url)}>
               <IconButton href={contact.url} rel="noopener" target="_blank" className={classNames(classes.contactIcon, "fa fa-" + contact.icon)} />
             </Tooltip>
@@ -34,6 +34,6 @@ const ProfileContacts = React.memo(withProfileManagement(withStyles(styles)(({ c
       })}
     </>
   );
-})));
+})))));
 
 export default ProfileContacts;
