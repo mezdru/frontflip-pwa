@@ -2,7 +2,6 @@ import commonStore from '../stores/common.store';
 import algoliasearch  from 'algoliasearch';
 import orgStore from '../stores/organisation.store';
 import {observe} from 'mobx';
-import statisticsStore from '../stores/statistics.store';
 
 class AlgoliaService {
 
@@ -155,27 +154,10 @@ class AlgoliaService {
       }, (err, content) => {
         if(err) return resolve(content);
         if(!content) return resolve(null);
-
-        if(logSearch) this.logCurrentSearch( (content.nbHits || null) );
-
         return resolve(content)
       });
     });
   }
-
-  logCurrentSearch(resultsCount) {
-    let searchFilters = commonStore.searchFilters || [];
-    let tagsArray = [];
-    let query = '';
-
-    searchFilters.forEach(filter => {
-      if (filter.tag.charAt(0) !== '#' && filter.tag.charAt(0) !== '@') query += ((query !== '') ? ' ' : '') + filter.name;
-      else tagsArray.push(filter.tag);
-    });
-
-    statisticsStore.postSearchLog(null, tagsArray, query, resultsCount);
-  }
-
 }
 
 export default new AlgoliaService(commonStore.algoliaKey);

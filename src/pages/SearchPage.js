@@ -68,15 +68,19 @@ class SearchPage extends PureComponent {
       }
     });
 
-    observe(this.props.commonStore, 'searchResultsCount', (change) => { this.forceUpdate(); });
+    this.unsubResultsCount = observe(this.props.commonStore, 'searchResultsCount', (change) => {
+      this.props.keenStore.recordEvent('search', {results: change.newValue, filters: [], recordEmitter: undefsafe(this.props.recordStore.currentUserRecord, '_id')});
+      this.unsubResultsCount();
+    });
 
     if (this.props.commonStore.url.params.recordTag) {
       this.handleDisplayProfile(null, this.props.commonStore.url.params.recordTag);
     }
 
     this.unsubscribeRecordTag = observe(this.props.commonStore.url, 'params', (change) => {
-      if (change.oldValue.recordTag !== change.newValue.recordTag && change.newValue.recordTag)
+      if (change.oldValue.recordTag !== change.newValue.recordTag && change.newValue.recordTag) {
         this.handleDisplayProfile(null, change.newValue.recordTag);
+      }
       if (!change.newValue.recordTag && change.oldValue.recordTag)
         this.handleCloseProfile();
     });
@@ -322,7 +326,7 @@ class SearchPage extends PureComponent {
 
 SearchPage = withAuthorizationManagement(withSearchManagement(withProfileManagement(SearchPage)), 'search');
 
-export default inject('commonStore', 'orgStore', 'authStore', 'userStore', 'recordStore')(
+export default inject('commonStore', 'orgStore', 'authStore', 'userStore', 'recordStore', 'keenStore')(
   observer(
     withWidth()(withStyles(styles)(SearchPage))
   )

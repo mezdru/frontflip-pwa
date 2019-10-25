@@ -46,6 +46,10 @@ class CardProfile extends React.PureComponent {
     return (this.props.commonStore.hiddenWings.find((hiddenWing => hiddenWing.tag === tag)));
   }
 
+  handleContactClick = (link) => {
+    this.props.keenStore.recordEvent('contact', {type: link.type, value: link.value, recordEmitter: this.props.recordStore.currentUserRecord._id, recordTarget: this.props.hit.objectID});
+  }
+
   render() {
     const { classes, hit } = this.props;
     const { addFilter } = this.props;
@@ -94,7 +98,7 @@ class CardProfile extends React.PureComponent {
                 if (link.type === 'workchat') return null; // hide workchat
                 if (link.class !== 'extraLink') {
                   return (
-                    <Grid item key={link._id} className={classes.contact}>
+                    <Grid item key={link._id} className={classes.contact} onClick={() => this.handleContactClick(link)}>
                       <Tooltip title={ProfileService.htmlDecode(link.display) || ProfileService.htmlDecode(link.value) || ProfileService.htmlDecode(link.url)}>
                         <IconButton href={link.url} rel="noopener" target="_blank" className={classes.contactButton + " fa fa-" + link.icon} />
                       </Tooltip>
@@ -146,7 +150,7 @@ CardProfile.propTypes = {
 
 CardProfile = withSearchManagement(CardProfile);
 
-export default inject('commonStore', 'orgStore', 'recordStore')(
+export default inject('commonStore', 'orgStore', 'recordStore', 'keenStore')(
   observer(
     withWidth()(withStyles(styles)(injectIntl(CardProfile)))
   )
