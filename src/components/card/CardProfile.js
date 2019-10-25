@@ -13,6 +13,7 @@ import withSearchManagement from '../../hoc/SearchManagement.hoc';
 import { styles } from './CardProfile.css';
 import { injectIntl } from 'react-intl';
 import { getBaseUrl } from '../../services/utils.service';
+import undefsafe from 'undefsafe';
 
 ProfileService.setExtraLinkLimit(5);
 const WINGS_DISPLAYED = 7;
@@ -47,7 +48,7 @@ class CardProfile extends React.PureComponent {
   }
 
   handleContactClick = (link) => {
-    this.props.keenStore.recordEvent('contact', {type: link.type, value: link.value, recordEmitter: this.props.recordStore.currentUserRecord._id, recordTarget: this.props.hit.objectID});
+    this.props.keenStore.recordEvent('contact', {type: link.type, value: link.value, recordEmitter: undefsafe(this.props.recordStore.currentUserRecord, '_id'), recordTarget: this.props.hit.objectID});
   }
 
   render() {
