@@ -170,7 +170,6 @@ class ProfileService {
       str = str[4].split(/"/g);
       return str[1];
     }catch(e) {
-      console.log(e);
       return null;
     }
 
