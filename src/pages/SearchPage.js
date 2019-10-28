@@ -51,13 +51,16 @@ class SearchPage extends PureComponent {
     };
 
     this.props.commonStore.setUrlParams(this.props.match);
+
+    // clear wings bank
+    this.props.commonStore.setLocalStorage('wingsBank', [], true);
   }
 
   componentDidMount() {
     this.moveSearchInputListener();
     this.handleUrlSearchFilters();
 
-    if(this.props.match.path.search('congrats') > -1) this.setState({ showCongratulation: true });
+    if (this.props.match.path.search('congrats') > -1) this.setState({ showCongratulation: true });
 
     observe(this.props.commonStore, 'searchFilters', (change) => {
       if (JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
@@ -69,7 +72,7 @@ class SearchPage extends PureComponent {
     });
 
     this.unsubResultsCount = observe(this.props.commonStore, 'searchResultsCount', (change) => {
-      this.props.keenStore.recordEvent('search', {results: change.newValue, filters: [], recordEmitter: undefsafe(this.props.recordStore.currentUserRecord, '_id')});
+      this.props.keenStore.recordEvent('search', { results: change.newValue, filters: [], recordEmitter: undefsafe(this.props.recordStore.currentUserRecord, '_id') });
       this.unsubResultsCount();
     });
 
@@ -140,7 +143,7 @@ class SearchPage extends PureComponent {
    */
   handleShowSearchResults = (offset) => {
     var contentPart = document.getElementById('content-container');
-    if(!contentPart) return;
+    if (!contentPart) return;
     var scrollMax = Math.min(contentPart.scrollHeight, window.innerHeight - 120);
     scroll.scrollTo(scrollMax, {
       duration: this.state.transitionDuration,
@@ -207,11 +210,11 @@ class SearchPage extends PureComponent {
       this.props.profileContext.reset();
       this.setState({ redirectTo: getBaseUrl(this.props) });
     },
-      (this.state.transitionDuration / 2)*0.9
+      (this.state.transitionDuration / 2) * 0.9
     );
   }
 
-  handleCloseCongrats = () => this.setState({showCongratulation: false});
+  handleCloseCongrats = () => this.setState({ showCongratulation: false });
 
   componentWillReceiveProps(nextProps) {
     this.props.commonStore.setUrlParams(nextProps.match);
@@ -282,8 +285,8 @@ class SearchPage extends PureComponent {
           )}
           {currentOrganisation && (currentOrganisation.tag === 'demo') && this.props.authStore.isAuth() && (
             <Suspense fallback={<></>}>
-              <Intercom 
-                appID={"k7gprnv3"} 
+              <Intercom
+                appID={"k7gprnv3"}
                 user_id={undefsafe(this.props.userStore.currentUser, '_id')}
                 name={undefsafe(this.props.recordStore.currentUserRecord, 'name')}
                 email={undefsafe(this.props.userStore.currentUser, 'email.value') || undefsafe(this.props.userStore.currentUser, 'google.email')}
@@ -302,7 +305,7 @@ class SearchPage extends PureComponent {
 
         {showCongratulation && (
           <Suspense fallback={<CircularProgress color='secondary' />}>
-            <OnboardCongratulation isOpen={showCongratulation} handleClose={this.handleCloseCongrats}/>
+            <OnboardCongratulation isOpen={showCongratulation} handleClose={this.handleCloseCongrats} />
           </Suspense>
         )}
 
