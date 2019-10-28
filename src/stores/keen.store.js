@@ -4,6 +4,7 @@ import Store from "./store";
 import orgStore from './organisation.store';
 import undefsafe from 'undefsafe';
 import authStore from "./auth.store";
+import userStore from './user.store';
 
 class KeenStore extends Store {
 
@@ -70,6 +71,7 @@ class KeenStore extends Store {
   recordEvent = (eventFamily, object) => {
     try {
       if (!this.client) return this.queue.push({ eventFamily: eventFamily, object: object });
+      object.userEmitter = undefsafe(userStore.currentUser, '_id');
       return this.client.recordEvent(eventFamily, {
         item: object
       });
