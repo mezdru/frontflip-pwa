@@ -164,7 +164,8 @@ class SearchSuggestions extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.props.resetScroll("search-suggestions-container");
-    this.setState({ facetHits: nextProps.autocompleteSuggestions, shouldUpdate: true });
+    let newSuggs = SuggestionsService.removeHiddenWings(nextProps.autocompleteSuggestions);
+    this.setState({ facetHits: newSuggs, shouldUpdate: true });
   }
 
   fetchSuggestions = (filters, query) => {
@@ -183,6 +184,7 @@ class SearchSuggestions extends React.Component {
             });
 
             var results = (resultHitsFiltered.length > 19 ? resultHitsFiltered : resultHits);
+            results = SuggestionsService.removeHiddenWings(results);
 
             this.props.resetScroll("search-suggestions-container");
             this.setState({ facetHits: getUnique(results.splice(0, 20), "tag"), shouldUpdate: true });

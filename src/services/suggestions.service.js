@@ -4,6 +4,7 @@ import { observable, decorate } from 'mobx';
 import undefsafe from 'undefsafe';
 
 class SuggestionsService {
+  HIDDEN_TAG = '#Hidden';
 
   constructor() {
     this._currentSuggestions = [];
@@ -36,11 +37,13 @@ class SuggestionsService {
           let sameFamily = await AlgoliaService.fetchHashtags([wingSelected.hashtags[i], featuredWingFamily]);
           sameFamiliesHits = sameFamiliesHits.concat(sameFamily.hits);
         }
+        sameFamiliesHits = this.removeHiddenWings(sameFamiliesHits);
       }
 
       // get common wings in organisation with wingSelected if there is
-      if (wingSelected && ! featuredWingFamily)
+      if (wingSelected && ! featuredWingFamily) {
         commonWithSelectedHits = (await AlgoliaService.fetchFacetValues(wingSelected, false, null, query)).facetHits;
+      }
 
     } catch (e) {
       console.log("Can't customize suggestions : ", e);
@@ -61,7 +64,19 @@ class SuggestionsService {
     }
 
     suggestions = await this.upgradeData(suggestions);
+    suggestions = this.removeHiddenWings(suggestions);
     return suggestions;
+  }
+
+  removeHiddenWings = (hits) => {
+    if(!hits || hits.length === 0) return hits;
+    return hits.filter(hit => {
+      try{
+        return !hit.hashtags.find(hashtag => hashtag.tag === this.HIDDEN_TAG);
+      }catch(e) {
+        return true;
+      }
+    })
   }
 
   /**
