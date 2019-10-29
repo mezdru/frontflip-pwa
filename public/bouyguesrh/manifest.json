@@ -1,0 +1,30 @@
+{
+  "short_name": "Bouygues RH",
+  "name": "Bouygues RH",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "bouyguesrh_144.png",
+      "sizes":"144x144",
+      "type":"image/png"
+    },
+      {
+    "src": "bouyguesrh_192.png",
+    "type": "image/png",
+    "sizes": "192x192"
+  },
+  {
+    "src": "bouyguesrh_512.png",
+    "type": "image/png",
+    "sizes": "512x512"
+  }
+  ],
+  "start_url": "/bouyguesrh",
+  "display": "standalone",
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF"
+}

@@ -89,6 +89,10 @@
       manifestLink.href = '%PUBLIC_URL%/circularity/manifest.json';
       faviconLink.href = '%PUBLIC_URL%/circularity/favicon.ico';
       document.title = 'Circularity';
+    } else if (window.location.href.search('bouyguesrh') !== -1) {
+      manifestLink.href = '%PUBLIC_URL%/bouyguesrh/manifest.json';
+      faviconLink.href = '%PUBLIC_URL%/bouyguesrh/favicon.ico';
+      document.title = 'Bouygues RH';
     } else {
       manifestLink.href = '%PUBLIC_URL%/manifest.json';
       faviconLink.href = '%PUBLIC_URL%/favicon.ico';
