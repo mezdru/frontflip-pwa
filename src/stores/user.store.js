@@ -39,6 +39,11 @@ class UserStore extends Store {
       if(orgAndRecord.record) recordStore.addRecord(orgAndRecord.record);
     });
 
+    let org = orgStore.currentOrganisation;
+    if(org && org.featuredWingsFamily && org.featuredWingsFamily.length > 0 && ! org.featuredWingsFamily[0]._id) {
+      orgStore.fetchOrganisation(org._id);
+    }
+
     LogRocket.identify(user._id, {   
       env: process.env.NODE_ENV,
     });
