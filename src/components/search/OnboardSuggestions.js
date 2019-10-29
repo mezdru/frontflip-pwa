@@ -34,6 +34,9 @@ const styles = theme => ({
   }
 });
 
+let timeout;
+const SUGGESTIONS_QUERY_DELAY = 200; // (ms) ajust this value to update the behaviour
+
 class OnboardSuggestions extends React.Component {
 
   state = {
@@ -45,7 +48,12 @@ class OnboardSuggestions extends React.Component {
     this.fetchSuggestions(null, this.props.wingsFamily);
     let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
 
-    this.unsubscribeUserQuery = observe(this.props.searchStore.values, 'userQuery', () => {this.fetchSuggestions(null, this.props.wingsFamily)});
+    this.unsubscribeUserQuery = observe(this.props.searchStore.values, 'userQuery', () => {
+      // If user write a word, we wait that he finishes before calling algolia.
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {this.fetchSuggestions(null, this.props.wingsFamily)}, SUGGESTIONS_QUERY_DELAY);
+    });
+
     this.unsubscribeUserRecord = observe(record, (change) => {
       if(change.name === 'hashtags' && change.oldValue.length > change.newValue.length) {
         let lastRemoved = change.oldValue[change.oldValue.length - 1];
