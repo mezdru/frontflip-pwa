@@ -62,7 +62,7 @@ class UserWings extends React.Component {
     let filteredHashtags = wingsFamily && record.hashtags ? record.hashtags.filter(elt => elt && elt.hashtags && elt.hashtags.find(elt2 => (elt2._id || elt2) === wingsFamily._id)) : record.hashtags || [];
     return (
       <div className={classes.root}>
-        <Typography variant="h4" style={{ textAlign: 'center', color: theme.palette.primary.dark }} ><FormattedMessage id="onboard.userWings" values={{ wingsCount: filteredHashtags.length, familyName: (wingsFamily ? wingsFamily.name : 'Wings') }} /></Typography>
+        <Typography variant="h4" style={{ textAlign: 'center', color: theme.palette.primary.dark }} ><FormattedMessage id="onboard.userWings" values={{ wingsCount: filteredHashtags.length, familyName: (wingsFamily ? ProfileService.htmlDecode(ProfileService.getWingDisplayedName(wingsFamily, locale)) : 'Wings') }} /></Typography>
         <div className="" style={{ paddingTop: 10 }}>
           {filteredHashtags.length > 0 && filteredHashtags.map((hashtag, i) => {
             if (!this.shoudlRenderWing(hashtag)) return null;
