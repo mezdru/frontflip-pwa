@@ -17,14 +17,14 @@ const styles = theme => ({
   },
   search: {
     padding: '0px 32px',
-    [theme.breakpoints.down('xs')]:{
+    [theme.breakpoints.down('xs')]: {
       padding: '0px 16px',
     }
   },
   title: {
-    padding: 24, 
+    padding: 24,
     paddingBottom: 8,
-    [theme.breakpoints.down('xs')]:{
+    [theme.breakpoints.down('xs')]: {
       padding: 8,
     }
   }
@@ -44,34 +44,33 @@ class OnboardWings extends React.Component {
     try {
       var elt = document.getElementById(this.state.scrollableClass);
       elt.scrollTop = elt.scrollHeight;
-    } catch (e) {}
+    } catch (e) { }
   }
 
   componentDidMount() {
-    setTimeout(() => 
-    {
+    setTimeout(() => {
       let elt = document.getElementById('onboard-wings-board');
-      this.setState({boardHeight: (elt ? elt.clientHeight : 0) + 72 });
+      this.setState({ boardHeight: (elt ? elt.clientHeight : 0) + 72 });
     }, 120);
 
   }
 
   addAndSave = (hashtagRecord) => {
-    if(!hashtagRecord) return;
+    if (!hashtagRecord) return;
     let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
     record.hashtags = record.hashtags.concat([hashtagRecord]);
     this.props.handleSave(['hashtags']);
   }
 
-  handleAddWing =async (element) => {
-    if(!element) return Promise.resolve();
+  handleAddWing = async (element) => {
+    if (!element) return Promise.resolve();
     let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
     if (record.hashtags.find(elt => elt.tag === element.tag)) return Promise.resolve();
 
-    let hashtagRecord = await this.props.recordStore.fetchByTag(element.tag, this.props.orgStore.currentOrganisation._id).catch(e => {return null});
+    let hashtagRecord = await this.props.recordStore.fetchByTag(element.tag, this.props.orgStore.currentOrganisation._id).catch(e => { return null });
 
-    if(hashtagRecord) this.addAndSave(hashtagRecord);
-    else if(element.tag) {
+    if (hashtagRecord) this.addAndSave(hashtagRecord);
+    else if (element.tag) {
       let newRecord = {
         tag: element.tag,
         name: element.name || (element.tag).substr(1),
@@ -82,8 +81,8 @@ class OnboardWings extends React.Component {
   }
 
   handleCreateWing = async (wing) => {
-    let newWing = {name: wing.name, type: 'hashtag', organisation: this.props.orgStore.currentOrganisation._id};
-    if(this.isFeaturedWings()) newWing.hashtags = [this.getFeaturedWings()];
+    let newWing = { name: wing.name, type: 'hashtag', organisation: this.props.orgStore.currentOrganisation._id };
+    if (this.isFeaturedWings()) newWing.hashtags = [this.getFeaturedWings()];
     let newWingSaved = await this.props.recordStore.postRecord(newWing);
     this.handleAddWing(newWingSaved);
   }
@@ -98,8 +97,13 @@ class OnboardWings extends React.Component {
 
   renderTitleByStep = () => {
     if (this.isFeaturedWings()) {
+      let fw = this.getFeaturedWings() || {};
+      let locale = this.props.commonStore.locale;
+      let title = fw.intro_translated ? (fw.intro_translated[locale] || fw.intro) : fw.intro;
       return (
-        <Typography variant="h4" style={{ textAlign: 'center', padding: 8, color: this.props.theme.palette.primary.dark }} >{this.getFeaturedWings() ? this.getFeaturedWings().intro : <FormattedMessage id={'onboard.chooseYourWings'} />}</Typography>
+        <Typography variant="h4" style={{ textAlign: 'center', padding: 8, color: this.props.theme.palette.primary.dark }} >
+          {title ? title : <FormattedMessage id={'onboard.chooseYourWings'} />}
+        </Typography>
       );
     } else {
       return (
@@ -110,9 +114,9 @@ class OnboardWings extends React.Component {
 
   isFeaturedWings = () => (this.props.activeStepLabel && this.props.activeStepLabel.charAt(0) === '#');
   getFeaturedWings = () => {
-    try{
+    try {
       return this.props.orgStore.currentOrganisation.featuredWingsFamily.filter(fam => fam.tag === this.props.activeStepLabel)[0];
-    }catch(e) {
+    } catch (e) {
       return null;
     }
   }
@@ -122,7 +126,7 @@ class OnboardWings extends React.Component {
     const { boardHeight } = this.state;
 
     return (
-      <Grid container direction="column" style={{background: 'white', overflow: 'hidden' }}>
+      <Grid container direction="column" style={{ background: 'white', overflow: 'hidden' }}>
         <Grid item style={{
           background: this.props.theme.palette.primary.main, maxWidth: '100%', position: 'relative', zIndex: 2,
           boxShadow: 'rgba(0, 0, 0, 0.2) 0px 1px 8px 0px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.12) 0px 3px 3px -2px',
@@ -141,7 +145,7 @@ class OnboardWings extends React.Component {
           </Grid>
         </Grid>
 
-        <Grid item justify="center" direction="row" container style={{height: `calc(100vh - ${boardHeight}px)`}} className={classes.userWingsPosition} id={this.state.scrollableClass}>
+        <Grid item justify="center" direction="row" container style={{ height: `calc(100vh - ${boardHeight}px)` }} className={classes.userWingsPosition} id={this.state.scrollableClass}>
           <Grid container item xs={12}>
             <Grid item xs={12} >
               <UserWings handleRemoveWing={this.handleRemoveWing} wingsFamily={this.isFeaturedWings() ? this.getFeaturedWings() : null}
