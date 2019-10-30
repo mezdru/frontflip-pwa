@@ -52,7 +52,7 @@ class AlgoliaService {
         facetName: 'hashtags.tag',
         query: query || '',
         facetQuery: '',
-        filters: (filters ? filters : ''),
+        filters: (filters ? filters : 'type:person'), // type:person
         maxFacetHits: 40,
         facetFilters:( (lastSelection && privateOnly !== null) ? this.makeFacetFilters(lastSelection, privateOnly) : ''),
       }, (err, res) => {
