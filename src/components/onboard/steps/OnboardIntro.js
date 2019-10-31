@@ -13,9 +13,10 @@ const styles = theme => ({
   root: {
     flexBasis: '100%',
     width: '100%',
-    height: '100%',
+    minHeight: '100%',
     background: theme.palette.primary.main,
-    padding: 24
+    padding: 24,
+    overflow: 'auto'
   },
   field: {
     minWidth: '100% !important'
