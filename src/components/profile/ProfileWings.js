@@ -116,10 +116,11 @@ class ProfileWings extends React.PureComponent {
       <div className={classes.root} id="profile-wings">
         {wingsByFamilies && wingsByFamilies.length > 0 && wingsByFamilies.map((wbf, index) => {
           if (wbf.wings.length === 0) return null;
+          let title = wbf.family.intro_translated ? (wbf.family.intro_translated[locale] || wbf.family.intro) : wbf.family.intro;
           return (
             <div key={index} className={classes.wingsFamilyContainer}>
               <Typography variant="body1" style={{ color: (wingsByFamilies.length > 1 || isEditable) ? 'rgba(255, 255, 255, 1)' : 'rgba(0,0,0,0)' }} className={classes.wingsFamilyTitle}>
-                {(wingsByFamilies.length > 1 || isEditable) ? wbf.family.intro : '.'}
+                {(wingsByFamilies.length > 1 || isEditable) ? title : '.'}
               </Typography>
               {wbf.wings.map((wing, index) => {
                 let displayedName = ProfileService.getWingDisplayedName(wing, locale);
