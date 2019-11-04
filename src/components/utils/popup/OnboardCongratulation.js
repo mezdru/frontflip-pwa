@@ -5,14 +5,14 @@ import { withStyles, Typography } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { FormattedMessage } from 'react-intl';
 
-import ColleagueImg from '../../../resources/images/colleagues.png';
 import PopupLayout from './PopupLayout';
 import { getBaseUrl } from '../../../services/utils.service';
+import profileService from '../../../services/profile.service';
 
 const styles = theme => ({
   picture: {
-    width: '60%',
-    height: 'auto',
+    // width: '60%',
+    // height: 'auto',
     marginBottom: 40,
   },
   text: {
@@ -60,7 +60,7 @@ class OnboardCongratulation extends React.Component {
         isOpen={this.state.open}
         title={
           <>
-            <img src={ColleagueImg} alt="Colleagues" className={classes.picture} />
+            <img src={profileService.getEmojiUrl('🥳')} alt="Congratulation!" className={classes.picture} />
             <Typography variant="h1" className={classes.title}>
               <FormattedMessage id="onboard.end.title" />
             </Typography>
