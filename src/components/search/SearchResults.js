@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { Grid, withStyles } from '@material-ui/core';
+import { Grid, withStyles, Button } from '@material-ui/core';
 import { inject, observer } from 'mobx-react';
 import { observe } from 'mobx';
 import undefsafe from 'undefsafe';
@@ -8,6 +8,7 @@ import AlgoliaService from '../../services/algolia.service';
 import { shuffleArray } from '../../services/utils.service';
 import Card from '../card/CardProfile';
 import withSearchManagement from '../../hoc/SearchManagement.hoc';
+import Invitation from '../utils/popup/Invitation';
 
 const SearchShowMore = React.lazy(() => import('./SearchShowMore'));
 const SearchNoResults = React.lazy(() => import('./SearchNoResults'));
@@ -43,6 +44,14 @@ const styles = theme => ({
   sentinel: {
     position: 'absolute',
     marginTop: '-500px',
+  },
+  cta: {
+    position: 'relative',
+    left: 0,
+    right: 0,
+    margin: 'auto',
+    textAlign: 'center',
+    maxWidth: 255
   }
 });
 
@@ -64,18 +73,18 @@ class SearchResults extends React.Component {
 
   componentDidMount() {
 
-    if(undefsafe(this.props.orgStore.currentAlgoliaKey, 'initialized')) {
+    if (undefsafe(this.props.orgStore.currentAlgoliaKey, 'initialized')) {
       this.props.makeFiltersRequest()
-      .then((req) => {
-        this.setState({ filterRequest: req.filterRequest, queryRequest: req.queryRequest }, () => {
-          this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
+        .then((req) => {
+          this.setState({ filterRequest: req.filterRequest, queryRequest: req.queryRequest }, () => {
+            this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
+          });
         });
-      });
     }
 
     this.setState({
       observer: observe(this.props.orgStore, 'currentAlgoliaKey', (change) => {
-        if(undefsafe(change.newValue, 'initialized')) {
+        if (undefsafe(change.newValue, 'initialized')) {
           this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
         }
       })
@@ -87,9 +96,9 @@ class SearchResults extends React.Component {
           .then((req) => {
             this.setState({ filterRequest: req.filterRequest, queryRequest: req.queryRequest, page: 0 }, () => {
               this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, this.state.page)
-              .then(() => {
-                this.props.keenStore.recordEvent('search', {results: this.props.commonStore.searchResultsCount, filters: change.newValue, recordEmitter: undefsafe(this.props.recordStore.currentUserRecord, '_id') })
-              });
+                .then(() => {
+                  this.props.keenStore.recordEvent('search', { results: this.props.commonStore.searchResultsCount, filters: change.newValue, recordEmitter: undefsafe(this.props.recordStore.currentUserRecord, '_id') })
+                });
             });
           });
       }
@@ -123,14 +132,14 @@ class SearchResults extends React.Component {
     await AlgoliaService.fetchHits(filters, query, facetFilters, page, true, 5)
       .then((content) => {
 
-        if(!content) return;
+        if (!content) return;
 
         if ((!content.hits || content.hits.length === 0) && (!page || page === 0)) this.setState({ showNoResult: true, hideShowMore: true });
         else this.setState({ showNoResult: false });
 
         this.props.commonStore.searchResultsCount = content.nbHits;
 
-        if (content.page >= (content.nbPages - 1) ) this.setState({ hideShowMore: true });
+        if (content.page >= (content.nbPages - 1)) this.setState({ hideShowMore: true });
         else if (content.nbPages > 1) this.setState({ hideShowMore: false });
 
         if (page) {
@@ -150,7 +159,7 @@ class SearchResults extends React.Component {
   }
 
   handleShowMore = (e) => {
-    if(! undefsafe(this.props.orgStore.currentAlgoliaKey, 'initialized')) return;
+    if (!undefsafe(this.props.orgStore.currentAlgoliaKey, 'initialized')) return;
     this.setState({ page: this.state.page + 1, loadInProgress: true }, () => {
       this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, this.state.page);
     });
@@ -159,6 +168,7 @@ class SearchResults extends React.Component {
   render() {
     const { hits, loadInProgress, hideShowMore, showNoResult } = this.state;
     const { handleDisplayProfile, classes } = this.props;
+    let { currentUser, currentOrgAndRecord } = this.props.userStore;
     let hitsResult = Array.from(hits);
 
     return (
@@ -182,13 +192,20 @@ class SearchResults extends React.Component {
               </Suspense>
             </li>
           )}
-          
+
 
           {showNoResult && (
             <Suspense fallback={<></>}>
               <SearchNoResults />
             </Suspense>
           )}
+
+          {(undefsafe(this.props.orgStore.currentOrganisation, 'canInvite') || undefsafe(currentUser, 'superadmin') || (currentOrgAndRecord && currentOrgAndRecord.admin)) && (
+            <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cta} >
+              <Invitation />
+            </Grid>
+          )}
+
         </ul>
       </div>
     );
@@ -197,7 +214,7 @@ class SearchResults extends React.Component {
 
 SearchResults = withSearchManagement(SearchResults);
 
-export default inject('commonStore', 'orgStore', 'keenStore', 'recordStore')(
+export default inject('commonStore', 'orgStore', 'keenStore', 'recordStore', 'userStore')(
   observer(
     withStyles(styles)(SearchResults)
   )
