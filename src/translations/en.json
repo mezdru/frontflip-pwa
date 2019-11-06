@@ -123,5 +123,7 @@
   "askForHelp.popup.badConditions": "You cannot ask more than 10 people. Remove {recipientsToRemove} recipients or refine your search.",
   "welcome.page.title": "We don't yet know your company",
   "welcome.page.subtitle": "Wingzy is the smart directory for your smart company.<br/> To create or join your smart directory, could you <a href='mailto:contact@wingzy.com'>contact us</a>?",
-  "errorPage.organisationForbidden": "Ouch, you cannot access this organisation. Could you ask a coworker for an invitation link? Or do not hesitate to <a href='mailto:contact@wingzy.com'>contact us</a>?"
+  "errorPage.organisationForbidden": "Ouch, you cannot access this organisation. Could you ask a coworker for an invitation link? Or do not hesitate to <a href='mailto:contact@wingzy.com'>contact us</a>?",
+  "popup.latestConnection.title": "Welcome back!",
+  "popup.latestConnection.text": "Your latest connection was on {os} - {browser} ({date})"
 }

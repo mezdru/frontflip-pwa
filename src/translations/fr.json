@@ -123,5 +123,7 @@
   "askForHelp.popup.badConditions": "Vous ne pouvez pas envoyer votre question à plus de 10 personnes. Veuillez supprimer {recipientsToRemove} destinataires ou affiner votre recherche.",
   "welcome.page.title": "Nous ne reconnaissons pas votre entreprise",
   "welcome.page.subtitle": "Wingzy c'est l'annuaire intelligent de votre entreprise.<br/> Pour créer ou rejoindre l'annuaire de votre entreprise, pouvez-vous <a href='mailto:contact+neworg@wingzy.com'>nous contacter</a> ?",
-  "errorPage.organisationForbidden": "Aïe, vous n'avez pas accès à cette organisation. Pouvez-vous demander un lien d'invitation à un collègue ? Ou <a href='mailto:contact+forbiddenorg@wingzy.com'>nous contacter</a> ?"
+  "errorPage.organisationForbidden": "Aïe, vous n'avez pas accès à cette organisation. Pouvez-vous demander un lien d'invitation à un collègue ? Ou <a href='mailto:contact+forbiddenorg@wingzy.com'>nous contacter</a> ?",
+  "popup.latestConnection.title": "Content de vous revoir !",
+  "popup.latestConnection.text": "Votre dernière connexion était sur {os} - {browser} ({date})"
 }

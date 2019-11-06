@@ -338,6 +338,10 @@ const ConnectionLog = {
     get: () => 
       requests.get(
         process.env.REACT_APP_API_ROOT_AUTH + '/api/connectionLogs'
+      ),
+    getLatestMe: () =>
+      requests.get(
+        process.env.REACT_APP_API_ROOT_AUTH + '/api/connectionLogs/me/latest'
       )
 }
 
