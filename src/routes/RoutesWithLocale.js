@@ -23,6 +23,7 @@ const messages = {
   'fr': messages_fr,
   'en': messages_en
 };
+var MomentConfigs = require('../components/configs/moment.conf');
 
 class RoutesWithLocale extends React.Component {
 
@@ -45,6 +46,8 @@ class RoutesWithLocale extends React.Component {
     } else {
       this.setState({ render: true });
     }
+
+    if(this.props.match.params.locale === 'fr') MomentConfigs.setMomentFr();
   }
 
   render() {

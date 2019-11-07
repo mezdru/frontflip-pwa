@@ -29,6 +29,7 @@ const Header = React.lazy(() => import('../components/header/Header'));
 const SearchResults = React.lazy(() => import('../components/search/SearchResults'));
 const Search = React.lazy(() => import('../components/search/Search'));
 const Intercom = React.lazy(() => import('react-intercom'));
+const NotifyLatestAuth = React.lazy(() => import('../components/utils/popup/NotifyLatestAuth'));
 
 console.debug('Loading SearchPage');
 
@@ -226,6 +227,7 @@ class SearchPage extends PureComponent {
     const { currentOrganisation } = this.props.orgStore;
     const { searchResultsCount } = this.props.commonStore;
     let searchFilters = this.props.commonStore.getSearchFilters();
+    let latestConnectionClosed = this.props.commonStore.getCookie('latestConnectionClosed');
 
     return (
       <React.Fragment>
@@ -322,6 +324,13 @@ class SearchPage extends PureComponent {
         <Suspense fallback={<></>}>
           <PromptIOsInstall />
         </Suspense>
+
+        {!latestConnectionClosed && (
+          <Suspense fallback={<></>}>
+            <NotifyLatestAuth />
+          </Suspense>
+        )}
+
       </React.Fragment>
     );
   }
