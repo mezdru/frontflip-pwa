@@ -6,9 +6,6 @@ import { Link } from 'react-router-dom';
 import Applause from '../../resources/icons/Applause';
 import { FormattedMessage } from 'react-intl';
 
-var MomentConfigs = require('../configs/moment.conf');
-MomentConfigs.setMomentFr();
-
 const styles = theme => ({
   rootLink: {
     textDecoration: 'none',

@@ -1,11 +1,10 @@
 import React from 'react';
 import StoreObject from '../../../stores/store';
-import { withStyles, Typography, Slide, ClickAwayListener } from '@material-ui/core';
+import { withStyles, Typography, Slide, ClickAwayListener, IconButton } from '@material-ui/core';
 import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { FormattedMessage } from 'react-intl';
-
-var MomentConfigs = require('../../configs/moment.conf');
+import { Close } from '@material-ui/icons';
 
 let Store = new StoreObject('ConnectionLog');
 
@@ -22,6 +21,16 @@ const style = theme => ({
     backgroundColor: 'white',
     borderRadius: '0 5px 5px 5px',
     boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
+  },
+  title: {
+    color: theme.palette.primary.dark,
+    marginBottom: 16
+  },
+  closeButton: {
+    float: 'right',
+    position: 'relative',
+    top: '-8px',
+    right: '-8px'
   }
 });
 
@@ -33,10 +42,6 @@ class NotifyLatestAuth extends React.Component {
   }
 
   componentDidMount() {
-
-    if (this.props.commonStore.locale === 'fr') {
-      MomentConfigs.setMomentFr();
-    }
 
     Store.customRequest('getLatestMe')
       .then((coLog => {
@@ -58,11 +63,14 @@ class NotifyLatestAuth extends React.Component {
     return (
       <Slide direction="up" in={coLog} mountOnEnter unmountOnExit>
         <ClickAwayListener onClickAway={this.handleClose}>
-          <div className={classes.root} onClick={this.handleClose}>
-            <Typography variant="h3"><FormattedMessage id="popup.latestConnection.title" /></Typography>
+          <div className={classes.root}>
+            <IconButton onClick={this.handleClose} className={classes.closeButton} >
+              <Close />
+            </IconButton>
+            <Typography variant="h3" className={classes.title} ><FormattedMessage id="popup.latestConnection.title" /></Typography>
             <Typography variant="body2">
               {coLog && (
-                <FormattedMessage id="popup.latestConnection.text" values={{ os: coLog.os, browser: coLog.browser, date: moment(coLog.created).calendar()}} />
+                <FormattedMessage id="popup.latestConnection.text" values={{ os: coLog.os, browser: coLog.browser, date: moment(coLog.created).calendar(), city: coLog.location.city, region: coLog.location.region }} />
               )}
             </Typography>
           </div>
