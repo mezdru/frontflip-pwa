@@ -10,8 +10,11 @@ const locale = ((process.env.NODE_ENV === 'production' || process.env.NODE_ENV =
 const API_ROOT_AUTH = process.env.REACT_APP_API_ROOT_AUTH;
 const API_ROOT = process.env.REACT_APP_API_ROOT + '/' + locale;
 
+// Used to avoid multiple refresh token requests at a same time.
+let refreshTokenInProgress = null;
+
 const handleErrors = err => {
-  if(err) LogRocket.error(err);
+  if (err) LogRocket.error(err);
 
   if (err && err.response && err.response.status === 401) {
     authStore.logout();
@@ -95,9 +98,13 @@ const requests = {
 /**
  * @description Get new access token if the older one is expired
  */
-let validateToken = () => {
+let validateToken = async () => {
+  if (refreshTokenInProgress) {
+    console.log('await refresh token in progress');
+    await refreshTokenInProgress();
+  }
   if (commonStore.getRefreshToken() && !commonStore.getAccessToken()) {
-    return new Promise((resolve, reject) => {
+    return refreshTokenInProgress = new Promise((resolve, reject) => {
       superagent.post(
         (process.env.NODE_ENV === 'development' ? 'http://' : 'https://') + `${API_ROOT_AUTH}/locale`,
         {
@@ -110,17 +117,19 @@ let validateToken = () => {
         .timeout({
           response: 30000,
         })
-        .end( (err) => {
-          if(err) LogRocket.error("The refresh token exchange has not worked.");
+        .end((err) => {
+          if (err) LogRocket.error("The refresh token exchange has not worked.");
           handleErrors(err);
-        })
-        .then((response) => {
+          refreshTokenInProgress = null;
+        }).then((response) => {
           commonStore.setAuthTokens(JSON.parse(response.text));
+          refreshTokenInProgress = null;
           resolve();
         }).catch((err) => {
           LogRocket.error("The refresh token exchange has not worked.");
           LogRocket.error(err);
           authStore.logout();
+          refreshTokenInProgress = null;
           window.location.href = UrlService.createUrl(window.location.host, '/signin', null);
         });
     });
@@ -307,7 +316,7 @@ const SearchLog = {
 }
 
 const Clap = {
-  post: (clap) => 
+  post: (clap) =>
     requests.post(
       process.env.REACT_APP_API_ROOT_RECOGNIZE + '/api/claps',
       {
@@ -318,7 +327,7 @@ const Clap = {
     requests.get(
       process.env.REACT_APP_API_ROOT_RECOGNIZE + '/api/claps/record/' + recordId + '/count',
     ),
-  getClapHistory: (recordId) => 
+  getClapHistory: (recordId) =>
     requests.get(
       process.env.REACT_APP_API_ROOT_RECOGNIZE + '/api/claps/record/' + recordId
     )
@@ -335,14 +344,14 @@ const HelpRequest = {
 }
 
 const ConnectionLog = {
-    get: () => 
-      requests.get(
-        process.env.REACT_APP_API_ROOT_AUTH + '/api/connectionLogs'
-      ),
-    getLatestMe: () =>
-      requests.get(
-        process.env.REACT_APP_API_ROOT_AUTH + '/api/connectionLogs/me/latest'
-      )
+  get: () =>
+    requests.get(
+      process.env.REACT_APP_API_ROOT_AUTH + '/api/connectionLogs'
+    ),
+  getLatestMe: () =>
+    requests.get(
+      process.env.REACT_APP_API_ROOT_AUTH + '/api/connectionLogs/me/latest'
+    )
 }
 
 export default {
