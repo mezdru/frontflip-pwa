@@ -150,7 +150,8 @@ class SearchPage extends PureComponent {
       duration: this.state.transitionDuration,
       smooth: 'easeInOutCubic',
       containerId: "content-container",
-      offset: offset || 0
+      offset: offset || 0,
+      delay: 200 // @todo : wait that search results is updated before launch scroll / remove this static delay
     });
   }
 
