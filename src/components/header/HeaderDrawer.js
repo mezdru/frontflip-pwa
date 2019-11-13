@@ -33,6 +33,7 @@ class HeaderDrawer extends Component {
     e.preventDefault();
     this.props.handleDrawerClose();
     this.props.authStore.logout().then(() => {
+      // @todo : issue with locale or only dev issue ? (always en-UK)
       window.location.href = UrlService.createUrl(window.location.host, this.props.orgStore.currentOrganisation ? '/' + this.props.orgStore.currentOrganisation.tag : '', null);
     });
   }
