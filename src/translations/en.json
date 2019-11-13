@@ -125,5 +125,8 @@
   "welcome.page.subtitle": "Wingzy is the smart directory for your smart company.<br/> To create or join your smart directory, could you <a href='mailto:contact@wingzy.com'>contact us</a>?",
   "errorPage.organisationForbidden": "Ouch, you cannot access this organisation. Could you ask a coworker for an invitation link? Or do not hesitate to <a href='mailto:contact@wingzy.com'>contact us</a>?",
   "popup.latestConnection.title": "Welcome back!",
-  "popup.latestConnection.text": "Your latest connection was on {os} - {browser} at {city} ({region}) ({date})"
+  "popup.latestConnection.text": "Your latest connection was on {os} - {browser} at {city} ({region}) ({date})",
+  "onboard.contacts.label.phone": "Phone number",
+  "onboard.contacts.label.email": "Email",
+  "onboard.contacts.label.landline": "Landline"
 }

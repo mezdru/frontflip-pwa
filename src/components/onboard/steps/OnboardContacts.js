@@ -1,6 +1,6 @@
 import React from 'react'
 import {inject, observer} from "mobx-react";
-import {FormattedMessage} from "react-intl";
+import {FormattedMessage, injectIntl} from "react-intl";
 import undefsafe from 'undefsafe';
 
 import {withStyles, Grid, TextField, InputAdornment, IconButton, Typography} from '@material-ui/core';
@@ -103,8 +103,11 @@ class OnboardContacts extends React.Component {
     }
   }
   
-  capitalize = (string) =>
-  {
+  getCapitalizedLabel = (string) => {
+    let translatedTypes = ['landline', 'email', 'phone'];
+    if(translatedTypes.some(e => e === string)) {
+      return this.props.intl.formatMessage({id: 'onboard.contacts.label.'+string});
+    }
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
   
@@ -138,13 +141,13 @@ class OnboardContacts extends React.Component {
                 <Grid item key={link._id || i} style={{padding: 8}}>
                   <TextField
                     className={( (newLinkIndex && i === newLinkIndex) ?  classes.link : classes.defaultLink)}
-                    label={this.capitalize(link.type)}
+                    label={this.getCapitalizedLabel(link.type)}
                     type={this.setTypeInput(link.type)}
                     variant={"outlined"}
                     value={link.value}
                     onChange={(e) => this.handleLinksChange(e, link, i)}
                     onBlur={() => this.props.handleSave(['links'])}
-                    placeholder={this.capitalize(link.type)}
+                    placeholder={this.getCapitalizedLabel(link.type)}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start" style={{fontSize: 24}}>
@@ -164,7 +167,7 @@ class OnboardContacts extends React.Component {
               )
             })}
             <Grid container item className={classes.root}>
-              <AddContactField parent={this} handleSave={this.props.handleSave} addLink={this.addLink} capitalize={this.capitalize}/>
+              <AddContactField parent={this} handleSave={this.props.handleSave} addLink={this.addLink} capitalize={this.getCapitalizedLabel}/>
             </Grid>
         </Grid>
       </Grid>
@@ -174,6 +177,6 @@ class OnboardContacts extends React.Component {
 
 export default inject('commonStore', 'recordStore')(
   observer(
-    withStyles(styles, {withTheme: true})(OnboardContacts)
+    withStyles(styles, {withTheme: true})( injectIntl(OnboardContacts))
   )
 );

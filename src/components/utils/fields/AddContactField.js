@@ -3,6 +3,7 @@ import {inject, observer} from 'mobx-react';
 import {Grid, Grow, Paper, Popper, ClickAwayListener, Fab, IconButton, withStyles, Tooltip} from '@material-ui/core'
 import {Add} from "@material-ui/icons";
 import '../../../resources/stylesheets/font-awesome.min.css';
+import { injectIntl } from 'react-intl';
 
 const styles = theme =>  ({
   addButton: {
@@ -145,6 +146,6 @@ class AddContactField extends React.Component {
 
 export default inject('commonStore', 'recordStore')(
   observer(
-    withStyles(styles)(AddContactField)
+    withStyles(styles)( injectIntl(AddContactField))
   )
 );
