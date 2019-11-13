@@ -70,6 +70,43 @@
       homescreen on Android. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
 
+
+  <!-- SHOULD BE THE FIRST SCRIPT LOADED -->
+  <script src="/js/outdated-browser-rework.min.js"></script>
+  <script>
+    outdatedBrowserRework({
+      browserSupport: {
+        'Chrome': 57,
+        'Edge': 39,
+        'Safari': 10,
+        'Mobile Safari': 10,
+        'Firefox': 50,
+        'Opera': 50,
+        'Vivaldi': 1,
+        'Yandex': { major: 17, minor: 10 },
+        'IE': false
+      },
+      requireChromeOnAndroid: false,
+      isUnknownBrowserOK: false,
+      messages: {
+        en: {
+          outOfDate: "Your browser is out of date!",
+          unsupported: "Your browser is not supported!",
+          update: {
+            web: "Update your browser to view this website correctly. ",
+            googlePlay: "Please install Chrome from Google Play",
+            appStore: "Please update iOS from the Settings App"
+          },
+          // You can set the URL to null if you do not want a clickable link or provide
+          // your own markup in the `update.web` message.
+          url: "http://outdatedbrowser.com/",
+          callToAction: "Update my browser now",
+          close: "Close"
+        }
+      }
+    });
+  </script>
+
   <script>
     var manifestLink = document.createElement('link');
     var faviconLink = document.createElement('link');
@@ -192,6 +229,8 @@
 </head>
 
 <body>
+  <div id="outdated"></div>
+
   <noscript>
     You need to enable JavaScript to run this app.
   </noscript>
@@ -242,17 +281,51 @@
     #errorMessage img {
       margin: 16px;
     }
+
+    #outdated {
+      z-index: 9999999;
+      width: 100%;
+      text-align: center;
+    }
+
+    #outdated #buttonCloseUpdateBrowser {
+      display: block;
+      font-size: 36px;
+      height: 100%;
+      line-height: 36px;
+      position: relative;
+      text-decoration: none;
+      width: 100%;
+    }
+
+    #outdated .last {
+      height: 20px;
+      position: absolute;
+      right: 70px;
+      top: 0px;
+      width: auto;
+      display: inline-table;
+    }
+
+    #outdated #buttonUpdateBrowser {
+      border: 2px solid white;
+      color: white;
+      cursor: pointer;
+      display: block;
+      margin: 30px auto 0;
+      padding: 10px 20px;
+      position: relative;
+      text-decoration: none;
+      width: 230px;
+    }
+
+    @media screen and (max-width: 640px) {
+      #outdated .last {
+        right: 16px;
+      }
+    }
   </style>
-  <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
 </body>
 
 </html>
