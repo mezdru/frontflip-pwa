@@ -96,12 +96,11 @@ class Invitation extends React.Component {
   };
 
   formatInvitationLink = (code) => {
-    var locale = this.props.commonStore.locale;
     var orgTag = this.props.orgStore.currentOrganisation.tag;
     if (process.env.NODE_ENV === 'development') {
-      return 'http://' + process.env.REACT_APP_HOST + '/' + locale + '/' + orgTag + '/signup/' + code;
+      return 'http://' + process.env.REACT_APP_HOST + '/' + orgTag + '/signup/' + code;
     }
-    return 'https://' + orgTag + '.wingzy.com/' + locale + '/code/' + code
+    return 'https://' + process.env.REACT_APP_HOST + '/' + orgTag +  '/signup/' + code;
   }
 
   copyUrl = () => {
