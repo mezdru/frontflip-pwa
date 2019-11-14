@@ -31,7 +31,6 @@ const withSearchManagement = (ComponentToWrap) => {
       var currentFilters = commonStore.getSearchFilters();
       var filterRequest = 'type:person';
       var queryRequest = '';
-      console.log(currentFilters);
   
       currentFilters.forEach(filter => {
         if (filter.tag.charAt(0) !== '#' && filter.tag.charAt(0) !== '@') {
