@@ -22,7 +22,7 @@ class ProfileClapHistory extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.authStore.isAuth()) {
+    // if (this.props.authStore.isAuth()) {
       setTimeout(() => {
         this.getClapHistory(this.props.profileContext.getProp('_id'));
       }, 50);
@@ -33,7 +33,7 @@ class ProfileClapHistory extends React.Component {
             this.getClapHistory(this.props.profileContext.getProp('_id'));
           }, 50);
       })
-    }
+    // }
   }
 
   componentWillUnmount() {
@@ -43,7 +43,7 @@ class ProfileClapHistory extends React.Component {
   getClapHistory = (recordId) => {
     if (!recordId) return this.setState({ clapHistory: [] });
     this.props.clapStore.setCurrentRecordId(recordId);
-    this.props.clapStore.getClapHistory()
+    this.props.clapStore.getClapHistoryFull(this.props.orgStore.currentOrganisation._id)
       .then(clapHistory => {
         this.setState({ clapHistory: JSON.parse(JSON.stringify(clapHistory)) });
       }).catch(e => { return; });
