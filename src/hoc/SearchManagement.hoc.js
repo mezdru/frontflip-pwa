@@ -43,8 +43,6 @@ const withSearchManagement = (ComponentToWrap) => {
         // else if (filter.tag.charAt(0) === '#') filterRequest += ' AND hashtags.tag:' + filter.tag;
         // else if (filter.tag.charAt(0) === '@') filterRequest += ' AND tag:' + filter.tag;
       });
-
-      console.log(queryRequest);
   
       return {
         filterRequest: filterRequest,
