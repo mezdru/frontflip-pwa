@@ -51,12 +51,12 @@ class ClapStore {
       .finally(action(() => { this.inProgress = false; }));
   }
 
-  getClapCountByProfile() {
+  getClapCountByProfile(orgId) {
     if (!this.values.currentRecordId) return Promise.reject(new Error('No record id'));
     this.inProgress = true;
     this.errors = null;
 
-    return agent.Clap.getClapCountByProfile(this.values.currentRecordId)
+    return agent.Clap.getClapCountByProfile(this.values.currentRecordId, orgId)
       .then(response => {
         this.setCurrentRecordClapCount(response.data);
         return this.values.currentRecordClapCount;
