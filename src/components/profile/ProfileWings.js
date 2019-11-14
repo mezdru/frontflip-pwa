@@ -94,9 +94,9 @@ class ProfileWings extends React.PureComponent {
   }
 
   getClapsCount = async (recordId) => {
-    if(!this.props.authStore.isAuth()) return;
+    // if(!this.props.authStore.isAuth()) return;
     this.props.clapStore.setCurrentRecordId(recordId);
-    await this.props.clapStore.getClapCountByProfile().catch(e => { return; });
+    await this.props.clapStore.getClapCountByProfile(this.props.orgStore.currentOrganisation._id).catch(e => { return; });
     if(!this.isUnmount) this.forceUpdate();
   }
 

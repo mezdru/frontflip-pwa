@@ -49,11 +49,11 @@ class ProfileProvider extends React.Component {
     this.buildWingsByFamilies();
     if(!this.props.authStore.isAuth()) {
       this.props.keenStore.recordEvent('view', {page: 'profile', recordEmitter: null, recordTarget: this.state.algoliaRecord.objectID || this.state.algoliaRecord.tag})
-      return;
+      // return;
     }
     this.props.recordStore.fetchByTag(this.state.algoliaRecord.tag, this.props.orgStore.currentOrganisation._id)
       .then((record) => {
-        this.props.keenStore.recordEvent('view', {page: 'profile', recordEmitter: undefsafe(this.props.recordStore.currentUserRecord, '_id'), recordTarget: record._id})
+        if(this.props.authStore.isAuth()) this.props.keenStore.recordEvent('view', {page: 'profile', recordEmitter: undefsafe(this.props.recordStore.currentUserRecord, '_id'), recordTarget: record._id})
 
         record.objectID = record._id;
 
