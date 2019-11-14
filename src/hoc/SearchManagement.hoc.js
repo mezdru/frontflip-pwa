@@ -33,15 +33,9 @@ const withSearchManagement = (ComponentToWrap) => {
       var queryRequest = '';
   
       currentFilters.forEach(filter => {
-        if (filter.tag.charAt(0) !== '#' && filter.tag.charAt(0) !== '@') {
-          queryRequest += ((queryRequest !== '') ? ' ' : '') + filter.tag;
-        } else {
-          queryRequest += ((queryRequest !== '') ? ' ' : '') + filter.tag.substr(1);
-        }
-        
-        // if (filter.tag.charAt(0) !== '#' && filter.tag.charAt(0) !== '@') queryRequest += ((queryRequest !== '') ? ' ' : '') + filter.name;
-        // else if (filter.tag.charAt(0) === '#') filterRequest += ' AND hashtags.tag:' + filter.tag;
-        // else if (filter.tag.charAt(0) === '@') filterRequest += ' AND tag:' + filter.tag;
+        if (filter.tag.charAt(0) !== '#' && filter.tag.charAt(0) !== '@') queryRequest += ((queryRequest !== '') ? ' ' : '') + filter.name;
+        else if (filter.tag.charAt(0) === '#') filterRequest += ' AND hashtags.tag:' + filter.tag;
+        else if (filter.tag.charAt(0) === '@') filterRequest += ' AND tag:' + filter.tag;
       });
   
       return {
