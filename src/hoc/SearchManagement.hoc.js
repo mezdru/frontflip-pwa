@@ -31,12 +31,21 @@ const withSearchManagement = (ComponentToWrap) => {
       var currentFilters = commonStore.getSearchFilters();
       var filterRequest = 'type:person';
       var queryRequest = '';
+      console.log(currentFilters);
   
       currentFilters.forEach(filter => {
-        if (filter.tag.charAt(0) !== '#' && filter.tag.charAt(0) !== '@') queryRequest += ((queryRequest !== '') ? ' ' : '') + filter.name;
-        else if (filter.tag.charAt(0) === '#') filterRequest += ' AND hashtags.tag:' + filter.tag;
-        else if (filter.tag.charAt(0) === '@') filterRequest += ' AND tag:' + filter.tag;
+        if (filter.tag.charAt(0) !== '#' && filter.tag.charAt(0) !== '@') {
+          queryRequest += ((queryRequest !== '') ? ' ' : '') + filter.tag;
+        } else {
+          queryRequest += ((queryRequest !== '') ? ' ' : '') + filter.tag.substr(1);
+        }
+        
+        // if (filter.tag.charAt(0) !== '#' && filter.tag.charAt(0) !== '@') queryRequest += ((queryRequest !== '') ? ' ' : '') + filter.name;
+        // else if (filter.tag.charAt(0) === '#') filterRequest += ' AND hashtags.tag:' + filter.tag;
+        // else if (filter.tag.charAt(0) === '@') filterRequest += ' AND tag:' + filter.tag;
       });
+
+      console.log(queryRequest);
   
       return {
         filterRequest: filterRequest,

@@ -174,12 +174,15 @@ class SearchSuggestions extends React.Component {
         if (!res) return;
         SuggestionsService.upgradeData(res.facetHits)
           .then(resultHits => {
+            var currentFilters = this.props.commonStore.getSearchFilters();
+
+            resultHits = resultHits.filter(hit => !currentFilters.some(w => w.tag === (hit.tag || hit.value)));
 
             var resultHitsFiltered = [];
 
             resultHits.forEach(hit => {
-              if (hit && this.state.firstWings.findIndex(wing => wing.tag === (hit.tag || hit.value)) === -1) {
-                resultHitsFiltered.push(hit);
+              if (hit && this.state.firstWings.findIndex(wing => wing.tag === (hit.tag || hit.value)) === -1 ) {
+                  resultHitsFiltered.push(hit);
               }
             });
 
