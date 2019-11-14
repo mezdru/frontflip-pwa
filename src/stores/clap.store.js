@@ -68,12 +68,30 @@ class ClapStore {
       .finally(action(() => { this.inProgress = false; }));
   }
 
-  getClapHistory() {
+  // getClapHistory() {
+  //   if (!this.values.currentRecordId) return Promise.reject(new Error('No record id'));
+  //   this.inProgress = true;
+  //   this.errors = null;
+
+  //   return agent.Clap.getClapHistory(this.values.currentRecordId)
+  //     .then(response => {
+  //       this.setCurrentClapHistory(response.data);
+  //       return this.values.currentClapHistory;
+  //     })
+  //     .catch(action((err) => {
+  //       this.setCurrentClapHistory([]);
+  //       this.errors = err.response && err.response.body && err.response.body.errors;
+  //       throw err;
+  //     }))
+  //     .finally(action(() => { this.inProgress = false; }));
+  // }
+
+  getClapHistoryFull(orgId) {
     if (!this.values.currentRecordId) return Promise.reject(new Error('No record id'));
     this.inProgress = true;
     this.errors = null;
 
-    return agent.Clap.getClapHistory(this.values.currentRecordId)
+    return agent.Clap.getClapHistoryFull(this.values.currentRecordId, orgId)
       .then(response => {
         this.setCurrentClapHistory(response.data);
         return this.values.currentClapHistory;

@@ -327,9 +327,13 @@ const Clap = {
     requests.get(
       process.env.REACT_APP_API_ROOT_RECOGNIZE + '/api/claps/record/' + recordId + '/count',
     ),
-  getClapHistory: (recordId) =>
+  // getClapHistory: (recordId) =>
+  //   requests.get(
+  //     process.env.REACT_APP_API_ROOT_RECOGNIZE + '/api/claps/record/' + recordId
+  //   ),
+  getClapHistoryFull: (recordId, orgId) =>
     requests.get(
-      process.env.REACT_APP_API_ROOT_RECOGNIZE + '/api/claps/record/' + recordId
+      process.env.REACT_APP_API_ROOT_RECOGNIZE + '/api/claps/organisation/' + orgId + '/record/' + recordId
     )
 }
 
