@@ -121,8 +121,8 @@ class AlgoliaService {
       this.index.search({
           query: inputValue,
           filters: this.makeOptionsFilters(hashtagOnly, wingsFamily),
-          attributesToRetrieve: ['type','name', 'name_translated', 'tag','picture', 'hashtags'],
-          restrictSearchableAttributes: ['name', 'name_translated', 'tag'],
+          attributesToRetrieve: ['type','name', 'name_translated', 'tag','picture', 'hashtags', 'description'],
+          restrictSearchableAttributes: ['name', 'name_translated', 'tag', 'description'],
           highlightPreTag: '<span>',
           highlightPostTag: '</span>',
           hitsPerPage: hitsParPage || 5
