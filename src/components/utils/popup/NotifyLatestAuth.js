@@ -42,13 +42,14 @@ class NotifyLatestAuth extends React.Component {
   }
 
   componentDidMount() {
-
-    Store.customRequest('getLatestMe')
-      .then((coLog => {
-        this.setState({ coLog: coLog });
-      })).catch(e => {
-        this.setState({ error: e });
-      });
+    if (this.props.authStore.isAuth()) {
+      Store.customRequest('getLatestMe')
+        .then((coLog => {
+          this.setState({ coLog: coLog });
+        })).catch(e => {
+          this.setState({ error: e });
+        });
+    }
   }
 
   handleClose = () => {
@@ -80,6 +81,6 @@ class NotifyLatestAuth extends React.Component {
   }
 }
 
-export default inject('commonStore')(observer(
+export default inject('commonStore', 'authStore')(observer(
   withStyles(style)(NotifyLatestAuth)
 ));
