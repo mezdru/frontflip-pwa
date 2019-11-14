@@ -31,7 +31,6 @@ class RoutesWithOrgTag extends React.Component {
 
     if(redirect404) return <Redirect to={'/' + locale + '/error/404/organisation'} push/>
     if (!render) return <CircularProgress color="secondary" style={{position: 'fixed', top: '45%', left:0, right:0, margin: 'auto'}} />;
-
     return (
       <Switch>
         {routes.map((route, i) => (
