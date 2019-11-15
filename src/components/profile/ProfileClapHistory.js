@@ -28,9 +28,9 @@ class ProfileClapHistory extends React.Component {
       }, 50);
 
       this.unsubUrlRecord = observe(this.props.commonStore.url, 'params', (change) => {
-        if (change.oldValue.recordTag !== change.newValue.recordTag && change.newValue.recordTag)
+        if (change.oldValue.recordTag !== change.newValue.recordTag && change.newValue.recordTag && this.props.recordStore.currentUrlRecord)
           setTimeout(() => {
-            this.getClapHistory(this.props.profileContext.getProp('_id'));
+            this.getClapHistory(this.props.recordStore.currentUrlRecord._id);
           }, 50);
       })
     // }
