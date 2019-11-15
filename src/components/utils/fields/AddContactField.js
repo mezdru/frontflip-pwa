@@ -83,6 +83,8 @@ class AddContactField extends React.Component {
         return 'comment';
       case 'landline':
         return 'phone-square';
+      case 'location':
+        return 'map-marker';
       default:
         return name;
     }
@@ -92,7 +94,7 @@ class AddContactField extends React.Component {
   render() {
     const {classes} = this.props;
     const {open} = this.state;
-    let linkName = ['email', 'phone', 'linkedin', 'twitter', 'facebook', 'github', 'link', 'workplace', 'workchat', 'landline']
+    let linkName = ['email', 'phone', 'linkedin', 'twitter', 'facebook', 'github', 'link', 'workplace', 'workchat', 'landline', 'location']
     
     return (
       <Grid container item  direction={'column'} alignItems={'center'}>
