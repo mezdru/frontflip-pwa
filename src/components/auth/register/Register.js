@@ -62,11 +62,6 @@ class Register extends React.Component {
               }
 
             }).catch((err) => {
-              console.log(err);
-              console.log(JSON.stringify(err))
-              console.log('---')
-              // console.log(err.response.body.message);
-
               if(err.response && err.response.body && err.response.body.message === 'Bad invitation code') {
                 this.setState({registerWarning: true});
                 this.setState({registerWarningMessage: this.props.intl.formatMessage({ id: 'signup.warning.badInvitationCode' }, { orgName: this.props.orgStore.currentOrganisation.name }) });
