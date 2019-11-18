@@ -4,6 +4,7 @@ import recordStore from './record.store';
 import LogRocket from 'logrocket';
 import Store from './store';
 import {asyncForEach} from '../services/utils.service';
+import undefsafe from 'undefsafe';
 
 class UserStore extends Store {
 
@@ -44,8 +45,12 @@ class UserStore extends Store {
       orgStore.fetchOrganisation(org._id);
     }
 
-    LogRocket.identify(user._id, {   
+    LogRocket.identify((undefsafe(user, 'email.value') || user._id), {   
       env: process.env.NODE_ENV,
+      organisation: undefsafe(orgStore.currentOrganisation, '_id'),
+      organisationTag: undefsafe(orgStore.currentOrganisation, 'tag'),
+      record: undefsafe(recordStore.currentUserRecord, '_id'),
+      recordTag: undefsafe(recordStore.currentUserRecord, 'tag')
     });
 
     return user;
