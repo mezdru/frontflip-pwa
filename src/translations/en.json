@@ -29,6 +29,7 @@
   "signup.error.shortPassword": "Your password is too short, could you make it 6 signs or more?",
   "signup.error.dumbPassword": "Your password is too simple: <strong>{dumbCount}</strong> people have the same! Could you make it harder to guess?",
   "signup.warning.forbiddenOrg": "<strong>Sorry</strong>, you cannot join {orgName}. You need an invitation, or the right email domain.<br/>Anyway, thank you for signing up! We just sent you an email to confirm your address, check your inbox...",
+  "signup.warning.badInvitationCode": "Your account is created but you cannot join {orgName}. Indeed, your invitation link is not longer valid. Please, ask someone for a new invitation link.<br/><br/> Anyway, thank you for signing up! We just sent you an email to confirm your address, check your inbox...",
   "signup.success": "<strong>Thank you</strong> for signing up! We just sent you an email to confirm your address, check your inbox...",
   "signup.error.generic": "Oh. That was an unexpected error from us. Could you refresh the page and retry?",
   "signup.error.userExists": "You already have an account. Could you sign in or <a href={forgotPasswordLink}>change your password</a>?",
