@@ -318,7 +318,7 @@ class SearchPage extends PureComponent {
           </Suspense>
         )}
 
-        {this.props.authStore.isAuth() && (
+        {this.props.authStore.isAuth() && currentOrganisation && (currentOrganisation.tag !== 'demo') && (
           <AskForHelpFab className={classes.fab} onClick={this.handleDisplayAskForHelp} highlighted={(searchFilters && searchFilters.length > 0 && searchResultsCount <= 10)} />
         )}
 
