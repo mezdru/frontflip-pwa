@@ -45,8 +45,9 @@ class UserStore extends Store {
       orgStore.fetchOrganisation(org._id);
     }
 
-    LogRocket.identify((undefsafe(user, 'email.value') || user._id), {   
+    LogRocket.identify(user._id, {
       env: process.env.NODE_ENV,
+      email: undefsafe(user.email, 'value'),
       organisation: undefsafe(orgStore.currentOrganisation, '_id'),
       organisationTag: undefsafe(orgStore.currentOrganisation, 'tag'),
       record: undefsafe(recordStore.currentUserRecord, '_id'),
