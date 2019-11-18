@@ -131,6 +131,10 @@
       manifestLink.href = '%PUBLIC_URL%/bouyguesrh/manifest.json';
       faviconLink.href = '%PUBLIC_URL%/bouyguesrh/favicon.ico';
       document.title = 'Bouygues RH';
+    } else if (window.location.href.search('demo') !== -1) {
+      manifestLink.href = '%PUBLIC_URL%/demo/manifest.json';
+      faviconLink.href = '%PUBLIC_URL%/demo/favicon.ico';
+      document.title = 'Demo Coffee Company';
     } else {
       manifestLink.href = '%PUBLIC_URL%/manifest.json';
       faviconLink.href = '%PUBLIC_URL%/favicon.ico';
