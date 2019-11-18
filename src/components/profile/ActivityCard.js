@@ -5,6 +5,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import Applause from '../../resources/icons/Applause';
 import { FormattedMessage } from 'react-intl';
+import ProfileService from '../../services/profile.service';
 
 const styles = theme => ({
   rootLink: {
@@ -54,7 +55,7 @@ const ActivityCard = React.memo(withStyles(styles)(({ picture, authorName, link,
       <Grid container item xs={10}>
         <Grid item xs={12} className={classes.textContainer}>
           <Typography variant="h1" className={classes.author} >
-            {authorName}
+            {ProfileService.htmlDecode(authorName)}
           </Typography>
           <Typography variant="body2" className={classes.date} >
             {moment(created).fromNow()}
@@ -66,7 +67,7 @@ const ActivityCard = React.memo(withStyles(styles)(({ picture, authorName, link,
             {'+' + given + ' '}
             <Applause className={classes.applauseIcon} />
             {' '}<FormattedMessage id="profile.activity.for" />{' '}
-            {hashtagDisplayedName}
+            {ProfileService.htmlDecode(hashtagDisplayedName)}
           </Typography>
         </Grid>
 

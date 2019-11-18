@@ -2,6 +2,7 @@ export const styles = theme => ({
   root: {
     padding: '6px 12px',
     cursor: 'pointer',
+    maxWidth: 'calc(100% - 12px)',
     margin: '16px 8px 0px 8px',
     borderRadius: 16,
     boxSizing: 'border-box',
@@ -96,6 +97,13 @@ export const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     whiteSpace: 'nowrap',
+    maxWidth: '100%',
+  },
+  labelContent: {
+    textOverflow: 'ellipsis',
+    width: '100%',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden'
   },
   clapRoot: {
     WebkitTouchCallout: 'none', /* iOS Safari */
