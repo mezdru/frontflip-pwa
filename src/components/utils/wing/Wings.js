@@ -96,7 +96,7 @@ class Wings extends React.PureComponent {
           </div>
         )}
         <span className={classes.label} onClick={this.props.onClick}>
-          <Typography variant="body1">
+          <Typography variant="body1" className={classes.labelContent}>
             {label}
           </Typography>
         </span>
