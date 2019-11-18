@@ -62,10 +62,18 @@ class Register extends React.Component {
               }
 
             }).catch((err) => {
+              console.log(err);
+              console.log(JSON.stringify(err))
+              console.log('---')
+              // console.log(err.response.body.message);
 
-              this.setState({ registerSuccess: true });
-              this.setState({ registerSuccessMessage: this.props.intl.formatMessage({ id: 'signup.warning.forbiddenOrg' }, { orgName: this.props.orgStore.currentOrganisation.name }) });
-
+              if(err.response && err.response.body && err.response.body.message === 'Bad invitation code') {
+                this.setState({registerWarning: true});
+                this.setState({registerWarningMessage: this.props.intl.formatMessage({ id: 'signup.warning.badInvitationCode' }, { orgName: this.props.orgStore.currentOrganisation.name }) });
+              } else {
+                this.setState({ registerSuccess: true });
+                this.setState({ registerSuccessMessage: this.props.intl.formatMessage({ id: 'signup.warning.forbiddenOrg' }, { orgName: this.props.orgStore.currentOrganisation.name }) });
+              }
             });
         } else {
 
@@ -115,7 +123,7 @@ class Register extends React.Component {
 
   render() {
     const { values, inProgress } = this.props.authStore;
-    let { registerErrors, registerSuccess, registerSuccessMessage, redirectTo } = this.state;
+    let { registerErrors, registerSuccess, registerSuccessMessage, redirectTo, registerWarning, registerWarningMessage } = this.state;
     let intl = this.props.intl;
 
     console.debug('%c Render Register.js', 'background-color: grey; padding: 6px 12px; border-radius: 5px; color: white;');
@@ -127,6 +135,14 @@ class Register extends React.Component {
         <Grid container item direction='column' spacing={16}>
           <Grid item>
             <SnackbarCustom variant="success" message={registerSuccessMessage} />
+          </Grid>
+        </Grid>
+      )
+    } else if (registerWarning) {
+      return (
+        <Grid container item direction='column' spacing={16}>
+          <Grid item>
+            <SnackbarCustom variant="warning" message={registerWarningMessage} />
           </Grid>
         </Grid>
       )
