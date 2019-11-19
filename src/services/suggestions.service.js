@@ -61,6 +61,9 @@ class SuggestionsService {
     // get common wings in organisation
     if(!query) {
       commonHits = (await AlgoliaService.fetchFacetValues(null, true, null, null)).facetHits;
+      commonHits = await this.upgradeData(commonHits);
+      commonHits = this.removeHiddenWings(commonHits);
+      if(featuredWingFamily) commonHits = commonHits.filter(s => s.hashtags && s.hashtags.some(h => h.tag === featuredWingFamily.tag));
     }
 
     suggestions = suggestions.concat(sameFamiliesHits.slice(0, 6));

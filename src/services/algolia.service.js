@@ -53,7 +53,7 @@ class AlgoliaService {
         query: query || '',
         facetQuery: '',
         filters: (filters ? filters : 'type:person'), // type:person
-        maxFacetHits: 40,
+        maxFacetHits: 100,
         facetFilters:( (lastSelection && privateOnly !== null) ? this.makeFacetFilters(lastSelection, privateOnly) : ''),
       }, (err, res) => {
         if(err) return resolve(res);
