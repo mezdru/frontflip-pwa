@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { Divider, SwipeableDrawer, IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, ListItemAvatar } from '@material-ui/core';
 import { ChevronLeft as ChevronLeftIcon } from '@material-ui/icons';
 import './header.css';
-import AvailabilityToggle from '../availabilityToggle/AvailabilityToggle';
 import { styles } from './Header.css.js'
 import Logo from '../utils/logo/Logo';
 import { injectIntl } from 'react-intl';
@@ -102,12 +101,6 @@ class HeaderDrawer extends Component {
                       </ListItem>
                       <ListItem button component={Link} to={'/' + locale + '/' + currentOrganisation.tag + '/' + currentUserRecord.tag} onClick={this.props.handleDrawerClose}>
                         <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.profile' })} />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.availability' })} />
-                        <ListItemSecondaryAction>
-                          <AvailabilityToggle />
-                        </ListItemSecondaryAction>
                       </ListItem>
                     </List>
                     <Divider className={classes.divider} />

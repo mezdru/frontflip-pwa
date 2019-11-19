@@ -5,7 +5,6 @@ import withWidth from '@material-ui/core/withWidth';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import '../../resources/stylesheets/font-awesome.min.css';
-import Availability from '../availabilityToggle/Availability';
 import Wings from '../utils/wing/Wings';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import ProfileService from '../../services/profile.service';
@@ -72,9 +71,6 @@ class CardProfile extends React.PureComponent {
               avatar={
                 <Grid item container>
                   <Grid item style={{ backgroundImage: `url(${ProfileService.getPicturePathResized(hit.picture, 'person ', this.getLogoSize()) || defaultPicture})` }} className={`${classes.logo} ${classes.backgroundLogo}`} />
-                  {((hit.personAvailability) && (hit.personAvailability !== 'unspecified')) ? <Grid item className={classes.dispo}>
-                    <Availability available={`${classes[hit.personAvailability]}`} />
-                  </Grid> : ''}
                 </Grid>
               }
               title={
