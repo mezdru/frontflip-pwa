@@ -33,15 +33,23 @@ class SuggestionsService {
 
       // get sisters wings & children
       if (wingSelected && wingSelected.hashtags && wingSelected.hashtags.length > 0) {
+        let endSuggestionsFamily = [];
         for (var i = 0; i < wingSelected.hashtags.length; i++) {
           let sameFamily = await AlgoliaService.fetchHashtags([wingSelected.hashtags[i], featuredWingFamily]);
-          sameFamiliesHits = sameFamiliesHits.concat(sameFamily.hits);
+          if(featuredWingFamily && wingSelected.hashtags[i].tag === featuredWingFamily.tag) {
+            // keep suggestions to add them at the end, because they are generic suggestions
+            endSuggestionsFamily = sameFamily.hits;
+          } else {
+            sameFamiliesHits = sameFamiliesHits.concat(sameFamily.hits);
+          }
         }
+        sameFamiliesHits = sameFamiliesHits.concat(endSuggestionsFamily);
         sameFamiliesHits = this.removeHiddenWings(sameFamiliesHits);
       }
 
       // get common wings in organisation with wingSelected if there is
       if (wingSelected && ! featuredWingFamily) {
+        // How to fetch facet values inside featuredWingFamily ?
         commonWithSelectedHits = (await AlgoliaService.fetchFacetValues(wingSelected, false, null, query)).facetHits;
       }
 
@@ -51,20 +59,33 @@ class SuggestionsService {
     }
 
     // get common wings in organisation
-    if(!query && ! featuredWingFamily)
-      commonHits = (await AlgoliaService.fetchFacetValues(null, false, null, null)).facetHits;
+    if(!query && !featuredWingFamily) {
+      commonHits = (await AlgoliaService.fetchFacetValues(null, true, null, null)).facetHits;
+    } else if(!query) {
+      console.log('get common wings in org');
+      commonHits = (await AlgoliaService.fetchFacetValues(null, true, null, null)).facetHits;
+      // then upgrade data & keep only featuredWings
+    }
+
+
+    console.log(sameFamiliesHits);
 
     suggestions = suggestions.concat(sameFamiliesHits.slice(0, 6));
     suggestions = suggestions.concat(commonWithSelectedHits.slice(0, 3));
     suggestions = suggestions.concat(commonHits.slice(0, (15 - suggestions.length)));
-
+    console.log(suggestions);
     if (suggestions.length <= 15) {
+      console.log('get classic options')
       let classicOptions = await AlgoliaService.fetchOptions(query, true, undefsafe(featuredWingFamily, 'tag'), 40);
       if (classicOptions) suggestions = suggestions.concat(classicOptions.hits);
     }
 
+
     suggestions = await this.upgradeData(suggestions);
     suggestions = this.removeHiddenWings(suggestions);
+
+    if(featuredWingFamily) suggestions = suggestions.filter(s => s.hashtags && s.hashtags.some(h => h.tag === featuredWingFamily.tag))
+    console.log(suggestions);
     return suggestions;
   }
 
