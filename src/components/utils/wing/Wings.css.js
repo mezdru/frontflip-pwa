@@ -60,13 +60,13 @@ export const styles = theme => ({
     }
   },
   buttonMode: {
-    backgroundColor: 'transparent',
-    border: '1px solid ' + theme.palette.secondary.dark,
+    backgroundColor: 'white',
+    border: '1px solid ' + theme.palette.secondary.main,
     '& p': {
-      color: theme.palette.secondary.dark,
+      color: theme.palette.secondary.main,
     },
     '&:hover': {
-      backgroundColor: 'rgba(50,50,50,.15)',
+      backgroundColor: 'rgba(50,50,50,.02)',
       boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)',
     }
   },

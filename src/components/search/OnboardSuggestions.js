@@ -123,6 +123,7 @@ class OnboardSuggestions extends React.Component {
         <Grid item className={classes.suggestionsContainer}>
           {userQuery && (
             <Wings
+              src={ProfileService.getPicturePath({emoji: '💬'})}
               label={this.props.intl.formatHTMLMessage({id: "onboard.createWing"}, {wingName: userQuery})}
               mode="button"
               onClick={this.handleCreateWing}
