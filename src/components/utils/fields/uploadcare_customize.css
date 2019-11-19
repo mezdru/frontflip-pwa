@@ -35,6 +35,19 @@
   box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 3px 1px -2px rgba(0,0,0,0.12);
 }
 
+.uploadcare--button_primary, .uploadcare--button_primary:focus {
+  background-color: #FF0018;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 3px 1px -2px rgba(0,0,0,0.12);
+  outline: none;
+}
+
+.uploadcare--button_primary:hover {
+  background-color: #BA0012;
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 3px 1px -2px rgba(0,0,0,0.12);
+}
+
 @media screen and (max-width: 600px) {
   .uploadcare--widget__button {
     width: 196px;
