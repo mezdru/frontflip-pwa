@@ -43,6 +43,7 @@ class OnboardSuggestions extends React.Component {
     suggestions: [],
     lastSelected: {}
   }
+  fetchSuggestionsAfterSelectInProgress = false;
 
   componentDidMount() {
     this.fetchSuggestions(null, this.props.wingsFamily);
@@ -51,12 +52,14 @@ class OnboardSuggestions extends React.Component {
     this.unsubscribeUserQuery = observe(this.props.searchStore.values, 'userQuery', () => {
       // If user write a word, we wait that he finishes before calling algolia.
       clearTimeout(timeout);
-      timeout = setTimeout(() => {this.fetchSuggestions(null, this.props.wingsFamily)}, SUGGESTIONS_QUERY_DELAY);
+      if(!this.fetchSuggestionsAfterSelectInProgress)
+        timeout = setTimeout(() => {this.fetchSuggestions(null, this.props.wingsFamily)}, SUGGESTIONS_QUERY_DELAY);
     });
 
     this.unsubscribeUserRecord = observe(record, (change) => {
       if(change.name === 'hashtags' && change.oldValue.length > change.newValue.length) {
         let lastRemoved = change.oldValue[change.oldValue.length - 1];
+        console.log('user record update');
         this.fetchSuggestions(lastRemoved, this.props.wingsFamily, true);
       }
     });
