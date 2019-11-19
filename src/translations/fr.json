@@ -104,7 +104,7 @@
   "action.addWings.add": "Ajoutez à votre profil",
   "action.addWings.search": "Cherchez dans {organisationName}",
   "action.addWings.text": "{wingsCount} trouvées",
-  "nobody.searchList": "Zut, il n'y a personne ici... pour le moment !",
+  "nobody.searchList": "Aucun résultat pour votre recherche.",
   "invitation.get.error": "Mince. Il y a une erreur de notre côté. Pouvez-vous rafraichir la page et rééssayer ? Si ca ne marche toujours pas, pouvez-vous <a href='mailto:contact@wingzy.com'>nous contacter</a> ?",
   "profile.activity.title": "Mes claps",
   "profile.activity.empty": "Oh, il n'y a pas encore de clap ici. Ne vous inquiétez pas, il y en aura plein très vite !",

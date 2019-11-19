@@ -104,7 +104,7 @@
   "action.addWings.add": "Add to my profile",
   "action.addWings.search": "Search {organisationName}",
   "action.addWings.text": "{wingsCount} found",
-  "nobody.searchList": "Ouch, there is no one here... yet!",
+  "nobody.searchList": "Your search returned no results.",
   "invitation.get.error": "Ouch, there was an error...",
   "profile.activity.title": "My claps",
   "profile.activity.empty": "Ow, there is no claps here yet. Don't worry, there will be plenty very soon!",

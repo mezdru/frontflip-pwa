@@ -11,7 +11,7 @@ const styles = theme => ({
     fontWeight: '600'
   },
   image: {
-    width: '47rem',
+    width: '100%',
     height: 'auto',
     [theme.breakpoints.down('xs')]: {
       width: '24rem',
@@ -23,12 +23,12 @@ const styles = theme => ({
 function SearchNoResults({ classes }) {
   return (
     <Grid container item justify={"center"} alignItems={'center'} direction={'column'}>
-      <Grid item>
+      <Grid item style={{left:0, right:0, margin: 'auto'}} xs={12} sm={8} md={6} lg={4}>
         <Typography variant="h4" className={classes.text} >
           <FormattedMessage id={"nobody.searchList"} />
         </Typography>
       </Grid>
-      <Grid item>
+      <Grid item style={{left:0, right:0, margin: 'auto'}} xs={12} sm={8} md={6} lg={4}>
         <img src={chat} alt={'chat'} className={classes.image} />
       </Grid>
     </Grid>
