@@ -124,7 +124,7 @@ class OnboardSuggestions extends React.Component {
           {userQuery && (
             <Wings
               src={ProfileService.getPicturePath({emoji: '💬'})}
-              label={this.props.intl.formatHTMLMessage({id: "onboard.createWing"}, {wingName: userQuery})}
+              label={this.props.intl.formatHTMLMessage({id: "onboard.createWing"}) + ' ' + ProfileService.htmlDecode(userQuery)}
               mode="button"
               onClick={this.handleCreateWing}
             />
