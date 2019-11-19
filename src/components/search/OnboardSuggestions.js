@@ -59,7 +59,6 @@ class OnboardSuggestions extends React.Component {
     this.unsubscribeUserRecord = observe(record, (change) => {
       if(change.name === 'hashtags' && change.oldValue.length > change.newValue.length) {
         let lastRemoved = change.oldValue[change.oldValue.length - 1];
-        console.log('user record update');
         this.fetchSuggestions(lastRemoved, this.props.wingsFamily, true);
       }
     });
