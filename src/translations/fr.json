@@ -128,5 +128,6 @@
   "popup.latestConnection.text": "Votre dernière connexion était sur {os} - {browser} à {city} ({region}) ({date})",
   "onboard.contacts.label.phone": "Téléphone mobile",
   "onboard.contacts.label.email": "Email",
-  "onboard.contacts.label.landline": "Télephone fixe"
+  "onboard.contacts.label.landline": "Télephone fixe",
+  "onboard.suggestions.loading": "Calcul des suggestions ..."
 }
