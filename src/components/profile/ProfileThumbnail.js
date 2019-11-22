@@ -10,7 +10,7 @@ import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 const ProfileThumbnail = React.memo(withProfileManagement(withStyles(styles)(({ classes, record, profileContext, ...props }) => {
   return (
     <Paper className={classes.main}>
-      <a href={profileContext.getBaseUrl() + '/onboard/intro/edit/' + profileContext.getProp('tag')} >
+      <a href={profileContext.isEditable ? profileContext.getBaseUrl() + '/onboard/intro/edit/' + profileContext.getProp('tag') : ''} >
         <Logo className={classes.profilePicture} src={ProfileService.getPicturePathResized(profileContext.getProp('picture'), 'person', '200x200')} type="person" />
       </a>
       <div className={classes.topOffset} ></div>
