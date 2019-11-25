@@ -129,5 +129,7 @@
   "onboard.contacts.label.phone": "Téléphone mobile",
   "onboard.contacts.label.email": "Email",
   "onboard.contacts.label.landline": "Télephone fixe",
-  "onboard.suggestions.loading": "Calcul des suggestions ..."
+  "onboard.suggestions.loading": "Calcul des suggestions ...",
+  "onboard.description.label": "Ma biographie en 50 mots",
+  "onboard.description.title": "Mon histoire"
 }
