@@ -90,7 +90,7 @@
   "onboard.welcome": "Bienvenue dans l'annuaire intelligent de ",
   "onboard.start": "Créer mon profil",
   "onboard.intro.name": "Mon prénom et mon nom",
-  "onboard.intro.intro": "Mon rôle chez {organisationName}",
+  "onboard.intro.intro": "Mon rôle",
   "onboard.userWings": "Mes {wingsCount} {familyName}",
   "onboard.noWings": "Utilisez le champs de texte et/ou les suggestions ci-dessus pour remplir votre profil. Créez toutes les compétences, expertises et passions que vous voulez partager avec vos collègues !",
   "onboard.welcome.text": "Pouvez-vous prendre 5 minutes pour révéler vos compétences, talents et énergies à tout le monde chez {organisationName}? Ça va beaucoup aider!",

@@ -90,7 +90,7 @@
   "onboard.welcome": "Welcome to the smart directory of ",
   "onboard.start": "Create my profile",
   "onboard.intro.name": "My full name",
-  "onboard.intro.intro": "My role(s) within {organisationName}",
+  "onboard.intro.intro": "My role(s)",
   "onboard.userWings": "My {wingsCount} {familyName}",
   "onboard.noWings": "Use the input field and/or the suggestions above to fill your profile. Create all the skills, expertise and passions you want to share with your coworkers !",
   "onboard.welcome.text": "Could you take 5 minutes to reveal your roles, skills, talents and energies to everyone within {organisationName}? It's going to help a lot!",
