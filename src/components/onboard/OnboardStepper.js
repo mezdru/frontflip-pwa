@@ -11,6 +11,7 @@ import Slide from '@material-ui/core/Slide';
 import OnboardIntro from './steps/OnboardIntro';
 import OnboardContacts from './steps/OnboardContacts';
 import OnboardWings from './steps/OnboardWings';
+import  OnboardDescription from './steps/OnboardDescription';
 import SlackService from '../../services/slack.service';
 import LoaderFeedback from '../utils/buttons/LoaderFeedback';
 
@@ -104,6 +105,7 @@ class OnboardStepper extends React.Component {
     switch (steps[activeStep]) {
       case 'intro': return OnboardIntro;
       case 'contacts': return OnboardContacts;
+      case 'description': return OnboardDescription;
       default: return OnboardWings;
     }
   }

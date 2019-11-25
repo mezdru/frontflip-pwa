@@ -129,5 +129,7 @@
   "onboard.contacts.label.phone": "Phone number",
   "onboard.contacts.label.email": "Email",
   "onboard.contacts.label.landline": "Landline",
-  "onboard.suggestions.loading": "Suggestions build..."
+  "onboard.suggestions.loading": "Suggestions build...",
+  "onboard.description.label": "My 50 words biography",
+  "onboard.description.title": "My story"
 }
