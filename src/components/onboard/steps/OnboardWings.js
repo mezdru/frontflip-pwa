@@ -62,11 +62,12 @@ class OnboardWings extends React.Component {
     this.props.handleSave(['hashtags']);
   }
 
-  buildHashtagsToAdd = (hashtagSelected) => {
+  buildHashtagsToAdd(hashtagSelected, userHashtags) {
     let hashtags = [];
     if(hashtagSelected.hashtags && hashtagSelected.hashtags.length > 0) {
       hashtagSelected.hashtags.forEach(hashtag => {
-        if(hashtag.autoAddWithChild) hashtags.push(hashtag);
+        if(hashtag.autoAddWithChild && (!userHashtags || !userHashtags.find(elt => elt.tag === hashtag.tag)) && (hashtag.tag !== hashtagSelected.tag) )
+          hashtags.push(hashtag);
       });
     }
     hashtags.push(hashtagSelected);
@@ -81,7 +82,7 @@ class OnboardWings extends React.Component {
     let hashtagRecord = await this.props.recordStore.fetchByTag(element.tag, this.props.orgStore.currentOrganisation._id).catch(e => { return null });
 
     if (hashtagRecord){
-      this.addAndSave(this.buildHashtagsToAdd(hashtagRecord));
+      this.addAndSave(this.buildHashtagsToAdd(hashtagRecord, record.hashtags));
     } else if (element.tag) {
       let newRecord = {
         tag: element.tag,
