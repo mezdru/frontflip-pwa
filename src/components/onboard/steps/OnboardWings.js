@@ -55,11 +55,23 @@ class OnboardWings extends React.Component {
 
   }
 
-  addAndSave = (hashtagRecord) => {
-    if (!hashtagRecord) return;
+  addAndSave = (hashtagRecords) => {
+    if (!hashtagRecords || !hashtagRecords.length || hashtagRecords.length < 1) return;
     let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
-    record.hashtags = record.hashtags.concat([hashtagRecord]);
+    record.hashtags = record.hashtags.concat(hashtagRecords);
     this.props.handleSave(['hashtags']);
+  }
+
+  buildHashtagsToAdd(hashtagSelected, userHashtags) {
+    let hashtags = [];
+    if(hashtagSelected.hashtags && hashtagSelected.hashtags.length > 0) {
+      hashtagSelected.hashtags.forEach(hashtag => {
+        if(hashtag.autoAddWithChild && (!userHashtags || !userHashtags.find(elt => elt.tag === hashtag.tag)) && (hashtag.tag !== hashtagSelected.tag) )
+          hashtags.push(hashtag);
+      });
+    }
+    hashtags.push(hashtagSelected);
+    return hashtags;
   }
 
   handleAddWing = async (element) => {
@@ -69,8 +81,9 @@ class OnboardWings extends React.Component {
 
     let hashtagRecord = await this.props.recordStore.fetchByTag(element.tag, this.props.orgStore.currentOrganisation._id).catch(e => { return null });
 
-    if (hashtagRecord) this.addAndSave(hashtagRecord);
-    else if (element.tag) {
+    if (hashtagRecord){
+      this.addAndSave(this.buildHashtagsToAdd(hashtagRecord, record.hashtags));
+    } else if (element.tag) {
       let newRecord = {
         tag: element.tag,
         name: element.name || (element.tag).substr(1),
