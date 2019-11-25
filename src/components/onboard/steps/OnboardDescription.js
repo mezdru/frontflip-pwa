@@ -35,6 +35,7 @@ class OnboardDescription extends React.Component {
   render() {
     const { classes } = this.props;
     let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
+    record.description = entities.decode(record.description);
 
     return (
         <Grid container item xs={12} spacing={16} direction="column" className={classes.root} >
