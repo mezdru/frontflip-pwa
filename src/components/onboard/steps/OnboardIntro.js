@@ -70,7 +70,7 @@ class OnboardIntro extends React.Component {
 
           <Grid item className={classes.field} >
             <TextField
-              label={this.props.intl.formatMessage({ id: 'onboard.intro.intro' }, { organisationName: this.props.orgStore.currentOrganisation.name })}
+              label={this.props.intl.formatMessage({ id: 'onboard.intro.intro' })}
               type="text"
               className={classes.field}
               fullWidth
