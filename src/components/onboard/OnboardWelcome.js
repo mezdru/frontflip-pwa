@@ -86,6 +86,7 @@ class OnboardWelcome extends React.Component {
 
   render() {
     const { currentOrganisation } = this.props.orgStore;
+    const { locale } = this.props.commonStore;
     const { classes } = this.props;
 
     return (
@@ -95,7 +96,11 @@ class OnboardWelcome extends React.Component {
             <FormattedMessage id={'onboard.welcome'} /> {entities.decode(currentOrganisation.name)}
           </Typography>
           <Grid item>
-            <FormattedHTMLMessage id="onboard.welcome.text" values={{ organisationName: entities.decode(currentOrganisation.name) }} />
+            {(currentOrganisation.onboardWelcome && currentOrganisation.onboardWelcome[locale]) ? (
+              <span dangerouslySetInnerHTML={{ __html: currentOrganisation.onboardWelcome[locale]}}></span>
+            ) : (
+              <FormattedHTMLMessage id="onboard.welcome.text" values={{ organisationName: entities.decode(currentOrganisation.name) }} />
+            )}
           </Grid>
           <Grid item>
             <Button onClick={this.props.handleEnterToOnboard} fullWidth color="secondary" ><FormattedMessage id={'onboard.start'} /></Button>
