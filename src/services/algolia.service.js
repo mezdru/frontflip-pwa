@@ -145,7 +145,7 @@ class AlgoliaService {
         page : page || 0,
         query: query || '',
         facetFilters: facetFilters || '',
-        filters: filters || 'type:person',
+        filters: filters || 'type:person AND welcomed=1',
         hitsPerPage: hitsPerPage || 30,
         attributesToSnippet: [
           "intro:"+15,

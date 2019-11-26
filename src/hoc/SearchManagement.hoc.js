@@ -29,7 +29,7 @@ const withSearchManagement = (ComponentToWrap) => {
 
     makeFiltersRequest = async () => {
       var currentFilters = commonStore.getSearchFilters();
-      var filterRequest = 'type:person';
+      var filterRequest = 'type:person AND welcomed=1';
       var queryRequest = '';
   
       currentFilters.forEach(filter => {
