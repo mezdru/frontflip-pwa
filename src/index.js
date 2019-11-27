@@ -19,6 +19,7 @@ import keenStore from './stores/keen.store';
 import HttpsRedirect from 'react-https-redirect';
 import { MuiThemeProvider } from "@material-ui/core";
 import theme from "./theme";
+import {subscribeUser} from './subscription';
 
 const stores = {
   authStore,
@@ -46,3 +47,4 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
 serviceWorker.register();
+subscribeUser();
