@@ -8,13 +8,25 @@ import ProfileWings from './ProfileWings';
 import ProfileActions from './ProfileActions';
 import { styles } from './ProfileLayout.css';
 import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
+import SkillsPropositionFab from '../utils/buttons/SkillsPropositionFab';
 
 const ProfileClapHistory = React.lazy(() => import('./ProfileClapHistory'));
+const ProposeSkills = React.lazy(() => import('../utils/popup/ProposeSkills'));
 
 class ProfileLayout extends React.Component {
 
+  state = {
+    showProposeSkills: false,
+    showManageProposedSkills: false
+  }
+
+  handleShowProposeSkills = () => {
+    this.setState({ showProposeSkills: true });
+  }
+
   render() {
     const { classes, visible, transitionDuration } = this.props;
+    const { showProposeSkills } = this.state;
 
     return (
       <Slide direction="up" in={visible} mountOnEnter unmountOnExit timeout={{ enter: transitionDuration, exit: transitionDuration / 2 }}>
@@ -51,6 +63,14 @@ class ProfileLayout extends React.Component {
             </Grid>
           </Grid>
 
+
+
+          <SkillsPropositionFab className={classes.skillsPropositionFab} onClick={this.handleShowProposeSkills} />
+
+
+          <Suspense fallback={<CircularProgress color='secondary' />}>
+            <ProposeSkills isOpen={showProposeSkills} style={{ zIndex: 99999 }} />
+          </Suspense>
 
         </Grid>
       </Slide>

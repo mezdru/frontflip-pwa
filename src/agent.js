@@ -347,6 +347,16 @@ const HelpRequest = {
     )
 }
 
+const SkillsProposition = {
+  post: (sp) =>
+  requests.post(
+    process.env.REACT_APP_API_ROOT + '/api/skillsPropositions',
+    {
+      skillsPropositions: sp
+    }
+  )
+}
+
 const ConnectionLog = {
   get: () =>
     requests.get(
@@ -368,5 +378,6 @@ export default {
   SearchLog,
   Clap,
   HelpRequest,
-  ConnectionLog
+  ConnectionLog,
+  SkillsProposition
 }

@@ -44,6 +44,7 @@ class PopupLayout extends React.Component {
         onClose={this.props.onClose}
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
+        style={this.props.style}
       >
         <DialogContent className={classes.content} >
           <IconButton className={classes.closeButton} onClick={this.props.onClose}>
