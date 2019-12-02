@@ -15,8 +15,6 @@ const withClapManagement = (ComponentToWrap) => {
     }
 
     handleClap = (recipient, hashtag,  given) => {
-      console.log('handle clap')
-      console.log({recipient, hashtag, given})
       if(!recipient || !hashtag || !this.props.recordStore.currentUserRecord) return;
       this.props.clapStore.setCurrentRecordId(recipient);
 

@@ -24,20 +24,23 @@ class ProposeSkills extends React.Component {
     open: this.props.isOpen,
     steps: ['Choose skills', 'Give claps on it'],
     activeStep: 0,
-    selectedSkills: []
+    selectedSkills: [],
+    error: null
   };
 
   handleNext = async () => {
-    if(this.state.activeStep === 1) {
+    let error = null;
+
+    if (this.state.activeStep === 1) {
       let sp = await this.props.skillsPropositionStore.postSkillsProposition({
-          organisation: this.props.orgStore.currentOrganisation._id,
-          hashtags: this.state.selectedSkills.map(elt => {return {_id: (elt._id ||elt.objectID)};}),
-          sender: this.props.recordStore.currentUserRecord._id,
-          recipient: this.props.profileContext.getProp('_id'),
-      }).catch(e => null);
-      if(sp) await EmailService.sendSkillsProposition(sp._id);
+        organisation: this.props.orgStore.currentOrganisation._id,
+        hashtags: this.state.selectedSkills.map(elt => { return { _id: (elt._id || elt.objectID) }; }),
+        sender: this.props.recordStore.currentUserRecord._id,
+        recipient: this.props.profileContext.getProp('_id'),
+      }).catch(e => {error = e; return null;});
+      if (sp) await EmailService.sendSkillsProposition(sp._id).catch(e => {error = e; return null;});
     }
-    this.setState({ activeStep: this.state.activeStep + 1 })
+    this.setState({ activeStep: this.state.activeStep + 1, error: error })
   };
 
   handleBack = () => {
@@ -52,7 +55,6 @@ class ProposeSkills extends React.Component {
   handleClose = () => this.setState({ open: false });
 
   onSelect = (selected) => {
-    console.log(selected)
     this.setState({ selectedSkills: this.state.selectedSkills.concat([selected]) });
   }
 
@@ -62,12 +64,12 @@ class ProposeSkills extends React.Component {
   }
 
   onDelete = (selectedId) => {
-    this.setState({selectedSkills: this.state.selectedSkills.filter(elt => (elt._id || elt.objectID) !== (selectedId))});
+    this.setState({ selectedSkills: this.state.selectedSkills.filter(elt => (elt._id || elt.objectID) !== (selectedId)) });
   }
 
   render() {
     const { classes, profileContext } = this.props;
-    const { steps, activeStep, selectedSkills } = this.state;
+    const { steps, activeStep, selectedSkills, error } = this.state;
     const { locale } = this.props.commonStore;
 
     return (
@@ -85,42 +87,59 @@ class ProposeSkills extends React.Component {
         actions={
           <div className={classes.actions}>
             <Button
-              disabled={activeStep === 0}
+              disabled={activeStep === 0 || activeStep === 2}
               onClick={this.handleBack}
               className={classes.buttons}
             >
               Back
               </Button>
-            <Button variant="contained" color="secondary" onClick={this.handleNext} className={classes.buttons} >
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-            </Button>
+            {activeStep < 2 ? (
+              <Button variant="contained" color="secondary" onClick={this.handleNext} className={classes.buttons} >
+                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              </Button>
+            ) : (
+                <Button variant="contained" color="secondary" onClick={this.handleClose} className={classes.buttons} >
+                  Close
+              </Button>
+              )}
           </div>
         }
         onClose={this.handleClose}
         style={this.props.style}
       >
-        <>
-          {activeStep === 0 && (
-            <Suspense fallback={<CircularProgress color="secondary" />}>
-              <Search mode="propose" onSelect={this.onSelect} handleCreateWing={this.onCreate} max={10} exclude={selectedSkills} />
-            </Suspense>
-          )}
+        {activeStep < 2 ? (
+          <>
+            {activeStep === 0 && (
+              <Suspense fallback={<CircularProgress color="secondary" />}>
+                <Search mode="propose" onSelect={this.onSelect} handleCreateWing={this.onCreate} max={10} exclude={selectedSkills} />
+              </Suspense>
+            )}
 
-          {/* Selected wings */}
-          <div className={classes.selectedSkillsContainer} >
-            {selectedSkills.map(selected =>
-              <Wings
-                key={selected.tag}
-                label={ProfileService.getWingDisplayedName(selected, locale)}
-                mode="profile"
-                recordId={profileContext.getProp('_id')}
-                hashtagId={selected._id || selected.objectID}
-                onDelete={activeStep === 0 ? () => this.onDelete(selected._id || selected.objectID) : null}
-                enableClap={activeStep === 1}
-              />
+            {/* Selected wings */}
+            <div className={classes.selectedSkillsContainer} >
+              {selectedSkills.map(selected =>
+                <Wings
+                  key={selected.tag}
+                  label={ProfileService.getWingDisplayedName(selected, locale)}
+                  mode="profile"
+                  recordId={profileContext.getProp('_id')}
+                  hashtagId={selected._id || selected.objectID}
+                  onDelete={activeStep === 0 ? () => this.onDelete(selected._id || selected.objectID) : null}
+                  enableClap={activeStep === 1}
+                />
+              )}
+            </div>
+          </>
+        ) : (
+          <div>
+            {error ? (
+              <>BRAVO!</>
+            ) : (
+              <>ECHEC!</>
             )}
           </div>
-        </>
+        )}
+
       </PopupLayout >
     );
   }
