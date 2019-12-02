@@ -11,7 +11,7 @@ import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 import SkillsPropositionFab from '../utils/buttons/SkillsPropositionFab';
 
 const ProfileClapHistory = React.lazy(() => import('./ProfileClapHistory'));
-const ProposeSkills = React.lazy(() => import('../utils/popup/ProposeSkills'));
+const ProposeSkills = React.lazy(() => import('../utils/popup/ProposeSkills/ProposeSkills'));
 
 class ProfileLayout extends React.Component {
 

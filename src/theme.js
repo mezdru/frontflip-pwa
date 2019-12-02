@@ -242,6 +242,14 @@ export default createMuiTheme({
         paddingBottom: 8,
       },
     },
+    MuiStepIcon: {
+      active: {
+        color: palette.secondary.main + ' !important'
+      },
+      completed: {
+        color: palette.secondary.main + ' !important'
+      }
+    },
     MuiMobileStepper: {
       dot: {
         backgroundColor: palette.primary.main,

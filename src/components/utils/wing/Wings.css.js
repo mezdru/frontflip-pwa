@@ -15,9 +15,9 @@ export const styles = theme => ({
   profileMode: {
     backgroundColor: '#FFFFFF',
     color: theme.palette.primary.dark,
-    '&:hover': {
-      boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'
-    }
+    // '&:hover': {
+    //   boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'
+    // }
   },
   personMode: {
     backgroundColor: theme.palette.primary.dark,

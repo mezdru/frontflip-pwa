@@ -32,7 +32,8 @@ const styles = theme => ({
     marginLeft: -8,
     overflow: 'hidden',
     position: 'relative',
-    width: '100%'
+    width: '100%',
+    textAlign: 'left'
   },
   loaderContainer: {
     position: 'absolute',
@@ -94,6 +95,13 @@ class OnboardSuggestions extends React.Component {
   }
 
   shouldDisplaySuggestion = (suggestion) => {
+    if(this.props.mode === 'propose') {
+      return (
+        (!this.props.exclude.find(wing => wing.tag === (suggestion.tag || suggestion.value))) &&
+        (suggestion.tag !== this.state.lastSelected.tag)
+      );
+    }
+
     let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
     return (
       (!record.hashtags.find(wing => wing.tag === (suggestion.tag || suggestion.value))) &&
@@ -107,9 +115,9 @@ class OnboardSuggestions extends React.Component {
       (this.state.suggestions.length === 0 && nextState.suggestions.length === 0)
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.fetchSuggestions(null, nextProps.wingsFamily);
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   this.fetchSuggestions(null, nextProps.wingsFamily);
+  // }
 
   handleSelectSuggestion = (suggestion) => {
     this.fetchSuggestionsAfterSelectInProgress = true;

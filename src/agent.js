@@ -284,6 +284,10 @@ const Email = {
   sendHelpRequest: (hrId) =>
     requests.post(
       API_ROOT + '/api/emails/helpRequest/' + hrId
+    ),
+  sendSkillsProposition: (spId) =>
+    requests.post(
+      API_ROOT + '/api/emails/skillsProposition/' + spId
     )
 }
 
@@ -352,7 +356,7 @@ const SkillsProposition = {
   requests.post(
     process.env.REACT_APP_API_ROOT + '/api/skillsPropositions',
     {
-      skillsPropositions: sp
+      skillsProposition: sp
     }
   )
 }

@@ -115,7 +115,7 @@ class ProfileProvider extends React.Component {
 
   isWingsDisplayed = (wingsId) => {
     if(!this.state.filteredWings) return true;
-    if(this.state.filteredWings.length === 0 ) return false;
+    if(this.state.filteredWings.length === 0 || !wingsId) return false;
 
     let res = false;
 
