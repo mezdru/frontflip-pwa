@@ -353,12 +353,16 @@ const HelpRequest = {
 
 const SkillsProposition = {
   post: (sp) =>
-  requests.post(
-    process.env.REACT_APP_API_ROOT + '/api/skillsPropositions',
-    {
-      skillsProposition: sp
-    }
-  )
+    requests.post(
+      process.env.REACT_APP_API_ROOT + '/api/skillsPropositions',
+      {
+        skillsProposition: sp
+      }
+    ),
+  getOne: (spId) =>
+    requests.get(
+      API_ROOT + '/api/skillsPropositions/' + spId
+    ),
 }
 
 const ConnectionLog = {

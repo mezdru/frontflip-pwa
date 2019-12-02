@@ -87,6 +87,7 @@ export const routes = [
           },
           {
             path: [
+              "/:locale(en|fr|en-UK)/:orgTag/:recordTag/:action(skillsProposition|other)/:actionId",
               "/:locale(en|fr|en-UK)/:orgTag/:hashtags/:action",
               "/:locale(en|fr|en-UK)/:orgTag/congrats",
               "/:locale(en|fr|en-UK)/:orgTag/:recordTag?"

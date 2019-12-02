@@ -1,16 +1,13 @@
 import React, { Suspense } from 'react';
 import Button from '@material-ui/core/Button';
-import { Redirect } from 'react-router-dom';
-import { withStyles, Typography, Hidden, CircularProgress, Stepper, Step, StepLabel } from '@material-ui/core';
+import { withStyles, CircularProgress, Stepper, Step, StepLabel } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { FormattedMessage } from 'react-intl';
 import ReactGA from 'react-ga';
 
 import Wings from '../../wing/Wings';
 import ProfileService from '../../../../services/profile.service';
-import SlackService from '../../../../services/slack.service';
 import PopupLayout from '../PopupLayout';
-import { getBaseUrl } from '../../../../services/utils.service';
 import { styles } from './ProposeSkills.css';
 import { withProfileManagement } from '../../../../hoc/profile/withProfileManagement';
 import EmailService from '../../../../services/email.service';
@@ -132,7 +129,7 @@ class ProposeSkills extends React.Component {
           </>
         ) : (
           <div>
-            {error ? (
+            {!error ? (
               <>BRAVO!</>
             ) : (
               <>ECHEC!</>

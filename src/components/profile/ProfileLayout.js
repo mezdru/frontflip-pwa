@@ -9,9 +9,10 @@ import ProfileActions from './ProfileActions';
 import { styles } from './ProfileLayout.css';
 import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
 import SkillsPropositionFab from '../utils/buttons/SkillsPropositionFab';
+import AcceptSkills from '../utils/popup/SkillsProposition/AcceptSkills';
 
 const ProfileClapHistory = React.lazy(() => import('./ProfileClapHistory'));
-const ProposeSkills = React.lazy(() => import('../utils/popup/ProposeSkills/ProposeSkills'));
+const ProposeSkills = React.lazy(() => import('../utils/popup/SkillsProposition/ProposeSkills'));
 
 class ProfileLayout extends React.Component {
 
@@ -27,6 +28,7 @@ class ProfileLayout extends React.Component {
   render() {
     const { classes, visible, transitionDuration } = this.props;
     const { showProposeSkills } = this.state;
+    const {url} = this.props.commonStore;
 
     return (
       <Slide direction="up" in={visible} mountOnEnter unmountOnExit timeout={{ enter: transitionDuration, exit: transitionDuration / 2 }}>
@@ -71,6 +73,10 @@ class ProfileLayout extends React.Component {
           <Suspense fallback={<CircularProgress color='secondary' />}>
             <ProposeSkills isOpen={showProposeSkills} style={{ zIndex: 99999 }} />
           </Suspense>
+
+          {url.params.action === 'skillsProposition' && url.params.actionId && (
+            <AcceptSkills skillsPropositionId={url.params.actionId} isOpen={true} style={{zIndex: 99999}} />
+          )}
 
         </Grid>
       </Slide>

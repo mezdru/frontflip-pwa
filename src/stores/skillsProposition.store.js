@@ -14,10 +14,16 @@ class SkillsPropositionStore extends Store {
     this.skillsProposition = skillsProposition;
     return skillsProposition;
   }
+
+  async fetchSkillsProposition(spId) {
+    this.skillsProposition = await super.fetchResource(spId);
+    return this.skillsProposition;
+  }
 }
 
 decorate(SkillsPropositionStore, {
   postSkillsProposition: action,
+  fetchSkillsProposition: action,
   skillsProposition: observable
 });
 
