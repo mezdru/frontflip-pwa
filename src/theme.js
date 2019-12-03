@@ -202,12 +202,19 @@ export default createMuiTheme({
     },
     MuiPaper: {
       root: {
-        padding: '16px'
+        padding: '16px',
+        transition: 'all 0.3s cubic-bezier(.25,.8,.25,1)',
       }
     },
     MuiDialog: {
       paper: {
-        margin: 16
+        margin: 16,
+        // padding: '16px 24px'
+      }
+    },
+    MuiDialogTitle: {
+      root: {
+        padding: 16
       }
     },
     //Inputs

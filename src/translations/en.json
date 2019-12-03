@@ -131,5 +131,14 @@
   "onboard.contacts.label.landline": "Landline",
   "onboard.suggestions.loading": "Suggestions build...",
   "onboard.description.label": "My 50 words biography",
-  "onboard.description.title": "My story"
+  "onboard.description.title": "My story",
+  "skillsProposition.manage.accept": "Accept",
+  "skillsProposition.manage.refuse": "Refuse",
+  "skillsProposition.manage.title": "{senderName} vous a proposé ces compétences :",
+  "skillsProposition.propose.step1": "Quelles compétences voulez-vous proposer ?",
+  "skillsProposition.propose.step2": "Donnez déjà des Claps à {recipientName}",
+  "skillsProposition.propose.close": "Close",
+  "skillsProposition.propose.send": "Send",
+  "skillsProposition.propose.next": "Next",
+  "skillsProposition.propose.back": "Back"
 }

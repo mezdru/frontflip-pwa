@@ -74,9 +74,9 @@ class ProfileLayout extends React.Component {
             <ProposeSkills isOpen={showProposeSkills} style={{ zIndex: 99999 }} />
           </Suspense>
 
-          {url.params.action === 'skillsProposition' && url.params.actionId && (
+          {/* {url.params.action === 'skillsProposition' && url.params.actionId && ( */}
             <AcceptSkills skillsPropositionId={url.params.actionId} isOpen={true} style={{zIndex: 99999}} />
-          )}
+          {/* )} */}
 
         </Grid>
       </Slide>

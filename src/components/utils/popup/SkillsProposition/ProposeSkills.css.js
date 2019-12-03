@@ -1,3 +1,5 @@
+import green from '@material-ui/core/colors/green';
+
 export const styles = theme => ({
   text: {
     margin: 0,
@@ -33,7 +35,13 @@ export const styles = theme => ({
     borderRadius: 4,
     padding : '16px 8px',
     paddingTop: 0,
-    minHeight: 112,
+    minHeight: 64,
     textAlign: 'left'
+  },
+  successIcon: {
+    color: green[600]
+  },
+  failedIcon: {
+    color: theme.palette.error.dark
   }
 });

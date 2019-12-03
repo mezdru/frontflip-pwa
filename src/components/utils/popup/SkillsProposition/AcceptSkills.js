@@ -4,13 +4,16 @@ import { withStyles } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import { FormattedMessage } from "react-intl";
 import ReactGA from "react-ga";
-
+import undefsafe from "undefsafe";
 import Wings from "../../wing/Wings";
 import ProfileService from "../../../../services/profile.service";
 import PopupLayout from "../PopupLayout";
 import { styles } from "./ProposeSkills.css";
 import EmailService from "../../../../services/email.service";
 import { getUnique, getClone } from "../../../../services/utils.service";
+import { CheckCircle, Error } from "@material-ui/icons";
+const Entities = require("html-entities").XmlEntities;
+const entities = new Entities();
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
@@ -18,7 +21,8 @@ class AcceptSkills extends React.Component {
   state = {
     open: this.props.isOpen,
     error: null,
-    ready: false
+    ready: false,
+    success: false
   };
 
   componentDidMount() {
@@ -37,18 +41,20 @@ class AcceptSkills extends React.Component {
       this.setState({ open: nextProps.isOpen });
   }
 
-  handleAccept = () => {
+  handleAccept = async () => {
     let hashtags = getClone(
       this.props.recordStore.currentUserRecord.hashtags.concat(
         this.props.skillsPropositionStore.skillsProposition.hashtags
       )
     );
 
-    this.props.recordStore.updateRecord(
+    await this.props.recordStore.updateRecord(
       this.props.recordStore.currentUserRecord._id,
       ["hashtags"],
       { hashtags: getUnique(hashtags, "_id") }
     );
+
+    this.setState({ success: true });
   };
 
   handleClose = () => this.setState({ open: false });
@@ -62,7 +68,7 @@ class AcceptSkills extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { ready, error } = this.state;
+    const { ready, error, success } = this.state;
     const { locale } = this.props.commonStore;
     const { skillsProposition } = this.props.skillsPropositionStore;
 
@@ -71,11 +77,26 @@ class AcceptSkills extends React.Component {
     return (
       <PopupLayout
         isOpen={this.state.open}
-        title={<div>HELLO</div>}
+        title={
+          ready &&
+          !error &&
+          !success && (
+            <div>
+              <FormattedMessage
+                id="skillsProposition.manage.title"
+                values={{
+                  senderName: entities.decode(
+                    undefsafe(skillsProposition, "sender.name")
+                  )
+                }}
+              />
+            </div>
+          )
+        }
         actions={
           <div className={classes.actions}>
             <Button onClick={this.handleClose} className={classes.buttons}>
-              Refuse
+              <FormattedMessage id="skillsProposition.manage.refuse" />
             </Button>
             <Button
               variant="contained"
@@ -83,26 +104,45 @@ class AcceptSkills extends React.Component {
               onClick={this.handleAccept}
               className={classes.buttons}
             >
-              Accept
+              <FormattedMessage id="skillsProposition.manage.accept" />
             </Button>
           </div>
         }
         onClose={this.handleClose}
         style={this.props.style}
       >
-        {/* Selected wings */}
-        <div className={classes.selectedSkillsContainer}>
-          {skillsProposition &&
-            skillsProposition.hashtags &&
-            skillsProposition.hashtags.map(selected => (
-              <Wings
-                key={selected.tag}
-                label={ProfileService.getWingDisplayedName(selected, locale)}
-                mode="profile"
-                onDelete={() => this.onDelete(selected._id)}
-              />
-            ))}
-        </div>
+        {ready && !error && !success ? (
+          <div className={classes.selectedSkillsContainer}>
+            {skillsProposition &&
+              skillsProposition.hashtags &&
+              skillsProposition.hashtags.map(selected => (
+                <Wings
+                  key={selected.tag}
+                  label={ProfileService.getWingDisplayedName(selected, locale)}
+                  mode="profile"
+                  onDelete={() => this.onDelete(selected._id)}
+                />
+              ))}
+          </div>
+        ) : (
+          <>
+            {!error && success ? (
+              <>
+                <CheckCircle fontSize="large" className={classes.successIcon} />
+                <br />
+                <FormattedMessage id="skillsProposition.manage.success" />
+              </>
+            ) : (
+              <>
+                <Error fontSize="large" className={classes.failedIcon} />
+                <br />
+                <FormattedMessage id="skillsProposition.manage.error" />
+                <br />
+                {error.message}
+              </>
+            )}
+          </>
+        )}
       </PopupLayout>
     );
   }
