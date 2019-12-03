@@ -1,5 +1,6 @@
 import Store from "./store";
 import { observable, action, decorate } from "mobx";
+import orgStore from './organisation.store';
 
 class SkillsPropositionStore extends Store {
   skillsProposition = {};
@@ -18,7 +19,12 @@ class SkillsPropositionStore extends Store {
     this.skillsProposition = await super.fetchResource(spId);
     return this.skillsProposition;
   }
-}
+
+  async updateSkillsPropositionStatus(spId) {
+    let spUpdated = await super.updateResource(spId, {status: 'accepted'}, orgStore.currentOrganisation._id);
+    this.skillsProposition = spUpdated;
+    return this.skillsProposition;
+  }}
 
 decorate(SkillsPropositionStore, {
   postSkillsProposition: action,

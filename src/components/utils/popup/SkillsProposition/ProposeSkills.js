@@ -202,7 +202,14 @@ class ProposeSkills extends React.Component {
               <>
                 <CheckCircle fontSize="large" className={classes.successIcon} />
                 <br />
-                <FormattedMessage id="skillsProposition.propose.success" />
+                <FormattedMessage
+                  id="skillsProposition.propose.success"
+                  values={{
+                    recipientName: entities.decode(
+                      profileContext.getProp("name")
+                    )
+                  }}
+                />
               </>
             ) : (
               <>

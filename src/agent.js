@@ -363,6 +363,14 @@ const SkillsProposition = {
     requests.get(
       API_ROOT + '/api/skillsPropositions/' + spId
     ),
+  put: (orgId, spId, sp) =>
+    requests.put(
+      API_ROOT + '/api/skillsPropositions/' + spId,
+      {
+        orgId: orgId,
+        skillsProposition: sp
+      }
+    ),
 }
 
 const ConnectionLog = {

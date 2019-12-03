@@ -55,6 +55,10 @@ class AcceptSkills extends React.Component {
     );
 
     this.setState({ success: true });
+
+    this.props.skillsPropositionStore.updateSkillsPropositionStatus(
+      this.props.skillsPropositionStore.skillsProposition._id
+    );
   };
 
   handleClose = () => this.setState({ open: false });

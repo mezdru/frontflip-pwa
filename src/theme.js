@@ -86,14 +86,7 @@ export default createMuiTheme({
       root: {
         height: "56px",
         fontWeight: "600",
-        transition: 'all 250ms',
         padding: '8px 24px',
-      },
-      contained: {
-        '&:hover': {
-          backgroundColor: palette.secondary.dark,
-          color: 'white',
-        }
       },
       text: {
         color: "darkgrey",

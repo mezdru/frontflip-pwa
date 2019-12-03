@@ -140,5 +140,7 @@
   "skillsProposition.propose.close": "Close",
   "skillsProposition.propose.send": "Send",
   "skillsProposition.propose.next": "Next",
-  "skillsProposition.propose.back": "Back"
+  "skillsProposition.propose.back": "Back",
+  "skillsProposition.propose.success": "Merci ! Vous serez informé si {recipientName} accepte ces compétences.",
+  "skillsProposition.manage.success": "Les compétences proposées par {senderName} ont été ajoutées à votre profil !"
 }
