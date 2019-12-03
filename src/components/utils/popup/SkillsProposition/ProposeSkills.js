@@ -128,31 +128,32 @@ class ProposeSkills extends React.Component {
         }
         actions={
           <div className={classes.actions}>
-            <Button
-              disabled={activeStep === 0 || activeStep === 2}
-              onClick={this.handleBack}
-              className={classes.buttons}
-            >
-              <FormattedMessage id="skillsProposition.propose.back" />
-            </Button>
             {activeStep < 2 ? (
-              <Button
-                disabled={!(selectedSkills && selectedSkills.length > 0)}
-                variant="contained"
-                color="secondary"
-                onClick={this.handleNext}
-                className={classes.buttons}
-              >
-                {activeStep === steps.length - 1 ? (
-                  <FormattedMessage id="skillsProposition.propose.send" />
-                ) : (
-                  <FormattedMessage id="skillsProposition.propose.next" />
-                )}
-              </Button>
+              <>
+                <Button
+                  disabled={activeStep === 0}
+                  onClick={this.handleBack}
+                  className={classes.buttons}
+                >
+                  <FormattedMessage id="skillsProposition.propose.back" />
+                </Button>
+                <Button
+                  disabled={!(selectedSkills && selectedSkills.length > 0)}
+                  variant="contained"
+                  color="secondary"
+                  onClick={this.handleNext}
+                  className={classes.buttons}
+                >
+                  {activeStep === steps.length - 1 ? (
+                    <FormattedMessage id="skillsProposition.propose.send" />
+                  ) : (
+                    <FormattedMessage id="skillsProposition.propose.next" />
+                  )}
+                </Button>
+              </>
             ) : (
               <Button
                 variant="contained"
-                color="secondary"
                 onClick={this.handleClose}
                 className={classes.buttons}
               >

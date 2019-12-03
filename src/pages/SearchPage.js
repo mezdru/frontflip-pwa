@@ -292,9 +292,11 @@ class SearchPage extends PureComponent {
     ReactGA.event({ category: "User", action: "Display profile" });
     this.props.profileContext.setProfileData(recordTag);
     let pathNameExploded = window.location.pathname.split("/");
-    let redirectTo = pathNameExploded.some(elt => elt === recordTag)
-      ? null
-      : getBaseUrl(this.props) + "/" + recordTag;
+    let redirectTo =
+      pathNameExploded.some(elt => elt === recordTag) &&
+      this.props.commonStore.url.params.action
+        ? null
+        : getBaseUrl(this.props) + "/" + recordTag;
     this.setState({ visible: true, redirectTo: redirectTo });
   };
 

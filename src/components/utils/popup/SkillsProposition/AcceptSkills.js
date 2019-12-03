@@ -5,13 +5,19 @@ import { inject, observer } from "mobx-react";
 import { FormattedMessage } from "react-intl";
 import ReactGA from "react-ga";
 import undefsafe from "undefsafe";
+import { Redirect } from "react-router-dom";
+import { CheckCircle, Error } from "@material-ui/icons";
+
 import Wings from "../../wing/Wings";
 import ProfileService from "../../../../services/profile.service";
 import PopupLayout from "../PopupLayout";
 import { styles } from "./ProposeSkills.css";
-import EmailService from "../../../../services/email.service";
-import { getUnique, getClone } from "../../../../services/utils.service";
-import { CheckCircle, Error } from "@material-ui/icons";
+import {
+  getUnique,
+  getClone,
+  getBaseUrl
+} from "../../../../services/utils.service";
+
 const Entities = require("html-entities").XmlEntities;
 const entities = new Entities();
 
@@ -57,11 +63,28 @@ class AcceptSkills extends React.Component {
     this.setState({ success: true });
 
     this.props.skillsPropositionStore.updateSkillsPropositionStatus(
-      this.props.skillsPropositionStore.skillsProposition._id
+      this.props.skillsPropositionStore.skillsProposition._id,
+      "accepted"
     );
   };
 
-  handleClose = () => this.setState({ open: false });
+  handleRefuse = () => {
+    this.props.skillsPropositionStore.updateSkillsPropositionStatus(
+      this.props.skillsPropositionStore.skillsProposition._id,
+      "refused"
+    );
+    this.handleClose();
+  };
+
+  handleClose = () => {
+    this.setState({
+      open: false,
+      redirectTo:
+        getBaseUrl(this.props) +
+        "/" +
+        this.props.commonStore.url.params.recordTag
+    });
+  };
 
   onDelete = selectedId => {
     this.props.skillsPropositionStore.skillsProposition.hashtags = this.props.skillsPropositionStore.skillsProposition.hashtags.filter(
@@ -72,11 +95,13 @@ class AcceptSkills extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { ready, error, success } = this.state;
+    const { ready, error, success, redirectTo } = this.state;
     const { locale } = this.props.commonStore;
     const { skillsProposition } = this.props.skillsPropositionStore;
 
     if (!ready && !error) return null;
+
+    if (redirectTo) return <Redirect to={redirectTo} />;
 
     return (
       <PopupLayout
@@ -99,17 +124,25 @@ class AcceptSkills extends React.Component {
         }
         actions={
           <div className={classes.actions}>
-            <Button onClick={this.handleClose} className={classes.buttons}>
-              <FormattedMessage id="skillsProposition.manage.refuse" />
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={this.handleAccept}
-              className={classes.buttons}
-            >
-              <FormattedMessage id="skillsProposition.manage.accept" />
-            </Button>
+            {ready && !error && !success ? (
+              <>
+                <Button onClick={this.handleRefuse} className={classes.buttons}>
+                  <FormattedMessage id="skillsProposition.manage.refuse" />
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={this.handleAccept}
+                  className={classes.buttons}
+                >
+                  <FormattedMessage id="skillsProposition.manage.accept" />
+                </Button>
+              </>
+            ) : (
+              <Button onClick={this.handleClose} className={classes.buttons}>
+                <FormattedMessage id="skillsProposition.manage.close" />
+              </Button>
+            )}
           </div>
         }
         onClose={this.handleClose}
@@ -134,7 +167,14 @@ class AcceptSkills extends React.Component {
               <>
                 <CheckCircle fontSize="large" className={classes.successIcon} />
                 <br />
-                <FormattedMessage id="skillsProposition.manage.success" />
+                <FormattedMessage
+                  id="skillsProposition.manage.success"
+                  values={{
+                    senderName: entities.decode(
+                      undefsafe(skillsProposition, "sender.name")
+                    )
+                  }}
+                />
               </>
             ) : (
               <>

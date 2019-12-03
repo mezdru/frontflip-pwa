@@ -9,9 +9,11 @@ import ProfileActions from "./ProfileActions";
 import { styles } from "./ProfileLayout.css";
 import { withProfileManagement } from "../../hoc/profile/withProfileManagement";
 import SkillsPropositionFab from "../utils/buttons/SkillsPropositionFab";
-import AcceptSkills from "../utils/popup/SkillsProposition/AcceptSkills";
 
 const ProfileClapHistory = React.lazy(() => import("./ProfileClapHistory"));
+const AcceptSkills = React.lazy(() =>
+  import("../utils/popup/SkillsProposition/AcceptSkills")
+);
 const ProposeSkills = React.lazy(() =>
   import("../utils/popup/SkillsProposition/ProposeSkills")
 );
@@ -26,10 +28,20 @@ class ProfileLayout extends React.Component {
     this.setState({ showProposeSkills: true });
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.visible !== nextProps.visible) {
+      this.setState({
+        showProposeSkills: false
+      });
+    }
+  }
+
   render() {
     const { classes, visible, transitionDuration } = this.props;
     const { showProposeSkills } = this.state;
     const { url } = this.props.commonStore;
+
+    console.log("", this.state);
 
     return (
       <Slide
@@ -97,19 +109,23 @@ class ProfileLayout extends React.Component {
             onClick={this.handleShowProposeSkills}
           />
 
-          <Suspense fallback={<CircularProgress color="secondary" />}>
-            <ProposeSkills
-              isOpen={showProposeSkills}
-              style={{ zIndex: 99999 }}
-            />
-          </Suspense>
+          {showProposeSkills && (
+            <Suspense fallback={<></>}>
+              <ProposeSkills
+                isOpen={showProposeSkills}
+                style={{ zIndex: 99999 }}
+              />
+            </Suspense>
+          )}
 
           {url.params.action === "skillsProposition" && url.params.actionId && (
-            <AcceptSkills
-              skillsPropositionId={url.params.actionId}
-              isOpen={true}
-              style={{ zIndex: 99999 }}
-            />
+            <Suspense fallback={<></>}>
+              <AcceptSkills
+                skillsPropositionId={url.params.actionId}
+                isOpen={true}
+                style={{ zIndex: 99999 }}
+              />
+            </Suspense>
           )}
         </Grid>
       </Slide>

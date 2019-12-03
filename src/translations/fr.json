@@ -134,6 +134,7 @@
   "onboard.description.title": "Mon histoire",
   "skillsProposition.manage.accept": "Accepter",
   "skillsProposition.manage.refuse": "Refuser",
+  "skillsProposition.manage.close": "Fermer",
   "skillsProposition.manage.title": "{senderName} vous a proposé ces compétences :",
   "skillsProposition.propose.step1": "Quelles compétences voulez-vous proposer ?",
   "skillsProposition.propose.step2": "Donnez déjà des Claps à {recipientName}",

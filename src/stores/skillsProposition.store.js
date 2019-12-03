@@ -20,8 +20,8 @@ class SkillsPropositionStore extends Store {
     return this.skillsProposition;
   }
 
-  async updateSkillsPropositionStatus(spId) {
-    let spUpdated = await super.updateResource(spId, {status: 'accepted'}, orgStore.currentOrganisation._id);
+  async updateSkillsPropositionStatus(spId, status) {
+    let spUpdated = await super.updateResource(spId, {status: status}, orgStore.currentOrganisation._id);
     this.skillsProposition = spUpdated;
     return this.skillsProposition;
   }}
