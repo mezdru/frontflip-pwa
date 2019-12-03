@@ -1,7 +1,6 @@
 import Store from "./store";
 import { observable, action, decorate } from "mobx";
 
-
 class SkillsPropositionStore extends Store {
   skillsProposition = {};
 
