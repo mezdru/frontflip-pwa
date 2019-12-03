@@ -41,8 +41,6 @@ class ProfileLayout extends React.Component {
     const { showProposeSkills } = this.state;
     const { url } = this.props.commonStore;
 
-    console.log("", this.state);
-
     return (
       <Slide
         direction="up"
