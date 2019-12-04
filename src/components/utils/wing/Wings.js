@@ -84,9 +84,11 @@ class Wings extends React.PureComponent {
     const { classes, label, src, enableClap, onDelete } = this.props;
     const { addClapCounterLocal, intervalDuration, canClap } = this.state;
     const remoteClaps = this.props.mode === 'profile' ?  this.props.getClapCount(this.props.hashtagId) || this.props.claps : this.props.claps;
-    let claps = addClapCounterLocal + remoteClaps;
+    let claps = addClapCounterLocal + (remoteClaps || 0);
     claps = (claps > 0 ? claps : null);
     const classMode = this.getClasseByMode();
+    // console.log({addClapCounterLocal, remoteClaps, claps})
+    // console.log('wings : ' + label + ' can clap ? ' + canClap);
     
     return (
       <div className={classNames(classes.root, classMode)} >

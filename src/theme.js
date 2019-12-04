@@ -86,14 +86,7 @@ export default createMuiTheme({
       root: {
         height: "56px",
         fontWeight: "600",
-        transition: 'all 250ms',
         padding: '8px 24px',
-      },
-      contained: {
-        '&:hover': {
-          backgroundColor: palette.secondary.dark,
-          color: 'white',
-        }
       },
       text: {
         color: "darkgrey",
@@ -202,12 +195,22 @@ export default createMuiTheme({
     },
     MuiPaper: {
       root: {
-        padding: '16px'
+        padding: '16px',
+        transition: 'all 0.3s cubic-bezier(.25,.8,.25,1)',
       }
     },
     MuiDialog: {
       paper: {
-        margin: 16
+        margin: 16,
+        // padding: '16px 24px'
+      },
+      paperScrollPaper: {
+        maxHeight: 'calc(100% - 64px)'
+      }
+    },
+    MuiDialogTitle: {
+      root: {
+        padding: 16
       }
     },
     //Inputs
@@ -241,6 +244,14 @@ export default createMuiTheme({
         paddingTop: 8,
         paddingBottom: 8,
       },
+    },
+    MuiStepIcon: {
+      active: {
+        color: palette.secondary.main + ' !important'
+      },
+      completed: {
+        color: palette.secondary.main + ' !important'
+      }
     },
     MuiMobileStepper: {
       dot: {

@@ -3,7 +3,8 @@ export const styles = theme => ({
     padding: '6px 12px',
     cursor: 'pointer',
     maxWidth: 'calc(100% - 12px)',
-    margin: '16px 8px 0px 8px',
+    // margin: '16px 8px 0px 8px',
+    margin: 8,
     borderRadius: 16,
     boxSizing: 'border-box',
     fontSize: '0.9125rem',
@@ -15,9 +16,9 @@ export const styles = theme => ({
   profileMode: {
     backgroundColor: '#FFFFFF',
     color: theme.palette.primary.dark,
-    '&:hover': {
-      boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'
-    }
+    // '&:hover': {
+    //   boxShadow: '0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)'
+    // }
   },
   personMode: {
     backgroundColor: theme.palette.primary.dark,

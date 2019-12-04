@@ -47,6 +47,7 @@ const styles = theme => ({
     fontWeight: 400,
     marginLeft: 16,
     lineHeight: 1,
+    marginBottom: 8
   },
   addWingsButton: {
     color: theme.palette.secondary.dark,
@@ -56,7 +57,7 @@ const styles = theme => ({
     height: 32,
     marginLeft: 8,
     opacity: 0.7,
-    marginTop: 16,
+    marginBottom: 8,
     verticalAlign: 'bottom !important',
     '& span': {
       // marginTop: -4
@@ -88,9 +89,19 @@ class ProfileWings extends React.PureComponent {
     });
   }
 
+  componentDidMount() {
+    this.unsubscribeUserRecord = observe(this.props.recordStore.currentUserRecord, (change)=> {
+      if(change.name === 'hashtags') {
+        this.props.profileContext.buildWingsByFamilies(this.props.recordStore.currentUserRecord.hashtags);
+        this.forceUpdate();
+      }
+    });
+  }
+
   componentWillUnmount() {
     this.isUnmount = true;
     if(this.unsubscribeUrlRecord) this.unsubscribeUrlRecord();
+    if(this.unsubscribeUserRecord) this.unsubscribeUserRecord();
   }
 
   getClapsCount = async (recordId) => {

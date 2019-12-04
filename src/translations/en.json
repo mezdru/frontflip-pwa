@@ -131,5 +131,17 @@
   "onboard.contacts.label.landline": "Landline",
   "onboard.suggestions.loading": "Suggestions build...",
   "onboard.description.label": "My 50 words biography",
-  "onboard.description.title": "My story"
+  "onboard.description.title": "My story",
+  "skillsProposition.manage.accept": "Accept",
+  "skillsProposition.manage.refuse": "Refuse",
+  "skillsProposition.manage.close": "Close",
+  "skillsProposition.manage.title": "{senderName} suggests these skills to you",
+  "skillsProposition.propose.step1": "Propose skills to {recipientName}",
+  "skillsProposition.propose.step2": "Give Claps to {recipientName}",
+  "skillsProposition.propose.close": "Close",
+  "skillsProposition.propose.send": "Send",
+  "skillsProposition.propose.next": "Next",
+  "skillsProposition.propose.back": "Back",
+  "skillsProposition.propose.success": "Thanks! {recipientName} will receive an email proposing to add these skills to his/her profile",
+  "skillsProposition.manage.success": "The skills suggested by {senderName} have been added to your profile!"
 }

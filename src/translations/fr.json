@@ -131,5 +131,17 @@
   "onboard.contacts.label.landline": "Télephone fixe",
   "onboard.suggestions.loading": "Calcul des suggestions ...",
   "onboard.description.label": "Ma biographie en 50 mots",
-  "onboard.description.title": "Mon histoire"
+  "onboard.description.title": "Mon histoire",
+  "skillsProposition.manage.accept": "Ajouter à mon profil",
+  "skillsProposition.manage.refuse": "Refuser",
+  "skillsProposition.manage.close": "Fermer",
+  "skillsProposition.manage.title": "{senderName} vous propose ces compétences",
+  "skillsProposition.propose.step1": "Proposer des compétences à {recipientName}",
+  "skillsProposition.propose.step2": "Donner des Claps à {recipientName}",
+  "skillsProposition.propose.close": "Fermer",
+  "skillsProposition.propose.send": "Envoyer",
+  "skillsProposition.propose.next": "Suivant",
+  "skillsProposition.propose.back": "Précédent",
+  "skillsProposition.propose.success": "Merci ! {recipientName} va recevoir un email pour lui proposer d'ajouter ces compétences à son profil",
+  "skillsProposition.manage.success": "Les compétences proposées par {senderName} ont été ajoutées à votre profil !"
 }

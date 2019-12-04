@@ -284,6 +284,10 @@ const Email = {
   sendHelpRequest: (hrId) =>
     requests.post(
       API_ROOT + '/api/emails/helpRequest/' + hrId
+    ),
+  sendSkillsProposition: (spId) =>
+    requests.post(
+      API_ROOT + '/api/emails/skillsProposition/' + spId
     )
 }
 
@@ -347,6 +351,28 @@ const HelpRequest = {
     )
 }
 
+const SkillsProposition = {
+  post: (sp) =>
+    requests.post(
+      process.env.REACT_APP_API_ROOT + '/api/skillsPropositions',
+      {
+        skillsProposition: sp
+      }
+    ),
+  getOne: (spId) =>
+    requests.get(
+      API_ROOT + '/api/skillsPropositions/' + spId
+    ),
+  put: (orgId, spId, sp) =>
+    requests.put(
+      API_ROOT + '/api/skillsPropositions/' + spId,
+      {
+        orgId: orgId,
+        skillsProposition: sp
+      }
+    ),
+}
+
 const ConnectionLog = {
   get: () =>
     requests.get(
@@ -368,5 +394,6 @@ export default {
   SearchLog,
   Clap,
   HelpRequest,
-  ConnectionLog
+  ConnectionLog,
+  SkillsProposition
 }

@@ -45,6 +45,7 @@ const styles = theme => ({
 
 const ActivityCard = React.memo(withStyles(styles)(({ picture, authorName, link, message, created, hashtag, classes, locale, given }) => {
   moment.locale(locale);
+  if(!hashtag) return null;
   let hashtagDisplayedName = (hashtag.name_translated ? (hashtag.name_translated[locale] || hashtag.name_translated['en-UK']) || hashtag.name || hashtag.tag : hashtag.name);
   return (
     <Link to={link} className={classes.rootLink}>

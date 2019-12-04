@@ -1,27 +1,28 @@
-import React from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Slide from '@material-ui/core/Slide';
-import { withStyles } from '@material-ui/core/styles';
-import { IconButton } from '@material-ui/core';
-import { Close } from '@material-ui/icons';
+import React from "react";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import Slide from "@material-ui/core/Slide";
+import { withStyles } from "@material-ui/core/styles";
+import { IconButton, DialogTitle, withWidth } from "@material-ui/core";
+import { Close } from "@material-ui/icons";
 
 const styles = theme => ({
   content: {
-    overflow: 'hidden',
-    textAlign: 'center',
-    padding: theme.spacing.unit*2 + 'px !important'
+    overflow: "auto",
+    textAlign: "center",
+    padding: theme.spacing.unit * 2 + "px !important"
   },
   actions: {
-    justifyContent: 'center',
+    justifyContent: "center",
     margin: 0,
-    padding: theme.spacing.unit*2,
+    padding: theme.spacing.unit * 2
   },
   closeButton: {
-    position: 'absolute',
-    right:0,
-    marginRight: 32
+    position: "absolute",
+    right: 0,
+    marginRight: 8,
+    top: 8
   }
 });
 
@@ -30,9 +31,8 @@ function Transition(props) {
 }
 
 class PopupLayout extends React.Component {
-
   render() {
-    const { classes } = this.props;
+    const { classes, width, theme } = this.props;
 
     return (
       <Dialog
@@ -40,16 +40,24 @@ class PopupLayout extends React.Component {
         TransitionComponent={Transition}
         keepMounted
         fullWidth
-        maxWidth={'sm'}
+        maxWidth={"sm"}
         onClose={this.props.onClose}
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
+        style={this.props.style}
+        fullScreen={width === 'xs'}
+        PaperProps={this.props.PaperProps}
       >
-        <DialogContent className={classes.content} >
-          <IconButton className={classes.closeButton} onClick={this.props.onClose}>
+        <DialogTitle>
+          {this.props.title}
+          <IconButton
+            className={classes.closeButton}
+            onClick={this.props.onClose}
+          >
             <Close />
           </IconButton>
-          {this.props.title}
+        </DialogTitle>
+        <DialogContent className={classes.content}>
           {this.props.children}
         </DialogContent>
         <DialogActions className={classes.actions}>
@@ -60,7 +68,4 @@ class PopupLayout extends React.Component {
   }
 }
 
-export default
-  withStyles(styles, { withTheme: true })(
-    PopupLayout
-  );
+export default withWidth()(withStyles(styles, { withTheme: true })(PopupLayout));

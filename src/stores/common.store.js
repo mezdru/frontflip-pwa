@@ -15,7 +15,8 @@ class CommonStore {
       hashtags: null,
       action: null,
       invitationCode: null,
-      onboardMode: null
+      onboardMode: null,
+      actionId: null
     }
   };
 
@@ -48,7 +49,8 @@ class CommonStore {
       hashtags: undefsafe(match, 'params.hashtags') || null,
       action: undefsafe(match, 'params.action') || null,
       invitationCode: undefsafe(match, 'params.invitationCode') || null,
-      onboardMode: undefsafe(match, 'params.mode') || null
+      onboardMode: undefsafe(match, 'params.mode') || null,
+      actionId: undefsafe(match, 'params.actionId') || null,
     };
 
     if(match.params.locale) this.handleLocale(match);

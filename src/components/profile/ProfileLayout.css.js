@@ -78,5 +78,11 @@ export const styles = {
   button: {
     height: 'initial',
     marginLeft: 32
+  },
+  skillsPropositionFab: {
+    position: 'fixed',
+    zIndex: 2,
+    bottom: 32,
+    right: 32,
   }
 }

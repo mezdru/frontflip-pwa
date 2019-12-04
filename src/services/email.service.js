@@ -48,6 +48,21 @@ class EmailService {
       })
       .finally(() => { this.inProgress = false; });
   }
+
+  sendSkillsProposition(spId) {
+    this.inProgress = true;
+    this.errors = null;
+
+    return agent.Email.sendSkillsProposition(spId)
+      .then((response) => {
+        return true;
+      })
+      .catch((err) => {
+        this.errors = err.response && err.response.body && err.response.body.errors;
+        throw err;
+      })
+      .finally(() => { this.inProgress = false; });
+  }
 }
 
 

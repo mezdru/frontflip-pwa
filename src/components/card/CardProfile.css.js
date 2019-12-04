@@ -40,7 +40,7 @@ export const styles = theme => ({
   wings: {
     display: 'inline-block',
     position: 'relative',
-    marginTop: '22px!important',
+    marginTop: '30px !important',
     marginBottom: 0,
     '& >div:first-child': {
       marginLeft: 16

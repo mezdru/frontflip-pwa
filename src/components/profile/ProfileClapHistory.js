@@ -64,18 +64,18 @@ class ProfileClapHistory extends React.Component {
         </Typography>
 
         {lastClapHistory && lastClapHistory.length > 0 && lastClapHistory.map((clap, index) => {
-          if (clap.recipient === profileContext.getProp('_id') && profileContext.isWingsDisplayed(clap.hashtag._id || clap.hashtag)) {
+          if (clap.recipient === profileContext.getProp('_id') && profileContext.isWingsDisplayed(undefsafe(clap, 'hashtag._id') || clap.hashtag)) {
             clapsDisplayed++;
             return <ActivityCard
               key={clap._id}
-              picture={clap.giver.picture ? clap.giver.picture.url : null}
+              picture={clap.giver && clap.giver.picture ? clap.giver.picture.url : null}
               hashtag={clap.hashtag}
-              authorName={clap.giver.name}
+              authorName={clap.giver ? clap.giver.name : null}
               message={clap.message}
               given={clap.given}
               created={clap.created}
               locale={this.props.commonStore.locale}
-              link={'/' + locale + '/' + currentOrganisation.tag + '/' + clap.giver.tag}
+              link={clap.giver ? '/' + locale + '/' + currentOrganisation.tag + '/' + clap.giver.tag : null}
             />
           } else return null;
         })}
