@@ -135,13 +135,13 @@
   "skillsProposition.manage.accept": "Accept",
   "skillsProposition.manage.refuse": "Refuse",
   "skillsProposition.manage.close": "Close",
-  "skillsProposition.manage.title": "{senderName} vous a proposé ces compétences :",
-  "skillsProposition.propose.step1": "Quelles compétences voulez-vous proposer ?",
-  "skillsProposition.propose.step2": "Montrez à {recipientName} que vous le recommandez 👏",
+  "skillsProposition.manage.title": "{senderName} suggests these skills to you",
+  "skillsProposition.propose.step1": "Propose skills to {recipientName}",
+  "skillsProposition.propose.step2": "Give Claps to {recipientName}",
   "skillsProposition.propose.close": "Close",
   "skillsProposition.propose.send": "Send",
   "skillsProposition.propose.next": "Next",
   "skillsProposition.propose.back": "Back",
-  "skillsProposition.propose.success": "Merci ! Vous serez informé si {recipientName} accepte ces compétences.",
-  "skillsProposition.manage.success": "Les compétences proposées par {senderName} ont été ajoutées à votre profil !"
+  "skillsProposition.propose.success": "Thanks! {recipientName} will receive an email proposing to add these skills to his/her profile",
+  "skillsProposition.manage.success": "The skills suggested by {senderName} have been added to your profile!"
 }
