@@ -33,7 +33,8 @@ const styles = theme => ({
     overflow: 'hidden',
     position: 'relative',
     width: '100%',
-    textAlign: 'left'
+    textAlign: 'left',
+    paddingTop:8
   },
   loaderContainer: {
     position: 'absolute',

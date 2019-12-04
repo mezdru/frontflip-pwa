@@ -31,11 +31,13 @@ export const styles = theme => ({
     margin: 8,
   },
   selectedSkillsContainer: {
-    background: theme.palette.background.default,
+    background: 'white',
     borderRadius: 4,
-    padding : '16px 8px',
-    paddingTop: 0,
-    minHeight: 64,
+    padding : 8,
+    minHeight: 112,
+    // maxHeight: 112,
+    overflowY: 'auto',
+    overflowX: 'hidden',
     textAlign: 'left'
   },
   successIcon: {
@@ -43,5 +45,11 @@ export const styles = theme => ({
   },
   failedIcon: {
     color: theme.palette.error.dark
+  },
+  stepTitle: {
+    textAlign: 'center'
+  },
+  emojiImg: {
+    marginBottom: 16
   }
 });

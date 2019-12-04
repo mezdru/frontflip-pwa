@@ -10,6 +10,7 @@ import { styles } from "./ProfileLayout.css";
 import { withProfileManagement } from "../../hoc/profile/withProfileManagement";
 import SkillsPropositionFab from "../utils/buttons/SkillsPropositionFab";
 import { observe } from "mobx";
+import ErrorBoundary from "../utils/errors/ErrorBoundary";
 
 const ProfileClapHistory = React.lazy(() => import("./ProfileClapHistory"));
 const AcceptSkills = React.lazy(() =>
@@ -116,24 +117,28 @@ class ProfileLayout extends React.Component {
           />
 
           {showProposeSkills && (
-            <Suspense fallback={<></>}>
-              <ProposeSkills
-                isOpen={showProposeSkills}
-                style={{ zIndex: 99999 }}
-              />
-            </Suspense>
+            <ErrorBoundary>
+              <Suspense fallback={<></>}>
+                <ProposeSkills
+                  isOpen={showProposeSkills}
+                  style={{ zIndex: 99999 }}
+                />
+              </Suspense>
+            </ErrorBoundary>
           )}
 
           {url.params.action === "skillsProposition" &&
             url.params.actionId &&
             this.isMyProfile() && (
-              <Suspense fallback={<></>}>
-                <AcceptSkills
-                  skillsPropositionId={url.params.actionId}
-                  isOpen={true}
-                  style={{ zIndex: 99999 }}
-                />
-              </Suspense>
+              <ErrorBoundary>
+                <Suspense fallback={<></>}>
+                  <AcceptSkills
+                    skillsPropositionId={url.params.actionId}
+                    isOpen={true}
+                    style={{ zIndex: 99999 }}
+                  />
+                </Suspense>
+              </ErrorBoundary>
             )}
         </Grid>
       </Slide>
@@ -147,4 +152,10 @@ export default inject(
   "authStore",
   "recordStore",
   "userStore"
-)(observer(withStyles(styles)(withProfileManagement(ProfileLayout))));
+)(
+  observer(
+    withStyles(styles, { withTheme: true })(
+      withProfileManagement(ProfileLayout)
+    )
+  )
+);

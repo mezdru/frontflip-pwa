@@ -203,6 +203,9 @@ export default createMuiTheme({
       paper: {
         margin: 16,
         // padding: '16px 24px'
+      },
+      paperScrollPaper: {
+        maxHeight: 'calc(100% - 64px)'
       }
     },
     MuiDialogTitle: {

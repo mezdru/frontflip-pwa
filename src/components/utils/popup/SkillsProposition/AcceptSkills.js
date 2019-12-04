@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core";
+import { withStyles, Typography } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import { FormattedMessage } from "react-intl";
 import ReactGA from "react-ga";
@@ -95,7 +95,7 @@ class AcceptSkills extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, theme } = this.props;
     const { ready, error, success, redirectTo } = this.state;
     const { locale } = this.props.commonStore;
     const { skillsProposition } = this.props.skillsPropositionStore;
@@ -107,11 +107,12 @@ class AcceptSkills extends React.Component {
     return (
       <PopupLayout
         isOpen={this.state.open}
+        PaperProps={{ style: { background: theme.palette.primary.main } }}
         title={
           ready &&
           !error &&
           !success && (
-            <div>
+            <Typography variant="h4" className={classes.stepTitle}>
               <FormattedMessage
                 id="skillsProposition.manage.title"
                 values={{
@@ -120,7 +121,7 @@ class AcceptSkills extends React.Component {
                   )
                 }}
               />
-            </div>
+            </Typography>
           )
         }
         actions={
@@ -157,7 +158,7 @@ class AcceptSkills extends React.Component {
                 <Wings
                   key={selected.tag}
                   label={ProfileService.getWingDisplayedName(selected, locale)}
-                  mode="profile"
+                  mode="onboard"
                   onDelete={() => this.onDelete(selected._id)}
                 />
               ))}
@@ -166,7 +167,7 @@ class AcceptSkills extends React.Component {
           <>
             {!error && success ? (
               <>
-                <CheckCircle fontSize="large" className={classes.successIcon} />
+                <img className={classes.emojiImg} src={ProfileService.getEmojiUrl('🤗')} alt="bigPicture" />
                 <br />
                 <FormattedMessage
                   id="skillsProposition.manage.success"

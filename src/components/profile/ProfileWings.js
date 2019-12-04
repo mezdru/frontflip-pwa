@@ -47,6 +47,7 @@ const styles = theme => ({
     fontWeight: 400,
     marginLeft: 16,
     lineHeight: 1,
+    marginBottom: 8
   },
   addWingsButton: {
     color: theme.palette.secondary.dark,
@@ -56,7 +57,7 @@ const styles = theme => ({
     height: 32,
     marginLeft: 8,
     opacity: 0.7,
-    marginTop: 16,
+    marginBottom: 8,
     verticalAlign: 'bottom !important',
     '& span': {
       // marginTop: -4

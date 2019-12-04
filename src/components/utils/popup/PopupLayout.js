@@ -4,7 +4,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import Slide from "@material-ui/core/Slide";
 import { withStyles } from "@material-ui/core/styles";
-import { IconButton, DialogTitle } from "@material-ui/core";
+import { IconButton, DialogTitle, withWidth } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 
 const styles = theme => ({
@@ -21,9 +21,8 @@ const styles = theme => ({
   closeButton: {
     position: "absolute",
     right: 0,
-    marginRight: 32,
-    top: 32,
-    background: theme.palette.background.default
+    marginRight: 8,
+    top: 8
   }
 });
 
@@ -33,7 +32,7 @@ function Transition(props) {
 
 class PopupLayout extends React.Component {
   render() {
-    const { classes } = this.props;
+    const { classes, width, theme } = this.props;
 
     return (
       <Dialog
@@ -46,6 +45,8 @@ class PopupLayout extends React.Component {
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
         style={this.props.style}
+        fullScreen={width === 'xs'}
+        PaperProps={this.props.PaperProps}
       >
         <DialogTitle>
           {this.props.title}
@@ -67,4 +68,4 @@ class PopupLayout extends React.Component {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(PopupLayout);
+export default withWidth()(withStyles(styles, { withTheme: true })(PopupLayout));

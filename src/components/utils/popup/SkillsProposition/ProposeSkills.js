@@ -5,7 +5,8 @@ import {
   CircularProgress,
   Stepper,
   Step,
-  StepLabel
+  StepLabel,
+  Typography
 } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import { FormattedMessage } from "react-intl";
@@ -104,31 +105,39 @@ class ProposeSkills extends React.Component {
   };
 
   render() {
-    const { classes, profileContext } = this.props;
+    const { classes, profileContext, theme } = this.props;
     const { steps, activeStep, selectedSkills, error, loading } = this.state;
     const { locale } = this.props.commonStore;
 
     return (
       <PopupLayout
         isOpen={this.state.open}
+        PaperProps={{ style: { background: theme.palette.primary.main } }}
         title={
           activeStep < 2 && (
-            <Stepper activeStep={activeStep} alternativeLabel>
-              {steps.map(label => (
-                <Step key={label}>
-                  <StepLabel>
-                    <FormattedMessage
-                      id={"skillsProposition.propose." + label}
-                      values={{
-                        recipientName: entities.decode(
-                          profileContext.getProp("name")
-                        )
-                      }}
-                    />
-                  </StepLabel>
-                </Step>
-              ))}
-            </Stepper>
+            <>
+              <Stepper
+                activeStep={activeStep}
+                alternativeLabel
+                style={{ background: "none", display: "none" }}
+              >
+                {steps.map(label => (
+                  <Step key={label}>
+                    <StepLabel></StepLabel>
+                  </Step>
+                ))}
+              </Stepper>
+              <Typography variant="h4" className={classes.stepTitle}>
+                <FormattedMessage
+                  id={"skillsProposition.propose." + steps[activeStep]}
+                  values={{
+                    recipientName: entities.decode(
+                      profileContext.getProp("name")
+                    )
+                  }}
+                />
+              </Typography>
+            </>
           )
         }
         actions={
@@ -188,12 +197,15 @@ class ProposeSkills extends React.Component {
               </Suspense>
             )}
 
-            <div className={classes.selectedSkillsContainer}>
+            <div
+              className={classes.selectedSkillsContainer}
+              style={{ maxHeight: activeStep === 0 ? 112 : "100%" }}
+            >
               {selectedSkills.map(selected => (
                 <Wings
                   key={selected.tag}
                   label={ProfileService.getWingDisplayedName(selected, locale)}
-                  mode="profile"
+                  mode="onboard"
                   recordId={profileContext.getProp("_id")}
                   hashtagId={selected._id || selected.objectID}
                   onDelete={
@@ -210,7 +222,7 @@ class ProposeSkills extends React.Component {
           <div>
             {!error ? (
               <>
-                <CheckCircle fontSize="large" className={classes.successIcon} />
+                <img className={classes.emojiImg} src={ProfileService.getEmojiUrl('😀')} alt="bigPicture" />
                 <br />
                 <FormattedMessage
                   id="skillsProposition.propose.success"
