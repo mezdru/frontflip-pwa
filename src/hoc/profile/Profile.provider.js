@@ -16,6 +16,7 @@ class ProfileProvider extends React.Component {
       filterProfile: this.filterProfile,
       setProfileData: this.setProfileData,
       isWingsDisplayed: this.isWingsDisplayed,
+      buildWingsByFamilies: this.buildWingsByFamilies,
       getProp: this.getProp,
       getBaseUrl: this.getBaseUrl,
       wingsByFamilies: [],
@@ -83,13 +84,18 @@ class ProfileProvider extends React.Component {
   /**
    * @description Create an array of link between : Family and Profile Wings
    */
-  buildWingsByFamilies = () => {
+  buildWingsByFamilies = (hashtags) => {
     let organisation = this.props.orgStore.currentOrganisation;
     let wingsByFamilies = [], otherWings = [], allWings = [];
 
     try {
-      otherWings = Array.from(this.getProp('hashtags'));
-      allWings = Array.from(this.getProp('hashtags'));
+      if(!hashtags) {
+        otherWings = Array.from(this.getProp('hashtags'));
+        allWings = Array.from(this.getProp('hashtags'));
+      } else {
+        otherWings = hashtags;
+        allWings = hashtags;
+      }
     }catch(e) {
       return;
     }

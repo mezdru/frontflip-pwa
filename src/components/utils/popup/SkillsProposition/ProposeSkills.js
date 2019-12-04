@@ -32,13 +32,14 @@ class ProposeSkills extends React.Component {
     steps: ["step1", "step2"],
     activeStep: 0,
     selectedSkills: [],
-    error: null
+    error: null,
+    loading: false
   };
 
   handleNext = async () => {
     let error = null;
-
     if (this.state.activeStep === 1) {
+      this.setState({ loading: true }); // async method
       let sp = await this.props.skillsPropositionStore
         .postSkillsProposition({
           organisation: this.props.orgStore.currentOrganisation._id,
@@ -58,7 +59,11 @@ class ProposeSkills extends React.Component {
           return null;
         });
     }
-    this.setState({ activeStep: this.state.activeStep + 1, error: error });
+    this.setState({
+      activeStep: this.state.activeStep + 1,
+      error: error,
+      loading: false
+    });
   };
 
   handleBack = () => {
@@ -100,7 +105,7 @@ class ProposeSkills extends React.Component {
 
   render() {
     const { classes, profileContext } = this.props;
-    const { steps, activeStep, selectedSkills, error } = this.state;
+    const { steps, activeStep, selectedSkills, error, loading } = this.state;
     const { locale } = this.props.commonStore;
 
     return (
@@ -137,19 +142,23 @@ class ProposeSkills extends React.Component {
                 >
                   <FormattedMessage id="skillsProposition.propose.back" />
                 </Button>
-                <Button
-                  disabled={!(selectedSkills && selectedSkills.length > 0)}
-                  variant="contained"
-                  color="secondary"
-                  onClick={this.handleNext}
-                  className={classes.buttons}
-                >
-                  {activeStep === steps.length - 1 ? (
-                    <FormattedMessage id="skillsProposition.propose.send" />
-                  ) : (
-                    <FormattedMessage id="skillsProposition.propose.next" />
-                  )}
-                </Button>
+                {loading ? (
+                  <CircularProgress color="secondary" />
+                ) : (
+                  <Button
+                    disabled={!(selectedSkills && selectedSkills.length > 0)}
+                    variant="contained"
+                    color="secondary"
+                    onClick={this.handleNext}
+                    className={classes.buttons}
+                  >
+                    {activeStep === steps.length - 1 ? (
+                      <FormattedMessage id="skillsProposition.propose.send" />
+                    ) : (
+                      <FormattedMessage id="skillsProposition.propose.next" />
+                    )}
+                  </Button>
+                )}
               </>
             ) : (
               <Button

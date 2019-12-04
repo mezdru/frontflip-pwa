@@ -88,9 +88,19 @@ class ProfileWings extends React.PureComponent {
     });
   }
 
+  componentDidMount() {
+    this.unsubscribeUserRecord = observe(this.props.recordStore.currentUserRecord, (change)=> {
+      if(change.name === 'hashtags') {
+        this.props.profileContext.buildWingsByFamilies(this.props.recordStore.currentUserRecord.hashtags);
+        this.forceUpdate();
+      }
+    });
+  }
+
   componentWillUnmount() {
     this.isUnmount = true;
     if(this.unsubscribeUrlRecord) this.unsubscribeUrlRecord();
+    if(this.unsubscribeUserRecord) this.unsubscribeUserRecord();
   }
 
   getClapsCount = async (recordId) => {

@@ -9,6 +9,7 @@ import ProfileActions from "./ProfileActions";
 import { styles } from "./ProfileLayout.css";
 import { withProfileManagement } from "../../hoc/profile/withProfileManagement";
 import SkillsPropositionFab from "../utils/buttons/SkillsPropositionFab";
+import { observe } from "mobx";
 
 const ProfileClapHistory = React.lazy(() => import("./ProfileClapHistory"));
 const AcceptSkills = React.lazy(() =>
@@ -35,6 +36,13 @@ class ProfileLayout extends React.Component {
       });
     }
   }
+
+  isMyProfile = () => {
+    return (
+      this.props.commonStore.url.params.recordTag ===
+      this.props.recordStore.currentUserRecord.tag
+    );
+  };
 
   render() {
     const { classes, visible, transitionDuration } = this.props;
@@ -116,15 +124,17 @@ class ProfileLayout extends React.Component {
             </Suspense>
           )}
 
-          {url.params.action === "skillsProposition" && url.params.actionId && (
-            <Suspense fallback={<></>}>
-              <AcceptSkills
-                skillsPropositionId={url.params.actionId}
-                isOpen={true}
-                style={{ zIndex: 99999 }}
-              />
-            </Suspense>
-          )}
+          {url.params.action === "skillsProposition" &&
+            url.params.actionId &&
+            this.isMyProfile() && (
+              <Suspense fallback={<></>}>
+                <AcceptSkills
+                  skillsPropositionId={url.params.actionId}
+                  isOpen={true}
+                  style={{ zIndex: 99999 }}
+                />
+              </Suspense>
+            )}
         </Grid>
       </Slide>
     );

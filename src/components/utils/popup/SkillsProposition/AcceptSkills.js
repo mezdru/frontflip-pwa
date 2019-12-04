@@ -48,16 +48,17 @@ class AcceptSkills extends React.Component {
   }
 
   handleAccept = async () => {
-    let hashtags = getClone(
+    this.props.recordStore.currentUserRecord.hashtags = getUnique(
       this.props.recordStore.currentUserRecord.hashtags.concat(
         this.props.skillsPropositionStore.skillsProposition.hashtags
-      )
+      ),
+      "_id"
     );
 
     await this.props.recordStore.updateRecord(
       this.props.recordStore.currentUserRecord._id,
       ["hashtags"],
-      { hashtags: getUnique(hashtags, "_id") }
+      { hashtags: this.props.recordStore.currentUserRecord.hashtags }
     );
 
     this.setState({ success: true });

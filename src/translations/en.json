@@ -137,7 +137,7 @@
   "skillsProposition.manage.close": "Close",
   "skillsProposition.manage.title": "{senderName} vous a proposé ces compétences :",
   "skillsProposition.propose.step1": "Quelles compétences voulez-vous proposer ?",
-  "skillsProposition.propose.step2": "Donnez déjà des Claps à {recipientName}",
+  "skillsProposition.propose.step2": "Montrez à {recipientName} que vous le recommandez 👏",
   "skillsProposition.propose.close": "Close",
   "skillsProposition.propose.send": "Send",
   "skillsProposition.propose.next": "Next",
