@@ -22,7 +22,7 @@ export const styles = {
     [theme.breakpoints.up('lg')]: {
       paddingRight: 0,
       paddingBottom: 32,
-      height: 'calc(100vh - 116px)',
+      minHeight: 'calc(100vh - 116px)',
     },
   },
   content: {
