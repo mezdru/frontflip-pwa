@@ -1,16 +1,16 @@
-import React from 'react';
-import { Typography, withStyles, Grid } from '@material-ui/core';
-import { inject, observer } from 'mobx-react';
-import { observe } from 'mobx';
-import undefsafe from 'undefsafe';
-import ActivityCard from './ActivityCard';
-import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
-import { FormattedMessage } from 'react-intl';
+import React from "react";
+import { Typography, withStyles, Grid } from "@material-ui/core";
+import { inject, observer } from "mobx-react";
+import { observe } from "mobx";
+import undefsafe from "undefsafe";
+import ActivityCard from "./ActivityCard";
+import { withProfileManagement } from "../../hoc/profile/withProfileManagement";
+import { FormattedMessage } from "react-intl";
 
 const styles = {
   activity: {
-    background: 'rgba(255, 255, 255, 0.85)',
-    borderRadius: '0px 4px 4px 4px',
+    background: "rgba(255, 255, 255, 0.85)",
+    borderRadius: "0px 4px 4px 4px",
     marginTop: 16,
     padding: 8
   }
@@ -18,36 +18,89 @@ const styles = {
 
 class ProfileClapHistory extends React.Component {
   state = {
-    clapHistory: [],
-  }
+    clapHistory: []
+  };
 
   componentDidMount() {
     // if (this.props.authStore.isAuth()) {
-      setTimeout(() => {
-        this.getClapHistory(this.props.profileContext.getProp('_id'));
-      }, 50);
+    setTimeout(() => {
+      this.getClapHistory(this.props.profileContext.getProp("_id"));
+    }, 50);
 
-      this.unsubUrlRecord = observe(this.props.commonStore.url, 'params', (change) => {
-        if (change.oldValue.recordTag !== change.newValue.recordTag && change.newValue.recordTag && this.props.recordStore.currentUrlRecord)
+    this.unsubUrlRecord = observe(
+      this.props.commonStore.url,
+      "params",
+      change => {
+        if (
+          change.oldValue.recordTag !== change.newValue.recordTag &&
+          change.newValue.recordTag &&
+          this.props.recordStore.currentUrlRecord
+        )
           setTimeout(() => {
             this.getClapHistory(this.props.recordStore.currentUrlRecord._id);
           }, 50);
-      })
+      }
+    );
     // }
   }
 
   componentWillUnmount() {
-    if(this.unsubUrlRecord) this.unsubUrlRecord();
+    if (this.unsubUrlRecord) this.unsubUrlRecord();
   }
 
-  getClapHistory = (recordId) => {
+  getClapHistory = recordId => {
     if (!recordId) return this.setState({ clapHistory: [] });
     this.props.clapStore.setCurrentRecordId(recordId);
-    this.props.clapStore.getClapHistoryFull(this.props.orgStore.currentOrganisation._id)
+    this.props.clapStore
+      .getClapHistoryFull(this.props.orgStore.currentOrganisation._id)
       .then(clapHistory => {
-        this.setState({ clapHistory: JSON.parse(JSON.stringify(clapHistory)) });
-      }).catch(e => { return; });
-  }
+        let claps = this.mixSimilarClaps(
+          JSON.parse(JSON.stringify(clapHistory))
+        );
+
+        this.setState({
+          clapHistory: claps
+        });
+      })
+      .catch(e => {
+        return;
+      });
+  };
+
+  mixSimilarClaps = claps => {
+    let mixedClaps = [];
+
+    claps.forEach(clap => {
+      if (
+        !mixedClaps.some(
+          elt =>
+            elt.giver._id === clap.giver._id &&
+            elt.hashtag._id === clap.hashtag._id
+        )
+      ) {
+        let newClapEntry = clap;
+        let similarClaps = claps.filter(
+          otherClap =>
+            otherClap.giver._id === clap.giver._id &&
+            otherClap.hashtag._id === clap.hashtag._id &&
+            otherClap._id !== clap._id
+        );
+
+        similarClaps.forEach(similarClap => {
+          newClapEntry.given += similarClap.given;
+          if (
+            new Date(newClapEntry.created).getTime() <
+            new Date(similarClap.created).getTime()
+          ) {
+            newClapEntry.created = similarClap.created;
+          }
+        });
+        mixedClaps.push(newClapEntry);
+      }
+    });
+
+    return mixedClaps;
+  };
 
   render() {
     const { classes, profileContext } = this.props;
@@ -59,40 +112,73 @@ class ProfileClapHistory extends React.Component {
 
     return (
       <>
-        <Typography variant="body1" style={{ textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.85)', fontSize: '0.8rem', fontWeight: 400 }}>
+        <Typography
+          variant="body1"
+          style={{
+            textTransform: "uppercase",
+            color: "rgba(255, 255, 255, 0.85)",
+            fontSize: "0.8rem",
+            fontWeight: 400
+          }}
+        >
           <FormattedMessage id="profile.activity.title" />
         </Typography>
 
-        {lastClapHistory && lastClapHistory.length > 0 && lastClapHistory.map((clap, index) => {
-          if (clap.recipient === profileContext.getProp('_id') && profileContext.isWingsDisplayed(undefsafe(clap, 'hashtag._id') || clap.hashtag)) {
-            clapsDisplayed++;
-            return <ActivityCard
-              key={clap._id}
-              picture={clap.giver && clap.giver.picture ? clap.giver.picture.url : null}
-              hashtag={clap.hashtag}
-              authorName={clap.giver ? clap.giver.name : null}
-              message={clap.message}
-              given={clap.given}
-              created={clap.created}
-              locale={this.props.commonStore.locale}
-              link={clap.giver ? '/' + locale + '/' + currentOrganisation.tag + '/' + clap.giver.tag : null}
-            />
-          } else return null;
-        })}
+        {lastClapHistory &&
+          lastClapHistory.length > 0 &&
+          lastClapHistory.map((clap, index) => {
+            if (
+              clap.recipient === profileContext.getProp("_id") &&
+              profileContext.isWingsDisplayed(
+                undefsafe(clap, "hashtag._id") || clap.hashtag
+              )
+            ) {
+              clapsDisplayed++;
+              return (
+                <ActivityCard
+                  key={clap._id}
+                  picture={
+                    clap.giver && clap.giver.picture
+                      ? clap.giver.picture.url
+                      : null
+                  }
+                  hashtag={clap.hashtag}
+                  authorName={clap.giver ? clap.giver.name : null}
+                  message={clap.message}
+                  given={clap.given}
+                  created={clap.created}
+                  locale={this.props.commonStore.locale}
+                  link={
+                    clap.giver
+                      ? "/" +
+                        locale +
+                        "/" +
+                        currentOrganisation.tag +
+                        "/" +
+                        clap.giver.tag
+                      : null
+                  }
+                />
+              );
+            } else return null;
+          })}
 
-        {(!lastClapHistory || lastClapHistory.length === 0 || clapsDisplayed === 0) ? (
-          <Grid item container xs={12} className={classes.activity} >
+        {!lastClapHistory ||
+        lastClapHistory.length === 0 ||
+        clapsDisplayed === 0 ? (
+          <Grid item container xs={12} className={classes.activity}>
             <FormattedMessage id="profile.activity.empty" />
           </Grid>
         ) : null}
-
       </>
     );
   }
 }
 
-export default inject('recordStore', 'clapStore', 'commonStore', 'orgStore', 'authStore')(
-  observer(
-    withStyles(styles)(withProfileManagement(ProfileClapHistory))
-  )
-)
+export default inject(
+  "recordStore",
+  "clapStore",
+  "commonStore",
+  "orgStore",
+  "authStore"
+)(observer(withStyles(styles)(withProfileManagement(ProfileClapHistory))));
