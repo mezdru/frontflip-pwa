@@ -143,5 +143,7 @@
   "skillsProposition.propose.next": "Suivant",
   "skillsProposition.propose.back": "Précédent",
   "skillsProposition.propose.success": "Merci ! {recipientName} va recevoir un email pour lui proposer d'ajouter ces compétences à son profil",
-  "skillsProposition.manage.success": "Les compétences proposées par {senderName} ont été ajoutées à votre profil !"
+  "skillsProposition.manage.success": "Les compétences proposées par {senderName} ont été ajoutées à votre profil !",
+  "skillsProposition.manage.error": "Il y a eu une erreur",
+  "skillsProposition.propose.error": "Il y a eu une erreur"
 }

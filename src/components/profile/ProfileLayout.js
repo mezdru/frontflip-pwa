@@ -111,12 +111,14 @@ class ProfileLayout extends React.Component {
             </Grid>
           </Grid>
 
-          <SkillsPropositionFab
-            className={classes.skillsPropositionFab}
-            onClick={this.handleShowProposeSkills}
-          />
+          {!this.isMyProfile() && (
+            <SkillsPropositionFab
+              className={classes.skillsPropositionFab}
+              onClick={this.handleShowProposeSkills}
+            />
+          )}
 
-          {showProposeSkills && (
+          {showProposeSkills && !this.isMyProfile() && (
             <ErrorBoundary>
               <Suspense fallback={<></>}>
                 <ProposeSkills
