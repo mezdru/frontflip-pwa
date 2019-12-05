@@ -113,7 +113,7 @@ class ProfileLayout extends React.Component {
             </Grid>
           </Grid>
 
-          {!this.isMyProfile() && (
+          {this.props.authStore.isAuth() && !this.isMyProfile() && (
             <SkillsPropositionFab
               className={classes.skillsPropositionFab}
               onClick={this.handleShowProposeSkills}
