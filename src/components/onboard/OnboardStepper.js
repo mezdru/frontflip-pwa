@@ -66,7 +66,10 @@ class OnboardStepper extends React.Component {
       // click on finish
 
       if (this.props.edit) {
+        return this.props.userStore.welcomeCurrentUser(this.props.orgStore.currentOrganisation._id)
+        .then(() => {
           return this.setState({ redirectTo: getBaseUrl(this.props) + '/' + this.props.commonStore.url.params.recordTag });
+        });
       }
 
       let user = this.props.userStore.currentUser;
