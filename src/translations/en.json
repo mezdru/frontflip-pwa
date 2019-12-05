@@ -145,5 +145,6 @@
   "skillsProposition.propose.success": "Thanks! {recipientName} will receive an email proposing to add these skills to his/her profile",
   "skillsProposition.manage.success": "The skills suggested by {senderName} have been added to your profile!",
   "skillsProposition.manage.error": "There was an error",
-  "skillsProposition.propose.error": "There was an error"
+  "skillsProposition.propose.error": "There was an error",
+  "skillsProposition.fab.tooltip": "Propose skills"
 }
