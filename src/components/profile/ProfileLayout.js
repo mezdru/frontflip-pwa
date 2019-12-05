@@ -40,8 +40,10 @@ class ProfileLayout extends React.Component {
 
   isMyProfile = () => {
     return (
+      this.props.recordStore.currentUserRecord &&
+      this.props.commonStore.url.params.recordTag &&
       this.props.commonStore.url.params.recordTag ===
-      this.props.recordStore.currentUserRecord.tag
+        this.props.recordStore.currentUserRecord.tag
     );
   };
 
