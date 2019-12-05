@@ -135,6 +135,10 @@
       manifestLink.href = '%PUBLIC_URL%/demo/manifest.json';
       faviconLink.href = '%PUBLIC_URL%/demo/favicon.ico';
       document.title = 'Demo Coffee Company';
+    } else if (window.location.href.search('rhizosphere') !== -1) {
+      manifestLink.href = '%PUBLIC_URL%/rhizosphere/manifest.json';
+      faviconLink.href = '%PUBLIC_URL%/rhizosphere/favicon.ico';
+      document.title = 'La Rhizosphere';
     } else {
       manifestLink.href = '%PUBLIC_URL%/manifest.json';
       faviconLink.href = '%PUBLIC_URL%/favicon.ico';
