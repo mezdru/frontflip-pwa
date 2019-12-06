@@ -1,6 +1,10 @@
 // Example of Constants which can be declared here.
 // const someCommonValues = ['common', 'values'];
 
+let UAParser = require('ua-parser-js');
+
+export const UAParserInstance = new UAParser();
+
 /**
  * @description Randomize the order of elements in an array.
  * @param {Array} array
@@ -77,3 +81,8 @@ export const replaceAndKeepReference = (obj, newObj) => {
 export const getClone = obj => {
   return JSON.parse(JSON.stringify(obj));
 };
+
+export const isInStandaloneMode = () =>
+  window.matchMedia("(display-mode: standalone)").matches ||
+  window.navigator.standalone ||
+  document.referrer.includes("android-app://");
