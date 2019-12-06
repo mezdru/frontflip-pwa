@@ -28,11 +28,6 @@ class Routes extends React.Component {
         SlackService.notify('#alerts', `Someone has installed the PWA (userId:${undefsafe(this.props.userStore.currentUser, '_id')}) (orgTag:${undefsafe(this.props.orgStore.currentOrganisation, 'tag')})`); 
       });
 
-      // know if User use app in standalone mode (app installed)
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        SlackService.notify('#alerts', `Someone is using the PWA in STANDALONE mode (userId:${undefsafe(this.props.userStore.currentUser, '_id')}) (orgTag:${undefsafe(this.props.orgStore.currentOrganisation, 'tag')})`); 
-        console.log("This is running as standalone.");
-      }
     }catch(e) {
       console.log(e);
     }

@@ -44,6 +44,7 @@
     "superagent": "^4.1.0",
     "superagent-promise": "^1.1.0",
     "twemoji": "^12.1.3",
+    "ua-parser-js": "^0.7.20",
     "undefsafe": "^2.0.2",
     "universal-cookie": "^3.0.7",
     "uploadcare-widget": "^3.7.0"
