@@ -35,7 +35,6 @@ class ProfileActions extends React.PureComponent {
         this.props.intl.formatMessage({ id: "profile.actions.delete.confirm" })
       )
     ) {
-      console.log("delete profile then redirect");
 
       let isMyProfile =
         this.props.recordStore.currentUserRecord._id ===
