@@ -146,5 +146,8 @@
   "skillsProposition.manage.success": "The skills suggested by {senderName} have been added to your profile!",
   "skillsProposition.manage.error": "There was an error",
   "skillsProposition.propose.error": "There was an error",
-  "skillsProposition.fab.tooltip": "Propose skills"
+  "skillsProposition.fab.tooltip": "Propose skills",
+  "profile.actions.delete": "Delete profile",
+  "profile.actions.delete.confirm": "Are you sure you want to delete this profile?",
+  "profile.actions.delete.error": "❌ Error while deleting this profile. \nContact us at : contact@wingzy.com\n\n"
 }
