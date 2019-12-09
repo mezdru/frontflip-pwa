@@ -90,6 +90,7 @@ class SearchPage extends PureComponent {
         ) {
           this.handleShowSearchResults(200);
         }
+        window.history.pushState(null, window.document.title, this.props.makeUrlQuery(this.props.commonStore.searchFilters));
         this.forceUpdate();
       }
     });
