@@ -148,5 +148,6 @@
   "skillsProposition.propose.error": "Il y a eu une erreur",
   "skillsProposition.fab.tooltip": "Proposer des compétences",
   "profile.actions.delete": "Supprimer le profil",
-  "profile.actions.delete.confirm": "Êtes-vous sûr de vouloir supprimer ce profil ?"
+  "profile.actions.delete.confirm": "Êtes-vous sûr de vouloir supprimer ce profil ?",
+  "profile.actions.delete.error": "❌ Il y a eu une erreur pendant la suppression du profil.\n Contactez-nous à : contact@wingzy.com\n\n"
 }

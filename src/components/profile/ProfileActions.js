@@ -1,12 +1,13 @@
 import React from "react";
 import { withStyles, Grid, IconButton, Tooltip } from "@material-ui/core";
-import { ArrowBack, Edit, Remove, Delete } from "@material-ui/icons";
+import { ArrowBack, Edit, Delete } from "@material-ui/icons";
 import classNames from "classnames";
 import { inject, observer } from "mobx-react";
 import { withProfileManagement } from "../../hoc/profile/withProfileManagement";
 import { getBaseUrl } from "../../services/utils.service.js";
 import { Link } from "react-router-dom";
 import { injectIntl } from "react-intl";
+import urlService from "../../services/url.service";
 
 const styles = theme => ({
   button: {
@@ -36,14 +37,35 @@ class ProfileActions extends React.PureComponent {
     ) {
       console.log("delete profile then redirect");
 
+      let isMyProfile =
+        this.props.recordStore.currentUserRecord._id ===
+        this.props.profileContext.getProp("_id");
+
       this.props.recordStore
         .deleteRecord(this.props.profileContext.getProp("_id"))
         .then(() => {
-          // ok
-          
+          if (isMyProfile) {
+            this.props.authStore.logout();
+            window.location.href = urlService.createUrl(
+              window.location.host,
+              "/signin",
+              null
+            );
+          } else {
+            window.location.href = urlService.createUrl(
+              window.location.host,
+              "/" + this.props.orgStore.currentOrganisation.tag,
+              null
+            );
+          }
         })
         .catch(e => {
-          // not ok
+          console.log(e);
+          window.alert(
+            this.props.intl.formatMessage({
+              id: "profile.actions.delete.error"
+            })
+          );
         });
     }
   };
@@ -105,7 +127,9 @@ class ProfileActions extends React.PureComponent {
 
 export default inject(
   "commonStore",
-  "orgStore"
+  "orgStore",
+  "recordStore",
+  "authStore"
 )(
   observer(
     withStyles(styles)(withProfileManagement(injectIntl(ProfileActions)))
