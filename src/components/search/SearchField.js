@@ -129,6 +129,7 @@ class SearchField extends PureComponent {
           {filters &&
             filters.length > 0 &&
             filters.map((filter, index) => {
+              if(filter.type !== 'hashtags.tag' && filter.type !== 'tag' && filter.type !== 'query') return null;
               let displayedName = ProfileService.getWingDisplayedName(
                 filter,
                 this.props.commonStore.locale

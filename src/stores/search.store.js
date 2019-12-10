@@ -1,7 +1,8 @@
 import { observable, action, decorate } from "mobx";
 import qs from "qs";
 
-const TYPES = ["tag", "hashtags.tag", "query", "onboarded_date", "type"];
+const TYPES = ["tag", "hashtags.tag", "query", "welcomedAt", "type"];
+const OPERATORS = ["gt", "lt"];
 
 class SearchStore {
   inProgress = false;
@@ -34,11 +35,15 @@ class SearchStore {
           this.addFilter(key, valueElt);
         });
       } else if (typeof value === "object") {
-        // console.log(value);
+        Object.keys(value).forEach(secondaryKey => {
+          if(OPERATORS.some(elt => elt === secondaryKey))
+            this.addFilter(key, value[secondaryKey], {operator: secondaryKey});
+        });
       } else if (typeof value === "string") {
         this.addFilter(key, value);
       }
     });
+    console.log(JSON.stringify(this.values.filters))
   }
 
   encodeFilters = () => {
@@ -57,7 +62,7 @@ class SearchStore {
     this.values.userQuery = query;
   }
 
-  addFilter(type, value) {
+  addFilter(type, value, options) {
     if (!TYPES.some(elt => elt === type)) throw new Error("Invalid type: " + type);
 
     if (
@@ -67,7 +72,8 @@ class SearchStore {
     ) {
       this.values.filters.push({
         type,
-        value
+        value,
+        options
       });
     }
   }
