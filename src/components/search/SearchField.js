@@ -9,34 +9,26 @@ import IconButton from "@material-ui/core/IconButton";
 import "./SearchFieldStyle.css";
 import ProfileService from "../../services/profile.service";
 import Wings from "../utils/wing/Wings";
-import withSearchManagement from "../../hoc/SearchManagement.hoc";
 import { styles } from "./SearchField.css";
 
 class SearchField extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      searchFilters:
-        this.props.mode !== "onboard" && this.props.mode !== "propose"
-          ? this.props.commonStore.getSearchFilters() || []
-          : []
     };
   }
 
   componentDidMount() {
     if (this.props.mode !== "onboard" && this.props.mode !== "propose") {
       this.unsubscribeSearchFilters = observe(
-        this.props.commonStore,
-        "searchFilters",
+        this.props.searchStore.values.filters,
         change => {
-          var currentSearchFilters = this.props.commonStore.getSearchFilters();
+          var currentSearchFilters = this.props.searchStore.values.filters;
           this.props.searchStore.setUserQuery(
             currentSearchFilters.length > 0 ? " " : ""
           );
-          this.setState(
-            { searchFilters: currentSearchFilters },
-            this.scrollToRight
-          );
+          this.scrollToRight();
+          this.forceUpdate();
         }
       );
     } else {
@@ -99,7 +91,10 @@ class SearchField extends PureComponent {
       this.props.searchStore.setUserQuery("");
       if (this.props.mode !== "onboard" && this.props.mode !== "propose") {
         if (value) {
-          this.props.addFilter({ name: value, tag: value });
+          this.props.searchStore.addFilter(
+            this.props.searchStore.getFilterTypeByTag(value),
+            value
+          );
         }
       } else {
         if (value) {
@@ -118,14 +113,12 @@ class SearchField extends PureComponent {
 
   reset = () => {
     this.props.searchStore.reset();
-    this.props.resetFilters();
     this.forceUpdate();
   };
 
   render() {
     const { classes } = this.props;
-    let { userQuery } = this.props.searchStore.values;
-    const { searchFilters } = this.state;
+    let { userQuery, filters } = this.props.searchStore.values;
 
     return (
       <div className={classes.searchContainer} id="search-container">
@@ -133,9 +126,9 @@ class SearchField extends PureComponent {
           className={classes.searchFiltersContainer}
           id="search-filters-container"
         >
-          {searchFilters &&
-            searchFilters.length > 0 &&
-            searchFilters.map((filter, index) => {
+          {filters &&
+            filters.length > 0 &&
+            filters.map((filter, index) => {
               let displayedName = ProfileService.getWingDisplayedName(
                 filter,
                 this.props.commonStore.locale
@@ -145,7 +138,7 @@ class SearchField extends PureComponent {
                   label={ProfileService.htmlDecode(displayedName)}
                   key={index}
                   onDelete={e => {
-                    this.props.removeFilter(filter);
+                    this.props.searchStore.removeFilter(filter);
                   }}
                   mode="highlight"
                   className={"highlighted"}
@@ -167,7 +160,7 @@ class SearchField extends PureComponent {
           />
         </div>
 
-        {(userQuery || (searchFilters && searchFilters.length > 0)) && (
+        {(userQuery || (filters && filters.length > 0)) && (
           <IconButton className={classes.searchClear} onClick={this.reset}>
             <Clear fontSize="inherit" />
           </IconButton>
@@ -176,8 +169,6 @@ class SearchField extends PureComponent {
     );
   }
 }
-
-SearchField = withSearchManagement(SearchField);
 
 export default inject(
   "commonStore",

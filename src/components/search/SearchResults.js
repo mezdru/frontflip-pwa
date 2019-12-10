@@ -1,50 +1,48 @@
-import React, { Suspense } from 'react'
-import { Grid, withStyles } from '@material-ui/core';
-import { inject, observer } from 'mobx-react';
-import { observe } from 'mobx';
-import undefsafe from 'undefsafe';
+import React, { Suspense } from "react";
+import { Grid, withStyles } from "@material-ui/core";
+import { inject, observer } from "mobx-react";
+import { observe } from "mobx";
+import undefsafe from "undefsafe";
 
-import AlgoliaService from '../../services/algolia.service';
-import { shuffleArray } from '../../services/utils.service';
-import Card from '../card/CardProfile';
-import withSearchManagement from '../../hoc/SearchManagement.hoc';
-import InvitationDialog from '../utils/popup/Invitation';
+import AlgoliaService from "../../services/algolia.service";
+import { shuffleArray } from "../../services/utils.service";
+import Card from "../card/CardProfile";
+import InvitationDialog from "../utils/popup/Invitation";
 
-const SearchShowMore = React.lazy(() => import('./SearchShowMore'));
-const SearchNoResults = React.lazy(() => import('./SearchNoResults'));
-
+const SearchShowMore = React.lazy(() => import("./SearchShowMore"));
+const SearchNoResults = React.lazy(() => import("./SearchNoResults"));
 
 const styles = theme => ({
   hitList: {
-    position: 'relative',
+    position: "relative",
     zIndex: 999,
-    width: '100%',
-    minHeight: 'calc(100vh - 129px)',
-    backgroundColor: '#f2f2f2',
-    '& ul': {
-      listStyleType: 'none',
+    width: "100%",
+    minHeight: "calc(100vh - 129px)",
+    backgroundColor: "#f2f2f2",
+    "& ul": {
+      listStyleType: "none",
       padding: 0,
-      marginTop: '32px',
-      marginBottom: '32px',
+      marginTop: "32px",
+      marginBottom: "32px"
     },
-    '& ul li': {
-      marginBottom: '32px',
+    "& ul li": {
+      marginBottom: "32px"
     },
-    '& ul li > div:first-child': {
-      position: 'relative',
-      left: '0',
-      right: '0',
-      margin: 'auto'
+    "& ul li > div:first-child": {
+      position: "relative",
+      left: "0",
+      right: "0",
+      margin: "auto"
     }
   },
   cardMobileView: {
-    [theme.breakpoints.down('xs')]: {
-      margin: '16px!important',
-    },
+    [theme.breakpoints.down("xs")]: {
+      margin: "16px!important"
+    }
   },
   sentinel: {
-    position: 'absolute',
-    marginTop: '-500px',
+    position: "absolute",
+    marginTop: "-500px"
   }
 });
 
@@ -58,43 +56,42 @@ class SearchResults extends React.Component {
       showNoResult: false,
       loadInProgress: true,
       hideShowMore: false,
-      observer: () => { },
-      filterRequest: '',
-      queryRequest: '',
+      observer: () => {},
+      filterRequest: "",
+      queryRequest: ""
     };
   }
 
   componentDidMount() {
-
-    if (undefsafe(this.props.orgStore.currentAlgoliaKey, 'initialized')) {
-      this.props.makeFiltersRequest()
-        .then((req) => {
-          this.setState({ filterRequest: req.filterRequest, queryRequest: req.queryRequest }, () => {
-            this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
-          });
-        });
+    if (undefsafe(this.props.orgStore.currentAlgoliaKey, "initialized")) {
+      this.fetchHits(this.props.searchStore.values.filters);
     }
 
     this.setState({
-      observer: observe(this.props.orgStore, 'currentAlgoliaKey', (change) => {
-        if (undefsafe(change.newValue, 'initialized')) {
-          this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, null);
+      observer: observe(this.props.orgStore, "currentAlgoliaKey", change => {
+        if (undefsafe(change.newValue, "initialized")) {
+          this.fetchHits(this.props.searchStore.values.filters);
         }
       })
     });
 
-    observe(this.props.commonStore, 'searchFilters', (change) => {
-      if (JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
-        this.props.makeFiltersRequest()
-          .then((req) => {
-            this.setState({ filterRequest: req.filterRequest, queryRequest: req.queryRequest, page: 0 }, () => {
-              this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, this.state.page)
-                .then(() => {
-                  this.props.keenStore.recordEvent('search', { results: this.props.commonStore.searchResultsCount, filters: change.newValue, recordEmitter: undefsafe(this.props.recordStore.currentUserRecord, '_id') })
-                });
-            });
+    observe(this.props.searchStore.values.filters, change => {
+      this.setState({ page: 0 }, () => {
+        this.fetchHits(
+          this.props.searchStore.values.filters,
+          null,
+          this.state.page
+        ).then(() => {
+          this.props.keenStore.recordEvent("search", {
+            results: this.props.commonStore.searchResultsCount,
+            filters: change.newValue,
+            recordEmitter: undefsafe(
+              this.props.recordStore.currentUserRecord,
+              "_id"
+            )
           });
-      }
+        });
+      });
     });
 
     this.createScrollObserver();
@@ -114,49 +111,67 @@ class SearchResults extends React.Component {
         });
       });
 
-      let hitList = document.getElementById('algolia-sentinel');
+      let hitList = document.getElementById("algolia-sentinel");
       observer.observe(hitList);
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
-  fetchHits = async (filters, query, facetFilters, page) => {
-    await AlgoliaService.fetchHits(filters, query, facetFilters, page, true, 5)
-      .then((content) => {
-
+  fetchHits = async (filters, facetFilters, page) => {
+    await AlgoliaService.fetchHits(filters, facetFilters, page, true, 5)
+      .then(content => {
         if (!content) return;
 
-        if ((!content.hits || content.hits.length === 0) && (!page || page === 0)) this.setState({ showNoResult: true, hideShowMore: true });
+        if (
+          (!content.hits || content.hits.length === 0) &&
+          (!page || page === 0)
+        )
+          this.setState({ showNoResult: true, hideShowMore: true });
         else this.setState({ showNoResult: false });
 
         this.props.commonStore.searchResultsCount = content.nbHits;
 
-        if (content.page >= (content.nbPages - 1)) this.setState({ hideShowMore: true });
+        if (content.page >= content.nbPages - 1)
+          this.setState({ hideShowMore: true });
         else if (content.nbPages > 1) this.setState({ hideShowMore: false });
 
         if (page) {
-          this.setState({ hits: this.state.hits.concat(content.hits) }, this.endHitsLoad);
+          this.setState(
+            { hits: this.state.hits.concat(content.hits) },
+            this.endHitsLoad
+          );
         } else {
           let contentHits = Array.from(content.hits);
-          if (this.state.filterRequest === 'type:person' && !this.state.queryRequest) {
+          if (
+            this.state.filterRequest === "type:person" &&
+            !this.state.queryRequest
+          ) {
             contentHits = shuffleArray(contentHits);
           }
           this.setState({ hits: contentHits }, this.endHitsLoad);
         }
-      }).catch((e) => { this.setState({ hits: [] }) });
-  }
+      })
+      .catch(e => {
+        this.setState({ hits: [] });
+      });
+  };
 
   endHitsLoad = () => {
     this.setState({ loadInProgress: false });
-  }
+  };
 
-  handleShowMore = (e) => {
-    if (!undefsafe(this.props.orgStore.currentAlgoliaKey, 'initialized')) return;
+  handleShowMore = e => {
+    if (!undefsafe(this.props.orgStore.currentAlgoliaKey, "initialized"))
+      return;
     this.setState({ page: this.state.page + 1, loadInProgress: true }, () => {
-      this.fetchHits(this.state.filterRequest, this.state.queryRequest, null, this.state.page);
+      this.fetchHits(
+        this.props.searchStore.values.filters,
+        null,
+        this.state.page
+      );
     });
-  }
+  };
 
   render() {
     const { hits, loadInProgress, hideShowMore, showNoResult } = this.state;
@@ -169,7 +184,14 @@ class SearchResults extends React.Component {
           {hitsResult.map((hit, i) => {
             return (
               <li key={hit.objectID}>
-                <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} >
+                <Grid
+                  item
+                  xs={12}
+                  sm={8}
+                  md={6}
+                  lg={4}
+                  className={classes.cardMobileView}
+                >
                   <Card hit={hit} handleDisplayProfile={handleDisplayProfile} />
                 </Grid>
               </li>
@@ -180,11 +202,13 @@ class SearchResults extends React.Component {
           {!hideShowMore && (
             <li>
               <Suspense fallback={<></>}>
-                <SearchShowMore loadInProgress={loadInProgress} handleShowMore={this.handleShowMore} />
+                <SearchShowMore
+                  loadInProgress={loadInProgress}
+                  handleShowMore={this.handleShowMore}
+                />
               </Suspense>
             </li>
           )}
-
 
           {showNoResult && (
             <Suspense fallback={<></>}>
@@ -192,7 +216,15 @@ class SearchResults extends React.Component {
             </Suspense>
           )}
 
-          <Grid item xs={12} sm={8} md={6} lg={4} className={classes.cardMobileView} style={{left:0, right:0, margin: 'auto'}} >
+          <Grid
+            item
+            xs={12}
+            sm={8}
+            md={6}
+            lg={4}
+            className={classes.cardMobileView}
+            style={{ left: 0, right: 0, margin: "auto" }}
+          >
             <InvitationDialog />
           </Grid>
         </ul>
@@ -201,10 +233,10 @@ class SearchResults extends React.Component {
   }
 }
 
-SearchResults = withSearchManagement(SearchResults);
-
-export default inject('commonStore', 'orgStore', 'keenStore', 'recordStore')(
-  observer(
-    withStyles(styles)(SearchResults)
-  )
-);
+export default inject(
+  "commonStore",
+  "orgStore",
+  "keenStore",
+  "recordStore",
+  "searchStore"
+)(observer(withStyles(styles)(SearchResults)));

@@ -9,7 +9,6 @@ import profileService from '../../../services/profile.service';
 import PopupLayout from './PopupLayout';
 import EmailService from '../../../services/email.service';
 import SnackbarCustom from '../snackbars/SnackbarCustom';
-import withSearchManagement from '../../../hoc/SearchManagement.hoc';
 import AlgoliaService from '../../../services/algolia.service';
 import { Email } from '@material-ui/icons';
 import undefsafe from 'undefsafe';
@@ -70,8 +69,7 @@ class AskForHelp extends React.Component {
         error: false
       });
       this.getSearchResults();
-      observe(this.props.commonStore, 'searchFilters', (change) => {
-        if (JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue))
+      observe(this.props.searchStore.values.filters, (change) => {
           this.getSearchResults();
       });
     }
@@ -95,7 +93,7 @@ class AskForHelp extends React.Component {
       sender: this.props.recordStore.currentUserRecord._id,
       recipients: this.buildRecipientsArray(this.state.recipients),
       results: this.props.commonStore.searchResultsCount,
-      tags: this.buildTagsArray(this.props.commonStore.searchFilters),
+      tags: this.buildTagsArray(this.props.searchStore.values.filters),
       service: 'email',
       message: this.state.message
     }
@@ -119,7 +117,7 @@ class AskForHelp extends React.Component {
 
   buildTagsArray(filters) {
     if (!filters) return [];
-    return filters.map(filter => filter.tag);
+    return filters.map(filter => filter.value);
   }
 
   handleMessageChange = (e) => this.setState({ message: e.target.value });
@@ -218,10 +216,10 @@ class AskForHelp extends React.Component {
   }
 }
 
-export default inject('commonStore', 'helpRequestStore', 'recordStore', 'orgStore', 'keenStore')(
+export default inject('commonStore', 'helpRequestStore', 'recordStore', 'orgStore', 'keenStore', 'searchStore')(
   observer(
     withStyles(styles, { withTheme: true })(
-      injectIntl(withSearchManagement(AskForHelp))
+      injectIntl(AskForHelp)
     )
   )
 );
