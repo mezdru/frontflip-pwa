@@ -81,7 +81,6 @@ class SearchPage extends PureComponent {
       this.setState({ showCongratulation: true });
 
     observe(this.props.searchStore.values.filters, change => {
-      console.log('fitlers change')
       window.history.pushState(null, window.document.title, this.props.searchStore.encodeFilters());
     });
 

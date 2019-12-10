@@ -116,8 +116,6 @@ class Auth extends React.Component {
   render() {
     const { redirectTo } = this.state;
     let authState = JSON.parse(this.state.queryParams.state || "{}");
-    console.debug('%c Render Auth.js', 'background-color: grey; padding: 6px 12px; border-radius: 5px; color: white;');
-    if(redirectTo) console.log('Auth.js : redirect to : ' + redirectTo);
     if (redirectTo) return (<Redirect push to={redirectTo} />);
 
     return (
