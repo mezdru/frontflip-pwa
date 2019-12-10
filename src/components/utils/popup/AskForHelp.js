@@ -9,7 +9,6 @@ import profileService from '../../../services/profile.service';
 import PopupLayout from './PopupLayout';
 import EmailService from '../../../services/email.service';
 import SnackbarCustom from '../snackbars/SnackbarCustom';
-import withSearchManagement from '../../../hoc/SearchManagement.hoc';
 import AlgoliaService from '../../../services/algolia.service';
 import { Email } from '@material-ui/icons';
 import undefsafe from 'undefsafe';
@@ -221,7 +220,7 @@ class AskForHelp extends React.Component {
 export default inject('commonStore', 'helpRequestStore', 'recordStore', 'orgStore', 'keenStore')(
   observer(
     withStyles(styles, { withTheme: true })(
-      injectIntl(withSearchManagement(AskForHelp))
+      injectIntl(AskForHelp)
     )
   )
 );

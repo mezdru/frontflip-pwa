@@ -13,7 +13,6 @@ import { styles } from "./SearchPage.css";
 import ErrorBoundary from "../components/utils/errors/ErrorBoundary";
 import "./SearchPageStyle.css";
 import SearchButton from "../components/search/SearchButton";
-import withSearchManagement from "../hoc/SearchManagement.hoc";
 import { withProfileManagement } from "../hoc/profile/withProfileManagement";
 import AskForHelpFab from "../components/utils/buttons/AskForHelpFab";
 import { getBaseUrl } from "../services/utils.service";
@@ -75,10 +74,16 @@ class SearchPage extends PureComponent {
 
   componentDidMount() {
     this.moveSearchInputListener();
-    this.handleUrlSearchFilters();
+
+    this.props.searchStore.decodeFilters(window.location.search);
 
     if (this.props.match.path.search("congrats") > -1)
       this.setState({ showCongratulation: true });
+
+    observe(this.props.searchStore.values.filters, change => {
+      console.log('fitlers change')
+      window.history.pushState(null, window.document.title, this.props.searchStore.encodeFilters());
+    });
 
     observe(this.props.commonStore, "searchFilters", change => {
       if (JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
@@ -90,7 +95,7 @@ class SearchPage extends PureComponent {
         ) {
           this.handleShowSearchResults(200);
         }
-        window.history.pushState(null, window.document.title, this.props.makeUrlQuery(this.props.commonStore.searchFilters));
+        window.history.pushState(null, window.document.title, this.props.searchStore.encodeFilters());
         this.forceUpdate();
       }
     });
@@ -230,30 +235,6 @@ class SearchPage extends PureComponent {
       containerId: "content-container",
       offset: offset || 0,
       delay: 200 // @todo : wait that search results is updated before launch scroll / remove this static delay
-    });
-  };
-
-  /**
-   * @description Handle URL search filters to make first search filters
-   */
-  handleUrlSearchFilters = () => {
-    if (!this.state.hashtagsFilter) return;
-
-    let currentSearchFilters = this.props.commonStore.getSearchFilters();
-
-    this.state.hashtagsFilter.forEach(wing => {
-      if (
-        !currentSearchFilters.find(
-          searchFilter => searchFilter.tag === "#" + wing
-        )
-      ) {
-        this.props.addFilter({
-          tag: "#" + wing,
-          value: "#" + wing,
-          label: "#" + wing,
-          name: wing
-        });
-      }
     });
   };
 
@@ -486,7 +467,7 @@ class SearchPage extends PureComponent {
 }
 
 SearchPage = withAuthorizationManagement(
-  withSearchManagement(withProfileManagement(SearchPage)),
+  withProfileManagement(SearchPage),
   "search"
 );
 
@@ -496,5 +477,6 @@ export default inject(
   "authStore",
   "userStore",
   "recordStore",
-  "keenStore"
+  "keenStore",
+  "searchStore"
 )(observer(withWidth()(withStyles(styles)(SearchPage))));

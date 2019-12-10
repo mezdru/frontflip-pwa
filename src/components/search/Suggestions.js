@@ -5,7 +5,6 @@ import { withStyles, Chip, Hidden, IconButton } from '@material-ui/core';
 import AlgoliaService from '../../services/algolia.service';
 import { inject, observer } from 'mobx-react';
 import { observe } from 'mobx';
-import withSearchManagement from '../../hoc/SearchManagement.hoc';
 import SuggestionsService from '../../services/suggestions.service';
 import ProfileService from '../../services/profile.service';
 import { ArrowLeft, ArrowRight } from '@material-ui/icons';

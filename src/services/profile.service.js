@@ -1,7 +1,7 @@
-import commonStore from '../stores/common.store';
 import twemoji from 'twemoji';
 import defaultPicture from '../resources/images/placeholder_person.png';
 import defaultHashtagPicture from '../resources/images/placeholder_hashtag.png';
+import searchStore from '../stores/search.store';
 
 class ProfileService {
   EXTRA_LINK_LIMIT = 20;
@@ -177,10 +177,10 @@ class ProfileService {
   
   makeHightlighted = function (item) {
     if (!item) return;
-    let filters = commonStore.getSearchFilters() || commonStore.searchFilters;
+    let filters = searchStore.values.filters
     if (filters && filters.length > 0 && item.hashtags && item.hashtags.length > 0) {
       item.hashtags.forEach((hashtag, index) => {
-        if (hashtag.tag && filters.find(filterValue => filterValue.tag.toLowerCase() === hashtag.tag.toLowerCase())) item.hashtags[index].class = 'highlighted';
+        if (hashtag.tag && filters.find(filterValue => filterValue.value.toLowerCase() === hashtag.tag.toLowerCase())) item.hashtags[index].class = 'highlighted';
       });
     }
   };

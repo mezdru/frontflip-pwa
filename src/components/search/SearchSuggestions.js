@@ -3,7 +3,6 @@ import { withStyles, Chip, Hidden, IconButton } from '@material-ui/core';
 import AlgoliaService from '../../services/algolia.service';
 import { inject, observer } from 'mobx-react';
 import { observe } from 'mobx';
-import withSearchManagement from '../../hoc/SearchManagement.hoc';
 import SuggestionsService from '../../services/suggestions.service';
 import ProfileService from '../../services/profile.service';
 import { ArrowLeft, ArrowRight } from '@material-ui/icons';
@@ -99,53 +98,32 @@ class SearchSuggestions extends React.Component {
     super(props);
     this.state = {
       facetHits: [],
-      observer: () => { },
-      observer2: () => { },
-      filterRequest: 'type:person',
-      queryRequest: '',
       firstWings: []
     };
 
   }
 
-  componentDidMount() {
+  fetchSoftWings = () => {
     AlgoliaService.setAlgoliaKey(undefsafe(this.props.orgStore.currentAlgoliaKey, 'value'));
-    AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:#Wings', null, null, null)
-      .then(content => {
+    AlgoliaService.fetchHits([{type: 'type', value: 'hashtag'}, {type: 'hashtags.tag', value: '%23Wings'}])
+    .then(content => {
 
-        let firstWings = ((content && content.hits) ? content.hits : []);
-        this.props.commonStore.hiddenWings = firstWings;
+      let firstWings = undefsafe(content, 'hits') || [];
+      this.props.commonStore.hiddenWings = firstWings;
 
-        this.setState({ firstWings: firstWings }, () => {
-          this.fetchSuggestions(this.state.filterRequest, this.state.queryRequest);
-        });
+      this.setState({ firstWings: firstWings }, () => {
+        this.fetchSuggestions(this.props.searchStore.values.filters);
       });
-
-    this.setState({
-      observer: observe(this.props.orgStore, 'currentAlgoliaKey', (change) => {
-        AlgoliaService.setAlgoliaKey(undefsafe(this.props.orgStore.currentAlgoliaKey, 'value'));
-        AlgoliaService.fetchHits('type:hashtag AND hashtags.tag:#Wings', null, null, null)
-          .then(content => {
-            let firstWings = ((content && content.hits) ? content.hits : []);
-            this.props.commonStore.hiddenWings = firstWings;
-            this.setState({ firstWings: ((content && content.hits) ? content.hits : []) }, () => {
-              this.fetchSuggestions(this.state.filterRequest, this.state.queryRequest);
-            });
-          });
-      })
     });
+  }
 
-    this.setState({
-      observer2: observe(this.props.commonStore, 'searchFilters', (change) => {
-        this.props.makeFiltersRequest()
-          .then((request) => {
-            if (JSON.stringify(change.newValue) !== JSON.stringify(change.oldValue)){
-              this.setState({ filterRequest: request.filterRequest, queryRequest: request.queryRequest }, () => {
-                this.fetchSuggestions(request.filterRequest, request.queryRequest);
-              });
-            }
-          });
-      })
+  componentDidMount() {
+    this.fetchSoftWings();
+
+    this.unsubAlgoliaKey = observe(this.props.orgStore, 'currentAlgoliaKey', () => this.fetchSoftWings());
+
+    this.unsubFilters = observe(this.props.searchStore.values.filters, change => {
+      this.fetchSuggestions(change.newValue);
     });
   }
 
@@ -158,8 +136,8 @@ class SearchSuggestions extends React.Component {
   }
 
   componentWillUnmount() {
-    this.state.observer();
-    this.state.observer2();
+    if(this.unsubAlgoliaKey) this.unsubAlgoliaKey();
+    if(this.unsubFilters) this.unsubFilters();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -168,37 +146,25 @@ class SearchSuggestions extends React.Component {
     this.setState({ facetHits: newSuggs, shouldUpdate: true });
   }
 
-  fetchSuggestions = (filters, query) => {
-    AlgoliaService.fetchFacetValues(null, false, filters, query)
-      .then((res) => {
-        if (!res) return;
-        SuggestionsService.upgradeData(res.facetHits)
-          .then(resultHits => {
+  fetchSuggestions = async (filters) => {
+    let algoliaRes = await AlgoliaService.fetchFacetValues(null, false, filters);
+    if(!algoliaRes) return null;
 
-            var resultHitsFiltered = [];
+    let hits = await SuggestionsService.upgradeData(algoliaRes.facetHits);
+    let resultHitsFiltered = hits.filter(hit => hit && !this.state.firstWings.some(fw => fw.tag === (hit.tag || hit.value)));
 
-            resultHits.forEach(hit => {
-              if (hit && this.state.firstWings.findIndex(wing => wing.tag === (hit.tag || hit.value)) === -1) {
-                resultHitsFiltered.push(hit);
-              }
-            });
-
-            var results = (resultHitsFiltered.length > 19 ? resultHitsFiltered : resultHits);
-            results = SuggestionsService.removeHiddenWings(results);
-
-            this.props.resetScroll("search-suggestions-container");
-            this.setState({ facetHits: getUnique(results.splice(0, 20), "tag"), shouldUpdate: true });
-          });
-      })
-      .catch((e) => { console.log(e) });
+    resultHitsFiltered = resultHitsFiltered.length > 15 ? resultHitsFiltered : hits;
+    resultHitsFiltered = SuggestionsService.removeHiddenWings(resultHitsFiltered);
+    this.props.resetScroll("search-suggestions-container");
+    this.setState({ facetHits: getUnique(resultHitsFiltered.splice(0, 20), "tag"), shouldUpdate: true });
   }
 
   shouldDisplaySuggestion(tag) {
-    return (this.state.filterRequest.search(tag) === -1);
+    return !this.props.searchStore.values.filters.some(f => f.value === tag);
   }
 
   handleWingClick = (wing) => {
-    this.props.addFilter(wing);
+    this.props.searchStore.addFilter(this.props.searchStore.getFilterTypeByTag(wing.value || wing.tag), wing.value || wing.tag);
   }
 
   render() {
@@ -206,7 +172,7 @@ class SearchSuggestions extends React.Component {
     const { classes } = this.props;
     const { locale } = this.props.commonStore;
 
-    return (
+    return ( 
       <div style={{position: 'relative'}}>
         
         <Hidden smDown>
@@ -267,8 +233,8 @@ class SearchSuggestions extends React.Component {
   }
 }
 
-SearchSuggestions = withScrollManagement(withSearchManagement(SearchSuggestions));
+SearchSuggestions = withScrollManagement(SearchSuggestions);
 
-export default inject('commonStore', 'orgStore')(
+export default inject('commonStore', 'orgStore', 'searchStore')(
   observer(withStyles(styles)(SearchSuggestions))
 );

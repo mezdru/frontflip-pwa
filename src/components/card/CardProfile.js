@@ -8,7 +8,6 @@ import '../../resources/stylesheets/font-awesome.min.css';
 import Wings from '../utils/wing/Wings';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import ProfileService from '../../services/profile.service';
-import withSearchManagement from '../../hoc/SearchManagement.hoc';
 import { styles } from './CardProfile.css';
 import { injectIntl } from 'react-intl';
 import { getBaseUrl } from '../../services/utils.service';
@@ -52,7 +51,7 @@ class CardProfile extends React.PureComponent {
 
   render() {
     const { classes, hit } = this.props;
-    const { addFilter } = this.props;
+    const { addFilter } = this.props.searchStore;
     const { locale } = this.props.commonStore;
     let currentWings = 0;
 
@@ -145,9 +144,7 @@ CardProfile.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-CardProfile = withSearchManagement(CardProfile);
-
-export default inject('commonStore', 'orgStore', 'recordStore', 'keenStore')(
+export default inject('commonStore', 'orgStore', 'recordStore', 'keenStore', 'searchStore')(
   observer(
     withWidth()(withStyles(styles)(injectIntl(CardProfile)))
   )
