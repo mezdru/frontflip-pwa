@@ -51,7 +51,6 @@ class CardProfile extends React.PureComponent {
 
   render() {
     const { classes, hit } = this.props;
-    const { addFilter } = this.props.searchStore;
     const { locale } = this.props.commonStore;
     let currentWings = 0;
 
@@ -118,7 +117,7 @@ class CardProfile extends React.PureComponent {
                 return (
                   <Wings src={ProfileService.getPicturePath(hashtag.picture)} key={hashtag._id}
                     label={ProfileService.htmlDecode(displayedName)}
-                    onClick={(e) => addFilter({ name: displayedName, tag: hashtag.tag, value: hashtag.tag, label: displayedName })}
+                    onClick={(e) => this.props.searchStore.addFilter('hashtags.tag', hashtag.tag)}
                     recordId={hit.objectID} hashtagId={hashtag._id} claps={claps} mode={(hashtag.class ? 'highlight' : 'card')}
                     enableClap={true}
                   />

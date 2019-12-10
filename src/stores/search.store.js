@@ -1,7 +1,7 @@
 import { observable, action, decorate } from "mobx";
 import qs from "qs";
 
-const TYPES = ["tag", "hashtags.tag", "query", "onboarded_timestamp", "type"];
+const TYPES = ["tag", "hashtags.tag", "query", "onboarded_date", "type"];
 
 class SearchStore {
   inProgress = false;
@@ -58,7 +58,7 @@ class SearchStore {
   }
 
   addFilter(type, value) {
-    if (!TYPES.some(elt => elt === type)) throw new Error("Invalid type");
+    if (!TYPES.some(elt => elt === type)) throw new Error("Invalid type: " + type);
 
     if (
       !this.values.filters.some(
