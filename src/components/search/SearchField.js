@@ -11,6 +11,8 @@ import ProfileService from "../../services/profile.service";
 import Wings from "../utils/wing/Wings";
 import { styles } from "./SearchField.css";
 
+const FILTERS_ALLOWED = ["hashtags.tag", "tag", "query"];
+
 class SearchField extends PureComponent {
   constructor(props) {
     super(props);
@@ -129,6 +131,7 @@ class SearchField extends PureComponent {
           {filters &&
             filters.length > 0 &&
             filters.map((filter, index) => {
+              if(!FILTERS_ALLOWED.some(elt => elt === filter.type)) return null;
               let displayedName = ProfileService.getWingDisplayedName(
                 filter,
                 this.props.commonStore.locale
