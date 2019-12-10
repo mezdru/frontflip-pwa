@@ -43,7 +43,6 @@ class SearchStore {
         this.addFilter(key, value);
       }
     });
-    console.log(JSON.stringify(this.values.filters))
   }
 
   encodeFilters = () => {
