@@ -119,7 +119,7 @@ class SearchResults extends React.Component {
   };
 
   fetchHits = async (filters, facetFilters, page) => {
-    await AlgoliaService.fetchHits(filters, facetFilters, page, true, 5)
+    await AlgoliaService.fetchHits([{type: 'type', value: 'person'}].concat(filters), facetFilters, page, true, 5)
       .then(content => {
         if (!content) return;
 

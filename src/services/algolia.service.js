@@ -190,7 +190,7 @@ class AlgoliaService {
           page: page || 0,
           query: queryRequest || "",
           facetFilters: facetFilters || "",
-          filters: filtersRequest ? ("type:person AND "+filtersRequest) : "type:person AND welcomed=1",
+          filters: filtersRequest ? filtersRequest : "type:person AND welcomed=1",
           hitsPerPage: hitsPerPage || 30,
           attributesToSnippet: ["intro:" + 15, "description:" + 15]
         },
