@@ -10,6 +10,7 @@ import "./SearchFieldStyle.css";
 import ProfileService from "../../services/profile.service";
 import Wings from "../utils/wing/Wings";
 import { styles } from "./SearchField.css";
+import suggestionsService from "../../services/suggestions.service";
 
 const FILTERS_ALLOWED = ["hashtags.tag", "tag", "query"];
 
@@ -17,11 +18,18 @@ class SearchField extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      filters: []
     };
   }
 
   componentDidMount() {
     if (this.props.mode !== "onboard" && this.props.mode !== "propose") {
+
+      this.makeDisplayedFilters(this.props.searchStore.values.filters)
+      .then(filters => {
+        this.setState({filters});
+      });
+
       this.unsubscribeSearchFilters = observe(
         this.props.searchStore.values.filters,
         change => {
@@ -30,7 +38,12 @@ class SearchField extends PureComponent {
             currentSearchFilters.length > 0 ? " " : ""
           );
           this.scrollToRight();
-          this.forceUpdate();
+
+          this.makeDisplayedFilters(this.props.searchStore.values.filters)
+          .then(filters => {
+            this.setState({filters});
+          });
+
         }
       );
     } else {
@@ -118,9 +131,21 @@ class SearchField extends PureComponent {
     this.forceUpdate();
   };
 
+  makeDisplayedFilters = async (filters) => {
+    if(!filters || filters.length === 0) return [];
+    let filtersP = JSON.parse(JSON.stringify(filters));
+
+    filtersP = filtersP.filter(f => FILTERS_ALLOWED.some(elt => elt === f.type));
+    filtersP = filtersP.map(f => {return {tag: f.value};});
+    filtersP = await suggestionsService.upgradeData(filtersP);
+
+    return filtersP;
+  }
+
   render() {
     const { classes } = this.props;
-    let { userQuery, filters } = this.props.searchStore.values;
+    let { userQuery } = this.props.searchStore.values;
+    let {filters} = this.state;
 
     return (
       <div className={classes.searchContainer} id="search-container">
@@ -131,7 +156,6 @@ class SearchField extends PureComponent {
           {filters &&
             filters.length > 0 &&
             filters.map((filter, index) => {
-              if(!FILTERS_ALLOWED.some(elt => elt === filter.type)) return null;
               let displayedName = ProfileService.getWingDisplayedName(
                 filter,
                 this.props.commonStore.locale

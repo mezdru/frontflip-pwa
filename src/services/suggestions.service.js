@@ -181,7 +181,7 @@ class SuggestionsService {
    */
   populateData = (suggestions, bank) => {
     return suggestions.map((suggestion, i) => {
-      return (bank ? bank.find(bankElt => bankElt.tag === suggestion.value) || suggestion : suggestion);
+      return (bank ? bank.find(bankElt => bankElt.tag === (suggestion.value || suggestion.tag)) || suggestion : suggestion);
     });
   }
 

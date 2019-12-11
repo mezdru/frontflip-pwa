@@ -72,6 +72,10 @@ class SearchPage extends PureComponent {
     this.props.commonStore.setLocalStorage("wingsBank", [], true);
   }
 
+  componentWillUnmount() {
+    if(this.unsubFilters) this.unsubFilters();
+  }
+
   componentDidMount() {
     this.moveSearchInputListener();
 
@@ -80,23 +84,9 @@ class SearchPage extends PureComponent {
     if (this.props.match.path.search("congrats") > -1)
       this.setState({ showCongratulation: true });
 
-    observe(this.props.searchStore.values.filters, change => {
+    this.unsubFilters = observe(this.props.searchStore.values.filters, change => {
+      this.handleShowSearchResults(200);
       window.history.pushState(null, window.document.title, this.props.searchStore.encodeFilters());
-    });
-
-    observe(this.props.commonStore, "searchFilters", change => {
-      if (JSON.stringify(change.oldValue) !== JSON.stringify(change.newValue)) {
-        if (
-          (change.newValue && !change.oldValue) ||
-          (change.newValue &&
-            change.oldValue &&
-            change.newValue.length > change.oldValue.length)
-        ) {
-          this.handleShowSearchResults(200);
-        }
-        window.history.pushState(null, window.document.title, this.props.searchStore.encodeFilters());
-        this.forceUpdate();
-      }
     });
 
     this.unsubResultsCount = observe(
@@ -222,6 +212,7 @@ class SearchPage extends PureComponent {
    * @description Scroll to search results part.
    */
   handleShowSearchResults = offset => {
+    console.log('show search results')
     var contentPart = document.getElementById("content-container");
     if (!contentPart) return;
     var scrollMax = Math.min(

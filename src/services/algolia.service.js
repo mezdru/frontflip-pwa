@@ -9,6 +9,8 @@ class AlgoliaService {
   client;
   algoliaKey;
 
+  waitingTasks = [];
+
   constructor(algoliaKey) {
     if (algoliaKey) {
       this.algoliaKey = algoliaKey;
@@ -17,6 +19,7 @@ class AlgoliaService {
         this.algoliaKey
       );
       this.index = this.client.initIndex(this.indexName);
+      this.runWaitingTasks();
       let aKeyObject = orgStore.getAlgoliaKey(orgStore.currentOrganisation._id);
       aKeyObject.initialized = true;
     } else {
@@ -38,6 +41,7 @@ class AlgoliaService {
           this.algoliaKey
         );
         this.index = this.client.initIndex(this.indexName);
+        this.runWaitingTasks();
         let aKeyObject = orgStore.getAlgoliaKey(
           orgStore.currentOrganisation._id
         );
@@ -54,12 +58,34 @@ class AlgoliaService {
       algoliaKey
     );
     this.index = this.client.initIndex(this.indexName);
+    this.runWaitingTasks();
     let aKeyObject = orgStore.getAlgoliaKey(orgStore.currentOrganisation._id);
     aKeyObject.initialized = true;
   }
 
-  fetchFacetValues(lastSelection, privateOnly, filters) {
-    if (!this.index) return Promise.resolve();
+  addWaitingTask = () => {
+    let waitingTaskResolve;
+    let waitingTask = new Promise((resolve, reject) => {waitingTaskResolve = resolve});
+    this.waitingTasks.push(waitingTaskResolve);
+    return waitingTask;
+  }
+
+  runWaitingTasks = () => {
+    this.waitingTasks.forEach(waitingTask => {
+      waitingTask();
+    });
+  }
+
+
+
+
+
+
+
+
+
+  async fetchFacetValues(lastSelection, privateOnly, filters) {
+    if(!this.index) await this.addWaitingTask();
     let [filtersRequest, queryRequest] = this.makeRequest(filters);
 
     return new Promise((resolve, reject) => {
@@ -83,8 +109,8 @@ class AlgoliaService {
     });
   }
 
-  fetchHashtags(families) {
-    if (!this.index) return Promise.resolve();
+  async fetchHashtags(families) {
+    if(!this.index) await this.addWaitingTask();
     let filters = ["type:hashtag"];
     families.forEach(family => {
       if (family) filters.push("hashtags.tag:" + family.tag);
@@ -104,16 +130,8 @@ class AlgoliaService {
     });
   }
 
-  makeFacetFilters(lastSelection, privateOnly) {
-    let query = [];
-    if (privateOnly)
-      query.push("organisation:" + orgStore.currentOrganisation._id);
-    if (lastSelection) query.push("hashtags.tag:" + lastSelection.tag);
-    return query;
-  }
-
-  loadBank(filters) {
-    if (!this.index) return Promise.resolve();
+  async loadBank(filters) {
+    if(!this.index) await this.addWaitingTask();
     return new Promise((resolve, reject) => {
       let currentBank = commonStore.getLocalStorage("wingsBank", true);
       if (!filters && currentBank && currentBank.length > 0) resolve();
@@ -131,25 +149,8 @@ class AlgoliaService {
     });
   }
 
-  /**
-   * @description Add or update local bank and remove duplicate entries
-   */
-  addToLocalStorage(hits) {
-    return new Promise((resolve, reject) => {
-      let currentBank = commonStore.getLocalStorage("wingsBank", true) || [];
-      hits.forEach(hit => {
-        let index = currentBank.findIndex(elt => elt.tag === hit.Tag);
-        if (index === -1) currentBank.push(hit);
-        else currentBank[index] = hit;
-      });
-      commonStore.setLocalStorage("wingsBank", currentBank, true).then(() => {
-        resolve();
-      });
-    });
-  }
-
-  fetchOptions(inputValue, hashtagOnly, wingsFamily, hitsParPage) {
-    if (!this.index) return Promise.resolve();
+  async fetchOptions(inputValue, hashtagOnly, wingsFamily, hitsParPage) {
+    if(!this.index) await this.addWaitingTask();
     return new Promise((resolve, reject) => {
       this.index.search(
         {
@@ -176,6 +177,53 @@ class AlgoliaService {
         },
         (err, content) => resolve(content)
       );
+    });
+  }
+
+  async fetchHits(filters, facetFilters, page, logSearch, hitsPerPage) {
+    if(!this.index) await this.addWaitingTask();
+    let [filtersRequest, queryRequest] = this.makeRequest(filters);
+
+    return new Promise((resolve, reject) => {
+      this.index.search(
+        {
+          page: page || 0,
+          query: queryRequest || "",
+          facetFilters: facetFilters || "",
+          filters: filtersRequest || "type:person AND welcomed=1",
+          hitsPerPage: hitsPerPage || 30,
+          attributesToSnippet: ["intro:" + 15, "description:" + 15]
+        },
+        (err, content) => {
+          if (err) return resolve(content);
+          if (!content) return resolve(null);
+          return resolve(content);
+        }
+      );
+    });
+  }
+
+
+
+
+
+
+
+
+  /**
+   * @description Add or update local bank and remove duplicate entries
+   */
+  addToLocalStorage(hits) {
+    return new Promise((resolve, reject) => {
+      let currentBank = commonStore.getLocalStorage("wingsBank", true) || [];
+      hits.forEach(hit => {
+        let index = currentBank.findIndex(elt => elt.tag === hit.Tag);
+        if (index === -1) currentBank.push(hit);
+        else currentBank[index] = hit;
+      });
+      commonStore.setLocalStorage("wingsBank", currentBank, true).then(() => {
+        resolve();
+      });
     });
   }
 
@@ -213,27 +261,12 @@ class AlgoliaService {
     return [filterReq, queryReq];
   }
 
-  fetchHits(filters, facetFilters, page, logSearch, hitsPerPage) {
-    if (!this.index) return Promise.resolve();
-    let [filtersRequest, queryRequest] = this.makeRequest(filters);
-
-    return new Promise((resolve, reject) => {
-      this.index.search(
-        {
-          page: page || 0,
-          query: queryRequest || "",
-          facetFilters: facetFilters || "",
-          filters: filtersRequest || "type:person AND welcomed=1",
-          hitsPerPage: hitsPerPage || 30,
-          attributesToSnippet: ["intro:" + 15, "description:" + 15]
-        },
-        (err, content) => {
-          if (err) return resolve(content);
-          if (!content) return resolve(null);
-          return resolve(content);
-        }
-      );
-    });
+  makeFacetFilters(lastSelection, privateOnly) {
+    let query = [];
+    if (privateOnly)
+      query.push("organisation:" + orgStore.currentOrganisation._id);
+    if (lastSelection) query.push("hashtags.tag:" + lastSelection.tag);
+    return query;
   }
 }
 
