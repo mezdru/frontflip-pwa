@@ -267,7 +267,7 @@ class SearchPage extends PureComponent {
       pathNameExploded.some(elt => elt === recordTag) &&
       this.props.commonStore.url.params.action
         ? null
-        : getBaseUrl(this.props) + "/" + recordTag;
+        : getBaseUrl(this.props) + "/" + recordTag + this.props.searchStore.encodeFilters();
     this.setState({ visible: true, redirectTo: redirectTo });
   };
 
@@ -275,7 +275,7 @@ class SearchPage extends PureComponent {
     this.setState({ visible: false });
     setTimeout(() => {
       this.props.profileContext.reset();
-      this.setState({ redirectTo: getBaseUrl(this.props) });
+      this.setState({ redirectTo: getBaseUrl(this.props) + this.props.searchStore.encodeFilters() });
     }, (this.state.transitionDuration / 2) * 0.9);
   };
 
