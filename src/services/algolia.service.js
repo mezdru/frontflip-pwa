@@ -250,6 +250,7 @@ class AlgoliaService {
         if (queryReq !== "") queryReq += " ";
         queryReq += filter.value;
       } else if(filter.type === 'welcomedAt') {
+        if (filterReq !== "") filterReq += " AND ";
         let dateTimestamp = new Date(filter.value).getTime();
         filterReq += `${filter.type + (filter.options.operator === 'gt' ? ' > ' : ' < ') + dateTimestamp}`;
       } else {
