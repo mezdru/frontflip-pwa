@@ -44,9 +44,6 @@ export const styles = theme => ({
     marginBottom: 0,
     '& >div:first-child': {
       marginLeft: 16
-    },
-    [theme.breakpoints.down('xs')]: {
-      marginTop: '18px!important',
     }
   },
   wingsContainer: {
