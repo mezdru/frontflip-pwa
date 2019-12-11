@@ -212,7 +212,6 @@ class SearchPage extends PureComponent {
    * @description Scroll to search results part.
    */
   handleShowSearchResults = offset => {
-    console.log('show search results')
     var contentPart = document.getElementById("content-container");
     if (!contentPart) return;
     var scrollMax = Math.min(
