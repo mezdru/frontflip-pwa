@@ -14,22 +14,23 @@ import ErrorBoundary from "../components/utils/errors/ErrorBoundary";
 import "./SearchPageStyle.css";
 import SearchButton from "../components/search/SearchButton";
 import { withProfileManagement } from "../hoc/profile/withProfileManagement";
-import AskForHelpFab from "../components/utils/buttons/AskForHelpFab";
+// import AskForHelpFab from "../components/utils/buttons/AskForHelpFab";
 import { getBaseUrl } from "../services/utils.service";
 import withAuthorizationManagement from "../hoc/AuthorizationManagement.hoc";
+import Popups from "./Popups";
 
-const OnboardCongratulation = React.lazy(() =>
-  import("../components/utils/popup/OnboardCongratulation")
-);
-const PromptIOsInstall = React.lazy(() =>
-  import("../components/utils/popup/PromptIOsInstall")
-);
-const AskForHelp = React.lazy(() =>
-  import("../components/utils/popup/AskForHelp")
-);
-const AddWingPopup = React.lazy(() =>
-  import("../components/utils/popup/AddWingPopup")
-);
+// const OnboardCongratulation = React.lazy(() =>
+//   import("../components/utils/popup/OnboardCongratulation")
+// );
+// const PromptIOsInstall = React.lazy(() =>
+//   import("../components/utils/popup/PromptIOsInstall")
+// );
+// const AskForHelp = React.lazy(() =>
+//   import("../components/utils/popup/AskForHelp")
+// );
+// const AddWingPopup = React.lazy(() =>
+//   import("../components/utils/popup/AddWingPopup")
+// );
 const ProfileLayout = React.lazy(() =>
   import("../components/profile/ProfileLayout")
 );
@@ -41,10 +42,10 @@ const SearchResults = React.lazy(() =>
   import("../components/search/SearchResults")
 );
 const Search = React.lazy(() => import("../components/search/Search"));
-const Intercom = React.lazy(() => import("react-intercom"));
-const NotifyLatestAuth = React.lazy(() =>
-  import("../components/utils/popup/NotifyLatestAuth")
-);
+// const Intercom = React.lazy(() => import("react-intercom"));
+// const NotifyLatestAuth = React.lazy(() =>
+//   import("../components/utils/popup/NotifyLatestAuth")
+// );
 
 console.debug("Loading SearchPage");
 
@@ -342,9 +343,9 @@ class SearchPage extends PureComponent {
                 className={classes.searchMobileView}
               >
                 <ErrorBoundary>
-                  <Suspense fallback={<CircularProgress color="secondary" />}>
+                  {/* <Suspense fallback={<CircularProgress color="secondary" />}> */}
                     <Search />
-                  </Suspense>
+                  {/* </Suspense> */}
                 </ErrorBoundary>
               </Grid>
             </Grid>
@@ -372,7 +373,7 @@ class SearchPage extends PureComponent {
               </ErrorBoundary>
             </div>
           </div>
-          {currentOrganisation && !this.props.authStore.isAuth() && (
+          {/* {currentOrganisation && !this.props.authStore.isAuth() && (
             <Suspense fallback={<></>}>
               <Intercom appID={"k7gprnv3"} />
             </Suspense>
@@ -397,7 +398,7 @@ class SearchPage extends PureComponent {
                   }
                 />
               </Suspense>
-            )}
+            )} */}
         </main>
 
         <Suspense fallback={<></>}>
@@ -408,11 +409,11 @@ class SearchPage extends PureComponent {
           />
         </Suspense>
 
-        <Suspense fallback={<CircularProgress color="secondary" />}>
+        {/* <Suspense fallback={<CircularProgress color="secondary" />}>
           <AskForHelp isOpen={showAskForHelp} />
-        </Suspense>
+        </Suspense> */}
 
-        {showCongratulation && (
+        {/* {showCongratulation && (
           <Suspense fallback={<CircularProgress color="secondary" />}>
             <OnboardCongratulation
               isOpen={showCongratulation}
@@ -425,9 +426,9 @@ class SearchPage extends PureComponent {
           <Suspense fallback={<CircularProgress color="secondary" />}>
             <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} />
           </Suspense>
-        )}
+        )} */}
 
-        {this.props.authStore.isAuth() &&
+        {/* {this.props.authStore.isAuth() &&
           currentOrganisation &&
           currentOrganisation.tag !== "demo" && (
             <AskForHelpFab
@@ -439,9 +440,9 @@ class SearchPage extends PureComponent {
                 searchResultsCount <= 10
               }
             />
-          )}
+          )} */}
 
-        <Suspense fallback={<></>}>
+        {/* <Suspense fallback={<></>}>
           <PromptIOsInstall />
         </Suspense>
 
@@ -449,7 +450,9 @@ class SearchPage extends PureComponent {
           <Suspense fallback={<></>}>
             <NotifyLatestAuth />
           </Suspense>
-        )}
+        )} */}
+
+        <Popups />
       </React.Fragment>
     );
   }

@@ -23,19 +23,5 @@ export const styles = theme => ({
     left: 0,
     background: 'rgb(0,0,0)',
     opacity: 0,
-  },
-  fab: {
-    position: 'fixed',
-    bottom: 32,
-    right: 32,
-    zIndex: 1000,
-    width: 64,
-    height: 64,
-    [theme.breakpoints.down('xs')]: {
-      bottom: 16,
-      right: 16,
-      width: 56,
-      height: 56,
-    }
   }
 });

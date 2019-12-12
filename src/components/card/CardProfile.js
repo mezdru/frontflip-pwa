@@ -11,7 +11,7 @@ import { styles } from './CardProfile.css';
 import { injectIntl } from 'react-intl';
 import { getBaseUrl } from '../../services/utils.service';
 import undefsafe from 'undefsafe';
-
+// import '../../resources/stylesheets/font-awesome.min.css';
 React.lazy(() => import('../../resources/stylesheets/font-awesome.min.css'));
 
 ProfileService.setExtraLinkLimit(5);

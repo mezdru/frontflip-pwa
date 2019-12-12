@@ -43,9 +43,7 @@ class OnboardCongratulation extends React.Component {
   }
 
   handleOnboardEnd = () => {
-    this.setState({ redirectTo: getBaseUrl(this.props) }, () => {
-      this.props.handleClose();
-    }); 
+    this.setState({ redirectTo: getBaseUrl(this.props) }); 
   }
 
   render() {
