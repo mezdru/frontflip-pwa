@@ -21,7 +21,6 @@ import {
   isInStandaloneMode,
   UAParserInstance
 } from "../services/utils.service.js";
-import SlackService from "../services/slack.service";
 import undefsafe from "undefsafe";
 
 addLocaleData([...locale_en, ...locale_fr]);

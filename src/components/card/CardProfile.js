@@ -4,7 +4,6 @@ import { Grid, withStyles, Typography, IconButton, CardActions, CardContent, Car
 import withWidth from '@material-ui/core/withWidth';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import '../../resources/stylesheets/font-awesome.min.css';
 import Wings from '../utils/wing/Wings';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import ProfileService from '../../services/profile.service';
@@ -12,6 +11,8 @@ import { styles } from './CardProfile.css';
 import { injectIntl } from 'react-intl';
 import { getBaseUrl } from '../../services/utils.service';
 import undefsafe from 'undefsafe';
+
+React.lazy(() => import('../../resources/stylesheets/font-awesome.min.css'));
 
 ProfileService.setExtraLinkLimit(5);
 const WINGS_DISPLAYED = 7;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import { withStyles } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import PropTypes from 'prop-types';
@@ -6,18 +6,24 @@ import { Divider, SwipeableDrawer, IconButton, List, ListItem, ListItemSecondary
 import { ChevronLeft as ChevronLeftIcon } from '@material-ui/icons';
 import './header.css';
 import { styles } from './Header.css.js'
-import Logo from '../utils/logo/Logo';
 import { injectIntl } from 'react-intl';
 import undefsafe from 'undefsafe';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import UrlService from '../../services/url.service';
 import { Link, withRouter } from 'react-router-dom';
-import OrganisationsList from '../utils/orgsList/OrganisationsList';
-import InvitationDialog from '../utils/popup/Invitation';
-import LocaleSelector from '../utils/fields/LocaleSelector';
+// import OrganisationsList from '../utils/orgsList/OrganisationsList';
+// import InvitationDialog from '../utils/popup/Invitation';
+// import LocaleSelector from '../utils/fields/LocaleSelector';
+// import Logo from '../utils/logo/Logo';
+
 
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
+
+const LocaleSelector = React.lazy(() => import('../utils/fields/LocaleSelector'));
+const InvitationDialog = React.lazy(() => import('../utils/popup/Invitation'));
+const OrganisationsList = React.lazy(() => import('../utils/orgsList/OrganisationsList'));
+const Logo = React.lazy(() => import('../utils/logo/Logo'));
 
 class HeaderDrawer extends Component {
 
@@ -32,22 +38,7 @@ class HeaderDrawer extends Component {
     e.preventDefault();
     this.props.handleDrawerClose();
     this.props.authStore.logout().then(() => {
-      // @todo : issue with locale or only dev issue ? (always en-UK)
       window.location.href = UrlService.createUrl(window.location.host, this.props.orgStore.currentOrganisation ? '/' + this.props.orgStore.currentOrganisation.tag : '', null);
-    });
-  }
-
-  handleTestPushNotification = () => {
-    Notification.requestPermission(function (status) {
-      console.log('Notification permission status:', status);
-      if (status === 'granted') {
-        navigator.serviceWorker.getRegistration().then(function (reg) {
-          if (reg)
-            reg.showNotification('Hello world! This is a notification from Wingzy PWA!');
-          else
-            console.warn("Can't use notification in this APP");
-        });
-      }
     });
   }
 
@@ -86,7 +77,8 @@ class HeaderDrawer extends Component {
             </IconButton>
           </div>
 
-          <div className={'leftMenu'}>
+          {open && (
+            <div className={'leftMenu'}>
             {(auth && undefsafe(currentOrganisation, '_id')) && (
               <React.Fragment>
                 {currentUserRecord && (
@@ -94,7 +86,9 @@ class HeaderDrawer extends Component {
                     <List className={'leftSubmenu'}>
                       <ListItem >
                         <ListItemAvatar>
-                          <Logo type={'person'} src={this.getPicturePath(currentUserRecord.picture) || defaultPicture} alt={currentUserRecord.name || currentUserRecord.tag} className={classes.logoBorder} />
+                          <Suspense fallback={<></>}>
+                            <Logo type={'person'} src={this.getPicturePath(currentUserRecord.picture) || defaultPicture} alt={currentUserRecord.name || currentUserRecord.tag} className={classes.logoBorder} />
+                          </Suspense>
                         </ListItemAvatar>
                         <ListItemText primary={currentUserRecord.name || currentUserRecord.tag}
                           primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold', color: 'white', fontSize: '1rem' } }} />
@@ -109,7 +103,9 @@ class HeaderDrawer extends Component {
                 <List className={'leftSubmenu'}>
                   <ListItem onClick={this.props.handleDrawerClose} component={Link} to={'/' + locale + '/' + undefsafe(currentOrganisation, 'tag')}>
                     <ListItemAvatar>
-                      <Logo type={'organisation'} alt={undefsafe(currentOrganisation, 'name')} className={classes.logoBorder} />
+                      <Suspense fallback={<></>}>
+                        <Logo type={'organisation'} alt={undefsafe(currentOrganisation, 'name')} className={classes.logoBorder} />
+                      </Suspense>
                     </ListItemAvatar>
                     <ListItemText primary={currentOrganisation && (currentOrganisation.name || currentOrganisation.tag)}
                       primaryTypographyProps={{ variant: 'button', noWrap: true, style: { fontWeight: 'bold', color: 'white', fontSize: '1rem' } }} />
@@ -117,7 +113,9 @@ class HeaderDrawer extends Component {
 
                   {(undefsafe(currentOrganisation, 'canInvite') || undefsafe(currentUser, 'superadmin') || (currentOrgAndRecord && currentOrgAndRecord.admin)) && (
                     <ListItem>
-                      <InvitationDialog />
+                      <Suspense fallback={<></>}>
+                        <InvitationDialog />
+                      </Suspense>
                     </ListItem>
                   )}
                   {(undefsafe(currentUser, 'superadmin') || (currentOrgAndRecord && currentOrgAndRecord.admin)) && (
@@ -142,7 +140,9 @@ class HeaderDrawer extends Component {
                         <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.listOrgTitle' })}
                           primaryTypographyProps={{ noWrap: true, style: { fontWeight: 'bold' } }} />
                       </ListItem>
-                      <OrganisationsList onClick={this.props.handleDrawerClose} />
+                      <Suspense fallback={<></>}>
+                        <OrganisationsList onClick={this.props.handleDrawerClose} />
+                      </Suspense>
                     </React.Fragment>
                   )}
                   {undefsafe(currentUser, 'superadmin') && (
@@ -150,14 +150,6 @@ class HeaderDrawer extends Component {
                       <Divider className={classes.divider} />
                       <ListItem button component="a" href={'/' + locale + '/' + currentOrganisation.tag + '/onboard'}>
                         <ListItemText primary={"Onboard"} />
-                      </ListItem>
-                    </React.Fragment>
-                  )}
-                  {undefsafe(currentUser, 'superadmin') && (
-                    <React.Fragment>
-                      <Divider className={classes.divider} />
-                      <ListItem button onClick={this.handleTestPushNotification}>
-                        <ListItemText primary={"Test notification"} />
                       </ListItem>
                     </React.Fragment>
                   )}
@@ -189,7 +181,9 @@ class HeaderDrawer extends Component {
               <ListItem>
                 <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.locale' })} />
                 <ListItemSecondaryAction>
-                  < LocaleSelector currentLocale={locale} handleChange={this.handleLocaleChange} />
+                  <Suspense fallback={<></>}>
+                    <LocaleSelector currentLocale={locale} handleChange={this.handleLocaleChange} />
+                  </Suspense>
                 </ListItemSecondaryAction>
               </ListItem>
 
@@ -218,6 +212,8 @@ class HeaderDrawer extends Component {
               )}
             </List>
           </div>
+          )}
+
         </div>
       </SwipeableDrawer>
     )
