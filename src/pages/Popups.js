@@ -59,15 +59,21 @@ class Popups extends React.Component {
     const { showAskForHelp } = this.state;
     const { classes } = this.props;
 
+    let latestConnectionClosed = this.props.commonStore.getCookie(
+      "latestConnectionClosed"
+    );
+
     return (
       <>
         <Suspense fallback={<></>}>
           <PromptIOsInstall />
         </Suspense>
 
-        <Suspense fallback={<></>}>
-          <NotifyLatestAuth />
-        </Suspense>
+        {!latestConnectionClosed && (
+          <Suspense fallback={<></>}>
+            <NotifyLatestAuth />
+          </Suspense>
+        )}
 
         {this.isCongrats() && (
           <Suspense fallback={<></>}>
@@ -75,11 +81,9 @@ class Popups extends React.Component {
           </Suspense>
         )}
 
-        {showAskForHelp && (
-          <Suspense fallback={<></>}>
-            <AskForHelp isOpen={showAskForHelp} />
-          </Suspense>
-        )}
+        <Suspense fallback={<></>}>
+          <AskForHelp isOpen={showAskForHelp} />
+        </Suspense>
 
         {this.props.authStore.isAuth() &&
           currentOrganisation &&

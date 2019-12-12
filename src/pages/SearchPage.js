@@ -14,23 +14,9 @@ import ErrorBoundary from "../components/utils/errors/ErrorBoundary";
 import "./SearchPageStyle.css";
 import SearchButton from "../components/search/SearchButton";
 import { withProfileManagement } from "../hoc/profile/withProfileManagement";
-// import AskForHelpFab from "../components/utils/buttons/AskForHelpFab";
 import { getBaseUrl } from "../services/utils.service";
 import withAuthorizationManagement from "../hoc/AuthorizationManagement.hoc";
-import Popups from "./Popups";
 
-// const OnboardCongratulation = React.lazy(() =>
-//   import("../components/utils/popup/OnboardCongratulation")
-// );
-// const PromptIOsInstall = React.lazy(() =>
-//   import("../components/utils/popup/PromptIOsInstall")
-// );
-// const AskForHelp = React.lazy(() =>
-//   import("../components/utils/popup/AskForHelp")
-// );
-// const AddWingPopup = React.lazy(() =>
-//   import("../components/utils/popup/AddWingPopup")
-// );
 const ProfileLayout = React.lazy(() =>
   import("../components/profile/ProfileLayout")
 );
@@ -42,10 +28,7 @@ const SearchResults = React.lazy(() =>
   import("../components/search/SearchResults")
 );
 const Search = React.lazy(() => import("../components/search/Search"));
-// const Intercom = React.lazy(() => import("react-intercom"));
-// const NotifyLatestAuth = React.lazy(() =>
-//   import("../components/utils/popup/NotifyLatestAuth")
-// );
+const Popups = React.lazy(() => import('./Popups'));
 
 console.debug("Loading SearchPage");
 
@@ -56,15 +39,11 @@ class SearchPage extends PureComponent {
     super(props);
 
     this.state = {
-      showCongratulation: false,
-      actionInQueue: this.getActionInQueue(),
-      hashtagsFilter: this.getHashtagsFilter(),
       top: 16,
       headerHeight: 129,
       headerPosition: "INITIAL",
       visible: false,
       transitionDuration: 800,
-      showAskForHelp: false
     };
 
     this.props.commonStore.setUrlParams(this.props.match);
@@ -74,7 +53,7 @@ class SearchPage extends PureComponent {
   }
 
   componentWillUnmount() {
-    if(this.unsubFilters) this.unsubFilters();
+    if (this.unsubFilters) this.unsubFilters();
   }
 
   componentDidMount() {
@@ -85,10 +64,17 @@ class SearchPage extends PureComponent {
     if (this.props.match.path.search("congrats") > -1)
       this.setState({ showCongratulation: true });
 
-    this.unsubFilters = observe(this.props.searchStore.values.filters, change => {
-      this.handleShowSearchResults(200);
-      window.history.pushState(null, window.document.title, this.props.searchStore.encodeFilters());
-    });
+    this.unsubFilters = observe(
+      this.props.searchStore.values.filters,
+      change => {
+        this.handleShowSearchResults(200);
+        window.history.pushState(
+          null,
+          window.document.title,
+          this.props.searchStore.encodeFilters()
+        );
+      }
+    );
 
     this.unsubResultsCount = observe(
       this.props.commonStore,
@@ -228,37 +214,11 @@ class SearchPage extends PureComponent {
     });
   };
 
-  /**
-   * @description Get action in queue is used for Add Wings via URL
-   */
-  getActionInQueue = () => {
-    let action = undefsafe(this.props.match, "params.action");
-    return action;
-  };
-
-  /**
-   * @description Fetch Wings filters passed as URL params
-   */
-  getHashtagsFilter = () => {
-    let wings = undefsafe(this.props.match, "params.hashtags");
-    if (wings) {
-      return wings.split(",");
-    } else {
-      return [];
-    }
-  };
-
   componentDidUpdate() {
     if (this.state.redirectTo === window.location.pathname) {
       this.setState({ redirectTo: null });
     }
   }
-
-  handleDisplayAskForHelp = () => {
-    this.setState({ showAskForHelp: false }, () => {
-      this.setState({ showAskForHelp: true });
-    });
-  };
 
   handleDisplayProfile = (e, recordTag) => {
     ReactGA.event({ category: "User", action: "Display profile" });
@@ -268,7 +228,10 @@ class SearchPage extends PureComponent {
       pathNameExploded.some(elt => elt === recordTag) &&
       this.props.commonStore.url.params.action
         ? null
-        : getBaseUrl(this.props) + "/" + recordTag + this.props.searchStore.encodeFilters();
+        : getBaseUrl(this.props) +
+          "/" +
+          recordTag +
+          this.props.searchStore.encodeFilters();
     this.setState({ visible: true, redirectTo: redirectTo });
   };
 
@@ -276,36 +239,23 @@ class SearchPage extends PureComponent {
     this.setState({ visible: false });
     setTimeout(() => {
       this.props.profileContext.reset();
-      this.setState({ redirectTo: getBaseUrl(this.props) + this.props.searchStore.encodeFilters() });
+      this.setState({
+        redirectTo:
+          getBaseUrl(this.props) + this.props.searchStore.encodeFilters()
+      });
     }, (this.state.transitionDuration / 2) * 0.9);
   };
-
-  handleCloseCongrats = () => this.setState({ showCongratulation: false });
 
   componentWillReceiveProps(nextProps) {
     this.props.commonStore.setUrlParams(nextProps.match);
   }
 
   render() {
-    const {
-      redirectTo,
-      showCongratulation,
-      actionInQueue,
-      hashtagsFilter,
-      visible,
-      transitionDuration,
-      showAskForHelp
-    } = this.state;
+    const { redirectTo, visible, transitionDuration } = this.state;
     const { classes } = this.props;
-    const { currentOrganisation } = this.props.orgStore;
-    const { searchResultsCount } = this.props.commonStore;
-    let searchFilters = this.props.commonStore.getSearchFilters();
-    let latestConnectionClosed = this.props.commonStore.getCookie(
-      "latestConnectionClosed"
-    );
 
     return (
-      <React.Fragment>
+      <>
         {redirectTo && window.location.pathname !== redirectTo && (
           <Redirect push to={redirectTo} />
         )}
@@ -343,9 +293,7 @@ class SearchPage extends PureComponent {
                 className={classes.searchMobileView}
               >
                 <ErrorBoundary>
-                  {/* <Suspense fallback={<CircularProgress color="secondary" />}> */}
-                    <Search />
-                  {/* </Suspense> */}
+                  <Search />
                 </ErrorBoundary>
               </Grid>
             </Grid>
@@ -373,32 +321,6 @@ class SearchPage extends PureComponent {
               </ErrorBoundary>
             </div>
           </div>
-          {/* {currentOrganisation && !this.props.authStore.isAuth() && (
-            <Suspense fallback={<></>}>
-              <Intercom appID={"k7gprnv3"} />
-            </Suspense>
-          )}
-          {currentOrganisation &&
-            currentOrganisation.tag === "demo" &&
-            this.props.authStore.isAuth() && (
-              <Suspense fallback={<></>}>
-                <Intercom
-                  appID={"k7gprnv3"}
-                  user_id={undefsafe(this.props.userStore.currentUser, "_id")}
-                  name={undefsafe(
-                    this.props.recordStore.currentUserRecord,
-                    "name"
-                  )}
-                  email={
-                    undefsafe(
-                      this.props.userStore.currentUser,
-                      "email.value"
-                    ) ||
-                    undefsafe(this.props.userStore.currentUser, "google.email")
-                  }
-                />
-              </Suspense>
-            )} */}
         </main>
 
         <Suspense fallback={<></>}>
@@ -409,51 +331,10 @@ class SearchPage extends PureComponent {
           />
         </Suspense>
 
-        {/* <Suspense fallback={<CircularProgress color="secondary" />}>
-          <AskForHelp isOpen={showAskForHelp} />
-        </Suspense> */}
-
-        {/* {showCongratulation && (
-          <Suspense fallback={<CircularProgress color="secondary" />}>
-            <OnboardCongratulation
-              isOpen={showCongratulation}
-              handleClose={this.handleCloseCongrats}
-            />
-          </Suspense>
-        )}
-
-        {hashtagsFilter.length > 0 && actionInQueue === "add" && (
-          <Suspense fallback={<CircularProgress color="secondary" />}>
-            <AddWingPopup wingsToAdd={hashtagsFilter} isOpen={true} />
-          </Suspense>
-        )} */}
-
-        {/* {this.props.authStore.isAuth() &&
-          currentOrganisation &&
-          currentOrganisation.tag !== "demo" && (
-            <AskForHelpFab
-              className={classes.fab}
-              onClick={this.handleDisplayAskForHelp}
-              highlighted={
-                searchFilters &&
-                searchFilters.length > 0 &&
-                searchResultsCount <= 10
-              }
-            />
-          )} */}
-
-        {/* <Suspense fallback={<></>}>
-          <PromptIOsInstall />
+        <Suspense fallback={<></>}>
+          <Popups />
         </Suspense>
-
-        {!latestConnectionClosed && (
-          <Suspense fallback={<></>}>
-            <NotifyLatestAuth />
-          </Suspense>
-        )} */}
-
-        <Popups />
-      </React.Fragment>
+      </>
     );
   }
 }
