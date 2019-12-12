@@ -77,7 +77,6 @@ class SearchPage extends PureComponent {
   }
 
   componentDidMount() {
-    return;
     this.moveSearchInputListener();
 
     this.props.searchStore.decodeFilters(window.location.search);
@@ -302,15 +301,6 @@ class SearchPage extends PureComponent {
     let searchFilters = this.props.commonStore.getSearchFilters();
     let latestConnectionClosed = this.props.commonStore.getCookie(
       "latestConnectionClosed"
-    );
-
-    return (
-      <div>
-        COUCOU
-        <Suspense fallback={<></>}>
-          <Header withProfileLogo />
-        </Suspense>
-      </div>
     );
 
     return (
