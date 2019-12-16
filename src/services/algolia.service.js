@@ -141,6 +141,7 @@ class AlgoliaService {
           hitsPerPage: 50
         },
         (err, content) => {
+          if(!content) return resolve();
           this.addToLocalStorage(content.hits).then(() => {
             resolve();
           });
