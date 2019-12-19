@@ -17,8 +17,9 @@ import { withProfileManagement } from "../hoc/profile/withProfileManagement";
 import { getBaseUrl } from "../services/utils.service";
 import withAuthorizationManagement from "../hoc/AuthorizationManagement.hoc";
 
-import SearchView from '../components/search/view/SearchView';
-
+const SearchView = React.lazy(() =>
+  import("../components/search/view/SearchView")
+);
 const ProfileLayout = React.lazy(() =>
   import("../components/profile/ProfileLayout")
 );
@@ -27,7 +28,7 @@ const BannerResizable = React.lazy(() =>
 );
 const Header = React.lazy(() => import("../components/header/Header"));
 const Search = React.lazy(() => import("../components/search/Search"));
-const Popups = React.lazy(() => import('./Popups'));
+const Popups = React.lazy(() => import("./Popups"));
 
 console.debug("Loading SearchPage");
 
@@ -42,7 +43,7 @@ class SearchPage extends PureComponent {
       headerHeight: 129,
       headerPosition: "INITIAL",
       visible: false,
-      transitionDuration: 800,
+      transitionDuration: 800
     };
 
     this.props.commonStore.setUrlParams(this.props.match);
@@ -307,17 +308,16 @@ class SearchPage extends PureComponent {
             {/* Search results part */}
             <div className={"search-content"} style={{ position: "relative" }}>
               <ErrorBoundary>
-                <Suspense fallback={<CircularProgress color="secondary" />}>
-                  <Grid
-                    container
-                    direction={"column"}
-                    justify={"space-around"}
-                    alignItems={"center"}
-                  >
+                <Grid
+                  container
+                  direction={"column"}
+                  justify={"space-around"}
+                  alignItems={"center"}
+                >
+                  <Suspense fallback={<CircularProgress color="secondary" />}>
                     <SearchView />
-                    {/* <SearchResults /> */}
-                  </Grid>
-                </Suspense>
+                  </Suspense>
+                </Grid>
               </ErrorBoundary>
             </div>
           </div>
