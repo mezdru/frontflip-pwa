@@ -62,7 +62,7 @@ class SearchStore {
   }
 
   addFilter(type, value, options) {
-    if (!TYPES.some(elt => elt === type)) throw new Error("Invalid type: " + type);
+    if (!TYPES.some(elt => elt === type)) return;
 
     if (
       !this.values.filters.some(

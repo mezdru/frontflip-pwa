@@ -26,9 +26,6 @@ const BannerResizable = React.lazy(() =>
   import("../components/utils/banner/BannerResizable")
 );
 const Header = React.lazy(() => import("../components/header/Header"));
-const SearchResults = React.lazy(() =>
-  import("../components/search/SearchResults")
-);
 const Search = React.lazy(() => import("../components/search/Search"));
 const Popups = React.lazy(() => import('./Popups'));
 
