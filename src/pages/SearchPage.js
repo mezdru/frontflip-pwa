@@ -17,6 +17,8 @@ import { withProfileManagement } from "../hoc/profile/withProfileManagement";
 import { getBaseUrl } from "../services/utils.service";
 import withAuthorizationManagement from "../hoc/AuthorizationManagement.hoc";
 
+import SearchView from '../components/search/view/SearchView';
+
 const ProfileLayout = React.lazy(() =>
   import("../components/profile/ProfileLayout")
 );
@@ -315,7 +317,8 @@ class SearchPage extends PureComponent {
                     justify={"space-around"}
                     alignItems={"center"}
                   >
-                    <SearchResults />
+                    <SearchView />
+                    {/* <SearchResults /> */}
                   </Grid>
                 </Suspense>
               </ErrorBoundary>
