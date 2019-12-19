@@ -17,6 +17,9 @@ import { withProfileManagement } from "../hoc/profile/withProfileManagement";
 import { getBaseUrl } from "../services/utils.service";
 import withAuthorizationManagement from "../hoc/AuthorizationManagement.hoc";
 
+const SearchView = React.lazy(() =>
+  import("../components/search/view/SearchView")
+);
 const ProfileLayout = React.lazy(() =>
   import("../components/profile/ProfileLayout")
 );
@@ -24,11 +27,8 @@ const BannerResizable = React.lazy(() =>
   import("../components/utils/banner/BannerResizable")
 );
 const Header = React.lazy(() => import("../components/header/Header"));
-const SearchResults = React.lazy(() =>
-  import("../components/search/SearchResults")
-);
 const Search = React.lazy(() => import("../components/search/Search"));
-const Popups = React.lazy(() => import('./Popups'));
+const Popups = React.lazy(() => import("./Popups"));
 
 console.debug("Loading SearchPage");
 
@@ -43,7 +43,7 @@ class SearchPage extends PureComponent {
       headerHeight: 129,
       headerPosition: "INITIAL",
       visible: false,
-      transitionDuration: 800,
+      transitionDuration: 800
     };
 
     this.props.commonStore.setUrlParams(this.props.match);
@@ -308,16 +308,16 @@ class SearchPage extends PureComponent {
             {/* Search results part */}
             <div className={"search-content"} style={{ position: "relative" }}>
               <ErrorBoundary>
-                <Suspense fallback={<CircularProgress color="secondary" />}>
-                  <Grid
-                    container
-                    direction={"column"}
-                    justify={"space-around"}
-                    alignItems={"center"}
-                  >
-                    <SearchResults />
-                  </Grid>
-                </Suspense>
+                <Grid
+                  container
+                  direction={"column"}
+                  justify={"space-around"}
+                  alignItems={"center"}
+                >
+                  <Suspense fallback={<CircularProgress color="secondary" />}>
+                    <SearchView />
+                  </Suspense>
+                </Grid>
               </ErrorBoundary>
             </div>
           </div>
