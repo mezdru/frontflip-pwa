@@ -1,6 +1,8 @@
 import React from "react";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
-import 'mapbox-gl/dist/mapbox-gl.css';
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import "mapbox-gl/dist/mapbox-gl.css";
+import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { withStyles } from "@material-ui/core";
 
 import { styles } from "./MapResults.css";
@@ -23,6 +25,13 @@ class MapResults extends React.Component {
 
     this.setState({ map: map }, () => {
       this.addRecordMarker({}, 48.864716, 2.349014);
+
+      var geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl
+      });
+
+      document.getElementById("input-geocoder").appendChild(geocoder.onAdd(this.state.map));
     });
   }
 
@@ -30,6 +39,16 @@ class MapResults extends React.Component {
     let marker = new mapboxgl.Marker()
       .setLngLat([lng, lat])
       .addTo(this.state.map);
+  };
+
+
+  // use it in onboard ?
+  getGeocode = (query) => {
+    // there are 2 endpoints : this one is free (up to 100k / month) : we can't store the data
+    //https://api.mapbox.com/geocoding/v5/mapbox.places/{QUERY_HERE}.json?access_token={ACCESS_TOKEN_HERE}
+
+    // this one isn't free : 5$ / 1K request : we can store the data
+    //https://api.mapbox.com/geocoding/v5/mapbox.places-permanent/{QUERY_HERE}.json?access_token={ACCESS_TOKEN_HERE}
   }
 
   render() {
@@ -37,7 +56,8 @@ class MapResults extends React.Component {
 
     return (
       <div className={classes.viewContainer}>
-        <div id="results-map" style={{height: 'calc(100vh - 183px)'}}></div>
+        <div id="input-geocoder" style={{width: '50%'}} ></div>
+        <div id="results-map" style={{ height: "calc(100vh - 183px)" }}></div>
       </div>
     );
   }

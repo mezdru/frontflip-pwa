@@ -5,7 +5,6 @@ export const styles = theme => ({
     width: "100%",
     minHeight: "calc(100vh - 129px)",
     padding: 16,
-    backgroundColor: "#f2f2f2",
-    background: 'black !important'
+    backgroundColor: "#f2f2f2"
   }
 });
