@@ -62,6 +62,26 @@ class MapResults extends React.Component {
 
     this.map.on("data", e => {
       if (e.sourceId !== "addresses" || !e.isSourceLoaded) return;
+
+      // set locale
+      var mapboxLanguage = new MapboxLanguage();
+      this.map.setStyle(
+        mapboxLanguage.setLanguage(
+          this.map.getStyle(),
+          this.props.commonStore.locale
+        )
+      );
+
+      // add geocoder
+      var geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl
+      });
+
+      document
+        .getElementById("input-geocoder")
+        .appendChild(geocoder.onAdd(this.map));
+
       this.map.on("moveend", this.updateMarkers); // moveend also fires on zoomend
       this.updateMarkers();
     });
