@@ -114,7 +114,18 @@ class MapResults extends React.Component {
         el.className = "marker";
         el.innerHTML = `<i class="fa fa-map-marker" aria-hidden="true"></i><img src="${defaultProfilePicture}" />`;
         el.dataset.type = "marker";
-        const marker = new mapboxgl.Marker(el).setLngLat(coords);
+
+        const popupEl = document.createElement("div");
+        popupEl.innerText = "Je suis une popup HTML";
+        popupEl.style.width = "300px";
+        popupEl.style.height = "50px";
+        popupEl.style.background = "pink";
+        const popup = new mapboxgl.Popup().setDOMContent(popupEl);
+
+        const marker = new mapboxgl.Marker(el)
+          .setLngLat(coords)
+          .setPopup(popup);
+
         marker.addTo(this.map);
         keepMarkers.push(props.id);
         this.markers.set(props.id, el);
