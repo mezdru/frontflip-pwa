@@ -1,0 +1,45 @@
+.marker {
+  background: transparent;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  text-align: center;
+  /* overflow: hidden; */
+}
+
+.marker i {
+  font-size: 80px;
+  margin-top: -40px;
+  color: #2b2d3c;
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+.marker:hover i {
+  color: #aaacbe;
+}
+
+.marker img {
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  left:0;
+  right:0;
+  margin: auto;
+  top: -28px;
+}
+
+.mapCluster {
+  background-color: #2b2d3c;
+  color: white;
+  font-weight: 500;
+  font-size: 1.3rem;
+  border-radius: 50%;
+  text-align: center;
+}
+
+.mapCluster > div {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
