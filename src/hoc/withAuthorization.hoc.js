@@ -5,7 +5,7 @@ import { getBaseUrl } from "../services/utils.service";
 import undefsafe from 'undefsafe';
 
 const COMPONENTS = ['onboard', 'search'];
-const withAuthorizationManagement = (ComponentToWrap, componentName) => {
+const withAuthorization = (ComponentToWrap, componentName) => {
   if(!COMPONENTS.find(elt => elt === componentName)) throw new Error('Component name must be in ' + COMPONENTS);
   class AuthorizationManagement extends Component {
 
@@ -46,4 +46,4 @@ const withAuthorizationManagement = (ComponentToWrap, componentName) => {
   AuthorizationManagement = inject('orgStore', 'userStore', 'authStore', 'commonStore', 'keenStore', 'recordStore')(observer(AuthorizationManagement));
   return AuthorizationManagement;
 }
-export default withAuthorizationManagement;
+export default withAuthorization;

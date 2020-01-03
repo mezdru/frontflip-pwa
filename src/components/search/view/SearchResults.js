@@ -1,33 +1,28 @@
 import React, { Suspense } from "react";
-import { CircularProgress } from "@material-ui/core";
-import qs from "qs";
+import { CircularProgress, Grid } from "@material-ui/core";
 
 const ListResults = React.lazy(() => import("./ListResults"));
 const MapResults = React.lazy(() => import("./MapResults"));
 const VIEW_LIST = "list";
 const VIEW_MAP = "map";
 
-class SearchView extends React.Component {
-  state = {
-    view: VIEW_LIST
-  };
-
-  componentDidMount() {
-    let query = window.location.search;
-    if (query.charAt(0) === "?") query = query.substr(1);
-    let parsedQuery = qs.parse(query);
-    if (parsedQuery.view) this.setState({ view: parsedQuery.view });
-  }
-
+class SearchResults extends React.Component {
   render() {
-    const { view } = this.state;
+    const { view } = this.props;
 
     if (view === VIEW_LIST) {
       return (
         <Suspense
           fallback={<CircularProgress color="secondary"></CircularProgress>}
         >
-          <ListResults />
+          <Grid
+            container
+            direction={"column"}
+            justify={"space-around"}
+            alignItems={"center"}
+          >
+            <ListResults />
+          </Grid>
         </Suspense>
       );
     } else if (view === VIEW_MAP) {
@@ -42,4 +37,4 @@ class SearchView extends React.Component {
   }
 }
 
-export default SearchView;
+export default SearchResults;

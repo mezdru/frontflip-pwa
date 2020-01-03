@@ -3,7 +3,7 @@ import { observe } from 'mobx';
 import { inject, observer } from "mobx-react";
 import defaultBanner from '../../../resources/images/fly_away.jpg';
 import { withStyles } from '@material-ui/core';
-import { withProfileManagement } from '../../../hoc/profile/withProfileManagement';
+import { withProfile } from '../../../hoc/profile/withProfile';
 import undefsafe from 'undefsafe'; 
 
 const styles = theme => ({
@@ -86,6 +86,6 @@ class BannerResizable extends React.Component {
 
 export default inject('orgStore', 'recordStore')(
   observer(
-    withStyles(styles, { withTheme: true })(withProfileManagement(BannerResizable))
+    withStyles(styles, { withTheme: true })(withProfile(BannerResizable))
   )
 );

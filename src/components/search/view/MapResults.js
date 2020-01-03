@@ -37,7 +37,7 @@ class MapResults extends React.Component {
         <div id="input-geocoder" style={{ width: "50%" }}></div>
         <div
           ref={el => (this.mapContainer = el)}
-          style={{ height: "calc(100vh - 183px)" }}
+          style={{ height: "100vh", position: "absolute", top: 0, width: "100%" }}
         ></div>
       </div>
     );

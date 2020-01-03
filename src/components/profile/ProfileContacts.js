@@ -4,7 +4,7 @@ import {inject, observer} from 'mobx-react';
 import classNames from 'classnames';
 import '../../resources/stylesheets/font-awesome.min.css';
 import './ContactsColors.css';
-import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
+import { withProfile } from '../../hoc/profile/withProfile';
 import ProfileService from '../../services/profile.service';
 import undefsafe from 'undefsafe';
 
@@ -19,7 +19,7 @@ const styles = theme => ({
   },
 });
 
-const ProfileContacts = React.memo( inject('keenStore', 'recordStore')(observer(withProfileManagement(withStyles(styles)(({ classes, profileContext, ...props }) => {  
+const ProfileContacts = React.memo( inject('keenStore', 'recordStore')(observer(withProfile(withStyles(styles)(({ classes, profileContext, ...props }) => {  
   var contacts = profileContext.getProp('links');
   return (
     <>

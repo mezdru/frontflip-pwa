@@ -4,7 +4,7 @@ import { inject, observer } from "mobx-react";
 import { observe } from "mobx";
 import undefsafe from "undefsafe";
 import ActivityCard from "./ActivityCard";
-import { withProfileManagement } from "../../hoc/profile/withProfileManagement";
+import { withProfile } from "../../hoc/profile/withProfile";
 import { FormattedMessage } from "react-intl";
 
 const styles = {
@@ -181,4 +181,4 @@ export default inject(
   "commonStore",
   "orgStore",
   "authStore"
-)(observer(withStyles(styles)(withProfileManagement(ProfileClapHistory))));
+)(observer(withStyles(styles)(withProfile(ProfileClapHistory))));

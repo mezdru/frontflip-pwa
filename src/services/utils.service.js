@@ -1,5 +1,6 @@
 // Example of Constants which can be declared here.
 // const someCommonValues = ['common', 'values'];
+import qs from "qs";
 
 let UAParser = require('ua-parser-js');
 
@@ -86,3 +87,10 @@ export const isInStandaloneMode = () =>
   window.matchMedia("(display-mode: standalone)").matches ||
   window.navigator.standalone ||
   document.referrer.includes("android-app://");
+
+export const getParsedUrlQuery = () => {
+  let query = window.location.search;
+  if (query.charAt(0) === "?") query = query.substr(1);
+  let parsedQuery = qs.parse(query);
+  return parsedQuery || {};
+}

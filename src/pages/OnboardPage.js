@@ -9,7 +9,7 @@ import {Redirect} from 'react-router-dom';
 import BannerResizable from '../components/utils/banner/BannerResizable';
 import Header from '../components/header/Header';
 import { styles } from './OnboardPage.css';
-import withAuthorizationManagement from '../hoc/AuthorizationManagement.hoc';
+import withAuthorization from '../hoc/withAuthorization.hoc';
 import { getBaseUrl } from '../services/utils.service';
 
 const Intercom = React.lazy(() => import('react-intercom'));
@@ -108,7 +108,7 @@ class OnboardPage extends React.PureComponent {
   }
 }
 
-OnboardPage = withAuthorizationManagement(OnboardPage, 'onboard');
+OnboardPage = withAuthorization(OnboardPage, 'onboard');
 
 export default inject('commonStore', 'orgStore', 'recordStore')(
   observer(

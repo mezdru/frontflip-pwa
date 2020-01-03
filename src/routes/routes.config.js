@@ -4,7 +4,7 @@ import {RedirectMissingLocale, RedirectNoMatch} from './RouteRedirect';
 const PasswordForgot = React.lazy(() => import('../pages/auth/PasswordForgot'));
 const PasswordReset = React.lazy(() => import('../pages/auth/PasswordReset'));
 const OnboardPage = React.lazy(() => import('../pages/OnboardPage'));
-const SearchPage = React.lazy(() => import('../pages/SearchPage'));
+const MainPage = React.lazy(() => import('../pages/MainPage'));
 const AuthPage = React.lazy(() => import('../pages/auth/AuthPage'));
 const ErrorPage = React.lazy(() => import('../pages/ErrorPage'));
 const WelcomePage = React.lazy(() => import('../pages/WelcomePage'));
@@ -92,7 +92,7 @@ export const routes = [
               "/:locale(en|fr|en-UK)/:orgTag/congrats",
               "/:locale(en|fr|en-UK)/:orgTag/:recordTag?"
             ],
-            component: SearchPage,
+            component: MainPage,
             exact: true
           },
           {

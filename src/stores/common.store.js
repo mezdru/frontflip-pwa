@@ -105,7 +105,7 @@ class CommonStore {
       }catch(e) {
         console.error(e);
         localStorage.removeItem(name);
-        console.log(`setLocalStorage : ${name} : ${value} : ${isObject}`);
+        console.log(`setLocalStorage : ${name} : ${isObject}`);
       }
 
     });

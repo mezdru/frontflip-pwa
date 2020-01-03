@@ -7,7 +7,7 @@ import BannerResizable from "../utils/banner/BannerResizable";
 import ProfileWings from "./ProfileWings";
 import ProfileActions from "./ProfileActions";
 import { styles } from "./ProfileLayout.css";
-import { withProfileManagement } from "../../hoc/profile/withProfileManagement";
+import { withProfile } from "../../hoc/profile/withProfile";
 import SkillsPropositionFab from "../utils/buttons/SkillsPropositionFab";
 import { observe } from "mobx";
 import ErrorBoundary from "../utils/errors/ErrorBoundary";
@@ -159,7 +159,7 @@ export default inject(
 )(
   observer(
     withStyles(styles, { withTheme: true })(
-      withProfileManagement(ProfileLayout)
+      withProfile(ProfileLayout)
     )
   )
 );

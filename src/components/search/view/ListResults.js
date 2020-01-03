@@ -68,7 +68,9 @@ class ListResults extends React.Component {
       else this.setState({ noResult: false });
 
       // Update search results count
+      console.log(res.nbHits);
       this.props.commonStore.searchResultsCount = res.nbHits;
+      console.log('after set')
 
       // Handle page is the last page ?
       if (res.page >= res.nbPages - 1) this.setState({ noMore: true });
@@ -84,6 +86,7 @@ class ListResults extends React.Component {
         this.setState({ hits: hits }, this.endHitsLoad);
       }
     } catch (e) {
+      console.error('ListResults.js - fetchHits', {filters: JSON.parse(JSON.stringify(filters)), page});
       console.error(e);
       this.setState({ hits: []});
     }

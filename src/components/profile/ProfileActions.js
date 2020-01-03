@@ -3,7 +3,7 @@ import { withStyles, Grid, IconButton, Tooltip } from "@material-ui/core";
 import { ArrowBack, Edit, Delete } from "@material-ui/icons";
 import classNames from "classnames";
 import { inject, observer } from "mobx-react";
-import { withProfileManagement } from "../../hoc/profile/withProfileManagement";
+import { withProfile } from "../../hoc/profile/withProfile";
 import { getBaseUrl } from "../../services/utils.service.js";
 import { Link } from "react-router-dom";
 import { injectIntl } from "react-intl";
@@ -131,6 +131,6 @@ export default inject(
   "authStore"
 )(
   observer(
-    withStyles(styles)(withProfileManagement(injectIntl(ProfileActions)))
+    withStyles(styles)(withProfile(injectIntl(ProfileActions)))
   )
 );

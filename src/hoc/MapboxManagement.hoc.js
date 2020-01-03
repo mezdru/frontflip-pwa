@@ -15,7 +15,8 @@ const withMapbox = ComponentToWrap => {
       return new Promise((resolve, reject) => {
         var map = new mapboxgl.Map({
           container: mapRef,
-          style: "mapbox://styles/mapbox/streets-v10", // v11 causes issue with locale
+          // style: "mapbox://styles/mapbox/streets-v10", // v11 causes issue with locale
+          style: "mapbox://styles/mapbox/dark-v10",
           zoom: options.zoom || 5,
           center: options.center || [2.349014, 48.864716]
           // renderWorldCopies: false
