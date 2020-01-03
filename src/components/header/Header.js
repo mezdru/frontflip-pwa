@@ -50,6 +50,11 @@ class App extends Component {
     this.props.handleDisplayProfile(e, record);
   };
 
+  componentDidMount() {
+    var headerButton = document.getElementById("header-button");
+    headerButton.dataset.position = "INITIAL";
+  }
+
   render() {
     const { open, successLogout, auth, isSigninOrSignupPage } = this.state;
     const { classes } = this.props;

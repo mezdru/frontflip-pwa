@@ -1,7 +1,7 @@
 import React from 'react';
 import { Popper, Paper, MenuList, Grow, MenuItem, withStyles } from '@material-ui/core';
 import { FormattedMessage } from 'react-intl';
-import { withProfileManagement } from '../../../hoc/profile/withProfileManagement';
+import { withProfile } from '../../../hoc/profile/withProfile';
 
 const styles = theme => ({
   button: {
@@ -84,4 +84,4 @@ class MenuDropdown extends React.PureComponent {
 }
 
 
-export default withStyles(styles)(withProfileManagement(MenuDropdown));
+export default withStyles(styles)(withProfile(MenuDropdown));

@@ -16,7 +16,7 @@ import Wings from "../../wing/Wings";
 import ProfileService from "../../../../services/profile.service";
 import PopupLayout from "../PopupLayout";
 import { styles } from "./ProposeSkills.css";
-import { withProfileManagement } from "../../../../hoc/profile/withProfileManagement";
+import { withProfile } from "../../../../hoc/profile/withProfile";
 import EmailService from "../../../../services/email.service";
 import { CheckCircle, Error } from "@material-ui/icons";
 
@@ -255,7 +255,7 @@ export default inject(
 )(
   observer(
     withStyles(styles, { withTheme: true })(
-      withProfileManagement(ProposeSkills)
+      withProfile(ProposeSkills)
     )
   )
 );

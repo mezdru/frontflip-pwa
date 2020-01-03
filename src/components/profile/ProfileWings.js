@@ -3,7 +3,7 @@ import { withStyles, Typography, IconButton } from '@material-ui/core';
 import Wings from '../utils/wing/Wings';
 import ProfileService from '../../services/profile.service';
 import { inject, observer } from 'mobx-react';
-import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
+import { withProfile } from '../../hoc/profile/withProfile';
 import { observe } from 'mobx';
 import { Add } from '@material-ui/icons';
 import { getBaseUrl } from '../../services/utils.service';
@@ -165,6 +165,6 @@ class ProfileWings extends React.PureComponent {
 
 export default inject('commonStore', 'clapStore', 'recordStore', 'orgStore', 'authStore')(
   observer(
-    withStyles(styles)(withProfileManagement(ProfileWings))
+    withStyles(styles)(withProfile(ProfileWings))
   )
 );

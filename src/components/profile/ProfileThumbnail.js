@@ -5,9 +5,9 @@ import ProfileService from '../../services/profile.service';
 import ProfileContacts from './ProfileContacts';
 import { styles } from './ProfileThumbnail.css';
 import { FormattedMessage } from 'react-intl';
-import { withProfileManagement } from '../../hoc/profile/withProfileManagement';
+import { withProfile } from '../../hoc/profile/withProfile';
 
-const ProfileThumbnail = React.memo(withProfileManagement(withStyles(styles)(({ classes, record, profileContext, ...props }) => {
+const ProfileThumbnail = React.memo(withProfile(withStyles(styles)(({ classes, record, profileContext, ...props }) => {
   return (
     <Paper className={classes.main}>
       <a href={profileContext.isEditable ? profileContext.getBaseUrl() + '/onboard/intro/edit/' + profileContext.getProp('tag') : ''} >

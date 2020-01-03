@@ -8,7 +8,7 @@ import { observe } from 'mobx';
 import SuggestionsService from '../../services/suggestions.service';
 import ProfileService from '../../services/profile.service';
 import { ArrowLeft, ArrowRight } from '@material-ui/icons';
-import withScrollManagement from '../../hoc/ScrollManagement.hoc';
+import withScroll from '../../hoc/withScroll.hoc';
 import classNames from 'classnames';
 import { getUnique } from '../../services/utils.service';
 import undefsafe from 'undefsafe';
