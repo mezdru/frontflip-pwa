@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { inject, observer } from "mobx-react";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
-// import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import MapboxLanguage from "@mapbox/mapbox-gl-language";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
@@ -28,10 +28,28 @@ const withMapbox = ComponentToWrap => {
       });
     };
 
+    addGeocoder(map, geocoderContainer) {
+      var geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        marker: {
+          color: "orange"
+        },
+        mapboxgl: mapboxgl
+      });
+
+      if(geocoderContainer) {
+        geocoderContainer.appendChild(geocoder.onAdd(map));
+      } else {
+        map.addControl(geocoder);
+      }
+
+      return geocoder;
+    }
+
     setLocale(map, locale) {
       var mapboxLanguage = new MapboxLanguage();
       map.setStyle(mapboxLanguage.setLanguage(map.getStyle(), locale));
-    };
+    }
 
     loadClusteredData = (map, geojson) => {
       this.markers = new Map();
@@ -61,7 +79,7 @@ const withMapbox = ComponentToWrap => {
       });
     };
 
-    updateMarkers = (map) => {
+    updateMarkers = map => {
       const features = map.querySourceFeatures("addresses");
       const keepMarkers = [];
 
@@ -169,7 +187,8 @@ const withMapbox = ComponentToWrap => {
           mapbox={{
             buildMap: this.buildMap,
             setLocale: this.setLocale,
-            loadClusteredData: this.loadClusteredData
+            loadClusteredData: this.loadClusteredData,
+            addGeocoder: this.addGeocoder
           }}
         />
       );
