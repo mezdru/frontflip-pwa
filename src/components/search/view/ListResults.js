@@ -3,110 +3,30 @@ import { inject, observer } from "mobx-react";
 import { withStyles, Grid } from "@material-ui/core";
 import undefsafe from "undefsafe";
 
-import AlgoliaService from "../../../services/algolia.service";
 import { styles } from "./ListResults.css";
 import Card from "../../card/CardProfile";
 import InvitationDialog from "../../utils/popup/Invitation";
-import { observe } from "mobx";
 
 const SearchShowMore = React.lazy(() => import("../SearchShowMore"));
 const SearchNoResults = React.lazy(() => import("../SearchNoResults"));
-const DEFAULT_FILTER = { type: "type", value: "person" };
 
 class ListResults extends React.Component {
-  state = {
-    hits: [],
-    page: 0,
-    noResult: false,
-    loading: true,
-    noMore: false
-  };
-
-  componentWillUnmount() {
-    if(this.unsubFilters) this.unsubFilters();
-  }
 
   componentDidMount() {
-    this.fetchHits(this.props.searchStore.values.filters);
-
-    this.unsubFilters = observe(
-      this.props.searchStore.values.filters,
-      change => {
-        this.setState({ page: 0 }, () => {
-          this.fetchHits(this.props.searchStore.values.filters, this.state.page);
-        });
-
-        this.props.keenStore.recordEvent("search", {
-          results: this.props.commonStore.searchResultsCount,
-          filters: JSON.parse(JSON.stringify(this.props.searchStore.values.filters)),
-          recordEmitter: undefsafe(
-            this.props.recordStore.currentUserRecord,
-            "_id"
-          )
-        });
-      }
-    );
-
     this.createScrollObserver();
   }
-
-  fetchHits = async (filters, page) => {
-    try {
-      let res = await AlgoliaService.fetchHits(
-        [DEFAULT_FILTER].concat(filters),
-        null,
-        page,
-        true,
-        5
-      );
-
-      if (!res) return;
-
-      // Handle no result
-      if ((!res.hits || res.hits.length === 0) && (!page || page === 0))
-        this.setState({ noResult: true, noMore: true });
-      else this.setState({ noResult: false });
-
-      // Update search results count
-      console.log(res.nbHits);
-      this.props.commonStore.searchResultsCount = res.nbHits;
-      console.log('after set')
-
-      // Handle page is the last page ?
-      if (res.page >= res.nbPages - 1) this.setState({ noMore: true });
-      else if (res.nbPages > 1) this.setState({ noMore: false });
-
-      if (page) {
-        this.setState(
-          { hits: this.state.hits.concat(res.hits) },
-          this.endHitsLoad
-        );
-      } else {
-        let hits = Array.from(res.hits);
-        this.setState({ hits: hits }, this.endHitsLoad);
-      }
-    } catch (e) {
-      console.error('ListResults.js - fetchHits', {filters: JSON.parse(JSON.stringify(filters)), page});
-      console.error(e);
-      this.setState({ hits: []});
-    }
-  };
-
-  endHitsLoad = () => this.setState({ loading: false });
 
   showMore = () => {
     if (!undefsafe(this.props.orgStore.currentAlgoliaKey, "initialized"))
       return;
-    this.setState({ page: this.state.page + 1, loading: true }, () =>
-      this.fetchHits(this.props.searchStore.values.filters, this.state.page)
-    );
+    this.props.fetchHits(this.props.searchStore.values.filters, this.props.page + 1, true)
   };
 
   createScrollObserver = () => {
     try {
       const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
-          if (entry.isIntersecting && !this.state.noMore) {
+          if (entry.isIntersecting && !this.props.noMore) {
             this.showMore();
           }
         });
@@ -120,7 +40,7 @@ class ListResults extends React.Component {
   };
 
   render() {
-    const { hits, loading, noMore, noResult } = this.state;
+    const { hits, loading, noMore, noResult } = this.props;
     const { classes } = this.props;
     let hitsResult = Array.from(hits);
 
@@ -180,9 +100,6 @@ class ListResults extends React.Component {
 }
 
 export default inject(
-  "commonStore",
   "searchStore",
-  "keenStore",
-  "recordStore",
   "orgStore"
 )(observer(withStyles(styles)(ListResults)));
