@@ -202,7 +202,10 @@ const withMapbox = ComponentToWrap => {
             properties: {
               tag: hit.tag,
               id: hit.objectID,
-              pictureUrl: hit.picture ? hit.picture.url : defaultProfilePicture
+              pictureUrl:
+                hit.picture && hit.picture.url
+                  ? hit.picture.url
+                  : defaultProfilePicture
             }
           });
         }
