@@ -54,19 +54,17 @@ const withMapbox = ComponentToWrap => {
       map.setStyle(mapboxLanguage.setLanguage(map.getStyle(), locale));
     }
 
-    loadClusteredData = (map, geojson) => {
-
+    loadClusteredData = (map, geojson, onMarkerClick) => {
       if (map.getSource("addresses")) {
         map.getSource("addresses").setData(geojson);
         map.removeLayer("clusters");
-
       } else {
         map.addSource("addresses", {
           type: "geojson",
           data: geojson,
           cluster: true,
           clusterMaxZoom: 13, // Max zoom to cluster points on
-          clusterRadius: 70 // Radius of each cluster when clustering points (defaults to 50)
+          clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
         });
       }
 
@@ -83,12 +81,12 @@ const withMapbox = ComponentToWrap => {
       map.on("data", e => {
         //if (e.sourceId !== "addresses" || !e.isSourceLoaded) return;
         if (e.sourceId !== "addresses") return;
-        map.on("moveend", () => this.updateMarkers(map)); // moveend also fires on zoomend
-        this.updateMarkers(map);
+        map.on("moveend", () => this.updateMarkers(map, onMarkerClick)); // moveend also fires on zoomend
+        this.updateMarkers(map, onMarkerClick);
       });
     };
 
-    updateMarkers = map => {
+    updateMarkers = (map, onMarkerClick) => {
       const features = map.querySourceFeatures("addresses");
       const keepMarkers = [];
 
@@ -125,9 +123,16 @@ const withMapbox = ComponentToWrap => {
           //Feature is not clustered and has not been created, create an icon for it
           const el = document.createElement("div");
           el.className = "marker";
-          let pic = profileService.getPicturePathResized({url: props.pictureUrl}, 'person', '38x38') || defaultProfilePicture;
+          let pic =
+            profileService.getPicturePathResized(
+              { url: props.pictureUrl },
+              "person",
+              "38x38"
+            ) || defaultProfilePicture;
           el.innerHTML = `<i class="fa fa-map-marker" aria-hidden="true"></i><img src="${pic}" />`;
           el.dataset.type = "marker";
+
+          el.addEventListener("click", e => onMarkerClick(props));
 
           const marker = new mapboxgl.Marker(el).setLngLat(coords);
 
