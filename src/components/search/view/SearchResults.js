@@ -60,7 +60,7 @@ class SearchResults extends React.Component {
             null,
             page,
             true,
-            5
+            this.props.view === VIEW_LIST ? 5 : 100
           );
 
           if (!res) return;
@@ -131,7 +131,7 @@ class SearchResults extends React.Component {
         <Suspense
           fallback={<CircularProgress color="secondary"></CircularProgress>}
         >
-          <MapResults />
+          <MapResults fetchHits={this.fetchHits} hits={hits} />
         </Suspense>
       );
     } else return null;

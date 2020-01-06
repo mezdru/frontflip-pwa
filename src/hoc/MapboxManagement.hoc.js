@@ -6,11 +6,14 @@ import MapboxLanguage from "@mapbox/mapbox-gl-language";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import defaultProfilePicture from "../resources/images/placeholder_person.png";
+import profileService from "../services/profile.service";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 const withMapbox = ComponentToWrap => {
   class MapboxManagement extends Component {
+    markers = new Map();
+
     buildMap = async (mapRef, options = {}) => {
       return new Promise((resolve, reject) => {
         var map = new mapboxgl.Map({
@@ -37,7 +40,7 @@ const withMapbox = ComponentToWrap => {
         mapboxgl: mapboxgl
       });
 
-      if(geocoderContainer) {
+      if (geocoderContainer) {
         geocoderContainer.appendChild(geocoder.onAdd(map));
       } else {
         map.addControl(geocoder);
@@ -52,15 +55,20 @@ const withMapbox = ComponentToWrap => {
     }
 
     loadClusteredData = (map, geojson) => {
-      this.markers = new Map();
 
-      map.addSource("addresses", {
-        type: "geojson",
-        data: geojson,
-        cluster: true,
-        clusterMaxZoom: 13, // Max zoom to cluster points on
-        clusterRadius: 70 // Radius of each cluster when clustering points (defaults to 50)
-      });
+      if (map.getSource("addresses")) {
+        map.getSource("addresses").setData(geojson);
+        map.removeLayer("clusters");
+
+      } else {
+        map.addSource("addresses", {
+          type: "geojson",
+          data: geojson,
+          cluster: true,
+          clusterMaxZoom: 13, // Max zoom to cluster points on
+          clusterRadius: 70 // Radius of each cluster when clustering points (defaults to 50)
+        });
+      }
 
       map.addLayer({
         id: "clusters",
@@ -73,7 +81,8 @@ const withMapbox = ComponentToWrap => {
       });
 
       map.on("data", e => {
-        if (e.sourceId !== "addresses" || !e.isSourceLoaded) return;
+        //if (e.sourceId !== "addresses" || !e.isSourceLoaded) return;
+        if (e.sourceId !== "addresses") return;
         map.on("moveend", () => this.updateMarkers(map)); // moveend also fires on zoomend
         this.updateMarkers(map);
       });
@@ -116,19 +125,11 @@ const withMapbox = ComponentToWrap => {
           //Feature is not clustered and has not been created, create an icon for it
           const el = document.createElement("div");
           el.className = "marker";
-          el.innerHTML = `<i class="fa fa-map-marker" aria-hidden="true"></i><img src="${defaultProfilePicture}" />`;
+          let pic = profileService.getPicturePathResized({url: props.pictureUrl}, 'person', '38x38') || defaultProfilePicture;
+          el.innerHTML = `<i class="fa fa-map-marker" aria-hidden="true"></i><img src="${pic}" />`;
           el.dataset.type = "marker";
 
-          const popupEl = document.createElement("div");
-          popupEl.innerText = "Je suis une popup HTML";
-          popupEl.style.width = "300px";
-          popupEl.style.height = "50px";
-          popupEl.style.background = "pink";
-          const popup = new mapboxgl.Popup().setDOMContent(popupEl);
-
-          const marker = new mapboxgl.Marker(el)
-            .setLngLat(coords)
-            .setPopup(popup);
+          const marker = new mapboxgl.Marker(el).setLngLat(coords);
 
           marker.addTo(map);
           keepMarkers.push(props.id);
@@ -180,6 +181,33 @@ const withMapbox = ComponentToWrap => {
       });
     };
 
+    convertAlgoliaToGeojson = hits => {
+      if (!hits || !Array.isArray(hits) || hits.length === 0) return;
+
+      let features = [];
+
+      hits.forEach(hit => {
+        if (hit._geoloc && hit._geoloc.lat && hit._geoloc.lng) {
+          features.push({
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [hit._geoloc.lng, hit._geoloc.lat]
+            },
+            properties: {
+              tag: hit.tag,
+              id: hit.objectID,
+              pictureUrl: hit.picture ? hit.picture.url : null
+            }
+          });
+        }
+      });
+      return {
+        type: "FeatureCollection",
+        features: features
+      };
+    };
+
     render() {
       return (
         <ComponentToWrap
@@ -188,7 +216,8 @@ const withMapbox = ComponentToWrap => {
             buildMap: this.buildMap,
             setLocale: this.setLocale,
             loadClusteredData: this.loadClusteredData,
-            addGeocoder: this.addGeocoder
+            addGeocoder: this.addGeocoder,
+            convertAlgoliaToGeojson: this.convertAlgoliaToGeojson
           }}
         />
       );

@@ -4,30 +4,27 @@ import { withStyles } from "@material-ui/core";
 
 import { styles } from "./MapResults.css";
 import "./marker.css";
-import defaultProfilePicture from "../../../resources/images/placeholder_person.png";
 import withMapbox from "../../../hoc/MapboxManagement.hoc";
 React.lazy(() => import("../../../resources/stylesheets/font-awesome.min.css"));
 
 class MapResults extends React.Component {
   state = {};
 
-  componentDidMount() {
+  async componentDidMount() {
+    await this.props.fetchHits(this.props.searchStore.values.filters, 0, true)
+
     this.props.mapbox.buildMap(this.mapContainer)
     .then((map) => {
       this.map = map;
       this.props.mapbox.setLocale(this.map, this.props.commonStore.locale);
-      this.props.mapbox.loadClusteredData(this.map, "https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson");
+      if(this.map) this.props.mapbox.loadClusteredData(this.map, this.props.mapbox.convertAlgoliaToGeojson(this.props.hits));
+
     });
   }
 
-
-  // use it in onboard ?
-  getGeocode = query => {
-    // there are 2 endpoints : this one is free (up to 100k / month) : we can't store the data
-    //https://api.mapbox.com/geocoding/v5/mapbox.places/{QUERY_HERE}.json?access_token={ACCESS_TOKEN_HERE}
-    // this one isn't free : 5$ / 1K request : we can store the data
-    //https://api.mapbox.com/geocoding/v5/mapbox.places-permanent/{QUERY_HERE}.json?access_token={ACCESS_TOKEN_HERE}
-  };
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if(this.map) this.props.mapbox.loadClusteredData(this.map, this.props.mapbox.convertAlgoliaToGeojson(nextProps.hits));
+  }
 
   render() {
     const { classes } = this.props;
@@ -44,6 +41,6 @@ class MapResults extends React.Component {
   }
 }
 
-export default inject("commonStore")(
+export default inject("commonStore", "searchStore")(
   observer(withStyles(styles)(withMapbox(MapResults)))
 );
