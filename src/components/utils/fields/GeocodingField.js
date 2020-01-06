@@ -53,12 +53,14 @@ class GeocodingField extends React.Component {
             lng: res.result.geometry.coordinates[0]
           },
           async () => {
+            // @todo : contact Mapbox sales to enable the permanent endpoint
+            // @todo : Do not deploy in production until we don't have the Mapbox sales response.
             let response = await request(
               `https://api.mapbox.com/geocoding/v5/mapbox.places-permanent/${this.state.longitude},${this.state.latitude}.json?access_token=${process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}`
             );
             console.log(response);
             this.props.onChange({ lat: this.state.lat, lng: this.state.lng });
-            if(this.props.handleSave) this.props.handleSave(["_geoloc"]);
+            if (this.props.handleSave) this.props.handleSave(["_geoloc"]);
           }
         );
       });

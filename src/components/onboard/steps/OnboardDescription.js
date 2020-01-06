@@ -2,7 +2,6 @@ import React from 'react'
 import { withStyles } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { TextField, Grid, Typography } from '@material-ui/core'
-import PictureField from '../../utils/fields/PictureField';
 import { FormattedMessage } from "react-intl";
 import { injectIntl } from 'react-intl';
 

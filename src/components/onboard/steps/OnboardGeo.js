@@ -1,14 +1,10 @@
 import React from "react";
 import { withStyles } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
-import { TextField, Grid, Typography } from "@material-ui/core";
-import PictureField from "../../utils/fields/PictureField";
+import { Grid, Typography } from "@material-ui/core";
 import { FormattedMessage } from "react-intl";
 import { injectIntl } from "react-intl";
 import GeocodingField from "../../utils/fields/GeocodingField";
-
-const Entities = require("html-entities").XmlEntities;
-const entities = new Entities();
 
 const styles = theme => ({
   root: {
