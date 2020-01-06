@@ -254,7 +254,7 @@ class AlgoliaService {
         if (filterReq !== "") filterReq += " AND ";
         let dateTimestamp = new Date(filter.value).getTime();
         filterReq += `${filter.type + (filter.options.operator === 'gt' ? ' > ' : ' < ') + dateTimestamp}`;
-      } else {
+      } else if(filter.type !== 'view'){
         if (filterReq !== "") filterReq += " AND ";
         filterReq += `${filter.type}:${filter.value.replace("%23", "#")}`;
       }

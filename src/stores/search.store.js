@@ -1,7 +1,7 @@
 import { observable, action, decorate } from "mobx";
 import qs from "qs";
 
-const TYPES = ["tag", "hashtags.tag", "query", "welcomedAt", "type"];
+const TYPES = ["tag", "hashtags.tag", "query", "welcomedAt", "type", "view"];
 const OPERATORS = ["gt", "lt"];
 
 class SearchStore {
@@ -36,8 +36,10 @@ class SearchStore {
         });
       } else if (typeof value === "object") {
         Object.keys(value).forEach(secondaryKey => {
-          if(OPERATORS.some(elt => elt === secondaryKey))
-            this.addFilter(key, value[secondaryKey], {operator: secondaryKey});
+          if (OPERATORS.some(elt => elt === secondaryKey))
+            this.addFilter(key, value[secondaryKey], {
+              operator: secondaryKey
+            });
         });
       } else if (typeof value === "string") {
         this.addFilter(key, value);
@@ -49,13 +51,15 @@ class SearchStore {
     var urlQuery = "";
 
     this.values.filters.forEach(filter => {
-      urlQuery += `&${filter.type}=${filter.value.replace('#', '%23')}`
+      let queryToAdd = `${filter.type}=${filter.value.replace("#", "%23")}`;
+
+      urlQuery += `&${queryToAdd}`;
     });
 
     urlQuery = urlQuery.substr(1);
 
-    return '?' + urlQuery;
-  }
+    return "?" + urlQuery;
+  };
 
   setUserQuery(query) {
     this.values.userQuery = query;
@@ -77,17 +81,20 @@ class SearchStore {
     }
   }
 
-  getFilterTypeByTag = (tag) => {
-    switch(tag.charAt(0)) {
-      case '#': return 'hashtags.tag';
-      case '@': return 'tag';
-      default: return 'query';
+  getFilterTypeByTag = tag => {
+    switch (tag.charAt(0)) {
+      case "#":
+        return "hashtags.tag";
+      case "@":
+        return "tag";
+      default:
+        return "query";
     }
-  }
+  };
 
-  removeFilter(value) {
+  removeFilter(filterToRemove) {
     var indexOfElement = this.values.filters.findIndex(
-      filter => filter.value === value
+      filter => filter.value === (filterToRemove.value || filterToRemove.tag)
     );
     this.values.filters.splice(indexOfElement, 1);
   }
