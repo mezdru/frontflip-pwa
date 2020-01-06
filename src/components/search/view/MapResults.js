@@ -10,6 +10,7 @@ React.lazy(() => import("../../../resources/stylesheets/font-awesome.min.css"));
 
 class MapResults extends React.Component {
   state = {};
+  waitingTask;
 
   async componentDidMount() {
     await this.props.fetchHits(this.props.searchStore.values.filters, 0, true)
@@ -24,8 +25,8 @@ class MapResults extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
-    // if(this.map) this.props.mapbox.loadClusteredData(this.map, this.props.mapbox.convertAlgoliaToGeojson(nextProps.hits));
+    // console.log(nextProps);
+    if(this.map) this.props.mapbox.loadClusteredData(this.map, this.props.mapbox.convertAlgoliaToGeojson(nextProps.hits));
     // else this.awaitMapBuild = this.props.mapbox.loadClusteredData(this.map, this.props.mapbox.convertAlgoliaToGeojson(nextProps.hits));
   }
 
