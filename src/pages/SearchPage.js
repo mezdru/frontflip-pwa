@@ -87,22 +87,26 @@ class SearchPage extends React.Component {
         </Suspense>
 
         <main className={classes.searchContainer}>
-          <Suspense
-            fallback={
-              <div style={{ position: "absolute", height: "100vh" }}></div>
-            }
-          >
-            <BannerResizable
-              type={"organisation"}
-              initialHeight={100}
-              style={{ position: "absolute" }}
-            />
-          </Suspense>
+          {view === VIEW_LIST && (
+            <>
+              <Suspense
+                fallback={
+                  <div style={{ position: "absolute", height: "100vh" }}></div>
+                }
+              >
+                <BannerResizable
+                  type={"organisation"}
+                  initialHeight={100}
+                  style={{ position: "absolute" }}
+                />
+              </Suspense>
 
-          <div
-            id="shadowed-background"
-            className={classes.shadowedBackground}
-          />
+              <div
+                id="shadowed-background"
+                className={classes.shadowedBackground}
+              />
+            </>
+          )}
 
           <div
             className={

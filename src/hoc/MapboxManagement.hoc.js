@@ -37,7 +37,7 @@ const withMapbox = ComponentToWrap => {
         mapboxgl: mapboxgl
       });
 
-      if(geocoderContainer) {
+      if (geocoderContainer) {
         geocoderContainer.appendChild(geocoder.onAdd(map));
       } else {
         map.addControl(geocoder);
@@ -73,7 +73,8 @@ const withMapbox = ComponentToWrap => {
       });
 
       map.on("data", e => {
-        if (e.sourceId !== "addresses" || !e.isSourceLoaded) return;
+        //if (e.sourceId !== "addresses" || !e.isSourceLoaded) return;
+        if(e.sourceId !== "addresses") return;
         map.on("moveend", () => this.updateMarkers(map)); // moveend also fires on zoomend
         this.updateMarkers(map);
       });
@@ -119,16 +120,7 @@ const withMapbox = ComponentToWrap => {
           el.innerHTML = `<i class="fa fa-map-marker" aria-hidden="true"></i><img src="${defaultProfilePicture}" />`;
           el.dataset.type = "marker";
 
-          const popupEl = document.createElement("div");
-          popupEl.innerText = "Je suis une popup HTML";
-          popupEl.style.width = "300px";
-          popupEl.style.height = "50px";
-          popupEl.style.background = "pink";
-          const popup = new mapboxgl.Popup().setDOMContent(popupEl);
-
-          const marker = new mapboxgl.Marker(el)
-            .setLngLat(coords)
-            .setPopup(popup);
+          const marker = new mapboxgl.Marker(el).setLngLat(coords);
 
           marker.addTo(map);
           keepMarkers.push(props.id);
@@ -180,6 +172,33 @@ const withMapbox = ComponentToWrap => {
       });
     };
 
+    convertAlgoliaToGeojson = hits => {
+      if (!hits || !Array.isArray(hits) || hits.length === 0) return;
+
+      let features = [];
+
+      hits.forEach(hit => {
+        if (hit._geoloc && hit._geoloc.lat && hit._geoloc.lng) {
+          features.push({
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [hit._geoloc.lng, hit._geoloc.lat]
+            },
+            properties: {
+              tag: hit.tag,
+              id: hit.objectID
+            }
+          });
+        }
+      });
+      console.log("features: ", features);
+      return {
+        type: "FeatureCollection",
+        features: features
+      };
+    };
+
     render() {
       return (
         <ComponentToWrap
@@ -188,7 +207,8 @@ const withMapbox = ComponentToWrap => {
             buildMap: this.buildMap,
             setLocale: this.setLocale,
             loadClusteredData: this.loadClusteredData,
-            addGeocoder: this.addGeocoder
+            addGeocoder: this.addGeocoder,
+            convertAlgoliaToGeojson: this.convertAlgoliaToGeojson
           }}
         />
       );

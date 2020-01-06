@@ -18,13 +18,15 @@ class MapResults extends React.Component {
     .then((map) => {
       this.map = map;
       this.props.mapbox.setLocale(this.map, this.props.commonStore.locale);
-      this.props.mapbox.loadClusteredData(this.map, "https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson");
+      if(this.map) this.props.mapbox.loadClusteredData(this.map, this.props.mapbox.convertAlgoliaToGeojson(this.props.hits));
+
     });
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     console.log(nextProps);
-    // if map is ready, use loadClusteredData when recieves hits
+    // if(this.map) this.props.mapbox.loadClusteredData(this.map, this.props.mapbox.convertAlgoliaToGeojson(nextProps.hits));
+    // else this.awaitMapBuild = this.props.mapbox.loadClusteredData(this.map, this.props.mapbox.convertAlgoliaToGeojson(nextProps.hits));
   }
 
   render() {
