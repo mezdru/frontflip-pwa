@@ -4,13 +4,11 @@ import { withStyles } from "@material-ui/core";
 
 import { styles } from "./MapResults.css";
 import "./marker.css";
-import defaultProfilePicture from "../../../resources/images/placeholder_person.png";
 import withMapbox from "../../../hoc/MapboxManagement.hoc";
 React.lazy(() => import("../../../resources/stylesheets/font-awesome.min.css"));
 
 class MapResults extends React.Component {
   state = {};
-  waitingTask;
 
   async componentDidMount() {
     await this.props.fetchHits(this.props.searchStore.values.filters, 0, true)
@@ -25,9 +23,7 @@ class MapResults extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    // console.log(nextProps);
     if(this.map) this.props.mapbox.loadClusteredData(this.map, this.props.mapbox.convertAlgoliaToGeojson(nextProps.hits));
-    // else this.awaitMapBuild = this.props.mapbox.loadClusteredData(this.map, this.props.mapbox.convertAlgoliaToGeojson(nextProps.hits));
   }
 
   render() {
