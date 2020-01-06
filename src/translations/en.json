@@ -149,5 +149,6 @@
   "skillsProposition.fab.tooltip": "Propose skills",
   "profile.actions.delete": "Delete profile",
   "profile.actions.delete.confirm": "Are you sure you want to delete this profile?",
-  "profile.actions.delete.error": "❌ Error while deleting this profile. \nContact us at : contact@wingzy.com\n\n"
+  "profile.actions.delete.error": "❌ Error while deleting this profile. \nContact us at : contact@wingzy.com\n\n",
+  "onboard.geo.title": "Where do your work?"
 }
