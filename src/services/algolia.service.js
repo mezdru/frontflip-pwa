@@ -185,6 +185,8 @@ class AlgoliaService {
     if(!this.index) await this.addWaitingTask();
     let [filtersRequest, queryRequest] = this.makeRequest(filters);
 
+    console.log("fetch hits with hits by page : " + hitsPerPage);
+
     return new Promise((resolve, reject) => {
       this.index.search(
         {

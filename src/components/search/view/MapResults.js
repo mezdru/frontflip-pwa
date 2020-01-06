@@ -11,7 +11,9 @@ React.lazy(() => import("../../../resources/stylesheets/font-awesome.min.css"));
 class MapResults extends React.Component {
   state = {};
 
-  componentDidMount() {
+  async componentDidMount() {
+    await this.props.fetchHits(this.props.searchStore.values.filters, 0, true)
+
     this.props.mapbox.buildMap(this.mapContainer)
     .then((map) => {
       this.map = map;
@@ -20,14 +22,10 @@ class MapResults extends React.Component {
     });
   }
 
-
-  // use it in onboard ?
-  getGeocode = query => {
-    // there are 2 endpoints : this one is free (up to 100k / month) : we can't store the data
-    //https://api.mapbox.com/geocoding/v5/mapbox.places/{QUERY_HERE}.json?access_token={ACCESS_TOKEN_HERE}
-    // this one isn't free : 5$ / 1K request : we can store the data
-    //https://api.mapbox.com/geocoding/v5/mapbox.places-permanent/{QUERY_HERE}.json?access_token={ACCESS_TOKEN_HERE}
-  };
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
+    // if map is ready, use loadClusteredData when recieves hits
+  }
 
   render() {
     const { classes } = this.props;
@@ -44,6 +42,6 @@ class MapResults extends React.Component {
   }
 }
 
-export default inject("commonStore")(
+export default inject("commonStore", "searchStore")(
   observer(withStyles(styles)(withMapbox(MapResults)))
 );
