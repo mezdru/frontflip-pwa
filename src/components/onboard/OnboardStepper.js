@@ -20,6 +20,7 @@ import classNames from 'classnames';
 import undefsafe from 'undefsafe';
 import { getBaseUrl } from '../../services/utils.service.js';
 import {styles} from './OnboardStepper.css';
+import OnboardGeo from './steps/OnboardGeo';
 
 let timeoutArray = [];
 
@@ -109,6 +110,7 @@ class OnboardStepper extends React.Component {
       case 'intro': return OnboardIntro;
       case 'contacts': return OnboardContacts;
       case 'description': return OnboardDescription;
+      case 'geo': return OnboardGeo;
       default: return OnboardWings;
     }
   }
