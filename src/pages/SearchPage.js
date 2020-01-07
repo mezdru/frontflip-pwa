@@ -83,7 +83,7 @@ class SearchPage extends React.Component {
     return (
       <>
         <Suspense fallback={<></>}>
-          <Header withProfileLogo />
+          <Header withProfileLogo forceInside={this.props.width === "xs"} />
         </Suspense>
 
         <main className={classes.searchContainer}>

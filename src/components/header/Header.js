@@ -57,7 +57,7 @@ class App extends Component {
 
   render() {
     const { open, successLogout, auth, isSigninOrSignupPage } = this.state;
-    const { classes } = this.props;
+    const { classes, forceInside } = this.props;
     const { locale } = this.props.commonStore;
     const orgTag = undefsafe(this.props.orgStore.currentOrganisation, "tag");
 
@@ -68,7 +68,7 @@ class App extends Component {
         <div className={classes.root}>
           <Fab
             variant="extended"
-            className={classes.menuButton}
+            className={classNames(classes.menuButton, forceInside ? classes.insideButton : null)}
             onClick={this.handleDrawerOpen}
             children={
               <Suspense fallback={<></>}>

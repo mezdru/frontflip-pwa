@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import { injectIntl } from "react-intl";
 import { inject, observer } from "mobx-react";
-import { withTheme, withStyles } from "@material-ui/core";
+import { withTheme, withStyles, withWidth } from "@material-ui/core";
 import { observe } from "mobx";
 import { Clear } from "@material-ui/icons";
 import IconButton from "@material-ui/core/IconButton";
@@ -24,11 +24,11 @@ class SearchField extends PureComponent {
 
   componentDidMount() {
     if (this.props.mode !== "onboard" && this.props.mode !== "propose") {
-
-      this.makeDisplayedFilters(this.props.searchStore.values.filters)
-      .then(filters => {
-        this.setState({filters});
-      });
+      this.makeDisplayedFilters(this.props.searchStore.values.filters).then(
+        filters => {
+          this.setState({ filters });
+        }
+      );
 
       this.unsubscribeSearchFilters = observe(
         this.props.searchStore.values.filters,
@@ -39,11 +39,11 @@ class SearchField extends PureComponent {
           );
           this.scrollToRight();
 
-          this.makeDisplayedFilters(this.props.searchStore.values.filters)
-          .then(filters => {
-            this.setState({filters});
-          });
-
+          this.makeDisplayedFilters(this.props.searchStore.values.filters).then(
+            filters => {
+              this.setState({ filters });
+            }
+          );
         }
       );
     } else {
@@ -131,24 +131,32 @@ class SearchField extends PureComponent {
     this.forceUpdate();
   };
 
-  makeDisplayedFilters = async (filters) => {
-    if(!filters || filters.length === 0) return [];
+  makeDisplayedFilters = async filters => {
+    if (!filters || filters.length === 0) return [];
     let filtersP = JSON.parse(JSON.stringify(filters));
 
-    filtersP = filtersP.filter(f => FILTERS_ALLOWED.some(elt => elt === f.type));
-    filtersP = filtersP.map(f => {return {tag: f.value};});
+    filtersP = filtersP.filter(f =>
+      FILTERS_ALLOWED.some(elt => elt === f.type)
+    );
+    filtersP = filtersP.map(f => {
+      return { tag: f.value };
+    });
     filtersP = await suggestionsService.upgradeData(filtersP);
 
     return filtersP;
-  }
+  };
 
   render() {
     const { classes } = this.props;
     let { userQuery } = this.props.searchStore.values;
-    let {filters} = this.state;
+    let { filters } = this.state;
 
     return (
-      <div className={classes.searchContainer} id="search-container">
+      <div
+        className={classes.searchContainer}
+        id="search-container"
+        style={this.props.width === "xs" ? { paddingLeft: 48 } : {}}
+      >
         <div
           className={classes.searchFiltersContainer}
           id="search-filters-container"
@@ -205,7 +213,9 @@ export default inject(
 )(
   observer(
     injectIntl(
-      withTheme()(withStyles(styles, { withTheme: true })(SearchField))
+      withTheme()(
+        withStyles(styles, { withTheme: true })(withWidth()(SearchField))
+      )
     )
   )
 );
