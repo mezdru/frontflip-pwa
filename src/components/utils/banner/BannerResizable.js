@@ -5,6 +5,7 @@ import defaultBanner from '../../../resources/images/fly_away.jpg';
 import { withStyles } from '@material-ui/core';
 import { withProfile } from '../../../hoc/profile/withProfile';
 import undefsafe from 'undefsafe'; 
+import { getProgressiveImage } from '../../../services/utils.service';
 
 const styles = theme => ({
   root: {
@@ -76,7 +77,7 @@ class BannerResizable extends React.Component {
 
     return (
       <>
-          <div className={classes.root} style={{backgroundImage: `url(${source})`, height: initialHeight + 'vh', ...this.props.style}} id="bannerResizable" >
+          <div className={classes.root} style={{backgroundImage: `url(${getProgressiveImage(source)})`, height: initialHeight + 'vh', ...this.props.style}} id="bannerResizable" >
             {this.props.children}
           </div>
       </>
