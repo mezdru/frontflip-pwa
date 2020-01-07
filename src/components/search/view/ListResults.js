@@ -14,13 +14,11 @@ class ListResults extends React.Component {
 
   componentDidMount() {
     setTimeout(this.createScrollObserver, 100);
-    // this.createScrollObserver();
   }
 
   showMore = () => {
     if (!undefsafe(this.props.orgStore.currentAlgoliaKey, "initialized"))
       return;
-    console.log('show more fetch hits')
     this.props.fetchHits(this.props.searchStore.values.filters, this.props.page + 1, true)
   };
 
