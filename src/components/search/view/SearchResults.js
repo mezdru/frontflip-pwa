@@ -26,6 +26,7 @@ class SearchResults extends React.Component {
 
   componentDidMount() {
     this.fetchHits(this.props.searchStore.values.filters);
+
     this.unsubFilters = observe(
       this.props.searchStore.values.filters,
       change => {

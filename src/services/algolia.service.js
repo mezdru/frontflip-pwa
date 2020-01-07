@@ -138,7 +138,7 @@ class AlgoliaService {
       this.index.search(
         {
           filters: filters ? "type:hashtag AND " + filters : "type:hashtag",
-          hitsPerPage: 50
+          hitsPerPage: 500
         },
         (err, content) => {
           if(!content) return resolve();

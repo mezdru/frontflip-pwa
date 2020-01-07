@@ -13,7 +13,7 @@ const SearchNoResults = React.lazy(() => import("../SearchNoResults"));
 class ListResults extends React.Component {
 
   componentDidMount() {
-    this.createScrollObserver();
+    setTimeout(this.createScrollObserver, 100);
   }
 
   showMore = () => {

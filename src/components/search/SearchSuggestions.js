@@ -120,8 +120,6 @@ class SearchSuggestions extends React.Component {
   componentDidMount() {
     this.fetchSoftWings();
 
-    this.unsubAlgoliaKey = observe(this.props.orgStore, 'currentAlgoliaKey', () => this.fetchSoftWings());
-
     this.unsubFilters = observe(this.props.searchStore.values.filters, change => {
       this.fetchSuggestions(this.props.searchStore.values.filters);
     });
