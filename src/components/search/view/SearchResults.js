@@ -60,7 +60,7 @@ class SearchResults extends React.Component {
             null,
             page,
             true,
-            this.props.view === VIEW_LIST ? 5 : 100
+            this.props.view === VIEW_LIST ? 5 : 1000
           );
 
           if (!res) return;

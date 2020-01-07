@@ -141,6 +141,13 @@ export const styles = theme => ({
       backgroundColor: 'white',
     }
   },
+  insideButton:{
+    top: 20,
+    height: 40,
+    width: 40,
+    minWidth: 0,
+    left: 20
+  },
   right: {
     right: '16px !important',
     left: 'unset',

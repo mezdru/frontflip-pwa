@@ -31,8 +31,8 @@
 }
 
 .mapCluster {
-  background-color: #2b2d3c;
-  color: white;
+  background-color: white;
+  color: #2b2d3c;
   font-weight: 500;
   font-size: 1.3rem;
   border-radius: 50%;
