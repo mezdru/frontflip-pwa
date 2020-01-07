@@ -120,9 +120,10 @@ class SearchSuggestions extends React.Component {
   componentDidMount() {
     this.fetchSoftWings();
 
-    this.unsubAlgoliaKey = observe(this.props.orgStore, 'currentAlgoliaKey', () => this.fetchSoftWings());
+    // this.unsubAlgoliaKey = observe(this.props.orgStore, 'currentAlgoliaKey', () => this.fetchSoftWings());
 
     this.unsubFilters = observe(this.props.searchStore.values.filters, change => {
+      console.log('fetch suggestions from observe')
       this.fetchSuggestions(this.props.searchStore.values.filters);
     });
   }
@@ -147,6 +148,7 @@ class SearchSuggestions extends React.Component {
   }
 
   fetchSuggestions = async (filters) => {
+    console.log('fetch suggestions', filters.length)
     let algoliaRes = await AlgoliaService.fetchFacetValues(null, false, filters);
     if(!algoliaRes) return null;
 

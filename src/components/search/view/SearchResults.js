@@ -25,10 +25,13 @@ class SearchResults extends React.Component {
   }
 
   componentDidMount() {
+    console.log('did mount');
     this.fetchHits(this.props.searchStore.values.filters);
+    
     this.unsubFilters = observe(
       this.props.searchStore.values.filters,
       change => {
+        console.log('fetch hits from observer');
         this.setState({ page: 0 }, () => {
           this.fetchHits(
             this.props.searchStore.values.filters,
@@ -51,6 +54,7 @@ class SearchResults extends React.Component {
   }
 
   fetchHits = async (filters, page, updatePageState) => {
+    console.log('fetch hits')
     this.setState(
       { loading: true, page: updatePageState ? page : this.state.page },
       async () => {

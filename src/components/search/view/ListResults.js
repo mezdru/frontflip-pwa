@@ -13,12 +13,14 @@ const SearchNoResults = React.lazy(() => import("../SearchNoResults"));
 class ListResults extends React.Component {
 
   componentDidMount() {
-    this.createScrollObserver();
+    setTimeout(this.createScrollObserver, 100);
+    // this.createScrollObserver();
   }
 
   showMore = () => {
     if (!undefsafe(this.props.orgStore.currentAlgoliaKey, "initialized"))
       return;
+    console.log('show more fetch hits')
     this.props.fetchHits(this.props.searchStore.values.filters, this.props.page + 1, true)
   };
 
