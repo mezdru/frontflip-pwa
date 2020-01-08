@@ -28,6 +28,13 @@ export const styles = theme => ({
   },
   sentinel: {
     position: "absolute",
-    marginTop: "-500px"
+    marginTop: "-1500px"
+  },
+  horizontalCenter: {
+    left:0,
+    right:0,
+    margin: 'auto',
+    position: 'relative',
+    textAlign: 'center'
   }
 });
