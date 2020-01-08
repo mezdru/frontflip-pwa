@@ -10,6 +10,7 @@ import {FormattedMessage} from "react-intl";
 import {Clear, InfoRounded, FileCopy} from "@material-ui/icons";
 import {inject, observer} from "mobx-react";
 import {injectIntl} from 'react-intl';
+import SnackbarCustom from '../snackbars/SnackbarCustom';
 
 const styles = theme => ({
   invitationBtn: {
@@ -93,7 +94,9 @@ class Invitation extends React.Component {
     open: false,
     invitationCode: null,
     errorMessage: null,
-    inputId: Math.random()
+    inputId: Math.random(),
+    copySuccess: false,
+    copyError: false
   };
 
   formatInvitationLink = (code) => {
@@ -107,7 +110,10 @@ class Invitation extends React.Component {
   copyUrl = () => {
     let copyText = document.getElementById(this.state.inputId);
     copyText.select();
-    document.execCommand("copy");
+    let isCopied = document.execCommand("copy");
+
+    if(isCopied) this.setState({copySuccess: true});
+    else this.setState({copyError: true});
   }
   
   handleClickOpen = () => {
@@ -144,7 +150,7 @@ class Invitation extends React.Component {
   
   render() {
     const {classes} = this.props;
-    const {invitationCode, errorMessage} = this.state;
+    const {invitationCode, errorMessage, copySuccess, copyError} = this.state;
 
     const invitationCodeLink = this.formatInvitationLink(invitationCode);
 
@@ -180,6 +186,12 @@ class Invitation extends React.Component {
             <Typography variant="body1" style={{color: 'black'}}>
               <FormattedMessage id={'menu.drawer.invitation.description'}/>
             </Typography>
+            {copySuccess && (
+              <SnackbarCustom variant="success" message={this.props.intl.formatMessage({id: "invitation.copy.success"})} />
+            )}
+            {copyError && (
+              <SnackbarCustom variant="error" message={this.props.intl.formatMessage({id: "invitation.copy.error"})} />
+            )}
             <Grid container direction={'row'} justify={'space-between'} style={{marginTop: 8}}>
               <Grid item xs={10}>
                 <input type="text" value={errorMessage || invitationCodeLink} className={classes.invitationInput} id={this.state.inputId} readOnly={true} />
