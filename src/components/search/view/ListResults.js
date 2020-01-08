@@ -86,7 +86,7 @@ class ListResults extends React.Component {
             </Suspense>
           )}
 
-          {!loading ? (
+          {loading ? (
             <Grid item className={classes.horizontalCenter}>
               <CircularProgress color="secondary" />
             </Grid>

@@ -33,6 +33,8 @@ export const styles = theme => ({
   horizontalCenter: {
     left:0,
     right:0,
-    margin: 'auto'
+    margin: 'auto',
+    position: 'relative',
+    textAlign: 'center'
   }
 });
