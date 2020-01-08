@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { inject, observer } from "mobx-react";
-import { withStyles, Grid } from "@material-ui/core";
+import { withStyles, Grid, CircularProgress } from "@material-ui/core";
 import undefsafe from "undefsafe";
 
 import { styles } from "./ListResults.css";
@@ -11,7 +11,6 @@ const SearchShowMore = React.lazy(() => import("../SearchShowMore"));
 const SearchNoResults = React.lazy(() => import("../SearchNoResults"));
 
 class ListResults extends React.Component {
-
   componentDidMount() {
     setTimeout(this.createScrollObserver, 100);
   }
@@ -19,7 +18,12 @@ class ListResults extends React.Component {
   showMore = () => {
     if (!undefsafe(this.props.orgStore.currentAlgoliaKey, "initialized"))
       return;
-    this.props.fetchHits(this.props.searchStore.values.filters, this.props.page + 1, true)
+    console.log("show more");
+    this.props.fetchHits(
+      this.props.searchStore.values.filters,
+      this.props.page + 1,
+      true
+    );
   };
 
   createScrollObserver = () => {
@@ -82,17 +86,23 @@ class ListResults extends React.Component {
             </Suspense>
           )}
 
-          <Grid
-            item
-            xs={12}
-            sm={8}
-            md={6}
-            lg={4}
-            className={classes.cardMobileView}
-            style={{ left: 0, right: 0, margin: "auto" }}
-          >
-            <InvitationDialog />
-          </Grid>
+          {!loading ? (
+            <Grid item className={classes.horizontalCenter}>
+              <CircularProgress color="secondary" />
+            </Grid>
+          ) : (
+            <Grid
+              item
+              xs={12}
+              sm={8}
+              md={6}
+              lg={4}
+              className={classes.cardMobileView}
+              style={{ left: 0, right: 0, margin: "auto" }}
+            >
+              <InvitationDialog />
+            </Grid>
+          )}
         </ul>
       </div>
     );

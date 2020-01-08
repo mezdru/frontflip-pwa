@@ -4,7 +4,7 @@ export const styles = theme => ({
     height: 240,
     marginBottom: -22,
     marginLeft: -62,
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: 'transparent',
     [theme.breakpoints.down('xs')]: {
       width: 190,
       height: 190,
