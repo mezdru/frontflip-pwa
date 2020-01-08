@@ -13,7 +13,7 @@ const SearchNoResults = React.lazy(() => import("../SearchNoResults"));
 
 class ListResults extends React.Component {
   state = {
-    hitsPerPage: 5,
+    hitsPerPage: 10,
     displayedPage: 0 // page used by render only
   };
 
