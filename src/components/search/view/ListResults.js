@@ -6,31 +6,59 @@ import undefsafe from "undefsafe";
 import { styles } from "./ListResults.css";
 import Card from "../../card/CardProfile";
 import InvitationDialog from "../../utils/popup/Invitation";
+import { observe } from "mobx";
 
 const SearchShowMore = React.lazy(() => import("../SearchShowMore"));
 const SearchNoResults = React.lazy(() => import("../SearchNoResults"));
 
 class ListResults extends React.Component {
+  state = {
+    hitsPerPage: 5,
+    displayedPage: 0 // page used by render only
+  };
+
+  componentWillUnmount() {
+    if (this.unsubFilters) this.unsubFilters();
+  }
+
   componentDidMount() {
     setTimeout(this.createScrollObserver, 100);
+
+    this.unsubFilters = observe(
+      this.props.searchStore.values.filters,
+      change => {
+        this.setState({ displayedPage: 0 });
+      }
+    );
   }
 
   showMore = () => {
     if (!undefsafe(this.props.orgStore.currentAlgoliaKey, "initialized"))
       return;
-    console.log("show more");
-    this.props.fetchHits(
-      this.props.searchStore.values.filters,
-      this.props.page + 1,
-      true
-    );
+
+    // Load other results 2 pages before the limit
+    if (
+      (this.state.displayedPage + 3) * this.state.hitsPerPage >=
+        this.props.hits.length &&
+      !this.props.noMore
+    ) {
+      this.props.fetchHits(
+        this.props.searchStore.values.filters,
+        this.props.page + 1,
+        true
+      );
+    }
+
+    this.setState({
+      displayedPage: this.state.displayedPage + 1
+    });
   };
 
   createScrollObserver = () => {
     try {
       const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
-          if (entry.isIntersecting && !this.props.noMore) {
+          if (entry.isIntersecting) {
             this.showMore();
           }
         });
@@ -46,12 +74,16 @@ class ListResults extends React.Component {
   render() {
     const { hits, loading, noMore, noResult } = this.props;
     const { classes } = this.props;
-    let hitsResult = Array.from(hits);
+    const { hitsPerPage, displayedPage } = this.state;
+
+    const hitsDisplayed = Array.from(
+      hits.slice(0, (displayedPage + 1) * hitsPerPage)
+    );
 
     return (
       <div className={classes.hitList}>
         <ul>
-          {hitsResult.map((hit, i) => {
+          {hitsDisplayed.map((hit, i) => {
             return (
               <li key={hit.objectID}>
                 <Grid
