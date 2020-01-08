@@ -28,7 +28,7 @@ export const styles = theme => ({
   },
   sentinel: {
     position: "absolute",
-    marginTop: "-1500px"
+    marginTop: "-500px"
   },
   horizontalCenter: {
     left:0,
