@@ -1,10 +1,10 @@
 import { observable, action, decorate, computed } from "mobx";
-import userStore from './user.store';
-import orgStore from './organisation.store';
-import Store from './store';
-import undefsafe from 'undefsafe';
+import userStore from "./user.store";
+import orgStore from "./organisation.store";
+import Store from "./store";
+import undefsafe from "undefsafe";
 import commonStore from "./common.store";
-import {replaceAndKeepReference } from '../services/utils.service';
+import { replaceAndKeepReference } from "../services/utils.service";
 
 class RecordStore extends Store {
   records = [];
@@ -14,8 +14,14 @@ class RecordStore extends Store {
   }
 
   get currentUserRecord() {
-    let orgAndRecord = userStore.currentUser && userStore.currentUser.orgsAndRecords.find(oar => (oar.organisation._id || oar.organisation) === undefsafe(orgStore.currentOrganisation, '_id'));
-    if(!orgAndRecord || !orgAndRecord.record) return null;
+    let orgAndRecord =
+      userStore.currentUser &&
+      userStore.currentUser.orgsAndRecords.find(
+        oar =>
+          (oar.organisation._id || oar.organisation) ===
+          undefsafe(orgStore.currentOrganisation, "_id")
+      );
+    if (!orgAndRecord || !orgAndRecord.record) return null;
     return this.getRecord(orgAndRecord.record._id || orgAndRecord.record);
   }
 
@@ -25,10 +31,20 @@ class RecordStore extends Store {
 
   getRecord(recordId, recordTag) {
     if (!recordId && !recordTag) return null;
-    return this.records.find(record => {
-      if (recordId) return JSON.stringify(recordId) === JSON.stringify(record._id || record.objectID);
-      else return ((recordTag === record.tag) && (record.organisation === orgStore.currentOrganisation._id) );
+    let rec;
+    rec = this.records.find(record => {
+      if (recordId)
+        return (
+          JSON.stringify(recordId) ===
+          JSON.stringify(record._id || record.objectID)
+        );
+      else
+        return (
+          recordTag === record.tag &&
+          record.organisation === orgStore.currentOrganisation._id
+        );
     });
+    return rec;
   }
 
   async getOrFetchRecord(recordId, recordTag, orgId) {
@@ -39,9 +55,14 @@ class RecordStore extends Store {
   }
 
   addRecord(inRecord) {
-    if(!inRecord) return null;
-    if(inRecord.objectID) inRecord._id = inRecord.objectID;
-    let index = this.records.findIndex(record => JSON.stringify(record._id) === JSON.stringify(inRecord._id || inRecord.objectID));
+    if (!inRecord) return null;
+    if (inRecord.objectID) inRecord._id = inRecord.objectID;
+    let index = this.records.findIndex(
+      record =>
+        JSON.stringify(record._id) ===
+        JSON.stringify(inRecord._id || inRecord.objectID)
+    );
+
     if (index > -1) {
       replaceAndKeepReference(this.records[index], inRecord);
     } else {
@@ -66,22 +87,32 @@ class RecordStore extends Store {
   }
 
   async fetchByTag(recordTag, orgId) {
-    if (!recordTag || !orgId) return Promise.reject(new Error('No record Tag or no organisation ID'));
-    let records = await super.fetchResources(`?tag=${recordTag.replace('#', '%23')}&organisation=${orgId}`);
+    if (!recordTag || !orgId)
+      return Promise.reject(new Error("No record Tag or no organisation ID"));
+    let records = await super.fetchResources(
+      `?tag=${recordTag.replace("#", "%23")}&organisation=${orgId}`
+    );
+
     this.addRecord(records[0]);
     return records[0];
   }
 
   async updateRecord(recordId, arrayOfFields, record) {
     let recordToUpdate = this.buildRecordToUpdate(arrayOfFields, record);
-    let recordUpdated = await super.updateResource(recordId, recordToUpdate, orgStore.currentOrganisation._id);
+    let recordUpdated = await super.updateResource(
+      recordId,
+      recordToUpdate,
+      orgStore.currentOrganisation._id
+    );
     this.addRecord(recordUpdated);
     return recordUpdated;
   }
 
   async fetchPopulatedForUser(orgId) {
-    if(!orgId) throw new Error('Organisation id is required');
-    let record = await super.fetchResources(`/populated?user=${userStore.currentUser._id}&organisation=${orgId}`)
+    if (!orgId) throw new Error("Organisation id is required");
+    let record = await super.fetchResources(
+      `/populated?user=${userStore.currentUser._id}&organisation=${orgId}`
+    );
     this.addRecord(record);
     return record;
   }
@@ -97,7 +128,6 @@ class RecordStore extends Store {
     }
     return recordToUpdate;
   }
-
 }
 
 decorate(RecordStore, {

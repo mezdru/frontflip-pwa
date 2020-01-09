@@ -9,7 +9,6 @@
     "@mapbox/mapbox-gl-language": "^0.10.1",
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
-    "@welldone-software/why-did-you-render": "^3.3.7",
     "algoliasearch": "^3.32.0",
     "async-request": "^1.2.0",
     "compression": "^1.7.4",
@@ -66,6 +65,7 @@
   },
   "browserslist": [],
   "devDependencies": {
+    "@welldone-software/why-did-you-render": "^3.5.0",
     "eslint-plugin-react": "^7.14.3",
     "workbox-cli": "^4.2.0"
   }

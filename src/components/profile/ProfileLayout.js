@@ -7,7 +7,6 @@ import BannerResizable from "../utils/banner/BannerResizable";
 import ProfileWings from "./ProfileWings";
 import ProfileActions from "./ProfileActions";
 import { styles } from "./ProfileLayout.css";
-import { withProfile } from "../../hoc/profile/withProfile";
 import SkillsPropositionFab from "../utils/buttons/SkillsPropositionFab";
 import { observe } from "mobx";
 import ErrorBoundary from "../utils/errors/ErrorBoundary";
@@ -21,6 +20,8 @@ const ProposeSkills = React.lazy(() =>
 );
 
 class ProfileLayout extends React.Component {
+  static whyDidYouRender = true;
+
   state = {
     showProposeSkills: false,
     showManageProposedSkills: false
@@ -56,8 +57,7 @@ class ProfileLayout extends React.Component {
       <Slide
         direction="up"
         in={visible}
-        mountOnEnter
-        unmountOnExit
+        // unmountOnExit
         timeout={{ enter: transitionDuration, exit: transitionDuration / 2 }}
       >
         <Grid container className={classes.root} alignContent="flex-start">
@@ -152,14 +152,6 @@ class ProfileLayout extends React.Component {
 
 export default inject(
   "commonStore",
-  "orgStore",
   "authStore",
-  "recordStore",
-  "userStore"
-)(
-  observer(
-    withStyles(styles, { withTheme: true })(
-      withProfile(ProfileLayout)
-    )
-  )
-);
+  "recordStore"
+)(observer(withStyles(styles, { withTheme: true })(ProfileLayout)));
