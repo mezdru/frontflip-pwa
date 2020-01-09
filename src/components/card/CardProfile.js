@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import {
   Grid,
   withStyles,
@@ -27,15 +26,9 @@ React.lazy(() => import("../../resources/stylesheets/font-awesome.min.css"));
 ProfileService.setExtraLinkLimit(5);
 const WINGS_DISPLAYED = 7;
 
-class CardProfile extends React.PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      locale:
-        this.props.commonStore.getCookie("locale") ||
-        this.props.commonStore.locale
-    };
+class CardProfile extends React.Component {
+  componentDidMount() {
+    this.props.recordStore.addRecord({provider: "algolia", ...this.props.hit});
   }
 
   getLogoSize = () => {
@@ -72,6 +65,15 @@ class CardProfile extends React.PureComponent {
     });
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      JSON.stringify(nextProps.hit) !== JSON.stringify(this.props.hit)
+    )
+      return true;
+    
+    return false;
+  }
+
   render() {
     const { classes, hit } = this.props;
     const { locale } = this.props.commonStore;
@@ -80,9 +82,6 @@ class CardProfile extends React.PureComponent {
     ProfileService.transformLinks(hit);
     ProfileService.makeHightlighted(hit);
     ProfileService.orderHashtags(hit);
-
-    hit.provider = "algolia";
-    this.props.recordStore.addRecord(hit);
 
     return (
       <Card className={classes.fullWidth} key={hit.objectID}>
@@ -242,10 +241,6 @@ class CardProfile extends React.PureComponent {
     );
   }
 }
-
-CardProfile.propTypes = {
-  classes: PropTypes.object.isRequired
-};
 
 export default inject(
   "commonStore",

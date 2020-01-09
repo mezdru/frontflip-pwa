@@ -19,7 +19,8 @@ class MainPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      redirectTo: null
+      redirectTo: null,
+      visible: false,
     };
     this.props.commonStore.setUrlParams(this.props.match);
   }
@@ -83,14 +84,18 @@ class MainPage extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.state.redirectTo === window.location.pathname) {
+    if (this.state.redirectTo && this.state.redirectTo === window.location.pathname) {
       this.setState({ redirectTo: null });
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if(JSON.stringify(nextState) !== JSON.stringify(this.state) && !(!nextState.redirectTo && this.state.redirectTo)) return true;
+    return false;
+  }
+
   render() {
     const { redirectTo, visible } = this.state;
-
     return (
       <>
         {redirectTo && window.location.pathname !== redirectTo && (

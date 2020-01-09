@@ -21,6 +21,9 @@ import HttpsRedirect from 'react-https-redirect';
 import { MuiThemeProvider } from "@material-ui/core";
 import theme from "./theme";
 
+// const whyDidYouRender = require('@welldone-software/why-did-you-render');
+// whyDidYouRender(React);
+
 const stores = {
   authStore,
   userStore,

@@ -77,13 +77,22 @@ class SearchPage extends React.Component {
     if (this.unsubFilters) this.unsubFilters();
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if(nextState.view !== this.state.view) return true;
+    return false;
+  }
+
   render() {
     const { classes, searchPage } = this.props;
     const { view } = this.state;
+
     return (
       <>
         <Suspense fallback={<></>}>
-          <Header withProfileLogo forceInside={view === VIEW_MAP && this.props.width === "xs"} />
+          <Header
+            withProfileLogo
+            forceInside={view === VIEW_MAP && this.props.width === "xs"}
+          />
         </Suspense>
 
         <main className={classes.searchContainer}>
