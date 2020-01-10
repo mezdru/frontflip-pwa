@@ -93,11 +93,13 @@ class CommonStore {
   removeSessionStorage = (name) => sessionStorage.removeItem(name);
 
   getLocalStorage(name, isObject) {
+    name = (process.env.NODE_ENV === "development" ? "development-" : "") + name;
     if (isObject) return JSON.parse(localStorage.getItem(name));
     else return localStorage.getItem(name);
   }
 
   setLocalStorage(name, value, isObject) {
+    name = (process.env.NODE_ENV === "development" ? "development-" : "") + name;
     return Promise.resolve().then(function () {
       try {
         if (isObject) localStorage.setItem(name, JSON.stringify(value));

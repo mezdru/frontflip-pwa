@@ -204,13 +204,6 @@ class AlgoliaService {
     });
   }
 
-
-
-
-
-
-
-
   /**
    * @description Add or update local bank and remove duplicate entries
    */
