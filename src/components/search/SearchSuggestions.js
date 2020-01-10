@@ -149,12 +149,14 @@ class SearchSuggestions extends React.Component {
     if(!algoliaRes) return null;
 
     let hits = await SuggestionsService.upgradeData(algoliaRes.facetHits);
-    let resultHitsFiltered = hits.filter(hit => hit && !this.state.firstWings.some(fw => fw.tag === (hit.tag || hit.value)));
 
+    let resultHitsFiltered = hits.filter(hit => hit && !this.state.firstWings.some(fw => fw.tag === (hit.tag || hit.value)));
     resultHitsFiltered = resultHitsFiltered.length > 15 ? resultHitsFiltered : hits;
     resultHitsFiltered = SuggestionsService.removeHiddenWings(resultHitsFiltered);
+    resultHitsFiltered.map(elt => {if(!elt.tag && elt.value) elt.tag = elt.value});
     this.props.resetScroll("search-suggestions-container");
-    this.setState({ facetHits: getUnique(resultHitsFiltered.splice(0, 20), "tag"), shouldUpdate: true });
+    let finalHits = getUnique(resultHitsFiltered.splice(0, 20), "tag");
+    this.setState({ facetHits: finalHits, shouldUpdate: true });
   }
 
   shouldDisplaySuggestion(tag) {
