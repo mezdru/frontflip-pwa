@@ -61,7 +61,7 @@ class SearchResults extends React.Component {
             null,
             page,
             true,
-            this.props.view === VIEW_LIST ? 50 : 1000
+            this.props.view === VIEW_LIST ? 500 : 1000
           );
 
           if (!res) return;
@@ -110,12 +110,12 @@ class SearchResults extends React.Component {
         <Suspense
           fallback={<CircularProgress color="secondary"></CircularProgress>}
         >
-          <Grid
+          {/* <Grid
             container
             direction={"column"}
             justify={"space-around"}
-            alignItems={"center"}
-          >
+            // alignItems={"center"}
+          > */}
             <ListResults
               hits={hits}
               noMore={noMore}
@@ -124,7 +124,7 @@ class SearchResults extends React.Component {
               fetchHits={this.fetchHits}
               page={page}
             />
-          </Grid>
+          {/* </Grid> */}
         </Suspense>
       );
     } else if (view === VIEW_MAP) {

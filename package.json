@@ -44,6 +44,7 @@
     "react-select": "^2.4.2",
     "react-swipeable-views": "^0.13.1",
     "react-swipeable-views-utils": "^0.13.1",
+    "react-virtualized": "^9.21.2",
     "slack-notify": "^0.1.7",
     "superagent": "^4.1.0",
     "superagent-promise": "^1.1.0",

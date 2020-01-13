@@ -22,6 +22,7 @@ export const styles = theme => ({
     }
   },
   cardMobileView: {
+    margin: 'auto',
     [theme.breakpoints.down("xs")]: {
       margin: "16px!important"
     }
