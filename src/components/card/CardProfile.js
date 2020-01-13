@@ -28,7 +28,10 @@ const WINGS_DISPLAYED = 7;
 
 class CardProfile extends React.Component {
   componentDidMount() {
-    this.props.recordStore.addRecord({provider: "algolia", ...this.props.hit});
+    this.props.recordStore.addRecord({
+      provider: "algolia",
+      ...this.props.hit
+    });
   }
 
   getLogoSize = () => {
@@ -67,15 +70,16 @@ class CardProfile extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (
-      JSON.stringify(nextProps.hit) !== JSON.stringify(this.props.hit)
+      JSON.stringify(nextProps.hit) !== JSON.stringify(this.props.hit) ||
+      (!nextProps.light && this.props.light)
     )
       return true;
-    
+
     return false;
   }
 
   render() {
-    const { classes, hit } = this.props;
+    const { classes, hit, light } = this.props;
     const { locale } = this.props.commonStore;
     let currentWings = 0;
 
@@ -96,11 +100,15 @@ class CardProfile extends React.Component {
                   <Grid
                     item
                     style={{
-                      backgroundImage: `url(${getProgressiveImage(ProfileService.getPicturePathResized(
-                        hit.picture,
-                        "person ",
-                        this.getLogoSize()
-                      )) || defaultPicture})`
+                      backgroundImage: light
+                        ? ""
+                        : `url(${getProgressiveImage(
+                            ProfileService.getPicturePathResized(
+                              hit.picture,
+                              "person ",
+                              this.getLogoSize()
+                            )
+                          ) || defaultPicture})`
                     }}
                     className={`${classes.logo} ${classes.backgroundLogo}`}
                   />
@@ -150,7 +158,7 @@ class CardProfile extends React.Component {
         <Grid item container className={classes.contactField}>
           <CardActions disableActionSpacing>
             <Grid item container>
-              {hit.links &&
+              {!light && hit.links &&
                 hit.links.map((link, i) => {
                   if (!link.value || link.value === "") return null;
                   if (link.type === "workchat") return null; // hide workchat
@@ -190,7 +198,7 @@ class CardProfile extends React.Component {
         <Grid container item className={classes.wingsContainer}>
           <CardContent style={{ paddingBottom: 0 }}>
             <Grid container className={classes.wings}>
-              {hit.hashtags &&
+              {!light && hit.hashtags &&
                 hit.hashtags.map((hashtag, i) => {
                   if (
                     currentWings >= WINGS_DISPLAYED ||
@@ -222,7 +230,7 @@ class CardProfile extends React.Component {
                     />
                   );
                 })}
-              {hit.hashtags && hit.hashtags.length > WINGS_DISPLAYED && (
+              {!light && hit.hashtags && hit.hashtags.length > WINGS_DISPLAYED && (
                 <Link to={getBaseUrl(this.props) + "/" + hit.tag}>
                   <Wings
                     label={this.props.intl.formatMessage(

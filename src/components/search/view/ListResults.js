@@ -78,6 +78,26 @@ class ListResults extends React.Component {
     this.willReceiveProps = true;
   }
 
+  rowRenderer = ({ index, isScrolling, isVisible, key, style }) => {
+    const {hits, classes} = this.props;
+    const row = hits[index];
+
+    return (
+      <div key={key} style={style}>
+        <Grid
+          item
+          xs={12}
+          sm={8}
+          md={6}
+          lg={4}
+          className={classes.cardMobileView}
+        >
+          <Card hit={row} light={isScrolling} />
+        </Grid>
+      </div>
+    );
+  };
+
   shouldComponentUpdate(nextProps, nextState) {
     if (
       JSON.stringify(nextState) === JSON.stringify(this.state) &&
@@ -93,45 +113,20 @@ class ListResults extends React.Component {
     const { classes } = this.props;
     const { hitsPerPage, displayedPage } = this.state;
 
-    const hitsDisplayed = Array.from(
-      hits.slice(0, (displayedPage + 1) * hitsPerPage)
-    );
+    let customElement = window.document.getElementById("content-container");
 
-    const list = Array.from(hits.slice(0, (displayedPage + 1) * hitsPerPage));
-
-    let _rowRenderer = ({ index, isScrolling, isVisible, key, style }) => {
-      // console.log("render " + index);
-      // const list = Array.from(
-      //   this.props.hits.slice(0, (this.state.displayedPage + 1) * this.state.hitsPerPage)
-      // );
-      const list = hits;
-      const row = list[index];
-      // const className = clsx(styles.row, {
-      //   [styles.rowScrolling]: isScrolling,
-      //   isVisible: isVisible,
-      // });
-
+    if (noResult) {
       return (
-        <div key={key} style={style}>
-          <Grid
-            item
-            xs={12}
-            sm={8}
-            md={6}
-            lg={4}
-            className={classes.cardMobileView}
-          >
-            <Card hit={row} />
-          </Grid>
+        <div className={classes.hitList}>
+          <Suspense fallback={<></>}>
+            <SearchNoResults />
+          </Suspense>
         </div>
       );
-    };
-
-    let customElement = window.document.getElementById("content-container");
+    }
 
     return (
       <WindowScroller
-        // ref={this._setRef}
         scrollElement={customElement}
       >
         {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => (
@@ -151,8 +146,7 @@ class ListResults extends React.Component {
                     overscanRowCount={5}
                     rowCount={hits.length}
                     rowHeight={273 + 32}
-                    rowRenderer={_rowRenderer}
-                    // scrollToIndex={scrollToIndex}
+                    rowRenderer={this.rowRenderer}
                     scrollTop={scrollTop}
                     width={width}
                   />
@@ -162,67 +156,6 @@ class ListResults extends React.Component {
           </div>
         )}
       </WindowScroller>
-    );
-
-    console.log("render list");
-
-    return (
-      <div className={classes.hitList}>
-        <ul>
-          {hitsDisplayed.map((hit, i) => {
-            return (
-              <li key={hit.objectID}>
-                <Grid
-                  item
-                  xs={12}
-                  sm={8}
-                  md={6}
-                  lg={4}
-                  className={classes.cardMobileView}
-                >
-                  <Card hit={hit} />
-                </Grid>
-              </li>
-            );
-          })}
-          <div id="algolia-sentinel" className={classes.sentinel}></div>
-
-          {!noMore && (
-            <li>
-              <Suspense fallback={<></>}>
-                <SearchShowMore
-                  loadInProgress={loading}
-                  handleShowMore={this.showMore}
-                />
-              </Suspense>
-            </li>
-          )}
-
-          {noResult && (
-            <Suspense fallback={<></>}>
-              <SearchNoResults />
-            </Suspense>
-          )}
-
-          {loading ? (
-            <Grid item className={classes.horizontalCenter}>
-              <CircularProgress color="secondary" />
-            </Grid>
-          ) : (
-            <Grid
-              item
-              xs={12}
-              sm={8}
-              md={6}
-              lg={4}
-              className={classes.cardMobileView}
-              style={{ left: 0, right: 0, margin: "auto" }}
-            >
-              <InvitationDialog />
-            </Grid>
-          )}
-        </ul>
-      </div>
     );
   }
 }
