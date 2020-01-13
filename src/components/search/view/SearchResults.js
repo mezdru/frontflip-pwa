@@ -110,21 +110,14 @@ class SearchResults extends React.Component {
         <Suspense
           fallback={<CircularProgress color="secondary"></CircularProgress>}
         >
-          {/* <Grid
-            container
-            direction={"column"}
-            justify={"space-around"}
-            // alignItems={"center"}
-          > */}
-            <ListResults
-              hits={hits}
-              noMore={noMore}
-              noResult={noResult}
-              loading={loading}
-              fetchHits={this.fetchHits}
-              page={page}
-            />
-          {/* </Grid> */}
+          <ListResults
+            hits={hits}
+            noMore={noMore}
+            noResult={noResult}
+            loading={loading}
+            fetchHits={this.fetchHits}
+            page={page}
+          />
         </Suspense>
       );
     } else if (view === VIEW_MAP) {
