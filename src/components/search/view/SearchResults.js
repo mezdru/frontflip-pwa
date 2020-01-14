@@ -61,7 +61,7 @@ class SearchResults extends React.Component {
             null,
             page,
             true,
-            this.props.view === VIEW_LIST ? 50 : 1000
+            this.props.view === VIEW_LIST ? 1000 : 1000 // if list view, should not be "1000", should use pagination
           );
 
           if (!res) return;
@@ -110,21 +110,14 @@ class SearchResults extends React.Component {
         <Suspense
           fallback={<CircularProgress color="secondary"></CircularProgress>}
         >
-          <Grid
-            container
-            direction={"column"}
-            justify={"space-around"}
-            alignItems={"center"}
-          >
-            <ListResults
-              hits={hits}
-              noMore={noMore}
-              noResult={noResult}
-              loading={loading}
-              fetchHits={this.fetchHits}
-              page={page}
-            />
-          </Grid>
+          <ListResults
+            hits={hits}
+            noMore={noMore}
+            noResult={noResult}
+            loading={loading}
+            fetchHits={this.fetchHits}
+            page={page}
+          />
         </Suspense>
       );
     } else if (view === VIEW_MAP) {

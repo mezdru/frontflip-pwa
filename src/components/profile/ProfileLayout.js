@@ -32,7 +32,7 @@ class ProfileLayout extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.visible !== nextProps.visible) {
+    if (this.props.visible !== nextProps.visible && this.state.showProposeSkills) {
       this.setState({
         showProposeSkills: false
       });
@@ -48,6 +48,11 @@ class ProfileLayout extends React.Component {
     );
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if(nextProps.visible === this.props.visible && JSON.stringify(nextState) === JSON.stringify(this.state)) return false;
+    return true;
+  }
+
   render() {
     const { classes, visible, transitionDuration } = this.props;
     const { showProposeSkills } = this.state;
@@ -57,7 +62,6 @@ class ProfileLayout extends React.Component {
       <Slide
         direction="up"
         in={visible}
-        // unmountOnExit
         timeout={{ enter: transitionDuration, exit: transitionDuration / 2 }}
       >
         <Grid container className={classes.root} alignContent="flex-start">

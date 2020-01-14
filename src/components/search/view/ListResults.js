@@ -7,27 +7,27 @@ import { styles } from "./ListResults.css";
 import Card from "../../card/CardProfile";
 import InvitationDialog from "../../utils/popup/Invitation";
 import { observe } from "mobx";
+import { AutoSizer, List, WindowScroller } from "react-virtualized";
 
 const SearchShowMore = React.lazy(() => import("../SearchShowMore"));
 const SearchNoResults = React.lazy(() => import("../SearchNoResults"));
 
 class ListResults extends React.Component {
+  static whyDidYouRender = true;
+
   state = {
-    hitsPerPage: 10,
-    displayedPage: 0 // page used by render only
-  };
+    scrollToIndex: null
+  }
 
   componentWillUnmount() {
     if (this.unsubFilters) this.unsubFilters();
   }
 
   componentDidMount() {
-    setTimeout(this.createScrollObserver, 100);
-
     this.unsubFilters = observe(
       this.props.searchStore.values.filters,
       change => {
-        this.setState({ displayedPage: 0 });
+        // this.setState({ scrollToIndex: 0 });
       }
     );
   }
@@ -54,89 +54,89 @@ class ListResults extends React.Component {
     });
   };
 
-  createScrollObserver = () => {
-    try {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            this.showMore();
-          }
-        });
-      });
+  componentWillReceiveProps(nextProps) {
+    this.willReceiveProps = true;
+  }
 
-      let hitList = document.getElementById("algolia-sentinel");
-      observer.observe(hitList);
-    } catch (e) {
-      console.log(e);
-    }
+  rowRenderer = ({ index, isScrolling, isVisible, key, style }) => {
+    const {hits, classes} = this.props;
+    const row = hits[index];
+
+    return (
+      <div key={key} style={style}>
+        <Grid
+          item
+          xs={12}
+          sm={8}
+          md={6}
+          lg={4}
+          className={classes.cardMobileView}
+        >
+          <Card hit={row} light={isScrolling} />
+        </Grid>
+      </div>
+    );
   };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      JSON.stringify(nextState) === JSON.stringify(this.state) &&
+      !this.willReceiveProps
+    )
+      return false;
+    this.willReceiveProps = false;
+    return true;
+  }
 
   render() {
     const { hits, loading, noMore, noResult } = this.props;
     const { classes } = this.props;
-    const { hitsPerPage, displayedPage } = this.state;
+    const {scrollToIndex} = this.state;
 
-    const hitsDisplayed = Array.from(
-      hits.slice(0, (displayedPage + 1) * hitsPerPage)
-    );
+    let customElement = window.document.getElementById("content-container");
+
+    if (noResult) {
+      return (
+        <div className={classes.hitList}>
+          <Suspense fallback={<></>}>
+            <SearchNoResults />
+          </Suspense>
+        </div>
+      );
+    }
 
     return (
-      <div className={classes.hitList}>
-        <ul>
-          {hitsDisplayed.map((hit, i) => {
-            return (
-              <li key={hit.objectID}>
-                <Grid
-                  item
-                  xs={12}
-                  sm={8}
-                  md={6}
-                  lg={4}
-                  className={classes.cardMobileView}
-                >
-                  <Card hit={hit} />
-                </Grid>
-              </li>
-            );
-          })}
-          <div id="algolia-sentinel" className={classes.sentinel}></div>
-
-          {!noMore && (
-            <li>
-              <Suspense fallback={<></>}>
-                <SearchShowMore
-                  loadInProgress={loading}
-                  handleShowMore={this.showMore}
-                />
-              </Suspense>
-            </li>
-          )}
-
-          {noResult && (
-            <Suspense fallback={<></>}>
-              <SearchNoResults />
-            </Suspense>
-          )}
-
-          {loading ? (
-            <Grid item className={classes.horizontalCenter}>
-              <CircularProgress color="secondary" />
-            </Grid>
-          ) : (
-            <Grid
-              item
-              xs={12}
-              sm={8}
-              md={6}
-              lg={4}
-              className={classes.cardMobileView}
-              style={{ left: 0, right: 0, margin: "auto" }}
-            >
-              <InvitationDialog />
-            </Grid>
-          )}
-        </ul>
-      </div>
+      <WindowScroller
+        scrollElement={customElement}
+      >
+        {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => (
+          <div className={styles.WindowScrollerWrapper}>
+            <AutoSizer disableHeight>
+              {({ width }) => (
+                <div ref={registerChild}>
+                  <List
+                    ref={el => {
+                      window.listEl = el;
+                    }}
+                    autoHeight
+                    className={classes.hitList}
+                    height={height}
+                    isScrolling={isScrolling}
+                    onScroll={onChildScroll}
+                    overscanRowCount={5}
+                    rowCount={hits.length}
+                    rowHeight={273 + 32}
+                    scrollToIndex={scrollToIndex}
+                    rowRenderer={this.rowRenderer}
+                    scrollTop={scrollTop}
+                    width={width}
+                  />
+                </div>
+              )}
+            </AutoSizer>
+          </div>
+        )}
+      </WindowScroller>
     );
   }
 }

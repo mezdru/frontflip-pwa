@@ -28,7 +28,10 @@ const WINGS_DISPLAYED = 7;
 
 class CardProfile extends React.Component {
   componentDidMount() {
-    this.props.recordStore.addRecord({provider: "algolia", ...this.props.hit});
+    this.props.recordStore.addRecord({
+      provider: "algolia",
+      ...this.props.hit
+    });
   }
 
   getLogoSize = () => {
@@ -67,15 +70,19 @@ class CardProfile extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (
-      JSON.stringify(nextProps.hit) !== JSON.stringify(this.props.hit)
+      JSON.stringify(nextProps.hit) !== JSON.stringify(this.props.hit) ||
+      (!nextProps.light && this.props.light)
     )
       return true;
-    
+
     return false;
   }
 
+  // @todo : replace Grid background img to img html and listen to the "load" event to display the picture smoothly.
+  smoothImageLoad = () => {};
+
   render() {
-    const { classes, hit } = this.props;
+    const { classes, hit, light } = this.props;
     const { locale } = this.props.commonStore;
     let currentWings = 0;
 
@@ -96,11 +103,13 @@ class CardProfile extends React.Component {
                   <Grid
                     item
                     style={{
-                      backgroundImage: `url(${getProgressiveImage(ProfileService.getPicturePathResized(
-                        hit.picture,
-                        "person ",
-                        this.getLogoSize()
-                      )) || defaultPicture})`
+                      backgroundImage: `url(${getProgressiveImage(
+                        ProfileService.getPicturePathResized(
+                          hit.picture,
+                          "person ",
+                          this.getLogoSize()
+                        )
+                      ) || defaultPicture})`
                     }}
                     className={`${classes.logo} ${classes.backgroundLogo}`}
                   />
@@ -205,7 +214,11 @@ class CardProfile extends React.Component {
                   let claps = this.getClaps(hit, hashtag._id);
                   return (
                     <Wings
-                      src={ProfileService.getPicturePath(hashtag.picture)}
+                      src={
+                        !light
+                          ? ProfileService.getPicturePath(hashtag.picture)
+                          : null
+                      }
                       key={hashtag._id}
                       label={ProfileService.htmlDecode(displayedName)}
                       onClick={e =>
