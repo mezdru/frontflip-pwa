@@ -1,6 +1,11 @@
 import React, { Suspense } from "react";
 import { inject, observer } from "mobx-react";
-import { withStyles, Grid, CircularProgress } from "@material-ui/core";
+import {
+  withStyles,
+  Grid,
+  CircularProgress,
+  withWidth
+} from "@material-ui/core";
 import undefsafe from "undefsafe";
 
 import { styles } from "./ListResults.css";
@@ -17,7 +22,7 @@ class ListResults extends React.Component {
 
   state = {
     scrollToIndex: null
-  }
+  };
 
   componentWillUnmount() {
     if (this.unsubFilters) this.unsubFilters();
@@ -59,7 +64,7 @@ class ListResults extends React.Component {
   }
 
   rowRenderer = ({ index, isScrolling, isVisible, key, style }) => {
-    const {hits, classes} = this.props;
+    const { hits, classes } = this.props;
     const row = hits[index];
 
     return (
@@ -91,7 +96,7 @@ class ListResults extends React.Component {
   render() {
     const { hits, loading, noMore, noResult } = this.props;
     const { classes } = this.props;
-    const {scrollToIndex} = this.state;
+    const { scrollToIndex } = this.state;
 
     let customElement = window.document.getElementById("content-container");
 
@@ -106,9 +111,7 @@ class ListResults extends React.Component {
     }
 
     return (
-      <WindowScroller
-        scrollElement={customElement}
-      >
+      <WindowScroller scrollElement={customElement}>
         {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => (
           <div className={styles.WindowScrollerWrapper}>
             <AutoSizer disableHeight>
@@ -125,7 +128,7 @@ class ListResults extends React.Component {
                     onScroll={onChildScroll}
                     overscanRowCount={5}
                     rowCount={hits.length}
-                    rowHeight={273 + 32}
+                    rowHeight={this.props.width === "xs" ? 229 + 16 : 273 + 32}
                     scrollToIndex={scrollToIndex}
                     rowRenderer={this.rowRenderer}
                     scrollTop={scrollTop}
@@ -144,4 +147,4 @@ class ListResults extends React.Component {
 export default inject(
   "searchStore",
   "orgStore"
-)(observer(withStyles(styles)(ListResults)));
+)(observer(withStyles(styles)(withWidth()(ListResults))));
