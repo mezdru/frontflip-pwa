@@ -61,7 +61,7 @@ class SearchResults extends React.Component {
             null,
             page,
             true,
-            this.props.view === VIEW_LIST ? 500 : 1000
+            this.props.view === VIEW_LIST ? 1000 : 1000 // if list view, should not be "1000", should use pagination
           );
 
           if (!res) return;

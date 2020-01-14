@@ -78,6 +78,9 @@ class CardProfile extends React.Component {
     return false;
   }
 
+  // @todo : replace Grid background img to img html and listen to the "load" event to display the picture smoothly.
+  smoothImageLoad = () => {};
+
   render() {
     const { classes, hit, light } = this.props;
     const { locale } = this.props.commonStore;
@@ -100,15 +103,13 @@ class CardProfile extends React.Component {
                   <Grid
                     item
                     style={{
-                      backgroundImage: light
-                        ? ""
-                        : `url(${getProgressiveImage(
-                            ProfileService.getPicturePathResized(
-                              hit.picture,
-                              "person ",
-                              this.getLogoSize()
-                            )
-                          ) || defaultPicture})`
+                      backgroundImage: `url(${getProgressiveImage(
+                        ProfileService.getPicturePathResized(
+                          hit.picture,
+                          "person ",
+                          this.getLogoSize()
+                        )
+                      ) || defaultPicture})`
                     }}
                     className={`${classes.logo} ${classes.backgroundLogo}`}
                   />
@@ -158,7 +159,7 @@ class CardProfile extends React.Component {
         <Grid item container className={classes.contactField}>
           <CardActions disableActionSpacing>
             <Grid item container>
-              {!light && hit.links &&
+              {hit.links &&
                 hit.links.map((link, i) => {
                   if (!link.value || link.value === "") return null;
                   if (link.type === "workchat") return null; // hide workchat
@@ -198,7 +199,7 @@ class CardProfile extends React.Component {
         <Grid container item className={classes.wingsContainer}>
           <CardContent style={{ paddingBottom: 0 }}>
             <Grid container className={classes.wings}>
-              {!light && hit.hashtags &&
+              {hit.hashtags &&
                 hit.hashtags.map((hashtag, i) => {
                   if (
                     currentWings >= WINGS_DISPLAYED ||
@@ -213,7 +214,11 @@ class CardProfile extends React.Component {
                   let claps = this.getClaps(hit, hashtag._id);
                   return (
                     <Wings
-                      src={ProfileService.getPicturePath(hashtag.picture)}
+                      src={
+                        !light
+                          ? ProfileService.getPicturePath(hashtag.picture)
+                          : null
+                      }
                       key={hashtag._id}
                       label={ProfileService.htmlDecode(displayedName)}
                       onClick={e =>
@@ -230,7 +235,7 @@ class CardProfile extends React.Component {
                     />
                   );
                 })}
-              {!light && hit.hashtags && hit.hashtags.length > WINGS_DISPLAYED && (
+              {hit.hashtags && hit.hashtags.length > WINGS_DISPLAYED && (
                 <Link to={getBaseUrl(this.props) + "/" + hit.tag}>
                   <Wings
                     label={this.props.intl.formatMessage(

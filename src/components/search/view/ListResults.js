@@ -16,21 +16,18 @@ class ListResults extends React.Component {
   static whyDidYouRender = true;
 
   state = {
-    hitsPerPage: 5, // 5 because CardProfile take too much time to render (15 - 30 ms per Card) ...
-    displayedPage: 0 // page used by render only
-  };
+    scrollToIndex: null
+  }
 
   componentWillUnmount() {
     if (this.unsubFilters) this.unsubFilters();
   }
 
   componentDidMount() {
-    setTimeout(this.createScrollObserver, 100);
-
     this.unsubFilters = observe(
       this.props.searchStore.values.filters,
       change => {
-        this.setState({ displayedPage: 0 });
+        // this.setState({ scrollToIndex: 0 });
       }
     );
   }
@@ -55,23 +52,6 @@ class ListResults extends React.Component {
     this.setState({
       displayedPage: this.state.displayedPage + 1
     });
-  };
-
-  createScrollObserver = () => {
-    try {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            this.showMore();
-          }
-        });
-      });
-
-      let hitList = document.getElementById("algolia-sentinel");
-      observer.observe(hitList);
-    } catch (e) {
-      console.log(e);
-    }
   };
 
   componentWillReceiveProps(nextProps) {
@@ -111,7 +91,7 @@ class ListResults extends React.Component {
   render() {
     const { hits, loading, noMore, noResult } = this.props;
     const { classes } = this.props;
-    const { hitsPerPage, displayedPage } = this.state;
+    const {scrollToIndex} = this.state;
 
     let customElement = window.document.getElementById("content-container");
 
@@ -146,6 +126,7 @@ class ListResults extends React.Component {
                     overscanRowCount={5}
                     rowCount={hits.length}
                     rowHeight={273 + 32}
+                    scrollToIndex={scrollToIndex}
                     rowRenderer={this.rowRenderer}
                     scrollTop={scrollTop}
                     width={width}
