@@ -123,6 +123,7 @@ class ProfileWings extends React.PureComponent {
   render() {
     const { classes, profileContext } = this.props;
     const { isEditable, wingsByFamilies } = this.props.profileContext;
+    const {currentOrganisation } = this.props.orgStore;
     const { locale } = this.props.commonStore;
 
     return (
@@ -141,7 +142,7 @@ class ProfileWings extends React.PureComponent {
                   <Wings src={ProfileService.getPicturePath(wing.picture)}
                     label={ProfileService.htmlDecode(displayedName)} key={wing._id}
                     recordId={profileContext.getProp('_id')} hashtagId={wing._id} mode={(wing.class ? 'highlight' : 'profile')}
-                    enableClap={true} claps={this.getClaps(wing._id)}
+                    enableClap={undefsafe(currentOrganisation, 'features.claps') === false ? false : true} claps={this.getClaps(wing._id)}
                   />
                 )
               })}

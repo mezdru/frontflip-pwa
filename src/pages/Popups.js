@@ -81,20 +81,21 @@ class Popups extends React.Component {
           </Suspense>
         )}
 
-        <Suspense fallback={<></>}>
-          <AskForHelp isOpen={showAskForHelp} />
-        </Suspense>
-
         {this.props.authStore.isAuth() &&
           currentOrganisation &&
-          currentOrganisation.tag !== "demo" && (
-            <AskForHelpFab
-              className={classes.fab}
-              onClick={this.handleDisplayAskForHelp}
-              highlighted={
-                filters && filters.length > 0 && searchResultsCount <= 10
-              }
-            />
+          undefsafe(currentOrganisation, "features.askForHelp") !== false && (
+            <>
+              <Suspense fallback={<></>}>
+                <AskForHelp isOpen={showAskForHelp} />
+              </Suspense>
+              <AskForHelpFab
+                className={classes.fab}
+                onClick={this.handleDisplayAskForHelp}
+                highlighted={
+                  filters && filters.length > 0 && searchResultsCount <= 10
+                }
+              />
+            </>
           )}
 
         {currentOrganisation && !this.props.authStore.isAuth() && (
