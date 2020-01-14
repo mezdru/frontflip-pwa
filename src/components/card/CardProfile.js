@@ -43,16 +43,6 @@ class CardProfile extends React.Component {
     }
   };
 
-  getClaps(hit, hashtagId) {
-    var clapEntry = {};
-    if (!hit || !hit.hashtags_claps) return null;
-    clapEntry = Object.assign(
-      clapEntry,
-      hit.hashtags_claps.find(elt => elt.hashtag === hashtagId)
-    );
-    return clapEntry ? clapEntry.claps : null;
-  }
-
   isHidden = tag => {
     return this.props.commonStore.hiddenWings.find(
       hiddenWing => hiddenWing.tag === tag
@@ -211,7 +201,6 @@ class CardProfile extends React.Component {
                     hashtag,
                     locale
                   );
-                  let claps = this.getClaps(hit, hashtag._id);
                   return (
                     <Wings
                       src={
@@ -229,9 +218,7 @@ class CardProfile extends React.Component {
                       }
                       recordId={hit.objectID}
                       hashtagId={hashtag._id}
-                      claps={claps}
                       mode={hashtag.class ? "highlight" : "card"}
-                      enableClap={true}
                     />
                   );
                 })}
