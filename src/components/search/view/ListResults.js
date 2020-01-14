@@ -77,7 +77,7 @@ class ListResults extends React.Component {
           lg={4}
           className={classes.cardMobileView}
         >
-          <Card hit={row} light={isScrolling} />
+          <Card hit={row} light={false} />
         </Grid>
       </div>
     );
