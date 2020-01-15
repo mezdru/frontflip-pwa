@@ -139,6 +139,10 @@
       manifestLink.href = '%PUBLIC_URL%/rhizosphere/manifest.json';
       faviconLink.href = '%PUBLIC_URL%/rhizosphere/favicon.ico';
       document.title = 'La Rhizosphere';
+    } else if (window.location.href.search('roissypole') !== -1) {
+      manifestLink.href = '%PUBLIC_URL%/roissypole/manifest.json';
+      faviconLink.href = '%PUBLIC_URL%/roissypole/favicon.ico';
+      document.title = 'My Roissypole';
     } else {
       manifestLink.href = '%PUBLIC_URL%/manifest.json';
       faviconLink.href = '%PUBLIC_URL%/favicon.ico';
