@@ -152,5 +152,6 @@
   "profile.actions.delete.error": "❌ Error while deleting this profile. \nContact us at : contact@wingzy.com\n\n",
   "onboard.geo.title": "Where do your work?",
   "invitation.copy.success": "The invitation link was copied to the clipboard!",
-  "invitation.copy.error": "There was an error, the invitation link can't be copied to the clipboard thanks to the button."
+  "invitation.copy.error": "There was an error, the invitation link can't be copied to the clipboard thanks to the button.",
+  "menu.drawer.listSecondaryRecordTitle": "My other profiles"
 }
