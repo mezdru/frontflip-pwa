@@ -28,7 +28,6 @@ export const styles = theme => ({
     fontSize: '1rem',
     maxHeight: '3em',
     textOverflow: 'ellipsis',
-    overflow: 'hidden',
   },
   titleSmallestView: {
     marginLeft: -2,

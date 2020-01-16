@@ -55,7 +55,6 @@ class BannerResizable extends React.Component {
           this.props.recordStore,
           "currentUrlRecord",
           change => {
-            console.log('current url record change')
             if (!this.updateProfileSource()) this.updateSource();
           }
         )
