@@ -25,7 +25,7 @@ class UserWings extends React.Component {
 
   componentDidMount() {
     setTimeout(() => this.props.scrollUserWingsToBottom(), 150);
-    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
+    let record = this.props.getWorkingRecord();
 
     this.unsubscribeRecord = observe(record, (change) => {
       if (change.name === 'hashtags' && (change.newValue.length > change.oldValue.length)) { // add wings
@@ -54,7 +54,7 @@ class UserWings extends React.Component {
   }
 
   render() {
-    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
+    let record = this.props.getWorkingRecord();
     const { theme, classes, wingsFamily } = this.props;
     const { locale } = this.props.commonStore;
     if (!record) return null;
