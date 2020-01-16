@@ -80,7 +80,6 @@ class RecordStore extends Store {
     delete recordToPost.tag;
     let record = await super.postResource(recordToPost);
     replaceAndKeepReference(recordToPost, record);
-    console.log(JSON.stringify(recordToPost));
     return recordToPost;
   }
 
