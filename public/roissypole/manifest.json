@@ -1,0 +1,30 @@
+{
+  "short_name": "My Roissypole",
+  "name": "My Roissypole",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "roissypole_144.png",
+      "sizes":"144x144",
+      "type":"image/png"
+    },
+      {
+    "src": "roissypole_192.png",
+    "type": "image/png",
+    "sizes": "192x192"
+  },
+  {
+    "src": "roissypole_512.png",
+    "type": "image/png",
+    "sizes": "512x512"
+  }
+  ],
+  "start_url": "/roissypole",
+  "display": "standalone",
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF"
+}
