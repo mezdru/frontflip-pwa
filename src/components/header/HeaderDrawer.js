@@ -50,6 +50,7 @@ class HeaderDrawer extends Component {
     const { locale } = this.props.commonStore;
     if (currentUserRecord) currentUserRecord.name = entities.decode(currentUserRecord.name)
     if (currentOrganisation) currentOrganisation.name = entities.decode(currentOrganisation.name)
+
     return (
       <SwipeableDrawer
         className={classes.drawer}

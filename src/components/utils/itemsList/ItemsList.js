@@ -10,6 +10,7 @@ import Logo from "../logo/Logo";
 import { Link } from "react-router-dom";
 import undefsafe from "undefsafe";
 import defaultLogo from "../../../resources/images/wingzy_512.png";
+import { Add } from "@material-ui/icons";
 
 const Entities = require("html-entities").XmlEntities;
 const entities = new Entities();
@@ -19,6 +20,7 @@ const style = theme => ({
     position: "relative",
     display: "inline-block",
     width: "33.33%",
+    height: 80,
     textAlign: "center",
     padding: 8
   },
@@ -49,6 +51,30 @@ const style = theme => ({
     position: "relative",
     width: "100%",
     textAlign: "center"
+  },
+  itemButton: {
+    top: 0,
+    width: 40,
+    height: 40,
+    borderRadius: '50%',
+    background: 'white',
+    position: 'relative',
+    opacity: 0.7,
+    transition: 'opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+    left:0,
+    right:0,
+    margin: 'auto',
+    '&:hover': {
+      opacity: 1,
+    },
+    '& > svg': {
+      position: 'absolute',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      left:0,
+      right:0,
+      margin: 'auto'
+    }
   }
 });
 
@@ -108,6 +134,16 @@ class OrganisationsList extends React.Component {
         });
       }
     });
+
+    if (dataType === "record") {
+      arrayOfItems.push({
+        name: null,
+        _id: "a1",
+        addButton: true,
+        redirectLink: `/${locale}/${currentOrganisation.tag}/onboard/intro/create/@NewProfile`,
+        redirectComponent: Link
+      });
+    }
     return arrayOfItems;
   };
 
@@ -128,12 +164,18 @@ class OrganisationsList extends React.Component {
               className={classes.orgItem}
               onClick={this.props.onClick}
             >
-              <Logo
-                type={"smallOrg"}
-                alt={entities.decode(item.name)}
-                src={item.pictureUrl || defaultLogo}
-                className={classes.itemLogo}
-              />
+              {item.addButton ? (
+                <div className={classes.itemButton} >
+                  <Add fontSize="medium" color="secondary" />
+                </div>
+              ) : (
+                <Logo
+                  type={"smallOrg"}
+                  alt={entities.decode(item.name)}
+                  src={item.pictureUrl || defaultLogo}
+                  className={classes.itemLogo}
+                />
+              )}
               <div className={classes.itemName}>
                 {entities.decode(item.name)}
               </div>
