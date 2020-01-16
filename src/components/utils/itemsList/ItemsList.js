@@ -77,6 +77,9 @@ class OrganisationsList extends React.Component {
     }
   }
 
+  /**
+   * @returns Array of item : {name, _id, pictureUrl, redirectLink, redirectComponent}
+   */
   buildItems = data => {
     if (!data || data.length === 0) return;
     const { dataType } = this.props;
