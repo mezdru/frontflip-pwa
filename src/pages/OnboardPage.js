@@ -38,17 +38,22 @@ class OnboardPage extends React.PureComponent {
   }
 
   async componentWillMount() {
-    let orgId = this.props.orgStore.currentOrganisation._id;
+    const mode = this.props.commonStore.url.params.onboardMode;
+    const orgId = this.props.orgStore.currentOrganisation._id;
+    const recordTag = this.props.commonStore.url.params.recordTag;
+
     this.props.history.listen((location, action) => {
       ReactGA.pageview(window.location.pathname);
     });
 
-    if(this.props.commonStore.url.params.onboardMode === 'edit') {
-      await this.props.recordStore.fetchByTag(this.props.commonStore.url.params.recordTag, orgId)
+    if(mode === "edit") {
+      await this.props.recordStore.fetchByTag(recordTag, orgId)
       .catch(e => {
         this.setState({redirectTo: getBaseUrl(this.props)});
         console.log(e);
       })
+    } else if (mode === "create") {
+      // nothing ?
     } else {
       await this.props.recordStore.fetchPopulatedForUser(orgId)
       .catch(async e => {
@@ -65,7 +70,8 @@ class OnboardPage extends React.PureComponent {
   render() {
     const { inOnboarding, renderComponent, redirectTo } = this.state;
     const { classes, width } = this.props;
-    let editMode = (this.props.commonStore.url.params.onboardMode === 'edit');
+    const editMode = (this.props.commonStore.url.params.onboardMode === 'edit');
+    const createMode = (this.props.commonStore.url.params.onboardMode === 'create');
 
     if(redirectTo) return <Redirect to={redirectTo} />;
     if(!renderComponent) return <CircularProgress color="secondary" style={{position: 'fixed', zIndex: '9', left:0, right:0, margin:'auto', top: '40%'}} />;
@@ -90,6 +96,7 @@ class OnboardPage extends React.PureComponent {
           {inOnboarding ? (
             <OnboardStepper
               edit={editMode}
+              create={createMode}
               wantedStep={undefsafe(this.props, 'match.params.step')}
             />
           ) : (

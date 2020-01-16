@@ -105,6 +105,17 @@ class OnboardStepper extends React.Component {
     });
   }
 
+  getWorkingRecord = () => {
+    const {edit, create} = this.props;
+
+    if(edit) {
+      return this.props.recordStore.currentUrlRecord
+    } else if (create) {
+      return {};
+    }
+    return this.props.recordStore.currentUserRecord;
+  }
+
   getStepComponent(steps, activeStep) {
     switch (steps[activeStep]) {
       case 'intro': return OnboardIntro;
@@ -150,11 +161,16 @@ class OnboardStepper extends React.Component {
   }
 
   render() {
-    const { theme, classes, edit } = this.props;
+    const { theme, classes, edit, create } = this.props;
     const { recordTag } = this.props.commonStore.url.params;
     const { activeStep, steps, canNext, showFeedback, redirectTo, slideDirection, slideState } = this.state;
     let StepComponent = this.getStepComponent(steps, activeStep);
-    let wantedUrl = getBaseUrl(this.props) + '/onboard/' + (steps[activeStep] ? steps[activeStep].replace('#', '%23') : '') + (edit ? '/edit': '') + (recordTag ? '/' + recordTag : '');
+    let wantedUrl = getBaseUrl(this.props) + '/onboard/' + 
+      (steps[activeStep] ? steps[activeStep].replace('#', '%23') : '') + 
+      (edit ? '/edit': '') + 
+      (create ? '/create' : '') +
+      (recordTag ? '/' + recordTag : '');
+    
     if (redirectTo && window.location.pathname !== redirectTo) return (<Redirect push to={redirectTo} />);
 
     return (
