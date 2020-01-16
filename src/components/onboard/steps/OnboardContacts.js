@@ -60,9 +60,7 @@ class OnboardContacts extends React.Component {
       {
         links:
           undefsafe(
-            this.props.edit
-              ? this.props.recordStore.currentUrlRecord
-              : this.props.recordStore.currentUserRecord,
+            this.props.getWorkingRecord(),
             "links"
           ) || []
       },
@@ -73,9 +71,7 @@ class OnboardContacts extends React.Component {
   }
 
   handleLinksChange = (e, link, index) => {
-    let record = this.props.edit
-      ? this.props.recordStore.currentUrlRecord
-      : this.props.recordStore.currentUserRecord;
+    let record = this.props.getWorkingRecord();
     link.value = e.target.value;
     let links = this.state.links;
     links[index].value = e.target.value;
@@ -84,9 +80,7 @@ class OnboardContacts extends React.Component {
   };
 
   deleteLink = linkToRemove => {
-    let record = this.props.edit
-      ? this.props.recordStore.currentUrlRecord
-      : this.props.recordStore.currentUserRecord;
+    let record = this.props.getWorkingRecord();
 
     record.links = record.links.filter(item => {
       return !(
@@ -115,9 +109,7 @@ class OnboardContacts extends React.Component {
   };
 
   getLinkByType = typeWanted => {
-    let record = this.props.edit
-      ? this.props.recordStore.currentUrlRecord
-      : this.props.recordStore.currentUserRecord;
+    let record = this.props.getWorkingRecord();
     try {
       return record.links.find(link => link.type === typeWanted);
     } catch (e) {

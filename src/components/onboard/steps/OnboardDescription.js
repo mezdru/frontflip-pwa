@@ -26,14 +26,14 @@ const styles = theme => ({
 class OnboardDescription extends React.Component {
 
   handleChange = (e, field) => {
-    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
+    let record = this.props.getWorkingRecord();
     record[field] = e.target.value;
     this.forceUpdate(); // why component do not update auto like Login fields ?
   }
 
   render() {
     const { classes } = this.props;
-    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
+    let record = this.props.getWorkingRecord();
     record.description = entities.decode(record.description);
 
     return (

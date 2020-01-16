@@ -107,11 +107,16 @@ class OnboardStepper extends React.Component {
 
   getWorkingRecord = () => {
     const {edit, create} = this.props;
+    const {currentUrlRecord} = this.props.recordStore;
+    const {currentOrganisation} = this.props.orgStore;
 
     if(edit) {
-      return this.props.recordStore.currentUrlRecord
+      return currentUrlRecord;
     } else if (create) {
-      return {};
+      if(currentUrlRecord) return currentUrlRecord;
+      let newRecord = {tag: '@NewProfile', organisation: currentOrganisation._id, type: 'person'};
+      this.props.recordStore.addRecord(newRecord);
+      return this.props.recordStore.getRecord(null, '@NewProfile');
     }
     return this.props.recordStore.currentUserRecord;
   }
@@ -127,18 +132,34 @@ class OnboardStepper extends React.Component {
   }
 
   handleSave = async (arrayOfLabels) => {
-    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
-    return await this.props.recordStore.updateRecord(record._id, arrayOfLabels, record).then((record) => {
-      timeoutArray.forEach(tm => { clearTimeout(tm) });
-      timeoutArray = [];
-      if(!this.isUnmount) {
-        this.setState({ showFeedback: true }, () => {
-          timeoutArray.push(setTimeout(() => { if(!this.isUnmount) this.setState({ showFeedback: false }) }, 2000));
-        })
-      }
-    }).catch((e) => {
-      console.error(e);
-    });
+    let record = this.getWorkingRecord();
+    if(record._id) {
+      return await this.props.recordStore.updateRecord(record._id, arrayOfLabels, record).then((record) => {
+        timeoutArray.forEach(tm => { clearTimeout(tm) });
+        timeoutArray = [];
+        if(!this.isUnmount) {
+          this.setState({ showFeedback: true }, () => {
+            timeoutArray.push(setTimeout(() => { if(!this.isUnmount) this.setState({ showFeedback: false }) }, 2000));
+          })
+        }
+      }).catch((e) => {
+        console.error(e);
+      });
+    } else if(record.name){
+      // create new record by calling API : POST + remove tag to populate new thanks to the name
+      return await this.props.recordStore.postRecord(record).then((newRecordSaved) => {
+        this.props.commonStore.url.params.recordTag = newRecordSaved.tag;
+        timeoutArray.forEach(tm => { clearTimeout(tm) });
+        timeoutArray = [];
+        if(!this.isUnmount) {
+          this.setState({ showFeedback: true }, () => {
+            timeoutArray.push(setTimeout(() => { if(!this.isUnmount) this.setState({ showFeedback: false }) }, 2000));
+          })
+        }
+      }).catch((e) => {
+        console.error(e);
+      });
+    }
   }
 
   getNextButtonText = () => {
@@ -147,7 +168,7 @@ class OnboardStepper extends React.Component {
   }
 
   shouldNextBeHighlighted = (activeStepLabel) => {
-    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
+    let record = this.getWorkingRecord();
     switch (activeStepLabel) {
       case 'intro':
         return (record.intro && record.intro.length > 1 && record.name && record.name.length > 1);
@@ -165,6 +186,7 @@ class OnboardStepper extends React.Component {
     const { recordTag } = this.props.commonStore.url.params;
     const { activeStep, steps, canNext, showFeedback, redirectTo, slideDirection, slideState } = this.state;
     let StepComponent = this.getStepComponent(steps, activeStep);
+
     let wantedUrl = getBaseUrl(this.props) + '/onboard/' + 
       (steps[activeStep] ? steps[activeStep].replace('#', '%23') : '') + 
       (edit ? '/edit': '') + 
@@ -203,7 +225,7 @@ class OnboardStepper extends React.Component {
 
           <div className={classes.stepComponentContainer}>
             <StepComponent handleSave={this.handleSave} activeStep={activeStep} activeStepLabel={steps[activeStep]}
-              SuggestionsController={this.props.SuggestionsController} edit={edit} />
+              SuggestionsController={this.props.SuggestionsController} edit={edit} getWorkingRecord={this.getWorkingRecord} />
           </div>
 
           {showFeedback && (

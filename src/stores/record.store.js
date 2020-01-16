@@ -77,9 +77,11 @@ class RecordStore extends Store {
   }
 
   async postRecord(recordToPost) {
+    delete recordToPost.tag;
     let record = await super.postResource(recordToPost);
-    this.addRecord(record);
-    return record;
+    replaceAndKeepReference(recordToPost, record);
+    console.log(JSON.stringify(recordToPost));
+    return recordToPost;
   }
 
   async deleteRecord(recordId) {

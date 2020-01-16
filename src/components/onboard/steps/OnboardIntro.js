@@ -26,14 +26,14 @@ const styles = theme => ({
 class OnboardIntro extends React.Component {
 
   handleChange = (e, field) => {
-    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
+    let record = this.props.getWorkingRecord();
     record[field] = e.target.value;
     this.forceUpdate(); // why component do not update auto like Login fields ?
   }
 
   render() {
-    const { classes } = this.props;
-    let record = (this.props.edit ? this.props.recordStore.currentUrlRecord : this.props.recordStore.currentUserRecord);
+    const { classes, getWorkingRecord } = this.props;
+    let record = getWorkingRecord();
 
 
     record.intro = entities.decode(record.intro);
@@ -49,7 +49,7 @@ class OnboardIntro extends React.Component {
           </Grid>
 
           <Grid item >
-            <PictureField handleSave={this.props.handleSave} edit={this.props.edit} />
+            <PictureField handleSave={this.props.handleSave} getWorkingRecord={getWorkingRecord} />
           </Grid>
 
           <Grid item className={classes.field}>

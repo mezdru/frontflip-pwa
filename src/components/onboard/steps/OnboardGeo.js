@@ -23,17 +23,13 @@ const styles = theme => ({
 
 class OnboardGeo extends React.Component {
   handleChange = value => {
-    let record = this.props.edit
-      ? this.props.recordStore.currentUrlRecord
-      : this.props.recordStore.currentUserRecord;
+    let record = this.props.getWorkingRecord();
     record["_geoloc"] = value;
   };
 
   render() {
     const { classes } = this.props;
-    let record = this.props.edit
-      ? this.props.recordStore.currentUrlRecord
-      : this.props.recordStore.currentUserRecord;
+    let record = this.props.getWorkingRecord();
 
     return (
       <Grid

@@ -38,23 +38,20 @@ class OnboardPage extends React.PureComponent {
   }
 
   async componentWillMount() {
-    const mode = this.props.commonStore.url.params.onboardMode;
+    const {onboardMode, recordTag} = this.props.commonStore.url.params;
     const orgId = this.props.orgStore.currentOrganisation._id;
-    const recordTag = this.props.commonStore.url.params.recordTag;
 
     this.props.history.listen((location, action) => {
       ReactGA.pageview(window.location.pathname);
     });
 
-    if(mode === "edit") {
+    if(onboardMode === "edit" || (onboardMode === "create" && recordTag !== "@NewProfile")) {
       await this.props.recordStore.fetchByTag(recordTag, orgId)
       .catch(e => {
         this.setState({redirectTo: getBaseUrl(this.props)});
         console.log(e);
       })
-    } else if (mode === "create") {
-      // nothing ?
-    } else {
+    } else if(onboardMode !== "create"){ // create primary record
       await this.props.recordStore.fetchPopulatedForUser(orgId)
       .catch(async e => {
         console.error(e);
