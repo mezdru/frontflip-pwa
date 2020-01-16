@@ -54,7 +54,6 @@ class UserWings extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     let record = this.props.getWorkingRecord();
     const { theme, classes, wingsFamily } = this.props;
     const { locale } = this.props.commonStore;
