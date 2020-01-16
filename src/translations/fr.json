@@ -152,5 +152,6 @@
   "profile.actions.delete.error": "❌ Il y a eu une erreur pendant la suppression du profil.\n Contactez-nous à : contact@wingzy.com\n\n",
   "onboard.geo.title": "Où travaillez-vous ?",
   "invitation.copy.success": "Le lien d'invitation a été copié !",
-  "invitation.copy.error": "Il y a eu une erreur, le lien d'invitation ne peut pas être copié grâce au bouton."
+  "invitation.copy.error": "Il y a eu une erreur, le lien d'invitation ne peut pas être copié grâce au bouton.",
+  "menu.drawer.listSecondaryRecordTitle": "Mes autres profils"
 }

@@ -11,18 +11,13 @@ import undefsafe from 'undefsafe';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import UrlService from '../../services/url.service';
 import { Link, withRouter } from 'react-router-dom';
-// import OrganisationsList from '../utils/orgsList/OrganisationsList';
-// import InvitationDialog from '../utils/popup/Invitation';
-// import LocaleSelector from '../utils/fields/LocaleSelector';
-// import Logo from '../utils/logo/Logo';
-
 
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 
 const LocaleSelector = React.lazy(() => import('../utils/fields/LocaleSelector'));
 const InvitationDialog = React.lazy(() => import('../utils/popup/Invitation'));
-const OrganisationsList = React.lazy(() => import('../utils/orgsList/OrganisationsList'));
+const ItemsList = React.lazy(() => import('../utils/itemsList/ItemsList'));
 const Logo = React.lazy(() => import('../utils/logo/Logo'));
 
 class HeaderDrawer extends Component {
@@ -51,11 +46,11 @@ class HeaderDrawer extends Component {
     const { classes, auth, open, intl } = this.props;
     const { currentUserRecord } = this.props.recordStore;
     const { currentOrganisation } = this.props.orgStore;
-    const { currentUser } = this.props.userStore;
+    const { currentUser, currentOrgAndRecord } = this.props.userStore;
     const { locale } = this.props.commonStore;
-    const currentOrgAndRecord = this.props.userStore.currentOrgAndRecord;
     if (currentUserRecord) currentUserRecord.name = entities.decode(currentUserRecord.name)
     if (currentOrganisation) currentOrganisation.name = entities.decode(currentOrganisation.name)
+
     return (
       <SwipeableDrawer
         className={classes.drawer}
@@ -96,6 +91,18 @@ class HeaderDrawer extends Component {
                       <ListItem button component={Link} to={'/' + locale + '/' + currentOrganisation.tag + '/' + currentUserRecord.tag} onClick={this.props.handleDrawerClose}>
                         <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.profile' })} />
                       </ListItem>
+                      {(currentUser && currentOrgAndRecord && currentOrgAndRecord.secondaryRecords && currentOrgAndRecord.secondaryRecords.length > 0) && (
+                        <React.Fragment>
+                          <Divider className={classes.divider} />
+                          <ListItem>
+                            <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.listSecondaryRecordTitle' })}
+                              primaryTypographyProps={{ noWrap: true, style: { fontWeight: 'bold' } }} />
+                          </ListItem>
+                          <Suspense fallback={<></>}>
+                            <ItemsList onClick={this.props.handleDrawerClose} dataType={"record"}/>
+                          </Suspense>
+                        </React.Fragment>
+                      )}
                     </List>
                     <Divider className={classes.divider} />
                   </React.Fragment>
@@ -141,7 +148,7 @@ class HeaderDrawer extends Component {
                           primaryTypographyProps={{ noWrap: true, style: { fontWeight: 'bold' } }} />
                       </ListItem>
                       <Suspense fallback={<></>}>
-                        <OrganisationsList onClick={this.props.handleDrawerClose} />
+                        <ItemsList onClick={this.props.handleDrawerClose} dataType={"organisation"}/>
                       </Suspense>
                     </React.Fragment>
                   )}
@@ -164,7 +171,7 @@ class HeaderDrawer extends Component {
                   <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.listOrgTitle' })}
                     primaryTypographyProps={{ noWrap: true, style: { fontWeight: 'bold' } }} />
                 </ListItem>
-                <OrganisationsList onClick={this.props.handleDrawerClose} />
+                <ItemsList onClick={this.props.handleDrawerClose} dataType={"organisation"} />
                 <Divider className={classes.divider} />
               </React.Fragment>
             )}
