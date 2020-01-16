@@ -71,7 +71,6 @@ class OrganisationsList extends React.Component {
     );
 
     if (this.props.dataType === "record") {
-      console.log(currentUserSecondaryRecords);
       this.setState({ items: this.buildItems(currentUserSecondaryRecords) });
     } else {
       this.setState({ items: this.buildItems(currentUserOrganisations) });
@@ -112,8 +111,6 @@ class OrganisationsList extends React.Component {
   render() {
     const { classes } = this.props;
     const { items } = this.state;
-
-    console.log(items.length);
 
     return (
       <List className={classes.orgsContainer}>

@@ -11,10 +11,6 @@ import undefsafe from 'undefsafe';
 import defaultPicture from '../../resources/images/placeholder_person.png';
 import UrlService from '../../services/url.service';
 import { Link, withRouter } from 'react-router-dom';
-// import InvitationDialog from '../utils/popup/Invitation';
-// import LocaleSelector from '../utils/fields/LocaleSelector';
-// import Logo from '../utils/logo/Logo';
-
 
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
