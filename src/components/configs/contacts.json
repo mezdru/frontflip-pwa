@@ -1,0 +1,48 @@
+{
+  "email": {
+    "iconType": "classe",
+    "icon": "fa fa-envelope-o"
+  },
+  "phone": {
+    "iconType": "classe",
+    "icon": "fa fa-phone"
+  },
+  "linkedin": {
+    "iconType": "classe",
+    "icon": "fa fa-linkedin"
+  },
+  "twitter": {
+    "iconType": "classe",
+    "icon": "fa fa-twitter"
+  },
+  "facebook": {
+    "iconType": "classe",
+    "icon": "fa fa-facebook"
+  },
+  "link": {
+    "iconType": "classe",
+    "icon": "fa fa-link"
+  },
+  "workplace": {
+    "iconType": "classe",
+    "icon": "fa fa-user"
+  },
+  "workchat": {
+    "iconType": "classe",
+    "icon": "fa fa-comment"
+  },
+  "landline": {
+    "iconType": "classe",
+    "icon": "fa fa-phone-square"
+  },
+  "location": {
+    "iconType": "classe",
+    "icon": "fa fa-map-marker"
+  },
+  "doctolib": {
+    "iconType": "image"
+  },
+  "lafourchette": {
+    "iconType": "image"
+  }
+}
