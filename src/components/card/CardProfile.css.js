@@ -82,6 +82,15 @@ export const styles = theme => ({
       paddingLeft: 72,
     },
   },
+  contactImage: {
+    width: 20,
+    height: 20,
+    borderRadius: 4,
+    [theme.breakpoints.down('xs')]: {
+      width: 14,
+      height: 14
+    }
+  },
   contactButton: {
     width: 37,
     height: 37,
