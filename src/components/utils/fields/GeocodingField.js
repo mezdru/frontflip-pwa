@@ -43,8 +43,6 @@ class GeocodingField extends React.Component {
 
     this.map.on("move", () => {
       let newCoords = this.map.getCenter();
-      // console.log('set position', newCoords);
-
       cMarker.setLngLat(newCoords);
       this.setState({ lng: newCoords.lng, lat: newCoords.lat });
       this.props.onChange({ lat: newCoords.lat, lng: newCoords.lng });
