@@ -40,7 +40,7 @@ class ProfileService {
   makeLinkIcon(link) {
     switch (link.type) {
       case 'email':
-        link.icon = 'envelope-o';
+        link.icon = 'envelope';
         break;
       case 'address':
       case 'location':

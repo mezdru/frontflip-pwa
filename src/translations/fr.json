@@ -153,5 +153,17 @@
   "onboard.geo.title": "Où travaillez-vous ?",
   "invitation.copy.success": "Le lien d'invitation a été copié !",
   "invitation.copy.error": "Il y a eu une erreur, le lien d'invitation ne peut pas être copié grâce au bouton.",
-  "menu.drawer.listSecondaryRecordTitle": "Mes autres profils"
+  "menu.drawer.listSecondaryRecordTitle": "Mes autres profils",
+  "contact.displayName.email": "Email",
+  "contact.displayName.phone": "Mobile",
+  "contact.displayName.linkedin": "LinkedIn",
+  "contact.displayName.twitter": "Twitter",
+  "contact.displayName.facebook": "Facebook",
+  "contact.displayName.link": "Lien",
+  "contact.displayName.workplace": "Workplace",
+  "contact.displayName.workchat": "Workchat",
+  "contact.displayName.location": "Localisation",
+  "contact.displayName.landline": "Téléphone&nbsp;fixe",
+  "contact.displayName.doctolib": "Doctolib",
+  "contact.displayName.lafourchette": "La&nbsp;Fourchette"
 }

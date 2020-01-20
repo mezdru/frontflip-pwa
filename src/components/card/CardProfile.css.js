@@ -82,15 +82,16 @@ export const styles = theme => ({
       paddingLeft: 72,
     },
   },
+  contactImage: {
+    width: 20,
+    height: 20,
+    borderRadius: 4,
+  },
   contactButton: {
     width: 37,
     height: 37,
     fontSize: '20px !important',
-    [theme.breakpoints.down('xs')]: {
-      width: 30,
-      height: 30,
-      fontSize: '14px !important'
-    },
+    opacity: 0.5,
     '&::before': {
       position: 'absolute',
       left: 0,
@@ -99,6 +100,7 @@ export const styles = theme => ({
     },
     '&:hover': {
       backgroundColor: '#41424F',
+      opacity: 1
     }
   },
   dispo: {

@@ -12,10 +12,11 @@ import {
   Typography
 } from "@material-ui/core";
 import { Clear } from "@material-ui/icons";
-import AddContactField from "../../utils/fields/AddContactField";
+import AddContactField from "../../utils/fields/AddContact";
 import ProfileService from "../../../services/profile.service";
 import "../../../resources/stylesheets/font-awesome.min.css";
-import GeocodingField from "../../utils/fields/GeocodingField";
+import LaFourchetteLogo from '../../../resources/images/lafourchette.png';
+import DoctolibLogo from '../../../resources/images/doctolib.png';
 
 const Entities = require("html-entities").XmlEntities;
 const entities = new Entities();
@@ -43,6 +44,11 @@ const styles = {
       position: "relative!important",
       transform: "translate3d(0px, -60px, 0px)!important"
     }
+  },
+  iconImg: {
+    width: 24,
+    height: 24,
+    borderRadius: 4,
   }
 };
 
@@ -101,11 +107,7 @@ class OnboardContacts extends React.Component {
   addLink = link => {
     let links = this.state.links;
     links.push(link);
-    let length = l => {
-      return l - 1;
-    };
-    let linkIndex = length(links.length);
-    this.setState({ links: links, newLinkIndex: linkIndex });
+    this.setState({ links: links, newLinkIndex: (links.length-1) });
   };
 
   getLinkByType = typeWanted => {
@@ -113,7 +115,6 @@ class OnboardContacts extends React.Component {
     try {
       return record.links.find(link => link.type === typeWanted);
     } catch (e) {
-      console.log(e);
       return null;
     }
   };
@@ -130,14 +131,8 @@ class OnboardContacts extends React.Component {
     }
   };
 
-  getCapitalizedLabel = string => {
-    let translatedTypes = ["landline", "email", "phone"];
-    if (translatedTypes.some(e => e === string)) {
-      return this.props.intl.formatMessage({
-        id: "onboard.contacts.label." + string
-      });
-    }
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  getTranslatedName = type => {
+    return this.props.intl.formatMessage({id: 'contact.displayName.'+type}).replace("&nbsp;", " ");
   };
 
   setDefaultLinks = () => {
@@ -152,6 +147,14 @@ class OnboardContacts extends React.Component {
     }
     this.setState({ links });
   };
+
+  getLinkIconComponent = (link) => {
+    switch(link.icon) {
+      case 'doctolib': return <img src={DoctolibLogo} className={this.props.classes.iconImg} />;
+      case 'lafourchette': return <img src={LaFourchetteLogo} className={this.props.classes.iconImg} />;
+      default: return <i className={"fa fa-" + (link.icon || link.type)} />
+    }
+  }
 
   render() {
     const { links, newLinkIndex } = this.state;
@@ -190,20 +193,20 @@ class OnboardContacts extends React.Component {
                         ? classes.link
                         : classes.defaultLink
                     }
-                    label={this.getCapitalizedLabel(link.type)}
+                    label={this.getTranslatedName(link.type)}
                     type={this.setTypeInput(link.type)}
                     variant={"outlined"}
                     value={link.value}
                     onChange={e => this.handleLinksChange(e, link, i)}
                     onBlur={() => this.props.handleSave(["links"])}
-                    placeholder={this.getCapitalizedLabel(link.type)}
+                    placeholder={this.getTranslatedName(link.type)}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment
                           position="start"
                           style={{ fontSize: 24 }}
                         >
-                          <i className={"fa fa-" + (link.icon || link.type)} />
+                          {this.getLinkIconComponent(link)}
                         </InputAdornment>
                       ),
                       endAdornment: (
@@ -223,10 +226,7 @@ class OnboardContacts extends React.Component {
             })}
           <Grid container item className={classes.root}>
             <AddContactField
-              parent={this}
-              handleSave={this.props.handleSave}
-              addLink={this.addLink}
-              capitalize={this.getCapitalizedLabel}
+              onAdd={this.addLink}
             />
           </Grid>
         </Grid>

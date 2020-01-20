@@ -20,6 +20,8 @@ import { styles } from "./CardProfile.css";
 import { injectIntl } from "react-intl";
 import { getBaseUrl, getProgressiveImage } from "../../services/utils.service";
 import undefsafe from "undefsafe";
+import LaFourchetteLogo from "../../resources/images/lafourchette.png";
+import DoctolibLogo from "../../resources/images/doctolib.png";
 // import '../../resources/stylesheets/font-awesome.min.css';
 React.lazy(() => import("../../resources/stylesheets/font-awesome.min.css"));
 
@@ -175,7 +177,20 @@ class CardProfile extends React.Component {
                             className={
                               classes.contactButton + " fa fa-" + link.icon
                             }
-                          />
+                          >
+                            {link.type === "doctolib" && (
+                              <img
+                                src={DoctolibLogo}
+                                className={classes.contactImage}
+                              />
+                            )}
+                            {link.type === "lafourchette" && (
+                              <img
+                                src={LaFourchetteLogo}
+                                className={classes.contactImage}
+                              />
+                            )}
+                          </IconButton>
                         </Tooltip>
                       </Grid>
                     );

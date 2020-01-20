@@ -1,0 +1,36 @@
+{
+  "email": {
+    "iconType": "classe",
+    "icon": "fa fa-envelope"
+  },
+  "phone": {
+    "iconType": "classe",
+    "icon": "fa fa-phone"
+  },
+  "landline": {
+    "iconType": "classe",
+    "icon": "fa fa-phone-square"
+  },
+  "linkedin": {
+    "iconType": "classe",
+    "icon": "fa fa-linkedin"
+  },
+  "twitter": {
+    "iconType": "classe",
+    "icon": "fa fa-twitter"
+  },
+  "facebook": {
+    "iconType": "classe",
+    "icon": "fa fa-facebook"
+  },
+  "link": {
+    "iconType": "classe",
+    "icon": "fa fa-link"
+  },
+  "doctolib": {
+    "iconType": "image"
+  },
+  "lafourchette": {
+    "iconType": "image"
+  }
+}
