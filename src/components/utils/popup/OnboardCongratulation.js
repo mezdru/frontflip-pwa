@@ -11,8 +11,9 @@ import profileService from '../../../services/profile.service';
 
 const styles = theme => ({
   picture: {
-    // width: '60%',
-    // height: 'auto',
+    position: 'relative',
+    left: '50%',
+    transform: 'translateX(-50%)',
     marginBottom: 40,
   },
   text: {
