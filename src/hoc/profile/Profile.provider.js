@@ -69,10 +69,12 @@ class ProfileProvider extends React.Component {
   }
 
   canEdit = (workingRecord) => {
-    if (!(this.props.userStore.currentUser && this.props.userStore.currentUser._id)) return false;
-    if (this.props.userStore.currentUser.superadmin) return true;
-    else if (this.props.userStore.currentUser.orgsAndRecords.find(orgAndRecord => (orgAndRecord.record._id || orgAndRecord.record) === workingRecord.objectID)) return true;
-    else if (this.props.userStore.currentUser.orgsAndRecords.find(orgAndRecord => (orgAndRecord.organisation._id || orgAndRecord.organisation) === workingRecord.organisation && orgAndRecord.admin)) return true;
+    const {currentUser, currentOrgAndRecord} = this.props.userStore;
+    if (!(currentUser && currentUser._id)) return false;
+    if (currentUser.superadmin) return true;
+    else if (currentUser.orgsAndRecords.find(orgAndRecord => (orgAndRecord.record._id || orgAndRecord.record) === workingRecord.objectID)) return true;
+    else if (currentUser.orgsAndRecords.find(orgAndRecord => (orgAndRecord.organisation._id || orgAndRecord.organisation) === workingRecord.organisation && orgAndRecord.admin)) return true;
+    else if (currentOrgAndRecord.secondaryRecords && currentOrgAndRecord.secondaryRecords.find(sr => ((sr._id || sr) === workingRecord._id ))) return true; 
     else return false;
   }
 
