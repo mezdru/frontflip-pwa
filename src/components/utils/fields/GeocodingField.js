@@ -37,40 +37,66 @@ class GeocodingField extends React.Component {
     lng: null
   };
 
-  componentDidMount() {
-    this.props.mapbox.buildMap(this.mapContainer).then(map => {
-      this.map = map;
-      this.props.mapbox.setLocale(this.map, this.props.commonStore.locale);
-      this.geocoder = this.props.mapbox.addGeocoder(
-        this.map,
-        this.geocoderContainer
-      );
+  createCenteredMarker = () => {
+    let cMarker = this.props.mapbox.createMarker(this.map.getCenter());
+    cMarker.addTo(this.map);
 
-      this.geocoder.on("result", res => {
-        this.setState(
-          {
-            lat: res.result.geometry.coordinates[1],
-            lng: res.result.geometry.coordinates[0]
-          },
-          async () => {
-            // @todo : contact Mapbox sales to enable the permanent endpoint
-            // @todo : Do not deploy in production until we don't have the Mapbox sales response.
-            let response = await request(
-              `https://api.mapbox.com/geocoding/v5/mapbox.places-permanent/${this.state.longitude},${this.state.latitude}.json?access_token=${process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}`
-            );
-            console.log(response);
-            this.props.onChange({ lat: this.state.lat, lng: this.state.lng });
-            if (this.props.handleSave) this.props.handleSave(["_geoloc"]);
-          }
+    this.map.on("move", () => {
+      let newCoords = this.map.getCenter();
+      cMarker.setLngLat(newCoords);
+      this.setState({ lng: newCoords.lng, lat: newCoords.lat });
+      this.props.onChange({ lat: newCoords.lat, lng: newCoords.lng });
+    }); // moveend also fires on zoomend
+  };
+
+  getCoordsFrom(elt) {
+    if (elt._geoloc && elt._geoloc.lat && elt._geoloc.lng)
+      return [elt._geoloc.lng, elt._geoloc.lat];
+    return null;
+  }
+
+  componentDidMount() {
+    let record = this.props.getWorkingRecord();
+    this.props.mapbox
+      .buildMap(this.mapContainer, { center: this.getCoordsFrom(record) })
+      .then(map => {
+        this.map = map;
+        this.props.mapbox.setLocale(this.map, this.props.commonStore.locale);
+        this.geocoder = this.props.mapbox.addGeocoder(
+          this.map,
+          this.geocoderContainer
         );
+
+        this.createCenteredMarker();
+
+        this.geocoder.on("result", res => {
+          this.setState(
+            {
+              lat: res.result.geometry.coordinates[1],
+              lng: res.result.geometry.coordinates[0]
+            },
+            async () => {
+              // @todo : contact Mapbox sales to enable the permanent endpoint
+              // @todo : Do not deploy in production until we don't have the Mapbox sales response.
+              let response = await request(
+                `https://api.mapbox.com/geocoding/v5/mapbox.places-permanent/${this.state.longitude},${this.state.latitude}.json?access_token=${process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}`
+              );
+              console.log(response);
+              this.props.onChange({ lat: this.state.lat, lng: this.state.lng });
+              if (this.props.handleSave) this.props.handleSave(["_geoloc"]);
+            }
+          );
+        });
       });
-    });
   }
 
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.root}>
+      <div
+        className={classes.root}
+        onBlur={() => this.props.handleSave(["_geoloc"])}
+      >
         <div
           ref={el => (this.geocoderContainer = el)}
           className={classes.geocoder}

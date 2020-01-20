@@ -54,6 +54,7 @@ class OnboardGeo extends React.Component {
 
         <Grid item className={classes.field}>
           <GeocodingField
+            getWorkingRecord={this.props.getWorkingRecord}
             onChange={this.handleChange}
             handleSave={e => this.props.handleSave(["_geoloc"])}
           />
