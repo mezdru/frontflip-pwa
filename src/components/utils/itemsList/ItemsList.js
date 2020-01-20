@@ -56,31 +56,32 @@ const style = theme => ({
     top: 0,
     width: 40,
     height: 40,
-    borderRadius: '50%',
-    background: 'white',
-    position: 'relative',
+    borderRadius: "50%",
+    background: "white",
+    position: "relative",
     opacity: 0.7,
-    transition: 'opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-    left:0,
-    right:0,
-    margin: 'auto',
-    '&:hover': {
-      opacity: 1,
+    transition: "opacity 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+    left: 0,
+    right: 0,
+    margin: "auto",
+    "&:hover": {
+      opacity: 1
     },
-    '& > svg': {
-      position: 'absolute',
-      top: '50%',
-      transform: 'translateY(-50%)',
-      left:0,
-      right:0,
-      margin: 'auto'
+    "& > svg": {
+      position: "absolute",
+      top: "50%",
+      transform: "translateY(-50%)",
+      left: 0,
+      right: 0,
+      margin: "auto"
     }
   }
 });
 
 class OrganisationsList extends React.Component {
   state = {
-    items: []
+    items: [],
+    loadInProgress: true
   };
 
   componentDidMount() {
@@ -97,9 +98,15 @@ class OrganisationsList extends React.Component {
     );
 
     if (this.props.dataType === "record") {
-      this.setState({ items: this.buildItems(currentUserSecondaryRecords) });
+      this.setState({
+        items: this.buildItems(currentUserSecondaryRecords),
+        loadInProgress: false
+      });
     } else {
-      this.setState({ items: this.buildItems(currentUserOrganisations) });
+      this.setState({
+        items: this.buildItems(currentUserOrganisations),
+        loadInProgress: false
+      });
     }
   }
 
@@ -107,33 +114,35 @@ class OrganisationsList extends React.Component {
    * @returns Array of item : {name, _id, pictureUrl, redirectLink, redirectComponent}
    */
   buildItems = data => {
-    if (!data || data.length === 0) return;
     const { dataType } = this.props;
     const { locale } = this.props.commonStore;
     const { currentOrganisation } = this.props.orgStore;
     let arrayOfItems = [];
 
-    data.forEach(elt => {
-      if (
-        (dataType === "organisation" && elt.tag !== currentOrganisation.tag) ||
-        dataType === "record"
-      ) {
-        arrayOfItems.push({
-          name: elt.name,
-          _id: elt._id,
-          pictureUrl:
-            dataType === "record"
-              ? undefsafe(elt, "picture.url")
-              : undefsafe(elt, "logo.url"),
-          redirectLink: `/${locale}/${
-            dataType === "record"
-              ? currentOrganisation.tag + "/" + elt.tag
-              : elt.tag
-          }`,
-          redirectComponent: dataType === "record" ? Link : "a"
-        });
-      }
-    });
+    if (data && data.length !== 0) {
+      data.forEach(elt => {
+        if (
+          (dataType === "organisation" &&
+            elt.tag !== currentOrganisation.tag) ||
+          dataType === "record"
+        ) {
+          arrayOfItems.push({
+            name: elt.name,
+            _id: elt._id,
+            pictureUrl:
+              dataType === "record"
+                ? undefsafe(elt, "picture.url")
+                : undefsafe(elt, "logo.url"),
+            redirectLink: `/${locale}/${
+              dataType === "record"
+                ? currentOrganisation.tag + "/" + elt.tag
+                : elt.tag
+            }`,
+            redirectComponent: dataType === "record" ? Link : "a"
+          });
+        }
+      });
+    }
 
     if (dataType === "record") {
       arrayOfItems.push({
@@ -149,40 +158,42 @@ class OrganisationsList extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { items } = this.state;
+    const { items, loadInProgress } = this.state;
 
     return (
       <List className={classes.orgsContainer}>
-        {items.map((item, i) => {
-          return (
-            <ListItem
-              button
-              component={item.redirectComponent}
-              href={item.redirectLink}
-              to={item.redirectLink}
-              key={item._id}
-              className={classes.orgItem}
-              onClick={this.props.onClick}
-            >
-              {item.addButton ? (
-                <div className={classes.itemButton} >
-                  <Add fontSize="medium" color="secondary" />
+        {items &&
+          items.length > 0 &&
+          items.map((item, i) => {
+            return (
+              <ListItem
+                button
+                component={item.redirectComponent}
+                href={item.redirectLink}
+                to={item.redirectLink}
+                key={item._id}
+                className={classes.orgItem}
+                onClick={this.props.onClick}
+              >
+                {item.addButton ? (
+                  <div className={classes.itemButton}>
+                    <Add fontSize="medium" color="secondary" />
+                  </div>
+                ) : (
+                  <Logo
+                    type={"smallOrg"}
+                    alt={entities.decode(item.name)}
+                    src={item.pictureUrl || defaultLogo}
+                    className={classes.itemLogo}
+                  />
+                )}
+                <div className={classes.itemName}>
+                  {entities.decode(item.name)}
                 </div>
-              ) : (
-                <Logo
-                  type={"smallOrg"}
-                  alt={entities.decode(item.name)}
-                  src={item.pictureUrl || defaultLogo}
-                  className={classes.itemLogo}
-                />
-              )}
-              <div className={classes.itemName}>
-                {entities.decode(item.name)}
-              </div>
-            </ListItem>
-          );
-        })}
-        {items.length === 0 && (
+              </ListItem>
+            );
+          })}
+        {loadInProgress && (
           <div className={classes.circularProgressContainer}>
             <CircularProgress />
           </div>
