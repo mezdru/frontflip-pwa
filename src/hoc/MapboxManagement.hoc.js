@@ -20,7 +20,7 @@ const withMapbox = ComponentToWrap => {
           container: mapRef,
           // style: "mapbox://styles/mapbox/streets-v10", // v11 causes issue with locale
           style: "mapbox://styles/mapbox/dark-v10",
-          zoom: options.zoom || 5,
+          zoom: options.zoom || (options.center ? 10 : 5),
           center: options.center || [2.349014, 48.864716]
           // renderWorldCopies: false
         });
@@ -34,10 +34,8 @@ const withMapbox = ComponentToWrap => {
     addGeocoder(map, geocoderContainer) {
       var geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
-        marker: {
-          color: "orange"
-        },
-        mapboxgl: mapboxgl
+        mapboxgl: mapboxgl,
+        marker: false
       });
 
       if (geocoderContainer) {
@@ -86,6 +84,25 @@ const withMapbox = ComponentToWrap => {
       });
     };
 
+    createMarker = (coords, onMarkerClick, props) => {
+      let el;
+      if(props) {
+        el = document.createElement("div");
+        el.className = "marker";
+        let pic =
+          profileService.getPicturePathResized(
+            { url: props.pictureUrl },
+            "person",
+            "38x38"
+          ) || defaultProfilePicture;
+        el.innerHTML = `<i class="fa fa-map-marker" aria-hidden="true"></i><img src="${pic}" />`;
+        el.dataset.type = "marker";
+        el.addEventListener("click", e => onMarkerClick(props));
+      }
+
+      return new mapboxgl.Marker(el || null).setLngLat(coords);
+    }
+
     updateMarkers = (map, onMarkerClick) => {
       const features = map.querySourceFeatures("addresses");
       const keepMarkers = [];
@@ -121,21 +138,7 @@ const withMapbox = ComponentToWrap => {
           keepMarkers.push(featureID);
         } else {
           //Feature is not clustered and has not been created, create an icon for it
-          const el = document.createElement("div");
-          el.className = "marker";
-          let pic =
-            profileService.getPicturePathResized(
-              { url: props.pictureUrl },
-              "person",
-              "38x38"
-            ) || defaultProfilePicture;
-          el.innerHTML = `<i class="fa fa-map-marker" aria-hidden="true"></i><img src="${pic}" />`;
-          el.dataset.type = "marker";
-
-          el.addEventListener("click", e => onMarkerClick(props));
-
-          const marker = new mapboxgl.Marker(el).setLngLat(coords);
-
+          const marker = this.createMarker(coords, onMarkerClick, props);
           marker.addTo(map);
           keepMarkers.push(props.id);
           this.markers.set(props.id, el);
@@ -216,13 +219,6 @@ const withMapbox = ComponentToWrap => {
       };
     };
 
-    /**
-     * @description Add marker on map center to allow the user to choose a geoloc with precision
-     */
-    addMarkerOnMapCenter = () => {
-
-    }
-
     render() {
       return (
         <ComponentToWrap
@@ -232,7 +228,8 @@ const withMapbox = ComponentToWrap => {
             setLocale: this.setLocale,
             loadClusteredData: this.loadClusteredData,
             addGeocoder: this.addGeocoder,
-            convertAlgoliaToGeojson: this.convertAlgoliaToGeojson
+            convertAlgoliaToGeojson: this.convertAlgoliaToGeojson,
+            createMarker: this.createMarker
           }}
         />
       );
