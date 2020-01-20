@@ -1,11 +1,15 @@
 {
   "email": {
     "iconType": "classe",
-    "icon": "fa fa-envelope-o"
+    "icon": "fa fa-envelope"
   },
   "phone": {
     "iconType": "classe",
     "icon": "fa fa-phone"
+  },
+  "landline": {
+    "iconType": "classe",
+    "icon": "fa fa-phone-square"
   },
   "linkedin": {
     "iconType": "classe",
@@ -22,22 +26,6 @@
   "link": {
     "iconType": "classe",
     "icon": "fa fa-link"
-  },
-  "workplace": {
-    "iconType": "classe",
-    "icon": "fa fa-user"
-  },
-  "workchat": {
-    "iconType": "classe",
-    "icon": "fa fa-comment"
-  },
-  "landline": {
-    "iconType": "classe",
-    "icon": "fa fa-phone-square"
-  },
-  "location": {
-    "iconType": "classe",
-    "icon": "fa fa-map-marker"
   },
   "doctolib": {
     "iconType": "image"

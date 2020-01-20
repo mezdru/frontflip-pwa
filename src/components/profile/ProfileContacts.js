@@ -3,7 +3,6 @@ import { withStyles, IconButton, Grid, Tooltip } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import classNames from "classnames";
 import "../../resources/stylesheets/font-awesome.min.css";
-import "./ContactsColors.css";
 import { withProfile } from "../../hoc/profile/withProfile";
 import ProfileService from "../../services/profile.service";
 import undefsafe from "undefsafe";

@@ -4,6 +4,7 @@ import { inject, observer } from "mobx-react";
 import { observe } from "mobx";
 import ReactGA from "react-ga";
 
+import "../components/profile/ContactsColors.css";
 import SearchPage from "./SearchPage";
 import { withProfile } from "../hoc/profile/withProfile";
 import { getBaseUrl } from "../services/utils.service";

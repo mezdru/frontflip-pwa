@@ -340,16 +340,7 @@ class OnboardStepper extends React.Component {
         {showFeedback && (
           <LoaderFeedback
             value={Date.now()}
-            style={{
-              position: "fixed",
-              bottom: 16,
-              zIndex: 999,
-              left: 0,
-              right: 0,
-              margin: "auto",
-              width: 60,
-              textAlign: "center"
-            }}
+            className={classes.loaderFeedback}
           />
         )}
       </>

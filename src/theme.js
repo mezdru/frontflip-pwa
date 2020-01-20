@@ -97,6 +97,7 @@ export default createMuiTheme({
     },
     MuiIconButton: {
       root: {
+        transition: 'all 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
         color: '#aaacbe',
         padding: 8,
       }

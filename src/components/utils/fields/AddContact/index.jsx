@@ -48,7 +48,7 @@ let AddContact = ({ classes, onAdd, intl, ...props }) => {
         aria-haspopup="true"
         onClick={() => setOpen(true)}
       >
-        <Add fontSize="large" />
+        <Add fontSize="large" color="secondary" />
       </Fab>
       <Popper open={open} anchorEl={anchorEl} transition disablePortal>
         {({ TransitionProps }) => (

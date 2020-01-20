@@ -4,7 +4,9 @@ export const styles = theme => ({
   },
   container: {
     backgroundColor: 'white',
-    borderRadius: 5,
+    borderRadius: 4,
+    overflow: 'hidden',
+    boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)',
     maxHeight: 'calc(100vh - 64px)',
     [theme.breakpoints.down('xs')]: {
       maxHeight: 'unset'
@@ -40,5 +42,20 @@ export const styles = theme => ({
     '&:hover': {
       background: theme.palette.secondary.dark,
     },
+  },
+  loaderFeedback: {
+    position: "fixed",
+    bottom: 16,
+    zIndex: 999,
+    left: 0,
+    right: 0,
+    margin: "auto",
+    width: 60,
+    textAlign: "center",
+    [theme.breakpoints.down('xs')]: {
+      left: 16,
+      right: 'initial',
+      margin: 0
+    }
   }
 });
