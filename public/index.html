@@ -91,18 +91,32 @@
       isUnknownBrowserOK: false,
       messages: {
         en: {
-          outOfDate: "Your browser is out of date!",
-          unsupported: "Your browser is not supported!",
+          outOfDate: "Your browser is too old :(",
+          unsupported: "Your browser won't work :(",
           update: {
-            web: "Update your browser to view this website correctly. ",
+            web: "Can you try Firefox or Chrome?",
             googlePlay: "Please install Chrome from Google Play",
             appStore: "Please update iOS from the Settings App"
           },
           // You can set the URL to null if you do not want a clickable link or provide
           // your own markup in the `update.web` message.
           url: "http://outdatedbrowser.com/",
-          callToAction: "Update my browser now",
+          callToAction: "Help",
           close: "Close"
+        },
+        fr: {
+          outOfDate: "Votre navigateur est trop vieux :(",
+          unsupported: "Votre navigateur ne fonctionnera pas :(",
+          update: {
+            web: "Pouvez-vous utiliser Firefox ou Chrome ?",
+            googlePlay: "Pouvez-vous installer Chrome dans Google Play ?",
+            appStore: "Pouvez-vous mettre à jour iOS dans les Réglages ?"
+          },
+          // You can set the URL to null if you do not want a clickable link or provide
+          // your own markup in the `update.web` message.
+          url: "http://outdatedbrowser.com/",
+          callToAction: "Aide",
+          close: "Fermer"
         }
       }
     });
