@@ -216,6 +216,13 @@ const withMapbox = ComponentToWrap => {
       };
     };
 
+    /**
+     * @description Add marker on map center to allow the user to choose a geoloc with precision
+     */
+    addMarkerOnMapCenter = () => {
+
+    }
+
     render() {
       return (
         <ComponentToWrap
