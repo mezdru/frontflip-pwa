@@ -42,6 +42,15 @@ class HeaderDrawer extends Component {
     window.location.pathname = '/' + e.target.value + '/' + (currentOrganisation ? currentOrganisation.tag : '');
   }
 
+  useSecondaryProfile = () => {
+    const { currentUser, currentOrgAndRecord } = this.props.userStore;
+    const { currentOrganisation } = this.props.orgStore;
+
+    return (currentUser && currentOrgAndRecord && (
+      currentOrganisation.features.secondaryProfiles ||
+      currentUser.superadmin));
+  }
+
   render() {
     const { classes, auth, open, intl } = this.props;
     const { currentUserRecord } = this.props.recordStore;
@@ -75,9 +84,9 @@ class HeaderDrawer extends Component {
           {open && (
             <div className={'leftMenu'}>
             {(auth && undefsafe(currentOrganisation, '_id')) && (
-              <React.Fragment>
+              <>
                 {currentUserRecord && (
-                  <React.Fragment>
+                  <>
                     <List className={'leftSubmenu'}>
                       <ListItem >
                         <ListItemAvatar>
@@ -91,8 +100,8 @@ class HeaderDrawer extends Component {
                       <ListItem button component={Link} to={'/' + locale + '/' + currentOrganisation.tag + '/' + currentUserRecord.tag} onClick={this.props.handleDrawerClose}>
                         <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.profile' })} />
                       </ListItem>
-                      {(currentUser && currentOrgAndRecord && currentOrgAndRecord.secondaryRecords && currentOrgAndRecord.secondaryRecords.length > 0) && (
-                        <React.Fragment>
+                      {this.useSecondaryProfile() && (
+                        <>
                           <Divider className={classes.divider} />
                           <ListItem>
                             <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.listSecondaryRecordTitle' })}
@@ -101,11 +110,11 @@ class HeaderDrawer extends Component {
                           <Suspense fallback={<></>}>
                             <ItemsList onClick={this.props.handleDrawerClose} dataType={"record"}/>
                           </Suspense>
-                        </React.Fragment>
+                        </>
                       )}
                     </List>
                     <Divider className={classes.divider} />
-                  </React.Fragment>
+                  </>
                 )}
                 <List className={'leftSubmenu'}>
                   <ListItem onClick={this.props.handleDrawerClose} component={Link} to={'/' + locale + '/' + undefsafe(currentOrganisation, 'tag')}>
@@ -141,7 +150,7 @@ class HeaderDrawer extends Component {
                     } />
                   </ListItem>
                   {(currentUser && currentUser.orgsAndRecords && (currentUser.orgsAndRecords.length > 1)) && (
-                    <React.Fragment>
+                    <>
                       <Divider className={classes.divider} />
                       <ListItem>
                         <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.listOrgTitle' })}
@@ -150,22 +159,22 @@ class HeaderDrawer extends Component {
                       <Suspense fallback={<></>}>
                         <ItemsList onClick={this.props.handleDrawerClose} dataType={"organisation"}/>
                       </Suspense>
-                    </React.Fragment>
+                    </>
                   )}
                   {undefsafe(currentUser, 'superadmin') && (
-                    <React.Fragment>
+                    <>
                       <Divider className={classes.divider} />
                       <ListItem button component="a" href={'/' + locale + '/' + currentOrganisation.tag + '/onboard'}>
                         <ListItemText primary={"Onboard"} />
                       </ListItem>
-                    </React.Fragment>
+                    </>
                   )}
                 </List>
                 <Divider className={classes.divider} />
-              </React.Fragment>
+              </>
             )}
             {(auth && !undefsafe(currentOrganisation, '_id')) && currentUser && currentUser.orgsAndRecords && (
-              <React.Fragment>
+              <>
                 <Divider className={classes.divider} />
                 <ListItem>
                   <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.listOrgTitle' })}
@@ -173,16 +182,16 @@ class HeaderDrawer extends Component {
                 </ListItem>
                 <ItemsList onClick={this.props.handleDrawerClose} dataType={"organisation"} />
                 <Divider className={classes.divider} />
-              </React.Fragment>
+              </>
             )}
             <List className={'leftSubmenu'}>
               {!auth && (
-                <React.Fragment>
+                <>
                   <ListItem button component={Link} to={"/" + locale + (currentOrganisation ? '/' + currentOrganisation.tag : '') + '/signin'}>
                     <ListItemText primary={intl.formatMessage({ id: 'Sign In' })} />
                   </ListItem>
                   <Divider className={classes.divider} />
-                </React.Fragment>
+                </>
               )}
 
               <ListItem>
@@ -210,12 +219,12 @@ class HeaderDrawer extends Component {
                 <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.protectingYourData' })} />
               </ListItem>
               {auth && (
-                <React.Fragment>
+                <>
                   <Divider className={classes.divider} />
                   <ListItem button onClick={this.handleLogout} >
                     <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.logout' })} />
                   </ListItem>
-                </React.Fragment>
+                </>
               )}
             </List>
           </div>
