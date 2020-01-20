@@ -62,6 +62,9 @@ export const styles = theme => ({
     display: 'none',
   },
   drawer: {
+    '& > div:first-child' : {
+      filter: 'brightness(0) invert(1)',
+    },
     '& span': {
       color: 'white',
     },
@@ -155,5 +158,5 @@ export const styles = theme => ({
   logoBorder: {
     backgroundCOlor: 'white',
     border: '2px solid white',
-  },
+  }
 });

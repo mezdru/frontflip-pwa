@@ -68,7 +68,7 @@ class HeaderDrawer extends Component {
         onOpen={this.props.handleDrawerOpen}
         onClose={this.props.handleDrawerClose}
         classes={{
-          paper: classes.drawerPaper,
+          paper: classes.drawerPaper
         }}
       >
         <div
