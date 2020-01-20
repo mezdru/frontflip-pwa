@@ -158,10 +158,5 @@ export const styles = theme => ({
   logoBorder: {
     backgroundCOlor: 'white',
     border: '2px solid white',
-  },
-  backdrop: {
-    '& > div' : {
-      filter: 'brightness(0) invert(1)',
-    }
   }
 });
