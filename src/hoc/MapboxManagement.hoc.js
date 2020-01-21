@@ -8,6 +8,8 @@ import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import defaultProfilePicture from "../resources/images/placeholder_person.png";
 import profileService from "../services/profile.service";
 import Spiderifier from "../resources/js/Spiderifier";
+import { withRouter } from "react-router-dom";
+import { getBaseUrl } from "../services/utils.service";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
@@ -178,38 +180,51 @@ const withMapbox = ComponentToWrap => {
       });
     };
 
-    createMarkerElement(spiderParam, props, index, onClick) {
+    createMarkerElement = (spiderParam, props, index, onClick) => {
       var parentElem = document.createElement("div"),
         markerElem = document.createElement("div"),
         lineElem = document.createElement("div");
-  
-      parentElem.className = "marker-parent";
-      lineElem.className = "line-div";
-      parentElem.style.zIndex = 1000 - index;
-      markerElem.className = "marker";
 
-      let pic =
-        profileService.getPicturePathResized(
-          { url: props.pictureUrl },
-          "person",
-          "50x50"
-        ) || defaultProfilePicture;
-      markerElem.innerHTML = `<img class="marker-img" src="${pic}" />`;
+      parentElem.className = "marker-parent";
+      parentElem.style.animationDelay = (10*index) + 'ms';
+      parentElem.style.zIndex = 1000 - index;
+
+      lineElem.className = "line-div";
+      markerElem.className = "marker";
       markerElem.dataset.type = "marker";
-      markerElem.addEventListener("click", e => onClick(props));
-  
+
+      if (props) {
+        let pic =
+          profileService.getPicturePathResized(
+            { url: props.pictureUrl },
+            "person",
+            "50x50"
+          ) || defaultProfilePicture;
+        markerElem.innerHTML = `<img class="marker-img" src="${pic}" />`;
+      } else {
+        markerElem.innerHTML = '<i class="fa fa-bars marker-img" aria-hidden="true"></i>';
+      }
+
+      if(onClick) markerElem.addEventListener("click", e => onClick(props));
+      else markerElem.addEventListener("click", e => {
+        this.props.history.push(getBaseUrl(this.props));
+      });
+
       parentElem.appendChild(lineElem);
       parentElem.appendChild(markerElem);
-  
+
       lineElem.style.height = spiderParam.legLength + "px";
       lineElem.style.transform =
         "rotate(" + (spiderParam.angle - Math.PI / 2) + "rad)";
-  
+
       return parentElem;
     }
 
     handleClusterClick = async (map, e, clusterID, onMarkerClick) => {
-      var spiderifier = new Spiderifier(map, {createMarkerElement: this.createMarkerElement, onClick: onMarkerClick});
+      var spiderifier = new Spiderifier(map, {
+        createMarkerElement: this.createMarkerElement,
+        onClick: onMarkerClick
+      });
       var features = map.queryRenderedFeatures(e.point, {
         layers: ["clusters"]
       });
@@ -240,7 +255,6 @@ const withMapbox = ComponentToWrap => {
               );
             }
             var markers = leafFeatures.map(elt => elt.properties);
-            markers = markers.slice(0, 20); // 20 max
             spiderifier.spiderfy(features[0].geometry.coordinates, markers);
           });
       }
@@ -311,7 +325,7 @@ const withMapbox = ComponentToWrap => {
     "clapStore",
     "orgStore",
     "recordStore"
-  )(observer(MapboxManagement));
+  )(observer(withRouter(MapboxManagement)));
   return MapboxManagement;
 };
 export default withMapbox;

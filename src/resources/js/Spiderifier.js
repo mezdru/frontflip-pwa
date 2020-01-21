@@ -17,6 +17,7 @@ export default function Spiderifier(map, userOptions) {
       spiralFootSeparation: 50, // related to size of spiral (experiment!)
       spiralLengthStart: 40, // ditto
       spiralLengthFactor: 4, // ditto
+      maxMarkers: 20,
       onClick: userOptions.onClick || NULL_FUNCTION,
       createMarkerElement: userOptions.createMarkerElement || NULL_FUNCTION
     },
@@ -32,20 +33,53 @@ export default function Spiderifier(map, userOptions) {
     var spiderParams = generateSpiderParams(markers.length);
 
     unspiderfy();
-    previousMarkers = util.map(markers, function(marker, index) {
+
+    for (var index = 0; index < markers.length; index++) {
+      if (index > options.maxMarkers) break;
+
       var spiderParam = spiderParams[index],
-        elem = options.createMarkerElement(spiderParam, marker, index, options.onClick);
+        elem;
 
-      elem.onclick = function(e) {
-        options.onClick(e, marker, elem);
-      };
+      if (index < options.maxMarkers) {
+        elem = options.createMarkerElement(
+          spiderParam,
+          markers[index],
+          index,
+          options.onClick
+        );
+      } else {
+        elem = options.createMarkerElement(
+          spiderParam,
+          null,
+          index,
+          null
+        )
+      }
 
-      return new mapboxgl.Marker(elem, {
-        offset: [spiderParam.x, spiderParam.y]
-      })
-        .setLngLat(latLng)
-        .addTo(map);
-    });
+      previousMarkers.push(
+        new mapboxgl.Marker(elem, {
+          offset: [spiderParam.x, spiderParam.y]
+        })
+          .setLngLat(latLng)
+          .addTo(map)
+      );
+    }
+
+    // previousMarkers = util.map(markers, function(marker, index) {
+    //   var spiderParam = spiderParams[index],
+    //     elem = options.createMarkerElement(
+    //       spiderParam,
+    //       marker,
+    //       index,
+    //       options.onClick
+    //     );
+
+    //   return new mapboxgl.Marker(elem, {
+    //     offset: [spiderParam.x, spiderParam.y]
+    //   })
+    //     .setLngLat(latLng)
+    //     .addTo(map);
+    // });
   }
 
   function unspiderfy() {
