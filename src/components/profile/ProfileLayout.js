@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import { withStyles, Grid, Slide, CircularProgress } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
+import undefsafe from "undefsafe";
 
 import ProfileThumbnail from "./ProfileThumbnail";
 import BannerResizable from "../utils/banner/BannerResizable";
@@ -8,7 +9,6 @@ import ProfileWings from "./ProfileWings";
 import ProfileActions from "./ProfileActions";
 import { styles } from "./ProfileLayout.css";
 import SkillsPropositionFab from "../utils/buttons/SkillsPropositionFab";
-import { observe } from "mobx";
 import ErrorBoundary from "../utils/errors/ErrorBoundary";
 
 const ProfileClapHistory = React.lazy(() => import("./ProfileClapHistory"));
@@ -32,7 +32,10 @@ class ProfileLayout extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.visible !== nextProps.visible && this.state.showProposeSkills) {
+    if (
+      this.props.visible !== nextProps.visible &&
+      this.state.showProposeSkills
+    ) {
       this.setState({
         showProposeSkills: false
       });
@@ -49,7 +52,11 @@ class ProfileLayout extends React.Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    if(nextProps.visible === this.props.visible && JSON.stringify(nextState) === JSON.stringify(this.state)) return false;
+    if (
+      nextProps.visible === this.props.visible &&
+      JSON.stringify(nextState) === JSON.stringify(this.state)
+    )
+      return false;
     return true;
   }
 
@@ -57,6 +64,7 @@ class ProfileLayout extends React.Component {
     const { classes, visible, transitionDuration } = this.props;
     const { showProposeSkills } = this.state;
     const { url } = this.props.commonStore;
+    const { currentOrganisation } = this.props.orgStore;
 
     return (
       <Slide
@@ -107,13 +115,15 @@ class ProfileLayout extends React.Component {
                 <ProfileWings />
               </Grid>
 
-              <Grid item xs={12} lg={4} className={classes.clapHistory}>
-                {visible && (
-                  <Suspense fallback={<CircularProgress color="secondary" />}>
-                    <ProfileClapHistory />
-                  </Suspense>
-                )}
-              </Grid>
+              {undefsafe(currentOrganisation, "features.claps") === true && (
+                <Grid item xs={12} lg={4} className={classes.clapHistory}>
+                  {visible && (
+                    <Suspense fallback={<CircularProgress color="secondary" />}>
+                      <ProfileClapHistory />
+                    </Suspense>
+                  )}
+                </Grid>
+              )}
             </Grid>
           </Grid>
 
@@ -157,5 +167,6 @@ class ProfileLayout extends React.Component {
 export default inject(
   "commonStore",
   "authStore",
-  "recordStore"
+  "recordStore",
+  "orgStore"
 )(observer(withStyles(styles, { withTheme: true })(ProfileLayout)));
