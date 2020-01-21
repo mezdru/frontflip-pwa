@@ -100,19 +100,19 @@ class HeaderDrawer extends Component {
                       <ListItem button component={Link} to={'/' + locale + '/' + currentOrganisation.tag + '/' + currentUserRecord.tag} onClick={this.props.handleDrawerClose}>
                         <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.profile' })} />
                       </ListItem>
-                      {this.useSecondaryProfile() && (
-                        <>
-                          <Divider className={classes.divider} />
-                          <ListItem>
-                            <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.listSecondaryRecordTitle' })}
-                              primaryTypographyProps={{ noWrap: true, style: { fontWeight: 'bold' } }} />
-                          </ListItem>
-                          <Suspense fallback={<></>}>
-                            <ItemsList onClick={this.props.handleDrawerClose} dataType={"record"}/>
-                          </Suspense>
-                        </>
-                      )}
                     </List>
+                    <Divider className={classes.divider} />
+                  </>
+                )}
+                {this.useSecondaryProfile() && (
+                  <>
+                    <ListItem>
+                      <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.listSecondaryRecordTitle' })}
+                        primaryTypographyProps={{ noWrap: true, style: { fontWeight: 'bold' } }} />
+                    </ListItem>
+                    <Suspense fallback={<></>}>
+                      <ItemsList onClick={this.props.handleDrawerClose} dataType={"record"}/>
+                    </Suspense>
                     <Divider className={classes.divider} />
                   </>
                 )}
