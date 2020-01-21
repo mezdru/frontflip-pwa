@@ -13,21 +13,32 @@ import { addLocaleData, IntlProvider } from "react-intl";
 import locale_en from "react-intl/locale-data/en";
 import locale_fr from "react-intl/locale-data/fr";
 import { Switch } from "react-router-dom";
+import undefsafe from "undefsafe";
+
 import ProfileProvider from "../hoc/profile/Profile.provider.js";
-import messages_en from "../translations/en.json";
-import messages_fr from "../translations/fr.json";
+
 import RouteWithSubRoutes from "./RouteWithSubRoutes";
 import {
   isInStandaloneMode,
   UAParserInstance
 } from "../services/utils.service.js";
-import undefsafe from "undefsafe";
+import messages_en from "../translations/en.json";
+import messages_fr from "../translations/fr.json";
+import roissypole_message_en from "../translations/roissypole/en.json";
+import roissypole_message_fr from "../translations/roissypole/fr.json";
+
+
+let isRoissypole = function() {
+  return (window.location.href.search('roissypole') !== -1);
+}
 
 addLocaleData([...locale_en, ...locale_fr]);
+
 const messages = {
-  fr: messages_fr,
-  en: messages_en
+  fr: isRoissypole() ? roissypole_message_fr : messages_fr,
+  en: isRoissypole() ? roissypole_message_en : messages_en
 };
+
 var MomentConfigs = require("../components/configs/moment.conf");
 
 class RoutesWithLocale extends React.Component {
