@@ -7,6 +7,9 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import defaultProfilePicture from "../resources/images/placeholder_person.png";
 import profileService from "../services/profile.service";
+import Spiderifier from "../resources/js/Spiderifier";
+import { withRouter } from "react-router-dom";
+import { getBaseUrl } from "../services/utils.service";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
@@ -20,12 +23,17 @@ const withMapbox = ComponentToWrap => {
           container: mapRef,
           // style: "mapbox://styles/mapbox/streets-v10", // v11 causes issue with locale
           style: "mapbox://styles/mapbox/dark-v10",
+          maxZoom: 22,
           zoom: options.zoom || (options.center ? 10 : 5),
           center: options.center || [2.349014, 48.864716]
           // renderWorldCopies: false
         });
 
         map.on("load", () => {
+          map.addControl(
+            new mapboxgl.ScaleControl({ position: "bottom-right" })
+          );
+
           resolve(map);
         });
       });
@@ -61,7 +69,7 @@ const withMapbox = ComponentToWrap => {
           type: "geojson",
           data: geojson,
           cluster: true,
-          clusterMaxZoom: 13, // Max zoom to cluster points on
+          // clusterMaxZoom: 21.9, // Max zoom to cluster points on
           clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
         });
       }
@@ -77,7 +85,6 @@ const withMapbox = ComponentToWrap => {
       });
 
       map.on("data", e => {
-        //if (e.sourceId !== "addresses" || !e.isSourceLoaded) return;
         if (e.sourceId !== "addresses") return;
         map.on("moveend", () => this.updateMarkers(map, onMarkerClick)); // moveend also fires on zoomend
         this.updateMarkers(map, onMarkerClick);
@@ -86,7 +93,7 @@ const withMapbox = ComponentToWrap => {
 
     createMarker = (coords, onMarkerClick, props) => {
       let el;
-      if(props) {
+      if (props) {
         el = document.createElement("div");
         el.className = "marker";
         let pic =
@@ -100,8 +107,22 @@ const withMapbox = ComponentToWrap => {
         el.addEventListener("click", e => onMarkerClick(props));
       }
 
-      return new mapboxgl.Marker(el || null).setLngLat(coords);
-    }
+      return [new mapboxgl.Marker(el || null).setLngLat(coords), el];
+    };
+
+    getExpansionZoom = async (map, clusterID) => {
+      let wantedClusterExpansionZoom = await new Promise((resolve, reject) => {
+        map
+          .getSource("addresses")
+          .getClusterExpansionZoom(clusterID, (e, zoom) => {
+            if (!e) return resolve(zoom);
+            return resolve(null);
+          });
+      });
+      if (wantedClusterExpansionZoom >= 18)
+        return wantedClusterExpansionZoom - 0.1;
+      else return wantedClusterExpansionZoom + 0.3;
+    };
 
     updateMarkers = (map, onMarkerClick) => {
       const features = map.querySourceFeatures("addresses");
@@ -131,17 +152,21 @@ const withMapbox = ComponentToWrap => {
           keepMarkers.push("cluster_" + clusterID);
           this.markers.set("cluster_" + clusterID, el);
           el.addEventListener("click", e =>
-            this.handleClusterClick(map, e, clusterID)
+            this.handleClusterClick(map, e, clusterID, onMarkerClick)
           );
         } else if (this.markers.has(featureID)) {
           //Feature marker is already on screen
           keepMarkers.push(featureID);
         } else {
           //Feature is not clustered and has not been created, create an icon for it
-          const marker = this.createMarker(coords, onMarkerClick, props);
+          const [marker, markerEl] = this.createMarker(
+            coords,
+            onMarkerClick,
+            props
+          );
           marker.addTo(map);
           keepMarkers.push(props.id);
-          this.markers.set(props.id, el);
+          this.markers.set(props.id, markerEl);
         }
       }
 
@@ -155,30 +180,90 @@ const withMapbox = ComponentToWrap => {
       });
     };
 
-    handleClusterClick = (map, event, clusterID) => {
-      const clusters = map.queryRenderedFeatures(event.point, {
+    createMarkerElement = (spiderParam, props, index, onClick) => {
+      var parentElem = document.createElement("div"),
+        markerElem = document.createElement("div"),
+        lineElem = document.createElement("div");
+
+      parentElem.className = "marker-parent";
+      parentElem.style.animationDelay = (10*index) + 'ms';
+      parentElem.style.zIndex = 1000 - index;
+
+      lineElem.className = "line-div";
+      markerElem.className = "marker";
+      markerElem.dataset.type = "marker";
+
+      if (props) {
+        let pic =
+          profileService.getPicturePathResized(
+            { url: props.pictureUrl },
+            "person",
+            "50x50"
+          ) || defaultProfilePicture;
+        markerElem.innerHTML = `<img class="marker-img" src="${pic}" />`;
+      } else {
+        markerElem.innerHTML = '<i class="fa fa-bars marker-img" aria-hidden="true"></i>';
+      }
+
+      if(onClick) markerElem.addEventListener("click", e => onClick(props));
+      else markerElem.addEventListener("click", e => {
+        this.props.history.push(getBaseUrl(this.props));
+      });
+
+      parentElem.appendChild(lineElem);
+      parentElem.appendChild(markerElem);
+
+      lineElem.style.height = spiderParam.legLength + "px";
+      lineElem.style.transform =
+        "rotate(" + (spiderParam.angle - Math.PI / 2) + "rad)";
+
+      return parentElem;
+    }
+
+    handleClusterClick = async (map, e, clusterID, onMarkerClick) => {
+      var spiderifier = new Spiderifier(map, {
+        createMarkerElement: this.createMarkerElement,
+        onClick: onMarkerClick
+      });
+      var features = map.queryRenderedFeatures(e.point, {
         layers: ["clusters"]
       });
-      const wantedCluster = clusters.find(
+
+      const wantedCluster = features.find(
         elt => elt.properties.cluster_id === clusterID
       );
       const coordinates = wantedCluster.geometry.coordinates;
       const currentZoom = map.getZoom();
+      const wantedZoom = await this.getExpansionZoom(map, clusterID);
 
-      map
-        .getSource("addresses")
-        .getClusterExpansionZoom(
-          wantedCluster.properties.cluster_id,
-          (e, zoom) => {
-            this.flyIntoCluster(map, coordinates, currentZoom, zoom);
-          }
-        );
+      spiderifier.unspiderfy();
+      if (!features.length) {
+        return;
+      } else if (currentZoom < wantedZoom) {
+        this.flyIntoCluster(map, coordinates, currentZoom, wantedZoom);
+      } else {
+        map
+          .getSource("addresses")
+          .getClusterLeaves(features[0].properties.cluster_id, 100, 0, function(
+            err,
+            leafFeatures
+          ) {
+            if (err) {
+              return console.error(
+                "error while getting leaves of a cluster",
+                err
+              );
+            }
+            var markers = leafFeatures.map(elt => elt.properties);
+            spiderifier.spiderfy(features[0].geometry.coordinates, markers);
+          });
+      }
     };
 
     flyIntoCluster = async (map, coordinates, currentZoom, wantedZoom) => {
       map.flyTo({
         center: coordinates,
-        zoom: wantedZoom + 0.3,
+        zoom: wantedZoom,
         bearing: 0,
         speed: 1.5,
         easing: function(t) {
@@ -240,7 +325,7 @@ const withMapbox = ComponentToWrap => {
     "clapStore",
     "orgStore",
     "recordStore"
-  )(observer(MapboxManagement));
+  )(observer(withRouter(MapboxManagement)));
   return MapboxManagement;
 };
 export default withMapbox;
