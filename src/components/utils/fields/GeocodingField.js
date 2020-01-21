@@ -38,7 +38,7 @@ class GeocodingField extends React.Component {
   };
 
   createCenteredMarker = () => {
-    let cMarker = this.props.mapbox.createMarker(this.map.getCenter());
+    let [cMarker, cMarkerEl] = this.props.mapbox.createMarker(this.map.getCenter());
     cMarker.addTo(this.map);
 
     this.map.on("move", () => {
