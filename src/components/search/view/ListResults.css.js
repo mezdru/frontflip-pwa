@@ -1,7 +1,7 @@
 export const styles = theme => ({
   hitList: {
     position: "relative",
-    // zIndex: 999,
+    zIndex: 999,
     width: "100%",
     minHeight: "calc(100vh - 129px)",
     backgroundColor: "#f2f2f2",

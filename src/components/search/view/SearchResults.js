@@ -7,7 +7,6 @@ import { observe } from "mobx";
 
 const ListResults = React.lazy(() => import("./ListResults"));
 const MapResults = React.lazy(() => import("./MapResults"));
-const MapPage = React.lazy(() => import("../../../pages/map"));
 const VIEW_LIST = "list";
 const VIEW_MAP = "map";
 const DEFAULT_FILTER = { type: "type", value: "person" };
@@ -106,18 +105,8 @@ class SearchResults extends React.Component {
     const { hits, noMore, noResult, loading, page } = this.state;
     const { view } = this.props;
 
-    return (
-      <>
-        <Suspense
-          fallback={<CircularProgress color="secondary"></CircularProgress>}
-        >
-          <MapPage
-            hits={hits}
-            fetchHits={this.fetchHits}
-            visible={view === VIEW_MAP}
-            transitionDuration={300}
-          />
-        </Suspense>
+    if (view === VIEW_LIST) {
+      return (
         <Suspense
           fallback={<CircularProgress color="secondary"></CircularProgress>}
         >
@@ -130,8 +119,16 @@ class SearchResults extends React.Component {
             page={page}
           />
         </Suspense>
-      </>
-    );
+      );
+    } else if (view === VIEW_MAP) {
+      return (
+        <Suspense
+          fallback={<CircularProgress color="secondary"></CircularProgress>}
+        >
+          <MapResults fetchHits={this.fetchHits} hits={hits} />
+        </Suspense>
+      );
+    } else return null;
   }
 }
 

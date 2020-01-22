@@ -70,9 +70,6 @@ class HeaderDrawer extends Component {
         classes={{
           paper: classes.drawerPaper
         }}
-        SlideProps={{
-          appear: true
-        }}
       >
         <div
           tabIndex={0}
@@ -85,7 +82,7 @@ class HeaderDrawer extends Component {
           </div>
 
           {open && (
-            <>
+            <div className={'leftMenu'}>
             {(auth && undefsafe(currentOrganisation, '_id')) && (
               <>
                 {currentUserRecord && (
@@ -230,7 +227,7 @@ class HeaderDrawer extends Component {
                 </>
               )}
             </List>
-          </>
+          </div>
           )}
 
         </div>
