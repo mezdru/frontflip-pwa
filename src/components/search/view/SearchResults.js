@@ -104,7 +104,7 @@ class SearchResults extends React.Component {
 
   render() {
     const { hits, noMore, noResult, loading, page } = this.state;
-    const { view } = this.props;
+    const { view, switchView } = this.props;
 
     return (
       <>
@@ -116,6 +116,7 @@ class SearchResults extends React.Component {
             fetchHits={this.fetchHits}
             visible={view === VIEW_MAP}
             transitionDuration={300}
+            switchView={switchView}
           />
         </Suspense>
         <Suspense
