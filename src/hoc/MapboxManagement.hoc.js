@@ -12,6 +12,7 @@ import { withRouter } from "react-router-dom";
 import { getBaseUrl } from "../services/utils.service";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+const CLUSTER_UNEXPANDABLE_ZOOM = 17.9;
 
 const withMapbox = ComponentToWrap => {
   class MapboxManagement extends Component {
@@ -84,6 +85,11 @@ const withMapbox = ComponentToWrap => {
         }
       });
 
+      this.spiderifier = new Spiderifier(map, {
+        createMarkerElement: this.createMarkerElement,
+        onClick: onMarkerClick
+      });
+
       map.on("data", e => {
         if (e.sourceId !== "addresses") return;
         map.on("moveend", () => this.updateMarkers(map, onMarkerClick)); // moveend also fires on zoomend
@@ -127,6 +133,7 @@ const withMapbox = ComponentToWrap => {
     updateMarkers = (map, onMarkerClick) => {
       const features = map.querySourceFeatures("addresses");
       const keepMarkers = [];
+      this.spiderifier.unspiderfy();
 
       for (let i = 0; i < features.length; i++) {
         const coords = features[i].geometry.coordinates;
@@ -152,7 +159,7 @@ const withMapbox = ComponentToWrap => {
           keepMarkers.push("cluster_" + clusterID);
           this.markers.set("cluster_" + clusterID, el);
           el.addEventListener("click", e =>
-            this.handleClusterClick(map, e, clusterID, onMarkerClick)
+            this.handleClusterClick(map, e, clusterID)
           );
         } else if (this.markers.has(featureID)) {
           //Feature marker is already on screen
@@ -220,11 +227,7 @@ const withMapbox = ComponentToWrap => {
       return parentElem;
     }
 
-    handleClusterClick = async (map, e, clusterID, onMarkerClick) => {
-      var spiderifier = new Spiderifier(map, {
-        createMarkerElement: this.createMarkerElement,
-        onClick: onMarkerClick
-      });
+    handleClusterClick = async (map, e, clusterID) => {
       var features = map.queryRenderedFeatures(e.point, {
         layers: ["clusters"]
       });
@@ -236,18 +239,18 @@ const withMapbox = ComponentToWrap => {
       const currentZoom = map.getZoom();
       const wantedZoom = await this.getExpansionZoom(map, clusterID);
 
-      spiderifier.unspiderfy();
+      this.spiderifier.unspiderfy();
       if (!features.length) {
         return;
-      } else if (currentZoom < wantedZoom) {
+      } else if (currentZoom < wantedZoom && wantedZoom !== CLUSTER_UNEXPANDABLE_ZOOM) {
         this.flyIntoCluster(map, coordinates, currentZoom, wantedZoom);
       } else {
         map
           .getSource("addresses")
-          .getClusterLeaves(features[0].properties.cluster_id, 100, 0, function(
+          .getClusterLeaves(features[0].properties.cluster_id, 100, 0, (
             err,
             leafFeatures
-          ) {
+          ) => {
             if (err) {
               return console.error(
                 "error while getting leaves of a cluster",
@@ -255,7 +258,7 @@ const withMapbox = ComponentToWrap => {
               );
             }
             var markers = leafFeatures.map(elt => elt.properties);
-            spiderifier.spiderfy(features[0].geometry.coordinates, markers);
+            this.spiderifier.spiderfy(features[0].geometry.coordinates, markers);
           });
       }
     };
