@@ -13,6 +13,7 @@ import { getBaseUrl } from "../services/utils.service";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 const CLUSTER_UNEXPANDABLE_ZOOM = 17.9;
+const GEOCODER_RESULT_ZOOM = 16
 
 const withMapbox = ComponentToWrap => {
   class MapboxManagement extends Component {
@@ -25,7 +26,7 @@ const withMapbox = ComponentToWrap => {
           // style: "mapbox://styles/mapbox/streets-v10", // v11 causes issue with locale
           style: "mapbox://styles/mapbox/dark-v10",
           maxZoom: 22,
-          zoom: options.zoom || (options.center ? 10 : 5),
+          zoom: options.zoom || (options.center ? GEOCODER_RESULT_ZOOM : 5),
           center: options.center || [2.349014, 48.864716]
           // renderWorldCopies: false
         });
@@ -44,7 +45,8 @@ const withMapbox = ComponentToWrap => {
       var geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
-        marker: false
+        marker: false,
+        zoom: GEOCODER_RESULT_ZOOM
       });
 
       if (geocoderContainer) {

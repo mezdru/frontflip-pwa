@@ -207,6 +207,7 @@ class OnboardWings extends React.Component {
                 max={10}
                 wingsFamily={this.getFeaturedWings()}
                 handleCreateWing={this.handleCreateWing}
+                getWorkingRecord={this.props.getWorkingRecord}
               />
             </Grid>
           </Grid>

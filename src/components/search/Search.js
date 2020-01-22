@@ -45,6 +45,7 @@ class Search extends PureComponent {
             wingsFamily={wingsFamily}
             handleCreateWing={this.props.handleCreateWing}
             edit={edit}
+            getWorkingRecord={this.props.getWorkingRecord}
           />
         )}
       </>
