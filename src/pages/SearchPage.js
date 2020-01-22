@@ -84,6 +84,10 @@ class SearchPage extends React.Component {
     return false;
   }
 
+  switchView = () => {
+    this.setState({view: this.state.view === VIEW_LIST ? VIEW_MAP : VIEW_LIST});
+  }
+
   render() {
     const { classes, searchPage } = this.props;
     const { view } = this.state;
@@ -156,12 +160,12 @@ class SearchPage extends React.Component {
             <div className={classes.searchContentList}>
               <ErrorBoundary>
                 <Suspense fallback={<CircularProgress color="secondary" />}>
-                  <SearchResults view={view} />
+                  <SearchResults view={view} switchView={this.switchView} />
                 </Suspense>
               </ErrorBoundary>
             </div>
 
-            <Fab onClick={() => this.setState({view: view === VIEW_LIST ? VIEW_MAP : VIEW_LIST})} className={classes.viewCTA} color="secondary">
+            <Fab onClick={this.switchView} className={classes.viewCTA} color="secondary">
               {view === VIEW_LIST ? (
                 <Map fontSize="large" />
               ) : (

@@ -211,13 +211,10 @@ const withMapbox = ComponentToWrap => {
           ) || defaultProfilePicture;
         markerElem.innerHTML = `<img class="marker-img" src="${pic}" />`;
       } else {
-        markerElem.innerHTML = '<i class="fa fa-bars marker-img" aria-hidden="true"></i>';
+        markerElem.innerHTML = '<i class="fa fa-list marker-img" aria-hidden="true"></i>';
       }
 
       if(onClick) markerElem.addEventListener("click", e => onClick(props));
-      else markerElem.addEventListener("click", e => {
-        this.props.history.push(getBaseUrl(this.props));
-      });
 
       parentElem.appendChild(lineElem);
       parentElem.appendChild(markerElem);

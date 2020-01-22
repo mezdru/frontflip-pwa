@@ -52,7 +52,7 @@ export default function Spiderifier(map, userOptions) {
           spiderParam,
           null,
           index,
-          null
+          options.onClick
         )
       }
 

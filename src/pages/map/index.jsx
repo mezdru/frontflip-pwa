@@ -13,7 +13,8 @@ class MapPage extends React.Component {
       visible,
       transitionDuration,
       hits,
-      fetchHits
+      fetchHits,
+      switchView
     } = this.props;
 
     return (
@@ -25,7 +26,7 @@ class MapPage extends React.Component {
       >
         <Grid container className={classes.root} alignContent="flex-start">
           <Suspense fallback={<CircularProgress color="secondary" />}>
-            <MapResults fetchHits={fetchHits} hits={hits} />
+            <MapResults fetchHits={fetchHits} hits={hits} switchView={switchView} />
           </Suspense>
         </Grid>
       </Slide>

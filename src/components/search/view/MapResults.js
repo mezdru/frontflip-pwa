@@ -37,11 +37,13 @@ class MapResults extends React.Component {
   }
 
   onMarkerClick = markerProps => {
-    if (markerProps.tag) {
+    if (markerProps && markerProps.tag) {
       this.props.history.push({
         pathname: getBaseUrl(this.props) + "/" + markerProps.tag,
         search: window.location.search
       });
+    } else {
+      this.props.switchView();
     }
   };
 
