@@ -99,7 +99,6 @@ class ListResults extends React.Component {
     const { scrollToIndex } = this.state;
 
     let customElement = window.document.getElementById("content-container");
-
     if (noResult) {
       return (
         <div className={classes.hitList}>
