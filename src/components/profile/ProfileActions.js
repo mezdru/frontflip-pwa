@@ -59,7 +59,7 @@ class ProfileActions extends React.PureComponent {
           }
         })
         .catch(e => {
-          console.log(e);
+          console.error(e);
           window.alert(
             this.props.intl.formatMessage({
               id: "profile.actions.delete.error"
@@ -72,7 +72,6 @@ class ProfileActions extends React.PureComponent {
   render() {
     const { classes } = this.props;
     const { isEditable } = this.props.profileContext;
-
     return (
       <>
         <Grid item xs={2}>
