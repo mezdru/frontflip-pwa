@@ -130,10 +130,8 @@ class OnboardSuggestions extends React.Component {
       );
     }
 
-    let record = this.props.edit
-      ? this.props.recordStore.currentUrlRecord
-      : this.props.recordStore.currentUserRecord;
-    return (
+    let record = this.props.getWorkingRecord();
+    return (  !record.hashtags ||
       !record.hashtags.find(
         wing => wing.tag === (suggestion.tag || suggestion.value)
       ) && suggestion.tag !== this.state.lastSelected.tag
