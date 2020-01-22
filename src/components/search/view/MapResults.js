@@ -47,7 +47,6 @@ class MapResults extends React.Component {
 
   render() {
     const { classes } = this.props;
-
     return (
       <div className={classes.viewContainer}>
         <div id="input-geocoder" style={{ width: "50%" }}></div>

@@ -3,7 +3,8 @@ import {
   Grid,
   withStyles,
   CircularProgress,
-  withWidth
+  withWidth,
+  Fab
 } from "@material-ui/core";
 import { observe } from "mobx";
 import { undefsafe } from "undefsafe";
@@ -78,7 +79,7 @@ class SearchPage extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if(nextState.view !== this.state.view) return true;
+    if (nextState.view !== this.state.view) return true;
     return false;
   }
 
@@ -96,26 +97,24 @@ class SearchPage extends React.Component {
         </Suspense>
 
         <main className={classes.searchContainer}>
-          {view === VIEW_LIST && (
-            <>
-              <Suspense
-                fallback={
-                  <div style={{ position: "absolute", height: "100vh" }}></div>
-                }
-              >
-                <BannerResizable
-                  type={"organisation"}
-                  initialHeight={100}
-                  style={{ position: "absolute" }}
-                />
-              </Suspense>
-
-              <div
-                id="shadowed-background"
-                className={classes.shadowedBackground}
+          <>
+            <Suspense
+              fallback={
+                <div style={{ position: "absolute", height: "100vh" }}></div>
+              }
+            >
+              <BannerResizable
+                type={"organisation"}
+                initialHeight={100}
+                style={{ position: "absolute" }}
               />
-            </>
-          )}
+            </Suspense>
+
+            <div
+              id="shadowed-background"
+              className={classes.shadowedBackground}
+            />
+          </>
 
           <div
             className={
@@ -142,28 +141,28 @@ class SearchPage extends React.Component {
           </div>
 
           <div
-            className={view === VIEW_LIST ? classes.searchContentContainer : ""}
+            className={classes.searchContentContainer}
             id="content-container"
           >
-            {view === VIEW_LIST && (
-              <>
-                <div className={classes.searchContentOffset} />
-                <div className={classes.searchCountButton} id="search-button">
-                  <SearchButton onClick={searchPage.easeToSearchResults} />
-                </div>
-              </>
-            )}
+            <>
+              <div className={classes.searchContentOffset} />
+              <div className={classes.searchCountButton} id="search-button">
+                <SearchButton onClick={searchPage.easeToSearchResults} />
+              </div>
+            </>
 
             {/* Search results part */}
-            <div
-              className={view === VIEW_LIST ? classes.searchContentList : ""}
-            >
+            <div className={classes.searchContentList}>
               <ErrorBoundary>
                 <Suspense fallback={<CircularProgress color="secondary" />}>
                   <SearchResults view={view} />
                 </Suspense>
               </ErrorBoundary>
             </div>
+
+            <Fab onClick={() => this.setState({view: view === VIEW_LIST ? VIEW_MAP : VIEW_LIST})} style={{position: 'fixed', bottom: 100, right: 32, zIndex: 1000}}>
+              {view === VIEW_LIST ? VIEW_MAP : VIEW_LIST}
+            </Fab>
           </div>
         </main>
       </>
