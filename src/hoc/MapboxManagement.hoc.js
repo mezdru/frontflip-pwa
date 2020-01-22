@@ -247,7 +247,7 @@ const withMapbox = ComponentToWrap => {
       } else {
         map
           .getSource("addresses")
-          .getClusterLeaves(features[0].properties.cluster_id, 100, 0, (
+          .getClusterLeaves(wantedCluster.properties.cluster_id, 100, 0, (
             err,
             leafFeatures
           ) => {
@@ -258,7 +258,7 @@ const withMapbox = ComponentToWrap => {
               );
             }
             var markers = leafFeatures.map(elt => elt.properties);
-            this.spiderifier.spiderfy(features[0].geometry.coordinates, markers);
+            this.spiderifier.spiderfy(wantedCluster.geometry.coordinates, markers);
           });
       }
     };
