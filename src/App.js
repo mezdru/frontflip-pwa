@@ -10,6 +10,14 @@ import Routes from './routes/Routes';
 if (process.env.NODE_ENV !== 'development' && process.env.REACT_APP_LOGROCKET) {
   LogRocket.init(process.env.REACT_APP_LOGROCKET, {
     release: version,
+    network: {
+      requestSanitizer: request => {
+        if(request.url.indexOf('https://auth') !== -1){
+          request.body = "Auth request: body isn't recovered for security reasons.";
+        }
+        return request;
+      }
+    }
   });
   setupLogRocketReact(LogRocket);
 }
