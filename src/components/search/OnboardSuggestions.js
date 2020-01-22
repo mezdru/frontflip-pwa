@@ -67,9 +67,7 @@ class OnboardSuggestions extends React.Component {
 
   componentDidMount() {
     this.fetchSuggestions(null, this.props.wingsFamily);
-    let record = this.props.edit
-      ? this.props.recordStore.currentUrlRecord
-      : this.props.recordStore.currentUserRecord;
+    let record = this.props.getWorkingRecord();
 
     this.unsubscribeUserQuery = observe(
       this.props.searchStore.values,
@@ -84,21 +82,23 @@ class OnboardSuggestions extends React.Component {
       }
     );
 
-    this.unsubscribeUserRecord = observe(record, change => {
-      if (
-        change.name === "hashtags" &&
-        change.oldValue.length > change.newValue.length
-      ) {
-        let lastRemoved = change.oldValue[change.oldValue.length - 1];
-        this.fetchSuggestions(lastRemoved, this.props.wingsFamily, true);
-      }
-    });
+    if(record) {
+      this.unsubscribeUserRecord = observe(record, change => {
+        if (
+          change.name === "hashtags" &&
+          change.oldValue.length > change.newValue.length
+        ) {
+          let lastRemoved = change.oldValue[change.oldValue.length - 1];
+          this.fetchSuggestions(lastRemoved, this.props.wingsFamily, true);
+        }
+      });
+    }
   }
 
   componentWillUnmount() {
     this.isUnmount = true;
-    this.unsubscribeUserQuery();
-    this.unsubscribeUserRecord();
+    if(this.unsubscribeUserQuery) this.unsubscribeUserQuery();
+    if(this.unsubscribeUserRecord) this.unsubscribeUserRecord();
   }
 
   fetchSuggestions = async (lastSelected, wingsFamily, includeLastSelected) => {

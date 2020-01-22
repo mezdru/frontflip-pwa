@@ -12,7 +12,7 @@
   font-size: 80px;
   margin-top: -40px;
   /* color: #2b2d3c; */
-  color: white;
+  color: white !important;
   transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
 
