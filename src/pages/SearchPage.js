@@ -17,6 +17,7 @@ import SearchButton from "../components/search/SearchButton";
 import withAuthorization from "../hoc/withAuthorization.hoc";
 import { withProfile } from "../hoc/profile/withProfile";
 import withScroll from "../hoc/withScroll.hoc";
+import { Map, List } from "@material-ui/icons";
 
 const SearchResults = lazy(() =>
   import("../components/search/view/SearchResults")
@@ -160,8 +161,12 @@ class SearchPage extends React.Component {
               </ErrorBoundary>
             </div>
 
-            <Fab onClick={() => this.setState({view: view === VIEW_LIST ? VIEW_MAP : VIEW_LIST})} style={{position: 'fixed', bottom: 100, right: 32, zIndex: 1000}}>
-              {view === VIEW_LIST ? VIEW_MAP : VIEW_LIST}
+            <Fab onClick={() => this.setState({view: view === VIEW_LIST ? VIEW_MAP : VIEW_LIST})} className={classes.viewCTA} color="secondary">
+              {view === VIEW_LIST ? (
+                <Map fontSize="large" />
+              ) : (
+                <List fontSize="large" />
+              )}
             </Fab>
           </div>
         </main>

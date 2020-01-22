@@ -24,16 +24,15 @@ const AddWingPopup = React.lazy(() =>
 const styles = theme => ({
   fab: {
     position: "fixed",
-    bottom: 32,
-    right: 32,
+    bottom: 16,
+    right: 56 + 32,
+    height: 56,
+    borderRadius: 28,
     zIndex: 1000,
-    width: 64,
-    height: 64,
     [theme.breakpoints.down("xs")]: {
+      display: 'none', // temporary
       bottom: 16,
-      right: 16,
-      width: 56,
-      height: 56
+      left: 16,
     }
   }
 });

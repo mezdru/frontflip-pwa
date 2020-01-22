@@ -9,8 +9,9 @@ class AskForHelpFab extends React.Component {
     const { highlighted } = this.props;
     
     return(
-      <Fab color={highlighted ? "secondary" : "default"} aria-label="Ask for Help" className={classNames(this.props.className)} onClick={this.props.onClick} >
-        <Email fontSize="large" />
+      <Fab color={highlighted ? "secondary" : "default"} aria-label="Ask for Help" variant="extended" className={classNames(this.props.className)} onClick={this.props.onClick} >
+        <Email fontSize="medium" style={{marginRight: 8}} />
+        Ask For Help
       </Fab>
     );
   }
