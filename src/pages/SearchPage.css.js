@@ -57,5 +57,11 @@ export const styles = theme => ({
   },
   searchCountButton: {
     height: 100
+  },
+  viewCTA: {
+    position: 'fixed',
+    bottom: 16,
+    right: 16,
+    zIndex: 1000
   }
 });
