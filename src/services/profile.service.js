@@ -30,8 +30,10 @@ class ProfileService {
   transformLinks(item) {
     if (!item) return;
     item.links = item.links || [];
-    let locationLink = this.makeLocationLink(item);
-    if(locationLink) item.links.push(locationLink);
+    if(!item.links.some(elt => elt.makeFromGeoloc)) {
+      let locationLink = this.makeLocationLink(item);
+      if(locationLink) item.links.push(locationLink);
+    }
     item.links.forEach(function (link, index, array) {
       this.makeLinkDisplay(link);
       this.makeLinkIcon(link);
@@ -73,7 +75,8 @@ class ProfileService {
       icon: 'map-marker',
       type: 'location',
       display: undefsafe(record, 'location.fullPlaceName'),
-      value: `https://maps.google.com/?q=${record._geoloc.lat},${record._geoloc.lng}`
+      value: `https://maps.google.com/?q=${record._geoloc.lat},${record._geoloc.lng}`,
+      makeFromGeoloc: true
     }
   }
   
