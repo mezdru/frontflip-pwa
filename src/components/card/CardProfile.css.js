@@ -41,14 +41,15 @@ export const styles = theme => ({
   wings: {
     display: 'inline-block',
     position: 'relative',
-    marginTop: '30px !important',
     marginBottom: 0,
     '& >div:first-child': {
       marginLeft: 16
     }
   },
   wingsContainer: {
-    height: 94,
+    position: 'absolute',
+    bottom : 0,
+    width: '100%',
     overflowY: 'hidden',
     overflowX: 'auto',
     overflow: '-moz-scrollbars-none',
