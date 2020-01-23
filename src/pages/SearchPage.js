@@ -7,7 +7,7 @@ import {
   Fab
 } from "@material-ui/core";
 import { observe } from "mobx";
-import { undefsafe } from "undefsafe";
+import undefsafe from "undefsafe";
 import { inject, observer } from "mobx-react";
 import ErrorBoundary from "../components/utils/errors/ErrorBoundary";
 import Search from "../components/search/Search";
@@ -85,12 +85,15 @@ class SearchPage extends React.Component {
   }
 
   switchView = () => {
-    this.setState({view: this.state.view === VIEW_LIST ? VIEW_MAP : VIEW_LIST});
-  }
+    this.setState({
+      view: this.state.view === VIEW_LIST ? VIEW_MAP : VIEW_LIST
+    });
+  };
 
   render() {
     const { classes, searchPage } = this.props;
     const { view } = this.state;
+    const { currentOrganisation } = this.props.orgStore;
 
     return (
       <>
@@ -165,13 +168,19 @@ class SearchPage extends React.Component {
               </ErrorBoundary>
             </div>
 
-            <Fab onClick={this.switchView} className={classes.viewCTA} color="secondary">
-              {view === VIEW_LIST ? (
-                <Map fontSize="large" />
-              ) : (
-                <List fontSize="large" />
-              )}
-            </Fab>
+            {undefsafe(currentOrganisation, "features.map") && (
+              <Fab
+                onClick={this.switchView}
+                className={classes.viewCTA}
+                color="secondary"
+              >
+                {view === VIEW_LIST ? (
+                  <Map fontSize="large" />
+                ) : (
+                  <List fontSize="large" />
+                )}
+              </Fab>
+            )}
           </div>
         </main>
       </>
@@ -182,7 +191,8 @@ class SearchPage extends React.Component {
 export default inject(
   "keenStore",
   "searchStore",
-  "recordStore"
+  "recordStore",
+  "orgStore"
 )(
   observer(
     withWidth()(

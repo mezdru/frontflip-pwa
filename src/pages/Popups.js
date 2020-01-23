@@ -3,6 +3,7 @@ import AskForHelpFab from "../components/utils/buttons/AskForHelpFab";
 import undefsafe from "undefsafe";
 import { inject, observer } from "mobx-react";
 import { withStyles } from "@material-ui/core";
+import classNames from "classnames";
 
 const Intercom = React.lazy(() => import("react-intercom"));
 const NotifyLatestAuth = React.lazy(() =>
@@ -30,10 +31,13 @@ const styles = theme => ({
     borderRadius: 28,
     zIndex: 1000,
     [theme.breakpoints.down("xs")]: {
-      display: 'none', // temporary
+      display: "none", // temporary
       bottom: 16,
-      left: 16,
+      left: 16
     }
+  },
+  fabAlone: {
+    right: 16
   }
 });
 
@@ -88,7 +92,12 @@ class Popups extends React.Component {
                 <AskForHelp isOpen={showAskForHelp} />
               </Suspense>
               <AskForHelpFab
-                className={classes.fab}
+                className={classNames(
+                  classes.fab,
+                  undefsafe(currentOrganisation, "features.map")
+                    ? null
+                    : classes.fabAlone
+                )}
                 onClick={this.handleDisplayAskForHelp}
                 highlighted={
                   filters && filters.length > 0 && searchResultsCount <= 10

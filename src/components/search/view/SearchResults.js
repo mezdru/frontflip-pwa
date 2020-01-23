@@ -1,16 +1,18 @@
 import React, { Suspense } from "react";
-import { CircularProgress, Grid } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import AlgoliaService from "../../../services/algolia.service";
 import undefsafe from "undefsafe";
 import { observe } from "mobx";
 
 const ListResults = React.lazy(() => import("./ListResults"));
-const MapResults = React.lazy(() => import("./MapResults"));
 const MapPage = React.lazy(() => import("../../../pages/map"));
 const VIEW_LIST = "list";
 const VIEW_MAP = "map";
-const DEFAULT_FILTER = [{ type: "type", value: "person" }, {type: "type", value: "event"}];
+const DEFAULT_FILTER = [
+  { type: "type", value: "person" },
+  { type: "type", value: "event" }
+];
 
 class SearchResults extends React.Component {
   state = {
@@ -105,20 +107,23 @@ class SearchResults extends React.Component {
   render() {
     const { hits, noMore, noResult, loading, page } = this.state;
     const { view, switchView } = this.props;
+    const { currentOrganisation } = this.props.orgStore;
 
     return (
       <>
-        <Suspense
-          fallback={<CircularProgress color="secondary"></CircularProgress>}
-        >
-          <MapPage
-            hits={hits}
-            fetchHits={this.fetchHits}
-            visible={view === VIEW_MAP}
-            transitionDuration={300}
-            switchView={switchView}
-          />
-        </Suspense>
+        {undefsafe(currentOrganisation, "features.map") && (
+          <Suspense
+            fallback={<CircularProgress color="secondary"></CircularProgress>}
+          >
+            <MapPage
+              hits={hits}
+              fetchHits={this.fetchHits}
+              visible={view === VIEW_MAP}
+              transitionDuration={300}
+              switchView={switchView}
+            />
+          </Suspense>
+        )}
         <Suspense
           fallback={<CircularProgress color="secondary"></CircularProgress>}
         >
