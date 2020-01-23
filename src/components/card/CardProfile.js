@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import {
   Grid,
   withStyles,
@@ -22,8 +22,9 @@ import { getBaseUrl, getProgressiveImage } from "../../services/utils.service";
 import undefsafe from "undefsafe";
 import LaFourchetteLogo from "../../resources/images/lafourchette.png";
 import DoctolibLogo from "../../resources/images/doctolib.png";
-// import '../../resources/stylesheets/font-awesome.min.css';
+
 React.lazy(() => import("../../resources/stylesheets/font-awesome.min.css"));
+const EventDate = React.lazy(() => import("./EventDate"));
 
 ProfileService.setExtraLinkLimit(5);
 const WINGS_DISPLAYED = 7;
@@ -83,7 +84,7 @@ class CardProfile extends React.Component {
     ProfileService.orderHashtags(hit);
 
     return (
-      <Card className={classes.fullWidth} key={hit.objectID}>
+      <Card className={classes.cardRoot} key={hit.objectID}>
         <Grid item container>
           <Link
             to={getBaseUrl(this.props) + "/" + hit.tag}
@@ -150,55 +151,62 @@ class CardProfile extends React.Component {
         </Grid>
         <Grid item container className={classes.contactField}>
           <CardActions disableActionSpacing>
-            <Grid item container>
-              {hit.links &&
-                hit.links.map((link, i) => {
-                  if (!link.value || link.value === "") return null;
-                  if (link.type === "workchat") return null; // hide workchat
-                  if (link.class !== "extraLink") {
-                    return (
-                      <Grid
-                        item
-                        key={link._id}
-                        className={classes.contact}
-                        onClick={() => this.handleContactClick(link)}
-                      >
-                        <Tooltip
-                          title={
-                            ProfileService.htmlDecode(link.display) ||
-                            ProfileService.htmlDecode(link.value) ||
-                            ProfileService.htmlDecode(link.url)
-                          }
+            {hit.type === "person" && (
+              <Grid item container className={classes.contactContainer} >
+                {hit.links &&
+                  hit.links.map((link, i) => {
+                    if (!link.value || link.value === "") return null;
+                    if (link.type === "workchat") return null; // hide workchat
+                    if (link.class !== "extraLink") {
+                      return (
+                        <Grid
+                          item
+                          key={link._id}
+                          className={classes.contact}
+                          onClick={() => this.handleContactClick(link)}
                         >
-                          <IconButton
-                            href={link.url}
-                            rel="noopener"
-                            target="_blank"
-                            className={
-                              classes.contactButton + " fa fa-" + link.icon
+                          <Tooltip
+                            title={
+                              ProfileService.htmlDecode(link.display) ||
+                              ProfileService.htmlDecode(link.value) ||
+                              ProfileService.htmlDecode(link.url)
                             }
                           >
-                            {link.type === "doctolib" && (
-                              <img
-                                src={DoctolibLogo}
-                                className={classes.contactImage}
-                              />
-                            )}
-                            {link.type === "lafourchette" && (
-                              <img
-                                src={LaFourchetteLogo}
-                                className={classes.contactImage}
-                              />
-                            )}
-                          </IconButton>
-                        </Tooltip>
-                      </Grid>
-                    );
-                  } else {
-                    return null;
-                  }
-                })}
-            </Grid>
+                            <IconButton
+                              href={link.url}
+                              rel="noopener"
+                              target="_blank"
+                              className={
+                                classes.contactButton + " fa fa-" + link.icon
+                              }
+                            >
+                              {link.type === "doctolib" && (
+                                <img
+                                  src={DoctolibLogo}
+                                  className={classes.contactImage}
+                                />
+                              )}
+                              {link.type === "lafourchette" && (
+                                <img
+                                  src={LaFourchetteLogo}
+                                  className={classes.contactImage}
+                                />
+                              )}
+                            </IconButton>
+                          </Tooltip>
+                        </Grid>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
+              </Grid>
+            )}
+            {hit.type === "event" && (
+              <Suspense fallback={<></>}>
+                <EventDate startDate={hit.startDate} endDate={hit.endDate} />
+              </Suspense>
+            )}
           </CardActions>
         </Grid>
         <Grid container item className={classes.wingsContainer}>
