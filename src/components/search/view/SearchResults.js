@@ -10,7 +10,7 @@ const MapResults = React.lazy(() => import("./MapResults"));
 const MapPage = React.lazy(() => import("../../../pages/map"));
 const VIEW_LIST = "list";
 const VIEW_MAP = "map";
-const DEFAULT_FILTER = { type: "type", value: "person" };
+const DEFAULT_FILTER = [{ type: "type", value: "person" }, {type: "type", value: "event"}];
 
 class SearchResults extends React.Component {
   state = {
@@ -58,7 +58,7 @@ class SearchResults extends React.Component {
       async () => {
         try {
           let res = await AlgoliaService.fetchHits(
-            [DEFAULT_FILTER].concat(filters),
+            DEFAULT_FILTER.concat(filters),
             null,
             page,
             true,
