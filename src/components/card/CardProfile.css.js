@@ -26,7 +26,8 @@ export const styles = theme => ({
   },
   intro: {
     fontSize: '1rem',
-    maxHeight: '3em',
+    maxHeight: '49px',
+    overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
   titleSmallestView: {

@@ -193,7 +193,7 @@ class AlgoliaService {
           facetFilters: facetFilters || "",
           filters: filtersRequest ? filtersRequest : "type:person OR type:event",
           hitsPerPage: hitsPerPage || 30,
-          attributesToSnippet: ["intro:" + 10, "description:" + 15]
+          attributesToSnippet: ["intro:" + 15, "description:" + 15]
         },
         (err, content) => {
           if (err) return resolve(content);

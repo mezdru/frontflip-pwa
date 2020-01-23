@@ -17,7 +17,7 @@ const styles = theme => ({
   root: {
     maxWidth: "calc(100% - 23px)",
     [theme.breakpoints.down("xs")]: {
-      maxWidth: "calc(100% - 39px)"
+      maxWidth: "calc(100% - 58px)"
     }
   }
 });
