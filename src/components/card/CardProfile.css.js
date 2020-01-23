@@ -56,9 +56,13 @@ export const styles = theme => ({
       width: '0 !important',
     },
   },
-  fullWidth: {
+  cardRoot: {
     width: '100%',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    height: 273,
+    [theme.breakpoints.down('xs')]: {
+      height: 235,
+    }
   },
   cardHeader: {
     maxHeight: 138,
@@ -103,20 +107,9 @@ export const styles = theme => ({
       opacity: 1
     }
   },
-  dispo: {
-    position: 'absolute',
-    [theme.breakpoints.down('xs')]: {
-      marginLeft: 102,
-      marginTop: 148,
-    },
-    marginLeft: 134,
-    marginTop: 187,
-  },
-  available: {
-    backgroundColor: 'green',
-  },
-  unavailable: {
-    backgroundColor: 'red',
+  contactContainer: {
+    maxHeight: 40,
+    overflow: 'hidden'
   },
   backgroundLogo: {
     backgroundRepeat: 'no-repeat',
