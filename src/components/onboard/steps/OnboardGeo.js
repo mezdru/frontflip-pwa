@@ -22,9 +22,10 @@ const styles = theme => ({
 });
 
 class OnboardGeo extends React.Component {
-  handleChange = value => {
+  handleChange = (_geoloc, location) => {
     let record = this.props.getWorkingRecord();
-    record["_geoloc"] = value;
+    record["_geoloc"] = _geoloc;
+    record["location"] = location;
   };
 
   render() {
@@ -56,7 +57,7 @@ class OnboardGeo extends React.Component {
           <GeocodingField
             getWorkingRecord={this.props.getWorkingRecord}
             onChange={this.handleChange}
-            handleSave={e => this.props.handleSave(["_geoloc"])}
+            handleSave={e => this.props.handleSave(["_geoloc", "location"])}
           />
         </Grid>
       </Grid>

@@ -38,14 +38,19 @@ class GeocodingField extends React.Component {
   };
 
   createCenteredMarker = () => {
-    let [cMarker, cMarkerEl] = this.props.mapbox.createMarker(this.map.getCenter());
+    let [cMarker, cMarkerEl] = this.props.mapbox.createMarker(
+      this.map.getCenter()
+    );
     cMarker.addTo(this.map);
 
     this.map.on("move", () => {
       let newCoords = this.map.getCenter();
       cMarker.setLngLat(newCoords);
       this.setState({ lng: newCoords.lng, lat: newCoords.lat });
-      this.props.onChange({ lat: newCoords.lat, lng: newCoords.lng });
+      this.props.onChange(
+        { lat: newCoords.lat, lng: newCoords.lng },
+        undefined
+      );
     }); // moveend also fires on zoomend
   };
 
@@ -53,6 +58,13 @@ class GeocodingField extends React.Component {
     if (elt._geoloc && elt._geoloc.lat && elt._geoloc.lng)
       return [elt._geoloc.lng, elt._geoloc.lat];
     return null;
+  }
+
+  findInMapboxGeocoding(type, context) {
+    let found = context.find(
+      elt => elt && elt.id && elt.id.search(type) !== -1
+    );
+    return found && found.text;
   }
 
   componentDidMount() {
@@ -66,6 +78,9 @@ class GeocodingField extends React.Component {
           this.map,
           this.geocoderContainer
         );
+
+        if (record.location && record.location.fullPlaceName)
+          this.geocoder.setInput(record.location.fullPlaceName);
 
         this.createCenteredMarker();
 
@@ -82,8 +97,35 @@ class GeocodingField extends React.Component {
                 `https://api.mapbox.com/geocoding/v5/mapbox.places-permanent/${this.state.longitude},${this.state.latitude}.json?access_token=${process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}`
               );
               console.log(response);
-              this.props.onChange({ lat: this.state.lat, lng: this.state.lng });
-              if (this.props.handleSave) this.props.handleSave(["_geoloc"]);
+              this.props.onChange(
+                { lat: this.state.lat, lng: this.state.lng },
+                {
+                  country: this.findInMapboxGeocoding(
+                    "country",
+                    res.result.context
+                  ),
+                  region: this.findInMapboxGeocoding(
+                    "region",
+                    res.result.context
+                  ),
+                  locality: this.findInMapboxGeocoding(
+                    "locality",
+                    res.result.context
+                  ),
+                  postcode: this.findInMapboxGeocoding(
+                    "postcode",
+                    res.result.context
+                  ),
+                  placeName: this.findInMapboxGeocoding(
+                    "place",
+                    res.result.context
+                  ),
+                  fullPlaceName: res.result.place_name,
+                  placeType: res.result.place_type[0]
+                }
+              );
+
+              if (this.props.handleSave) this.props.handleSave();
             }
           );
         });
@@ -93,10 +135,7 @@ class GeocodingField extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <div
-        className={classes.root}
-        onBlur={() => this.props.handleSave(["_geoloc"])}
-      >
+      <div className={classes.root} onBlur={() => this.props.handleSave()}>
         <div
           ref={el => (this.geocoderContainer = el)}
           className={classes.geocoder}
