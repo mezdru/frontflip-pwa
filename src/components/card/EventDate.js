@@ -3,12 +3,13 @@ import moment from "moment";
 import { inject, observer } from "mobx-react";
 import { AccessTime } from "@material-ui/icons";
 import { withStyles, Tooltip, Grid } from "@material-ui/core";
+import { FormattedMessage } from "react-intl";
 
 const styles = theme => ({
   icon: {
     color: "rgba(255,255,255,.7)",
     marginRight: 0,
-    textAlign: 'left'
+    textAlign: "left"
   },
   text: {
     color: "rgba(255,255,255,.7)"
@@ -40,14 +41,18 @@ function EventDate({ commonStore, startDate, endDate, classes, ...props }) {
         <Tooltip title={getTooltip()}>
           <Grid container>
             <Grid item xs={2} className={classes.icon}>
-              <AccessTime  />
+              <AccessTime />
             </Grid>
             <Grid item xs={10} className={classes.text}>
-              {new Date().getTime() < startDate ? (
-                <>commence le {moment(startDate).calendar()}</>
+              <FormattedMessage id="card.event.startDate.prefix" />{" "}
+              {moment(startDate).calendar()}{" - "}
+              <FormattedMessage id="card.event.endDate.prefix" />{" "}
+              {moment(endDate).calendar()}
+              {/* {new Date().getTime() < startDate ? (
+                <><FormattedMessage id="card.event.startDate.prefix" /> {moment(startDate).calendar()}</>
               ) : (
-                <>se termine le {moment(endDate).calendar()}</>
-              )}
+                <><FormattedMessage id="card.event.endDate.prefix" /> {moment(endDate).calendar()}</>
+              )} */}
             </Grid>
           </Grid>
         </Tooltip>
