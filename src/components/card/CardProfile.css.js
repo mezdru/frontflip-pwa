@@ -82,6 +82,8 @@ export const styles = theme => ({
     paddingLeft: 82,
     minHeight: 40,
     backgroundColor: 'transparent',
+    marginTop: 8,
+    marginBottom: -8,
     [theme.breakpoints.down('xs')]: {
       minHeight: 35,
       marginLeft: 66,
