@@ -94,7 +94,7 @@ class AlgoliaService {
           facetName: "hashtags.tag",
           query: queryRequest || "",
           facetQuery: "",
-          filters: filtersRequest ? filtersRequest : "type:person", // type:person
+          filters: filtersRequest ? filtersRequest : "type:person OR type:event",
           maxFacetHits: 100,
           facetFilters:
             lastSelection && privateOnly !== null
@@ -191,7 +191,7 @@ class AlgoliaService {
           page: page || 0,
           query: queryRequest || "",
           facetFilters: facetFilters || "",
-          filters: filtersRequest ? filtersRequest : "type:person AND welcomed=1",
+          filters: filtersRequest ? filtersRequest : "type:person OR type:event",
           hitsPerPage: hitsPerPage || 30,
           attributesToSnippet: ["intro:" + 15, "description:" + 15]
         },
@@ -248,7 +248,8 @@ class AlgoliaService {
         let dateTimestamp = new Date(filter.value).getTime();
         filterReq += `${filter.type + (filter.options.operator === 'gt' ? ' > ' : ' < ') + dateTimestamp}`;
       } else if(filter.type !== 'view'){
-        if (filterReq !== "") filterReq += " AND ";
+        if(filter.type === 'type' && filter.value === 'event') filterReq += " OR ";
+        else if (filterReq !== "") filterReq += " AND ";
         filterReq += `${filter.type}:${filter.value.replace("%23", "#")}`;
       }
     });
