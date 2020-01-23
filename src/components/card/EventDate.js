@@ -15,7 +15,7 @@ const styles = theme => ({
     color: "rgba(255,255,255,.7)"
   },
   root: {
-    maxWidth: "calc(100% - 23px)",
+    maxWidth: "calc(100% - 92px)",
     [theme.breakpoints.down("xs")]: {
       maxWidth: "calc(100% - 58px)"
     }
