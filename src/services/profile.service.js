@@ -2,6 +2,7 @@ import twemoji from 'twemoji';
 import defaultPicture from '../resources/images/placeholder_person.png';
 import defaultHashtagPicture from '../resources/images/placeholder_hashtag.png';
 import searchStore from '../stores/search.store';
+import undefsafe from 'undefsafe';
 
 class ProfileService {
   EXTRA_LINK_LIMIT = 20;
@@ -29,6 +30,8 @@ class ProfileService {
   transformLinks(item) {
     if (!item) return;
     item.links = item.links || [];
+    let locationLink = this.makeLocationLink(item);
+    if(locationLink) item.links.push(locationLink);
     item.links.forEach(function (link, index, array) {
       this.makeLinkDisplay(link);
       this.makeLinkIcon(link);
@@ -61,6 +64,16 @@ class ProfileService {
       default:
         link.icon = link.type;
         break;
+    }
+  }
+
+  makeLocationLink(record) {
+    if(!record._geoloc) return;
+    return {
+      icon: 'map-marker',
+      type: 'location',
+      display: undefsafe(record, 'location.fullPlaceName'),
+      value: `https://maps.google.com/?q=${record._geoloc.lat},${record._geoloc.lng}`
     }
   }
   
