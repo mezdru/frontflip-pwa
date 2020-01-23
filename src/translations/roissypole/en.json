@@ -165,5 +165,7 @@
   "contact.displayName.location": "Location",
   "contact.displayName.landline": "Landline",
   "contact.displayName.doctolib": "Doctolib",
-  "contact.displayName.lafourchette": "La&nbsp;Fourchette"
+  "contact.displayName.lafourchette": "La&nbsp;Fourchette",
+  "card.event.startDate.prefix": "start:",
+  "card.event.endDate.prefix": "end:"
 }
