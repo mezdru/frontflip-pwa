@@ -139,6 +139,7 @@ export default createMuiTheme({
     //Cards
     MuiCard: {
       root: {
+        position: 'relative',
         padding: 0,
         borderRadius: 4,
         margin: 15,
