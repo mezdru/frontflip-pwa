@@ -161,7 +161,7 @@ class CardProfile extends React.Component {
                       return (
                         <Grid
                           item
-                          key={link._id}
+                          key={link._id || i}
                           className={classes.contact}
                           onClick={() => this.handleContactClick(link)}
                         >

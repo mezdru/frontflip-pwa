@@ -109,7 +109,7 @@ class MainPage extends React.Component {
           <ProfileLayout
             visible={visible}
             handleClose={this.handleCloseProfile}
-            transitionDuration={800}
+            transitionDuration={600}
           />
         </Suspense>
 

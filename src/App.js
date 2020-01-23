@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter } from "react-router-dom";
 import './components/header/header.css';
-
 import { version } from '../package.json'
 import LogRocket from 'logrocket';
 import setupLogRocketReact from 'logrocket-react';

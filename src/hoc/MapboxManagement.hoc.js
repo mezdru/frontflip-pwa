@@ -3,8 +3,6 @@ import { inject, observer } from "mobx-react";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl.js";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import MapboxLanguage from "@mapbox/mapbox-gl-language";
-import "mapbox-gl/dist/mapbox-gl.css";
-import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import defaultProfilePicture from "../resources/images/placeholder_person.png";
 import profileService from "../services/profile.service";
 import Spiderifier from "../resources/js/Spiderifier";

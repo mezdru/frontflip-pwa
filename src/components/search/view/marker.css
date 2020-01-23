@@ -4,8 +4,6 @@
   height: 50px;
   border-radius: 50%;
   text-align: center;
-  position: relative;
-  /* overflow: hidden; */
 }
 
 .marker i {

@@ -119,7 +119,7 @@ class SearchResults extends React.Component {
               hits={hits}
               fetchHits={this.fetchHits}
               visible={view === VIEW_MAP}
-              transitionDuration={300}
+              transitionDuration={600}
               switchView={switchView}
             />
           </Suspense>

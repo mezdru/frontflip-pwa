@@ -3,6 +3,7 @@ import withMapbox from "../../../hoc/MapboxManagement.hoc";
 import { inject, observer } from "mobx-react";
 import { withStyles } from "@material-ui/core";
 import request from "async-request";
+import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 const styles = theme => ({
   root: {

@@ -2,7 +2,6 @@ import React from "react";
 import { inject, observer } from "mobx-react";
 import { withStyles } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
-
 import { styles } from "./MapResults.css";
 import "./marker.css";
 import withMapbox from "../../../hoc/MapboxManagement.hoc";
