@@ -74,7 +74,7 @@ class SearchButton extends React.Component {
     return(
       <>
         <div className={classes.searchBox} onClick={this.props.onClick} >
-          <div className={classes.searchCounter}>{searchResultsCount} <Person fontSize="large"/></div>
+          <div className={classes.searchCounter}>{searchResultsCount}</div>
           <div className={classes.bottomShape} />
           <div className={classes.bottomShapeCover} />
         </div>
