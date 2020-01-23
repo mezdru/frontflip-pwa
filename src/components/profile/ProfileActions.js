@@ -41,7 +41,7 @@ class ProfileActions extends React.PureComponent {
         this.props.profileContext.getProp("_id");
 
       this.props.recordStore
-        .deleteRecord(this.props.profileContext.getProp("_id"))
+        .deleteRecord(this.props.profileContext.getProp("_id"), this.props.orgStore.currentOrganisation._id)
         .then(() => {
           if (isMyProfile) {
             this.props.authStore.logout();

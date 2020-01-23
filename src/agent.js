@@ -230,9 +230,9 @@ const Record = {
         record: record
       }
     ),
-  delete: (recordId) =>
+  delete: (recordId, orgId) =>
     requests.del(
-      API_ROOT + '/api/records/' + recordId
+      API_ROOT + '/api/records/' + recordId + '?organisation=' + orgId
     )
 
 };

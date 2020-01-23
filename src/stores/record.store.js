@@ -83,8 +83,8 @@ class RecordStore extends Store {
     return recordToPost;
   }
 
-  async deleteRecord(recordId) {
-    await super.deleteResource(recordId);
+  async deleteRecord(recordId, orgId) {
+    await super.deleteResource(recordId, orgId);
   }
 
   async fetchByTag(recordTag, orgId) {

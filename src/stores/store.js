@@ -58,11 +58,11 @@ class Store {
       .finally(action(() => { this.inProgress = false; }));
   }
 
-  deleteResource(resourceId) {
+  deleteResource(resourceId, orgId) {
     this.inProgress = true;
     this.errors = null;
 
-    return agent[this.resourceName].delete(resourceId)
+    return agent[this.resourceName].delete(resourceId, orgId)
       .then(res => {
         return true;
       })
