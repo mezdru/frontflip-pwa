@@ -27,6 +27,7 @@ export const styles = theme => ({
   intro: {
     fontSize: '1rem',
     maxHeight: '49px',
+    paddingBottom: '2px',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
