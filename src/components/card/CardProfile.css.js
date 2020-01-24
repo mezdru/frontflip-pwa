@@ -49,6 +49,7 @@ export const styles = theme => ({
   wingsContainer: {
     position: 'absolute',
     bottom : 0,
+    paddingBottom: 8,
     width: '100%',
     overflowY: 'hidden',
     overflowX: 'auto',
@@ -56,7 +57,8 @@ export const styles = theme => ({
     MsOverflowStyle: 'none',
     scrollbarColor: '#2b2d3c #2b2d3c',
     '&::-webkit-scrollbar': {
-      width: '0 !important',
+      // width: '0 !important',
+      display: 'none',
     },
   },
   cardRoot: {
