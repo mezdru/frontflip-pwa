@@ -40,9 +40,9 @@ class CardProfile extends React.Component {
   getLogoSize = () => {
     switch (this.props.width) {
       case "xs":
-        return "150x150";
+        return "190x190";
       default:
-        return "200x200";
+        return "240x240";
     }
   };
 
