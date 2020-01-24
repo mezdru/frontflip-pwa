@@ -19,6 +19,10 @@ export const styles = theme => ({
       left: "0",
       right: "0",
       margin: "auto"
+    },
+    [theme.breakpoints.up("sm")]: {
+      paddingTop: 16,
+      paddingBottom: 16
     }
   },
   cardMobileView: {
@@ -37,5 +41,5 @@ export const styles = theme => ({
     margin: 'auto',
     position: 'relative',
     textAlign: 'center'
-  }
+  },
 });
