@@ -3,18 +3,15 @@ import { inject, observer } from "mobx-react";
 import {
   withStyles,
   Grid,
-  CircularProgress,
   withWidth
 } from "@material-ui/core";
 import undefsafe from "undefsafe";
 
 import { styles } from "./ListResults.css";
 import Card from "../../card/CardProfile";
-import InvitationDialog from "../../utils/popup/Invitation";
 import { observe } from "mobx";
 import { AutoSizer, List, WindowScroller } from "react-virtualized";
 
-const SearchShowMore = React.lazy(() => import("../SearchShowMore"));
 const SearchNoResults = React.lazy(() => import("../SearchNoResults"));
 
 class ListResults extends React.Component {
