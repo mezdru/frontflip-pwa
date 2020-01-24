@@ -11,7 +11,7 @@ import {
 import PropTypes from "prop-types";
 import { Add } from "@material-ui/icons";
 import "../../../profile/ContactsColors.css";
-import contacts from "../../../configs/contacts.json";
+import contacts from "../../../../resources/data/contacts.json";
 import { styles } from "./design";
 import { FormattedHTMLMessage, injectIntl } from "react-intl";
 import LaFourchetteLogo from "../../../../resources/images/lafourchette.png";
