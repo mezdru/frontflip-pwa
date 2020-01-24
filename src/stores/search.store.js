@@ -58,7 +58,7 @@ class SearchStore {
 
     urlQuery = urlQuery.substr(1);
 
-    return "?" + urlQuery;
+    return urlQuery !== "" ? "?" + urlQuery : "";
   };
 
   setUserQuery(query) {
