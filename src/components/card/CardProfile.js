@@ -81,21 +81,13 @@ class CardProfile extends React.Component {
     ) || defaultPicture}`;
   };
 
-  //   var image = document.createElement('img');
-  // image.src = getBgUrl(document.getElementById('test-bg'));
-  // image.onload = function () {
-  //     alert('Loaded!');
-  // };
-
-  // @todo : replace Grid background img to img html and listen to the "load" event to display the picture smoothly.
   smoothImageLoad = (record) => {
+    if(!record) return;
     var img = document.createElement('img');
     img.src = this.getLogoUrl(record);
     img.onload = () => {
-      console.log(record.objectID + ' logo loaded');
       let imgFilter = document.getElementById('card-logo-filter-'+(record.objectID || record._id));
       if(!imgFilter) return;
-      console.log('set opacity')
       imgFilter.style.opacity = 0;
     }
   };
