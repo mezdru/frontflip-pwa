@@ -1,0 +1,237 @@
+[
+  {
+    "tag": "#ButterflyWings",
+    "type": "hashtag",
+    "name": "Butterfly Wings",
+    "picture": { "path": "/wings/butterfly.png" },
+    "objectID": "5aa8150888bdb200142242f6"
+  },
+  {
+    "tag": "#BatWings",
+    "type": "hashtag",
+    "name": "Bat Wings",
+    "picture": { "path": "/wings/bat.png" },
+    "objectID": "5aa812f388bdb200142242f3"
+  },
+  {
+    "tag": "#FaeryWings",
+    "type": "hashtag",
+    "name": "Faery Wings",
+    "picture": { "path": "/wings/faery.png" },
+    "objectID": "5aa8150888bdb200142242f8"
+  },
+  {
+    "tag": "#DragonWings",
+    "type": "hashtag",
+    "name": "Dragon Wings",
+    "picture": { "path": "/wings/dragon.png" },
+    "objectID": "5aa8150888bdb200142242fc"
+  },
+  {
+    "tag": "#LadybugWings",
+    "type": "hashtag",
+    "name": "Ladybug Wings",
+    "picture": { "path": "/wings/ladybug.png" },
+    "objectID": "5aa8150888bdb200142242f9"
+  },
+  {
+    "tag": "#JetWings",
+    "type": "hashtag",
+    "name": "Jet Wings",
+    "picture": { "path": "/wings/plane.png" },
+    "objectID": "5aa8150888bdb200142242fa"
+  },
+  {
+    "tag": "#EagleWings",
+    "type": "hashtag",
+    "name": "Eagle Wings",
+    "picture": { "path": "/wings/eagle.png", "emoji": "🦅" },
+    "objectID": "5aa8150888bdb200142242f5"
+  },
+  {
+    "tag": "#HelicopterWings",
+    "type": "hashtag",
+    "name": "Helicopter Wings",
+    "picture": { "path": "/wings/helicopter.png" },
+
+    "objectID": "5aa8150888bdb200142242f7"
+  },
+  {
+    "tag": "#WingSuit",
+    "type": "hashtag",
+    "name": "Wing Suit",
+    "picture": { "path": "/wings/wingsuit.png" },
+
+    "objectID": "5aa8150888bdb200142242fb"
+  },
+  {
+    "tag": "#Organization",
+    "type": "hashtag",
+    "name": "Organization",
+    "name_translated": { "en": "Organization", "fr": "Organisation" },
+    "picture": { "emoji": "🐜" },
+    "objectID": "5e175ce0150d380015e18367"
+  },
+  {
+    "tag": "#Curiosity",
+    "type": "hashtag",
+    "name": "Curiosity",
+    "name_translated": { "en": "Curiosity", "fr": "Curiosité" },
+    "picture": { "emoji": "🐵" },
+
+    "objectID": "5e175ce0150d380015e18369"
+  },
+  {
+    "tag": "#Adaptability",
+    "type": "hashtag",
+    "name": "Adaptability",
+    "name_translated": { "en": "Adaptability", "fr": "Adaptabilité" },
+    "picture": { "emoji": "🦎" },
+
+    "objectID": "5e175ce0150d380015e18368"
+  },
+  {
+    "tag": "#TeamSpirit",
+    "type": "hashtag",
+    "name": "Team spirit",
+    "name_translated": { "en": "Team spirit", "fr": "Esprit d'équipe" },
+    "picture": { "emoji": "🐝" },
+
+    "objectID": "5e175ce0150d380015e1836f"
+  },
+  {
+    "tag": "#Empathy",
+    "type": "hashtag",
+    "name": "Empathy",
+    "name_translated": { "en": "Empathy", "fr": "Empathie" },
+    "picture": { "emoji": "💟" },
+    "objectID": "5e175ce0150d380015e1836d"
+  },
+  {
+    "tag": "#Zen",
+    "type": "hashtag",
+    "name": "Zen",
+    "name_translated": { "en": "Zen", "fr": "Zen" },
+    "picture": { "emoji": "🐘" },
+
+    "objectID": "5e175ce0150d380015e18366"
+  },
+  {
+    "tag": "#Autonomy",
+    "type": "hashtag",
+    "name": "Autonomy",
+    "name_translated": { "en": "Autonomy", "fr": "Autonomie" },
+    "picture": { "emoji": "😺" },
+    "objectID": "5e183d0d150d380015e186b6"
+  },
+  {
+    "tag": "#Boldness",
+    "type": "hashtag",
+    "name": "Boldness",
+    "name_translated": { "en": "Boldness", "fr": "Audace" },
+    "picture": { "emoji": "🦅" },
+
+    "objectID": "5e175ce0150d380015e18363"
+  },
+  {
+    "tag": "#Ingeniosite",
+    "type": "hashtag",
+    "name": "Ingenuity",
+    "name_translated": { "en": "Ingenuity", "fr": "Ingéniosité" },
+    "picture": { "emoji": "😺" },
+
+    "objectID": "5e175ce0150d380015e1836b"
+  },
+  {
+    "tag": "#Adaptability",
+    "type": "hashtag",
+    "name": "Adaptability",
+    "name_translated": { "en": "Adaptability", "fr": "Adaptabilité" },
+    "intro": "",
+    "description": "",
+    "picture": { "emoji": "🦎" },
+    "objectID": "5af066dec1842f0014681abb"
+  },
+  {
+    "tag": "#Curiosity",
+    "type": "hashtag",
+    "name": "Curiosity",
+    "name_translated": { "en": "Curiosity", "fr": "Curiosité" },
+    "intro": "",
+    "description": "",
+    "picture": { "emoji": "🐵" },
+    "objectID": "5af066bac1842f0014681ab7"
+  },
+  {
+    "tag": "#Empathy",
+    "type": "hashtag",
+    "name": "Empathy",
+    "name_translated": { "en": "Empathy", "fr": "Empathie" },
+    "intro": "",
+    "description": "",
+    "picture": { "emoji": "💟" },
+    "objectID": "5af06695c1842f0014681ab3"
+  },
+  {
+    "tag": "#TeamSpirit",
+    "type": "hashtag",
+    "name": "Team spirit",
+    "name_translated": { "en": "Team spirit", "fr": "Esprit d'équipe" },
+    "picture": { "emoji": "🐝" },
+    "objectID": "5af066c8c1842f0014681ab9"
+  },
+  {
+    "tag": "#Organization",
+    "type": "hashtag",
+    "name": "Organization",
+    "name_translated": { "en": "Organization", "fr": "Organisation" },
+    "picture": { "emoji": "🐜" },
+    "objectID": "5af066b2c1842f0014681ab6"
+  },
+  {
+    "tag": "#Boldness",
+    "type": "hashtag",
+    "name": "Boldness",
+    "name_translated": { "en": "Boldness", "fr": "Audace" },
+    "picture": {
+      "emoji": "🦅",
+      "url": "https://ucarecdn.com/13bdb8db-b7b0-4da6-808c-01b48d112941/"
+    },
+    "objectID": "5aca96c2bd677300147fffca"
+  },
+  {
+    "tag": "#Zen",
+    "type": "hashtag",
+    "name": "Zen",
+    "name_translated": { "en": "Zen", "fr": "Zen" },
+    "picture": {
+      "emoji": "🐘",
+      "url": "https://ucarecdn.com/02e7bd4b-f1d6-4525-ad68-efccaeada25b/"
+    },
+    "objectID": "5af066c1c1842f0014681ab8"
+  },
+  {
+    "tag": "#Autonomy",
+    "type": "hashtag",
+    "name": "Autonomy",
+    "name_translated": { "en": "Autonomy", "fr": "Autonomie" },
+    "picture": { "emoji": "😺" },
+    "objectID": "5aca471dc8dc310014505c2f"
+  },
+  {
+    "tag": "#Ingeniosite",
+    "type": "hashtag",
+    "name": "Ingéniosité",
+    "name_translated": {
+      "fr": "Ingéniosité",
+      "en": "Ingenuity",
+      "en-UK": "Ingenuity"
+    },
+    "picture": {
+      "url": "https://ucarecdn.com/c1f7998d-33d2-4694-8f64-b405e00dd3be/",
+      "uuid": "c1f7998d-33d2-4694-8f64-b405e00dd3be",
+      "emoji": "😺"
+    },
+    "objectID": "5af066a0c1842f0014681ab4"
+  }
+]

@@ -10,6 +10,7 @@ import withScroll from '../../hoc/withScroll.hoc';
 import classNames from 'classnames';
 import { getUnique } from '../../services/utils.service';
 import undefsafe from 'undefsafe';
+import firstWings from "../../resources/data/firstWings.json";
 
 const styles = theme => ({
   suggestionsContainer: {
@@ -98,27 +99,13 @@ class SearchSuggestions extends React.Component {
     super(props);
     this.state = {
       facetHits: [],
-      firstWings: []
+      firstWings: firstWings
     };
 
   }
 
-  fetchSoftWings = () => {
-    AlgoliaService.setAlgoliaKey(undefsafe(this.props.orgStore.currentAlgoliaKey, 'value'));
-    AlgoliaService.fetchHits([{type: 'type', value: 'hashtag'}, {type: 'hashtags.tag', value: '%23Wings'}])
-    .then(content => {
-
-      let firstWings = undefsafe(content, 'hits') || [];
-      this.props.commonStore.hiddenWings = firstWings;
-
-      this.setState({ firstWings: firstWings }, () => {
-        this.fetchSuggestions(this.props.searchStore.values.filters);
-      });
-    });
-  }
-
   componentDidMount() {
-    this.fetchSoftWings();
+    this.fetchSuggestions(this.props.searchStore.values.filters);
 
     this.unsubFilters = observe(this.props.searchStore.values.filters, change => {
       this.fetchSuggestions(this.props.searchStore.values.filters);
