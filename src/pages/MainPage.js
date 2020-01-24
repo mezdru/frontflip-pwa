@@ -97,6 +97,7 @@ class MainPage extends React.Component {
 
   render() {
     const { redirectTo, visible } = this.state;
+    console.log(redirectTo);
     return (
       <>
         {redirectTo && window.location.pathname !== redirectTo && (
