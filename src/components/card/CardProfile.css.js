@@ -12,6 +12,14 @@ export const styles = theme => ({
       marginBottom: -10,
     },
   },
+  logoFilter: {
+    width: '100%',
+    height: '100%',
+    borderRadius: '50%',
+    background: 'white',
+    opacity: 1,
+    transition: 'all 600ms cubic-bezier(.25,.8,.25,1)'
+  },
   name: {
     color: 'white',
     fontSize: '1.5rem',

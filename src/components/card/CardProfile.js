@@ -71,8 +71,26 @@ class CardProfile extends React.Component {
     return false;
   }
 
-  // @todo : replace Grid background img to img html and listen to the "load" event to display the picture smoothly.
-  smoothImageLoad = () => {};
+  getLogoUrl = record => {
+    return `${getProgressiveImage(
+      ProfileService.getPicturePathResized(
+        record.picture,
+        "person ",
+        this.getLogoSize()
+      )
+    ) || defaultPicture}`;
+  };
+
+  smoothImageLoad = (record) => {
+    if(!record) return;
+    var img = document.createElement('img');
+    img.src = this.getLogoUrl(record);
+    img.onload = () => {
+      let imgFilter = document.getElementById('card-logo-filter-'+(record.objectID || record._id));
+      if(!imgFilter) return;
+      imgFilter.style.opacity = 0;
+    }
+  };
 
   render() {
     const { classes, hit, light } = this.props;
@@ -82,6 +100,8 @@ class CardProfile extends React.Component {
     ProfileService.transformLinks(hit);
     ProfileService.makeHightlighted(hit);
     ProfileService.orderHashtags(hit);
+
+    this.smoothImageLoad(hit);
 
     return (
       <Card className={classes.cardRoot} key={hit.objectID}>
@@ -96,16 +116,13 @@ class CardProfile extends React.Component {
                   <Grid
                     item
                     style={{
-                      backgroundImage: `url(${getProgressiveImage(
-                        ProfileService.getPicturePathResized(
-                          hit.picture,
-                          "person ",
-                          this.getLogoSize()
-                        )
-                      ) || defaultPicture})`
+                      backgroundImage: `url(${this.getLogoUrl(hit)})`
                     }}
                     className={`${classes.logo} ${classes.backgroundLogo}`}
-                  />
+                  >
+                    <div id={"card-logo-filter-"+(hit.objectID || hit._id)} className={classes.logoFilter} >
+                    </div>
+                    </Grid>
                 </Grid>
               }
               title={
@@ -152,7 +169,7 @@ class CardProfile extends React.Component {
         <Grid item container className={classes.contactField}>
           <CardActions disableActionSpacing>
             {hit.type === "person" && (
-              <Grid item container className={classes.contactContainer} >
+              <Grid item container className={classes.contactContainer}>
                 {hit.links &&
                   hit.links.map((link, i) => {
                     if (!link.value || link.value === "") return null;
