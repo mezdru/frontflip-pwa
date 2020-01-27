@@ -49,7 +49,7 @@ class OnboardIntro extends React.Component {
           </Grid>
 
           <Grid item >
-            <PictureField handleSave={this.props.handleSave} getWorkingRecord={getWorkingRecord} />
+            <PictureField handleSave={this.props.handleSave} getWorkingRecord={getWorkingRecord} pictureType="logo" />
           </Grid>
 
           <Grid item className={classes.field}>
