@@ -12,15 +12,16 @@ import OnboardIntro from "./steps/OnboardIntro";
 import OnboardContacts from "./steps/OnboardContacts";
 import OnboardWings from "./steps/OnboardWings";
 import OnboardDescription from "./steps/OnboardDescription";
-import SlackService from "../../services/slack.service";
-import LoaderFeedback from "../utils/buttons/LoaderFeedback";
+import OnboardGeo from "./steps/OnboardGeo";
+import OnboardCover from "./steps/OnboardCover";
 
 import { FormattedMessage } from "react-intl";
 import classNames from "classnames";
 import undefsafe from "undefsafe";
 import { getBaseUrl } from "../../services/utils.service.js";
 import { styles } from "./OnboardStepper.css";
-import OnboardGeo from "./steps/OnboardGeo";
+import SlackService from "../../services/slack.service";
+import LoaderFeedback from "../utils/buttons/LoaderFeedback";
 
 let timeoutArray = [];
 
@@ -163,6 +164,8 @@ class OnboardStepper extends React.Component {
         return OnboardDescription;
       case "geo":
         return OnboardGeo;
+      case "cover":
+        return OnboardCover;
       default:
         return OnboardWings;
     }
