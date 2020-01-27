@@ -59,9 +59,6 @@ const styles = theme => ({
     opacity: 0.7,
     marginBottom: 8,
     verticalAlign: 'bottom !important',
-    '& span': {
-      // marginTop: -4
-    },
     '&:hover': {
       color: theme.palette.secondary.main,
       backgroundColor: 'white',
@@ -91,7 +88,6 @@ class ProfileWings extends React.PureComponent {
 
   componentDidMount() {
     if(this.props.recordStore.currentUserRecord) {
-      console.log(this.props.recordStore.currentUserRecord);
       this.unsubscribeUserRecord = observe(this.props.recordStore.currentUserRecord, (change)=> {
         if(change.name === 'hashtags') {
           this.props.profileContext.buildWingsByFamilies(this.props.recordStore.currentUserRecord.hashtags);
