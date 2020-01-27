@@ -49,7 +49,11 @@ class SearchSuggestions extends React.Component {
     this.setState({ facetHits: newSuggs, shouldUpdate: true });
   }
 
+  /**
+   * @param filters Array
+   */
   fetchSuggestions = async (filters) => {
+    const {currentOrganisation} = this.props.orgStore;
     let algoliaRes = await AlgoliaService.fetchFacetValues(null, false, filters);
     if(!algoliaRes) return null;
 
@@ -61,6 +65,12 @@ class SearchSuggestions extends React.Component {
     resultHitsFiltered.map(elt => {if(!elt.tag && elt.value) elt.tag = elt.value});
     this.props.resetScroll("search-suggestions-container");
     let finalHits = getUnique(resultHitsFiltered.splice(0, 20), "tag");
+
+    // add searchTabs if no filters
+    if(!filters || filters.length === 0) {
+      finalHits = (currentOrganisation.searchTabs || []).concat(finalHits);
+    }
+
     this.setState({ facetHits: finalHits, shouldUpdate: true });
   }
 
