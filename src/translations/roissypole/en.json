@@ -167,5 +167,6 @@
   "contact.displayName.doctolib": "Doctolib",
   "contact.displayName.lafourchette": "La&nbsp;Fourchette",
   "card.event.startDate.prefix": "start:",
-  "card.event.endDate.prefix": "end:"
+  "card.event.endDate.prefix": "end:",
+  "onboard.cover.title": "My cover picture"
 }
