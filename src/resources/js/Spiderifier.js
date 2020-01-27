@@ -13,7 +13,7 @@ export default function Spiderifier(map, userOptions) {
     options = {
       circleSpiralSwitchover: 9, // show spiral instead of circle from this marker count upwards
       // 0 -> always spiral; Infinity -> always circle
-      circleFootSeparation: 40, //related to circumference of circle
+      circleFootSeparation: 50, //related to circumference of circle
       spiralFootSeparation: 50, // related to size of spiral (experiment!)
       spiralLengthStart: 40, // ditto
       spiralLengthFactor: 4, // ditto
@@ -30,7 +30,7 @@ export default function Spiderifier(map, userOptions) {
 
   // Private:
   function spiderfy(latLng, markers) {
-    var spiderParams = generateSpiderParams(markers.length);
+    var spiderParams = generateSpiderParams(Math.min(markers.length, options.maxMarkers + 1));
 
     unspiderfy();
 
