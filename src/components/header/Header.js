@@ -60,6 +60,7 @@ class App extends Component {
     const { classes, forceInside } = this.props;
     const { locale } = this.props.commonStore;
     const orgTag = undefsafe(this.props.orgStore.currentOrganisation, "tag");
+    const isOrgPublic = undefsafe(this.props.orgStore.currentOrganisation, "public");
 
     if (successLogout) return <Redirect to="/" />;
 
@@ -77,7 +78,7 @@ class App extends Component {
             }
             id="header-button"
           />
-          {!auth && !isSigninOrSignupPage && (
+          {!auth && !isSigninOrSignupPage && !isOrgPublic && (
             <Suspense fallback={<></>}>
               <Button
                 variant="text"
