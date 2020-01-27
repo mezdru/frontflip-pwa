@@ -59,9 +59,6 @@ const styles = theme => ({
     opacity: 0.7,
     marginBottom: 8,
     verticalAlign: 'bottom !important',
-    '& span': {
-      // marginTop: -4
-    },
     '&:hover': {
       color: theme.palette.secondary.main,
       backgroundColor: 'white',
