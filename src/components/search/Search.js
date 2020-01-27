@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import SearchField from "./SearchField";
-import SearchSuggestions from "./SearchSuggestions";
+import SearchSuggestions from "./SearchSuggestions/index";
 import AlgoliaService from "../../services/algolia.service";
 import OnboardSuggestions from "./OnboardSuggestions";
 
