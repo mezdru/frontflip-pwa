@@ -7,7 +7,8 @@ import commonStore from "./common.store";
 import { replaceAndKeepReference } from "../services/utils.service";
 
 class RecordStore extends Store {
-  records = [];
+  recordsById = {};
+  recordsByTag = {};
 
   constructor() {
     super("Record");
@@ -31,20 +32,8 @@ class RecordStore extends Store {
 
   getRecord(recordId, recordTag) {
     if (!recordId && !recordTag) return null;
-    let rec;
-    rec = this.records.find(record => {
-      if (recordId)
-        return (
-          JSON.stringify(recordId) ===
-          JSON.stringify(record._id || record.objectID)
-        );
-      else
-        return (
-          recordTag === record.tag &&
-          record.organisation === orgStore.currentOrganisation._id
-        );
-    });
-    return rec;
+    if(!recordId && recordTag) return this.recordsByTag[undefsafe(orgStore.currentOrganisation, '_id') + '-' + recordTag];
+    else if(recordId) return this.recordsById[recordId];
   }
 
   async getOrFetchRecord(recordId, recordTag, orgId) {
@@ -57,16 +46,12 @@ class RecordStore extends Store {
   addRecord(inRecord) {
     if (!inRecord) return null;
     if (inRecord.objectID) inRecord._id = inRecord.objectID;
-    let index = this.records.findIndex(
-      record =>
-        JSON.stringify(record._id) ===
-        JSON.stringify(inRecord._id || inRecord.objectID)
-    );
+    let inRecordEntry = this.recordsById[inRecord._id];
 
-    if (index > -1) {
-      replaceAndKeepReference(this.records[index], inRecord);
-    } else {
-      this.records.push(inRecord);
+    if(inRecordEntry) replaceAndKeepReference(inRecordEntry, inRecord);
+    else {
+      if(inRecord.tag) this.recordsByTag[inRecord.organisation + '-' + inRecord.tag] = inRecord;
+      this.recordsById[inRecord._id] = inRecord; 
     }
   }
 
@@ -132,7 +117,8 @@ class RecordStore extends Store {
 }
 
 decorate(RecordStore, {
-  records: observable,
+  recordsById: observable,
+  recordsByTag: observable,
   currentUserRecord: computed,
   currentUrlRecord: computed,
   postRecord: action,

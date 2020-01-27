@@ -91,6 +91,7 @@ class ProfileWings extends React.PureComponent {
 
   componentDidMount() {
     if(this.props.recordStore.currentUserRecord) {
+      console.log(this.props.recordStore.currentUserRecord);
       this.unsubscribeUserRecord = observe(this.props.recordStore.currentUserRecord, (change)=> {
         if(change.name === 'hashtags') {
           this.props.profileContext.buildWingsByFamilies(this.props.recordStore.currentUserRecord.hashtags);

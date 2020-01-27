@@ -141,6 +141,7 @@ class OnboardStepper extends React.Component {
     if (edit) {
       return currentUrlRecord;
     } else if (create) {
+      console.log(currentUrlRecord)
       if (currentUrlRecord) return currentUrlRecord;
       let newRecord = {
         tag: "@NewProfile",
@@ -148,6 +149,7 @@ class OnboardStepper extends React.Component {
         type: "person"
       };
       this.props.recordStore.addRecord(newRecord);
+      console.log(JSON.parse(JSON.stringify(this.props.recordStore.recordsById)))
       return this.props.recordStore.getRecord(null, "@NewProfile");
     }
     return this.props.recordStore.currentUserRecord;
