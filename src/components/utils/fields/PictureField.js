@@ -37,11 +37,6 @@ const styles = theme => ({
     borderRadius: 4,
     width: "100%",
     height: "auto",
-    [theme.breakpoints.down("xs")]: {
-      // width: 180,
-      // height: 180
-    },
-    // border: "8px solid white",
     background: "white",
     zIndex: 2
   }
