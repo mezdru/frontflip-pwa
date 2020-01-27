@@ -47,9 +47,9 @@ const styles = theme => ({
   }
 });
 
-const TYPES = {
-  logo: "logo",
-  cover: "cover"
+const types = {
+  LOGO: "logo",
+  COVER: "cover"
 };
 
 class PictureField extends React.Component {
@@ -71,10 +71,10 @@ class PictureField extends React.Component {
 
     if (!file) {
       let record = this.props.getWorkingRecord();
-      if (pictureType === TYPES.logo) {
+      if (pictureType === types.LOGO) {
         record.picture = { url: null };
         this.props.handleSave(["picture"]);
-      } else if (pictureType === TYPES.cover) {
+      } else if (pictureType === types.COVER) {
         record.cover = { url: null };
         this.props.handleSave(["cover"]);
       }
@@ -92,12 +92,12 @@ class PictureField extends React.Component {
     if (!this._ismounted) return;
     const { pictureType } = this.props;
     let record = this.props.getWorkingRecord();
-    if (pictureType === TYPES.logo) {
+    if (pictureType === types.LOGO) {
       record.picture = {
         url: file.cdnUrl
       };
       this.props.handleSave(["picture"]);
-    } else if (pictureType === TYPES.cover) {
+    } else if (pictureType === types.COVER) {
       record.cover = {
         url: file.cdnUrl
       };
@@ -115,7 +115,6 @@ class PictureField extends React.Component {
     const { classes, pictureType } = this.props;
     const { currentOrganisation } = this.props.orgStore;
     let record = this.props.getWorkingRecord();
-    console.log(pictureType);
     return (
       <div>
         <div className={classes.pictureContainer} style={this.props.style}>
@@ -130,7 +129,7 @@ class PictureField extends React.Component {
             <img
               src={
                 pictureUrl ||
-                (pictureType === TYPES.logo
+                (pictureType === types.LOGO
                   ? defaultPicture
                   : undefsafe(record, "cover.url") ||
                     undefsafe(currentOrganisation, "cover.url") ||
@@ -154,7 +153,7 @@ class PictureField extends React.Component {
             onChange={this.handleChange}
             value={
               pictureUrl ||
-              (pictureType === TYPES.logo
+              (pictureType === types.LOGO
                 ? undefsafe(record, "picture.url")
                 : undefsafe(record, "cover.url"))
             }
@@ -168,7 +167,5 @@ class PictureField extends React.Component {
 }
 
 export default inject(
-  "commonStore",
-  "recordStore",
   "orgStore"
 )(observer(injectIntl(withStyles(styles)(PictureField))));
