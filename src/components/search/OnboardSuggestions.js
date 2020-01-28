@@ -2,8 +2,7 @@ import React from "react";
 import {
   Grid,
   withStyles,
-  CircularProgress,
-  Typography
+  CircularProgress
 } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import Wings from "../utils/wing/Wings";

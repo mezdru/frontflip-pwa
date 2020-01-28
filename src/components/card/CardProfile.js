@@ -201,12 +201,14 @@ class CardProfile extends React.Component {
                                 <img
                                   src={DoctolibLogo}
                                   className={classes.contactImage}
+                                  alt="Doctolib"
                                 />
                               )}
                               {link.type === "lafourchette" && (
                                 <img
                                   src={LaFourchetteLogo}
                                   className={classes.contactImage}
+                                  alt="La Fourchette"
                                 />
                               )}
                             </IconButton>

@@ -75,10 +75,10 @@ const ProfileContacts = React.memo(
                           )}
                         >
                           {contact.type === 'doctolib' && (
-                            <img src={DoctolibLogo} className={classes.contactImage} />
+                            <img src={DoctolibLogo} className={classes.contactImage} alt="Doctolib"/>
                           )}
                           {contact.type === 'lafourchette' && (
-                            <img src={LaFourchetteLogo} className={classes.contactImage} />
+                            <img src={LaFourchetteLogo} className={classes.contactImage} alt="La Fourchette" />
                           )}
                         </IconButton>
                       </Tooltip>

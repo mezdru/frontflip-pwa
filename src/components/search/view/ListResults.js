@@ -9,7 +9,6 @@ import undefsafe from "undefsafe";
 
 import { styles } from "./ListResults.css";
 import Card from "../../card/CardProfile";
-import { observe } from "mobx";
 import { AutoSizer, List, WindowScroller } from "react-virtualized";
 
 const SearchNoResults = React.lazy(() => import("../SearchNoResults"));
@@ -20,19 +19,6 @@ class ListResults extends React.Component {
   state = {
     scrollToIndex: null
   };
-
-  componentWillUnmount() {
-    if (this.unsubFilters) this.unsubFilters();
-  }
-
-  componentDidMount() {
-    this.unsubFilters = observe(
-      this.props.searchStore.values.filters,
-      change => {
-        // this.setState({ scrollToIndex: 0 });
-      }
-    );
-  }
 
   showMore = () => {
     if (!undefsafe(this.props.orgStore.currentAlgoliaKey, "initialized"))
@@ -91,7 +77,7 @@ class ListResults extends React.Component {
   }
 
   render() {
-    const { hits, loading, noMore, noResult } = this.props;
+    const { hits, noResult } = this.props;
     const { classes } = this.props;
     const { scrollToIndex } = this.state;
 

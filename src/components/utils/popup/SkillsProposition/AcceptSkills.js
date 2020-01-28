@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import Button from "@material-ui/core/Button";
 import { withStyles, Typography } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
@@ -6,7 +6,7 @@ import { FormattedMessage } from "react-intl";
 import ReactGA from "react-ga";
 import undefsafe from "undefsafe";
 import { Redirect } from "react-router-dom";
-import { CheckCircle, Error } from "@material-ui/icons";
+import { Error } from "@material-ui/icons";
 
 import Wings from "../../wing/Wings";
 import ProfileService from "../../../../services/profile.service";
@@ -14,7 +14,6 @@ import PopupLayout from "../PopupLayout";
 import { styles } from "./ProposeSkills.css";
 import {
   getUnique,
-  getClone,
   getBaseUrl
 } from "../../../../services/utils.service";
 

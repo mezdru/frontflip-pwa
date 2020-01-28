@@ -32,7 +32,7 @@ function Transition(props) {
 
 class PopupLayout extends React.Component {
   render() {
-    const { classes, width, theme } = this.props;
+    const { classes, width } = this.props;
 
     return (
       <Dialog
@@ -68,4 +68,4 @@ class PopupLayout extends React.Component {
   }
 }
 
-export default withWidth()(withStyles(styles, { withTheme: true })(PopupLayout));
+export default withWidth()(withStyles(styles)(PopupLayout));
