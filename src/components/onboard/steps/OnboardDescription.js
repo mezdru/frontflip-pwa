@@ -15,7 +15,8 @@ const styles = theme => ({
     minHeight: '100%',
     background: theme.palette.primary.main,
     padding: 24,
-    overflow: 'auto'
+    overflow: 'auto',
+    margin: 0,
   },
   field: {
     minWidth: '100% !important',

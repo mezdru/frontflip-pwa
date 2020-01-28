@@ -13,6 +13,7 @@ const styles = (theme) => ({
     padding: 24,
     backgroundColor: 'white',
     borderRadius: 5,
+    width: 'auto',
     [theme.breakpoints.down('xs')]: {
       margin: 16,
       marginTop: 80
@@ -27,14 +28,10 @@ const styles = (theme) => ({
     marginBottom: -47,
   },
   container: {
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     borderRadius: 4,
     overflow: 'hidden',
     boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)',
-    maxHeight: 'calc(100vh - 64px)',
-    [theme.breakpoints.down('xs')]: {
-      maxHeight: 'unset'
-    }
     // overflowY: 'auto',
   },
   intro: {
