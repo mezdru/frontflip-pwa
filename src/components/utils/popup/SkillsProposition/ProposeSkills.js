@@ -193,6 +193,7 @@ class ProposeSkills extends React.Component {
                   handleCreateWing={this.onCreate}
                   max={10}
                   exclude={selectedSkills}
+                  getWorkingRecord={() => {}}
                 />
               </Suspense>
             )}
