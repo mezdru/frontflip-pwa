@@ -30,7 +30,6 @@ class OnboardGeo extends React.Component {
 
   render() {
     const { classes } = this.props;
-    let record = this.props.getWorkingRecord();
 
     return (
       <Grid

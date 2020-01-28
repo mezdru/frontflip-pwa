@@ -80,6 +80,7 @@ let AddContact = ({ classes, onAdd, intl, ...props }) => {
                           <img
                             src={stringToImage(contact)}
                             className={classes.contactImg}
+                            alt="Link icon"
                           />
                         )}
                         <span className={classes.contactName}>

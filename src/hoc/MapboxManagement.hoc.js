@@ -7,7 +7,6 @@ import defaultProfilePicture from "../resources/images/placeholder_person.png";
 import profileService from "../services/profile.service";
 import Spiderifier from "../resources/js/Spiderifier";
 import { withRouter } from "react-router-dom";
-import { getBaseUrl } from "../services/utils.service";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 const CLUSTER_UNEXPANDABLE_ZOOM = 17.9;

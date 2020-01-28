@@ -2,7 +2,6 @@ import React from 'react';
 import { inject, observer } from "mobx-react";
 import { withStyles } from '@material-ui/core';
 import { observe } from 'mobx';
-import {Person} from '@material-ui/icons';
 
 const styles = theme => ({
   searchBox: {

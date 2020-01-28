@@ -48,11 +48,6 @@ function EventDate({ commonStore, startDate, endDate, classes, ...props }) {
               {moment(startDate).calendar()}{" - "}
               <FormattedMessage id="card.event.endDate.prefix" />{" "}
               {moment(endDate).calendar()}
-              {/* {new Date().getTime() < startDate ? (
-                <><FormattedMessage id="card.event.startDate.prefix" /> {moment(startDate).calendar()}</>
-              ) : (
-                <><FormattedMessage id="card.event.endDate.prefix" /> {moment(endDate).calendar()}</>
-              )} */}
             </Grid>
           </Grid>
         </Tooltip>

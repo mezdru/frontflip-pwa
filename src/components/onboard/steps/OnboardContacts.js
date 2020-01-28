@@ -150,8 +150,8 @@ class OnboardContacts extends React.Component {
 
   getLinkIconComponent = (link) => {
     switch(link.icon) {
-      case 'doctolib': return <img src={DoctolibLogo} className={this.props.classes.iconImg} />;
-      case 'lafourchette': return <img src={LaFourchetteLogo} className={this.props.classes.iconImg} />;
+      case 'doctolib': return <img src={DoctolibLogo} className={this.props.classes.iconImg} alt="Doctolib" />;
+      case 'lafourchette': return <img src={LaFourchetteLogo} className={this.props.classes.iconImg} alt="La Fourchette" />;
       default: return <i className={"fa fa-" + (link.icon || link.type)} />
     }
   }

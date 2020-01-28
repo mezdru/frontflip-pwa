@@ -3,7 +3,6 @@ import { withStyles, CircularProgress } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import { injectIntl } from "react-intl";
 import undefsafe from "undefsafe";
-import ProfileService from "../../../services/profile.service";
 import defaultPicture from "../../../resources/images/placeholder_person.png";
 import defaultCover from "../../../resources/images/fly_away.jpg";
 import "./uploadcare_customize.css";

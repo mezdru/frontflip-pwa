@@ -18,9 +18,6 @@ const PromptIOsInstall = React.lazy(() =>
 const AskForHelp = React.lazy(() =>
   import("../components/utils/popup/AskForHelp")
 );
-const AddWingPopup = React.lazy(() =>
-  import("../components/utils/popup/AddWingPopup")
-);
 
 const styles = theme => ({
   fab: {

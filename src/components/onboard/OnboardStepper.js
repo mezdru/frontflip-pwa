@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { withStyles, Grid } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import MobileStepper from "@material-ui/core/MobileStepper";
@@ -8,12 +8,12 @@ import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import { Redirect } from "react-router-dom";
 import Slide from "@material-ui/core/Slide";
 
-import OnboardIntro from "./steps/OnboardIntro";
-import OnboardContacts from "./steps/OnboardContacts";
-import OnboardWings from "./steps/OnboardWings";
-import OnboardDescription from "./steps/OnboardDescription";
-import OnboardGeo from "./steps/OnboardGeo";
-import OnboardCover from "./steps/OnboardCover";
+// import OnboardIntro from "./steps/OnboardIntro";
+// import OnboardContacts from "./steps/OnboardContacts";
+// import OnboardWings from "./steps/OnboardWings";
+// import OnboardDescription from "./steps/OnboardDescription";
+// import OnboardGeo from "./steps/OnboardGeo";
+// import OnboardCover from "./steps/OnboardCover";
 
 import { FormattedMessage } from "react-intl";
 import classNames from "classnames";
@@ -22,6 +22,14 @@ import { getBaseUrl } from "../../services/utils.service.js";
 import { styles } from "./OnboardStepper.css";
 import SlackService from "../../services/slack.service";
 import LoaderFeedback from "../utils/buttons/LoaderFeedback";
+import ErrorBoundary from "../../components/utils/errors/ErrorBoundary";
+
+const OnboardIntro = React.lazy(() => import("./steps/OnboardIntro"));
+const OnboardContacts = React.lazy(() => import("./steps/OnboardContacts"));
+const OnboardWings = React.lazy(() => import("./steps/OnboardWings"));
+const OnboardDescription = React.lazy(() => import("./steps/OnboardDescription"));
+const OnboardGeo = React.lazy(() => import("./steps/OnboardGeo"));
+const OnboardCover = React.lazy(() => import("./steps/OnboardCover"));
 
 let timeoutArray = [];
 
@@ -329,14 +337,18 @@ class OnboardStepper extends React.Component {
             </Grid>
 
             <div className={classes.stepComponentContainer}>
-              <StepComponent
-                handleSave={this.handleSave}
-                activeStep={activeStep}
-                activeStepLabel={steps[activeStep]}
-                SuggestionsController={this.props.SuggestionsController}
-                edit={edit}
-                getWorkingRecord={this.getWorkingRecord}
-              />
+              <Suspense fallback={<></>}>
+              <ErrorBoundary>
+                <StepComponent
+                  handleSave={this.handleSave}
+                  activeStep={activeStep}
+                  activeStepLabel={steps[activeStep]}
+                  SuggestionsController={this.props.SuggestionsController}
+                  edit={edit}
+                  getWorkingRecord={this.getWorkingRecord}
+                />
+                </ErrorBoundary>
+              </Suspense>
             </div>
           </Grid>
         </Slide>

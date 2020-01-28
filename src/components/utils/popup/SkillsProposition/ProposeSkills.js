@@ -18,7 +18,7 @@ import PopupLayout from "../PopupLayout";
 import { styles } from "./ProposeSkills.css";
 import { withProfile } from "../../../../hoc/profile/withProfile";
 import EmailService from "../../../../services/email.service";
-import { CheckCircle, Error } from "@material-ui/icons";
+import { Error } from "@material-ui/icons";
 
 const Entities = require("html-entities").XmlEntities;
 const entities = new Entities();
