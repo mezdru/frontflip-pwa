@@ -64,7 +64,6 @@ class orgStore extends Store {
 
   async fetchOrganisation(orgId) {
     let organisation = await super.fetchResource(orgId);
-    console.log(organisation);
     this.addOrg(organisation);
     return organisation;
   }
