@@ -40,7 +40,7 @@ class OnboardIntro extends React.Component {
     record.name = entities.decode(record.name);
 
     return (
-        <Grid container item xs={12} spacing={16} direction="column" className={classes.root} >
+        <Grid container item xs={12} spacing={2} direction="column" className={classes.root} >
           
           <Grid item >
             <Typography variant="h4" style={{ textAlign: 'center', color: this.props.theme.palette.primary.dark }} >

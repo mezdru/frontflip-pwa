@@ -134,9 +134,7 @@ class Auth extends React.Component {
 }
 
 export default inject('authStore', 'orgStore', 'commonStore', 'userStore', 'recordStore')(
-  withTheme()(
     withStyles(styles, { withTheme: true })(
       injectIntl(observer((Auth)))
     )
-  )
 );

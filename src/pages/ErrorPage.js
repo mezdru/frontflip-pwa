@@ -71,7 +71,7 @@ class ErrorPage extends React.Component {
             <Grid item xs={12} md={6}>
               <Grid
                 container
-                spacing={16}
+                spacing={2}
                 className={classes.subLayout}
                 alignItems={'center'}
                 direction={'column'}
