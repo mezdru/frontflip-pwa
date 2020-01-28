@@ -138,7 +138,7 @@ class HeaderDrawer extends Component {
                     </ListItem>
                   )}
                   {(undefsafe(currentUser, 'superadmin') || (currentOrgAndRecord && currentOrgAndRecord.admin)) && (
-                    <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_BACKFLIP, '/admin/organisation', currentOrganisation.tag)} target="_blank">
+                    <ListItem button component="a" href={UrlService.createUrl(process.env.REACT_APP_HOST_ADMINPWA,'/' + currentOrganisation.tag)} target="_blank">
                       <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.organisationAdmin' })} />
                     </ListItem>
                   )}
