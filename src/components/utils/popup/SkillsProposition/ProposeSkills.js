@@ -37,6 +37,10 @@ class ProposeSkills extends React.Component {
     loading: false
   };
 
+  getWorkingRecord = () => {
+    return this.props.profileContext.wingzyRecord;
+  }
+
   handleNext = async () => {
     let error = null;
     if (this.state.activeStep === 1) {
@@ -193,6 +197,7 @@ class ProposeSkills extends React.Component {
                   handleCreateWing={this.onCreate}
                   max={10}
                   exclude={selectedSkills}
+                  getWorkingRecord={() => {}}
                 />
               </Suspense>
             )}
