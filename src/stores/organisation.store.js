@@ -1,6 +1,7 @@
 import { observable, action, decorate, computed } from "mobx";
 import commonStore from "./common.store";
 import Store from './store';
+import { replaceAndKeepReference } from "../services/utils.service";
 
 class orgStore extends Store {
 
@@ -30,7 +31,7 @@ class orgStore extends Store {
   addOrg(inOrg) {
     let index = this.organisations.findIndex(org => JSON.stringify(org._id) === JSON.stringify(inOrg._id));
     if (index > -1) {
-      this.organisations[index] = inOrg;
+      replaceAndKeepReference(this.organisations[index], inOrg);
     } else {
       this.organisations.push(inOrg);
     }
@@ -63,6 +64,7 @@ class orgStore extends Store {
 
   async fetchOrganisation(orgId) {
     let organisation = await super.fetchResource(orgId);
+    console.log(organisation);
     this.addOrg(organisation);
     return organisation;
   }
@@ -82,36 +84,6 @@ class orgStore extends Store {
     this.addAlgoliaKey(algoliaKey.value, orgId, new Date(algoliaKey.valid_until));
     return algoliaKey.value;
   }
-
-  // getAlgoliaKey(organisation, forceUpdate) {
-  //   this.inProgress = true;
-  //   this.errors = null;
-
-  //   if ((commonStore.algoliaKey || commonStore.getCookie('algoliaKey')) && !forceUpdate) return Promise.resolve(commonStore.algoliaKey);
-  //   if (commonStore.algoliaKeyOrganisation === organisation.tag && !forceUpdate) return Promise.resolve(commonStore.algoliaKey);
-
-  //   return agent.Organisation.getAlgoliaKey(organisation._id, organisation.public)
-  //     .then(res => {
-  //       if (res) {
-  //         commonStore.setAlgoliaKey(res.data, organisation.tag);
-  //         return res.data.value;
-  //       }
-  //       return null;
-  //     })
-  //     .catch(action((err) => {
-  //       this.errors = err.response && err.response.body && err.response.body.errors;
-  //       throw err;
-  //     }))
-  //     .finally(action(() => { this.inProgress = false; }));
-  // }
-
-  // isKeyStillValid() {
-  //   if (commonStore.algoliaKey && commonStore.algoliaKeyValidity) {
-  //     let valid_until_date = new Date(parseInt(commonStore.algoliaKeyValidity));
-  //     return (((new Date()).getTime() + 3600000) < valid_until_date.getTime());
-  //   }
-  //   return false;
-  // }
 
 }
 

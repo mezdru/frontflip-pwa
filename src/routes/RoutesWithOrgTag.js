@@ -4,6 +4,7 @@ import RouteWithSubRoutes from './RouteWithSubRoutes';
 import {inject, observer} from 'mobx-react';
 import {Redirect} from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import undefsafe from 'undefsafe';
 
 class RoutesWithOrgTag extends React.Component {
 
@@ -15,7 +16,8 @@ class RoutesWithOrgTag extends React.Component {
   componentDidMount() {
     this.props.orgStore.getOrFetchOrganisation(null, this.props.match.params.orgTag)
     .then((org) => {
-      if(org && org.featuredWingsFamily && org.featuredWingsFamily.length > 0 && ! org.featuredWingsFamily[0]._id) {
+      if( (undefsafe(org, 'featuredWingsFamily.length') > 0 && org.featuredWingsFamily[0]._id) || 
+        (undefsafe(org, 'searchTabs.length') > 0 && !org.searchTabs[0]._id )) {
         this.props.orgStore.fetchOrganisation(org._id);
       }
       this.setState({render: true})
