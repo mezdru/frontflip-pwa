@@ -15,7 +15,7 @@ const ProfileThumbnail = React.memo(withProfile(withStyles(styles)(({ classes, r
       </a>
       <div className={classes.topOffset} ></div>
 
-      <Grid container spacing={32}>
+      <Grid container spacing={4}>
 
         <Grid item xs={12}>
           <Typography variant="h1" className={classes.text}>

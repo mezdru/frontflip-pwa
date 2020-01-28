@@ -213,9 +213,7 @@ export default inject(
 )(
   observer(
     injectIntl(
-      withTheme()(
         withStyles(styles, { withTheme: true })(withWidth()(SearchField))
-      )
     )
   )
 );

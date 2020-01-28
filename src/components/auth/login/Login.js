@@ -111,7 +111,7 @@ class Login extends React.Component {
     else {
       return (
         <form onSubmit={this.handleSubmitForm} id="form-login">
-          <Grid container item direction='column' spacing={16}>
+          <Grid container item direction='column' spacing={2}>
             {loginErrors && (
               <Grid item>
                 <SnackbarCustom variant="warning" message={loginErrors} />
@@ -178,7 +178,7 @@ class Login extends React.Component {
                 <FormattedHTMLMessage id="signin.or.integration" />
               </Typography>
             </Grid>
-            <Grid container item direction="row" justify="center" spacing={16} >
+            <Grid container item direction="row" justify="center" spacing={2} >
               <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="google" /></Grid>
               <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="linkedin" currentAction="signin" /></Grid>
             </Grid>

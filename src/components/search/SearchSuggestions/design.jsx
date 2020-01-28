@@ -29,10 +29,6 @@ export const styles = theme => ({
     animation: 'easeIn .6s',
     animationFillMode: 'forwards',
   },
-  '@keyframes easeIn': {
-    from: { opacity: 0 },
-    to: { opacity: 1 }
-  },
   suggestionLabel: {
     paddingRight: 12,
     paddingLeft: 12,

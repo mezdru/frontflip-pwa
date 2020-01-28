@@ -127,7 +127,7 @@ class Register extends React.Component {
 
     if (registerSuccess) {
       return (
-        <Grid container item direction='column' spacing={16}>
+        <Grid container item direction='column' spacing={2}>
           <Grid item>
             <SnackbarCustom variant="success" message={registerSuccessMessage} />
           </Grid>
@@ -135,7 +135,7 @@ class Register extends React.Component {
       )
     } else if (registerWarning) {
       return (
-        <Grid container item direction='column' spacing={16}>
+        <Grid container item direction='column' spacing={2}>
           <Grid item>
             <SnackbarCustom variant="warning" message={registerWarningMessage} />
           </Grid>
@@ -144,7 +144,7 @@ class Register extends React.Component {
     } else {
       return (
         <form onSubmit={this.handleSubmitForm} id="form-register">
-          <Grid container item direction='column' spacing={16}>
+          <Grid container item direction='column' spacing={2}>
             {registerErrors && (
               <Grid item>
                 <SnackbarCustom variant="warning" message={registerErrors} />
@@ -203,7 +203,7 @@ class Register extends React.Component {
                 textAlign: 'center'
               }}><FormattedHTMLMessage id="signup.or.integration" /></Typography>
             </Grid>
-            <Grid container item direction="row" justify="center" spacing={16} >
+            <Grid container item direction="row" justify="center" spacing={2} >
               <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="google" /></Grid>
               <Grid item><IntegrationButton labelId={"Sign in with Google"} integrationTag="linkedin" /></Grid>
             </Grid>

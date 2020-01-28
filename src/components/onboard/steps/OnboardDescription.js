@@ -15,7 +15,8 @@ const styles = theme => ({
     minHeight: '100%',
     background: theme.palette.primary.main,
     padding: 24,
-    overflow: 'auto'
+    overflow: 'auto',
+    margin: 0,
   },
   field: {
     minWidth: '100% !important',
@@ -37,7 +38,7 @@ class OnboardDescription extends React.Component {
     record.description = entities.decode(record.description);
 
     return (
-        <Grid container item xs={12} spacing={16} direction="column" className={classes.root} >
+        <Grid container item xs={12} spacing={2} direction="column" className={classes.root} >
           
           <Grid item >
             <Typography variant="h4" style={{ textAlign: 'center', color: this.props.theme.palette.primary.dark }} >

@@ -13,6 +13,7 @@ const styles = (theme) => ({
     padding: 24,
     backgroundColor: 'white',
     borderRadius: 5,
+    width: 'auto',
     [theme.breakpoints.down('xs')]: {
       margin: 16,
       marginTop: 80
@@ -27,9 +28,11 @@ const styles = (theme) => ({
     marginBottom: -47,
   },
   container: {
-    [theme.breakpoints.down('xs')]: {
-      padding: 8,
-    }
+    // backgroundColor: 'white',
+    borderRadius: 4,
+    overflow: 'hidden',
+    boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12)',
+    // overflowY: 'auto',
   },
   intro: {
     textAlign: 'center',
@@ -90,8 +93,9 @@ class OnboardWelcome extends React.Component {
     const { classes } = this.props;
 
     return (
+      <Grid item xs={12} sm={8} md={6} lg={6} className={classes.container}>
       <form onSubmit={this.props.handleEnterToOnboard}>
-        <Grid item container direction={'column'} xs={12} sm={8} md={6} lg={6} spacing={16} className={classes.root}>
+        <Grid item container direction={'column'} xs={12} spacing={2} className={classes.root}>
           <Typography variant="h2" className={classes.title} >
             <FormattedMessage id={'onboard.welcome'} /> {entities.decode(currentOrganisation.name)}
           </Typography>
@@ -119,6 +123,7 @@ class OnboardWelcome extends React.Component {
           </Grid>
         </Grid>
       </form>
+      </Grid>
     );
   }
 }

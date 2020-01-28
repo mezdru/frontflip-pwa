@@ -120,7 +120,7 @@ class Auth extends React.Component {
 
     return (
       <Grid container>
-        <Grid item xs={12}>
+        <Grid item xs={12} style={{padding: 16}}>
           {this.state.value === 0 && (
             <Login authState={authState} handleChangeIndex={this.handleChangeIndex} />
           )}
@@ -134,9 +134,7 @@ class Auth extends React.Component {
 }
 
 export default inject('authStore', 'orgStore', 'commonStore', 'userStore', 'recordStore')(
-  withTheme()(
     withStyles(styles, { withTheme: true })(
       injectIntl(observer((Auth)))
     )
-  )
 );
