@@ -14,12 +14,10 @@ const styles = theme => ({
     position: 'relative',
     left: '50%',
     transform: 'translateX(-50%)',
-    marginBottom: 40,
   },
   text: {
     margin: 0,
     padding: 0,
-    paddingTop: 16,
     textAlign: 'center'
   },
   title: {
