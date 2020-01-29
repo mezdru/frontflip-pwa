@@ -70,7 +70,7 @@ class ProfileService {
   }
 
   makeLocationLink(record) {
-    if(!record._geoloc) return;
+    if(!record._geoloc || !record._geoloc.lat || !record._geoloc.lng) return;
     return {
       icon: 'map-marker',
       type: 'location',
