@@ -31,7 +31,6 @@ class RecordStore extends Store {
   }
 
   getRecord(recordId, recordTag) {
-    console.log('get : ' + recordTag);
     if (!recordId && !recordTag) return null;
     if(!recordId && recordTag) return this.recordsByTag[undefsafe(orgStore.currentOrganisation, '_id') + '-' + recordTag];
     else if(recordId) return this.recordsById[recordId];
@@ -48,12 +47,10 @@ class RecordStore extends Store {
     if (!inRecord) return null;
     if (inRecord.objectID) inRecord._id = inRecord.objectID;
     let inRecordEntry = this.recordsById[inRecord._id];
-    let inRecordTagEntry = this.recordsByTag[inRecord.organisation + '-' + inRecord.tag];
 
     if(inRecordEntry) {
       replaceAndKeepReference(inRecordEntry, inRecord);
-      if(inRecordTagEntry) replaceAndKeepReference(inRecordTagEntry, inRecord);
-      else if(inRecord.tag) this.recordsByTag[inRecord.organisation + '-' + inRecord.tag] = inRecord;
+      replaceAndKeepReference(this.recordsByTag[inRecord.organisation + '-' + inRecord.tag], inRecord);
     }
     else {
       if(inRecord.tag) this.recordsByTag[inRecord.organisation + '-' + inRecord.tag] = inRecord;
