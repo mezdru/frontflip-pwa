@@ -48,7 +48,10 @@ class RecordStore extends Store {
     if (inRecord.objectID) inRecord._id = inRecord.objectID;
     let inRecordEntry = this.recordsById[inRecord._id];
 
-    if(inRecordEntry) replaceAndKeepReference(inRecordEntry, inRecord);
+    if(inRecordEntry) {
+      replaceAndKeepReference(inRecordEntry, inRecord);
+      replaceAndKeepReference(this.recordsByTag[inRecord.organisation + '-' + inRecord.tag], inRecord);
+    }
     else {
       if(inRecord.tag) this.recordsByTag[inRecord.organisation + '-' + inRecord.tag] = inRecord;
       this.recordsById[inRecord._id] = inRecord; 
