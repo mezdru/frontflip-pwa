@@ -21,12 +21,12 @@ export const styles = theme => ({
     // }
   },
   personMode: {
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: theme.palette.primary.main,
     '& p': {
       color: '#FFFFFF !important',
     },
     '& svg': {
-      color: '#FFFFFF !important',
+      color: theme.palette.primary.main,
     },
     '& img': {
       borderRadius: '50%',

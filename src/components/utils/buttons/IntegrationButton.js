@@ -62,7 +62,7 @@ class IntegrationButton extends React.Component {
     const {classes, labelId, integrationTag} = this.props;
 
     return (
-      <Button className={classes.root} onClick={this.props.onClick || this.redirectToAuth}>
+      <Button className={classes.root} onClick={this.props.onClick || this.redirectToAuth} variant="contained" >
         <img src={this.getIntegrationLogo(integrationTag)} className={classes.logo} alt={labelId} /> {integrationTag}
       </Button>
     );

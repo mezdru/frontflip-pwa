@@ -192,7 +192,7 @@ class Register extends React.Component {
               }
               {
                 !inProgress && (
-                  <Button fullWidth={true} type="submit" color="secondary"><FormattedMessage id="Sign Up" /></Button>
+                  <Button fullWidth type="submit" variant="contained" color="secondary"><FormattedMessage id="Sign Up" /></Button>
                 )
               }
             </Grid>

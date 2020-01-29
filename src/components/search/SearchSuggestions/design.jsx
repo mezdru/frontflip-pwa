@@ -23,7 +23,7 @@ export const styles = theme => ({
     fontWeight: 500,
     '&:hover': {
       color: theme.palette.primary.dark,
-      background: theme.palette.primary.main,
+      background: theme.palette.primary.light,
     },
     opacity: 0,
     animation: 'easeIn .6s',

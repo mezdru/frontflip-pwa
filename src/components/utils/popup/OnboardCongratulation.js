@@ -66,7 +66,7 @@ class OnboardCongratulation extends React.Component {
           </>
         }
         actions={
-          <Button onClick={this.handleOnboardEnd} color="secondary">
+          <Button onClick={this.handleOnboardEnd} color="secondary" variant="contained">
             <FormattedMessage id="onboard.end.cta" values={{ organisationName: currentOrganisation.name }} />
           </Button>
         }

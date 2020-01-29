@@ -69,11 +69,6 @@ export const styles = {
   },
   banner: {
     position: 'fixed',
-    // WebkitFilter: 'blur(2px)',
-    // MozFilter: 'blur(2px)',
-    // OFilter: 'blur(2px)',
-    // MsFilter: 'blur(2px)',
-    // filter: 'blur(2px)',
   },
   button: {
     height: 'initial',
@@ -84,5 +79,9 @@ export const styles = {
     zIndex: 2,
     bottom: 32,
     right: 32,
+    [theme.breakpoints.down('sm')]: {
+      bottom: 16,
+      right: 16
+    }
   }
 }

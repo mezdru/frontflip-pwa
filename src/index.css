@@ -96,6 +96,7 @@ main {
 @keyframes wingEaseIn {
   from {
     background: #FF0018;
+    color: white;
     transform: scale(0);
   }
   85% {
@@ -103,6 +104,7 @@ main {
   }
   to {
     background: #e4e5ec;
+    color: #2b2d3c;
     transform: scale(1);
   }
 }
