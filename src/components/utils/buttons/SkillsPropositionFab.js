@@ -7,15 +7,16 @@ import { injectIntl, FormattedMessage } from "react-intl";
 class SkillsPropositionFab extends React.Component {
   getVariant = () => {
     switch (this.props.width) {
-      case "xs":
+      case "xs": return "round";
       case "sm":
-        return null;
+        return "round";
       default:
         return "extended";
     }
   };
 
   render() {
+
     return (
       <Tooltip
         title={this.props.intl.formatMessage({

@@ -11,12 +11,12 @@ const styles = theme => ({
   content: {
     overflow: "auto",
     textAlign: "center",
-    padding: theme.spacing.unit * 2 + "px !important"
+    // padding: theme.spacing.unit * 2 + "px !important"
   },
   actions: {
     justifyContent: "center",
-    margin: 0,
-    padding: theme.spacing.unit * 2
+    // margin: 0,
+    // padding: theme.spacing.unit * 2
   },
   closeButton: {
     position: "absolute",

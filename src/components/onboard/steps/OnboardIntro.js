@@ -14,7 +14,7 @@ const styles = theme => ({
     flexBasis: '100%',
     width: '100%',
     minHeight: '100%',
-    background: theme.palette.primary.main,
+    background: theme.palette.primary.light,
     padding: 24,
     overflow: 'auto',
     margin: 0,

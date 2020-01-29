@@ -145,7 +145,7 @@ class AskForHelp extends React.Component {
           </Typography>
         }
         actions={
-          <Button onClick={(error || success) ? this.handleClose : this.handleSend} color="secondary" type="submit" disabled={!this.isAvailable()} >
+          <Button onClick={(error || success) ? this.handleClose : this.handleSend} variant="contained" color="secondary" type="submit" disabled={!this.isAvailable()} >
             {(error || success) ? (
               <FormattedMessage id={"askForHelp.popup.close"} />
             ) : (

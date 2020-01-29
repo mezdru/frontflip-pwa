@@ -168,5 +168,10 @@
   "contact.displayName.lafourchette": "La&nbsp;Fourchette",
   "card.event.startDate.prefix": "début :",
   "card.event.endDate.prefix": "fin :",
-  "onboard.cover.title": "Ma photo de couverture"
+  "onboard.cover.title": "Ma photo de couverture",
+  "onboard.date.title": "Quand l'événement a-t-il lieu ?",
+  "onboard.date.clear.label": "Vider",
+  "onboard.date.cancel.label": "Annuler",
+  "onboard.date.startDate.placeholder": "Date de début",
+  "onboard.date.endDate.placeholder": "Date de fin"
 }

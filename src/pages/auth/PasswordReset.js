@@ -168,7 +168,7 @@ class PasswordReset extends React.Component {
                 )
               }
               {!inProgress && (
-                <Button fullWidth={true} type="submit" color="secondary">
+                <Button fullWidth={true} type="submit" variant="contained" color="secondary">
                   {!userEmail && (
                     <FormattedMessage id="password.new.create" />
                   )}

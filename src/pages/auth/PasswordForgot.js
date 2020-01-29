@@ -109,7 +109,7 @@ class PasswordForgot extends React.Component {
                   />
                 </Grid>
                 <Grid item>
-                  <Button fullWidth={true} type="submit" color="secondary"><FormattedMessage id="password.forgot.send"/></Button>
+                  <Button fullWidth={true} type="submit" variant="contained" color="secondary"><FormattedMessage id="password.forgot.send"/></Button>
                 </Grid>
               </Grid>
             </form>

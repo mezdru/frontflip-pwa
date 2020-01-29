@@ -2,7 +2,7 @@ import React from 'react'
 import { withStyles, Typography } from '@material-ui/core';
 import { inject, observer } from "mobx-react";
 import { observe } from 'mobx';
-import Wings from './Wing';
+import Wings from './Wings';
 import ProfileService from '../../../services/profile.service';
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
 
@@ -74,17 +74,17 @@ class UserWings extends React.Component {
                   <Wings src={ProfileService.getPicturePath(hashtag.picture)}
                     label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
                     className={''}
+                    mode="onboard"
                     onDelete={(e) => { this.props.handleRemoveWing(e, hashtag.tag) }} />
                 </div>
               )
             } else {
               return (
-                <div className="" key={hashtag._id} style={{ display: 'inline-block' }} >
+                <div className="animated" key={hashtag._id} style={{ display: 'inline-block' }} >
                   <Wings src={ProfileService.getPicturePath(hashtag.picture)}
                     label={ProfileService.htmlDecode(displayedName)} key={hashtag.tag}
                     className={'animated'}
                     mode="onboard"
-                    style={{ background: theme.palette.primary.main }}
                     onDelete={(e) => { this.props.handleRemoveWing(e, hashtag.tag) }} />
                 </div>
               )

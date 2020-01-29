@@ -14,11 +14,14 @@ export const styles = theme => ({
     // overflowY: 'auto',
   },
   stepComponentContainer: {
-    maxHeight: 'calc(100% - 64px)',
+    minHeight: 400,
+    backgroundColor: theme.palette.primary.light,
+    maxHeight: 'calc(100vh - 136px)',
     overflowY: 'auto',
     [theme.breakpoints.down('xs')]: {
       height: 'calc(100vh - 72px)',
       maxHeight: 'unset',
+      minHeight: 'unset',
       overflowY: 'auto',
     }
   },

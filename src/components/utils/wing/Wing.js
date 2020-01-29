@@ -5,8 +5,8 @@ import withClapManagement from '../../../hoc/ClapManagement.hoc';
 
 const styles = theme => ({
   wingImg: {
-    height: 48,
-    width: 32,
+    height: '48px !important',
+    width: '32px !important',
     margin: '-15px -6px 0 -22px',
     boxShadow: 'none',
     backgroundColor: 'transparent',

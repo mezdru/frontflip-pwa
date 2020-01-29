@@ -106,7 +106,7 @@ class AcceptSkills extends React.Component {
     return (
       <PopupLayout
         isOpen={this.state.open}
-        PaperProps={{ style: { background: theme.palette.primary.main } }}
+        PaperProps={{ style: { background: theme.palette.primary.light } }}
         title={
           ready &&
           !error &&
