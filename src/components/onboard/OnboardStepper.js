@@ -148,6 +148,8 @@ class OnboardStepper extends React.Component {
     const { currentUrlRecord } = this.props.recordStore;
     const { currentOrganisation } = this.props.orgStore;
     const { url } = this.props.commonStore;
+
+    console.log(currentUrlRecord && JSON.parse(JSON.stringify(currentUrlRecord)));
     
     if (edit) {
       return currentUrlRecord;

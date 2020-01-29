@@ -46,6 +46,7 @@ class OnboardPage extends React.PureComponent {
     });
 
     if(onboardMode === "edit" || (onboardMode === "create" && recordTag !== "@NewProfile" && recordTag !== "@NewEvent")) {
+      console.log('fetch ' + recordTag);
       await this.props.recordStore.fetchByTag(recordTag, orgId)
       .catch(e => {
         this.setState({redirectTo: getBaseUrl(this.props)});
