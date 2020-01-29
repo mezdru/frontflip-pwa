@@ -123,7 +123,7 @@ class OrganisationsList extends React.Component {
       data.forEach(elt => {
         if (
           (dataType === "organisation" &&
-            elt.tag !== currentOrganisation.tag) ||
+            elt.tag !== undefsafe(currentOrganisation, 'tag')) ||
           dataType === "record"
         ) {
           arrayOfItems.push({

@@ -80,6 +80,7 @@ export default createMuiTheme({
     MuiButton: {
       root: {
         fontWeight: "600",
+        padding: '8px 24px'
       }
     },
     MuiIconButton: {
@@ -227,7 +228,8 @@ export default createMuiTheme({
     },
     MuiMobileStepper: {
       root: {
-        height: 72
+        height: 72,
+        padding: 16
       },
       dot: {
         backgroundColor: palette.primary.light,

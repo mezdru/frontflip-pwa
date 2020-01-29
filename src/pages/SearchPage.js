@@ -48,7 +48,7 @@ class SearchPage extends React.Component {
         window.history.pushState(
           null,
           window.document.title,
-          this.props.searchStore.encodeFilters()
+          this.props.searchStore.encodeFilters() || '?'
         );
       }
     );

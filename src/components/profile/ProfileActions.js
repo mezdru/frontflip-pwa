@@ -8,6 +8,7 @@ import { getBaseUrl } from "../../services/utils.service.js";
 import { Link } from "react-router-dom";
 import { injectIntl } from "react-intl";
 import urlService from "../../services/url.service";
+import undefsafe from 'undefsafe';
 
 const styles = theme => ({
   button: {
@@ -37,7 +38,7 @@ class ProfileActions extends React.PureComponent {
     ) {
 
       let isMyProfile =
-        this.props.recordStore.currentUserRecord._id ===
+        undefsafe(this.props.recordStore.currentUserRecord, '_id') ===
         this.props.profileContext.getProp("_id");
 
       this.props.recordStore
