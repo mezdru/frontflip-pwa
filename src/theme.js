@@ -228,7 +228,8 @@ export default createMuiTheme({
     },
     MuiMobileStepper: {
       root: {
-        height: 72
+        height: 72,
+        padding: 16
       },
       dot: {
         backgroundColor: palette.primary.light,
