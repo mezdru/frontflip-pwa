@@ -58,21 +58,6 @@ const styles = theme => ({
     marginTop: 32,
     marginLeft: 32,
     marginRight: 32
-  },
-  '@keyframes wingEaseIn': {
-    from: {
-      background: theme.palette.secondary.main,
-      color: 'white',
-      transform: 'scale(0)',
-    },
-    '85%': {
-      background: theme.palette.secondary.main,
-    },
-    to: {
-      background: theme.palette.primary.main,
-      color: theme.palette.primary.dark,
-      transform: 'scale(1)',
-    }
   }
 });
 
