@@ -80,6 +80,7 @@ export default createMuiTheme({
     MuiButton: {
       root: {
         fontWeight: "600",
+        padding: '8px 24px'
       }
     },
     MuiIconButton: {
