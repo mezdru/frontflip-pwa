@@ -16,7 +16,7 @@ class RoutesWithOrgTag extends React.Component {
   componentDidMount() {
     this.props.orgStore.getOrFetchOrganisation(null, this.props.match.params.orgTag)
     .then((org) => {
-      if( (undefsafe(org, 'featuredWingsFamily.length') > 0 && org.featuredWingsFamily[0]._id) || 
+      if( (undefsafe(org, 'featuredWingsFamily.length') > 0 && !org.featuredWingsFamily[0]._id) || 
         (undefsafe(org, 'searchTabs.length') > 0 && !org.searchTabs[0]._id )) {
         this.props.orgStore.fetchOrganisation(org._id);
       }
