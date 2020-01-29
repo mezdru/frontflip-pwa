@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Grid, Typography, withStyles } from "@material-ui/core";
-import { FormattedMessage } from "react-intl";
-import { MuiPickersUtilsProvider, KeyboardDateTimePicker } from "@material-ui/pickers";
+import { FormattedMessage, injectIntl } from "react-intl";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDateTimePicker,
+  DateTimePicker
+} from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import moment from "moment";
 import { inject, observer } from "mobx-react";
@@ -19,11 +23,20 @@ const styles = theme => ({
     padding: 24,
     overflow: "auto",
     margin: 0
+  },
+  center: {
+    textAlign: "center"
   }
 });
 
-function OnboardEventDate({ classes, handleSave, getWorkingRecord, commonStore, ...props }) {
-
+function OnboardEventDate({
+  classes,
+  handleSave,
+  getWorkingRecord,
+  commonStore,
+  intl,
+  ...props
+}) {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -45,10 +58,12 @@ function OnboardEventDate({ classes, handleSave, getWorkingRecord, commonStore, 
           </Typography>
         </Grid>
 
-        <Grid item>
-          <KeyboardDateTimePicker
+        <Grid item className={classes.center}>
+          <DateTimePicker
             clearable
-            label="Date de début"
+            label={intl.formatMessage({
+              id: "onboard.date.startDate.placeholder"
+            })}
             inputVariant="outlined"
             ampm={false}
             value={startDate}
@@ -57,14 +72,18 @@ function OnboardEventDate({ classes, handleSave, getWorkingRecord, commonStore, 
             onError={console.log}
             disablePast
             format="lll"
-            clearLabel="vider"
-            cancelLabel="annuler"
+            clearLabel={intl.formatMessage({ id: "onboard.date.clear.label" })}
+            cancelLabel={intl.formatMessage({
+              id: "onboard.date.cancel.label"
+            })}
           />
         </Grid>
-        <Grid item>
-          <KeyboardDateTimePicker
+        <Grid item className={classes.center}>
+          <DateTimePicker
             clearable
-            label="Date de fin"
+            label={intl.formatMessage({
+              id: "onboard.date.endDate.placeholder"
+            })}
             inputVariant="outlined"
             ampm={false}
             value={endDate}
@@ -74,8 +93,10 @@ function OnboardEventDate({ classes, handleSave, getWorkingRecord, commonStore, 
             minDate={startDate || new Date()}
             disablePast
             format="lll"
-            clearLabel="vider"
-            cancelLabel="annuler"
+            clearLabel={intl.formatMessage({ id: "onboard.date.clear.label" })}
+            cancelLabel={intl.formatMessage({
+              id: "onboard.date.cancel.label"
+            })}
           />
         </Grid>
       </Grid>
@@ -83,6 +104,8 @@ function OnboardEventDate({ classes, handleSave, getWorkingRecord, commonStore, 
   );
 }
 
-OnboardEventDate = inject("commonStore")(observer(withStyles(styles)(OnboardEventDate)));
+OnboardEventDate = inject("commonStore")(
+  observer(withStyles(styles)(injectIntl(OnboardEventDate)))
+);
 
 export default OnboardEventDate;

@@ -29,29 +29,6 @@ export default createMuiTheme({
     ].join(','),
   },
   overrides: {
-    MuiPickersToolbar: {
-      toolbar: {
-        backgroundColor: palette.primary.dark
-      },
-    },
-    MuiPickersDay: {
-      day: {
-        color: palette.primary.dark,
-      },
-      daySelected: {
-        backgroundColor: palette.primary.hover,
-      },
-    },
-    MuiPickersModal: {
-      withAdditionalAction: {
-        // '& button': {
-        //   backgroundColor: palette.secondary.main,
-        //   '&:hover': {
-        //     backgroundColor: palette.secondary.dark
-        //   }
-        // }
-      },
-    },
     MuiTooltip: {
       popper: {
         zIndex: 9999999999,
@@ -102,15 +79,7 @@ export default createMuiTheme({
     //Buttons
     MuiButton: {
       root: {
-        // height: "56px",
         fontWeight: "600",
-        // padding: '8px 24px',
-      },
-      text: {
-        // color: "darkgrey",
-        // '&:hover': {
-        //   color: 'black',
-        // }
       }
     },
     MuiIconButton: {
@@ -172,13 +141,11 @@ export default createMuiTheme({
     },
     MuiCardActions: {
       root: {
-        // padding: '0 8px!important',
         display: 'flex',
       }
     },
     MuiCardContent: {
       root: {
-        // padding: '0 0 8px 8px!important',
         padding: 0,
         whiteSpace: 'nowrap',
         scrollbarWidth: 'none',
@@ -210,22 +177,12 @@ export default createMuiTheme({
     },
     MuiPaper: {
       root: {
-        // padding: '16px',
         transition: 'all 0.3s cubic-bezier(.25,.8,.25,1)',
       }
     },
     MuiDialog: {
-      paper: {
-        // margin: 16,
-        // padding: '16px 24px'
-      },
       paperScrollPaper: {
         maxHeight: 'calc(100% - 64px)'
-      }
-    },
-    MuiDialogTitle: {
-      root: {
-        // padding: 16
       }
     },
     //Inputs
@@ -285,9 +242,6 @@ export default createMuiTheme({
   
   // Props
     props: {
-      // MuiButton: {
-      //   variant: "contained",
-      // },
       MuiInput: {
         margin: "none"
       }
