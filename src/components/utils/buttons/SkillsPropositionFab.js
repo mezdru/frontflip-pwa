@@ -16,7 +16,7 @@ class SkillsPropositionFab extends React.Component {
   };
 
   render() {
-    console.log(this.props.width, this.getVariant());
+
     return (
       <Tooltip
         title={this.props.intl.formatMessage({
