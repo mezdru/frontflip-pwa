@@ -54,7 +54,7 @@ class RecordStore extends Store {
     }
     else {
       if(inRecord.tag) this.recordsByTag[inRecord.organisation + '-' + inRecord.tag] = inRecord;
-      this.recordsById[inRecord._id] = inRecord; 
+      if(inRecord._id) this.recordsById[inRecord._id] = inRecord; 
     }
   }
 
@@ -68,6 +68,7 @@ class RecordStore extends Store {
     delete recordToPost.tag;
     let record = await super.postResource(recordToPost);
     replaceAndKeepReference(recordToPost, record);
+    this.addRecord(recordToPost);
     return recordToPost;
   }
 
