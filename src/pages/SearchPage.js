@@ -45,10 +45,11 @@ class SearchPage extends React.Component {
       this.props.searchStore.values.filters,
       change => {
         this.props.searchPage.easeToSearchResults(200, 800);
+        console.log('update url', this.props.searchStore.values.filters.length);
         window.history.pushState(
           null,
           window.document.title,
-          this.props.searchStore.encodeFilters()
+          this.props.searchStore.encodeFilters() || '?'
         );
       }
     );
