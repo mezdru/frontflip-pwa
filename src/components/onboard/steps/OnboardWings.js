@@ -135,7 +135,7 @@ class OnboardWings extends React.Component {
           style={{
             textAlign: "center",
             padding: 8,
-            color: this.props.theme.palette.primary.dark
+            color: this.props.theme.palette.primary.main
           }}
         >
           {title ? title : <FormattedMessage id={"onboard.chooseYourWings"} />}
@@ -148,7 +148,7 @@ class OnboardWings extends React.Component {
           style={{
             textAlign: "center",
             padding: 8,
-            color: this.props.theme.palette.primary.dark
+            color: this.props.theme.palette.primary.light
           }}
         >
           <FormattedMessage id={"onboard.chooseYourWings"} />
@@ -182,7 +182,7 @@ class OnboardWings extends React.Component {
         <Grid
           item
           style={{
-            background: this.props.theme.palette.primary.main,
+            background: this.props.theme.palette.primary.light,
             maxWidth: "100%",
             position: "relative",
             zIndex: 2,

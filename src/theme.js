@@ -7,7 +7,8 @@ export const palette = {
     dark: '#BA0012',
   },
   primary: {
-    main: '#e4e5ec',
+    light: '#e4e5ec',
+    main: '#2b2d3c',
     dark: '#2b2d3c',
     hover: '#aaacbe',
     contrastText: '#fff',
@@ -28,11 +29,27 @@ export default createMuiTheme({
     ].join(','),
   },
   overrides: {
-    // General styles
-    MuiGrid: {
-      "spacing-xs-16": {
-        width: "auto",
-        margin: "auto",
+    MuiPickersToolbar: {
+      toolbar: {
+        backgroundColor: palette.primary.dark
+      },
+    },
+    MuiPickersDay: {
+      day: {
+        color: palette.primary.dark,
+      },
+      daySelected: {
+        backgroundColor: palette.primary.hover,
+      },
+    },
+    MuiPickersModal: {
+      withAdditionalAction: {
+        // '& button': {
+        //   backgroundColor: palette.secondary.main,
+        //   '&:hover': {
+        //     backgroundColor: palette.secondary.dark
+        //   }
+        // }
       },
     },
     MuiTooltip: {
@@ -78,21 +95,22 @@ export default createMuiTheme({
     // Avatar
     MuiAvatar: {
       img: {
+        
         height: 'auto',
       }
     },
     //Buttons
     MuiButton: {
       root: {
-        height: "56px",
+        // height: "56px",
         fontWeight: "600",
-        padding: '8px 24px',
+        // padding: '8px 24px',
       },
       text: {
-        color: "darkgrey",
-        '&:hover': {
-          color: 'black',
-        }
+        // color: "darkgrey",
+        // '&:hover': {
+        //   color: 'black',
+        // }
       }
     },
     MuiIconButton: {
@@ -154,7 +172,7 @@ export default createMuiTheme({
     },
     MuiCardActions: {
       root: {
-        padding: '0 8px!important',
+        // padding: '0 8px!important',
         display: 'flex',
       }
     },
@@ -192,13 +210,13 @@ export default createMuiTheme({
     },
     MuiPaper: {
       root: {
-        padding: '16px',
+        // padding: '16px',
         transition: 'all 0.3s cubic-bezier(.25,.8,.25,1)',
       }
     },
     MuiDialog: {
       paper: {
-        margin: 16,
+        // margin: 16,
         // padding: '16px 24px'
       },
       paperScrollPaper: {
@@ -207,7 +225,7 @@ export default createMuiTheme({
     },
     MuiDialogTitle: {
       root: {
-        padding: 16
+        // padding: 16
       }
     },
     //Inputs
@@ -251,8 +269,11 @@ export default createMuiTheme({
       }
     },
     MuiMobileStepper: {
+      root: {
+        height: 72
+      },
       dot: {
-        backgroundColor: palette.primary.main,
+        backgroundColor: palette.primary.light,
         margin: 8,
       },
       dotActive: {
@@ -264,9 +285,9 @@ export default createMuiTheme({
   
   // Props
     props: {
-      MuiButton: {
-        variant: "contained",
-      },
+      // MuiButton: {
+      //   variant: "contained",
+      // },
       MuiInput: {
         margin: "none"
       }

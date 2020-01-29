@@ -6,13 +6,13 @@ import PictureField from "../../utils/fields/PictureField";
 const styles = theme => ({
   title: {
     textAlign: "center",
-    color: theme.palette.primary.dark
+    color: theme.palette.primary.main,
   },
   root: {
     flexBasis: '100%',
     width: '100%',
     minHeight: '100%',
-    background: theme.palette.primary.main,
+    background: theme.palette.primary.light,
     padding: 24,
     overflow: 'auto',
     margin: 0,
@@ -26,7 +26,7 @@ function OnboardCover({ classes, handleSave, getWorkingRecord, ...props }) {
       container
       item
       xs={12}
-      spacing={16}
+      spacing={2}
       direction="column"
       className={classes.root}
     >

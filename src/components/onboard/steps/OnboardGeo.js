@@ -11,7 +11,7 @@ const styles = theme => ({
     flexBasis: "100%",
     width: "100%",
     minHeight: "100%",
-    background: theme.palette.primary.main,
+    background: theme.palette.primary.light,
     padding: 24,
     overflow: "auto",
     margin: 0,
@@ -37,7 +37,7 @@ class OnboardGeo extends React.Component {
         container
         item
         xs={12}
-        spacing={16}
+        spacing={2}
         direction="column"
         className={classes.root}
       >

@@ -23,6 +23,7 @@ import { styles } from "./OnboardStepper.css";
 import SlackService from "../../services/slack.service";
 import LoaderFeedback from "../utils/buttons/LoaderFeedback";
 import ErrorBoundary from "../../components/utils/errors/ErrorBoundary";
+import OnboardEventDate from "./steps/OnboardEventDate.js";
 
 const OnboardIntro = React.lazy(() => import("./steps/OnboardIntro"));
 const OnboardContacts = React.lazy(() => import("./steps/OnboardContacts"));
@@ -174,6 +175,8 @@ class OnboardStepper extends React.Component {
         return OnboardGeo;
       case "cover":
         return OnboardCover;
+      case "date": 
+        return OnboardEventDate;
       default:
         return OnboardWings;
     }

@@ -164,7 +164,7 @@ class OnboardContacts extends React.Component {
       <Grid
         container
         style={{
-          background: this.props.theme.palette.primary.main,
+          background: this.props.theme.palette.primary.light,
           padding: 24
         }}
         direction="column"
@@ -176,7 +176,7 @@ class OnboardContacts extends React.Component {
             style={{
               textAlign: "center",
               padding: 16,
-              color: this.props.theme.palette.primary.dark
+              color: this.props.theme.palette.primary.main
             }}
           >
             <FormattedMessage id={"onboard.yourContact"} />
