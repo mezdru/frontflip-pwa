@@ -45,7 +45,7 @@ class OnboardPage extends React.PureComponent {
       ReactGA.pageview(window.location.pathname);
     });
 
-    if(onboardMode === "edit" || (onboardMode === "create" && recordTag !== "@NewProfile")) {
+    if(onboardMode === "edit" || (onboardMode === "create" && recordTag !== "@NewProfile" && recordTag !== "@NewEvent")) {
       await this.props.recordStore.fetchByTag(recordTag, orgId)
       .catch(e => {
         this.setState({redirectTo: getBaseUrl(this.props)});

@@ -147,18 +147,19 @@ class OnboardStepper extends React.Component {
     const { edit, create } = this.props;
     const { currentUrlRecord } = this.props.recordStore;
     const { currentOrganisation } = this.props.orgStore;
-
+    const { url } = this.props.commonStore;
+    
     if (edit) {
       return currentUrlRecord;
     } else if (create) {
       if (currentUrlRecord) return currentUrlRecord;
       let newRecord = {
-        tag: "@NewProfile",
+        tag: url.params.recordTag,
         organisation: currentOrganisation._id,
-        type: "person"
+        type: url.params.recordTag === '@NewEvent' ? 'event' : 'person'
       };
       this.props.recordStore.addRecord(newRecord);
-      return this.props.recordStore.getRecord(null, "@NewProfile");
+      return this.props.recordStore.getRecord(null, url.params.recordTag);
     }
     return this.props.recordStore.currentUserRecord;
   };
