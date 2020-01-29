@@ -148,7 +148,7 @@ class OnboardWings extends React.Component {
           style={{
             textAlign: "center",
             padding: 8,
-            color: this.props.theme.palette.primary.light
+            color: this.props.theme.palette.primary.main
           }}
         >
           <FormattedMessage id={"onboard.chooseYourWings"} />

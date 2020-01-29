@@ -47,7 +47,7 @@ export const styles = theme => ({
     color: 'white'
   },
   onboardMode: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.primary.light,
     color: theme.palette.primary.dark,
 
   },
@@ -124,6 +124,17 @@ export const styles = theme => ({
     '& span': {
       pointerEvents: 'none',
       marginLeft: 2
+    }
+  },
+  clearRoot: {
+    backgroundColor: 'white',
+    borderRadius: '50%',
+    color: theme.palette.primary.light,
+    marginRight: -4,
+    transition: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+    '&:hover': {
+      opacity: 0.6,
+      color: theme.palette.primary.main
     }
   }
 });

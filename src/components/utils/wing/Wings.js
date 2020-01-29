@@ -125,8 +125,8 @@ class Wings extends React.PureComponent {
         )}
 
         {onDelete && (
-          <div className={classes.clapRoot} onClick={onDelete} >
-            <Clear style={{marginTop: -2}}/>
+          <div className={classes.clearRoot} onClick={onDelete} >
+            <Clear />
           </div>
         )}
 

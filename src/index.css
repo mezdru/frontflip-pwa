@@ -78,6 +78,13 @@ main {
   overflow-x: hidden;
 }
 
+.animated > div{
+  background-color: #FF0018 !important;
+  animation-name: wingEaseIn;
+  animation-fill-mode: forwards;
+  animation-duration: 300ms;
+}
+
 @keyframes easeIn {
   from {
     opacity: 0;
@@ -89,7 +96,6 @@ main {
 @keyframes wingEaseIn {
   from {
     background: #FF0018;
-    color: white;
     transform: scale(0);
   }
   85% {
@@ -97,7 +103,6 @@ main {
   }
   to {
     background: #e4e5ec;
-    color: #2b2d3c;
     transform: scale(1);
   }
 }
