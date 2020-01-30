@@ -1,4 +1,4 @@
-import {createMuiTheme, responsiveFontSizes} from '@material-ui/core/styles';
+import {createMuiTheme} from '@material-ui/core/styles';
 
 export const palette = {
   secondary: {
@@ -18,7 +18,7 @@ export const palette = {
   }
 };
 
-let theme = createMuiTheme({
+export default createMuiTheme({
   palette: palette,
   typography: {
     useNextVariants: true,
