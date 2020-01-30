@@ -61,8 +61,9 @@ export const styles = theme => ({
     color: 'white',
     marginBottom: 0,
     overflow: 'hidden',
+    maxHeight: '6.9rem',
     [theme.breakpoints.down('xs')]: {
-      maxHeight: 75
+      maxHeight: '4.5rem'
     }
   },
   ellipsis: {
