@@ -40,14 +40,10 @@ function OnboardEventDate({
   const [endDate, setEndDate] = useState(null);
 
   const handleChange = (date, field) => {
-    console.log('eheh', date);
     let dateObject = moment(date).toDate();
     record[field] = dateObject;
-
     if(field === "startDate") setStartDate(dateObject);
     else setEndDate(dateObject);
-
-    console.log(JSON.parse(JSON.stringify(record)))
   }
 
   moment.locale(commonStore.locale);
