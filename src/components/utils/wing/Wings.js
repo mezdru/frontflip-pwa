@@ -20,17 +20,7 @@ class Wings extends React.PureComponent {
     rateLimitActive: false
   }
 
-  // componentWillMount() {
-  //   this.t1 = window.performance.now();
-  // }
-
   componentDidMount() {
-    // let renderTime = window.performance.now() - this.t1;
-    // console.log(renderTime)
-    // if(renderTime < 100) {
-    //   window.totalRender += renderTime;
-    //   window.renderCount += 1;
-    // }
     this.setState({ canClap: this.props.canClap(this.props.recordId) });
 
     if(this.props.mode === 'profile') {
