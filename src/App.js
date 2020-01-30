@@ -6,6 +6,9 @@ import LogRocket from 'logrocket';
 import setupLogRocketReact from 'logrocket-react';
 import Routes from './routes/Routes';
 
+window.totalRender = 0;
+window.renderCount = 0;
+
 if (process.env.NODE_ENV !== 'development' && process.env.REACT_APP_LOGROCKET) {
   LogRocket.init(process.env.REACT_APP_LOGROCKET, {
     release: version,

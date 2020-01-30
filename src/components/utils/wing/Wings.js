@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import withClapManagement from "../../../hoc/ClapManagement.hoc";
 import { withStyles, Typography } from '@material-ui/core';
 import { styles } from './Wings.css';
-import ApplauseIcon from '../../../resources/icons/Applause.js';
 import classNames from 'classnames';
-import ClickBurst from '../../../hoc/ClickBurst';
 import { Clear } from '@material-ui/icons';
+
+const ClickBurst = React.lazy(() => import("../../../hoc/ClickBurst"));
+const ApplauseIcon = React.lazy(() => import("../../../resources/icons/Applause"));
 
 let interval;
 
@@ -19,7 +20,17 @@ class Wings extends React.PureComponent {
     rateLimitActive: false
   }
 
+  // componentWillMount() {
+  //   this.t1 = window.performance.now();
+  // }
+
   componentDidMount() {
+    // let renderTime = window.performance.now() - this.t1;
+    // console.log(renderTime)
+    // if(renderTime < 100) {
+    //   window.totalRender += renderTime;
+    //   window.renderCount += 1;
+    // }
     this.setState({ canClap: this.props.canClap(this.props.recordId) });
 
     if(this.props.mode === 'profile') {
@@ -102,22 +113,26 @@ class Wings extends React.PureComponent {
         </span>
 
         {canClap && enableClap && (
-          <ClickBurst intervalDuration={intervalDuration}>
-            <div className={classes.clapRoot} id="clap"
-              onMouseDown={this.handleClapDown}
-              onMouseUp={this.handleClapUp}
-            >
-              <ApplauseIcon className={classNames(classMode, classes.applauseIcon)} />
-              <span>
-                {claps}
-              </span>
-            </div>
-          </ClickBurst>
+          <Suspense fallback={<></>}>
+            <ClickBurst intervalDuration={intervalDuration}>
+              <div className={classes.clapRoot} id="clap"
+                onMouseDown={this.handleClapDown}
+                onMouseUp={this.handleClapUp}
+              >
+                <ApplauseIcon className={classNames(classMode, classes.applauseIcon)} />
+                <span>
+                  {claps}
+                </span>
+              </div>
+            </ClickBurst>
+          </Suspense>
         )}
 
         {!canClap && enableClap && (
           <div className={classes.clapRoot} id="clap" >
-            <ApplauseIcon className={classNames(classMode, classes.applauseIcon)} />
+            <Suspense fallback={<></>}>
+              <ApplauseIcon className={classNames(classMode, classes.applauseIcon)} />
+            </Suspense>
             <span>
               {claps}
             </span>
