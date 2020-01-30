@@ -53,8 +53,13 @@ class OnboardStepper extends React.Component {
     this.isUnmount = true;
   }
 
+  /**
+   * @description Make onboard steps in organisation 
+   * @note Use @NewEvent
+   */
   makeSteps = async stepLabel => {
     let org = this.props.orgStore.currentOrganisation;
+    let recordTag = this.props.commonStore.url.params.recordTag;
     let steps;
 
     if (undefsafe(org, "onboardSteps.length") > 0) {
@@ -68,6 +73,14 @@ class OnboardStepper extends React.Component {
         });
       steps.push("wings");
     }
+
+    // if event, add "date" after "intro"
+    if(recordTag === '@NewEvent' || this.getWorkingRecord().type === 'event') {
+      let indexOfIntro = steps.indexOf("intro");
+      if(indexOfIntro === -1) steps.unshift("intro");
+      steps.splice(Math.max(indexOfIntro, 0)+1, 0, "date");
+    }
+
     this.setState({
       steps: steps,
       activeStep: stepLabel ? steps.indexOf(stepLabel.replace("%23", "#")) : 0,
@@ -143,13 +156,14 @@ class OnboardStepper extends React.Component {
     });
   };
 
+  /**
+   * @note Use @NewEvent
+   */
   getWorkingRecord = () => {
     const { edit, create } = this.props;
     const { currentUrlRecord } = this.props.recordStore;
     const { currentOrganisation } = this.props.orgStore;
     const { url } = this.props.commonStore;
-
-    console.log(currentUrlRecord && JSON.parse(JSON.stringify(currentUrlRecord)));
     
     if (edit) {
       return currentUrlRecord;

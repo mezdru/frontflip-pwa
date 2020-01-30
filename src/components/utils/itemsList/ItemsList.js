@@ -171,6 +171,7 @@ class OrganisationsList extends React.Component {
                 component={item.redirectComponent}
                 href={item.redirectLink}
                 to={item.redirectLink}
+                push
                 key={item._id}
                 className={classes.orgItem}
                 onClick={this.props.onClick}
