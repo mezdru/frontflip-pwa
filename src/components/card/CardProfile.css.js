@@ -1,3 +1,8 @@
+const logoSize = {
+  default: 200,
+  xs: 130
+};
+
 export const styles = theme => ({
   root: {
     position: 'relative',
@@ -20,17 +25,17 @@ export const styles = theme => ({
     position: 'absolute',
     top: -40,
     left: -40,
-    width: 240,
-    height: 240,
+    width: logoSize.default+40,
+    height: logoSize.default+40,
     backgroundRepeat: 'no-repeat',
     backgroundPositionX: 'right',
     backgroundPositionY: 'bottom',
     borderRadius: '50%',
-    backgroundSize: '200px 200px',
+    backgroundSize: `${logoSize.default}px ${logoSize.default}px`,
     [theme.breakpoints.down('xs')]: {
-      width: 190,
-      height: 190,
-      backgroundSize: '150px 150px',
+      width: logoSize.xs+40,
+      height: logoSize.xs+40,
+      backgroundSize: `${logoSize.xs}px ${logoSize.xs}px`,
     },
   },
   logoFilter: {
@@ -45,15 +50,15 @@ export const styles = theme => ({
     position: 'relative',
     top: 0,
     right: 0,
-    left: 200,
+    left: logoSize.default,
     width: 'calc(100% - 232px)',
     margin: 16,
     flex: 1,
-    height: 168,
+    height: logoSize.default-32,
     [theme.breakpoints.down('xs')]: {
       width: 'calc(100% - 182px)',
-      height: 134,
-      left: 150,
+      height: logoSize.xs-16,
+      left: logoSize.xs,
       marginBottom: 0,
     }
   },

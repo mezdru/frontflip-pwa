@@ -95,6 +95,10 @@ class CardProfile extends React.Component {
     ProfileService.orderHashtags(hit);
 
     this.smoothImageLoad(hit);
+    if(window.performance.memory) {
+      let m = window.performance.memory;
+      console.log( (m.usedJSHeapSize / m.totalJSHeapSize)*100  + ' %');
+    }
 
     return (
       <Link
