@@ -2,7 +2,7 @@
 // const someCommonValues = ['common', 'values'];
 import qs from "qs";
 
-let UAParser = require('ua-parser-js');
+let UAParser = require("ua-parser-js");
 
 export const UAParserInstance = new UAParser();
 
@@ -93,16 +93,16 @@ export const getParsedUrlQuery = () => {
   if (query.charAt(0) === "?") query = query.substr(1);
   let parsedQuery = qs.parse(query);
   return parsedQuery || {};
-}
+};
 
 /**
  * @description Transform uploadcare link to fetch image in progressive mode
- * @param {String} url 
+ * @param {String} url
  */
-export const getProgressiveImage = (url) => {
-  if(!url) return;
-  if(url.search("https://ucarecdn.com") === -1) return url; // not an uploadcare link
-  if(url.charAt(url.length - 1) !== '/') url += '/';
-  url += '-/progressive/yes/';
+export const getProgressiveImage = url => {
+  if (!url) return;
+  if (url.search("https://ucarecdn.com") === -1) return url; // not an uploadcare link
+  if (url.charAt(url.length - 1) !== "/") url += "/";
+  url += "-/progressive/yes/";
   return url;
-}
+};
