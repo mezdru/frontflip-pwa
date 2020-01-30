@@ -27,6 +27,7 @@ export const styles = theme => ({
   },
   text: {
     color: theme.palette.primary.dark,
+    overflow: 'hidden'
   },
   description: {
     maxHeight: 500,
