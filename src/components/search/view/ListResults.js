@@ -110,7 +110,7 @@ class ListResults extends React.Component {
                     onScroll={onChildScroll}
                     overscanRowCount={5}
                     rowCount={hits.length}
-                    rowHeight={this.props.width === "xs" ? 235 + 16 : 273 + 32}
+                    rowHeight={this.props.width === "xs" ? 215 + 16 : 265 + 32}
                     scrollToIndex={scrollToIndex}
                     rowRenderer={this.rowRenderer}
                     scrollTop={scrollTop}

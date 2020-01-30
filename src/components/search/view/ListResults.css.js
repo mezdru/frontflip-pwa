@@ -5,6 +5,7 @@ export const styles = theme => ({
     width: "100%",
     minHeight: "calc(100vh - 129px)",
     backgroundColor: "#f2f2f2",
+    paddingBottom: 16,
     "& ul": {
       listStyleType: "none",
       padding: 0,
@@ -21,8 +22,8 @@ export const styles = theme => ({
       margin: "auto"
     },
     [theme.breakpoints.up("sm")]: {
-      paddingTop: 16,
-      paddingBottom: 16
+      paddingTop: 32,
+      paddingBottom: 0
     }
   },
   cardMobileView: {
