@@ -65,10 +65,6 @@ export const asyncForEach = async (array, callback) => {
  * @param {*} newObj
  */
 export const replaceAndKeepReference = (obj, newObj) => {
-  // console.log(obj)
-  // console.log(JSON.parse(JSON.stringify(obj)))
-  // console.log(JSON.parse(JSON.stringify(newObj)))
-
   Object.keys(obj).forEach(function(key) {
     if (!newObj[key]) delete obj[key];
   });
