@@ -12,13 +12,14 @@ const styles = theme => ({
     textAlign: "left"
   },
   text: {
-    color: "rgba(255,255,255,.7)"
+    color: "rgba(255,255,255,.7)",
+    fontSize: '0.75rem'
   },
   root: {
   }
 });
 
-function EventDate({ commonStore, startDate, endDate, classes, ...props }) {
+function EventDate({ commonStore, startDate, endDate, classes, className, ...props }) {
   moment.locale(commonStore.locale);
 
   let getTooltip = () => {
@@ -33,7 +34,7 @@ function EventDate({ commonStore, startDate, endDate, classes, ...props }) {
 
   if (new Date().getTime() < endDate) {
     return (
-      <div className={classes.root}>
+      <div className={className}>
         <Tooltip title={getTooltip()}>
           <Grid container>
             <Grid item xs={2} className={classes.icon}>

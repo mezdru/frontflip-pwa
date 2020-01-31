@@ -58,19 +58,24 @@ export const styles = theme => ({
       marginBottom: 0,
     }
   },
-  text: {
+  name: {
+    fontSize: '1.5rem',
     color: 'white',
-    marginBottom: 0,
+    marginBottom: 8,
     overflow: 'hidden',
-    maxHeight: '6.9rem',
+    maxHeight: '3.7rem',
     [theme.breakpoints.down('xs')]: {
-      maxHeight: '4.5rem'
+      maxHeight: '3.6rem'
     }
   },
-  ellipsis: {
+  intro: {
+    fontSize: '1rem',
+    color: 'white',
     overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap'
+    maxHeight: '2.6rem',
+    [theme.breakpoints.down('xs')]: {
+      maxHeight: '2.5rem'
+    }
   },
   contactsContainer : {
     position: 'absolute',

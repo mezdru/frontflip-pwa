@@ -112,7 +112,7 @@ class CardProfile extends React.Component {
             ></div>
           </div>
           <div className={classes.dataContainer}>
-            <Typography variant="h1" className={classes.text}>
+            <Typography variant="h1" className={classes.name}>
               <span
                 dangerouslySetInnerHTML={{
                   __html:
@@ -126,7 +126,7 @@ class CardProfile extends React.Component {
             </Typography>
             <Typography
               variant="h2"
-              className={`${classes.text} ${classes.ellipsis}`}
+              className={classes.intro}
             >
               <span
                 dangerouslySetInnerHTML={{
@@ -150,7 +150,11 @@ class CardProfile extends React.Component {
               </Suspense>
             ) : (
               <Suspense fallback={<></>}>
-                <EventDate startDate={hit.startDate} endDate={hit.endDate} />
+                <EventDate
+                  startDate={hit.startDate}
+                  endDate={hit.endDate}
+                  className={classes.contactsContainer}
+                />
               </Suspense>
             )}
           </div>
