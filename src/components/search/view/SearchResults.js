@@ -7,11 +7,13 @@ import { observe } from "mobx";
 
 const ListResults = React.lazy(() => import("./ListResults"));
 const MapPage = React.lazy(() => import("../../../pages/map"));
+
 const VIEW_LIST = "list";
 const VIEW_MAP = "map";
 const DEFAULT_FILTER = [
   { type: "type", value: "person" },
-  { type: "type", value: "event", options: {operator: 'OR'} }
+  { type: "type", value: "event", options: {operator: 'OR'} },
+  // { type: "endDate", value: new Date().getTime(), options: {operator: 'gt'}}, // doesn't work because of null values
 ];
 
 class SearchResults extends React.Component {
