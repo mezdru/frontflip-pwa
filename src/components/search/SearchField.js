@@ -12,7 +12,7 @@ import Wings from "../utils/wing/Wings";
 import { styles } from "./SearchField.css";
 import suggestionsService from "../../services/suggestions.service";
 
-const FILTERS_ALLOWED = ["hashtags.tag", "tag", "query"];
+const FILTERS_ALLOWED = ["hashtags.tag", "tag", "query", "type"];
 
 class SearchField extends PureComponent {
   constructor(props) {
@@ -164,10 +164,13 @@ class SearchField extends PureComponent {
           {filters &&
             filters.length > 0 &&
             filters.map((filter, index) => {
-              let displayedName = ProfileService.getWingDisplayedName(
-                filter,
-                this.props.commonStore.locale
-              );
+              let displayedName =
+                filter.tag !== "event"
+                  ? ProfileService.getWingDisplayedName(
+                      filter,
+                      this.props.commonStore.locale
+                    )
+                  : this.props.intl.formatMessage({ id: "search.type.event" });
               return (
                 <Wings
                   label={ProfileService.htmlDecode(displayedName)}
@@ -213,7 +216,7 @@ export default inject(
 )(
   observer(
     injectIntl(
-        withStyles(styles, { withTheme: true })(withWidth()(SearchField))
+      withStyles(styles, { withTheme: true })(withWidth()(SearchField))
     )
   )
 );

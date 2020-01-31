@@ -11,7 +11,7 @@ const VIEW_LIST = "list";
 const VIEW_MAP = "map";
 const DEFAULT_FILTER = [
   { type: "type", value: "person" },
-  { type: "type", value: "event" }
+  { type: "type", value: "event", options: {operator: 'OR'} }
 ];
 
 class SearchResults extends React.Component {
