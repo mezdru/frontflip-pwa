@@ -192,6 +192,5 @@ class OrganisationsList extends React.Component {
 
 export default inject(
   "orgStore",
-  "commonStore",
-  "userStore"
+  "commonStore"
 )(observer(withStyles(style, { withTheme: true })(OrganisationsList)));
