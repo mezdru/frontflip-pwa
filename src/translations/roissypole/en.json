@@ -174,5 +174,6 @@
   "onboard.date.cancel.label": "Cancel",
   "onboard.date.startDate.placeholder": "Start date",
   "onboard.date.endDate.placeholder": "End date",
-  "search.type.event": "Event"
+  "search.type.event": "Event",
+  "menu.drawer.listEventsTitle": "My events"
 }

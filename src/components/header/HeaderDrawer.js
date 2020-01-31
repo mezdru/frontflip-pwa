@@ -51,10 +51,19 @@ class HeaderDrawer extends Component {
       currentUser.superadmin));
   }
 
+  useEvents = () => {
+    const { currentUser, currentOrgAndRecord } = this.props.userStore;
+    const { currentOrganisation } = this.props.orgStore;
+
+    return (currentUser && currentOrgAndRecord && (
+      currentOrganisation.features.events ||
+      currentUser.superadmin));
+  }
+
   render() {
     const { classes, auth, open, intl } = this.props;
     const { currentUserRecord } = this.props.recordStore;
-    const { currentOrganisation } = this.props.orgStore;
+    const { currentOrganisation, userOrganisations } = this.props.orgStore;
     const { currentUser, currentOrgAndRecord } = this.props.userStore;
     const { locale } = this.props.commonStore;
     if (currentUserRecord) currentUserRecord.name = entities.decode(currentUserRecord.name)
@@ -114,7 +123,19 @@ class HeaderDrawer extends Component {
                         primaryTypographyProps={{ noWrap: true, style: { fontWeight: 'bold' } }} />
                     </ListItem>
                     <Suspense fallback={<></>}>
-                      <ItemsList onClick={this.props.handleDrawerClose} dataType={"record"}/>
+                      <ItemsList onClick={this.props.handleDrawerClose} dataType={"person"} data={undefsafe(currentOrgAndRecord, 'secondaryRecords')} />
+                    </Suspense>
+                    <Divider className={classes.divider} />
+                  </>
+                )}
+                {this.useEvents() && (
+                  <>
+                    <ListItem>
+                      <ListItemText primary={intl.formatMessage({ id: 'menu.drawer.listEventsTitle' })}
+                        primaryTypographyProps={{ noWrap: true, style: { fontWeight: 'bold' } }} />
+                    </ListItem>
+                    <Suspense fallback={<></>}>
+                      <ItemsList onClick={this.props.handleDrawerClose} dataType={"event"} data={undefsafe(currentOrgAndRecord, 'events')}/>
                     </Suspense>
                     <Divider className={classes.divider} />
                   </>
@@ -160,7 +181,7 @@ class HeaderDrawer extends Component {
                           primaryTypographyProps={{ noWrap: true, style: { fontWeight: 'bold' } }} />
                       </ListItem>
                       <Suspense fallback={<></>}>
-                        <ItemsList onClick={this.props.handleDrawerClose} dataType={"organisation"}/>
+                        <ItemsList onClick={this.props.handleDrawerClose} dataType={"organisation"} data={userOrganisations} />
                       </Suspense>
                     </>
                   )}

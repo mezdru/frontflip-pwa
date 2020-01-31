@@ -2,7 +2,7 @@ import { observable, action, decorate, computed } from "mobx";
 import commonStore from "./common.store";
 import Store from './store';
 import { replaceAndKeepReference } from "../services/utils.service";
-
+import userStore from './user.store';
 class orgStore extends Store {
 
   organisations = [];
@@ -19,6 +19,19 @@ class orgStore extends Store {
 
   get currentAlgoliaKey() {
     try { return this.getAlgoliaKey(this.currentOrganisation._id) } catch (e) { return null; };
+  }
+
+  get userOrganisations() {
+    try {
+      return this.organisations.filter(
+        org =>
+          userStore.currentUser.orgsAndRecords.find(
+            oar => (oar.organisation._id || oar.organisation) === org._id
+          )
+      );
+    }catch(e) {
+      return [];
+    }
   }
 
   async getOrFetchOrganisation(orgId, orgTag) {
@@ -89,6 +102,7 @@ class orgStore extends Store {
 decorate(orgStore, {
   currentOrganisation: computed,
   currentAlgoliaKey: computed,
+  userOrganisations: computed,
   organisations: observable,
   algoliaKeys: observable,
   fetchForPublic: action,

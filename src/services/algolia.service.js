@@ -9,6 +9,7 @@ class AlgoliaService {
   indexName = "world";
   client;
   algoliaKey;
+  DATE_FIELDS = ["welcomedAt", "startDate", "endDate"];
 
   waitingTasks = [];
 
@@ -252,7 +253,7 @@ class AlgoliaService {
       if (filter.type === "query") {
         if (queryReq !== "") queryReq += " ";
         queryReq += filter.value;
-      } else if(filter.type === 'welcomedAt') {
+      } else if(this.DATE_FIELDS.some(elt => elt === filter.type)) {
         if (filterReq !== "") filterReq += " AND ";
         let dateTimestamp = new Date(filter.value).getTime();
         filterReq += `${filter.type + (filter.options.operator === 'gt' ? ' > ' : ' < ') + dateTimestamp}`;

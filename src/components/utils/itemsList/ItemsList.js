@@ -85,29 +85,10 @@ class OrganisationsList extends React.Component {
   };
 
   componentDidMount() {
-    let currentUserOrganisations = this.props.orgStore.organisations.filter(
-      org =>
-        this.props.userStore.currentUser.orgsAndRecords.find(
-          oar => (oar.organisation._id || oar.organisation) === org._id
-        )
-    );
-
-    let currentUserSecondaryRecords = undefsafe(
-      this.props.userStore.currentOrgAndRecord,
-      "secondaryRecords"
-    );
-
-    if (this.props.dataType === "record") {
-      this.setState({
-        items: this.buildItems(currentUserSecondaryRecords),
-        loadInProgress: false
-      });
-    } else {
-      this.setState({
-        items: this.buildItems(currentUserOrganisations),
-        loadInProgress: false
-      });
-    }
+    this.setState({
+      items: this.buildItems(this.props.data),
+      loadInProgress: false
+    });
   }
 
   /**
@@ -123,33 +104,38 @@ class OrganisationsList extends React.Component {
       data.forEach(elt => {
         if (
           (dataType === "organisation" &&
-            elt.tag !== undefsafe(currentOrganisation, 'tag')) ||
-          dataType === "record"
+            elt.tag !== undefsafe(currentOrganisation, "tag")) ||
+          dataType === "person" ||
+          dataType === "event"
         ) {
           arrayOfItems.push({
             name: elt.name,
             _id: elt._id,
             pictureUrl:
-              dataType === "record"
-                ? undefsafe(elt, "picture.url")
-                : undefsafe(elt, "logo.url"),
+              dataType === "organisation"
+                ? undefsafe(elt, "logo.url")
+                : undefsafe(elt, "picture.url"),
             redirectLink: `/${locale}/${
-              dataType === "record"
-                ? currentOrganisation.tag + "/" + elt.tag
-                : elt.tag
+              dataType === "organisation"
+                ? elt.tag
+                : currentOrganisation.tag + "/" + elt.tag
             }`,
-            redirectComponent: dataType === "record" ? Link : "a"
+            redirectComponent: dataType === "organisation" ? "a" : Link
           });
         }
       });
     }
 
-    if (dataType === "record") {
+    if (dataType === "person" || dataType === "event") {
       arrayOfItems.push({
         name: null,
         _id: "a1",
         addButton: true,
-        redirectLink: `/${locale}/${currentOrganisation.tag}/onboard/intro/create/@NewProfile`,
+        redirectLink: `/${locale}/${
+          currentOrganisation.tag
+        }/onboard/intro/create/${
+          dataType === "person" ? "@NewProfile" : "@NewEvent"
+        }`,
         redirectComponent: Link
       });
     }
@@ -206,6 +192,5 @@ class OrganisationsList extends React.Component {
 
 export default inject(
   "orgStore",
-  "commonStore",
-  "userStore"
+  "commonStore"
 )(observer(withStyles(style, { withTheme: true })(OrganisationsList)));
