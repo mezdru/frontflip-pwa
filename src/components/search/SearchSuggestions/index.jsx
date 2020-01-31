@@ -147,7 +147,7 @@ class SearchSuggestions extends React.Component {
           className={classes.suggestionsContainer}
           id="search-suggestions-container"
         >
-          {(true || undefsafe(currentOrganisation, "features.events")) &&
+          {undefsafe(currentOrganisation, "features.events") &&
             this.shouldDisplaySuggestion("event") && (
               <Chip
                 component={React.forwardRef((props, ref) => {
