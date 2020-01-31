@@ -27,6 +27,7 @@ export const styles = theme => ({
     backgroundPositionY: 'bottom',
     borderRadius: '50%',
     backgroundSize: '200px 200px',
+    backgroundColor: 'white',
     [theme.breakpoints.down('xs')]: {
       width: 190,
       height: 190,
