@@ -2,6 +2,7 @@ import commonStore from "../stores/common.store";
 import algoliasearch from "algoliasearch";
 import orgStore from "../stores/organisation.store";
 import { observe } from "mobx";
+import undefsafe from 'undefsafe';
 
 class AlgoliaService {
   index;
@@ -63,6 +64,9 @@ class AlgoliaService {
     aKeyObject.initialized = true;
   }
 
+  /**
+   * @description If algolia client isn't initialized yet, the Algolia search methods will not works. We have to await the init to run the methods
+   */
   addWaitingTask = () => {
     let waitingTaskResolve;
     let waitingTask = new Promise((resolve, reject) => {waitingTaskResolve = resolve});
@@ -70,19 +74,14 @@ class AlgoliaService {
     return waitingTask;
   }
 
+  /**
+   * @description Run all waiting tasks to run all waiting methods (after algolia client init)
+   */
   runWaitingTasks = () => {
     this.waitingTasks.forEach(waitingTask => {
       waitingTask();
     });
   }
-
-
-
-
-
-
-
-
 
   async fetchFacetValues(lastSelection, privateOnly, filters) {
     if(!this.index) await this.addWaitingTask();
@@ -130,6 +129,11 @@ class AlgoliaService {
     });
   }
 
+  /**
+   * 
+   * @param {*} filters 
+   * @todo Use makeRequest
+   */
   async loadBank(filters) {
     if(!this.index) await this.addWaitingTask();
     return new Promise((resolve, reject) => {
@@ -206,6 +210,8 @@ class AlgoliaService {
 
   /**
    * @description Add or update local bank and remove duplicate entries
+   * @note Local Storage isn't the best way to store all this data. The max size is often reached.
+   * @todo Use IndexedDB if possible ? (not available for all browser)
    */
   addToLocalStorage(hits) {
     return new Promise((resolve, reject) => {
@@ -221,6 +227,9 @@ class AlgoliaService {
     });
   }
 
+  /**
+   * @todo Useless method, use makeRequest
+   */
   makeOptionsFilters(hashtagOnly, wingsFamily) {
     let filter = "";
     if (hashtagOnly) filter += "type:hashtag";
@@ -231,7 +240,7 @@ class AlgoliaService {
   /**
    *
    * @param {*} filters
-   * @return {[String, String]} [filterRequest, queryRequest]
+   * @return {[{type, value, options}]} Array of filters with filter type, filter value and options like operators
    */
   makeRequest(filters) {
     if(!filters || filters.length === 0 ) return [null, null];
@@ -248,8 +257,7 @@ class AlgoliaService {
         let dateTimestamp = new Date(filter.value).getTime();
         filterReq += `${filter.type + (filter.options.operator === 'gt' ? ' > ' : ' < ') + dateTimestamp}`;
       } else if(filter.type !== 'view'){
-        if(filter.type === 'type' && filter.value === 'event') filterReq += " OR ";
-        else if (filterReq !== "") filterReq += " AND ";
+        if (filterReq !== "") filterReq += ` ${undefsafe(filter, 'options.operator') || "AND"} `;
         filterReq += `${filter.type}:${filter.value.replace("%23", "#")}`;
       }
     });
@@ -257,6 +265,9 @@ class AlgoliaService {
     return [filterReq, queryReq];
   }
 
+  /**
+   * @todo Useless method, use makeRequest
+   */
   makeFacetFilters(lastSelection, privateOnly) {
     let query = [];
     if (privateOnly)

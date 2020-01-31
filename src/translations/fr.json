@@ -173,5 +173,6 @@
   "onboard.date.clear.label": "Vider",
   "onboard.date.cancel.label": "Annuler",
   "onboard.date.startDate.placeholder": "Date de début",
-  "onboard.date.endDate.placeholder": "Date de fin"
+  "onboard.date.endDate.placeholder": "Date de fin",
+  "search.type.event": "Événement"
 }

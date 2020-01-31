@@ -105,8 +105,8 @@ class SearchSuggestions extends React.Component {
   };
 
   handleEventFilter = () => {
-    this.props.searchStore.addFilter('type', 'event');
-  }
+    this.props.searchStore.addFilter("type", "event", { operator: "AND" });
+  };
 
   render() {
     const { facetHits } = this.state;
@@ -147,27 +147,28 @@ class SearchSuggestions extends React.Component {
           className={classes.suggestionsContainer}
           id="search-suggestions-container"
         >
-          {(true || undefsafe(currentOrganisation, "features.events")) && this.shouldDisplaySuggestion('event') && (
-            <Chip
-              component={React.forwardRef((props, ref) => {
-                return (
-                  <div {...props} ref={ref}>
-                    <div className={classes.suggestionPicture}>
-                      <img
-                        alt="Emoji"
-                        src={ProfileService.getPicturePath({ emoji: "📅" })}
-                      />
+          {(true || undefsafe(currentOrganisation, "features.events")) &&
+            this.shouldDisplaySuggestion("event") && (
+              <Chip
+                component={React.forwardRef((props, ref) => {
+                  return (
+                    <div {...props} ref={ref}>
+                      <div className={classes.suggestionPicture}>
+                        <img
+                          alt="Emoji"
+                          src={ProfileService.getPicturePath({ emoji: "📅" })}
+                        />
+                      </div>
+                      <div className={classes.suggestionLabel}>
+                        <FormattedMessage id="search.type.event" />
+                      </div>
                     </div>
-                    <div className={classes.suggestionLabel}>
-                      <FormattedMessage id="search.type.event" />
-                    </div>
-                  </div>
-                );
-              })}
-              onClick={this.handleEventFilter}
-              className={classes.suggestion}
-            />
-          )}
+                  );
+                })}
+                onClick={this.handleEventFilter}
+                className={classes.suggestion}
+              />
+            )}
 
           {facetHits.map((item, i) => {
             let indexOfItem = facetHits.findIndex(

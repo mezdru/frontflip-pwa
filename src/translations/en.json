@@ -173,5 +173,6 @@
   "onboard.date.clear.label": "Clear",
   "onboard.date.cancel.label": "Cancel",
   "onboard.date.startDate.placeholder": "Start date",
-  "onboard.date.endDate.placeholder": "End date"
+  "onboard.date.endDate.placeholder": "End date",
+  "search.type.event": "Event"
 }
