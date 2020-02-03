@@ -32,6 +32,7 @@ export const styles = theme => ({
   description: {
     maxHeight: 500,
     overflowY: 'auto',
-    marginTop: 16
+    marginTop: 16,
+    whiteSpace: 'pre-wrap',
   }
 });
