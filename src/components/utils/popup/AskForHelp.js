@@ -55,6 +55,7 @@ class AskForHelp extends React.Component {
     AlgoliaService.fetchHits(this.props.searchStore.values.filters, null, null, false, 50)
       .then((content) => {
         let hits = Array.from(content.hits).filter(hit => hit.tag !== this.props.recordStore.currentUserRecord.tag); // not user record
+        hits = hits.filter(elt => elt.type === 'person');
         this.setState({ recipients: hits });
       });
   }
