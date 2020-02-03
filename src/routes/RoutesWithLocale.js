@@ -35,8 +35,8 @@ let isRoissypole = function() {
 addLocaleData([...locale_en, ...locale_fr]);
 
 const messages = {
-  fr: isRoissypole() ? roissypole_message_fr : messages_fr,
-  en: isRoissypole() ? roissypole_message_en : messages_en
+  fr: isRoissypole() ? Object.assign(messages_fr, roissypole_message_fr) : messages_fr,
+  en: isRoissypole() ? Object.assign(messages_en, roissypole_message_en) : messages_en
 };
 
 var MomentConfigs = require("../components/configs/moment.conf");
