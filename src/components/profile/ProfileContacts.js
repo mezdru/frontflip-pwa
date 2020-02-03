@@ -44,7 +44,7 @@ const ProfileContacts = React.memo(
                   return (
                     <Grid
                       item
-                      key={contact._id}
+                      key={contact._id || index}
                       style={{ position: "relative" }}
                       onClick={e =>
                         props.keenStore.recordEvent("contact", {

@@ -146,5 +146,6 @@ export default inject(
   "orgStore",
   "recordStore",
   "userStore",
-  "searchStore"
+  "searchStore",
+  "keenStore"
 )(observer(withStyles(styles)(Popups)));

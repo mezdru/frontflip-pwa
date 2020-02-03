@@ -10,11 +10,11 @@ import { Close } from "@material-ui/icons";
 const styles = theme => ({
   content: {
     overflow: "auto",
-    textAlign: "center",
+    textAlign: "center"
     // padding: theme.spacing.unit * 2 + "px !important"
   },
   actions: {
-    justifyContent: "center",
+    justifyContent: "center"
     // margin: 0,
     // padding: theme.spacing.unit * 2
   },
@@ -45,18 +45,23 @@ class PopupLayout extends React.Component {
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
         style={this.props.style}
-        fullScreen={width === 'xs'}
+        fullScreen={width === "xs"}
         PaperProps={this.props.PaperProps}
       >
-        <DialogTitle>
-          {this.props.title}
-          <IconButton
-            className={classes.closeButton}
-            onClick={this.props.onClose}
-          >
-            <Close />
-          </IconButton>
-        </DialogTitle>
+        <DialogTitle
+          children={
+            <>
+              {this.props.title}
+              <IconButton
+                className={classes.closeButton}
+                onClick={this.props.onClose}
+              >
+                <Close />
+              </IconButton>
+            </>
+          }
+          disableTypography
+        />
         <DialogContent className={classes.content}>
           {this.props.children}
         </DialogContent>

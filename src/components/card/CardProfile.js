@@ -97,11 +97,11 @@ class CardProfile extends React.Component {
     this.smoothImageLoad(hit);
 
     return (
-      <Link
-        to={getBaseUrl(this.props) + "/" + hit.tag}
-        className={classes.noLinkStyle}
-      >
-        <div className={classes.root}>
+      <div className={classes.root}>
+        <Link
+          to={getBaseUrl(this.props) + "/" + hit.tag}
+          className={classes.noLinkStyle}
+        >
           <div
             className={classes.logo}
             style={{ backgroundImage: `url(${this.getLogoUrl(hit)})` }}
@@ -111,7 +111,13 @@ class CardProfile extends React.Component {
               className={classes.logoFilter}
             ></div>
           </div>
-          <div className={classes.dataContainer}>
+        </Link>
+
+        <div className={classes.dataContainer}>
+          <Link
+            to={getBaseUrl(this.props) + "/" + hit.tag}
+            className={classes.noLinkStyle}
+          >
             <Typography variant="h1" className={classes.name}>
               <span
                 dangerouslySetInnerHTML={{
@@ -124,10 +130,7 @@ class CardProfile extends React.Component {
                 }}
               ></span>
             </Typography>
-            <Typography
-              variant="h2"
-              className={classes.intro}
-            >
+            <Typography variant="h2" className={classes.intro}>
               <span
                 dangerouslySetInnerHTML={{
                   __html: ProfileService.htmlDecode(
@@ -140,76 +143,73 @@ class CardProfile extends React.Component {
                 }}
               ></span>
             </Typography>
-            {hit.type === "person" ? (
-              <Suspense fallback={<></>}>
-                <ContactsList
-                  className={classes.contactsContainer}
-                  handleContactClick={this.handleContactClick}
-                  contacts={hit.links}
-                />
-              </Suspense>
-            ) : (
-              <Suspense fallback={<></>}>
-                <EventDate
-                  startDate={hit.startDate}
-                  endDate={hit.endDate}
-                  className={classes.contactsContainer}
-                />
-              </Suspense>
-            )}
-          </div>
-          <div className={classes.wingsContainer}>
-            {hit.hashtags &&
-              hit.hashtags.map((hashtag, i) => {
-                if (
-                  currentWings >= WINGS_DISPLAYED ||
-                  this.isHidden(hashtag.tag)
-                )
-                  return null;
-                currentWings++;
-                let displayedName = ProfileService.getWingDisplayedName(
-                  hashtag,
-                  locale
-                );
-                return (
-                  <Suspense fallback={<></>} key={hashtag._id}>
-                    <Wings
-                      src={
-                        !light
-                          ? ProfileService.getPicturePath(hashtag.picture)
-                          : null
-                      }
-                      label={ProfileService.htmlDecode(displayedName)}
-                      onClick={e =>
-                        this.props.searchStore.addFilter(
-                          "hashtags.tag",
-                          hashtag.tag
-                        )
-                      }
-                      recordId={hit.objectID}
-                      hashtagId={hashtag._id}
-                      mode={hashtag.class ? "highlight" : "card"}
-                    />
-                  </Suspense>
-                );
-              })}
-            {hit.hashtags && hit.hashtags.length > WINGS_DISPLAYED && (
-              <Link to={getBaseUrl(this.props) + "/" + hit.tag}>
-                <Suspense fallback={<></>}>
+          </Link>
+          {hit.type === "person" ? (
+            <Suspense fallback={<></>}>
+              <ContactsList
+                className={classes.contactsContainer}
+                handleContactClick={this.handleContactClick}
+                contacts={hit.links}
+              />
+            </Suspense>
+          ) : (
+            <Suspense fallback={<></>}>
+              <EventDate
+                startDate={hit.startDate}
+                endDate={hit.endDate}
+                className={classes.contactsContainer}
+              />
+            </Suspense>
+          )}
+        </div>
+        <div className={classes.wingsContainer}>
+          {hit.hashtags &&
+            hit.hashtags.map((hashtag, i) => {
+              if (currentWings >= WINGS_DISPLAYED || this.isHidden(hashtag.tag))
+                return null;
+              currentWings++;
+              let displayedName = ProfileService.getWingDisplayedName(
+                hashtag,
+                locale
+              );
+              return (
+                <Suspense fallback={<></>} key={hashtag._id}>
                   <Wings
-                    label={this.props.intl.formatMessage(
-                      { id: "card.moreWings" },
-                      { counter: hit.hashtags.length - WINGS_DISPLAYED }
-                    )}
-                    enableClap={false}
-                    mode="card"
+                    src={
+                      !light
+                        ? ProfileService.getPicturePath(hashtag.picture)
+                        : null
+                    }
+                    label={ProfileService.htmlDecode(displayedName)}
+                    onClick={e =>
+                      this.props.searchStore.addFilter(
+                        "hashtags.tag",
+                        hashtag.tag
+                      )
+                    }
+                    recordId={hit.objectID}
+                    hashtagId={hashtag._id}
+                    mode={hashtag.class ? "highlight" : "card"}
                   />
                 </Suspense>
-              </Link>
-            )}
-          </div>
+              );
+            })}
+          {hit.hashtags && hit.hashtags.length > WINGS_DISPLAYED && (
+            <Link to={getBaseUrl(this.props) + "/" + hit.tag}>
+              <Suspense fallback={<></>}>
+                <Wings
+                  label={this.props.intl.formatMessage(
+                    { id: "card.moreWings" },
+                    { counter: hit.hashtags.length - WINGS_DISPLAYED }
+                  )}
+                  enableClap={false}
+                  mode="card"
+                />
+              </Suspense>
+            </Link>
+          )}
         </div>
-      </Link>
+      </div>
     );
   }
 }
