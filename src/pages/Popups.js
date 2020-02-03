@@ -47,6 +47,15 @@ class Popups extends React.Component {
   isCongrats = () => window.location.pathname.search("congrats") > -1;
 
   handleDisplayAskForHelp = () => {
+    this.props.keenStore.recordEvent(
+      "openAskForHelp", {
+        recordEmitter: undefsafe(
+          this.props.recordStore.currentUserRecord,
+          "_id"
+        )
+      }
+    );
+
     this.setState({ showAskForHelp: false }, () => {
       this.setState({ showAskForHelp: true });
     });

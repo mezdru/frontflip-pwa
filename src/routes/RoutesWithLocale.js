@@ -57,7 +57,6 @@ class RoutesWithLocale extends React.Component {
           if (isInStandaloneMode()) {
             // update user & create keen event
             this.props.keenStore.recordEvent("pwa-usage", {
-              userEmitter: undefsafe(this.props.userStore.currentUser, "_id"),
               browser: UAParserInstance.getResult()
             });
           }
