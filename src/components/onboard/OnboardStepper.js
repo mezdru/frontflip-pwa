@@ -23,7 +23,6 @@ import { styles } from "./OnboardStepper.css";
 import SlackService from "../../services/slack.service";
 import LoaderFeedback from "../utils/buttons/LoaderFeedback";
 import ErrorBoundary from "../../components/utils/errors/ErrorBoundary";
-import OnboardEventDate from "./steps/OnboardEventDate.js";
 
 const OnboardIntro = React.lazy(() => import("./steps/OnboardIntro"));
 const OnboardContacts = React.lazy(() => import("./steps/OnboardContacts"));
@@ -31,6 +30,7 @@ const OnboardWings = React.lazy(() => import("./steps/OnboardWings"));
 const OnboardDescription = React.lazy(() => import("./steps/OnboardDescription"));
 const OnboardGeo = React.lazy(() => import("./steps/OnboardGeo"));
 const OnboardCover = React.lazy(() => import("./steps/OnboardCover"));
+const OnboardEventDate = React.lazy(() => import("./steps/OnboardEventDate"));
 
 let timeoutArray = [];
 
@@ -268,6 +268,14 @@ class OnboardStepper extends React.Component {
         return record.links && record.links.length > 0;
       case "wings":
         return record.hashtags && record.hashtags.length > 9;
+      case "description":
+        return record.description && record.description.length > 10;
+      case "geo":
+        return record._geoloc && record._geoloc.lat && record._geoloc.lng;
+      case "date":
+        return record.startDate && record.endDate;
+      case "cover":
+        return record.cover && record.cover.url;
       default:
         return false;
     }
