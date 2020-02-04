@@ -10,6 +10,7 @@ import ProfileActions from "./ProfileActions";
 import { styles } from "./ProfileLayout.css";
 import SkillsPropositionFab from "../utils/buttons/SkillsPropositionFab";
 import ErrorBoundary from "../utils/errors/ErrorBoundary";
+import { withProfile } from "../../hoc/profile/withProfile";
 
 const ProfileClapHistory = React.lazy(() => import("./ProfileClapHistory"));
 const AcceptSkills = React.lazy(() =>
@@ -28,6 +29,10 @@ class ProfileLayout extends React.Component {
   };
 
   handleShowProposeSkills = () => {
+    this.props.keenStore.recordEvent("openProposeSkills", {
+      recordEmitter: undefsafe(this.props.recordStore.currentUserRecord, "_id"),
+      recordTarget: this.props.profileContext.getProp("_id")
+    });
     this.setState({ showProposeSkills: true });
   };
 
@@ -169,4 +174,6 @@ export default inject(
   "authStore",
   "recordStore",
   "orgStore"
-)(observer(withStyles(styles, { withTheme: true })(ProfileLayout)));
+)(
+  observer(withStyles(styles, { withTheme: true })(withProfile(ProfileLayout)))
+);
