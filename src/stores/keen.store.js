@@ -6,6 +6,9 @@ import undefsafe from 'undefsafe';
 import authStore from "./auth.store";
 import userStore from './user.store';
 
+const helpers = KeenTracking.helpers;
+const utils = KeenTracking.utils;
+
 class KeenStore extends Store {
 
   constructor() {
@@ -13,6 +16,11 @@ class KeenStore extends Store {
     this.queue = [];
     this.writesKeys = [];
     this.client = null;
+    this.sessionCookie = utils.cookie('keen-session');
+
+    if (!this.sessionCookie.get('guest_id')) {
+      this.sessionCookie.set('guest_id', helpers.getUniqueId());
+    }
 
     this.unsubOrg = observe(orgStore, 'currentOrganisation', (change) => {
       try {
@@ -73,7 +81,10 @@ class KeenStore extends Store {
       if (!this.client) return this.queue.push({ eventFamily: eventFamily, object: object });
       object.userEmitter = undefsafe(userStore.currentUser, '_id');
       return this.client.recordEvent(eventFamily, {
-        item: object
+        item: object,
+        session: {
+          guest_id: undefsafe(this.sessionCookie, 'data.guest_id')
+        }
       });
     } catch (e) {
       console.error(e);

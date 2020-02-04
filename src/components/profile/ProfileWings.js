@@ -137,7 +137,7 @@ class ProfileWings extends React.PureComponent {
                 let displayedName = ProfileService.getWingDisplayedName(wing, locale);
                 return (
                   <Wings src={ProfileService.getPicturePath(wing.picture)}
-                    label={ProfileService.htmlDecode(displayedName)} key={wing._id}
+                    label={ProfileService.htmlDecode(displayedName)} key={wing._id || index}
                     recordId={profileContext.getProp('_id')} hashtagId={wing._id} mode={(wing.class ? 'highlight' : 'profile')}
                     enableClap={undefsafe(currentOrganisation, 'features.claps') === false ? false : true} claps={this.getClaps(wing._id)}
                   />

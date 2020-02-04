@@ -85,6 +85,17 @@ class SearchPage extends React.Component {
   }
 
   switchView = () => {
+    if(this.state.view === VIEW_LIST) {
+      this.props.keenStore.recordEvent(
+        "openMap", {
+          recordEmitter: undefsafe(
+            this.props.recordStore.currentUserRecord,
+            "_id"
+          )
+        }
+      );
+    }
+
     this.setState({
       view: this.state.view === VIEW_LIST ? VIEW_MAP : VIEW_LIST
     });
@@ -192,7 +203,8 @@ export default inject(
   "keenStore",
   "searchStore",
   "recordStore",
-  "orgStore"
+  "orgStore",
+  "userStore"
 )(
   observer(
     withWidth()(

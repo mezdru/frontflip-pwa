@@ -59,11 +59,7 @@ const withAuthorization = (ComponentToWrap, componentName) => {
       if (!isAuth && !this.hasAccessToOrg())
         return <Redirect push to={baseUrl + "/signin"} />;
 
-      if (
-        isAuth &&
-        this.belongsToOrg() &&
-        !this.props.commonStore.getCookie("isAccessInLogged")
-      ) {
+      if (!this.props.commonStore.getCookie("isAccessInLogged")) {
         this.props.commonStore.setCookie(
           "isAccessInLogged",
           true,

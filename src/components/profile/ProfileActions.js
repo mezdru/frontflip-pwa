@@ -70,6 +70,15 @@ class ProfileActions extends React.PureComponent {
     }
   };
 
+  logEditProfile = () => {
+    this.props.keenStore.recordEvent(
+      "openEditProfile", {
+        recordTarget: this.props.profileContext.getProp("_id"),
+        recordEmitter: undefsafe(this.props.recordStore.currentUserRecord, '_id')
+      }
+    )
+  }
+
   render() {
     const { classes } = this.props;
     const { isEditable } = this.props.profileContext;
@@ -113,6 +122,7 @@ class ProfileActions extends React.PureComponent {
                   "/onboard/intro/edit/" +
                   this.props.profileContext.getProp("tag")
                 }
+                onClick={this.logEditProfile}
               >
                 <Edit />
               </IconButton>
@@ -128,7 +138,8 @@ export default inject(
   "commonStore",
   "orgStore",
   "recordStore",
-  "authStore"
+  "authStore",
+  "keenStore"
 )(
   observer(
     withStyles(styles)(withProfile(injectIntl(ProfileActions)))

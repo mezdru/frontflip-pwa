@@ -50,7 +50,8 @@ class SearchResults extends React.Component {
           recordEmitter: undefsafe(
             this.props.recordStore.currentUserRecord,
             "_id"
-          )
+          ),
+          view: this.props.view
         });
       }
     );
