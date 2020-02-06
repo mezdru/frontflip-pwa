@@ -64,6 +64,7 @@
   "devDependencies": {
     "@welldone-software/why-did-you-render": "^3.5.0",
     "eslint-plugin-react": "^7.14.3",
+    "prettier": "^1.19.1",
     "workbox-cli": "^4.2.0"
   }
 }
