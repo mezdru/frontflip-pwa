@@ -11,12 +11,9 @@ const styles = theme => ({
   content: {
     overflow: "auto",
     textAlign: "center"
-    // padding: theme.spacing.unit * 2 + "px !important"
   },
   actions: {
     justifyContent: "center"
-    // margin: 0,
-    // padding: theme.spacing.unit * 2
   },
   closeButton: {
     position: "absolute",
@@ -26,7 +23,7 @@ const styles = theme => ({
   }
 });
 
-function Transition(props) {
+const Transition = (props) => {
   return <Slide direction="up" {...props} />;
 }
 

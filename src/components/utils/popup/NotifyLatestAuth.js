@@ -73,7 +73,7 @@ class NotifyLatestAuth extends React.Component {
     let { classes } = this.props;
 
     return (
-      <Slide direction="up" in={coLog} mountOnEnter unmountOnExit>
+      <Slide direction="up" in={Boolean(coLog)} mountOnEnter unmountOnExit>
         <ClickAwayListener onClickAway={this.handleClose}>
           <div className={classes.root}>
             <IconButton

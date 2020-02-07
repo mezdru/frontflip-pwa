@@ -199,7 +199,7 @@ class SearchPage extends React.Component {
   }
 }
 
-export default inject(
+export default withAuthorization(inject(
   "keenStore",
   "searchStore",
   "recordStore",
@@ -209,8 +209,8 @@ export default inject(
   observer(
     withWidth()(
       withStyles(styles)(
-        withAuthorization(withProfile(withScroll(SearchPage)), "search")
+        withProfile(withScroll(SearchPage))
       )
     )
   )
-);
+), "search");

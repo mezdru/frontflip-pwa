@@ -115,10 +115,12 @@ class OnboardPage extends React.PureComponent {
   }
 }
 
-OnboardPage = withAuthorization(OnboardPage, 'onboard');
-
-export default inject('commonStore', 'orgStore', 'recordStore')(
+OnboardPage = inject('commonStore', 'orgStore', 'recordStore')(
   observer(
     withStyles(styles, { withTheme: true })(withWidth()(OnboardPage))
   )
 );
+
+OnboardPage = withAuthorization(OnboardPage, 'onboard');
+
+export default OnboardPage;

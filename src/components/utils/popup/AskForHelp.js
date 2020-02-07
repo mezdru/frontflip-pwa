@@ -17,14 +17,14 @@ const styles = theme => ({
   text: {
     margin: 0,
     padding: 0,
-    paddingTop: theme.spacing.unit * 2,
+    paddingTop: theme.spacing(2),
     textAlign: 'left'
   },
   title: {
     textAlign: 'center',
   },
   textarea: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
     '& textarea': {
       lineHeight: 1.5,
       fontSize: '1rem',
