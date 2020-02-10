@@ -20,6 +20,7 @@
     "html-entities": "^1.2.1",
     "keen-analysis": "^3.4.5",
     "keen-tracking": "^4.4.1",
+    "lodash": "^4.17.15",
     "logrocket": "^0.6.20",
     "logrocket-react": "^3.0.0",
     "mapbox-gl": "^1.6.1",

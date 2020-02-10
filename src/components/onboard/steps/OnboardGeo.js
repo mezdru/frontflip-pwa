@@ -14,7 +14,7 @@ const styles = theme => ({
     background: theme.palette.primary.light,
     padding: 24,
     overflow: "auto",
-    margin: 0,
+    margin: 0
   },
   field: {
     minWidth: "100% !important",
@@ -24,9 +24,10 @@ const styles = theme => ({
 
 class OnboardGeo extends React.Component {
   handleChange = (_geoloc, location) => {
-    let record = this.props.getWorkingRecord();
+    let record = this.props.recordStore.workingRecord;
     record["_geoloc"] = _geoloc;
     record["location"] = location;
+    console.log(JSON.parse(JSON.stringify(record)))
   };
 
   render() {
@@ -55,7 +56,6 @@ class OnboardGeo extends React.Component {
 
         <Grid item className={classes.field}>
           <GeocodingField
-            getWorkingRecord={this.props.getWorkingRecord}
             onChange={this.handleChange}
             handleSave={e => this.props.handleSave(["_geoloc", "location"])}
           />
@@ -65,8 +65,8 @@ class OnboardGeo extends React.Component {
   }
 }
 
-export default inject(
-  "commonStore",
-  "recordStore",
-  "orgStore"
-)(observer(injectIntl(withStyles(styles, { withTheme: true })(OnboardGeo))));
+export default injectIntl(
+  withStyles(styles, { withTheme: true })(
+    inject("commonStore", "recordStore", "orgStore")(observer(OnboardGeo))
+  )
+);

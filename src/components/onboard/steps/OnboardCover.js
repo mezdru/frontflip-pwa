@@ -20,7 +20,7 @@ const styles = theme => ({
   }
 });
 
-function OnboardCover({ classes, handleSave, getWorkingRecord, ...props }) {
+function OnboardCover({ classes, handleSave, ...props }) {
   return (
     <Grid
       container
@@ -37,7 +37,7 @@ function OnboardCover({ classes, handleSave, getWorkingRecord, ...props }) {
       </Grid>
 
       <Grid item>
-        <PictureField getWorkingRecord={getWorkingRecord} pictureType="cover" handleSave={handleSave} />
+        <PictureField pictureType="cover" handleSave={handleSave} />
       </Grid>
     </Grid>
   );

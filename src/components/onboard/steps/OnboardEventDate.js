@@ -28,13 +28,12 @@ const styles = theme => ({
 function OnboardEventDate({
   classes,
   handleSave,
-  getWorkingRecord,
   commonStore,
+  recordStore,
   intl,
   ...props
 }) {
-
-  const record = getWorkingRecord();
+  const record = recordStore.workingRecord;
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -42,9 +41,9 @@ function OnboardEventDate({
   const handleChange = (date, field) => {
     let dateObject = moment(date).toDate();
     record[field] = dateObject;
-    if(field === "startDate") setStartDate(dateObject);
+    if (field === "startDate") setStartDate(dateObject);
     else setEndDate(dateObject);
-  }
+  };
 
   moment.locale(commonStore.locale);
 
@@ -73,8 +72,10 @@ function OnboardEventDate({
             inputVariant="outlined"
             ampm={false}
             value={record.startDate || null}
-            onChange={(e) => handleChange(e, "startDate")}
-            onBlur={() => { handleSave(['startDate']) }}
+            onChange={e => handleChange(e, "startDate")}
+            onBlur={() => {
+              handleSave(["startDate"]);
+            }}
             minutesStep={5}
             onError={console.log}
             disablePast
@@ -94,8 +95,10 @@ function OnboardEventDate({
             inputVariant="outlined"
             ampm={false}
             value={record.endDate || null}
-            onChange={(e) => handleChange(e, "endDate")}
-            onBlur={() => { handleSave(['endDate']) }}
+            onChange={e => handleChange(e, "endDate")}
+            onBlur={() => {
+              handleSave(["endDate"]);
+            }}
             minutesStep={5}
             onError={console.log}
             minDate={record.startDate || new Date()}
@@ -112,8 +115,8 @@ function OnboardEventDate({
   );
 }
 
-OnboardEventDate = inject("commonStore")(
-  observer(withStyles(styles)(injectIntl(OnboardEventDate)))
+OnboardEventDate = withStyles(styles)(
+  injectIntl(inject("commonStore", "recordStore")(observer(OnboardEventDate)))
 );
 
 export default OnboardEventDate;

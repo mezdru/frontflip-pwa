@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  Grid,
-  withStyles,
-  CircularProgress
-} from "@material-ui/core";
+import { Grid, withStyles, CircularProgress } from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import Wings from "../utils/wing/Wings";
 import ProfileService from "../../services/profile.service";
@@ -57,7 +53,7 @@ const styles = theme => ({
 let timeout;
 const SUGGESTIONS_QUERY_DELAY = 200; // (ms) ajust this value to update the behaviour
 
-class OnboardSuggestions extends React.Component {
+class OnboardSuggestions extends React.PureComponent {
   state = {
     suggestions: [],
     lastSelected: {}
@@ -66,7 +62,7 @@ class OnboardSuggestions extends React.Component {
 
   componentDidMount() {
     this.fetchSuggestions(null, this.props.wingsFamily);
-    let record = this.props.getWorkingRecord();
+    let record = this.props.recordStore.workingRecord;
 
     this.unsubscribeUserQuery = observe(
       this.props.searchStore.values,
@@ -81,7 +77,7 @@ class OnboardSuggestions extends React.Component {
       }
     );
 
-    if(record) {
+    if (record) {
       this.unsubscribeUserRecord = observe(record, change => {
         if (
           change.name === "hashtags" &&
@@ -96,8 +92,8 @@ class OnboardSuggestions extends React.Component {
 
   componentWillUnmount() {
     this.isUnmount = true;
-    if(this.unsubscribeUserQuery) this.unsubscribeUserQuery();
-    if(this.unsubscribeUserRecord) this.unsubscribeUserRecord();
+    if (this.unsubscribeUserQuery) this.unsubscribeUserQuery();
+    if (this.unsubscribeUserRecord) this.unsubscribeUserRecord();
   }
 
   fetchSuggestions = async (lastSelected, wingsFamily, includeLastSelected) => {
@@ -129,24 +125,15 @@ class OnboardSuggestions extends React.Component {
       );
     }
 
-    let record = this.props.getWorkingRecord();
-    return (  !record.hashtags ||
-      !record.hashtags.find(
+    let record = this.props.recordStore.workingRecord;
+    return (
+      !record.hashtags ||
+      (!record.hashtags.find(
         wing => wing.tag === (suggestion.tag || suggestion.value)
-      ) && suggestion.tag !== this.state.lastSelected.tag
+      ) &&
+        suggestion.tag !== this.state.lastSelected.tag)
     );
   };
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      JSON.stringify(this.state.suggestions) !==
-        JSON.stringify(nextState.suggestions) ||
-      JSON.stringify(nextProps.wingsFamily) !==
-        JSON.stringify(this.props.wingsFamily) ||
-      (this.state.suggestions.length === 0 &&
-        nextState.suggestions.length === 0)
-    );
-  }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.mode !== "propose")
@@ -214,7 +201,7 @@ class OnboardSuggestions extends React.Component {
                   animationDelay: (suggestionsDisplayed - 1) * 0.05 + "s"
                 }}
                 className={classes.suggestion}
-                key={Math.random()}
+                key={suggestion.tag}
               >
                 <Wings
                   label={ProfileService.getWingDisplayedName(
@@ -234,8 +221,12 @@ class OnboardSuggestions extends React.Component {
   }
 }
 
-export default inject(
-  "commonStore",
-  "recordStore",
-  "searchStore"
-)(observer(withStyles(styles)(injectIntl(OnboardSuggestions))));
+export default withStyles(styles)(
+  injectIntl(
+    inject(
+      "commonStore",
+      "recordStore",
+      "searchStore"
+    )(observer(OnboardSuggestions))
+  )
+);

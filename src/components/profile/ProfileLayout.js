@@ -21,7 +21,6 @@ const ProposeSkills = React.lazy(() =>
 );
 
 class ProfileLayout extends React.Component {
-  static whyDidYouRender = true;
 
   state = {
     showProposeSkills: false,

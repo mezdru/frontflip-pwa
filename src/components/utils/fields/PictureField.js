@@ -64,7 +64,7 @@ class PictureField extends React.Component {
     const { pictureType } = this.props;
 
     if (!file) {
-      let record = this.props.getWorkingRecord();
+      let record = this.props.recordStore.workingRecord;
       if (pictureType === types.LOGO) {
         record.picture = { url: null };
         this.props.handleSave(["picture"]);
@@ -85,7 +85,7 @@ class PictureField extends React.Component {
   handleUploadComplete = file => {
     if (!this._ismounted) return;
     const { pictureType } = this.props;
-    let record = this.props.getWorkingRecord();
+    let record = this.props.recordStore.workingRecord;
     if (pictureType === types.LOGO) {
       record.picture = {
         url: file.cdnUrl
@@ -100,15 +100,11 @@ class PictureField extends React.Component {
     this.setState({ pictureUrl: file.cdnUrl, loading: false });
   };
 
-  handleResetPicture = e => {
-    this.forceUpdate();
-  };
-
   render() {
     const { pictureUrl, loading } = this.state;
     const { classes, pictureType } = this.props;
     const { currentOrganisation } = this.props.orgStore;
-    let record = this.props.getWorkingRecord();
+    let record = this.props.recordStore.workingRecord;
     return (
       <div>
         <div className={classes.pictureContainer} style={this.props.style}>
@@ -160,6 +156,6 @@ class PictureField extends React.Component {
   }
 }
 
-export default inject(
-  "orgStore"
-)(observer(injectIntl(withStyles(styles)(PictureField))));
+export default injectIntl(
+  withStyles(styles)(inject("orgStore", "recordStore")(observer(PictureField)))
+);

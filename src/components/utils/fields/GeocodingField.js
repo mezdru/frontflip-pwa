@@ -3,6 +3,7 @@ import withMapbox from "../../../hoc/MapboxManagement.hoc";
 import { inject, observer } from "mobx-react";
 import { withStyles } from "@material-ui/core";
 import request from "async-request";
+import undefsafe from "undefsafe";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 const styles = theme => ({
@@ -50,7 +51,7 @@ class GeocodingField extends React.Component {
       this.setState({ lng: newCoords.lng, lat: newCoords.lat });
       this.props.onChange(
         { lat: newCoords.lat, lng: newCoords.lng },
-        undefined
+        undefsafe(this.props.recordStore.workingRecord, "location")
       );
     }); // moveend also fires on zoomend
   };
@@ -69,7 +70,7 @@ class GeocodingField extends React.Component {
   }
 
   componentDidMount() {
-    let record = this.props.getWorkingRecord();
+    let record = this.props.recordStore.workingRecord;
     this.props.mapbox
       .buildMap(this.mapContainer, { center: this.getCoordsFrom(record) })
       .then(map => {
@@ -150,6 +151,8 @@ class GeocodingField extends React.Component {
   }
 }
 
-export default inject("commonStore")(
-  observer(withMapbox(withStyles(styles)(GeocodingField)))
+export default withMapbox(
+  withStyles(styles)(
+    inject("commonStore", "recordStore")(observer(GeocodingField))
+  )
 );

@@ -2,6 +2,7 @@ import React from "react";
 import { inject, observer } from "mobx-react";
 import { FormattedMessage, injectIntl } from "react-intl";
 import undefsafe from "undefsafe";
+import _ from "lodash";
 
 import {
   withStyles,
@@ -15,8 +16,8 @@ import { Clear } from "@material-ui/icons";
 import AddContactField from "../../utils/fields/AddContact";
 import ProfileService from "../../../services/profile.service";
 import "../../../resources/stylesheets/font-awesome.min.css";
-import LaFourchetteLogo from '../../../resources/images/lafourchette.png';
-import DoctolibLogo from '../../../resources/images/doctolib.png';
+import LaFourchetteLogo from "../../../resources/images/lafourchette.png";
+import DoctolibLogo from "../../../resources/images/doctolib.png";
 
 const Entities = require("html-entities").XmlEntities;
 const entities = new Entities();
@@ -48,7 +49,7 @@ const styles = {
   iconImg: {
     width: 24,
     height: 24,
-    borderRadius: 4,
+    borderRadius: 4
   }
 };
 
@@ -64,11 +65,7 @@ class OnboardContacts extends React.Component {
   componentWillMount() {
     this.setState(
       {
-        links:
-          undefsafe(
-            this.props.getWorkingRecord(),
-            "links"
-          ) || []
+        links: undefsafe(this.props.recordStore.workingRecord, "links") || []
       },
       () => {
         this.setDefaultLinks();
@@ -77,7 +74,7 @@ class OnboardContacts extends React.Component {
   }
 
   handleLinksChange = (e, link, index) => {
-    let record = this.props.getWorkingRecord();
+    let record = this.props.recordStore.workingRecord;
     link.value = e.target.value;
     let links = this.state.links;
     links[index].value = e.target.value;
@@ -86,7 +83,7 @@ class OnboardContacts extends React.Component {
   };
 
   deleteLink = linkToRemove => {
-    let record = this.props.getWorkingRecord();
+    let record = this.props.recordStore.workingRecord;
 
     record.links = record.links.filter(item => {
       return !(
@@ -107,11 +104,11 @@ class OnboardContacts extends React.Component {
   addLink = link => {
     let links = this.state.links;
     links.push(link);
-    this.setState({ links: links, newLinkIndex: (links.length-1) });
+    this.setState({ links: links, newLinkIndex: links.length - 1 });
   };
 
   getLinkByType = typeWanted => {
-    let record = this.props.getWorkingRecord();
+    let record = this.props.recordStore.workingRecord;
     try {
       return record.links.find(link => link.type === typeWanted);
     } catch (e) {
@@ -132,7 +129,9 @@ class OnboardContacts extends React.Component {
   };
 
   getTranslatedName = type => {
-    return this.props.intl.formatMessage({id: 'contact.displayName.'+type}).replace("&nbsp;", " ");
+    return this.props.intl
+      .formatMessage({ id: "contact.displayName." + type })
+      .replace("&nbsp;", " ");
   };
 
   setDefaultLinks = () => {
@@ -148,13 +147,28 @@ class OnboardContacts extends React.Component {
     this.setState({ links });
   };
 
-  getLinkIconComponent = (link) => {
-    switch(link.icon) {
-      case 'doctolib': return <img src={DoctolibLogo} className={this.props.classes.iconImg} alt="Doctolib" />;
-      case 'lafourchette': return <img src={LaFourchetteLogo} className={this.props.classes.iconImg} alt="La Fourchette" />;
-      default: return <i className={"fa fa-" + (link.icon || link.type)} />
+  getLinkIconComponent = link => {
+    switch (link.icon) {
+      case "doctolib":
+        return (
+          <img
+            src={DoctolibLogo}
+            className={this.props.classes.iconImg}
+            alt="Doctolib"
+          />
+        );
+      case "lafourchette":
+        return (
+          <img
+            src={LaFourchetteLogo}
+            className={this.props.classes.iconImg}
+            alt="La Fourchette"
+          />
+        );
+      default:
+        return <i className={"fa fa-" + (link.icon || link.type)} />;
     }
-  }
+  };
 
   render() {
     const { links, newLinkIndex } = this.state;
@@ -183,6 +197,7 @@ class OnboardContacts extends React.Component {
           </Typography>
           {links &&
             links.map((link, i) => {
+              link = _.clone(link);
               ProfileService.makeLinkIcon(link);
               link.value = entities.decode(link.value);
               return (
@@ -225,9 +240,7 @@ class OnboardContacts extends React.Component {
               );
             })}
           <Grid container item className={classes.root}>
-            <AddContactField
-              onAdd={this.addLink}
-            />
+            <AddContactField onAdd={this.addLink} />
           </Grid>
         </Grid>
       </Grid>
@@ -235,9 +248,6 @@ class OnboardContacts extends React.Component {
   }
 }
 
-export default inject(
-  "commonStore",
-  "recordStore"
-)(
-  observer(withStyles(styles, { withTheme: true })(injectIntl(OnboardContacts)))
+export default withStyles(styles, { withTheme: true })(
+  injectIntl(inject("commonStore", "recordStore")(observer(OnboardContacts)))
 );

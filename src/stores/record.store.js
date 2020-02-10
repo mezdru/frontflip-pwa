@@ -14,6 +14,19 @@ class RecordStore extends Store {
     super("Record");
   }
 
+  /**
+   * @description Onboard mode : edit OR create : return record linked to the url recordTag
+   *              No mode ? return user record
+   */
+  get workingRecord() {
+    const { url } = commonStore;
+    
+    if (url.params.onboardMode === "edit" || url.params.onboardMode === "create") {
+      return this.currentUrlRecord;
+    }
+    return this.currentUserRecord;
+  }
+
   get currentUserRecord() {
     let orgAndRecord =
       userStore.currentUser &&
@@ -125,6 +138,7 @@ decorate(RecordStore, {
   recordsByTag: observable,
   currentUserRecord: computed,
   currentUrlRecord: computed,
+  workingRecord: computed,
   postRecord: action,
   addRecord: action,
   updateRecord: action,

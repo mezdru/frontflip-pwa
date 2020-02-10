@@ -7,14 +7,6 @@ import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import { Redirect } from "react-router-dom";
 import Slide from "@material-ui/core/Slide";
-
-// import OnboardIntro from "./steps/OnboardIntro";
-// import OnboardContacts from "./steps/OnboardContacts";
-// import OnboardWings from "./steps/OnboardWings";
-// import OnboardDescription from "./steps/OnboardDescription";
-// import OnboardGeo from "./steps/OnboardGeo";
-// import OnboardCover from "./steps/OnboardCover";
-
 import { FormattedMessage } from "react-intl";
 import classNames from "classnames";
 import undefsafe from "undefsafe";
@@ -23,11 +15,14 @@ import { styles } from "./OnboardStepper.css";
 import SlackService from "../../services/slack.service";
 import LoaderFeedback from "../utils/buttons/LoaderFeedback";
 import ErrorBoundary from "../../components/utils/errors/ErrorBoundary";
+import { observe } from "mobx";
 
 const OnboardIntro = React.lazy(() => import("./steps/OnboardIntro"));
 const OnboardContacts = React.lazy(() => import("./steps/OnboardContacts"));
 const OnboardWings = React.lazy(() => import("./steps/OnboardWings"));
-const OnboardDescription = React.lazy(() => import("./steps/OnboardDescription"));
+const OnboardDescription = React.lazy(() =>
+  import("./steps/OnboardDescription")
+);
 const OnboardGeo = React.lazy(() => import("./steps/OnboardGeo"));
 const OnboardCover = React.lazy(() => import("./steps/OnboardCover"));
 const OnboardEventDate = React.lazy(() => import("./steps/OnboardEventDate"));
@@ -47,19 +42,44 @@ class OnboardStepper extends React.Component {
   }
 
   componentWillMount() {
+    const { url } = this.props.commonStore;
+    
+    if (this.props.create && !this.props.recordStore.currentUrlRecord) {
+      this.createNewRecord();
+    }
+
+    observe(url, change => {
+      if (this.props.create && !this.props.recordStore.currentUrlRecord) {
+        this.createNewRecord();
+      }
+    });
+
     this.makeSteps(this.props.wantedStep);
   }
+
   componentWillUnmount() {
     this.isUnmount = true;
   }
 
+  createNewRecord = () => {
+    const { url } = this.props.commonStore;
+
+    console.log("add record");
+    this.props.recordStore.addRecord({
+      tag: url.params.recordTag,
+      organisation: this.props.orgStore.currentOrganisation._id,
+      type: url.params.recordTag === "@NewEvent" ? "event" : "person"
+    });
+  };
+
   /**
-   * @description Make onboard steps in organisation 
+   * @description Make onboard steps in organisation
    * @note Use @NewEvent
    */
   makeSteps = async stepLabel => {
-    let org = this.props.orgStore.currentOrganisation;
-    let recordTag = this.props.commonStore.url.params.recordTag;
+    const org = this.props.orgStore.currentOrganisation;
+    const recordTag = this.props.commonStore.url.params.recordTag;
+    const workingRecord = this.props.recordStore.workingRecord;
     let steps;
 
     if (undefsafe(org, "onboardSteps.length") > 0) {
@@ -75,10 +95,10 @@ class OnboardStepper extends React.Component {
     }
 
     // if event, add "date" after "intro"
-    if(recordTag === '@NewEvent' || this.getWorkingRecord().type === 'event') {
+    if (recordTag === "@NewEvent" || workingRecord.type === "event") {
       let indexOfIntro = steps.indexOf("intro");
-      if(indexOfIntro === -1) steps.unshift("intro");
-      steps.splice(Math.max(indexOfIntro, 0)+1, 0, "date");
+      if (indexOfIntro === -1) steps.unshift("intro");
+      steps.splice(Math.max(indexOfIntro, 0) + 1, 0, "date");
     }
 
     this.setState({
@@ -156,30 +176,6 @@ class OnboardStepper extends React.Component {
     });
   };
 
-  /**
-   * @note Use @NewEvent
-   */
-  getWorkingRecord = () => {
-    const { edit, create } = this.props;
-    const { currentUrlRecord } = this.props.recordStore;
-    const { currentOrganisation } = this.props.orgStore;
-    const { url } = this.props.commonStore;
-    
-    if (edit) {
-      return currentUrlRecord;
-    } else if (create) {
-      if (currentUrlRecord) return currentUrlRecord;
-      let newRecord = {
-        tag: url.params.recordTag,
-        organisation: currentOrganisation._id,
-        type: url.params.recordTag === '@NewEvent' ? 'event' : 'person'
-      };
-      this.props.recordStore.addRecord(newRecord);
-      return this.props.recordStore.getRecord(null, url.params.recordTag);
-    }
-    return this.props.recordStore.currentUserRecord;
-  };
-
   getStepComponent(steps, activeStep) {
     switch (steps[activeStep]) {
       case "intro":
@@ -192,7 +188,7 @@ class OnboardStepper extends React.Component {
         return OnboardGeo;
       case "cover":
         return OnboardCover;
-      case "date": 
+      case "date":
         return OnboardEventDate;
       default:
         return OnboardWings;
@@ -200,7 +196,7 @@ class OnboardStepper extends React.Component {
   }
 
   handleSave = async arrayOfLabels => {
-    let record = this.getWorkingRecord();
+    let record = this.props.recordStore.workingRecord;
     if (record._id) {
       return await this.props.recordStore
         .updateRecord(record._id, arrayOfLabels, record)
@@ -255,7 +251,7 @@ class OnboardStepper extends React.Component {
   };
 
   shouldNextBeHighlighted = activeStepLabel => {
-    let record = this.getWorkingRecord();
+    let record = this.props.recordStore.workingRecord;
     switch (activeStepLabel) {
       case "intro":
         return (
@@ -279,6 +275,11 @@ class OnboardStepper extends React.Component {
       default:
         return false;
     }
+  };
+
+  handleWorkingRecordChange = (field, value) => {
+    const { workingRecord } = this.props.recordStore;
+    workingRecord[field] = value;
   };
 
   render() {
@@ -366,15 +367,14 @@ class OnboardStepper extends React.Component {
 
             <div className={classes.stepComponentContainer}>
               <Suspense fallback={<></>}>
-              <ErrorBoundary>
-                <StepComponent
-                  handleSave={this.handleSave}
-                  activeStep={activeStep}
-                  activeStepLabel={steps[activeStep]}
-                  SuggestionsController={this.props.SuggestionsController}
-                  edit={edit}
-                  getWorkingRecord={this.getWorkingRecord}
-                />
+                <ErrorBoundary>
+                  <StepComponent
+                    handleSave={this.handleSave}
+                    activeStep={activeStep}
+                    activeStepLabel={steps[activeStep]}
+                    edit={edit}
+                    handleWorkingRecordChange={this.handleWorkingRecordChange}
+                  />
                 </ErrorBoundary>
               </Suspense>
             </div>

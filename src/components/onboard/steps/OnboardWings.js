@@ -57,7 +57,7 @@ class OnboardWings extends React.Component {
   addAndSave = hashtagRecords => {
     if (!hashtagRecords || !hashtagRecords.length || hashtagRecords.length < 1)
       return;
-    let record = this.props.getWorkingRecord();
+    let record = this.props.recordStore.workingRecord;
     record.hashtags = record.hashtags.concat(hashtagRecords);
     this.props.handleSave(["hashtags"]);
   };
@@ -81,7 +81,7 @@ class OnboardWings extends React.Component {
 
   handleAddWing = async element => {
     if (!element) return Promise.resolve();
-    let record = this.props.getWorkingRecord();
+    let record = this.props.recordStore.workingRecord;
     if (record.hashtags.find(elt => elt.tag === element.tag))
       return Promise.resolve();
 
@@ -117,7 +117,7 @@ class OnboardWings extends React.Component {
   handleRemoveWing = (e, tag) => {
     e.preventDefault();
     // should clone record ?
-    let record = this.props.getWorkingRecord();
+    let record = this.props.recordStore.workingRecord;
     record.hashtags = record.hashtags.filter(hashtag => hashtag.tag !== tag);
     this.props.handleSave(["hashtags"]);
   };
@@ -207,7 +207,6 @@ class OnboardWings extends React.Component {
                 max={10}
                 wingsFamily={this.getFeaturedWings()}
                 handleCreateWing={this.handleCreateWing}
-                getWorkingRecord={this.props.getWorkingRecord}
               />
             </Grid>
           </Grid>
@@ -230,7 +229,6 @@ class OnboardWings extends React.Component {
                   this.isFeaturedWings() ? this.getFeaturedWings() : null
                 }
                 scrollUserWingsToBottom={this.scrollUserWingsToBottom}
-                getWorkingRecord={this.props.getWorkingRecord}
               />
             </Grid>
           </Grid>
