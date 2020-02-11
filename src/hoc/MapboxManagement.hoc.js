@@ -7,14 +7,38 @@ import defaultProfilePicture from "../resources/images/placeholder_person.png";
 import profileService from "../services/profile.service";
 import Spiderifier from "../resources/js/Spiderifier";
 import { withRouter } from "react-router-dom";
+import undefsafe from "undefsafe";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 const CLUSTER_UNEXPANDABLE_ZOOM = 17.9;
-const GEOCODER_RESULT_ZOOM = 16
+const GEOCODER_RESULT_ZOOM = 16;
 
 const withMapbox = ComponentToWrap => {
   class MapboxManagement extends Component {
     markers = new Map();
+
+    getCenter = options => {
+      const orgCoords = undefsafe(
+        this.props.orgStore.currentOrganisation,
+        "settings.map.defaultCoords"
+      );
+      return (
+        options.center || (orgCoords && [orgCoords.lng, orgCoords.lat]) || [
+          2.349014,
+          48.864716
+        ]
+      );
+    };
+
+    getZoom = options => {
+      return options.zoom ||
+        (options.center && GEOCODER_RESULT_ZOOM) ||
+        undefsafe(
+          this.props.orgStore.currentOrganisation,
+          "settings.map.defaultZoom"
+        ) ||
+        5;
+    };
 
     buildMap = async (mapRef, options = {}) => {
       return new Promise((resolve, reject) => {
@@ -23,8 +47,8 @@ const withMapbox = ComponentToWrap => {
           // style: "mapbox://styles/mapbox/streets-v10", // v11 causes issue with locale
           style: "mapbox://styles/mapbox/dark-v10",
           maxZoom: 22,
-          zoom: options.zoom || (options.center ? GEOCODER_RESULT_ZOOM : 5),
-          center: options.center || [2.349014, 48.864716]
+          zoom: this.getZoom(options),
+          center: this.getCenter(options)
           // renderWorldCopies: false
         });
 
@@ -192,7 +216,7 @@ const withMapbox = ComponentToWrap => {
         lineElem = document.createElement("div");
 
       parentElem.className = "marker-parent";
-      parentElem.style.animationDelay = (10*index) + 'ms';
+      parentElem.style.animationDelay = 10 * index + "ms";
       parentElem.style.zIndex = 1000 - index;
 
       lineElem.className = "line-div";
@@ -208,10 +232,11 @@ const withMapbox = ComponentToWrap => {
           ) || defaultProfilePicture;
         markerElem.innerHTML = `<img class="marker-img" src="${pic}" />`;
       } else {
-        markerElem.innerHTML = '<i class="fa fa-list marker-img" aria-hidden="true"></i>';
+        markerElem.innerHTML =
+          '<i class="fa fa-list marker-img" aria-hidden="true"></i>';
       }
 
-      if(onClick) markerElem.addEventListener("click", e => onClick(props));
+      if (onClick) markerElem.addEventListener("click", e => onClick(props));
 
       parentElem.appendChild(lineElem);
       parentElem.appendChild(markerElem);
@@ -221,7 +246,7 @@ const withMapbox = ComponentToWrap => {
         "rotate(" + (spiderParam.angle - Math.PI / 2) + "rad)";
 
       return parentElem;
-    }
+    };
 
     handleClusterClick = async (map, e, clusterID) => {
       var features = map.queryRenderedFeatures(e.point, {
@@ -238,24 +263,32 @@ const withMapbox = ComponentToWrap => {
       this.spiderifier.unspiderfy();
       if (!features.length) {
         return;
-      } else if (currentZoom < wantedZoom && wantedZoom !== CLUSTER_UNEXPANDABLE_ZOOM) {
+      } else if (
+        currentZoom < wantedZoom &&
+        wantedZoom !== CLUSTER_UNEXPANDABLE_ZOOM
+      ) {
         this.flyIntoCluster(map, coordinates, currentZoom, wantedZoom);
       } else {
         map
           .getSource("addresses")
-          .getClusterLeaves(wantedCluster.properties.cluster_id, 100, 0, (
-            err,
-            leafFeatures
-          ) => {
-            if (err) {
-              return console.error(
-                "error while getting leaves of a cluster",
-                err
+          .getClusterLeaves(
+            wantedCluster.properties.cluster_id,
+            100,
+            0,
+            (err, leafFeatures) => {
+              if (err) {
+                return console.error(
+                  "error while getting leaves of a cluster",
+                  err
+                );
+              }
+              var markers = leafFeatures.map(elt => elt.properties);
+              this.spiderifier.spiderfy(
+                wantedCluster.geometry.coordinates,
+                markers
               );
             }
-            var markers = leafFeatures.map(elt => elt.properties);
-            this.spiderifier.spiderfy(wantedCluster.geometry.coordinates, markers);
-          });
+          );
       }
     };
 
