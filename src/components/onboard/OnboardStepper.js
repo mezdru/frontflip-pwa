@@ -82,12 +82,12 @@ class OnboardStepper extends React.Component {
     const workingRecord = this.props.recordStore.workingRecord;
     let steps;
 
-    if (undefsafe(org, "onboardSteps.length") > 0) {
-      steps = org.onboardSteps;
+    if (undefsafe(org, "settings.onboard.steps.length") > 0) {
+      steps = org.settings.onboard.steps;
     } else {
       steps = ["intro", "contacts"];
-      if (undefsafe(org, "featuredWingsFamily.length") > 0)
-        org.featuredWingsFamily.forEach(fwf => {
+      if (undefsafe(org, "settings.wings.families.length") > 0)
+        org.settings.wings.families.forEach(fwf => {
           if (!steps.find(elt => elt === fwf.tag) && fwf.tag)
             steps.push(fwf.tag);
         });

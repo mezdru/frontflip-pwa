@@ -1,7 +1,7 @@
 import React from 'react'
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
 import { inject, observer } from 'mobx-react';
-
+import undefsafe from 'undefsafe';
 import { Button, Grid, Typography, withStyles } from "@material-ui/core";
 import UrlService from '../../services/url.service';
 
@@ -100,8 +100,8 @@ class OnboardWelcome extends React.Component {
             <FormattedMessage id={'onboard.welcome'} /> {entities.decode(currentOrganisation.name)}
           </Typography>
           <Grid item>
-            {(currentOrganisation.onboardWelcome && currentOrganisation.onboardWelcome[locale]) ? (
-              <span dangerouslySetInnerHTML={{ __html: currentOrganisation.onboardWelcome[locale]}}></span>
+            {undefsafe(currentOrganisation, 'settings.onboard.welcomeMessage.'+locale) ? (
+              <span dangerouslySetInnerHTML={{ __html: currentOrganisation.settings.onboard.welcomeMessage[locale]}}></span>
             ) : (
               <FormattedHTMLMessage id="onboard.welcome.text" values={{ organisationName: entities.decode(currentOrganisation.name) }} />
             )}

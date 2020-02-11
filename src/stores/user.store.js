@@ -41,7 +41,7 @@ class UserStore extends Store {
     });
 
     let org = orgStore.currentOrganisation;
-    if(org && org.featuredWingsFamily && org.featuredWingsFamily.length > 0 && ! org.featuredWingsFamily[0]._id) {
+    if(undefsafe(org, 'settings.wings.families.length') > 0 && !org.settings.wings.families[0]._id) {
       orgStore.fetchOrganisation(org._id);
     }
 

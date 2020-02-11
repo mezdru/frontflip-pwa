@@ -163,8 +163,8 @@ class ProfileProvider extends React.Component {
       return;
     }
 
-    if (organisation.featuredWingsFamily)
-      organisation.featuredWingsFamily.forEach(family => {
+    if (undefsafe(organisation, 'settings.wings.families.length'))
+      organisation.settings.wings.families.forEach(family => {
         let familyWings = [];
 
         for (var index = 0; index < allWings.length; index++) {

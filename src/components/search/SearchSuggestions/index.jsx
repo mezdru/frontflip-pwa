@@ -85,9 +85,9 @@ class SearchSuggestions extends React.Component {
     this.props.resetScroll("search-suggestions-container");
     let finalHits = getUnique(resultHitsFiltered.splice(0, 20), "tag");
 
-    // add searchTabs if no filters
+    // add search tabs if no filters
     if (!filters || filters.length === 0) {
-      finalHits = (currentOrganisation.searchTabs || []).concat(finalHits);
+      finalHits = (undefsafe(currentOrganisation, 'settings.search.tabs') || []).concat(finalHits);
     }
 
     this.setState({ facetHits: finalHits, shouldUpdate: true });

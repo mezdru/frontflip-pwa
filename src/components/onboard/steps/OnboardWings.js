@@ -161,7 +161,7 @@ class OnboardWings extends React.Component {
     this.props.activeStepLabel && this.props.activeStepLabel.charAt(0) === "#";
   getFeaturedWings = () => {
     try {
-      return this.props.orgStore.currentOrganisation.featuredWingsFamily.filter(
+      return this.props.orgStore.currentOrganisation.settings.wings.families.filter(
         fam => fam.tag === this.props.activeStepLabel
       )[0];
     } catch (e) {
