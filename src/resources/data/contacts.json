@@ -28,9 +28,11 @@
     "icon": "fa fa-link"
   },
   "doctolib": {
-    "iconType": "image"
+    "iconType": "image",
+    "optional": true
   },
   "lafourchette": {
-    "iconType": "image"
+    "iconType": "image",
+    "optional": true
   }
 }

@@ -16,12 +16,16 @@ import { styles } from "./design";
 import { FormattedHTMLMessage, injectIntl } from "react-intl";
 import LaFourchetteLogo from "../../../../resources/images/lafourchette.png";
 import DoctolibLogo from "../../../../resources/images/doctolib.png";
+import { inject, observer } from "mobx-react";
+import {pipe, keys, filter, getOr} from "lodash/fp";
 
-let AddContact = ({ classes, onAdd, intl, ...props }) => {
+let AddContact = ({ classes, onAdd, intl, orgStore, ...props }) => {
   const [open, setOpen] = useState(false);
   let anchorEl;
+  const defaultLinks = pipe(keys, filter(contact => !contacts[contact].optional))(contacts);  
+  const availableLinks = getOr(defaultLinks, 'settings.onboard.links', orgStore.currentOrganisation);
 
-  let stringToImage = str => {
+  const stringToImage = str => {
     switch (str) {
       case "doctolib":
         return DoctolibLogo;
@@ -32,7 +36,7 @@ let AddContact = ({ classes, onAdd, intl, ...props }) => {
     }
   };
 
-  let addContact = typeOfField => {
+  const addContact = typeOfField => {
     onAdd({ type: typeOfField, value: "" });
     setOpen(false);
   };
@@ -60,15 +64,15 @@ let AddContact = ({ classes, onAdd, intl, ...props }) => {
             <Paper className={classes.paper}>
               <ClickAwayListener onClickAway={() => setOpen(false)}>
                 <Grid container justify={"center"} alignItems={"center"}>
-                  {Object.keys(contacts).map((contact, index) => {
-                    let workingContact = contacts[contact];
+                  {availableLinks.map((contactType, index) => {
+                    const workingContact = contacts[contactType];
 
                     return (
                       <Grid
                         item
                         key={index}
                         className={classes.contactItem}
-                        onClick={() => addContact(contact)}
+                        onClick={() => addContact(contactType)}
                       >
                         {workingContact.iconType === "classe" ? (
                           <i
@@ -78,14 +82,14 @@ let AddContact = ({ classes, onAdd, intl, ...props }) => {
                           />
                         ) : (
                           <img
-                            src={stringToImage(contact)}
+                            src={stringToImage(contactType)}
                             className={classes.contactImg}
                             alt="Link icon"
                           />
                         )}
                         <span className={classes.contactName}>
                           <FormattedHTMLMessage
-                            id={"contact.displayName." + contact}
+                            id={"contact.displayName." + contactType}
                           />
                         </span>
                       </Grid>
@@ -105,6 +109,8 @@ AddContact.propTypes = {
   onAdd: PropTypes.func
 };
 
-AddContact = injectIntl(withStyles(styles)(AddContact));
+AddContact = inject("orgStore")(
+  observer(injectIntl(withStyles(styles)(AddContact)))
+);
 
 export default React.memo(AddContact);
