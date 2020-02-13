@@ -251,29 +251,34 @@ class OnboardStepper extends React.Component {
   };
 
   shouldNextBeHighlighted = activeStepLabel => {
-    let record = this.props.recordStore.workingRecord;
-    switch (activeStepLabel) {
-      case "intro":
-        return (
-          record.intro &&
-          record.intro.length > 1 &&
-          record.name &&
-          record.name.length > 1
-        );
-      case "contacts":
-        return record.links && record.links.length > 0;
-      case "wings":
-        return record.hashtags && record.hashtags.length > 9;
-      case "description":
-        return record.description && record.description.length > 10;
-      case "geo":
-        return record._geoloc && record._geoloc.lat && record._geoloc.lng;
-      case "date":
-        return record.startDate && record.endDate;
-      case "cover":
-        return record.cover && record.cover.url;
-      default:
-        return false;
+    try {
+      let record = this.props.recordStore.workingRecord;
+      if(!record)return false;
+      switch (activeStepLabel) {
+        case "intro":
+          return (
+            record.intro &&
+            record.intro.length > 1 &&
+            record.name &&
+            record.name.length > 1
+          );
+        case "contacts":
+          return record.links && record.links.length > 0;
+        case "wings":
+          return record.hashtags && record.hashtags.length > 9;
+        case "description":
+          return record.description && record.description.length > 10;
+        case "geo":
+          return record._geoloc && record._geoloc.lat && record._geoloc.lng;
+        case "date":
+          return record.startDate && record.endDate;
+        case "cover":
+          return record.cover && record.cover.url;
+        default:
+          return false;
+      }
+    }catch(e) {
+      return false;
     }
   };
 
