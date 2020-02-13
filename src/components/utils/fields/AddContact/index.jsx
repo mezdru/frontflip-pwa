@@ -17,13 +17,21 @@ import { FormattedHTMLMessage, injectIntl } from "react-intl";
 import LaFourchetteLogo from "../../../../resources/images/lafourchette.png";
 import DoctolibLogo from "../../../../resources/images/doctolib.png";
 import { inject, observer } from "mobx-react";
-import {pipe, keys, filter, getOr} from "lodash/fp";
+import { pipe, keys, filter, isEmpty, get } from "lodash/fp";
 
 let AddContact = ({ classes, onAdd, intl, orgStore, ...props }) => {
   const [open, setOpen] = useState(false);
   let anchorEl;
-  const defaultLinks = pipe(keys, filter(contact => !contacts[contact].optional))(contacts);  
-  const availableLinks = getOr(defaultLinks, 'settings.onboard.links', orgStore.currentOrganisation);
+
+  const defaultLinks = pipe(
+    keys,
+    filter(contact => !contacts[contact].optional)
+  )(contacts);
+
+  const availableLinks = pipe(
+    get("settings.onboard.links"),
+    orgLinks => isEmpty(orgLinks) ? defaultLinks : orgLinks
+  )(orgStore.currentOrganisation);
 
   const stringToImage = str => {
     switch (str) {
