@@ -172,7 +172,8 @@ export default inject(
   "commonStore",
   "authStore",
   "recordStore",
-  "orgStore"
+  "orgStore",
+  "keenStore"
 )(
   observer(withStyles(styles, { withTheme: true })(withProfile(ProfileLayout)))
 );
