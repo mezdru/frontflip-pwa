@@ -2,7 +2,6 @@ import React from "react";
 import { FormattedMessage, injectIntl, FormattedHTMLMessage } from "react-intl";
 import { inject, observer } from "mobx-react";
 import { Redirect } from "react-router-dom";
-import { getOr } from 'lodash/fp';
 
 import {
   Button,
@@ -156,7 +155,7 @@ class Register extends React.Component {
 
   render() {
     const { values, inProgress } = this.props.authStore;
-    const { currentOrganisation } = this.props.orgStore;
+    const { currentOrganisation, currentAuthProviders } = this.props.orgStore;
     let {
       registerErrors,
       registerSuccess,
@@ -166,16 +165,6 @@ class Register extends React.Component {
       registerWarningMessage
     } = this.state;
     let intl = this.props.intl;
-
-    const loginProviders = getOr(
-      [],
-      "settings.auth.providers"
-    )(currentOrganisation);
-
-    console.debug(
-      "%c Render Register.js",
-      "background-color: grey; padding: 6px 12px; border-radius: 5px; color: white;"
-    );
 
     if (redirectTo) return <Redirect push to={redirectTo} />;
 
@@ -259,7 +248,7 @@ class Register extends React.Component {
                 </Button>
               )}
             </Grid>
-            {loginProviders.length > 0 && (
+            {currentAuthProviders.length > 0 && (
               <>
                 <Grid item>
                   <Typography
@@ -279,7 +268,7 @@ class Register extends React.Component {
                   justify="center"
                   spacing={2}
                 >
-                  {loginProviders.includes("google") && (
+                  {currentAuthProviders.includes("google") && (
                     <Grid item>
                       <IntegrationButton
                         labelId={"Sign in with Google"}
@@ -287,7 +276,7 @@ class Register extends React.Component {
                       />
                     </Grid>
                   )}
-                  {loginProviders.includes("linkedin") && (
+                  {currentAuthProviders.includes("linkedin") && (
                     <Grid item>
                       <IntegrationButton
                         labelId={"Sign in with Google"}

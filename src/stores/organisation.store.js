@@ -3,6 +3,10 @@ import commonStore from "./common.store";
 import Store from './store';
 import { replaceAndKeepReference } from "../services/utils.service";
 import userStore from './user.store';
+import { getOr } from 'lodash/fp';
+
+const DEFAULT_AUTH_PROVIDERS = ["google", "linkedin"];
+
 class orgStore extends Store {
 
   organisations = [];
@@ -10,6 +14,12 @@ class orgStore extends Store {
 
   constructor() {
     super('Organisation');
+  }
+
+  get currentAuthProviders() {
+    return this.currentOrganisation
+      ? getOr([], "settings.auth.providers")(this.currentOrganisation)
+      : DEFAULT_AUTH_PROVIDERS;
   }
 
   get currentOrganisation() {
@@ -103,6 +113,7 @@ decorate(orgStore, {
   currentOrganisation: computed,
   currentAlgoliaKey: computed,
   userOrganisations: computed,
+  currentAuthProviders: computed,
   organisations: observable,
   algoliaKeys: observable,
   fetchForPublic: action,

@@ -2,7 +2,6 @@ import React from "react";
 import { FormattedMessage, injectIntl, FormattedHTMLMessage } from "react-intl";
 import { Link, Redirect, withRouter } from "react-router-dom";
 import { inject, observer } from "mobx-react";
-import { getOr } from "lodash/fp";
 
 import {
   Button,
@@ -135,15 +134,10 @@ class Login extends React.Component {
 
   render() {
     const { values, inProgress } = this.props.authStore;
-    const { currentOrganisation } = this.props.orgStore;
+    const { currentOrganisation, currentAuthProviders } = this.props.orgStore;
     let { loginErrors, redirectTo, isAuth } = this.state;
     const { locale } = this.props.commonStore;
     let intl = this.props.intl;
-
-    const loginProviders = getOr(
-      [],
-      "settings.auth.providers"
-    )(currentOrganisation);
 
     if (redirectTo) {
       return <Redirect push to={redirectTo} />;
@@ -234,7 +228,7 @@ class Login extends React.Component {
                 <FormattedMessage id="I don't have my password" />
               </Button>
             </Grid>
-            {loginProviders.length > 0 && (
+            {currentAuthProviders.length > 0 && (
               <>
                 <Grid item>
                   <Typography
@@ -254,7 +248,7 @@ class Login extends React.Component {
                   justify="center"
                   spacing={2}
                 >
-                  {loginProviders.includes("google") && (
+                  {currentAuthProviders.includes("google") && (
                     <Grid item>
                       <IntegrationButton
                         labelId={"Sign in with Google"}
@@ -262,7 +256,7 @@ class Login extends React.Component {
                       />
                     </Grid>
                   )}
-                  {loginProviders.includes("linkedin") && (
+                  {currentAuthProviders.includes("linkedin") && (
                     <Grid item>
                       <IntegrationButton
                         labelId={"Sign in with LinkedIn"}
