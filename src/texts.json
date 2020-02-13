@@ -32,7 +32,7 @@
   "signup.success": "<strong>Thank you</strong> for signing up! We just sent you an email to confirm your address, check your inbox...",
   "signup.error.generic": "Oh. That was an unexpected error from us. Could you refresh the page and retry?",
   "signup.error.userExists": "You already have an account. Could you sign in or <a href={forgotPasswordLink}>change your password</a>?",
-  "signin.error.integration.notFound": "Ouch, we found no account attached to your {integrationName} accound. Could you sign in another way? Or <a href={signupLink} >signup</a>?",  
+  "signin.error.integration.notFound": "Ouch, we found no account attached to your {integrationName} accound. Could you sign in another way? Or <a href={signupLink} >signup</a>?",
   "password.forgot.intro": "You forgot your password? Don't worry ! We will send you an email to change it.",
   "password.new.intro": "Choose your new password for <strong>{userEmail}</strong>.",
   "password.create.intro": "Could you create a new password?",
